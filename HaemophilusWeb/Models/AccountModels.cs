@@ -11,7 +11,7 @@ namespace HaemophilusWeb.Models
     public class UsersContext : DbContext
     {
         public UsersContext()
-            : base("DefaultConnection")
+            : base("HaemophilusWebContext")
         {
         }
 
