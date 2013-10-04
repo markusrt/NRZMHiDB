@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using FluentValidation.Mvc;
 
 namespace HaemophilusWeb
 {
@@ -16,6 +17,8 @@ namespace HaemophilusWeb
     {
         protected void Application_Start()
         {
+            System.Data.Entity.Database.SetInitializer(new System.Data.Entity.DropCreateDatabaseIfModelChanges<HaemophilusWeb.Models.HaemophilusWebContext>());
+
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
@@ -23,6 +26,7 @@ namespace HaemophilusWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             AuthConfig.RegisterAuth();
+            FluentValidationModelValidatorProvider.Configure();
         }
     }
 }

@@ -1,0 +1,137 @@
+@model HaemophilusWeb.Models.Isolate
+
+@* This partial view defines form fields that will appear when creating and editing entities *@
+
+
+<div class="editor-label">
+    Einsender
+</div>
+<div class="editor-field">
+    @Html.DropDownListFor(model => model.SenderId, ((IEnumerable<HaemophilusWeb.Models.Sender>)ViewBag.PossibleSenders).Select(option => new SelectListItem {
+        Text = (option == null ? "None" : option.Name), 
+        Value = option.SenderId.ToString(),
+        Selected = (Model != null) && (option.SenderId == Model.SenderId)
+    }), "Auswählen...")
+    @Html.ValidationMessageFor(model => model.SenderId)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.LaboratoryNumber)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.LaboratoryNumber)
+    @Html.ValidationMessageFor(model => model.LaboratoryNumber)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.StemNumber)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.StemNumber)
+    @Html.ValidationMessageFor(model => model.StemNumber)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.SamplingDate)
+</div>
+<div class="editor-field">
+    @Html.JQueryUI().DatepickerFor(model => model.SamplingDate)
+    @Html.ValidationMessageFor(model => model.SamplingDate)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.ReceivingDate)
+</div>
+<div class="editor-field">
+    @Html.JQueryUI().DatepickerFor(model => model.ReceivingDate)
+    @Html.ValidationMessageFor(model => model.ReceivingDate)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.SenderLaboratory)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.SenderLaboratory)
+    @Html.ValidationMessageFor(model => model.SenderLaboratory)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Invasive)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Invasive)
+    @Html.ValidationMessageFor(model => model.Invasive)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.SenderConclusion)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.SenderConclusion)
+    @Html.ValidationMessageFor(model => model.SenderConclusion)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.FactorTestResults)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.FactorTestResults)
+    @Html.ValidationMessageFor(model => model.FactorTestResults)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.AmpicillinEtest)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.AmpicillinEtest)
+    @Html.ValidationMessageFor(model => model.AmpicillinEtest)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.AmoxicillinToClavulanicAcid)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.AmoxicillinToClavulanicAcid)
+    @Html.ValidationMessageFor(model => model.AmoxicillinToClavulanicAcid)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.MeropenemEtest)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.MeropenemEtest)
+    @Html.ValidationMessageFor(model => model.MeropenemEtest)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.CefotaximEtest)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.CefotaximEtest)
+    @Html.ValidationMessageFor(model => model.CefotaximEtest)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Evaluation)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Evaluation)
+    @Html.ValidationMessageFor(model => model.Evaluation)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.Comment)
+</div>
+<div class="editor-field">
+    @Html.EditorFor(model => model.Comment)
+    @Html.ValidationMessageFor(model => model.Comment)
+</div>
+
+<div class="editor-label">
+    @Html.LabelFor(model => model.ReportingDate)
+</div>
+<div class="editor-field">
+    @Html.JQueryUI().DatepickerFor(model => model.ReportingDate)
+    @Html.ValidationMessageFor(model => model.ReportingDate)
+</div>
+
