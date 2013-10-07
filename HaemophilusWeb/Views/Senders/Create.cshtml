@@ -1,26 +1,22 @@
 @model HaemophilusWeb.Models.Sender
 
 @{
-    ViewBag.Title = "Neuen Einsender erfassen";
+    ViewBag.Title = "";
 }
 
-<h2>Create</h2>
+<h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm(null, null, FormMethod.Post, new {@class = "pure-form pure-form-aligned"}))
+{
     @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>Sender</legend>
 
-		@Html.Partial("_CreateOrEdit", Model)
+    @Html.Partial("_CreateOrEdit", Model)
 
-        <p>
-            <input type="submit" value="Create" />
-        </p>
-    </fieldset>
+    <p>
+        <input type="submit" value="Create" />
+    </p>
 }
 
 <div>
     @Html.ActionLink("Zurück zur Liste der Einsender", "Index")
 </div>
-
-

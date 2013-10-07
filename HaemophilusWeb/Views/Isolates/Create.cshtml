@@ -1,26 +1,22 @@
 @model HaemophilusWeb.Models.Isolate
 
 @{
-    ViewBag.Title = "Neues Isolat erfassen";
+    ViewBag.Title = "Neues Isolat anlegen";
 }
 
-<h2>Create</h2>
+<h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm(null, null, FormMethod.Post, new {@class = "pure-form pure-form-aligned"}))
+{
     @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>Isolate</legend>
 
-		@Html.Partial("_CreateOrEdit", Model)
+    @Html.Partial("_CreateOrEdit", Model)
 
-        <p>
-            <input type="submit" value="Create" />
-        </p>
-    </fieldset>
+    <p>
+        <button type="submit" class="pure-button">Speichern</button>
+    </p>
 }
 
 <div>
     @Html.ActionLink("Zurück zur Liste der Isolate", "Index")
 </div>
-
-

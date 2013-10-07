@@ -1,16 +1,17 @@
+@using HaemophilusWeb.Models
 @model IEnumerable<HaemophilusWeb.Models.Sender>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Einsender";
 }
 
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Neuen Einsender anlegen", "Create")
 </p>
-<table>
-    <tr>
+<table  class="pure-table">
+    <thead>
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
@@ -31,35 +32,35 @@
         </th>
         <th></th>
     </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-			@item.Name
-        </td>
-        <td>
-			@item.Type
-        </td>
-        <td>
-			@item.PostalCode
-        </td>
-        <td>
-			@item.City
-        </td>
-        <td>
-			@item.Street
-        </td>
-        <td>
-            @item.ContactInfo
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.SenderId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.SenderId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.SenderId })
-        </td>
-    </tr>
-}
-
+    </thead>
+    <tbody>
+        @foreach (Sender item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                    @item.Type
+                </td>
+                <td>
+                    @item.PostalCode
+                </td>
+                <td>
+                    @item.City
+                </td>
+                <td>
+                    @item.Street
+                </td>
+                <td>
+                    @item.ContactInfo
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new {id = item.SenderId}) |
+                    @Html.ActionLink("Details", "Details", new {id = item.SenderId}) |
+                    @Html.ActionLink("Delete", "Delete", new {id = item.SenderId})
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
-
-

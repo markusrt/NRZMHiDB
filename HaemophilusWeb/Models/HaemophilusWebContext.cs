@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
 
 namespace HaemophilusWeb.Models
 {
@@ -17,8 +13,8 @@ namespace HaemophilusWeb.Models
         // 
         // System.Data.Entity.Database.SetInitializer(new System.Data.Entity.DropCreateDatabaseIfModelChanges<HaemophilusWeb.Models.HaemophilusWebContext>());
 
-        public DbSet<HaemophilusWeb.Models.Sender> Senders { get; set; }
+        public DbSet<Sender> Senders { get; set; }
 
-        public DbSet<HaemophilusWeb.Models.Isolate> Isolates { get; set; }
+        public DbSet<Isolate> Isolates { get; set; }
     }
 }

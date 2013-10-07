@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
 
 namespace HaemophilusWeb.Models
 {
     public enum Material
     {
-        [Display(Name = "Blut")]
-        Blood,
-        [Display(Name = "Liquor")]
-        Liquor
+        [Description("Blut")] Blood,
+        [Description("Liquor")] Liquor
     }
 }

@@ -26,6 +26,7 @@ namespace HaemophilusWeb.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int HaemophilusId { get; set; }
 
+        [Display(Name = "Einsender")]
         public int SenderId { get; set; }
 
         [Display(Name = "Labornummer")] //KL-Nr.
@@ -52,15 +53,6 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Ergebnis (Einsender)")]
         public string SenderConclusion { get; set; }
 
-        [Display(Name = "Oxidase")]
-        public TestResult Oxidase { get; set; }
-
-        [Display(Name = "β-Lactamase")]
-        public TestResult BetaLactamase { get; set; }
-
-        [Display(Name = "Agglutination")]
-        public TestResult Agglutination { get; set; }
-
         [Display(Name = "Faktorentest")]
         public string FactorTestResults { get; set; }
 
@@ -75,6 +67,15 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Cefotaxim E-Test")]
         public float CefotaximEtest { get; set; }
+
+        [Display(Name = "Oxidase")]
+        public TestResult Oxidase { get; set; }
+
+        [Display(Name = "β-Lactamase")]
+        public TestResult BetaLactamase { get; set; }
+
+        [Display(Name = "Agglutination")]
+        public TestResult Agglutination { get; set; }
 
         [Display(Name = "api NH")]
         public TestResult ApiNh { get; set; }

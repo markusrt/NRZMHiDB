@@ -176,6 +176,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IsolatesController.cs" />
     <Compile Include="Controllers\SendersController.cs" />
+    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

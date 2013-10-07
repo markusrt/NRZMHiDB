@@ -28,11 +28,10 @@
     <div class="display-label">ContactInfo</div>
     <div class="display-field">@Model.ContactInfo</div>
 </fieldset>
-@using (Html.BeginForm()) {
+@using (Html.BeginForm())
+{
     <p>
         <input type="submit" value="Delete" /> |
         @Html.ActionLink("Back to List", "Index")
     </p>
 }
-
-

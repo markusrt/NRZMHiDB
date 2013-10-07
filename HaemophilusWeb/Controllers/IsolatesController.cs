@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
 
 namespace HaemophilusWeb.Controllers
-{   
+{
     public class IsolatesController : Controller
     {
-        private HaemophilusWebContext context = new HaemophilusWebContext();
+        private readonly HaemophilusWebContext context = new HaemophilusWebContext();
 
         //
         // GET: /Isolates/
@@ -37,7 +33,7 @@ namespace HaemophilusWeb.Controllers
         {
             ViewBag.PossibleSenders = context.Senders;
             return View(new Isolate());
-        } 
+        }
 
         //
         // POST: /Isolates/Create
@@ -49,16 +45,16 @@ namespace HaemophilusWeb.Controllers
             {
                 context.Isolates.Add(isolate);
                 context.SaveChanges();
-                return RedirectToAction("Index");  
+                return RedirectToAction("Index");
             }
 
             ViewBag.PossibleSenders = context.Senders;
             return View(isolate);
         }
-        
+
         //
         // GET: /Isolates/Edit/5
- 
+
         public ActionResult Edit(int id)
         {
             Isolate isolate = context.Isolates.Single(x => x.HaemophilusId == id);
@@ -84,7 +80,7 @@ namespace HaemophilusWeb.Controllers
 
         //
         // GET: /Isolates/Delete/5
- 
+
         public ActionResult Delete(int id)
         {
             Isolate isolate = context.Isolates.Single(x => x.HaemophilusId == id);
@@ -105,7 +101,8 @@ namespace HaemophilusWeb.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing) {
+            if (disposing)
+            {
                 context.Dispose();
             }
             base.Dispose(disposing);

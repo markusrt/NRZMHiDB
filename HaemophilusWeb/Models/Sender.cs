@@ -5,7 +5,6 @@ namespace HaemophilusWeb.Models
 {
     public class Sender
     {
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SenderId { get; set; }

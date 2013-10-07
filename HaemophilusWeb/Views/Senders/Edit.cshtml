@@ -1,23 +1,21 @@
 @model HaemophilusWeb.Models.Sender
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Einsender bearbeiten";
 }
 
-<h2>Edit</h2>
+<h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm(null, null, FormMethod.Post, new {@class = "pure-form pure-form-aligned"}))
+{
     @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>Sender</legend>
 
-        @Html.HiddenFor(model => model.SenderId)
-		@Html.Partial("_CreateOrEdit", Model)
+    @Html.HiddenFor(model => model.SenderId)
+    @Html.Partial("_CreateOrEdit", Model)
 
-        <p>
-            <input type="submit" value="Save" />
-        </p>
-    </fieldset>
+    <p>
+        <button type="submit" class="pure-button">Änderungen speichern</button>
+    </p>
 }
 
 <div>

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
+        <title>@ViewBag.Title</title>
         <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
         <meta name="viewport" content="width=device-width" />
         @Styles.Render("~/Content/css")
@@ -13,7 +13,9 @@
         @Scripts.Render("~/bundles/jqueryval")
         @Scripts.Render("~/bundles/jqueryui")
             
-        @RenderSection("scripts", required: false)
+        @RenderSection("scripts", false)
+        
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
     </head>
     <body>
         <header>
@@ -40,7 +42,7 @@
             </div>
         </header>
         <div id="body">
-            @RenderSection("featured", required: false)
+            @RenderSection("featured", false)
             <section class="content-wrapper main-content clear-fix">
                 @RenderBody()
             </section>

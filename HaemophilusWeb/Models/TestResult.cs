@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
 
 namespace HaemophilusWeb.Models
 {
-    public enum TestResult  
+    public enum TestResult
     {
-        [Display(Name = "Positiv")]
-        Positive,
-        [Display(Name = "Negativ")]
-        Negative
+        [Description("Positiv")] Positive,
+        [Description("Negativ")] Negative
     }
 }

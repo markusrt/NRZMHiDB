@@ -17,20 +17,18 @@
 <h3>Schritt für Schritt:</h3>
 <ol class="round">
     <li class="one">
-        <h5>Einsender erfassen</h5>
-        @Html.ActionLink("Neu erfassen...", "Create", "Senders")<br/>
-        @Html.ActionLink("Vorhandene bearbeiten...", "Index", "Senders")<br/>
+        <b>@Html.ActionLink("Neuen Einsender anlegen", "Create", "Senders")</b><br/>
+        @Html.ActionLink("Liste aller Einsender", "Index", "Senders")
     </li>
     
     <li class="two">
-        <h5>Patienten erfassen</h5>
+        <b>Patienten erfassen</b><br/>
         <a href="#">To be done…</a>
     </li>
 
     <li class="three">
-        <h5>Isolate erfassen</h5>
-        @Html.ActionLink("Neu anlegen...", "Create", "Isolates")<br/>
-        @Html.ActionLink("Vorhandene bearbeiten...", "Index", "Isolates")<br/>
+        <b>@Html.ActionLink("Neues Isolat anlegen", "Create", "Isolates")</b><br/>
+        @Html.ActionLink("Liste aller Isolate", "Index", "Isolates")
     </li>
 
     

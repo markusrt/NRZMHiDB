@@ -1,59 +1,61 @@
+@using HaemophilusWeb.Models
 @model IEnumerable<HaemophilusWeb.Models.Isolate>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Isolate";
 }
 
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Neues Isolat anlegen", "Create")
 </p>
-<table>
-    <tr>
-        <th></th>
-        <th>
-            @Html.DisplayNameFor(model => model.LaboratoryNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StemNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReceivingDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SamplingDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReportingDate)
-        </th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.HaemophilusId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.HaemophilusId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.HaemophilusId })
-        </td>
-        <td>
-			@item.LaboratoryNumber
-        </td>
-        <td>
-			@item.StemNumber
-        </td>
-        <td>
-			@String.Format("{0:g}", item.ReceivingDate)
-        </td>
-        <td>
-			@String.Format("{0:g}", item.SamplingDate)
-        </td>
-        <td>
-			@String.Format("{0:g}", item.ReportingDate)
-        </td>
-    </tr>
-}
-
+<table  class="pure-table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.LaboratoryNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StemNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReceivingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SamplingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportingDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Isolate item in Model)
+        {
+            <tr>
+                <td>
+                    @item.LaboratoryNumber
+                </td>
+                <td>
+                    @item.StemNumber
+                </td>
+                <td>
+                    @String.Format("{0:g}", item.ReceivingDate)
+                </td>
+                <td>
+                    @String.Format("{0:g}", item.SamplingDate)
+                </td>
+                <td>
+                    @String.Format("{0:g}", item.ReportingDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new {id = item.HaemophilusId}) |
+                    @Html.ActionLink("Details", "Details", new {id = item.HaemophilusId}) |
+                    @Html.ActionLink("Delete", "Delete", new {id = item.HaemophilusId})
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
-
-
