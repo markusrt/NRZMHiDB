@@ -13,22 +13,30 @@ namespace HaemophilusWeb.Models
         [Required]
         public string Name { get; set; }
 
-        [Display(Name = "Art")]
-        public string Type { get; set; }
+        [Display(Name = "Abteilung")]
+        public string Department { get; set; }
 
-        [Display(Name = "Postleitzahl")]
+        [Display(Name = "Ansprechperson")]
+        public string ContactPerson { get; set; }
+
+        [Display(Name = "Telefon #1")]
+        [Phone]
+        public string Phone1 { get; set; }
+
+        [Display(Name = "Telefon #2")]
+        [Phone]
+        public string Phone2 { get; set; }
+
+        [Display(Name = "Fax")]
+        [Phone]
+        public string Fax { get; set; }
+
+        [Display(Name = "E-Mail")]
         [Required]
-        public string PostalCode { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
 
-        [Display(Name = "Ort")]
-        [Required]
-        public string City { get; set; }
-
-        [Display(Name = "Straße")]
-        [Required]
-        public string Street { get; set; }
-
-        [Display(Name = "Kontakt")]
-        public string ContactInfo { get; set; }
+        [Display(Name = "Bemerkung")]
+        public string Remark { get; set; }
     }
 }
