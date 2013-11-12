@@ -1,5 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
 using FluentAssertions;
+using HaemophilusWeb.Models;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Controllers
@@ -28,13 +31,16 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Test]
-        public void Contact()
+        public void Changes_AreOrderedDescending()
         {
             var controller = new HomeController();
 
-            var result = controller.Contact() as ViewResult;
+            var result = controller.About() as ViewResult;
 
             result.Should().NotBeNull();
+            var changes = result.Model as IEnumerable<Change>;
+            changes.Should().NotBeNull();
+            changes.Select(c => c.Date).Should().BeInDescendingOrder();
         }
     }
 }

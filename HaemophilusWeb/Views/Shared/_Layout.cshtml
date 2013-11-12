@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Reflection
+@using HaemophilusWeb.Controllers
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -21,9 +23,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("Startseite", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Über", "About", "Home")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -33,7 +34,11 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>
+                &copy; @DateTime.Now.Year 
+                - Konsiliarlabor für Haemophilus influenzae, Inst. für Hygiene und Mikrobiologie, Würzburg, Deutschland
+                - Version: @Assembly.GetAssembly(typeof(HomeController)).GetName().Version
+            </p>
         </footer>
     </div>
 

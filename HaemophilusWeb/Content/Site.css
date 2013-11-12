@@ -1,42 +1,65 @@
 ﻿body {
-    padding-top: 50px;
     padding-bottom: 20px;
+    padding-top: 50px;
 }
 
 /* Set padding to keep content from hitting the edges */
+
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
 }
 
 /* Set width on the form input elements since they're 100% wide by default */
+
 input,
 select,
-textarea {
-  /*  max-width: 280px;*/
-}
+textarea { /*  max-width: 280px;*/ }
 
 /* styles for validation helpers */
-.field-validation-error {
-    color: #b94a48;
+
+.field-validation-error { color: #b94a48; }
+
+.field-validation-valid { display: none; }
+
+input.input-validation-error { border: 1px solid #b94a48; }
+
+input[type="checkbox"].input-validation-error { border: 0 none; }
+
+.validation-summary-errors { color: #b94a48; }
+
+.validation-summary-valid { display: none; }
+
+/* Bootstrap customization*/
+
+.navbar-inverse .navbar-brand {
+    background-image: url('/Images/logo.png');
+    background-position: 0 1px;
+    background-repeat: no-repeat;
+    color: #fff;
+    padding-left: 130px;
 }
 
-.field-validation-valid {
-    display: none;
+.navbar-inverse {
+    background-color: #1b5da9;
+    border-color: #174370;
 }
 
-input.input-validation-error {
-    border: 1px solid #b94a48;
-}
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form { border-color: #174370; }
 
-input[type="checkbox"].input-validation-error {
-    border: 0 none;
-}
+.navbar-inverse .navbar-nav > li > a { color: #999999; }
 
-.validation-summary-errors {
-    color: #b94a48;
+.navbar-inverse .navbar-nav > li > a { 
+	color:#caddf8;
 }
-
-.validation-summary-valid {
-    display: none;
+	
+.navbar-inverse .navbar-nav > li > a:visited { 
+	color:#caddf8;
+}
+	
+.navbar-inverse .navbar-nav > li > a:active, 
+.navbar-inverse .navbar-nav > li > a.active,
+.navbar-inverse .navbar-nav > li > a:hover  { 
+	color: #fff;
+	text-decoration: underline;
 }
