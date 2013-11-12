@@ -254,6 +254,9 @@
     <Content Include="Views\Sender\Edit.cshtml" />
     <Content Include="Views\Sender\Index.cshtml" />
     <Content Include="Views\View1.cshtml" />
+    <Content Include="Views\Sender\_CreateOrEdit.cshtml" />
+    <Content Include="Views\Shared\_CreateButton.cshtml" />
+    <Content Include="Views\Shared\_EditButton.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -2,48 +2,89 @@
 @using HaemophilusWeb.Controllers
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>@ViewBag.Title - My ASP.NET Application</title>
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
 
-</head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Haemophilus Web", "Index", "Home", null, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Startseite", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Über", "About", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
+    </head>
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    @Html.ActionLink("Haemophilus Web", "Index", "Home", null, new {@class = "navbar-brand"})
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Startseite", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Über", "About", "Home")</li>
+                    </ul>
+                    @Html.Partial("_LoginPartial")
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>
-                &copy; @DateTime.Now.Year 
-                - Konsiliarlabor für Haemophilus influenzae, Inst. für Hygiene und Mikrobiologie, Würzburg, Deutschland
-                - Version: @Assembly.GetAssembly(typeof(HomeController)).GetName().Version
-            </p>
-        </footer>
-    </div>
+        <div class="container body-content">
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
-</body>
+            @if (IsSectionDefined("CreateModel") || IsSectionDefined("EditModel"))
+            {
+                <h2>@ViewBag.Title</h2>
+
+                using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4>@ViewBag.ModelName</h4>
+                        <hr />
+                        @Html.ValidationSummary(true)
+                     
+                        @if (IsSectionDefined("CreateModel"))
+                        {
+                            @RenderSection("CreateModel")
+                        }
+                        @if (IsSectionDefined("EditModel"))
+                        {
+                            @RenderSection("EditModel")
+                        }
+                     
+                        @if (IsSectionDefined("CreateModel"))
+                        {
+                            @Html.Partial("_CreateButton")
+                        }
+                        else if (IsSectionDefined("EditModel"))
+                        {
+                            @Html.Partial("_EditButton")
+                        }
+                    </div>
+                }
+
+                <div>
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+                
+                @Scripts.Render("~/bundles/jqueryval")
+            }
+
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>
+                    &copy; @DateTime.Now.Year 
+                    - Konsiliarlabor für Haemophilus influenzae, Inst. für Hygiene und Mikrobiologie, Würzburg, Deutschland
+                    - Version: @Assembly.GetAssembly(typeof (HomeController)).GetName().Version
+                </p>
+            </footer>
+        </div>
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", false)
+    </body>
 </html>
