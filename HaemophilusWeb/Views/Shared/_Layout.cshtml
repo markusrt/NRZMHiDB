@@ -23,10 +23,10 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Startseite", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Einsender", "Index", "Sender")</li>
                         <li>@Html.ActionLink("Über", "About", "Home")</li>
                     </ul>
-                    @Html.Partial("_LoginPartial")
+                    @*@Html.Partial("_LoginPartial")*@
                 </div>
             </div>
         </div>
@@ -34,15 +34,15 @@
 
             @if (IsSectionDefined("CreateModel") || IsSectionDefined("EditModel"))
             {
-                <h2>@ViewBag.Title</h2>
-
+                <h4>@ViewBag.Title</h4>
+                <hr />
+                
                 using (Html.BeginForm())
                 {
                     @Html.AntiForgeryToken()
-
+                
                     <div class="form-horizontal">
-                        <h4>@ViewBag.ModelName</h4>
-                        <hr />
+                        
                         @Html.ValidationSummary(true)
                      
                         @if (IsSectionDefined("CreateModel"))
@@ -64,10 +64,6 @@
                         }
                     </div>
                 }
-
-                <div>
-                    @Html.ActionLink("Back to List", "Index")
-                </div>
                 
                 @Scripts.Render("~/bundles/jqueryval")
             }
