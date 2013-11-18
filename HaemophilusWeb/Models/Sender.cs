@@ -17,9 +17,11 @@ namespace HaemophilusWeb.Models
         public string Department { get; set; }
 
         [Display(Name = "Ansprechperson")]
+        [Required]
         public string ContactPerson { get; set; }
 
         [Display(Name = "Telefon #1")]
+        [Required]
         [Phone]
         public string Phone1 { get; set; }
 
@@ -32,7 +34,6 @@ namespace HaemophilusWeb.Models
         public string Fax { get; set; }
 
         [Display(Name = "E-Mail")]
-        [Required]
         [EmailAddress]
         public string Email { get; set; }
 

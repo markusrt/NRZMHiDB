@@ -21,7 +21,10 @@
 <div class="form-group">
     @Html.LabelFor(m => m.ContactPerson, new {@class = "col-sm-2 control-label"})
     <div class="col-sm-5">
-        @Html.TextBoxFor(m => m.ContactPerson, new {@placeholder = "Erika Mustermann", @class = "form-control"})
+        <div class="input-group">
+            @Html.TextBoxFor(m => m.ContactPerson, new {@placeholder = "Erika Mustermann", @class = "form-control"})
+            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
+        </div>
         @Html.ValidationMessageFor(model => model.ContactPerson)
     </div>
 </div>
@@ -30,7 +33,8 @@
     <div class="col-sm-5">
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-phone-alt"></span></span>
-            @Html.TextBoxFor(m => m.Phone1, new { @placeholder = "030-18754-0", @class = "form-control", @type = "tel" })
+            @Html.TextBoxFor(m => m.Phone1, new {@placeholder = "030-18754-0", @class = "form-control", @type = "tel"})
+            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
         </div>
         @Html.ValidationMessageFor(model => model.Phone1)
     </div>
@@ -40,7 +44,7 @@
     <div class="col-sm-5">
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-phone"></span></span>
-            @Html.TextBoxFor(m => m.Phone2, new { @placeholder = "030-18754-1", @class = "form-control", @type = "tel" })
+            @Html.TextBoxFor(m => m.Phone2, new {@placeholder = "030-18754-1", @class = "form-control", @type = "tel"})
         </div>
         @Html.ValidationMessageFor(model => model.Phone2)
     </div>
@@ -50,7 +54,7 @@
     <div class="col-sm-5">
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-print"></span></span>
-            @Html.TextBoxFor(m => m.Fax, new { @placeholder = "030-18754-3535", @class = "form-control", @type = "tel" })
+            @Html.TextBoxFor(m => m.Fax, new {@placeholder = "030-18754-3535", @class = "form-control", @type = "tel"})
         </div>
         @Html.ValidationMessageFor(model => model.Fax)
     </div>
@@ -61,15 +65,14 @@
         <div class="input-group">
             <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span></span>
             @Html.TextBoxFor(m => m.Email, new {@placeholder = "Zentrale@rki.de", @class = "form-control", @type = "email"})
-            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
         </div>
         @Html.ValidationMessageFor(model => model.Email)
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(m => m.Remark, new { @class = "col-sm-2 control-label" })
+    @Html.LabelFor(m => m.Remark, new {@class = "col-sm-2 control-label"})
     <div class="col-sm-5">
-       @Html.TextAreaFor(m => m.Remark, new { @class = "form-control", @rows = "5" })
+        @Html.TextAreaFor(m => m.Remark, new {@class = "form-control", @rows = "5"})
     </div>
 </div>
 <!--
