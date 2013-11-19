@@ -186,6 +186,10 @@
     <Compile Include="Migrations\201311070703159_RefinedSender.Designer.cs">
       <DependentUpon>201311070703159_RefinedSender.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.cs" />
+    <Compile Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.Designer.cs">
+      <DependentUpon>201311181323010_ChangedRequiredFieldsOnSender.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Change.cs" />
@@ -273,6 +277,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201311070703159_RefinedSender.resx">
       <DependentUpon>201311070703159_RefinedSender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.resx">
+      <DependentUpon>201311181323010_ChangedRequiredFieldsOnSender.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
