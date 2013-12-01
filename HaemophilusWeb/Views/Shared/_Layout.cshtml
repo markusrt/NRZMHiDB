@@ -24,6 +24,7 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>@Html.ActionLink("Einsender", "Index", "Sender")</li>
+                        <li>@Html.ActionLink("Patienten", "Index", "Patient")</li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>@Html.ActionLink("Über", "About", "Home")</li>
@@ -72,7 +73,6 @@
                     </div>
                 }
                 
-                @Scripts.Render("~/bundles/jqueryval")
             }
 
             @RenderBody()
@@ -88,6 +88,17 @@
 
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/jqueryval")
+        
+        <script>
+            $(document).ready(function () {
+                $(".datepicker").datepicker(
+                    {
+                        "format": "dd.mm.yyyy",
+                    });
+            });
+        </script>
+
         @RenderSection("scripts", false)
     </body>
 </html>

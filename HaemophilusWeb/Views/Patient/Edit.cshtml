@@ -1,0 +1,12 @@
+﻿@model HaemophilusWeb.Models.Patient
+
+@{
+    ViewBag.Title = "Patient bearbeiten";
+}
+
+@section EditModel
+{
+    @Html.HiddenFor(model => model.PatientId)
+
+    @Html.Partial("_CreateOrEdit", Model)
+}

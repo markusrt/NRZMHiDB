@@ -174,6 +174,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\SenderController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -190,21 +191,28 @@
     <Compile Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.Designer.cs">
       <DependentUpon>201311181323010_ChangedRequiredFieldsOnSender.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201311242304525_Patient.cs" />
+    <Compile Include="Migrations\201311242304525_Patient.Designer.cs">
+      <DependentUpon>201311242304525_Patient.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Change.cs" />
     <Compile Include="Models\ChangeType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Sender.cs" />
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Views\Utils\EnumEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -217,9 +225,11 @@
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
     <Content Include="Images\logo3.png" />
+    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
+    <Content Include="Scripts\jquery-browser.min.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
     <Content Include="Scripts\jquery-2.0.3.min.map" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -263,6 +273,15 @@
     <Content Include="Views\Sender\_CreateOrEdit.cshtml" />
     <Content Include="Views\Shared\_CreateButton.cshtml" />
     <Content Include="Views\Shared\_EditButton.cshtml" />
+    <Content Include="Views\Patient\Create.cshtml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Content Include="Views\Patient\Delete.cshtml" />
+    <Content Include="Views\Patient\Details.cshtml" />
+    <Content Include="Views\Patient\Edit.cshtml" />
+    <Content Include="Views\Patient\Index.cshtml" />
+    <Content Include="Views\Patient\_CreateOrEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -280,6 +299,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.resx">
       <DependentUpon>201311181323010_ChangedRequiredFieldsOnSender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311242304525_Patient.resx">
+      <DependentUpon>201311242304525_Patient.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

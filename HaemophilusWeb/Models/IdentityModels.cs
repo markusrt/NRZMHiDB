@@ -15,5 +15,7 @@ namespace HaemophilusWeb.Models
         }
 
         public System.Data.Entity.DbSet<HaemophilusWeb.Models.Sender> Senders { get; set; }
+
+        public System.Data.Entity.DbSet<HaemophilusWeb.Models.Patient> Patients { get; set; }
     }
 }

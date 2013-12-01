@@ -1,0 +1,42 @@
+﻿@model IEnumerable<HaemophilusWeb.Models.Patient>
+
+@{
+    ViewBag.Title = "Patienten";
+}
+<p>
+    @Html.ActionLink("Neuen Patienten anlegen", "Create", "Patient", null, new { @class = "btn btn-default" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Initials)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BirthDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PostalCode)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Initials)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BirthDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PostalCode)
+        </td>
+        <td>
+            @Html.ActionLink("Bearbeiten", "Edit", new { id=item.PatientId }) @*|
+            @Html.ActionLink("Details", "Details", new { id=item.PatientId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.PatientId })*@
+        </td>
+    </tr>
+}
+
+</table>
