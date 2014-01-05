@@ -200,6 +200,7 @@
     <Compile Include="Models\Change.cs" />
     <Compile Include="Models\ChangeType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Sending.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Sender.cs" />
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
