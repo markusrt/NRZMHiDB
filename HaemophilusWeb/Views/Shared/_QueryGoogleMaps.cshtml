@@ -1,0 +1,121 @@
+﻿@* Experimental code, not used due to Google TOS not allowing internet websites querying the API without commercial license *@
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+
+<script>
+    function queryGoogleMaps()
+    {
+        var geocoder = new window.google.maps.Geocoder();
+        var input = (document.getElementById('postal-code'));
+        var options =
+        {
+            componentRestrictions: { country: 'de' }
+        };
+        var autocomplete = new window.google.maps.places.Autocomplete(input, options);
+
+        window.google.maps.event.addListener(autocomplete, 'place_changed', function ()
+        {
+            var address = LoadAddressFromSearchResult(autocomplete);
+
+            if (address.county == '')
+            {
+                var query = address.postalCode + " " + address.city;
+                geocoder.geocode({ 'address': query }, function (results, status)
+                {
+                    if (status == window.google.maps.GeocoderStatus.OK)
+                    {
+                        var addressComponents = results[0].address_components;
+                        populateAddressWithAddressComponents(addressComponents, address);
+                    }
+                    alert(address.street + ' ' + address.streetNumber + ", " + address.postalCode + " " + address.city + "(" + address.county + ")");
+                }
+                );
+            }
+            else
+            {
+                alert(address.street + ' ' + address.streetNumber + ", " + address.postalCode + " " + address.city + "(" + address.county + ")");
+            }
+       });
+    }
+
+    function Address()
+    {
+        this.street = '';
+        this.streetNumber = '';
+        this.postalCode = '';
+        this.city = '';
+        this.county = '';
+        this.state = '';
+    }
+
+    function LoadAddressFromSearchResult(autocomplete)
+    {
+        var address = new Address();
+        var place = autocomplete.getPlace();
+        var addressComponents = place.address_components;
+        populateAddressWithAddressComponents(addressComponents, address);
+        return address;
+    }
+
+    function populateAddressWithAddressComponents(addressComponents, address)
+    {
+        if (addressComponents)
+        {
+            for (var index in addressComponents)
+            {
+                var addressComponent = addressComponents[index];
+
+                if (isStreet(addressComponent))
+                {
+                    address.street = addressComponent.long_name;
+                }
+                if (isStreetNumber(addressComponent))
+                {
+                    address.streetNumber = addressComponent.long_name;
+                }
+                if (isPostalCode(addressComponent))
+                {
+                    address.postalCode = addressComponent.long_name;
+                }
+                if (isCity(addressComponent))
+                {
+                    address.city = addressComponent.long_name;
+                }
+                if (isCounty(addressComponent))
+                {
+                    address.county = addressComponent.long_name;
+                }
+            }
+        }
+    }
+
+    function isStreet(addressComponent)
+    {
+        return jQuery.inArray("route", addressComponent.types) != -1;
+    }
+
+    function isStreetNumber(addressComponent)
+    {
+        return jQuery.inArray("street_number", addressComponent.types) != -1;
+    }
+
+    function isPostalCode(addressComponent)
+    {
+        return jQuery.inArray("postal_code", addressComponent.types) != -1;
+    }
+
+    function isCity(addressComponent)
+    {
+        return isPolitical(addressComponent) && jQuery.inArray("locality", addressComponent.types) != -1;
+    }
+
+    function isCounty(addressComponent)
+    {
+        return isPolitical(addressComponent) && jQuery.inArray("administrative_area_level_3", addressComponent.types) != -1;
+    }
+
+    function isPolitical(addressComponent)
+    {
+        return jQuery.inArray("political", addressComponent.types) != -1;
+    }
+    
+</script>

@@ -229,6 +229,7 @@
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jeoQuery.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-browser.min.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
@@ -283,6 +284,8 @@
     <Content Include="Views\Patient\Edit.cshtml" />
     <Content Include="Views\Patient\Index.cshtml" />
     <Content Include="Views\Patient\_CreateOrEdit.cshtml" />
+    <Content Include="Views\Shared\_QueryGoogleMaps.cshtml" />
+    <Content Include="Views\Shared\_QueryPostalCodeViaGeonames.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

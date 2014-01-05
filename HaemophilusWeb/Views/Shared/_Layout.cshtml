@@ -8,7 +8,9 @@
         <title>Haemophilus Web - @ViewBag.Title</title>
         @Styles.Render("~/Content/css")
         @Scripts.Render("~/bundles/modernizr")
-
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @Scripts.Render("~/bundles/jqueryval")
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -86,9 +88,6 @@
             </footer>
         </div>
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/bundles/jqueryval")
         
         <script>
             $(document).ready(function () {

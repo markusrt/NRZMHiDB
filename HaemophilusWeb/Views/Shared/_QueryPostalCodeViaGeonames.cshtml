@@ -1,0 +1,50 @@
+﻿<script src="~/Scripts/jeoQuery.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#postal-code").jeoPostalCodeLookup({
+            country: "DE",
+            callback: function (data)
+            {
+                PopulateCityInput(data.placeName);
+                PopulateCountyInput(data.adminName3);
+                PopulateStateComboBox(data.adminName1);
+            },
+            noDataCallback: function ()
+            {
+                PopulateCityInput("Unbekannt");
+                PopulateCountyInput("Unbekannt");
+                PopulateStateComboBox("Unbekannt");
+            }
+        });
+    });
+    
+    function PopulateCityInput(value)
+    {
+        if ($("#city").length > 0)
+        {
+            $("#city").val(value);
+        }
+    }
+    
+    function PopulateCountyInput(value)
+    {
+        if ($("#county").length > 0)
+        {
+            $("#county").val(value);
+        }
+    }
+    
+    function PopulateStateComboBox(value)
+    {
+        if ($("#state").length > 0)
+        {
+            $('#state option').filter(
+                function()
+                {
+                     return $(this).html() == value;
+                }
+            ).prop('selected', true);
+        }
+    }
+</script>
