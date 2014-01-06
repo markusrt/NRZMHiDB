@@ -17,12 +17,12 @@
             callback: function (data) {
                 PopulateCityInput(data.placeName);
                 PopulateCountyInput(data.adminName3);
-                PopulateStateComboBox(data.adminName1);
+                PopulateStateComboBox(data.adminCode1);
             },
             noDataCallback: function () {
                 PopulateCityInput("Unbekannt");
                 PopulateCountyInput("Unbekannt");
-                PopulateStateComboBox("Unbekannt");
+                PopulateStateComboBox("Unknown");
             }
         });
     }
@@ -37,7 +37,7 @@
             {
                 PopulateCityInput("");
                 PopulateCountyInput("");
-                PopulateStateComboBox("Unbekannt");
+                PopulateStateComboBox("Unknown");
             }
 
             $.getJSON(
@@ -91,12 +91,7 @@
     {
         if ($("#State").length > 0)
         {
-            $('#State option').filter(
-                function()
-                {
-                    return $(this).html() == value;
-                }
-            ).prop('selected', true);
+            $('#State option[value="'+ value + '"]').prop('selected', true);
         }
     }
 </script>

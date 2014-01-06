@@ -11,6 +11,7 @@
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
         @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/site")
     </head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
@@ -50,7 +51,7 @@
                 using (Html.BeginForm())
                 {
                     @Html.AntiForgeryToken()
-                
+
                     <div class="form-horizontal">
                         
                         @Html.ValidationSummary(true)
@@ -74,7 +75,6 @@
                         }
                     </div>
                 }
-                
             }
 
             @RenderBody()
@@ -90,7 +90,8 @@
 
         
         <script>
-            $(document).ready(function () {
+            $(document).ready(function()
+            {
                 $(".datepicker").datepicker(
                     {
                         "format": "dd.mm.yyyy",

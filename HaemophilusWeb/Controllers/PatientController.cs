@@ -47,7 +47,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,HibVaccination")] Patient patient)
+        public ActionResult Create([Bind(Include = "PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,OtherClinicalInformation,HibVaccination,HibVaccinationDate")] Patient patient)
         {
             if (ModelState.IsValid)
             {
@@ -80,7 +80,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,HibVaccination")] Patient patient)
+        public ActionResult Edit([Bind(Include = "PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,OtherClinicalInformation,HibVaccination,HibVaccinationDate")] Patient patient)
         {
             if (ModelState.IsValid)
             {

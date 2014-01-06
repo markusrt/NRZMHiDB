@@ -36,7 +36,7 @@
 <div class="form-group">
     @Html.LabelFor(m => m.PostalCode, new {@class = "col-sm-2 control-label"})
     <div class="col-sm-5">
-        @Html.TextBoxFor(m => m.PostalCode, new { @placeholder = "97080", @class = "form-control", @list = "postalCodeSearchresults", @autocomplete="off" })
+        @Html.TextBoxFor(m => m.PostalCode, new {@placeholder = "97080", @class = "form-control", @list = "postalCodeSearchresults", @autocomplete = "off"})
         <datalist id="postalCodeSearchresults"></datalist>
         @Html.ValidationMessageFor(model => model.PostalCode)
     </div>
@@ -65,8 +65,15 @@
 <div class="form-group">
     @Html.LabelFor(m => m.ClinicalInformation, new {@class = "col-sm-2 control-label"})
     <div class="col-sm-5">
-        @Html.TextBoxFor(m => m.ClinicalInformation, new {@class = "form-control"})
+        @Html.EnumDropDownListFor(m => m.ClinicalInformation, new {@class = "form-control"})
         @Html.ValidationMessageFor(model => model.ClinicalInformation)
+    </div>
+</div>
+<div id="OtherClinicalInformationForm" class="form-group">
+    @Html.LabelFor(m => m.OtherClinicalInformation, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        @Html.TextBoxFor(m => m.OtherClinicalInformation, new {@class = "form-control"})
+        @Html.ValidationMessageFor(model => model.OtherClinicalInformation)
     </div>
 </div>
 <div class="form-group">
@@ -76,4 +83,41 @@
         @Html.ValidationMessageFor(model => model.HibVaccination)
     </div>
 </div>
+<div id="HibVaccinationDateForm" class="form-group">
+    @Html.LabelFor(m => m.HibVaccinationDate, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        <div class="input-group">
+            @{ Html.EnableClientValidation(false); }
+            @Html.TextBoxFor(m => m.HibVaccinationDate, new {@class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.HibVaccinationDate)})
+            @{ Html.EnableClientValidation(true); }
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.HibVaccinationDate)
+    </div>
+</div>
+
+<script>
+    $(document).ready(function()
+    {
+        ShowOtherClinicalInformationIfOtherIsSelected();
+        ShowHibVaccinationDateIfHibVaccinationIsYes();
+    });
+
+    function ShowOtherClinicalInformationIfOtherIsSelected()
+    {
+        ShowDivIfDropDownHasSpecificSelectedValueOrClearInputOtherwise(
+            "#OtherClinicalInformationForm", "#ClinicalInformation",
+            "Other", "#OtherClinicalInformation"
+        );
+    }
+
+    function ShowHibVaccinationDateIfHibVaccinationIsYes()
+    {
+        ShowDivIfDropDownHasSpecificSelectedValueOrClearInputOtherwise(
+            "#HibVaccinationDateForm", "#HibVaccination",
+            "Yes", "#HibVaccinationDate"
+        );
+    }
+
+</script>
 
