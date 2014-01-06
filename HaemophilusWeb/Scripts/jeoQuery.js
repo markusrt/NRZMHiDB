@@ -120,8 +120,12 @@ var jeoquery = (function ($) {
     };
 
     $.fn.jeoPostalCodeLookup = function (options) {
-        this.on("change", function () {
+        this.on("input", function () {
             var code = $(this).val();
+            if (options.lengthTrigger && code.length != options.lengthTrigger)
+            {
+                return;
+            }
             var country = options.country || jeoquery.defaultCountryCode;
             if (options.countryInput) {
                 country = options.countryInput.val() || jeoquery.defaultCountry;

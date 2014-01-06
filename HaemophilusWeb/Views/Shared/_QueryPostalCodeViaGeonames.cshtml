@@ -1,48 +1,100 @@
 ﻿<script src="~/Scripts/jeoQuery.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $("#postal-code").jeoPostalCodeLookup({
+    
+    $(document).ready(function ()
+    {
+        RegisterPostalCodeAutocompletion();
+
+        RegisterPostalCodeDetailsLookup();
+    });
+    
+    function RegisterPostalCodeDetailsLookup()
+    {
+        $("#PostalCode").jeoPostalCodeLookup({
             country: "DE",
-            callback: function (data)
-            {
+            lengthTrigger: 5,
+            callback: function (data) {
                 PopulateCityInput(data.placeName);
                 PopulateCountyInput(data.adminName3);
                 PopulateStateComboBox(data.adminName1);
             },
-            noDataCallback: function ()
-            {
+            noDataCallback: function () {
                 PopulateCityInput("Unbekannt");
                 PopulateCountyInput("Unbekannt");
                 PopulateStateComboBox("Unbekannt");
             }
         });
-    });
+    }
     
+    function RegisterPostalCodeAutocompletion()
+    {
+        $("#PostalCode").on("input", function (e) {
+            var val = $(this).val();
+            if (val === "") return;
+            
+            if (val.length != 5)
+            {
+                PopulateCityInput("");
+                PopulateCountyInput("");
+                PopulateStateComboBox("Unbekannt");
+            }
+
+            $.getJSON(
+                "http://api.geonames.org/postalCodeSearchJSON?callback=?",
+                { postalcode_startsWith: val, country: "DE", username: "hweb" }
+            ).done(FillPostalCodeDataList);
+        });
+    }
+
+    var knownPostalCodes = new Array();
+
+    function FillPostalCodeDataList (data)
+    {
+        if (data.postalCodes.length == 0)
+        {
+            return;
+        }
+
+        var dataList = $("#postalCodeSearchresults");
+        for (var i = 0, len = data.postalCodes.length; i < len; i++)
+        {
+            var result = data.postalCodes[i];
+            var postalCode = result.postalCode;
+            if (jQuery.inArray(postalCode, knownPostalCodes) != -1)
+            {
+                continue;
+            }
+            dataList.append("<option value='" + postalCode + "'>" + result.postalCode + " " + result.placeName + "</option>");
+            knownPostalCodes.push(postalCode);
+        }
+        $("#PostalCode").val($("#PostalCode").val());
+    }
+
     function PopulateCityInput(value)
     {
-        if ($("#city").length > 0)
+        if ($("#City").length > 0)
         {
-            $("#city").val(value);
+            $("#City").val(value);
         }
     }
     
     function PopulateCountyInput(value)
     {
-        if ($("#county").length > 0)
+        if ($("#County").length > 0)
         {
-            $("#county").val(value);
+            $("#County").val(value);
         }
     }
     
     function PopulateStateComboBox(value)
     {
-        if ($("#state").length > 0)
+        if ($("#State").length > 0)
         {
-            $('#state option').filter(
+            $('#State option').filter(
                 function()
                 {
-                     return $(this).html() == value;
+                    return $(this).html() == value;
                 }
             ).prop('selected', true);
         }
