@@ -21,7 +21,7 @@ namespace HaemophilusWeb.Models
         public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Postleitzahl")]
-        [RegularExpression(@"\d{5}", ErrorMessage = "Die Postleitzahl muss eine 5-stellige Nummer sein")]
+        [RegularExpression(Validations.PostalCodeValidation, ErrorMessage = Validations.PostalCodeValidationError)]
         public string PostalCode { get; set; }
 
         [Display(Name = "Geschlecht")]

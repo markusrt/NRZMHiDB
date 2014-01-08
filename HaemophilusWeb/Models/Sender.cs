@@ -16,9 +16,15 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Abteilung")]
         public string Department { get; set; }
 
-        [Display(Name = "Ansprechperson")]
-        [Required]
-        public string ContactPerson { get; set; }
+        [Display(Name = "Straße")]
+        public string StreetWithNumber { get; set; }
+
+        [Display(Name = "Postleitzahl")]
+        [RegularExpression(Validations.PostalCodeValidation, ErrorMessage = Validations.PostalCodeValidationError)]
+        public string PostalCode { get; set; }
+
+        [Display(Name = "Wohnort")]
+        public string City { get; set; }
 
         [Display(Name = "Telefon #1")]
         [Required]

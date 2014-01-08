@@ -199,11 +199,16 @@
     <Compile Include="Migrations\201401061223272_RefinedPatient.Designer.cs">
       <DependentUpon>201401061223272_RefinedPatient.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201401081931532_RefinedSender1.cs" />
+    <Compile Include="Migrations\201401081931532_RefinedSender1.Designer.cs">
+      <DependentUpon>201401081931532_RefinedSender1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Change.cs" />
     <Compile Include="Models\ChangeType.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Validations.cs" />
     <Compile Include="Models\Sending.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Sender.cs" />
@@ -314,6 +319,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201401061223272_RefinedPatient.resx">
       <DependentUpon>201401061223272_RefinedPatient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401081931532_RefinedSender1.resx">
+      <DependentUpon>201401081931532_RefinedSender1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

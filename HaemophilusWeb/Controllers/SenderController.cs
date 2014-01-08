@@ -46,7 +46,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="SenderId,Name,Department,ContactPerson,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
+        public ActionResult Create([Bind(Include="SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +78,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="SenderId,Name,Department,ContactPerson,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
+        public ActionResult Edit([Bind(Include="SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
         {
             if (ModelState.IsValid)
             {
