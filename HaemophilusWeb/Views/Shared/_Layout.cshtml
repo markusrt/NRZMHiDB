@@ -10,7 +10,7 @@
         @Scripts.Render("~/bundles/modernizr")
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/bootstrap")
-        @Scripts.Render("~/bundles/jqueryval")
+        
         @Scripts.Render("~/bundles/site")
     </head>
     <body>
@@ -28,6 +28,7 @@
                     <ul class="nav navbar-nav">
                         <li>@Html.ActionLink("Einsender", "Index", "Sender")</li>
                         <li>@Html.ActionLink("Patienten", "Index", "Patient")</li>
+                        <li>@Html.ActionLink("Einsendungen", "Index", "Sending")</li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>@Html.ActionLink("Über", "About", "Home")</li>
@@ -100,5 +101,6 @@
         </script>
 
         @RenderSection("scripts", false)
+        @Scripts.Render("~/bundles/jqueryval")
     </body>
 </html>

@@ -1,0 +1,153 @@
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.Models.Sending
+
+<div class="form-group">
+    @Html.LabelFor(model => model.SenderId, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        <div class="input-group">
+            @Html.DropDownListFor(model => model.SenderId, ((IEnumerable<Sender>) ViewBag.PossibleSenders).Select(option => new SelectListItem
+            {
+                Text = (option == null ? "None" : option.Name),
+                Value = option.SenderId.ToString(),
+                Selected = (Model != null) && (option.SenderId == Model.SenderId)
+            }), "Auswählen...", new {@class = "form-control"})
+            
+            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.SenderId)
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.PatientId, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        <div class="input-group">
+            @Html.DropDownListFor(model => model.PatientId, ((IEnumerable<Patient>)ViewBag.PossiblePatients).Select(option => new SelectListItem
+            {
+                Text = (option == null ? "None" : option.Initials),
+                Value = option.PatientId.ToString(),
+                Selected = (Model != null) && (option.PatientId == Model.PatientId)
+            }), "Auswählen...", new { @class = "form-control" })
+
+            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.PatientId)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.SamplingDate, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        <div class="input-group">
+            @{ Html.EnableClientValidation(false); }
+            @Html.TextBoxFor(m => m.SamplingDate, new {@class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.SamplingDate)})
+            @{ Html.EnableClientValidation(true); }
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.SamplingDate)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.ReceivingDate, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        <div class="input-group">
+            @{ Html.EnableClientValidation(false); }
+            @Html.TextBoxFor(m => m.ReceivingDate, new {@class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.ReceivingDate)})
+            @{ Html.EnableClientValidation(true); }
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.ReceivingDate)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Material, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+       @Html.EnumRadioButtonFor(m => m.Material)
+    </div>
+</div>
+<div id="OtherMaterialForm" class="form-group">
+    @Html.LabelFor(m => m.OtherMaterial, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        <div class="input-group">
+            @Html.TextBoxFor(m => m.OtherMaterial, new { @class = "form-control", @list = "otherMaterialsAutocomplete", @autocomplete = "off" })
+            <datalist id="otherMaterialsAutocomplete">
+                @foreach (var item in ViewBag.PossibleOtherMaterials)
+                {
+                    <option value="@item.ToString()" />
+                }
+            </datalist>
+
+            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.OtherMaterial)
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Invasive, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        @Html.EnumRadioButtonFor(m => m.Invasive)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.SenderLaboratoryNumber, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        <div class="input-group">
+            @Html.TextBoxFor(m => m.SenderLaboratoryNumber, new { @class = "form-control" })
+
+            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.SenderLaboratoryNumber)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.SenderConclusion, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        <div class="input-group">
+            @Html.TextBoxFor(m => m.SenderConclusion, new { @class = "form-control" })
+
+            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.SenderConclusion)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Evaluation, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        @Html.EnumDropDownListFor(model => model.Evaluation, new {@class = "form-control"})
+        @Html.ValidationMessageFor(model => model.Evaluation)
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Remark, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        @Html.TextAreaFor(m => m.Remark, new {@class = "form-control", @rows = "5"})
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.ReportDate, new {@class = "col-sm-2 control-label"})
+    <div class="col-sm-5">
+        <div class="input-group">
+            @{ Html.EnableClientValidation(false); }
+            @Html.TextBoxFor(m => m.ReportDate, new {@class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.ReportDate)})
+            @{ Html.EnableClientValidation(true); }
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.ReportDate)
+    </div>
+</div>
+
+<script>
+    $(document).ready(function()
+    {
+        ShowOtherMaterialIfOtherIsSelected();
+    });
+
+    function ShowOtherMaterialIfOtherIsSelected()
+    {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#OtherMaterialForm", "input:radio[name='Material']",
+            "Other", "#OtherMaterial"
+        );
+    }
+</script>

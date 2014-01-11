@@ -1,4 +1,8 @@
-﻿using HaemophilusWeb.Migrations;
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using FluentValidation;
+using FluentValidation.Mvc;
+using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
 using System;
 using System.Collections.Generic;
@@ -20,6 +24,7 @@ namespace HaemophilusWeb
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
+            FluentValidationModelValidatorProvider.Configure();
         }
     }
 }

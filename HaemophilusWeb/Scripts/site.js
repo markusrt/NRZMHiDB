@@ -1,7 +1,7 @@
-﻿function ShowDivIfDropDownHasSpecificSelectedValueOrClearInputOtherwise(
-                divToShow, dropDown, valueOnWhichToShowDiv, inputToClearOnOtherValue)
+﻿function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+                divToShow, inputSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue)
 {
-    if ($(dropDown).val() === valueOnWhichToShowDiv)
+    if ($(inputSelector).val() === valueOnWhichToShowDiv)
     {
         $(divToShow).removeClass("hidden");
     }
@@ -9,7 +9,7 @@
         $(divToShow).addClass("hidden");
     }
 
-    $(dropDown).change(function ()
+    $(inputSelector).change(function ()
     {
         if ($(this).val() === valueOnWhichToShowDiv)
         {

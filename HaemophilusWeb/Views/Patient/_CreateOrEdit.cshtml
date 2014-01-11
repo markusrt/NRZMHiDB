@@ -27,10 +27,9 @@
     </div>
 </div>
 <div class="form-group">
-    @Html.LabelFor(m => m.Gender, new {@class = "col-sm-2 control-label"})
+    @Html.LabelFor(m => m.Gender, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
-        @Html.EnumDropDownListFor(model => model.Gender, new {@class = "form-control"})
-        @Html.ValidationMessageFor(model => model.Gender)
+        @Html.EnumRadioButtonFor(m => m.Gender)
     </div>
 </div>
 <div class="form-group">
@@ -105,7 +104,7 @@
 
     function ShowOtherClinicalInformationIfOtherIsSelected()
     {
-        ShowDivIfDropDownHasSpecificSelectedValueOrClearInputOtherwise(
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
             "#OtherClinicalInformationForm", "#ClinicalInformation",
             "Other", "#OtherClinicalInformation"
         );
@@ -113,7 +112,7 @@
 
     function ShowHibVaccinationDateIfHibVaccinationIsYes()
     {
-        ShowDivIfDropDownHasSpecificSelectedValueOrClearInputOtherwise(
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
             "#HibVaccinationDateForm", "#HibVaccination",
             "Yes", "#HibVaccinationDate"
         );

@@ -1,0 +1,12 @@
+﻿@model HaemophilusWeb.Models.Sending
+
+@{
+    ViewBag.Title = "Einsendung bearbeiten";
+}
+
+@section EditModel
+{
+    @Html.HiddenFor(model => model.SendingId)
+
+    @Html.Partial("_CreateOrEdit", Model)
+}

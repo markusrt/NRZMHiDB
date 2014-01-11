@@ -1,0 +1,55 @@
+﻿@using HaemophilusWeb.Models
+@model IEnumerable<HaemophilusWeb.Models.Sending>
+
+@{
+    ViewBag.Title = "Einsendungen";
+}
+<p>
+    @Html.ActionLink("Neue Einsendung anlegen", "Create", "Sending", null, new { @class = "btn btn-default" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SendingId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SamplingDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReceivingDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Material)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Invasive)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.SendingId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SamplingDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ReceivingDate)
+        </td>
+        <td>
+            @(item.Material == Material.Other ? Html.DisplayFor(modelItem => item.OtherMaterial) : Html.DisplayFor(modelItem => item.Material))
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Invasive)
+        </td>
+        <td>
+            @Html.ActionLink("Bearbeiten", "Edit", new { id=item.SendingId })@* |
+            @Html.ActionLink("Details", "Details", new { id=item.SendingId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SendingId })*@
+        </td>
+    </tr>
+}
+
+</table>

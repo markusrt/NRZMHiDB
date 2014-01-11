@@ -2,10 +2,14 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
+using FluentValidation.Attributes;
+using FluentValidation.Validators;
+using HaemophilusWeb.Validators;
+using Microsoft.Ajax.Utilities;
 
 namespace HaemophilusWeb.Models
 {
+    [Validator(typeof(SendingValidator))]
     public class Sending
     {
         public Sending()
@@ -17,6 +21,7 @@ namespace HaemophilusWeb.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Einsendungsnummer")]
         public int SendingId { get; set; }
 
         [Display(Name = "Einsender")]
@@ -24,39 +29,38 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Patient")]
         public int PatientId { get; set; }
-        
+
         [Display(Name = "Entnahmedatum")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime SamplingDate { get; set; }
 
-        [Display(Name = "Eingangsdatum")]
+        [DisplayName("Eingangsdatum")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ReceivingDate { get; set; }
-        
+
         [Display(Name = "Material")]
         public Material Material { get; set; }
 
-        [Display(Name = "anderes Material")]
+        [Display(Name = "Anderes Material")]
         public string OtherMaterial { get; set; }
 
         [Display(Name = "Invasiv")]
-        public bool? Invasive { get; set; }
+        public YesNo? Invasive { get; set; }
 
         [Display(Name = "Labnr. Einsender")]
         public string SenderLaboratoryNumber { get; set; }
 
         [Display(Name = "Ergebnis Einsender")]
-        [Required]
         public string SenderConclusion { get; set; }
 
         [Display(Name = "Beurteilung")]
-        public string Evaluation { get; set; }
-    }
+        public Evaluation Evaluation { get; set; }
 
-    public enum Material
-    {
-        [Description("Blut")]
-        Blood,
-        [Description("Liquor")]
-        Liquor
-    }
+        [Display(Name = "Bemerkung")]
+        public string Remark { get; set; }
 
+        [Display(Name = "Befund am")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? ReportDate { get; set; }
+    }
 }

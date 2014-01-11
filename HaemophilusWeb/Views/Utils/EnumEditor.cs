@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
@@ -23,44 +25,72 @@ namespace HaemophilusWeb.Views.Utils
             return realModelType;
         }
 
-        public static string GetEnumDescription<TEnum>(TEnum value)
+        private static string GetEnumDescription<TEnum>(TEnum value)
         {
-            var fi = value.GetType().GetField(value.ToString());
+            var field = value.GetType().GetField(value.ToString());
 
-            var attributes = (DescriptionAttribute[]) fi.GetCustomAttributes(typeof (DescriptionAttribute), false);
+            var attributes = (DescriptionAttribute[]) field.GetCustomAttributes(typeof (DescriptionAttribute), false);
 
-            if ((attributes != null) && (attributes.Length > 0))
-                return attributes[0].Description;
-            else
-                return value.ToString();
+            return (attributes.Length > 0) ? attributes[0].Description : value.ToString();
         }
 
         public static MvcHtmlString EnumDropDownListFor<TModel, TEnum>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TEnum>> expression)
+            Expression<Func<TModel, TEnum>> expression, object htmlAttributes = null)
         {
-            return EnumDropDownListFor(htmlHelper, expression, null);
-        }
-
-        public static MvcHtmlString EnumDropDownListFor<TModel, TEnum>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TEnum>> expression, object htmlAttributes)
-        {
-            var metadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
-            var enumType = GetNonNullableModelType(metadata);
-            var values = Enum.GetValues(enumType).Cast<TEnum>();
-
-            var items = from value in values
+            var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            
+            var items = from value in GetEnumValues<TEnum>(modelMetadata)
                 select new SelectListItem
                 {
                     Text = GetEnumDescription(value),
                     Value = value.ToString(),
-                    Selected = value.Equals(metadata.Model)
+                    Selected = value.Equals(modelMetadata.Model)
                 };
 
             // If the enum is nullable, add an 'empty' item to the collection
-            if (metadata.IsNullableValueType)
+            if (modelMetadata.IsNullableValueType)
+            {
                 items = SingleEmptyItem.Concat(items);
+            }
 
             return htmlHelper.DropDownListFor(expression, items, htmlAttributes);
+        }
+
+        private static IEnumerable<TEnum> GetEnumValues<TEnum>(ModelMetadata modelMetadata)
+        {
+            var enumType = GetNonNullableModelType(modelMetadata);
+            var values = Enum.GetValues(enumType).Cast<TEnum>();
+            return values;
+        }
+
+
+        public static MvcHtmlString EnumRadioButtonFor<TModel, TEnum>(this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TEnum>> expression)
+        {
+            var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            var currentValue = htmlHelper.ValueFor(expression).ToString();
+
+            var sb = new StringBuilder();
+            sb.Append("<div><div class=\"btn-group\" data-toggle=\"buttons\">");
+            foreach (var value in GetEnumValues<TEnum>(modelMetadata))
+            {
+                var description = GetEnumDescription(value);
+                var name = GetName(modelMetadata, value);
+
+                var id = string.Format("{0}_{1}", modelMetadata.PropertyName, name);
+
+                var radio = htmlHelper.RadioButtonFor(expression, name, new {id}).ToHtmlString();
+                sb.AppendFormat("<label class=\"btn btn-primary {2}\">{0} {1}</label>", radio, description, currentValue==name?"active":"");
+            }
+            sb.Append("</div></div>");
+            sb.Append(htmlHelper.ValidationMessageFor(expression).ToHtmlString());
+            return MvcHtmlString.Create(sb.ToString());
+        }
+
+        private static string GetName<TEnum>(ModelMetadata metadata, TEnum value)
+        {
+            var enumType = GetNonNullableModelType(metadata);
+            return Enum.GetName(enumType, value);
         }
     }
 }
