@@ -32,6 +32,11 @@ namespace HaemophilusWeb.Models
             get { return wrappedContext.Sendings; }
         }
 
+        public IDbSet<Isolate> Isolates
+        {
+            get { return wrappedContext.Isolates; }
+        }
+
         public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
         {
             return wrappedContext.Entry(entity);

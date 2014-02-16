@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Linq;
 using HaemophilusWeb.Mocks;
 
 namespace HaemophilusWeb.Models
@@ -9,7 +10,8 @@ namespace HaemophilusWeb.Models
     {
         public readonly InMemoryDbSet<Patient> PatientDbSet = new InMemoryDbSet<Patient>(true);
         public readonly InMemoryDbSet<Sender> SenderDbSet = new InMemoryDbSet<Sender>(true);
-        public readonly InMemoryDbSet<Sending> SendingDbSet = new InMemoryDbSet<Sending>(true);
+        public readonly InMemoryDbSet<Sending> SendingDbSet = new MockDbSet<Sending>(true);
+        public readonly InMemoryDbSet<Isolate> IsolatesDbSet = new InMemoryDbSet<Isolate>(true);
 
         public IDbSet<Sender> Senders
         {
@@ -26,6 +28,11 @@ namespace HaemophilusWeb.Models
             get { return SendingDbSet; }
         }
 
+        public IDbSet<Isolate> Isolates
+        {
+            get { return IsolatesDbSet; }
+        }
+
         public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
         {
             return null;
@@ -38,6 +45,18 @@ namespace HaemophilusWeb.Models
 
         public void Dispose()
         {
+        }
+    }
+
+    public class MockDbSet<T> : InMemoryDbSet<Sending>
+    {
+        public MockDbSet(bool clearDownExistingData) : base(clearDownExistingData)
+        {
+        }
+
+        public override Sending Find(params object[] keyValues)
+        {
+            return this.FirstOrDefault(s => keyValues.Contains(s.SendingId));
         }
     }
 }

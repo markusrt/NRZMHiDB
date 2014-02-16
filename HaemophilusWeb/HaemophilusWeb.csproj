@@ -214,6 +214,10 @@
     <Compile Include="Migrations\201401100947336_Sending.Designer.cs">
       <DependentUpon>201401100947336_Sending.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201402032311285_Isolate_1.cs" />
+    <Compile Include="Migrations\201402032311285_Isolate_1.Designer.cs">
+      <DependentUpon>201402032311285_Isolate_1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
@@ -221,10 +225,12 @@
     <Compile Include="Models\Change.cs" />
     <Compile Include="Models\ChangeType.cs" />
     <Compile Include="Models\ClinicalInformation.cs" />
+    <Compile Include="Models\Error.cs" />
     <Compile Include="Models\Evaluation.cs" />
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\IApplicationDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Isolate.cs" />
     <Compile Include="Models\Material.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\Validations.cs" />
@@ -354,6 +360,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201401100947336_Sending.resx">
       <DependentUpon>201401100947336_Sending.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402032311285_Isolate_1.resx">
+      <DependentUpon>201402032311285_Isolate_1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

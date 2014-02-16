@@ -23,3 +23,14 @@
         }
     });
 }
+
+function ShowError(message)
+{
+    var errorHtml =
+        '<div class="alert alert-danger alert-dismissable">' +
+          '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+          '<strong>Fehler!</strong> ' + message +
+        '</div>';
+
+    $("#errorMessages").append(errorHtml);
+}

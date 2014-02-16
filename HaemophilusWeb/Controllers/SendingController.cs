@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -73,7 +74,8 @@ namespace HaemophilusWeb.Controllers
         {
             ViewBag.PossibleSenders = db.Senders;
             ViewBag.PossiblePatients = db.Patients;
-            ViewBag.PossibleOtherMaterials = db.Sendings.Where(s => !string.IsNullOrEmpty(s.OtherMaterial)).Select(s => s.OtherMaterial).Distinct();
+            ViewBag.PossibleOtherMaterials =
+                db.Sendings.Where(s => !string.IsNullOrEmpty(s.OtherMaterial)).Select(s => s.OtherMaterial).Distinct();
         }
 
         // GET: /Sending/Edit/5
@@ -90,6 +92,51 @@ namespace HaemophilusWeb.Controllers
             }
             AddReferenceDataToViewBag();
             return View(sending);
+        }
+
+        public ActionResult AssignStemNumber(int? id)
+        {
+            if (id == null)
+            {
+                return
+                    Json(new Error {ErrorMessage = "Zur Zuweisung einer Stammnummer wird eine Sendungsnummer benötigt."});
+            }
+            var sending = db.Sendings.Find(id);
+            if (sending == null)
+            {
+                return
+                    Json(new Error
+                    {
+                        ErrorMessage =
+                            string.Format(
+                                "Zuweisung einer Stammnummer ist fehlgeschlagen. Die Sendung mit der Nummer '{0}' existiert nicht.",
+                                id)
+                    });
+            }
+            if (sending.Isolate == null)
+            {
+                var currentYear = DateTime.Now.Year;
+                var nextSequentialIsolateNumber = GetNextSequentialIsolateNumber(currentYear);
+
+                sending.Isolate = new Isolate
+                {
+                    Year = currentYear,
+                    YearlySequentialIsolateNumber = nextSequentialIsolateNumber
+                };
+
+                db.SaveChanges();
+            }
+            var isolate = sending.Isolate;
+            return Json(isolate);
+        }
+
+        private int GetNextSequentialIsolateNumber(int currentYear)
+        {
+            var lastSequentialIsolateNumber =
+                db.Isolates.Where(i => i.Year == currentYear)
+                    .DefaultIfEmpty()
+                    .Max(i => i == null ? 0 : i.YearlySequentialIsolateNumber);
+            return lastSequentialIsolateNumber + 1;
         }
 
         // POST: /Sending/Edit/5

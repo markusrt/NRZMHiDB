@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web.Script.Serialization;
 using FluentValidation.Attributes;
 using FluentValidation.Validators;
 using HaemophilusWeb.Validators;
@@ -62,5 +63,7 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Befund am")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? ReportDate { get; set; }
+
+        public virtual Isolate Isolate { get; set; }
     }
 }

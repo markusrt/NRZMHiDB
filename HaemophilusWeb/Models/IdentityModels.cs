@@ -17,5 +17,7 @@ namespace HaemophilusWeb.Models
         public DbSet<Patient> Patients { get; set; }
 
         public DbSet<Sending> Sendings { get; set; }
+
+        public DbSet<Isolate> Isolates { get; set; }
     }
 }

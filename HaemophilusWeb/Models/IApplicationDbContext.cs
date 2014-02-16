@@ -11,6 +11,8 @@ namespace HaemophilusWeb.Models
         IDbSet<Patient> Patients { get;  }
 
         IDbSet<Sending> Sendings { get;  }
+        
+        IDbSet<Isolate> Isolates { get;  }
 
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
