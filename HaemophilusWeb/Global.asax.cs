@@ -10,13 +10,18 @@ using System.Web.Script.Serialization;
 using FluentValidation.Mvc;
 using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
+using NLog;
 
 namespace HaemophilusWeb
 {
     public class MvcApplication : HttpApplication
     {
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
         protected void Application_Start()
         {
+            Log.Info("Application start");
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -27,17 +32,20 @@ namespace HaemophilusWeb
 
         private void Application_Error(object sender, EventArgs e)
         {
+            var exception = Server.GetLastError();
+            Log.ErrorException(string.Format("Unhandled error: {0}", exception.Message), exception);
+
             if (IsAjaxRequest())
             {
                 Response.Clear();
 
-                var serializer = new JavaScriptSerializer();
-                var lastError = Server.GetLastError();
-                var error = new Error {ErrorMessage = lastError.Message};
+                var serializer = new JavaScriptSerializer();   
+                var error = new Error {ErrorMessage = exception.Message};
                 var responseJson = serializer.Serialize(error);
                 Response.Write(responseJson);
                 Server.ClearError();
             }
+
         }
 
         private bool IsAjaxRequest()

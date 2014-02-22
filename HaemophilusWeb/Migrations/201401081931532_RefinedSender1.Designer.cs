@@ -7,9 +7,9 @@ namespace HaemophilusWeb.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.0.1-21010")]
-    public sealed partial class RefinedSender2 : IMigrationMetadata
+    public sealed partial class RefinedSender1 : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(RefinedSender2));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(RefinedSender1));
         
         string IMigrationMetadata.Id
         {
