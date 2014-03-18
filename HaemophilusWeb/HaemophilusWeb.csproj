@@ -187,6 +187,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Controllers\PatientSendingController.cs" />
     <Compile Include="Controllers\SenderController.cs" />
     <Compile Include="Controllers\SendingController.cs" />
     <Compile Include="Global.asax.cs">
@@ -248,7 +249,9 @@
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Validators\PatientValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
+    <Compile Include="ViewModels\PatientSendingViewModel.cs" />
     <Compile Include="Views\Utils\BootstrapEditor.cs" />
     <Compile Include="Views\Utils\EnumEditor.cs" />
   </ItemGroup>
@@ -336,7 +339,6 @@
     <Content Include="Views\Patient\Details.cshtml" />
     <Content Include="Views\Patient\Edit.cshtml" />
     <Content Include="Views\Patient\Index.cshtml" />
-    <Content Include="Views\Patient\_CreateOrEdit.cshtml" />
     <Content Include="Views\Shared\_QueryGoogleMaps.cshtml" />
     <Content Include="Views\Shared\_QueryPostalCodeViaGeonames.cshtml" />
     <Content Include="Views\Sending\Create.cshtml" />
@@ -344,7 +346,11 @@
     <Content Include="Views\Sending\Details.cshtml" />
     <Content Include="Views\Sending\Edit.cshtml" />
     <Content Include="Views\Sending\Index.cshtml" />
-    <Content Include="Views\Sending\_CreateOrEdit.cshtml" />
+    <Content Include="Views\PatientSending\Create.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Patient.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Sending.cshtml" />
+    <Content Include="Views\PatientSending\Index.cshtml" />
+    <Content Include="Views\PatientSending\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

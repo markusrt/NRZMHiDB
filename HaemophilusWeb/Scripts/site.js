@@ -1,9 +1,17 @@
 ﻿function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-                divToShow, inputSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue)
+    divToShow, inputSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue)
 {
-    if ($(inputSelector).val() === valueOnWhichToShowDiv)
+    ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+    divToShow, inputSelector, inputSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue)
+}
+
+function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+    divToShow, inputSelector, valueSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue)
+    {
+    if ($(valueSelector).val() === valueOnWhichToShowDiv)
     {
         $(divToShow).removeClass("hidden");
+        $(inputToClearOnOtherValue).focus();
     }
     else {
         $(divToShow).addClass("hidden");

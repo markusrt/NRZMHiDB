@@ -2,15 +2,12 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Web.Script.Serialization;
 using FluentValidation.Attributes;
-using FluentValidation.Validators;
 using HaemophilusWeb.Validators;
-using Microsoft.Ajax.Utilities;
 
 namespace HaemophilusWeb.Models
 {
-    [Validator(typeof(SendingValidator))]
+    [Validator(typeof (SendingValidator))]
     public class Sending
     {
         public Sending()

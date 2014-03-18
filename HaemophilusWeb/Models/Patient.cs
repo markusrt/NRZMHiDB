@@ -1,30 +1,36 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Globalization;
+using FluentValidation.Attributes;
+using HaemophilusWeb.Validators;
 
 namespace HaemophilusWeb.Models
 {
+    [Validator(typeof (PatientValidator))]
     public class Patient
     {
+        private string initials;
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PatientId { get; set; }
 
         [Display(Name = "Initialen")]
-        [Required]
-        [RegularExpression(@"([a-zA-ZäöüÄÖÜ]\.)+")]
-        public string Initials { get; set; }
+        public string Initials
+        {
+            get { return initials; }
+            set { initials = value.ToUpper(CultureInfo.InvariantCulture); }
+        }
 
         [Display(Name = "Geburtsdatum")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? BirthDate { get; set; }
 
         [Display(Name = "Postleitzahl")]
-        [RegularExpression(Validations.PostalCodeValidation, ErrorMessage = Validations.PostalCodeValidationError)]
         public string PostalCode { get; set; }
 
         [Display(Name = "Geschlecht")]
-        [Required]
         public Gender? Gender { get; set; }
 
         [Display(Name = "Wohnort")]

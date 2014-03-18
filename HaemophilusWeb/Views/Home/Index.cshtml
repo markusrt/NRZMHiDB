@@ -17,27 +17,15 @@
         </p>
     </div>
     <div class="col-md-3 col-sm-6 col-xs-12">
-        <h3>Patienten</h3>
-        <p>
-            Suchen, anlegen und bearbeiten von Patienten.
-        </p>
-        <p>
-            @Html.ActionLink("Alle Patienten anzeigen", "Index", "Patient", null, new { @class = "btn btn-default btn-block" })
-        </p>
-        <p>
-            @Html.ActionLink("Neuen Patient anlegen", "Create", "Patient", null, new { @class = "btn btn-primary btn-block" })
-        </p>
-    </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
         <h3>Einsendungen</h3>
         <p>
             Suchen, anlegen und bearbeiten von Einsendungen.
         </p>
         <p>
-            @Html.ActionLink("Alle Einsendungen anzeigen", "Index", "Sending", null, new { @class = "btn btn-default btn-block" })
+            @Html.ActionLink("Alle Einsendungen anzeigen", "Index", "PatientSending", null, new { @class = "btn btn-default btn-block" })
         </p>
         <p>
-            @Html.ActionLink("Neuen Einsendung anlegen", "Create", "Sending", null, new { @class = "btn btn-primary btn-block" })
+            @Html.ActionLink("Neuen Einsendung anlegen", "Create", "PatientSending", null, new { @class = "btn btn-primary btn-block" })
         </p>
     </div>
 </div>

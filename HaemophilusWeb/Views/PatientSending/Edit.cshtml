@@ -1,0 +1,15 @@
+﻿@model HaemophilusWeb.ViewModels.PatientSendingViewModel
+
+@{
+    ViewBag.Title = "Einsendung bearbeiten";
+}
+
+@section EditModel
+{
+    @Html.HiddenFor(model => model.Sending.SendingId)
+    @Html.HiddenFor(model => model.Sending.PatientId)
+    @Html.HiddenFor(model => model.Patient.PatientId)
+
+    @Html.EditorFor(m => m.Sending)
+    @Html.EditorFor(m => m.Patient)
+}

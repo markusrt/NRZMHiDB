@@ -10,6 +10,7 @@ namespace HaemophilusWeb.Controllers
     {
         private readonly List<Change> changeLog = new List<Change>
         {
+            new Change(new DateTime(2014,3,18), "Einfache Erfassung von Einsendung/Patient", ChangeType.Feature ),
             new Change(new DateTime(2014,2,16), "Zuweisung einer Stammnummer", ChangeType.Feature ),
             new Change(new DateTime(2014,1,11), "Einfache Erfassung von Einsendungen", ChangeType.Feature ),
             new Change(new DateTime(2014,1,8), "Geänderte Felder für Einsender (Straße, Postleitzahl, Stadt)", ChangeType.Feature ),

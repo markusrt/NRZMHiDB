@@ -11,7 +11,7 @@
     
     function RegisterPostalCodeDetailsLookup()
     {
-        $("#PostalCode").jeoPostalCodeLookup({
+        $("[id$='PostalCode']").jeoPostalCodeLookup({
             country: "DE",
             lengthTrigger: 5,
             callback: function (data) {
@@ -29,7 +29,7 @@
     
     function RegisterPostalCodeAutocompletion()
     {
-        $("#PostalCode").on("input", function (e) {
+        $("[id$='PostalCode']").on("input", function (e) {
             var val = $(this).val();
             if (val === "") return;
             
@@ -68,30 +68,30 @@
             dataList.append("<option value='" + postalCode + "'>" + result.postalCode + " " + result.placeName + "</option>");
             knownPostalCodes.push(postalCode);
         }
-        $("#PostalCode").val($("#PostalCode").val());
+        $("[id$='PostalCode']").val($("[id$='PostalCode']").val());
     }
 
     function PopulateCityInput(value)
     {
-        if ($("#City").length > 0)
+        if ($("[id$='City']").length > 0)
         {
-            $("#City").val(value);
+            $("[id$='City']").val(value);
         }
     }
     
     function PopulateCountyInput(value)
     {
-        if ($("#County").length > 0)
+        if ($("[id$='County']").length > 0)
         {
-            $("#County").val(value);
+            $("[id$='County']").val(value);
         }
     }
     
     function PopulateStateComboBox(value)
     {
-        if ($("#State").length > 0)
+        if ($("[id$='State']").length > 0)
         {
-            $('#State option[value="'+ value + '"]').prop('selected', true);
+            $('[id$="State"] option[value="'+ value + '"]').prop('selected', true);
         }
     }
 </script>

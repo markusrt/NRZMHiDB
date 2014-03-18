@@ -1,0 +1,110 @@
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Views.Utils
+@model IEnumerable<HaemophilusWeb.ViewModels.PatientSendingViewModel>
+
+@{
+    ViewBag.Title = "Einsendungen";
+}
+<p>
+    @Html.ActionLink("Neue Einsendung anlegen", "Create", "PatientSending", null, new {@class = "btn btn-default"})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Patient.Initials)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Patient.BirthDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sending.SendingId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sending.ReceivingDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sending.Material)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sending.Invasive)
+        </th>
+        <th>
+            Stammnummer
+        </th>
+        <th>
+            Labornummer
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patient.Initials)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patient.BirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sending.SendingId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sending.ReceivingDate)
+            </td>
+            <td>
+                @(item.Sending.Material == Material.Other ? Html.Encode(item.Sending.OtherMaterial) : EnumEditor.GetEnumDescription(item.Sending.Material))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sending.Invasive)
+            </td>
+            <td id="isolate_Id_@item.Sending.SendingId">
+                @if (item.Sending.Isolate != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Sending.Isolate.IsolateId)
+                }
+                else
+                {
+                    <a href="#" data-sending-id="@item.Sending.SendingId">Stammnummer zuweisen</a>
+                }
+            </td>
+            <td id="isolate_labNr_@item.Sending.SendingId">
+                @if (item.Sending.Isolate != null)
+                {
+                    @item.Sending.Isolate.LaboratoryNumber
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Bearbeiten", "Edit", new {id = item.Sending.SendingId})@* |
+                    @Html.ActionLink("Details", "Details", new { id=item.SendingId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.SendingId })*@
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script>
+    $("td[id^='isolate_Id_'] a").click(function()
+    {
+        var sendingId = $(this).attr("data-sending-id");
+        $.ajax({
+            url: '@Url.Action("AssignStemNumber", "Sending")' + '/' + sendingId,
+            type: 'POST',
+            dataType: 'json',
+            success: function(data)
+            {
+                if (data.ErrorMessage)
+                {
+                    ShowError(data.ErrorMessage);
+                }
+                $("#isolate_Id_" + sendingId).html(data.IsolateId);
+                $("#isolate_labNr_" + sendingId).html(data.LaboratoryNumber);
+            },
+            error: function(error)
+            {
+                ShowError(error.status + " " + error.statusText);
+            },
+        });
+    });
+</script>

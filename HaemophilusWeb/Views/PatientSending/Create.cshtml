@@ -1,0 +1,11 @@
+﻿@model HaemophilusWeb.ViewModels.PatientSendingViewModel
+
+@{
+    ViewBag.Title = "Einsendung erfassen";
+}
+
+@section CreateModel
+{
+    @Html.EditorFor(m => m.Sending)
+    @Html.EditorFor(m => m.Patient)
+}

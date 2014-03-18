@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
 
@@ -28,7 +24,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Patient patient = db.Patients.Find(id);
+            var patient = db.Patients.Find(id);
             if (patient == null)
             {
                 return HttpNotFound();
@@ -39,7 +35,7 @@ namespace HaemophilusWeb.Controllers
         // GET: /Patient/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new Patient());
         }
 
         // POST: /Patient/Create
@@ -47,7 +43,11 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,OtherClinicalInformation,HibVaccination,HibVaccinationDate")] Patient patient)
+        public ActionResult Create(
+            [Bind(
+                Include =
+                    "PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,OtherClinicalInformation,HibVaccination,HibVaccinationDate"
+                )] Patient patient)
         {
             if (ModelState.IsValid)
             {
@@ -67,7 +67,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Patient patient = db.Patients.Find(id);
+            var patient = db.Patients.Find(id);
             if (patient == null)
             {
                 return HttpNotFound();
@@ -80,7 +80,11 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,OtherClinicalInformation,HibVaccination,HibVaccinationDate")] Patient patient)
+        public ActionResult Edit(
+            [Bind(
+                Include =
+                    "PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,OtherClinicalInformation,HibVaccination,HibVaccinationDate"
+                )] Patient patient)
         {
             if (ModelState.IsValid)
             {
@@ -99,7 +103,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Patient patient = db.Patients.Find(id);
+            var patient = db.Patients.Find(id);
             if (patient == null)
             {
                 return HttpNotFound();
@@ -112,7 +116,7 @@ namespace HaemophilusWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Patient patient = db.Patients.Find(id);
+            var patient = db.Patients.Find(id);
             db.Patients.Remove(patient);
             db.SaveChanges();
             return RedirectToAction("Index");

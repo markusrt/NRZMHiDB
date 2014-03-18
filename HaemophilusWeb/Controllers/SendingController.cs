@@ -44,8 +44,7 @@ namespace HaemophilusWeb.Controllers
         // GET: /Sending/Create
         public ActionResult Create()
         {
-            AddReferenceDataToViewBag();
-            return View(new Sending());
+            return CreateEditView(new Sending());
         }
 
         // POST: /Sending/Create
@@ -66,16 +65,15 @@ namespace HaemophilusWeb.Controllers
                 return RedirectToAction("Index");
             }
 
-            AddReferenceDataToViewBag();
-            return View(sending);
+            return CreateEditView(sending);
         }
 
-        private void AddReferenceDataToViewBag()
+        internal void AddReferenceDataToViewBag(dynamic viewBag)
         {
-            ViewBag.PossibleSenders = db.Senders;
-            ViewBag.PossiblePatients = db.Patients;
-            ViewBag.PossibleOtherMaterials =
-                db.Sendings.Where(s => !string.IsNullOrEmpty(s.OtherMaterial)).Select(s => s.OtherMaterial).Distinct();
+            viewBag.PossibleSenders = db.Senders;
+            viewBag.PossiblePatients = db.Patients;
+            viewBag.PossibleOtherMaterials = db.Sendings.Where(
+                s => !string.IsNullOrEmpty(s.OtherMaterial)).Select(s => s.OtherMaterial).Distinct();
         }
 
         // GET: /Sending/Edit/5
@@ -90,8 +88,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return HttpNotFound();
             }
-            AddReferenceDataToViewBag();
-            return View(sending);
+            return CreateEditView(sending);
         }
 
         public ActionResult AssignStemNumber(int? id)
@@ -156,7 +153,12 @@ namespace HaemophilusWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            AddReferenceDataToViewBag();
+            return CreateEditView(sending);
+        }
+
+        private ActionResult CreateEditView(Sending sending)
+        {
+            AddReferenceDataToViewBag(ViewBag);
             return View(sending);
         }
 

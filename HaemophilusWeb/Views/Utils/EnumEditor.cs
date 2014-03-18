@@ -25,7 +25,7 @@ namespace HaemophilusWeb.Views.Utils
             return realModelType;
         }
 
-        private static string GetEnumDescription<TEnum>(TEnum value)
+        public static string GetEnumDescription<TEnum>(TEnum value)
         {
             var field = value.GetType().GetField(value.ToString());
 
