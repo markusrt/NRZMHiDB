@@ -109,6 +109,7 @@
     <Compile Include="Mocks\ApplicationDbContextMock.cs" />
     <Compile Include="Mocks\FakeDbSet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\JsonUtils.cs" />
     <Compile Include="Validators\AbstractValidatorTests.cs" />
     <Compile Include="Validators\PatientValidatorTests.cs" />
     <Compile Include="Validators\SendingValidatorTests.cs" />
