@@ -1,0 +1,146 @@
+﻿@model HaemophilusWeb.Models.Isolate
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Isolate</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.SendingId)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.IsolateId, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.IsolateId)
+                @Html.ValidationMessageFor(model => model.IsolateId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.YearlySequentialIsolateNumber, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.YearlySequentialIsolateNumber)
+                @Html.ValidationMessageFor(model => model.YearlySequentialIsolateNumber)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Year, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Year)
+                @Html.ValidationMessageFor(model => model.Year)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FactorTest, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FactorTest)
+                @Html.ValidationMessageFor(model => model.FactorTest)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Agglutination, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Agglutination)
+                @Html.ValidationMessageFor(model => model.Agglutination)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BetaLactamase, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BetaLactamase)
+                @Html.ValidationMessageFor(model => model.BetaLactamase)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Oxidase, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Oxidase)
+                @Html.ValidationMessageFor(model => model.Oxidase)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OuterMembraneProteinP2, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OuterMembraneProteinP2)
+                @Html.ValidationMessageFor(model => model.OuterMembraneProteinP2)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FuculoKinase, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FuculoKinase)
+                @Html.ValidationMessageFor(model => model.FuculoKinase)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.OuterMembraneProteinP6, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.OuterMembraneProteinP6)
+                @Html.ValidationMessageFor(model => model.OuterMembraneProteinP6)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.BexA, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.BexA)
+                @Html.ValidationMessageFor(model => model.BexA)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SerotypePcr, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.SerotypePcr)
+                @Html.ValidationMessageFor(model => model.SerotypePcr)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RibosomalRna16S, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.RibosomalRna16S)
+                @Html.ValidationMessageFor(model => model.RibosomalRna16S)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ApiNh, new {@class = "control-label col-md-2"})
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ApiNh)
+                @Html.ValidationMessageFor(model => model.ApiNh)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

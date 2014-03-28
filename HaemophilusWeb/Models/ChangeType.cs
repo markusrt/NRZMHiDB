@@ -2,8 +2,8 @@
 {
     public enum ChangeType
     {
-        Feature,
-        Bug,
-        Design
+        Feature = 0,
+        Bug = 1,
+        Design = 2
     }
 }

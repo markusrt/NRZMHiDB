@@ -19,5 +19,9 @@ namespace HaemophilusWeb.Models
         public DbSet<Sending> Sendings { get; set; }
 
         public DbSet<Isolate> Isolates { get; set; }
+
+        public DbSet<EpsilometerTest> EpsilometerTests { get; set; }
+
+        public DbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints { get; set; }
     }
 }

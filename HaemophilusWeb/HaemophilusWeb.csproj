@@ -186,6 +186,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\IsolateController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PatientSendingController.cs" />
     <Compile Include="Controllers\SenderController.cs" />
@@ -225,8 +226,16 @@
     <Compile Include="Migrations\201402032311285_Isolate_1.Designer.cs">
       <DependentUpon>201402032311285_Isolate_1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201403252007478_Isolate_2.cs" />
+    <Compile Include="Migrations\201403252007478_Isolate_2.Designer.cs">
+      <DependentUpon>201403252007478_Isolate_2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\EpsilometerTest.cs" />
+    <Compile Include="Models\EpsilometerTestResult.cs" />
+    <Compile Include="Models\EucastClinicalBreakpoint.cs" />
+    <Compile Include="Models\Serotype.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Change.cs" />
@@ -234,12 +243,14 @@
     <Compile Include="Models\ClinicalInformation.cs" />
     <Compile Include="Models\Error.cs" />
     <Compile Include="Models\Evaluation.cs" />
+    <Compile Include="Models\FactorTest.cs" />
     <Compile Include="Models\Gender.cs" />
     <Compile Include="Models\IApplicationDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Isolate.cs" />
     <Compile Include="Models\Material.cs" />
     <Compile Include="Models\State.cs" />
+    <Compile Include="Models\TestResult.cs" />
     <Compile Include="Models\Validations.cs" />
     <Compile Include="Models\Sending.cs" />
     <Compile Include="Models\Patient.cs" />
@@ -251,6 +262,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\PatientValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
+    <Compile Include="ViewModels\IsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
     <Compile Include="Views\Utils\BootstrapEditor.cs" />
     <Compile Include="Views\Utils\EnumEditor.cs" />
@@ -299,7 +311,9 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -351,6 +365,7 @@
     <Content Include="Views\Shared\EditorTemplates\Sending.cshtml" />
     <Content Include="Views\PatientSending\Index.cshtml" />
     <Content Include="Views\PatientSending\Edit.cshtml" />
+    <Content Include="Views\Isolate\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -383,6 +398,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201402032311285_Isolate_1.resx">
       <DependentUpon>201402032311285_Isolate_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403252007478_Isolate_2.resx">
+      <DependentUpon>201403252007478_Isolate_2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
