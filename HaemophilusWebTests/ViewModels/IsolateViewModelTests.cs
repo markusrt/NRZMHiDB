@@ -53,7 +53,7 @@ namespace HaemophilusWeb.ViewModels
             var isolate = new Isolate {EpsilometerTests = new List<EpsilometerTest>()};
             return new IsolateViewModel
             {
-                Isolate = isolate,
+                TheIsolate = isolate,
                 CurrentClinicalBreakpoints = CreateMockBreakpoints()
             };
         }

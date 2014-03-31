@@ -61,7 +61,8 @@
             <td id="isolate_Id_@item.Sending.SendingId">
                 @if (item.Sending.Isolate != null)
                 {
-                    @Html.DisplayFor(modelItem => item.Sending.Isolate.IsolateId)
+                    @Html.ActionLink(item.Sending.Isolate.IsolateId.ToString(), 
+                        "Edit", "Isolate", new {id = item.Sending.Isolate.IsolateId}, null)
                 }
                 else
                 {

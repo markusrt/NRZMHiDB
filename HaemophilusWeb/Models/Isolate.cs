@@ -30,14 +30,14 @@ namespace HaemophilusWeb.Models
             get { return string.Format("{0}/{1}", YearlySequentialIsolateNumber, Year - 2000); }
         }
 
-        [Description("Faktoren-test")]
+        [Display(Name = "Faktoren-test")]
         public FactorTest? FactorTest { get; set; }
 
         public Serotype? Agglutination { get; set; }
 
         //Ampicillin	E-Test
 
-        [Description("ß-Laktamase")]
+        [Display(Name = "ß-Laktamase")]
         public TestResult? BetaLactamase { get; set; }
 
         //Oxidase	Positiv, Negativ, n.d.
@@ -47,25 +47,25 @@ namespace HaemophilusWeb.Models
         //Cefotaxim	E-Test
         //Meropenem	E-Test
 
-        [Description("opm-P2")]
+        [Display(Name = "opm-P2")]
         public TestResult? OuterMembraneProteinP2 { get; set; }
 
-        [Description("fucK")]
+        [Display(Name = "fucK")]
         public TestResult FuculoKinase { get; set; }
 
-        [Description("opm-P6")]
+        [Display(Name = "opm-P6")]
         public TestResult OuterMembraneProteinP6 { get; set; }
 
-        [Description("bexA")]
+        [Display(Name = "bexA")]
         public TestResult? BexA { get; set; }
 
-        [Description("Serotyp-PCR")]
+        [Display(Name = "Serotyp-PCR")]
         public Serotype? SerotypePcr { get; set; }
 
-        [Description("16S rRNA")]
+        [Display(Name = "16S rRNA")]
         public TestResult RibosomalRna16S { get; set; }
 
-        [Description("api NH")]
+        [Display(Name = "api NH")]
         public TestResult? ApiNh { get; set; }
 
         public virtual ICollection<EpsilometerTest> EpsilometerTests { get; set; }

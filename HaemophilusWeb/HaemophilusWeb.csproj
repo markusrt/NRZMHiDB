@@ -366,6 +366,7 @@
     <Content Include="Views\PatientSending\Index.cshtml" />
     <Content Include="Views\PatientSending\Edit.cshtml" />
     <Content Include="Views\Isolate\Edit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EpsilometerTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

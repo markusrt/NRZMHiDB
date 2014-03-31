@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using HaemophilusWeb.Models;
 
@@ -12,22 +13,16 @@ namespace HaemophilusWeb.ViewModels
         internal const string PenicillinCefotaxime = "Cefotaxime";
         internal const string PenicillinMeropenem = "Meropenem";
 
-        public Isolate Isolate { get; set; }
+        public Isolate TheIsolate { get; set; }
 
         public List<EucastClinicalBreakpoint> CurrentClinicalBreakpoints { get; set; }
 
-        public EpsilometerTest Ampicillin
-        {
-            get { return GetEpsilometerTest(PenicillinAmpicillin); }
-        }
+        public EpsilometerTest Ampicillin { get; set; }
 
-        [Description("Amoxicillin/Clavulansäure")]
-        public EpsilometerTest AmoxicillinClavulanate
-        {
-            get { return GetEpsilometerTest(PenicillinAmoxicillinClavulanate); }
-        }
+        [Display(Name = "Amoxicillin/Clavulansäure")]
+        public EpsilometerTest AmoxicillinClavulanate { get; set; }
 
-        [Description("Cefotaxim")]
+        [Display(Name = "Cefotaxim")]
         public EpsilometerTest Cefotaxime
         {
             get { return GetEpsilometerTest(PenicillinCefotaxime); }
@@ -52,14 +47,14 @@ namespace HaemophilusWeb.ViewModels
         private EpsilometerTest FindTestWithPenicillin(string penicillin)
         {
             return
-                Isolate.EpsilometerTests.SingleOrDefault(e => e.EucastClinicalBreakpoint.Penicillin.Equals(penicillin));
+                TheIsolate.EpsilometerTests.SingleOrDefault(e => e.EucastClinicalBreakpoint.Penicillin.Equals(penicillin));
         }
 
         private void AddNewTestForPenicillin(string penicillin)
         {
             var clinicalBreakPoint =
                 CurrentClinicalBreakpoints.SingleOrDefault(e => e.Penicillin.Equals(penicillin));
-            Isolate.EpsilometerTests.Add(new EpsilometerTest
+            TheIsolate.EpsilometerTests.Add(new EpsilometerTest
             {
                 EucastClinicalBreakpoint = clinicalBreakPoint
             });

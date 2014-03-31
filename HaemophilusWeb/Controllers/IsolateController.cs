@@ -1,7 +1,10 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.ViewModels;
 
 namespace HaemophilusWeb.Controllers
 {
@@ -16,13 +19,16 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var isolate = db.Isolates.Find(id);
+            var isolate = db.Isolates.Single(i => i.IsolateId==id);
             if (isolate == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.SendingId = new SelectList(db.Sendings, "SendingId", "OtherMaterial", isolate.SendingId);
-            return View(isolate);
+
+            var isolateViewModel = new IsolateViewModel {TheIsolate = isolate};
+            isolateViewModel.CurrentClinicalBreakpoints = new List<EucastClinicalBreakpoint>();
+            isolateViewModel.CurrentClinicalBreakpoints.Add(new EucastClinicalBreakpoint() { Penicillin = "Ampicillin" });
+            return View(isolateViewModel);
         }
 
         // POST: /Isolate/Edit/5
@@ -31,18 +37,20 @@ namespace HaemophilusWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
-            [Bind(
-                Include =
-                    "SendingId,IsolateId,YearlySequentialIsolateNumber,Year,FactorTest,Agglutination,BetaLactamase,Oxidase,OuterMembraneProteinP2,FuculoKinase,OuterMembraneProteinP6,BexA,SerotypePcr,RibosomalRna16S,ApiNh"
-                )] Isolate isolate)
+            [Bind(Include = "TheIsolate,Ampicillin,AmoxicillinClavulanate")]
+            IsolateViewModel isolate)
         {
+            //if (ModelState.IsValid)
+            //{
+            //    db.Entry(isolate).State = EntityState.Modified;
+            //    db.SaveChanges();
+            //    return RedirectToAction("Index", "PatientSending");
+            //}
+            //ViewBag.SendingId = new SelectList(db.Sendings, "SendingId", "OtherMaterial", isolate.SendingId);
             if (ModelState.IsValid)
             {
-                db.Entry(isolate).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index", "PatientSending");
+                return View(isolate);
             }
-            ViewBag.SendingId = new SelectList(db.Sendings, "SendingId", "OtherMaterial", isolate.SendingId);
             return View(isolate);
         }
 
