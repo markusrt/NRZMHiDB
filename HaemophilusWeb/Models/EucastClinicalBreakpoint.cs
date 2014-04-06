@@ -11,8 +11,11 @@ namespace HaemophilusWeb.Models
         public int EucastClinicalBreakpointId { get; set; }
 
         [Required]
+        public Antibiotic Antibiotic { get; set; }
+
+        [Required]
         [MaxLength(128)]
-        public string Penicillin { get; set; }
+        public string AntibioticDetails { get; set; }
 
         [Required]
         [MaxLength(64)]

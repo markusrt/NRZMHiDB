@@ -100,3 +100,15 @@ h6,
 .h6 {
   font-size: 12px;
 }
+
+.label-etest-Resistant {
+  background-color: #d9534f;
+}
+
+.label-etest-Susceptible {
+  background-color: #5cb85c;
+}
+
+.label-etest-Intermediate {
+  background-color: #f0ad4e;
+}

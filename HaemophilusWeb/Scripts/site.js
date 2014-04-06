@@ -32,6 +32,18 @@ function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
     });
 }
 
+function hideAll(selector) {
+    $.each($(selector), function (index, value) {
+        $(value).addClass("hidden");
+    });
+}
+
+function showAll(selector) {
+    $.each($(selector), function (index, value) {
+        $(value).removeClass("hidden");
+    });
+}
+
 function ShowError(message)
 {
     var errorHtml =

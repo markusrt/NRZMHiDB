@@ -27,15 +27,16 @@ namespace HaemophilusWeb.Migrations
                 c => new
                 {
                     EucastClinicalBreakpointId = c.Int(false, true),
-                    Penicillin = c.String(false, 128),
+                    Antibiotic = c.Int(false),
+                    AntibioticDetails = c.String(false, 128),
                     Version = c.String(false, 64),
                     ValidFrom = c.DateTime(false),
                     MicBreakpointSusceptible = c.Single(false),
                     MicBreakpointResistent = c.Single(false),
                 })
                 .PrimaryKey(t => t.EucastClinicalBreakpointId);
-            CreateIndex("dbo.EucastClinicalBreakpoints", new[] {"Penicillin", "Version"}, true,
-                "IX_EucastClinicalBreakpointVersionPenicillin");
+            CreateIndex("dbo.EucastClinicalBreakpoints", new[] { "AntibioticDetails", "Version" }, true,
+                "IX_EucastClinicalBreakpointVersionAntibioticDetails");
 
             AddColumn("dbo.Isolates", "FactorTest", c => c.Int());
             AddColumn("dbo.Isolates", "Agglutination", c => c.Int());
@@ -58,7 +59,7 @@ namespace HaemophilusWeb.Migrations
             DropForeignKey("dbo.EpsilometerTests", "EucastClinicalBreakpointId", "dbo.EucastClinicalBreakpoints");
             DropIndex("dbo.EpsilometerTests", new[] {"Isolate_SendingId"});
             DropIndex("dbo.EpsilometerTests", new[] {"EucastClinicalBreakpointId"});
-            DropIndex("dbo.EucastClinicalBreakpoints", "IX_EucastClinicalBreakpointVersionPenicillin");
+            DropIndex("dbo.EucastClinicalBreakpoints", "IX_EucastClinicalBreakpointVersionAntibioticDetails");
             AlterColumn("dbo.Patients", "Gender", c => c.Int(false));
             AlterColumn("dbo.Patients", "Initials", c => c.String(false));
             DropColumn("dbo.Isolates", "ApiNh");

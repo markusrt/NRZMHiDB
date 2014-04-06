@@ -235,6 +235,7 @@
     <Compile Include="Models\EpsilometerTest.cs" />
     <Compile Include="Models\EpsilometerTestResult.cs" />
     <Compile Include="Models\EucastClinicalBreakpoint.cs" />
+    <Compile Include="Models\Antibiotic.cs" />
     <Compile Include="Models\Serotype.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -262,6 +263,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validators\PatientValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
+    <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
     <Compile Include="ViewModels\IsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
     <Compile Include="Views\Utils\BootstrapEditor.cs" />
@@ -366,7 +368,7 @@
     <Content Include="Views\PatientSending\Index.cshtml" />
     <Content Include="Views\PatientSending\Edit.cshtml" />
     <Content Include="Views\Isolate\Edit.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\EpsilometerTest.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EpsilometerTestViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

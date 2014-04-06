@@ -110,16 +110,23 @@
     </div>
     
     <div class="form-group">
-        @Html.LabelFor(model => model.Ampicillin, new { @class = "col-sm-2 control-label" })
-        <div class="col-sm-5">
-            @Html.EditorFor(model => model.Ampicillin, new { @class = "form-control" })
-        </div>
+        @Html.LabelFor(model => model.Ampicillin, new { @class = "col-sm-2 col-xs-12 control-label" })
+        @Html.EditorFor(model => model.Ampicillin, new { @class = "form-control" })
     </div>
     
     <div class="form-group">
         @Html.LabelFor(model => model.AmoxicillinClavulanate, new { @class = "col-sm-2 control-label" })
-        <div class="col-sm-5">
-            @Html.EditorFor(model => model.AmoxicillinClavulanate, new { @class = "form-control" })
-        </div>
+        @Html.EditorFor(model => model.AmoxicillinClavulanate, new { @class = "form-control" })
     </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.Meropenem, new { @class = "col-sm-2 control-label" })
+        @Html.EditorFor(model => model.Meropenem, new { @class = "form-control" })
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.Cefotaxime, new { @class = "col-sm-2 control-label" })
+        @Html.EditorFor(model => model.Cefotaxime, new { @class = "form-control" })
+    </div>
+}
 }

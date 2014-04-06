@@ -65,7 +65,7 @@ namespace HaemophilusWeb.Views.Utils
 
 
         public static MvcHtmlString EnumRadioButtonFor<TModel, TEnum>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TEnum>> expression)
+            Expression<Func<TModel, TEnum>> expression, bool shortName=false)
         {
             var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             var currentValue = htmlHelper.ValueFor(expression).ToString();
@@ -75,6 +75,10 @@ namespace HaemophilusWeb.Views.Utils
             foreach (var value in GetEnumValues<TEnum>(modelMetadata))
             {
                 var description = GetEnumDescription(value);
+                if (shortName)
+                {
+                    description = description.First().ToString();
+                }
                 var name = GetName(modelMetadata, value);
 
                 var id = string.Format("{0}_{1}", modelMetadata.PropertyName, name);
