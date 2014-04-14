@@ -2,110 +2,34 @@
 @using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.ViewModels.EpsilometerTestViewModel
 
-@{
+@{ 
     var relevantBreakPoints = ((IEnumerable<EucastClinicalBreakpoint>) ViewBag.ClinicalBreakpoints).Where(
         b => b.Antibiotic == Model.Antibiotic).ToList();
-
-    const string evaluateBreakpointLogicTemplate = 
-        "if(breakPointId=={0}) {{\n" +
-        "  if(measurement>{2}) {{\n" +
-        "    showAll('#{1}ETestResistant');\n" +
-        "    $('#{1}_Result').val('Resistant');\n" +
-        "  }}\n" +
-        "  else if(measurement<={3}) {{\n" +
-        "    showAll('#{1}ETestSusceptible');\n" +
-        "    $('#{1}_Result').val('Susceptible');\n" +
-        "  }}\n" +
-        "  else {{\n" +
-        "    showAll('#{1}ETestIntermediate');" +
-        "    $('#{1}_Result').val('Intermediate');\n" +
-        "  }}\n" +
-        "}}";
-
-    var evaluateBreakpointLogicBlocks = relevantBreakPoints.Select(
-        bp => string.Format( evaluateBreakpointLogicTemplate, 
-            bp.EucastClinicalBreakpointId, Model.Antibiotic,
-            bp.MicBreakpointResistent, bp.MicBreakpointSusceptible));
-            
-    var evaluateETestFunction = 
-        string.Format(
-        "function {0}_ETestChange() {{\n" +
-        "  var breakPointId = $('#{0}_EucastClinicalBreakpointId').val();\n" +
-        "  hideAll('span[id^={0}ETest]');\n" +
-        "  var measurement = parseFloat($('#{0}_Measurement').val());\n" +
-        "  if(!isNaN(measurement)) {{\n" +
-        "    {1}\n" +
-        "  }}" +
-        "}}", Model.Antibiotic, string.Join("\n", evaluateBreakpointLogicBlocks));
 }
 
-<script>
-    
-</script>
-
-<div class="col-sm-2 col-xs-4">
+<div class="col-sm-2 col-xs-3">
     @Html.TextBoxFor(m => m.Measurement, new {@class = "form-control"})
     @Html.ValidationMessageFor(m => m.Measurement)
 </div>
-<div class="col-sm-4 col-xs-4">
+<div class="col-sm-4 col-xs-7">
     @Html.DropDownListFor(model => model.EucastClinicalBreakpointId, relevantBreakPoints.Select(
         option => new SelectListItem
         {
-            Text = string.Format("{0} - {1:dd. MMM. yy}", option.AntibioticDetails, option.ValidFrom),
+            Text = string.Format("{0} - v{1} vom {2:dd. MMM. yy}", option.AntibioticDetails, option.Version, option.ValidFrom),
             Value = option.EucastClinicalBreakpointId.ToString(),
             Selected = (Model != null) && (option.EucastClinicalBreakpointId == Model.EucastClinicalBreakpointId)
         }), "EUCAST Breakpoint auswählen...", new {@class = "form-control"})
+    @Html.ValidationMessageFor(m => m.EucastClinicalBreakpointId)
 </div>
-<div class="col-sm-4 col-xs-4">
-    <span id="@(Model.Antibiotic + "ETestSusceptible")" class="label label-etest-Susceptible @(Model.Result==EpsilometerTestResult.Susceptible?"":"hidden")">
+<div class="col-sm-4 col-xs-2">
+    <span id="@(Model.Antibiotic + "_ETestSusceptible")" class="label label-etest-Susceptible @(Model.Result==EpsilometerTestResult.Susceptible?"":"hidden")">
         @EnumEditor.GetEnumDescription(EpsilometerTestResult.Susceptible)
     </span>
-    <span id="@(Model.Antibiotic + "ETestIntermediate")" class="label label-etest-Intermediate @(Model.Result==EpsilometerTestResult.Intermediate?"":"hidden")">
+    <span id="@(Model.Antibiotic + "_ETestIntermediate")" class="label label-etest-Intermediate @(Model.Result==EpsilometerTestResult.Intermediate?"":"hidden")">
         @EnumEditor.GetEnumDescription(EpsilometerTestResult.Intermediate)
     </span>
-    <span id="@(Model.Antibiotic + "ETestResistant")" class="label label-etest-Resistant @(Model.Result==EpsilometerTestResult.Resistant?"":"hidden")">
+    <span id="@(Model.Antibiotic + "_ETestResistant")" class="label label-etest-Resistant @(Model.Result==EpsilometerTestResult.Resistant?"":"hidden")">
         @EnumEditor.GetEnumDescription(EpsilometerTestResult.Resistant)
     </span>
     @Html.HiddenFor(m => m.Result)
 </div>
-
-<script>
-
-
-
-
-        $(document).ready(function() {
-            $("#@(Model.Antibiotic + "_EucastClinicalBreakpointId")").change(@(Model.Antibiotic + "_ETestChange"));
-            $("#@(Model.Antibiotic + "_Measurement")").keyup(@(Model.Antibiotic + "_ETestChange"));
-
-            @{
-                WriteLiteral(evaluateETestFunction);
-            }
-
-            @*@{
-            @:function
-            @Model.Antibiotic<text>_ETestChange() {
-              var breakPointId = $("#@(Model.Antibiotic + "_EucastClinicalBreakpointId")").val();
-              hideAll("span[id^=@(Model.Antibiotic+"ETest")]");
-              var measurement = parseFloat($("#@(Model.Antibiotic + "_Measurement")").val());
-              if(!isNaN(measurement))
-              {
-              @foreach (var breakPoint in relevantBreakPoints)
-              {
-                WriteLiteral(string.Format("if(breakPointId=={0}){{", breakPoint.EucastClinicalBreakpointId));
-                WriteLiteral(
-                  string.Format("if(measurement>{0}){{showAll('#{1}ETestResistant');$('#{1}_Result').val('Resistant');}}",
-                  breakPoint.MicBreakpointResistent, Model.Antibiotic));
-                WriteLiteral(
-                    string.Format("else if(measurement<={0}){{showAll('#{1}ETestSusceptible');$('#{1}_Result').val('Susceptible');}}",
-                    breakPoint.MicBreakpointSusceptible, Model.Antibiotic));
-                WriteLiteral(
-                  string.Format("else{{showAll('#{0}ETestIntermediate');$('#{0}_Result').val('Intermediate');}}", Model.Antibiotic));
-                WriteLiteral("}");
-              }
-              }
-        }
-        </text>
-        }});*@
-        });
-</script>

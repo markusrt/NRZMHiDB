@@ -28,6 +28,13 @@ namespace HaemophilusWeb
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
             FluentValidationModelValidatorProvider.Configure();
+            OverwriteDefaultErrorMessages();
+        }
+
+        private static void OverwriteDefaultErrorMessages()
+        {
+            ClientDataTypeModelValidatorProvider.ResourceClassKey = "MyResources";
+            DefaultModelBinder.ResourceClassKey = "MyResources";
         }
 
         private void Application_Error(object sender, EventArgs e)

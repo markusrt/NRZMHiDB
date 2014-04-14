@@ -4,13 +4,13 @@ namespace HaemophilusWeb.Models
 {
     public enum Serotype
     {
-        A = 0,
-        B = 1,
-        C = 2,
-        D = 3,
-        E = 4,
-        F = 5,
-        [Description("Negativ")] Negative = 6,
-        [Description("n.d.")] NotDetermined = 7
+        [Description("n.d.")] NotDetermined = 0,
+        A = 1,
+        B = 2,
+        C = 3,
+        D = 4,
+        E = 5,
+        F = 6,
+        [Description("Negativ")] Negative = 7,
     }
 }

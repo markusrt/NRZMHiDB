@@ -1,4 +1,5 @@
-﻿@using HaemophilusWeb.Views.Utils
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.ViewModels.IsolateViewModel
 
 @{
@@ -10,123 +11,191 @@
 {
     @Html.ValidationSummary(true)
     @Html.HiddenFor(model => model.TheIsolate.SendingId)
+    @Html.HiddenFor(model => model.TheIsolate.Year)
+    @Html.HiddenFor(model => model.TheIsolate.YearlySequentialIsolateNumber)
 
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.IsolateId, new {@class = "control-label col-sm-2"})
-        <div class="col-sm-5">
+        <div class="col-sm-5 form-control-static">
             @Html.DisplayFor(model => model.TheIsolate.IsolateId)
             @Html.HiddenFor(model => model.TheIsolate.IsolateId)
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.LaboratoryNumber, new {@class = "control-label col-sm-2"})
-        <div class="col-sm-5">
+        <div class="col-sm-5 form-control-static">
             @Html.DisplayFor(model => model.TheIsolate.LaboratoryNumber)
         </div>
     </div>
     <div class="form-group">
+        @Html.LabelFor(model => model.TheIsolate.Sending.Material, new { @class = "control-label col-sm-2" })
+        <div class="col-sm-5 form-control-static">
+            @(Model.TheIsolate.Sending.Material == Material.Other ? Html.Encode(Model.TheIsolate.Sending.OtherMaterial) : EnumEditor.GetEnumDescription(Model.TheIsolate.Sending.Material))
+            @Html.HiddenFor(model => model.TheIsolate.Sending.OtherMaterial)
+            @Html.HiddenFor(model => model.TheIsolate.Sending.Material)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.TheIsolate.Sending.Invasive, new { @class = "control-label col-sm-2" })
+        <div class="col-sm-5 form-control-static">
+            @EnumEditor.GetEnumDescription(Model.TheIsolate.Sending.Invasive)
+            @Html.HiddenFor(model => model.TheIsolate.Sending.Invasive)
+        </div>
+    </div>
+    <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.FactorTest, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.FactorTest, new {@class = "form-control"})
+        <div class="col-sm-10">
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.FactorTest)
             @Html.ValidationMessageFor(model => model.TheIsolate.FactorTest)
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.Agglutination, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.Agglutination, new {@class = "form-control"})
+        <div class="col-sm-10">
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.Agglutination)
             @Html.ValidationMessageFor(model => model.TheIsolate.Agglutination)
         </div>
     </div>
     <div class="form-group">
+        @Html.LabelFor(model => model.Ampicillin, new { @class = "col-sm-2 col-xs-12 control-label" })
+        @Html.EditorFor(model => model.Ampicillin, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.BetaLactamase, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.BetaLactamase, new {@class = "form-control"})
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.BetaLactamase)
             @Html.ValidationMessageFor(model => model.TheIsolate.BetaLactamase)
         </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.Oxidase, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.Oxidase, new {@class = "form-control"})
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.Oxidase)
             @Html.ValidationMessageFor(model => model.TheIsolate.Oxidase)
         </div>
     </div>
-
+    <div class="form-group">
+        @Html.LabelFor(model => model.AmoxicillinClavulanate, new { @class = "col-sm-2 col-xs-12 control-label" })
+        @Html.EditorFor(model => model.AmoxicillinClavulanate, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Meropenem, new { @class = "col-sm-2 col-xs-12 control-label" })
+        @Html.EditorFor(model => model.Meropenem, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Cefotaxime, new { @class = "col-sm-2 col-xs-12 control-label" })
+        @Html.EditorFor(model => model.Cefotaxime, new { @class = "form-control" })
+    </div>
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.OuterMembraneProteinP2, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.OuterMembraneProteinP2, new {@class = "form-control"})
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.OuterMembraneProteinP2)
             @Html.ValidationMessageFor(model => model.TheIsolate.OuterMembraneProteinP2)
         </div>
     </div>
-        
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.FuculoKinase, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.FuculoKinase, new {@class = "form-control"})
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.FuculoKinase)
             @Html.ValidationMessageFor(model => model.TheIsolate.FuculoKinase)
         </div>
     </div>
-       
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.OuterMembraneProteinP6, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.OuterMembraneProteinP6, new {@class = "form-control"})
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.OuterMembraneProteinP6)
             @Html.ValidationMessageFor(model => model.TheIsolate.OuterMembraneProteinP6)
         </div>
     </div>
-        
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.BexA, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.BexA, new {@class = "form-control"})
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.BexA)
             @Html.ValidationMessageFor(model => model.TheIsolate.BexA)
         </div>
     </div>
-        
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.SerotypePcr, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.SerotypePcr, new {@class = "form-control"})
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.SerotypePcr)
             @Html.ValidationMessageFor(model => model.TheIsolate.SerotypePcr)
         </div>
     </div>
-
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.RibosomalRna16S, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.RibosomalRna16S, new {@class = "form-control"})
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.RibosomalRna16S)
             @Html.ValidationMessageFor(model => model.TheIsolate.RibosomalRna16S)
         </div>
     </div>
-        
     <div class="form-group">
         @Html.LabelFor(model => model.TheIsolate.ApiNh, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.TheIsolate.ApiNh, new {@class = "form-control"})
+            @Html.EnumRadioButtonFor(model => model.TheIsolate.ApiNh)
             @Html.ValidationMessageFor(model => model.TheIsolate.ApiNh)
         </div>
     </div>
-    
-    <div class="form-group">
-        @Html.LabelFor(model => model.Ampicillin, new { @class = "col-sm-2 col-xs-12 control-label" })
-        @Html.EditorFor(model => model.Ampicillin, new { @class = "form-control" })
-    </div>
-    
-    <div class="form-group">
-        @Html.LabelFor(model => model.AmoxicillinClavulanate, new { @class = "col-sm-2 control-label" })
-        @Html.EditorFor(model => model.AmoxicillinClavulanate, new { @class = "form-control" })
-    </div>
-    
-    <div class="form-group">
-        @Html.LabelFor(model => model.Meropenem, new { @class = "col-sm-2 control-label" })
-        @Html.EditorFor(model => model.Meropenem, new { @class = "form-control" })
-    </div>
-    
-    <div class="form-group">
-        @Html.LabelFor(model => model.Cefotaxime, new { @class = "col-sm-2 control-label" })
-        @Html.EditorFor(model => model.Cefotaxime, new { @class = "form-control" })
-    </div>
 }
-}
+
+@section Scripts{
+    <script>
+        var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
+        
+        $(document).ready(function() {
+            $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
+            $("input[id$=_Measurement]").keyup(ETestChange);
+        });
+
+        function ETestChange() 
+        {
+            var id = $(this).attr('id');
+            var antibiotic = id.substring(0, id.indexOf('_'));
+            var currentBreakpointSelector = '#' + antibiotic + '_EucastClinicalBreakpointId';
+            var currentMeasurementSelector = '#' + antibiotic + '_Measurement';
+
+            SetETestResult(antibiotic, null);
+
+            var currentBreakpointId = $(currentBreakpointSelector).val();
+            
+            var currentMeasurement = parseFloat($(currentMeasurementSelector).val());
+            if (isNaN(currentMeasurement)) 
+            {
+                return;
+            }
+
+            clinicalBreakpoints.forEach(function(clinicalBreakpoint) 
+            {
+                if(currentBreakpointId==clinicalBreakpoint.EucastClinicalBreakpointId) 
+                {
+                    if(currentMeasurement>clinicalBreakpoint.MicBreakpointResistent) 
+                    {
+                        SetETestResult(antibiotic, 'Resistant');
+                    }
+                    else if(currentMeasurement<=clinicalBreakpoint.MicBreakpointSusceptible) 
+                    {
+                        SetETestResult(antibiotic, 'Susceptible');
+                    }
+                    else if(currentMeasurement != null)
+                    {
+                        SetETestResult(antibiotic, 'Intermediate');
+                    }
+                }
+            });
+        }
+
+        function SetETestResult(antibiotic, result)
+        {
+            var resultSelector = '#' + antibiotic + '_Result';
+
+            $(resultSelector).val('');
+            hideAll('span[id^=' + antibiotic + '_ETest]');
+
+            if(result != null)
+            {
+                showAll('#' + antibiotic + '_ETest' + result);
+                $(resultSelector).val(result);
+            }
+        }
+
+    </script>
+} 

@@ -35,17 +35,10 @@ namespace HaemophilusWeb.Models
 
         public Serotype? Agglutination { get; set; }
 
-        //Ampicillin	E-Test
-
         [Display(Name = "ß-Laktamase")]
         public TestResult? BetaLactamase { get; set; }
 
-        //Oxidase	Positiv, Negativ, n.d.
         public TestResult? Oxidase { get; set; }
-
-        //Amoxicillin/Clavulansäure	E-Test
-        //Cefotaxim	E-Test
-        //Meropenem	E-Test
 
         [Display(Name = "opm-P2")]
         public TestResult? OuterMembraneProteinP2 { get; set; }

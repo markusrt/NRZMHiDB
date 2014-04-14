@@ -84,7 +84,7 @@ namespace HaemophilusWeb.Views.Utils
                 var id = string.Format("{0}_{1}", modelMetadata.PropertyName, name);
 
                 var radio = htmlHelper.RadioButtonFor(expression, name, new {id}).ToHtmlString();
-                sb.AppendFormat("<label class=\"btn btn-primary {2}\">{0} {1}</label>", radio, description, currentValue==name?"active":"");
+                sb.AppendFormat("<label class=\"btn btn-default {2}\">{0} {1}</label>", radio, description, currentValue==name?"active":"");
             }
             sb.Append("</div></div>");
             sb.Append(htmlHelper.ValidationMessageFor(expression).ToHtmlString());

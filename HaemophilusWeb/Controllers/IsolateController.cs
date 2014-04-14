@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using System.Data.Entity;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.ViewModels;
 
@@ -16,7 +17,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var isolate = db.Isolates.Single(i => i.IsolateId == id);
+            var isolate = db.Isolates.Include(i => i.Sending).Single(i => i.IsolateId == id);
             if (isolate == null)
             {
                 return HttpNotFound();
@@ -39,13 +40,17 @@ namespace HaemophilusWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
             [Bind(Include = "TheIsolate,Ampicillin,AmoxicillinClavulanate,Cefotaxime,Meropenem")] IsolateViewModel
-                isolate)
+                isolateViewModel)
         {
             if (ModelState.IsValid)
             {
-                return CreateEditView(isolate);
+                var isolate = isolateViewModel.TheIsolate;
+                db.Entry(isolate).State = EntityState.Modified;
+                db.Entry(isolate).Property(x => x.Sending).IsModified = false;
+                db.SaveChanges();
+                return RedirectToAction("Index", "PatientSending");
             }
-            return CreateEditView(isolate);
+            return CreateEditView(isolateViewModel);
         }
 
         protected override void Dispose(bool disposing)

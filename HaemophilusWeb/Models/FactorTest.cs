@@ -4,11 +4,11 @@ namespace HaemophilusWeb.Models
 {
     public enum FactorTest
     {
-        V = 0,
-        VX = 1,
-        X = 2,
-        [Description("Nicht beurteilbar")] NotEvaluable = 3,
-        [Description("Kein Wachstum")] NoGrowth = 4,
-        [Description("n.d.")] NotDetermined = 5
+        [Description("n.d.")] NotDetermined = 0,
+        V = 1,
+        VX = 2,
+        X = 3,
+        [Description("Nicht beurteilbar")] NotEvaluable = 4,
+        [Description("Kein Wachstum")] NoGrowth = 5
     }
 }

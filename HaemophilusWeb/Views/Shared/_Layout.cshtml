@@ -1,4 +1,5 @@
 ﻿@using System.Reflection
+@using System.Threading
 @using HaemophilusWeb.Controllers
 <!DOCTYPE html>
 <html>
@@ -98,10 +99,14 @@
                     {
                         "format": "dd.mm.yyyy",
                     });
+                Globalize.culture("de-DE");
             });
         </script>
 
         @RenderSection("scripts", false)
+
         @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/globalize-de-DE")
+        @Scripts.Render("~/bundles/globalized-validation")
     </body>
 </html>

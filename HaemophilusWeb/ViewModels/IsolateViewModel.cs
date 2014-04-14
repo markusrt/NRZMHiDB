@@ -1,8 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using HaemophilusWeb.Models;
+using FluentValidation.Attributes;
+using HaemophilusWeb.Validators;
 
 namespace HaemophilusWeb.ViewModels
 {
+    [Validator(typeof(IsolateViewModelValidator))]
     public class IsolateViewModel
     {
         public IsolateViewModel()
@@ -17,7 +20,7 @@ namespace HaemophilusWeb.ViewModels
 
         public EpsilometerTestViewModel Ampicillin { get; private set; }
 
-        [Display(Name = "Amoxicillin/Clavulansäure")]
+        [Display(Name = "Amoxicillin / Clavulansäure")]
         public EpsilometerTestViewModel AmoxicillinClavulanate { get; private set; }
 
         [Display(Name = "Cefotaxim")]
