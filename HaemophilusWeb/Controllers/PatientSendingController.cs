@@ -122,6 +122,7 @@ namespace HaemophilusWeb.Controllers
             }
         }
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult Index()
         {
             return View(db.Sendings.Select(CreatePatientSending).ToList());

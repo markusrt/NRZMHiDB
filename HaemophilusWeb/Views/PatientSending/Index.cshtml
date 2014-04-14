@@ -99,7 +99,11 @@
                 {
                     ShowError(data.ErrorMessage);
                 }
-                $("#isolate_Id_" + sendingId).html(data.IsolateId);
+                $("#isolate_Id_" + sendingId).html(
+                    "<a href='"
+                        + '@Url.Action("Edit", "Isolate")' + "/" + data.IsolateId + "'>"
+                        + data.IsolateId + "</a>"
+                );
                 $("#isolate_labNr_" + sendingId).html(data.LaboratoryNumber);
             },
             error: function(error)

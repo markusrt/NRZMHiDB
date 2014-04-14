@@ -26,7 +26,9 @@ namespace HaemophilusWeb.Models
         public int SenderId { get; set; }
 
         [Display(Name = "Patient")]
+        [ForeignKey("Patient")]
         public int PatientId { get; set; }
+        public virtual Patient Patient { get; set; }
 
         [Display(Name = "Entnahmedatum")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]

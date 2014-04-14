@@ -10,50 +10,54 @@
 @section EditModel
 {
     @Html.ValidationSummary(true)
-    @Html.HiddenFor(model => model.TheIsolate.SendingId)
-    @Html.HiddenFor(model => model.TheIsolate.Year)
-    @Html.HiddenFor(model => model.TheIsolate.YearlySequentialIsolateNumber)
 
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.IsolateId, new {@class = "control-label col-sm-2"})
+        @Html.LabelFor(model => model.IsolateId, new {@class = "control-label col-sm-2"})
         <div class="col-sm-5 form-control-static">
-            @Html.DisplayFor(model => model.TheIsolate.IsolateId)
-            @Html.HiddenFor(model => model.TheIsolate.IsolateId)
+            @Html.DisplayFor(model => model.IsolateId)
+            @Html.HiddenFor(model => model.IsolateId)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.LaboratoryNumber, new {@class = "control-label col-sm-2"})
+        @Html.LabelFor(model => model.LaboratoryNumber, new {@class = "control-label col-sm-2"})
         <div class="col-sm-5 form-control-static">
-            @Html.DisplayFor(model => model.TheIsolate.LaboratoryNumber)
+            @Html.DisplayFor(model => model.LaboratoryNumber)
+            @Html.HiddenFor(model => model.LaboratoryNumber)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.Sending.Material, new { @class = "control-label col-sm-2" })
+        @Html.LabelFor(model => model.Material, new { @class = "control-label col-sm-2" })
         <div class="col-sm-5 form-control-static">
-            @(Model.TheIsolate.Sending.Material == Material.Other ? Html.Encode(Model.TheIsolate.Sending.OtherMaterial) : EnumEditor.GetEnumDescription(Model.TheIsolate.Sending.Material))
-            @Html.HiddenFor(model => model.TheIsolate.Sending.OtherMaterial)
-            @Html.HiddenFor(model => model.TheIsolate.Sending.Material)
+            @Html.DisplayFor(model => model.Material)
+            @Html.HiddenFor(model => model.Material)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.Sending.Invasive, new { @class = "control-label col-sm-2" })
+        @Html.LabelFor(model => model.Invasive, new { @class = "control-label col-sm-2" })
         <div class="col-sm-5 form-control-static">
-            @EnumEditor.GetEnumDescription(Model.TheIsolate.Sending.Invasive)
-            @Html.HiddenFor(model => model.TheIsolate.Sending.Invasive)
+            @Html.DisplayFor(model => model.Invasive)
+            @Html.HiddenFor(model => model.Invasive)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.FactorTest, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.PatientAgeAtSampling, new { @class = "control-label col-sm-2" })
+        <div class="col-sm-5 form-control-static">
+            @Html.DisplayFor(model => model.PatientAgeAtSampling)
+            @Html.HiddenFor(model => model.PatientAgeAtSampling)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.FactorTest, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-10">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.FactorTest)
-            @Html.ValidationMessageFor(model => model.TheIsolate.FactorTest)
+            @Html.EnumRadioButtonFor(model => model.FactorTest)
+            @Html.ValidationMessageFor(model => model.FactorTest)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.Agglutination, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.Agglutination, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-10">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.Agglutination)
-            @Html.ValidationMessageFor(model => model.TheIsolate.Agglutination)
+            @Html.EnumRadioButtonFor(model => model.Agglutination)
+            @Html.ValidationMessageFor(model => model.Agglutination)
         </div>
     </div>
     <div class="form-group">
@@ -61,17 +65,17 @@
         @Html.EditorFor(model => model.Ampicillin, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.BetaLactamase, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.BetaLactamase, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.BetaLactamase)
-            @Html.ValidationMessageFor(model => model.TheIsolate.BetaLactamase)
+            @Html.EnumRadioButtonFor(model => model.BetaLactamase)
+            @Html.ValidationMessageFor(model => model.BetaLactamase)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.Oxidase, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.Oxidase, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.Oxidase)
-            @Html.ValidationMessageFor(model => model.TheIsolate.Oxidase)
+            @Html.EnumRadioButtonFor(model => model.Oxidase)
+            @Html.ValidationMessageFor(model => model.Oxidase)
         </div>
     </div>
     <div class="form-group">
@@ -87,52 +91,52 @@
         @Html.EditorFor(model => model.Cefotaxime, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.OuterMembraneProteinP2, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.OuterMembraneProteinP2, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.OuterMembraneProteinP2)
-            @Html.ValidationMessageFor(model => model.TheIsolate.OuterMembraneProteinP2)
+            @Html.EnumRadioButtonFor(model => model.OuterMembraneProteinP2)
+            @Html.ValidationMessageFor(model => model.OuterMembraneProteinP2)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.FuculoKinase, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.FuculoKinase, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.FuculoKinase)
-            @Html.ValidationMessageFor(model => model.TheIsolate.FuculoKinase)
+            @Html.EnumRadioButtonFor(model => model.FuculoKinase)
+            @Html.ValidationMessageFor(model => model.FuculoKinase)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.OuterMembraneProteinP6, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.OuterMembraneProteinP6, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.OuterMembraneProteinP6)
-            @Html.ValidationMessageFor(model => model.TheIsolate.OuterMembraneProteinP6)
+            @Html.EnumRadioButtonFor(model => model.OuterMembraneProteinP6)
+            @Html.ValidationMessageFor(model => model.OuterMembraneProteinP6)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.BexA, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.BexA, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.BexA)
-            @Html.ValidationMessageFor(model => model.TheIsolate.BexA)
+            @Html.EnumRadioButtonFor(model => model.BexA)
+            @Html.ValidationMessageFor(model => model.BexA)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.SerotypePcr, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.SerotypePcr, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.SerotypePcr)
-            @Html.ValidationMessageFor(model => model.TheIsolate.SerotypePcr)
+            @Html.EnumRadioButtonFor(model => model.SerotypePcr)
+            @Html.ValidationMessageFor(model => model.SerotypePcr)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.RibosomalRna16S, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.RibosomalRna16S, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.RibosomalRna16S)
-            @Html.ValidationMessageFor(model => model.TheIsolate.RibosomalRna16S)
+            @Html.EnumRadioButtonFor(model => model.RibosomalRna16S)
+            @Html.ValidationMessageFor(model => model.RibosomalRna16S)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.TheIsolate.ApiNh, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.ApiNh, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.TheIsolate.ApiNh)
-            @Html.ValidationMessageFor(model => model.TheIsolate.ApiNh)
+            @Html.EnumRadioButtonFor(model => model.ApiNh)
+            @Html.ValidationMessageFor(model => model.ApiNh)
         </div>
     </div>
 }

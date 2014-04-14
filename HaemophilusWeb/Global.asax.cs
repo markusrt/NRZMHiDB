@@ -7,9 +7,11 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Script.Serialization;
+using AutoMapper;
 using FluentValidation.Mvc;
 using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.ViewModels;
 using NLog;
 
 namespace HaemophilusWeb
@@ -29,6 +31,13 @@ namespace HaemophilusWeb
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
             FluentValidationModelValidatorProvider.Configure();
             OverwriteDefaultErrorMessages();
+            InitializeAutomapper();
+        }
+
+        private void InitializeAutomapper()
+        {
+            Mapper.CreateMap<IsolateViewModel, Isolate>();
+            Mapper.CreateMap<Isolate, IsolateViewModel>();
         }
 
         private static void OverwriteDefaultErrorMessages()

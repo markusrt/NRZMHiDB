@@ -241,6 +241,10 @@
     <Compile Include="Migrations\201403252007478_Isolate_2.Designer.cs">
       <DependentUpon>201403252007478_Isolate_2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201404142153397_Sending_Add_ForeignKeyToPatient.cs" />
+    <Compile Include="Migrations\201404142153397_Sending_Add_ForeignKeyToPatient.Designer.cs">
+      <DependentUpon>201404142153397_Sending_Add_ForeignKeyToPatient.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -745,6 +749,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Isolate2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -783,6 +788,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201403252007478_Isolate_2.resx">
       <DependentUpon>201403252007478_Isolate_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404142153397_Sending_Add_ForeignKeyToPatient.resx">
+      <DependentUpon>201404142153397_Sending_Add_ForeignKeyToPatient.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
