@@ -1,11 +1,4 @@
 ﻿function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-    divToShow, inputSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue)
-{
-    ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-    divToShow, inputSelector, inputSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue)
-}
-
-function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
     divToShow, inputSelector, valueSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue)
     {
     if ($(valueSelector).val() === valueOnWhichToShowDiv)

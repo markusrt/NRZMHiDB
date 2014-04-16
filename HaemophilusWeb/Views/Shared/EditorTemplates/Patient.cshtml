@@ -46,8 +46,7 @@
 <div class="form-group">
     @Html.LabelFor(m => m.ClinicalInformation, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
-        @Html.EnumDropDownListFor(m => m.ClinicalInformation, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.ClinicalInformation)
+        @Html.EnumRadioButtonFor(m => m.ClinicalInformation)
     </div>
 </div>
 
@@ -61,8 +60,7 @@
 <div class="form-group">
     @Html.LabelFor(m => m.HibVaccination, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
-        @Html.EnumDropDownListFor(model => model.HibVaccination, new { @class = "form-control" })
-        @Html.ValidationMessageFor(model => model.HibVaccination)
+        @Html.EnumRadioButtonFor(m => m.HibVaccination)
     </div>
 </div>
 <div id="HibVaccinationDateForm" class="form-group">
@@ -86,14 +84,16 @@
 
     function ShowOtherClinicalInformationIfOtherIsSelected() {
         ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#OtherClinicalInformationForm", "[id$='ClinicalInformation']",
+            "#OtherClinicalInformationForm", "input:radio[name$='ClinicalInformation']",
+            "input:radio[name$='ClinicalInformation']:checked",
             "Other", "[id$='OtherClinicalInformation']"
         );
     }
 
     function ShowHibVaccinationDateIfHibVaccinationIsYes() {
         ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#HibVaccinationDateForm", "[id$='HibVaccination']",
+            "#HibVaccinationDateForm", "input:radio[name$='HibVaccination']",
+            "input:radio[name$='HibVaccination']:checked",
             "Yes", "[id$='HibVaccinationDate']"
         );
     }
