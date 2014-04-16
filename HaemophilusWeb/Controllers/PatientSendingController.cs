@@ -125,14 +125,14 @@ namespace HaemophilusWeb.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult Index()
         {
-            return View(db.Sendings.Select(CreatePatientSending).ToList());
+            return View(db.Sendings.Include(s => s.Patient).Select(CreatePatientSending).ToList());
         }
 
         private PatientSendingViewModel CreatePatientSending(Sending sending)
         {
             return new PatientSendingViewModel
             {
-                Patient = db.Patients.FirstOrDefault(p => p.PatientId == sending.PatientId),
+                Patient = sending.Patient,
                 Sending = sending
             };
         }
