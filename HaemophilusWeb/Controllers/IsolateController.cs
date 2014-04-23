@@ -20,7 +20,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var isolate = db.Isolates.Include(i => i.Sending).Single(i => i.IsolateId == id);
+            var isolate = db.Isolates.Include(i => i.Sending).SingleOrDefault(i => i.IsolateId == id);
             if (isolate == null)
             {
                 return HttpNotFound();
