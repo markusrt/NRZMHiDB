@@ -20,7 +20,15 @@ namespace HaemophilusWeb.Models
         public string Initials
         {
             get { return initials; }
-            set { initials = value.ToUpper(CultureInfo.InvariantCulture); }
+            set
+            {
+                initials = value;
+                if (initials!=null)
+                {
+                    initials = initials.ToUpper(CultureInfo.InvariantCulture);
+                }
+                
+            }
         }
 
         [Display(Name = "Geburtsdatum")]

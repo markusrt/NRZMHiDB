@@ -252,6 +252,10 @@
     <Compile Include="Migrations\201404160613229_Update_AspNetIdentity_Version_2.Designer.cs">
       <DependentUpon>201404160613229_Update_AspNetIdentity_Version_2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201404231940084_Isolate_3_Default_To_ND.cs" />
+    <Compile Include="Migrations\201404231940084_Isolate_3_Default_To_ND.Designer.cs">
+      <DependentUpon>201404231940084_Isolate_3_Default_To_ND.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -797,6 +801,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201404160613229_Update_AspNetIdentity_Version_2.resx">
       <DependentUpon>201404160613229_Update_AspNetIdentity_Version_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404231940084_Isolate_3_Default_To_ND.resx">
+      <DependentUpon>201404231940084_Isolate_3_Default_To_ND.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
