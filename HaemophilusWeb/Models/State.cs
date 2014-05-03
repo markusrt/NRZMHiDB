@@ -22,5 +22,6 @@ namespace HaemophilusWeb.Models
         [Description("Sachsen")] SN = 14,
         [Description("Sachsen-Anhalt")] ST = 15,
         [Description("Thüringen")] TH = 16,
+        [Description("Ausland")] Overseas = 17,
     }
 }
