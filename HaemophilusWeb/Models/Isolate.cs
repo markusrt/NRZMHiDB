@@ -40,13 +40,13 @@ namespace HaemophilusWeb.Models
 
         public TestResult Oxidase { get; set; }
 
-        [Display(Name = "opm-P2")]
+        [Display(Name = "ompP2")]
         public TestResult OuterMembraneProteinP2 { get; set; }
 
         [Display(Name = "fucK")]
         public TestResult FuculoKinase { get; set; }
 
-        [Display(Name = "opm-P6")]
+        [Display(Name = "ompP6")]
         public TestResult OuterMembraneProteinP6 { get; set; }
 
         [Display(Name = "bexA")]
