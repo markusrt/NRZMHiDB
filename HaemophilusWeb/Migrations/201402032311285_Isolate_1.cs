@@ -28,6 +28,7 @@ namespace HaemophilusWeb.Migrations
         {
             DropForeignKey("dbo.Isolates", "SendingId", "dbo.Sendings");
             DropIndex("dbo.Isolates", new[] { "SendingId" });
+            DropIndex("dbo.Isolates", "IX_LaboratoryNumber");
             DropTable("dbo.Isolates");
         }
     }

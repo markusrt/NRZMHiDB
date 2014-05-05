@@ -256,6 +256,10 @@
     <Compile Include="Migrations\201404231940084_Isolate_3_Default_To_ND.Designer.cs">
       <DependentUpon>201404231940084_Isolate_3_Default_To_ND.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.cs" />
+    <Compile Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.Designer.cs">
+      <DependentUpon>201405051839287_Isolate_4_Add_StemNumber.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -287,6 +291,7 @@
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Utils\ExceptionUtils.cs" />
     <Compile Include="Validators\IsolateViewModelValidator.cs" />
     <Compile Include="Validators\PatientValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
@@ -804,6 +809,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201404231940084_Isolate_3_Default_To_ND.resx">
       <DependentUpon>201404231940084_Isolate_3_Default_To_ND.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.resx">
+      <DependentUpon>201405051839287_Isolate_4_Add_StemNumber.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

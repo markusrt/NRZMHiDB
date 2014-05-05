@@ -112,19 +112,32 @@ namespace HaemophilusWeb.Controllers
             }
             if (sending.Isolate == null)
             {
-                var currentYear = DateTime.Now.Year;
-                var nextSequentialIsolateNumber = GetNextSequentialIsolateNumber(currentYear);
-
-                sending.Isolate = new Isolate
-                {
-                    Year = currentYear,
-                    YearlySequentialIsolateNumber = nextSequentialIsolateNumber
-                };
-
-                db.SaveChanges();
+                db.WrapInTransaction(() => CreateIsolateWithNewStemAndLaboratoryNumber(sending));
             }
             var isolate = sending.Isolate;
             return Json(isolate);
+        }
+
+        private void CreateIsolateWithNewStemAndLaboratoryNumber(Sending sending)
+        {
+            var currentYear = DateTime.Now.Year;
+            var nextSequentialIsolateNumber = GetNextSequentialIsolateNumber(currentYear);
+            var nextSequentialStemNumber = GetNextSequentialStemNumber();
+
+            sending.Isolate = new Isolate
+            {
+                Year = currentYear,
+                YearlySequentialIsolateNumber = nextSequentialIsolateNumber,
+                StemNumber = nextSequentialStemNumber
+            };
+        }
+
+        private int GetNextSequentialStemNumber()
+        {
+            var lastSequentialStemNumber =
+                db.Isolates.DefaultIfEmpty()
+                    .Max(i => i == null || !i.StemNumber.HasValue ? 0 : i.StemNumber.Value);
+            return lastSequentialStemNumber + 1;
         }
 
         private int GetNextSequentialIsolateNumber(int currentYear)

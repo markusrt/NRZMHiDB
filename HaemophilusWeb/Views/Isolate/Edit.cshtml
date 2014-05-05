@@ -10,14 +10,9 @@
 @section EditModel
 {
     @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.IsolateId)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.IsolateId, new {@class = "control-label col-sm-2"})
-        <div class="col-sm-5 form-control-static">
-            @Html.DisplayFor(model => model.IsolateId)
-            @Html.HiddenFor(model => model.IsolateId)
-        </div>
-    </div>
+
     <div class="form-group">
         @Html.LabelFor(model => model.LaboratoryNumber, new {@class = "control-label col-sm-2"})
         <div class="col-sm-5 form-control-static">
@@ -46,6 +41,9 @@
             @Html.HiddenFor(model => model.PatientAgeAtSampling)
         </div>
     </div>
+    
+    @Html.TextEditorFor(m => m.StemNumber)
+        
     <div class="form-group">
         @Html.LabelFor(model => model.FactorTest, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-10">

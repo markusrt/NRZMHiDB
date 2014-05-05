@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.TestUtils;
 using HaemophilusWeb.Utils;
 using NUnit.Framework;
 using TestDataGenerator;

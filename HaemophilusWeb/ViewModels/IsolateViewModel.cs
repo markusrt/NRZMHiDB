@@ -19,8 +19,10 @@ namespace HaemophilusWeb.ViewModels
             Meropenem = new EpsilometerTestViewModel(Antibiotic.Meropenem);
         }
 
-        [Display(Name = "Stammnummer")]
         public int IsolateId { get; set; }
+
+        [Display(Name = "Stammnummer")]
+        public int? StemNumber { get; set; }
 
         [Display(Name = "Labornummer")]
         public string LaboratoryNumber { get; set; }

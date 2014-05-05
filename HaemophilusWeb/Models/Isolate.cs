@@ -9,8 +9,10 @@ namespace HaemophilusWeb.Models
     public class Isolate
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Stammnummer")]
         public int IsolateId { get; set; }
+
+        [Display(Name = "Stammnummer")]
+        public int? StemNumber { get; set; }
 
         [Display(Name = "Einsendung")]
         [Key]

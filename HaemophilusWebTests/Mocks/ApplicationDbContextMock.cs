@@ -43,6 +43,11 @@ namespace HaemophilusWeb.Models
             return 0;
         }
 
+        public void WrapInTransaction(Action action)
+        {
+            action();
+        }
+
         public void Dispose()
         {
         }

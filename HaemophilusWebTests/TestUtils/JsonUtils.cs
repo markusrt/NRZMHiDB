@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
-namespace HaemophilusWeb.Utils
+namespace HaemophilusWeb.TestUtils
 {
     public static class JsonUtils
     {

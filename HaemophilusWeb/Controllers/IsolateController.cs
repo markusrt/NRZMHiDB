@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
 using HaemophilusWeb.Views.Utils;
 
@@ -126,13 +129,27 @@ namespace HaemophilusWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var isolate = db.Isolates.Include(i => i.EpsilometerTests).Single(i => i.IsolateId == isolateViewModel.IsolateId);
-                Mapper.Map(isolateViewModel, isolate);
+                try
+                {
+                    var isolate = db.Isolates.Include(i => i.EpsilometerTests).Single(i => i.IsolateId == isolateViewModel.IsolateId);
+                    Mapper.Map(isolateViewModel, isolate);
 
-                ViewModelToModel(isolateViewModel.EpsilometerTestViewModels, isolate.EpsilometerTests);
-                db.Entry(isolate).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index", "PatientSending");
+                    ViewModelToModel(isolateViewModel.EpsilometerTestViewModels, isolate.EpsilometerTests);
+                    db.Entry(isolate).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "PatientSending");
+                }
+                catch (DbUpdateException e)
+                {
+                    if (e.AnyMessageMentions("IX_StemNumber"))
+                    {
+                        ModelState.AddModelError("StemNumber", "Diese Stammnummer ist bereits vergeben");
+                    }
+                    else
+                    {
+                        throw e;
+                    }
+                }
             }
             return CreateEditView(isolateViewModel);
         }

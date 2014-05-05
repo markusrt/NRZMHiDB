@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 
 namespace HaemophilusWeb.Models
@@ -45,6 +46,23 @@ namespace HaemophilusWeb.Models
         public int SaveChanges()
         {
             return wrappedContext.SaveChanges();
+        }
+
+        public void WrapInTransaction(Action action)
+        {
+            using (var transaction = wrappedContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    action();
+                    SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                }
+            }
         }
     }
 }

@@ -61,8 +61,12 @@
             <td id="isolate_Id_@item.Sending.SendingId">
                 @if (item.Sending.Isolate != null)
                 {
-                    @Html.ActionLink(item.Sending.Isolate.IsolateId.ToString(), 
-                        "Edit", "Isolate", new {id = item.Sending.Isolate.IsolateId}, null)
+                    var stemNumber = "n.d.";
+                    if (item.Sending.Isolate.StemNumber.HasValue)
+                    {
+                        stemNumber = item.Sending.Isolate.StemNumber.Value.ToString();
+                    }
+                    @Html.ActionLink(stemNumber, "Edit", "Isolate", new {id = item.Sending.Isolate.IsolateId}, null)
                 }
                 else
                 {
@@ -102,7 +106,7 @@
                 $("#isolate_Id_" + sendingId).html(
                     "<a href='"
                         + '@Url.Action("Edit", "Isolate")' + "/" + data.IsolateId + "'>"
-                        + data.IsolateId + "</a>"
+                        + data.StemNumber + "</a>"
                 );
                 $("#isolate_labNr_" + sendingId).html(data.LaboratoryNumber);
             },
