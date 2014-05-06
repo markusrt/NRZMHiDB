@@ -71,7 +71,7 @@ namespace CsvImporter
 
         public TestResult FuculoKinase { get; set; }
 
-        public TestResult OuterMembraneProteinP6 { get; set; }
+        public SpecificTestResult OuterMembraneProteinP6 { get; set; }
 
         public TestResult? BexA { get; set; }
 

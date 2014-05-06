@@ -266,6 +266,7 @@
     <Compile Include="Models\EpsilometerTestResult.cs" />
     <Compile Include="Models\EucastClinicalBreakpoint.cs" />
     <Compile Include="Models\Antibiotic.cs" />
+    <Compile Include="Models\IsolateBase.cs" />
     <Compile Include="Models\Serotype.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />

@@ -14,7 +14,7 @@ namespace HaemophilusWeb.Models
         {
             ReceivingDate = DateTime.Now;
             SamplingDate = DateTime.Now.Subtract(TimeSpan.FromDays(7));
-            SenderConclusion = "H. influenzae";
+            SenderConclusion = "H.influenzae";
         }
 
         [Key]
