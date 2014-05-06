@@ -260,6 +260,10 @@
     <Compile Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.Designer.cs">
       <DependentUpon>201405051839287_Isolate_4_Add_StemNumber.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs" />
+    <Compile Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.Designer.cs">
+      <DependentUpon>201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -762,7 +766,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Isolate2\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -813,6 +816,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.resx">
       <DependentUpon>201405051839287_Isolate_4_Add_StemNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.resx">
+      <DependentUpon>201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

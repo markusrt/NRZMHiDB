@@ -9,6 +9,12 @@ namespace HaemophilusWeb.Models
         [Description("Positiv")] Positive = 2
     }
 
+    public enum UnspecificTestResult
+    {
+        [Description("n.d.")] NotDetermined = 0,
+        [Description("durchgeführt")] Determined = 1,
+    }
+
     public enum SpecificTestResult
     {
         [Description("n.d.")] NotDetermined = 0,

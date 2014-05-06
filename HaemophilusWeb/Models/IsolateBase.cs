@@ -37,9 +37,21 @@ namespace HaemophilusWeb.Models
         public Serotype SerotypePcr { get; set; }
 
         [Display(Name = "16S rRNA")]
-        public TestResult RibosomalRna16S { get; set; }
+        public UnspecificTestResult RibosomalRna16S { get; set; }
+
+        [Display(Name = "16S rRNA Übereinstimmung")]
+        public double? RibosomalRna16SMatchInPercent { get; set; }
 
         [Display(Name = "api NH")]
-        public TestResult ApiNh { get; set; }
+        public UnspecificTestResult ApiNh { get; set; }
+
+        [Display(Name = "api NH Übereinstimmung")]
+        public double? ApiNhMatchInPercent { get; set; }
+
+        [Display(Name = "MALDI-TOF")]
+        public UnspecificTestResult MaldiTof { get; set; }
+
+        [Display(Name = "MALDI-TOF Übereinstimmung")]
+        public double? MaldiTofMatchConfidence { get; set; }
     }
 }
