@@ -1,5 +1,4 @@
-﻿@using HaemophilusWeb.Models
-@using HaemophilusWeb.Views.Utils
+﻿@using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.ViewModels.IsolateViewModel
 
 @{
@@ -21,21 +20,21 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Material, new { @class = "control-label col-sm-2" })
+        @Html.LabelFor(model => model.Material, new {@class = "control-label col-sm-2"})
         <div class="col-sm-5 form-control-static">
             @Html.DisplayFor(model => model.Material)
             @Html.HiddenFor(model => model.Material)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Invasive, new { @class = "control-label col-sm-2" })
+        @Html.LabelFor(model => model.Invasive, new {@class = "control-label col-sm-2"})
         <div class="col-sm-5 form-control-static">
             @Html.DisplayFor(model => model.Invasive)
             @Html.HiddenFor(model => model.Invasive)
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.PatientAgeAtSampling, new { @class = "control-label col-sm-2" })
+        @Html.LabelFor(model => model.PatientAgeAtSampling, new {@class = "control-label col-sm-2"})
         <div class="col-sm-5 form-control-static">
             @Html.DisplayFor(model => model.PatientAgeAtSampling)
             @Html.HiddenFor(model => model.PatientAgeAtSampling)
@@ -59,8 +58,11 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Ampicillin, new { @class = "col-sm-2 col-xs-12 control-label" })
-        @Html.EditorFor(model => model.Ampicillin, new { @class = "form-control" })
+        @Html.LabelFor(model => model.Oxidase, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-5">
+            @Html.EnumRadioButtonFor(model => model.Oxidase)
+            @Html.ValidationMessageFor(model => model.Oxidase)
+        </div>
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.BetaLactamase, new {@class = "col-sm-2 control-label"})
@@ -70,43 +72,27 @@
         </div>
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Oxidase, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.Oxidase)
-            @Html.ValidationMessageFor(model => model.Oxidase)
-        </div>
+        @Html.LabelFor(model => model.Ampicillin, new {@class = "col-sm-2 col-xs-12 control-label"})
+        @Html.EditorFor(model => model.Ampicillin, new {@class = "form-control"})
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.AmoxicillinClavulanate, new {@class = "col-sm-2 col-xs-12 control-label"})
+        @Html.EditorFor(model => model.AmoxicillinClavulanate, new {@class = "form-control"})
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.AmoxicillinClavulanate, new { @class = "col-sm-2 col-xs-12 control-label" })
-        @Html.EditorFor(model => model.AmoxicillinClavulanate, new { @class = "form-control" })
+        @Html.LabelFor(model => model.Meropenem, new {@class = "col-sm-2 col-xs-12 control-label"})
+        @Html.EditorFor(model => model.Meropenem, new {@class = "form-control"})
     </div>
     <div class="form-group">
-        @Html.LabelFor(model => model.Meropenem, new { @class = "col-sm-2 col-xs-12 control-label" })
-        @Html.EditorFor(model => model.Meropenem, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.Cefotaxime, new { @class = "col-sm-2 col-xs-12 control-label" })
-        @Html.EditorFor(model => model.Cefotaxime, new { @class = "form-control" })
+        @Html.LabelFor(model => model.Cefotaxime, new {@class = "col-sm-2 col-xs-12 control-label"})
+        @Html.EditorFor(model => model.Cefotaxime, new {@class = "form-control"})
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.OuterMembraneProteinP2, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
             @Html.EnumRadioButtonFor(model => model.OuterMembraneProteinP2)
             @Html.ValidationMessageFor(model => model.OuterMembraneProteinP2)
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.FuculoKinase, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-5">
-            @Html.EnumRadioButtonFor(model => model.FuculoKinase)
-            @Html.ValidationMessageFor(model => model.FuculoKinase)
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.OuterMembraneProteinP6, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-10">
-            @Html.EnumRadioButtonFor(model => model.OuterMembraneProteinP6)
-            @Html.ValidationMessageFor(model => model.OuterMembraneProteinP6)
         </div>
     </div>
     <div class="form-group">
@@ -123,7 +109,21 @@
             @Html.ValidationMessageFor(model => model.SerotypePcr)
         </div>
     </div>
-
+    <div class="form-group">
+        @Html.LabelFor(model => model.FuculoKinase, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-5">
+            @Html.EnumRadioButtonFor(model => model.FuculoKinase)
+            @Html.ValidationMessageFor(model => model.FuculoKinase)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.OuterMembraneProteinP6, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-10">
+            @Html.EnumRadioButtonFor(model => model.OuterMembraneProteinP6)
+            @Html.ValidationMessageFor(model => model.OuterMembraneProteinP6)
+        </div>
+    </div>
+    
     <div class="form-group">
         @Html.LabelFor(model => model.RibosomalRna16S, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
@@ -132,10 +132,10 @@
         </div>
     </div>
     <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
-        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 control-label" })
+        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-2">
             <div class="input-group">
-                @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "form-control"})
                 <span class="input-group-addon">%</span>
             </div>
             @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
@@ -150,10 +150,10 @@
         </div>
     </div>
     <div id="ApiNhMatchInPercentForm" class="form-group">
-        @Html.LabelFor(m => m.ApiNhMatchInPercent, new { @class = "col-sm-2 control-label" })
+        @Html.LabelFor(m => m.ApiNhMatchInPercent, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-2">
             <div class="input-group">
-                @Html.TextBoxFor(m => m.ApiNhMatchInPercent, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.ApiNhMatchInPercent, new {@class = "form-control"})
                 <span class="input-group-addon">%</span>
             </div>
             @Html.ValidationMessageFor(model => model.ApiNhMatchInPercent)
@@ -161,29 +161,30 @@
     </div>
     
     <div class="form-group">
-        @Html.LabelFor(model => model.MaldiTof, new { @class = "col-sm-2 control-label" })
+        @Html.LabelFor(model => model.MaldiTof, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-2">
             @Html.EnumRadioButtonFor(model => model.MaldiTof)
             @Html.ValidationMessageFor(model => model.MaldiTof)
         </div>
     </div>
     <div id="MaldiTofMatchConfidenceForm" class="form-group">
-    @Html.LabelFor(m => m.MaldiTofMatchConfidence, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-2">
-        <div class="input-group">
-            @Html.TextBoxFor(m => m.MaldiTofMatchConfidence, new { @class = "form-control" })
-            <span class="input-group-addon">00,0</span>
+        @Html.LabelFor(m => m.MaldiTofMatchConfidence, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-2">
+            <div class="input-group">
+                @Html.TextBoxFor(m => m.MaldiTofMatchConfidence, new {@class = "form-control"})
+                <span class="input-group-addon">00,0</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
         </div>
-        @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
     </div>
-</div>
 }
 
 @section Scripts{
     <script>
         var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
-        
-        $(document).ready(function() {
+
+        $(document).ready(function()
+        {
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("input[id$=_Measurement]").keyup(ETestChange);
             ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
@@ -191,7 +192,8 @@
             ShowMaldiTofMatchConfidenceIfDeterminedIsSelected();
         });
 
-        function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected() {
+        function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected()
+        {
             ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
                 "#RibosomalRna16SMatchInPercentForm", "input:radio[name$='RibosomalRna16S']",
                 "input:radio[name$='RibosomalRna16S']:checked",
@@ -199,7 +201,8 @@
             );
         }
 
-        function ShowApiNhMatchInPercentIfDeterminedIsSelected() {
+        function ShowApiNhMatchInPercentIfDeterminedIsSelected()
+        {
             ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
                 "#ApiNhMatchInPercentForm", "input:radio[name$='ApiNh']",
                 "input:radio[name$='ApiNh']:checked",
@@ -207,7 +210,8 @@
             );
         }
 
-        function ShowMaldiTofMatchConfidenceIfDeterminedIsSelected() {
+        function ShowMaldiTofMatchConfidenceIfDeterminedIsSelected()
+        {
             ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
                 "#MaldiTofMatchConfidenceForm", "input:radio[name$='MaldiTof']",
                 "input:radio[name$='MaldiTof']:checked",
@@ -215,7 +219,7 @@
             );
         }
 
-        function ETestChange() 
+        function ETestChange()
         {
             var id = $(this).attr('id');
             var antibiotic = id.substring(0, id.indexOf('_'));
@@ -225,22 +229,22 @@
             SetETestResult(antibiotic, null);
 
             var currentBreakpointId = $(currentBreakpointSelector).val();
-            
+
             var currentMeasurement = parseFloat($(currentMeasurementSelector).val());
-            if (isNaN(currentMeasurement)) 
+            if(isNaN(currentMeasurement))
             {
                 return;
             }
 
-            clinicalBreakpoints.forEach(function(clinicalBreakpoint) 
+            clinicalBreakpoints.forEach(function(clinicalBreakpoint)
             {
-                if(currentBreakpointId==clinicalBreakpoint.EucastClinicalBreakpointId) 
+                if(currentBreakpointId == clinicalBreakpoint.EucastClinicalBreakpointId)
                 {
-                    if(currentMeasurement>clinicalBreakpoint.MicBreakpointResistent) 
+                    if(currentMeasurement > clinicalBreakpoint.MicBreakpointResistent)
                     {
                         SetETestResult(antibiotic, 'Resistant');
                     }
-                    else if(currentMeasurement<=clinicalBreakpoint.MicBreakpointSusceptible) 
+                    else if(currentMeasurement <= clinicalBreakpoint.MicBreakpointSusceptible)
                     {
                         SetETestResult(antibiotic, 'Susceptible');
                     }

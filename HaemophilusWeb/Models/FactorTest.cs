@@ -9,6 +9,5 @@ namespace HaemophilusWeb.Models
         VX = 2,
         X = 3,
         [Description("Nicht beurteilbar")] NotEvaluable = 4,
-        [Description("Kein Wachstum")] NoGrowth = 5
     }
 }
