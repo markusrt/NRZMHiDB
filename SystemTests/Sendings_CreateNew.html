@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://localhost:49310/" />
+<title>Sendings_CreateNew</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Sendings_CreateNew</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Alle Einsendungen anzeigen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>link=Neue Einsendung erfassen</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=Sending_SenderId</td>
+	<td>label=Der Einsender</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=Sending_SenderLaboratoryNumber</td>
+	<td>12345</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[7]/div/div/div/label</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=Patient_Initials</td>
+	<td>Z.T.</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[14]/div/div/div/label[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[21]/div/div/div/label[2]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertVisible</td>
+	<td>id=Patient_HibVaccinationDate</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[21]/div/div/div/label[3]</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertNotVisible</td>
+	<td>id=Patient_HibVaccinationDate</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=input.btn.btn-primary</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertElementPresent</td>
+	<td>//td[contains(., 'Z.T.')]</td>
+	<td></td>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
