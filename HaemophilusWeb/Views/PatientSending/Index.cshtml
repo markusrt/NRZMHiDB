@@ -66,11 +66,11 @@
                     {
                         stemNumber = item.Sending.Isolate.StemNumber.Value.ToString();
                     }
-                    @Html.ActionLink(stemNumber, "Edit", "Isolate", new {id = item.Sending.Isolate.IsolateId}, null)
+                    @Html.ActionLink(stemNumber, "Edit", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn-sm btn btn-default", role = "button" })
                 }
                 else
                 {
-                    <a href="#" data-sending-id="@item.Sending.SendingId">Stammnummer zuweisen</a>
+                    <a class="btn-sm btn btn-default" role="button" href="#" data-sending-id="@item.Sending.SendingId">Stammnummer zuweisen</a>
                 }
             </td>
             <td id="isolate_labNr_@item.Sending.SendingId">
@@ -80,10 +80,18 @@
                 }
             </td>
             <td>
-                @Html.ActionLink("Bearbeiten", "Edit", new {id = item.Sending.SendingId})@* |
+                <div class="btn-group btn-group-sm">
+                    @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Sending.SendingId }, new { @class = "btn btn-default", role = "button" })
+                    @if (item.Sending.Isolate != null)
+                    {
+                        @Html.ActionLink("Bericht erstellen", "Report", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn btn-default", role = "button" })
+                    }
+                    @* |
                     @Html.ActionLink("Details", "Details", new { id=item.SendingId }) |
                     @Html.ActionLink("Delete", "Delete", new { id=item.SendingId })*@
-            </td>
+                </div>
+    
+</td>
         </tr>
     }
 
@@ -104,7 +112,7 @@
                     ShowError(data.ErrorMessage);
                 }
                 $("#isolate_Id_" + sendingId).html(
-                    "<a href='"
+                    "<a class='btn-sm btn btn-default', role='button' href='"
                         + '@Url.Action("Edit", "Isolate")' + "/" + data.IsolateId + "'>"
                         + data.StemNumber + "</a>"
                 );

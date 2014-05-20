@@ -1,0 +1,29 @@
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.IsolateViewModel
+
+@{
+    ViewBag.Title = "Bericht erstellen";
+}
+
+@Scripts.Render("~/bundles/docxgen")
+
+
+<div class="jumbotron">
+    <h1>Noch in Arbeit!</h1>
+    <p>Diese Seite dient nur als <b>technische Demonstration</b>. Die Werte im Bericht sind noch unvollständig.</p>
+</div>
+
+@section Scripts{
+    <script>
+        var documentData = @(Html.Raw(Json.Encode(Model)));
+
+        $(document).ready(function() {
+            var doc= new DocxGen().loadFromFile("/befund.docx",{async:true,intelligentTagging:true}).success(function(doc){
+                doc.setTags(documentData); //set the templateVariables
+                doc.applyTags(); //apply them
+                doc.output(); //Output the document using Data-URI
+            });
+        });
+    </script>
+}

@@ -33,6 +33,11 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(isolateViewModel);
         }
 
+        public ActionResult Report(int? id)
+        {
+            return Edit(id);
+        }
+
         private static IsolateViewModel ModelToViewModel(Isolate isolate)
         {
             var isolateViewModel = Mapper.Map<IsolateViewModel>(isolate);

@@ -332,9 +332,11 @@
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
     <Content Include="Images\logo3.png" />
+    <Content Include="Scripts\base64.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\docxgen.js" />
     <Content Include="Scripts\globalize\cultures\globalize.culture.af-ZA.js" />
     <Content Include="Scripts\globalize\cultures\globalize.culture.af.js" />
     <Content Include="Scripts\globalize\cultures\globalize.culture.am-ET.js" />
@@ -701,6 +703,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jszip.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
@@ -763,6 +766,8 @@
     <Content Include="Views\Isolate\Edit.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EpsilometerTestViewModel.cshtml" />
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
+    <Content Include="Views\Isolate\Report.cshtml" />
+    <Content Include="befund.docx" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
