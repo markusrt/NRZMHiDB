@@ -4,7 +4,10 @@
     if ($(valueSelector).val() === valueOnWhichToShowDiv)
     {
         $(divToShow).removeClass("hidden");
-        $(inputToClearOnOtherValue).focus();
+        if ($(inputToClearOnOtherValue).val().length == 0)
+        {
+            $(inputToClearOnOtherValue).focus();
+        }
     }
     else {
         $(divToShow).addClass("hidden");
