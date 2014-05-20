@@ -768,6 +768,7 @@
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
     <Content Include="Views\Isolate\Report.cshtml" />
     <Content Include="befund.docx" />
+    <Content Include="Views\Shared\EditorTemplates\SendingConclusion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
