@@ -51,13 +51,17 @@ namespace HaemophilusWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                patient.Initials = patient.Initials.ToUpper(CultureInfo.InvariantCulture);
-                db.Patients.Add(patient);
-                db.SaveChanges();
+                CreatePatient(patient);
                 return RedirectToAction("Index");
             }
 
             return View(patient);
+        }
+
+        internal void CreatePatient(Patient patient)
+        {
+            db.Patients.Add(patient);
+            db.SaveChanges();
         }
 
         // GET: /Patient/Edit/5
@@ -88,7 +92,6 @@ namespace HaemophilusWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                patient.Initials = patient.Initials.ToUpper(CultureInfo.InvariantCulture);
                 db.Entry(patient).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");

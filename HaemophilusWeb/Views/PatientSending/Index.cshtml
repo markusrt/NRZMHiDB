@@ -29,9 +29,6 @@
             @Html.DisplayNameFor(model => model.Sending.Invasive)
         </th>
         <th>
-            Stammnummer
-        </th>
-        <th>
             Labornummer
         </th>
         <th></th>
@@ -58,26 +55,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Sending.Invasive)
             </td>
-            <td id="isolate_Id_@item.Sending.SendingId">
-                @if (item.Sending.Isolate != null)
-                {
-                    var stemNumber = "n.d.";
-                    if (item.Sending.Isolate.StemNumber.HasValue)
-                    {
-                        stemNumber = item.Sending.Isolate.StemNumber.Value.ToString();
-                    }
-                    @Html.ActionLink(stemNumber, "Edit", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn-sm btn btn-default", role = "button" })
-                }
-                else
-                {
-                    <a class="btn-sm btn btn-default" role="button" href="#" data-sending-id="@item.Sending.SendingId">Stammnummer zuweisen</a>
-                }
-            </td>
             <td id="isolate_labNr_@item.Sending.SendingId">
-                @if (item.Sending.Isolate != null)
-                {
-                    @item.Sending.Isolate.LaboratoryNumber
-                }
+                @Html.ActionLink(@item.Sending.Isolate.LaboratoryNumber, 
+                    "Edit", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn-sm btn btn-default", role = "button" })
             </td>
             <td>
                 <div class="btn-group btn-group-sm">
@@ -90,38 +70,8 @@
                     @Html.ActionLink("Details", "Details", new { id=item.SendingId }) |
                     @Html.ActionLink("Delete", "Delete", new { id=item.SendingId })*@
                 </div>
-    
-</td>
+            </td>
         </tr>
     }
 
 </table>
-
-<script>
-    $("td[id^='isolate_Id_'] a").click(function()
-    {
-        var sendingId = $(this).attr("data-sending-id");
-        $.ajax({
-            url: '@Url.Action("AssignStemNumber", "Sending")' + '/' + sendingId,
-            type: 'POST',
-            dataType: 'json',
-            success: function(data)
-            {
-                if (data.ErrorMessage)
-                {
-                    ShowError(data.ErrorMessage);
-                }
-                $("#isolate_Id_" + sendingId).html(
-                    "<a class='btn-sm btn btn-default', role='button' href='"
-                        + '@Url.Action("Edit", "Isolate")' + "/" + data.IsolateId + "'>"
-                        + data.StemNumber + "</a>"
-                );
-                $("#isolate_labNr_" + sendingId).html(data.LaboratoryNumber);
-            },
-            error: function(error)
-            {
-                ShowError(error.status + " " + error.statusText);
-            },
-        });
-    });
-</script>

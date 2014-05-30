@@ -78,11 +78,9 @@ namespace HaemophilusWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                db.Patients.Add(patientSending.Patient);
-                db.SaveChanges();
+                patientController.CreatePatient(patientSending.Patient);
                 patientSending.Sending.PatientId = patientSending.Patient.PatientId;
-                db.Sendings.Add(patientSending.Sending);
-                db.SaveChanges();
+                sendingController.CreateSendingAndAssignStemnumber(patientSending.Sending);
                 return RedirectToAction("Index");
             }
             return CreateEditView(patientSending);

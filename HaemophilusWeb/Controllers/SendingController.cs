@@ -60,12 +60,18 @@ namespace HaemophilusWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Sendings.Add(sending);
-                db.SaveChanges();
+                CreateSendingAndAssignStemnumber(sending);
                 return RedirectToAction("Index");
             }
 
             return CreateEditView(sending);
+        }
+
+        internal void CreateSendingAndAssignStemnumber(Sending sending)
+        {
+            db.Sendings.Add(sending);
+            db.SaveChanges();
+            AssignStemNumber(sending.SendingId);
         }
 
         internal void AddReferenceDataToViewBag(dynamic viewBag)
@@ -91,31 +97,22 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(sending);
         }
 
-        public ActionResult AssignStemNumber(int? id)
+        public Isolate AssignStemNumber(int? id)
         {
             if (id == null)
             {
-                return
-                    Json(new Error {ErrorMessage = "Zur Zuweisung einer Stammnummer wird eine Sendungsnummer benötigt."});
+                throw new ArgumentException("Sending id is required", "id");
             }
             var sending = db.Sendings.Find(id);
             if (sending == null)
             {
-                return
-                    Json(new Error
-                    {
-                        ErrorMessage =
-                            string.Format(
-                                "Zuweisung einer Stammnummer ist fehlgeschlagen. Die Sendung mit der Nummer '{0}' existiert nicht.",
-                                id)
-                    });
+                throw new ArgumentException("Sending id does not exist", "id");
             }
             if (sending.Isolate == null)
             {
                 db.WrapInTransaction(() => CreateIsolateWithNewStemAndLaboratoryNumber(sending));
             }
-            var isolate = sending.Isolate;
-            return Json(isolate);
+            return sending.Isolate;
         }
 
         private void CreateIsolateWithNewStemAndLaboratoryNumber(Sending sending)

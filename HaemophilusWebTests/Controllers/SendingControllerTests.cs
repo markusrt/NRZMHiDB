@@ -62,22 +62,19 @@ namespace HaemophilusWeb.Controllers
             sending.Isolate.Year = 2099;
             sending.Isolate.YearlySequentialIsolateNumber = 999;
 
-            var result = controller.AssignStemNumber(SecondSendingId) as JsonResult;
-            var isolate = result.ConvertTo<Isolate>();
+            var isolate = controller.AssignStemNumber(SecondSendingId);
 
             isolate.Year.Should().Be(2099);
             isolate.YearlySequentialIsolateNumber.Should().Be(999);
         }
 
         [Test]
+        [ExpectedException(typeof(ArgumentException))]
         public void AssignStemNumber_NoId_ReturnsError()
         {
             var controller = CreateMockSendingController();
 
-            var result = controller.AssignStemNumber(null) as JsonResult;
-            var error = result.ConvertTo<Error>();
-
-            error.ErrorMessage.Should().Contain("Sendungsnummer benötigt");
+            controller.AssignStemNumber(null);
         }
 
         [Test]
@@ -86,24 +83,20 @@ namespace HaemophilusWeb.Controllers
             var expectedLaboratoryNumber = string.Format("1/{0:yy}", DateTime.Now);
             var controller = CreateMockSendingController();
 
-            var result = controller.AssignStemNumber(FirstSendingId) as JsonResult;
-            var isolate = result.ConvertTo<Isolate>();
+            var isolate = controller.AssignStemNumber(FirstSendingId);
 
             isolate.Should().NotBeNull();
             isolate.LaboratoryNumber.Should().Be(expectedLaboratoryNumber);
         }
 
         [Test]
+        [ExpectedException(typeof(ArgumentException))]
         public void AssignStemNumber_UnknownId_ReturnsError()
         {
             const int unknownId = 12345;
             var controller = CreateMockSendingController();
 
-            var result = controller.AssignStemNumber(unknownId) as JsonResult;
-            var error = result.ConvertTo<Error>();
-
-            error.ErrorMessage.Should().Contain(unknownId.ToString());
-            error.ErrorMessage.Should().Contain("existiert nicht");
+            controller.AssignStemNumber(unknownId);
         }
 
         [Test]
