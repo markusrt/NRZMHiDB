@@ -893,8 +893,11 @@ Created by Edgar HIPP
               throw err;
             }
           });
-        } else {
-          document.location.href = "data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64," + result;
+        }
+        else
+        {
+            saveAs(result, options.name);
+            //document.location.href = "data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64," + result;
         }
       }
       return result;

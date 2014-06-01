@@ -297,6 +297,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\ExceptionUtils.cs" />
+    <Compile Include="Utils\FileLister.cs" />
+    <Compile Include="Utils\ServerUtils.cs" />
     <Compile Include="Validators\IsolateViewModelValidator.cs" />
     <Compile Include="Validators\PatientValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
@@ -328,6 +330,10 @@
     </None>
     <None Include="Properties\PublishProfiles\haemophilus.pubxml" />
     <None Include="Properties\PublishProfiles\Production Server.pubxml" />
+    <Content Include="ReportTemplates\BLNAR v5.docx" />
+    <Content Include="ReportTemplates\BLNAS v5.docx" />
+    <Content Include="ReportTemplates\BLPACR v5.docx" />
+    <Content Include="ReportTemplates\BLPACS v5.docx" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
@@ -337,6 +343,7 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\docxgen.js" />
+    <Content Include="Scripts\FileSaver.js" />
     <Content Include="Scripts\globalize\cultures\globalize.culture.af-ZA.js" />
     <Content Include="Scripts\globalize\cultures\globalize.culture.af.js" />
     <Content Include="Scripts\globalize\cultures\globalize.culture.am-ET.js" />
@@ -767,7 +774,7 @@
     <Content Include="Views\Shared\EditorTemplates\EpsilometerTestViewModel.cshtml" />
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
     <Content Include="Views\Isolate\Report.cshtml" />
-    <Content Include="befund.docx" />
+    <Content Include="ReportTemplates\befund.docx" />
     <Content Include="Views\Shared\EditorTemplates\SendingConclusion.cshtml" />
   </ItemGroup>
   <ItemGroup>

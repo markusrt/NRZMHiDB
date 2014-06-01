@@ -1,5 +1,4 @@
-﻿@using HaemophilusWeb.Models
-@using HaemophilusWeb.Views.Utils
+﻿@using HaemophilusWeb.Utils
 @model HaemophilusWeb.ViewModels.IsolateViewModel
 
 @{
@@ -13,16 +12,39 @@
     <h1>Noch in Arbeit!</h1>
     <p>Diese Seite dient nur als <b>technische Demonstration</b>. Die Werte im Bericht sind noch unvollständig.</p>
 </div>
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.Label("Berichtsvorlage", new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-5">
+            @Html.DropDownList("ReportTemplate", ((IEnumerable<FileInfo>) ViewBag.ReportTemplates).Select(option => new SelectListItem
+            {
+                Text = (option == null ? "Keine Vorlage vorhanden" : option.Name),
+                Value = Url.Content(option.FullName.ReverseMapPath())
+            }), "Auswählen...", new {@class = "form-control"})
+        </div>
+    </div>
+    <div class="form-group">
+        <button id="CreateReport" class="btn btn-default btn-block">Bericht erstellen</button>
+    </div>
+</div>
 
 @section Scripts{
     <script>
         var documentData = @(Html.Raw(Json.Encode(Model)));
 
-        $(document).ready(function() {
-            var doc= new DocxGen().loadFromFile("/befund.docx",{async:true,intelligentTagging:true}).success(function(doc){
-                doc.setTags(documentData); //set the templateVariables
-                doc.applyTags(); //apply them
-                doc.output(); //Output the document using Data-URI
+        $("#CreateReport").click(function()
+        {
+            var templateFile = $("#ReportTemplate").val();
+            if(templateFile == "")
+            {
+                return;
+            }
+            console.log(templateFile);
+            var doc = new DocxGen().loadFromFile(templateFile, { async: true, intelligentTagging: true }).success(function(doc)
+            {
+                doc.setTags(documentData);
+                doc.applyTags();
+                doc.output({ name: "foo.docx", type:"blob" });
             });
         });
     </script>

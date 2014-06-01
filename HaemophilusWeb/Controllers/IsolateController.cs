@@ -35,7 +35,15 @@ namespace HaemophilusWeb.Controllers
 
         public ActionResult Report(int? id)
         {
+            AddReportTemplatesToViewBag();
             return Edit(id);
+        }
+
+        private void AddReportTemplatesToViewBag()
+        {
+            var templatePath = Server.MapPath("~/ReportTemplates");
+            var lister = new FileLister(templatePath, ".docx");
+            ViewBag.ReportTemplates = lister.Files;
         }
 
         private static IsolateViewModel ModelToViewModel(Isolate isolate)
