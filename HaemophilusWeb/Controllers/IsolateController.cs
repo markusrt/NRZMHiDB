@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
+using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
@@ -36,6 +37,7 @@ namespace HaemophilusWeb.Controllers
         public ActionResult Report(int? id)
         {
             AddReportTemplatesToViewBag();
+            AddReportSignersToViewBag();
             return Edit(id);
         }
 
@@ -44,6 +46,11 @@ namespace HaemophilusWeb.Controllers
             var templatePath = Server.MapPath("~/ReportTemplates");
             var lister = new FileLister(templatePath, ".docx");
             ViewBag.ReportTemplates = lister.Files;
+        }
+
+        private void AddReportSignersToViewBag()
+        {
+            ViewBag.ReportSigners = ConfigurationManager.AppSettings["reportSigners"].Split(';');
         }
 
         private static IsolateViewModel ModelToViewModel(Isolate isolate)
@@ -66,6 +73,17 @@ namespace HaemophilusWeb.Controllers
                 isolateViewModel.PatientAgeAtSampling = ageAtSampling;
             }
             ModelToViewModel(isolate.EpsilometerTests, isolateViewModel.EpsilometerTestViewModels);
+
+            isolateViewModel.SamplingDate = isolate.Sending.SamplingDate.ToReportFormat();
+            isolateViewModel.ReceivingDate = isolate.Sending.ReceivingDate.ToReportFormat();
+            isolateViewModel.Patient = isolate.Sending.Patient.ToReportFormat();
+            isolateViewModel.PatientBirthDate = isolate.Sending.Patient.BirthDate.ToReportFormat();
+            isolateViewModel.SenderLaboratoryNumber = isolate.Sending.SenderLaboratoryNumber;
+            isolateViewModel.Evaluation = isolate.Sending.Evaluation.ToReportFormat();
+            var interpretationResult = IsolateInterpretation.Interpret(isolate);
+            isolateViewModel.Interpretation = interpretationResult.Interpretation;
+            isolateViewModel.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
+
             return isolateViewModel;
         }
 
@@ -82,6 +100,15 @@ namespace HaemophilusWeb.Controllers
                     epsilometerTestViewModel.EucastClinicalBreakpointId = epsilometerTest.EucastClinicalBreakpointId;
                     epsilometerTestViewModel.Measurement = epsilometerTest.Measurement;
                     epsilometerTestViewModel.Result = epsilometerTest.Result;
+
+                    var eucastClinicalBreakpoint = epsilometerTest.EucastClinicalBreakpoint;
+                    if (eucastClinicalBreakpoint != null)
+                    {
+                        epsilometerTestViewModel.MicBreakpointResistent =
+                            eucastClinicalBreakpoint.MicBreakpointResistent;
+                        epsilometerTestViewModel.MicBreakpointSusceptible =
+                            eucastClinicalBreakpoint.MicBreakpointSusceptible;
+                    }
                 }
             }
         }
@@ -144,7 +171,9 @@ namespace HaemophilusWeb.Controllers
             {
                 try
                 {
-                    var isolate = db.Isolates.Include(i => i.EpsilometerTests).Single(i => i.IsolateId == isolateViewModel.IsolateId);
+                    var isolate =
+                        db.Isolates.Include(i => i.EpsilometerTests)
+                            .Single(i => i.IsolateId == isolateViewModel.IsolateId);
                     Mapper.Map(isolateViewModel, isolate);
 
                     ViewModelToModel(isolateViewModel.EpsilometerTestViewModels, isolate.EpsilometerTests);

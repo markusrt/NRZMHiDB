@@ -17,6 +17,10 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Messwert")]
         public float Measurement { get; set; }
 
-        public EpsilometerTestResult? Result { get; set; } 
+        public EpsilometerTestResult? Result { get; set; }
+
+        public float MicBreakpointSusceptible { get; set; }
+
+        public float MicBreakpointResistent { get; set; }
     }
 }

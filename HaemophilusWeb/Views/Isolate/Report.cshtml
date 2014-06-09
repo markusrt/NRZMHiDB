@@ -18,9 +18,19 @@
         <div class="col-sm-5">
             @Html.DropDownList("ReportTemplate", ((IEnumerable<FileInfo>) ViewBag.ReportTemplates).Select(option => new SelectListItem
             {
-                Text = (option == null ? "Keine Vorlage vorhanden" : option.Name),
+                Text = (option == null ? "Keine Vorlagen hinterlegt" : option.Name),
                 Value = Url.Content(option.FullName.ReverseMapPath())
             }), "Auswählen...", new {@class = "form-control"})
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Unterzeichner", new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.DropDownList("ReportSigner", ((IEnumerable<string>)ViewBag.ReportSigners).Select(option => new SelectListItem
+            {
+                Text = option,
+                Value = option
+            }), "Auswählen...", new { @class = "form-control" })
         </div>
     </div>
     <div class="form-group">
@@ -29,6 +39,7 @@
 </div>
 
 @section Scripts{
+
     <script>
         var documentData = @(Html.Raw(Json.Encode(Model)));
 
@@ -39,8 +50,10 @@
             {
                 return;
             }
-            console.log(templateFile);
-            var doc = new DocxGen().loadFromFile(templateFile, { async: true, intelligentTagging: true }).success(function(doc)
+            
+            documentData["Signer"] = $("#ReportSigner").val();
+
+            new DocxGen().loadFromFile(templateFile, { async: true, intelligentTagging: true }).success(function(doc)
             {
                 doc.setTags(documentData);
                 doc.applyTags();

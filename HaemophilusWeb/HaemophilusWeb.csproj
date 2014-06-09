@@ -205,6 +205,7 @@
     <Compile Include="Controllers\SenderController.cs" />
     <Compile Include="Controllers\SendingController.cs" />
     <Compile Include="App_Start\ExceptionLogger.cs" />
+    <Compile Include="Domain\IsolateInterpretation.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -298,6 +299,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Utils\ExceptionUtils.cs" />
     <Compile Include="Utils\FileLister.cs" />
+    <Compile Include="Utils\ReportFormatter.cs" />
     <Compile Include="Utils\ServerUtils.cs" />
     <Compile Include="Validators\IsolateViewModelValidator.cs" />
     <Compile Include="Validators\PatientValidator.cs" />

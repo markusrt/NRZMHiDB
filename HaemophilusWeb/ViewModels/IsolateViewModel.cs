@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using FluentValidation.Attributes;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Validators;
@@ -51,21 +54,61 @@ namespace HaemophilusWeb.ViewModels
                 yield return Meropenem;
             }
         }
-        
+
         public IEnumerable<Typing> Typings
         {
             get
             {
-                if (OuterMembraneProteinP2 != 0)
+                var properties = GetType().GetProperties();
+                foreach (
+                    var typingProperty in
+                        properties.Where(p => p.PropertyType == typeof (TestResult) && p.Name != "BetaLactamase"))
                 {
-                    yield return new Typing { Attribute = "ompP2", Value = EnumEditor.GetEnumDescription(OuterMembraneProteinP2) };
+                    var value = (TestResult) typingProperty.GetValue(this);
+                    var name = GetDisplayName(typingProperty);
+                    if (value != TestResult.NotDetermined)
+                    {
+                        yield return new Typing {Attribute = name, Value = EnumEditor.GetEnumDescription(value)};
+                    }
                 }
-                if (OuterMembraneProteinP6 != 0)
+                if (OuterMembraneProteinP6 != SpecificTestResult.NotDetermined)
                 {
-                    yield return new Typing { Attribute = "ompP6", Value = EnumEditor.GetEnumDescription(OuterMembraneProteinP6) };
+                    yield return
+                        new Typing {Attribute = "ompP6", Value = EnumEditor.GetEnumDescription(OuterMembraneProteinP6)};
+                }
+                if (SerotypePcr != Serotype.NotDetermined)
+                {
+                    yield return
+                        new Typing {Attribute = "Kapselgenotypen", Value = EnumEditor.GetEnumDescription(SerotypePcr)};
+                }
+                if (FactorTest != FactorTest.NotDetermined)
+                {
+                    yield return
+                        new Typing {Attribute = "Faktoren-test", Value = EnumEditor.GetEnumDescription(FactorTest)};
                 }
             }
-        } 
+        }
+
+        public string SamplingDate { get; set; }
+        public string ReceivingDate { get; set; }
+        public string Patient { get; set; }
+        public string PatientBirthDate { get; set; }
+        public string SenderLaboratoryNumber { get; set; }
+        public string Evaluation { get; set; }
+        public string Interpretation { get; set; }
+        public string InterpretationDisclaimer { get; set; }
+
+        public string Date
+        {
+            get { return DateTime.Now.ToString("dd.MM.yyyyy"); }
+        }
+
+
+        private static string GetDisplayName(MemberInfo member)
+        {
+            var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
+            return displayAttribute == null ? member.Name : displayAttribute.Name;
+        }
 
         public IEnumerable<EpsilometerTestReportModel> ETests
         {
@@ -95,15 +138,28 @@ namespace HaemophilusWeb.ViewModels
             get { return EnumEditor.GetEnumDescription(Agglutination); }
         }
 
-        private EpsilometerTestReportModel CreateEpsilometerTestReportModel(EpsilometerTestViewModel epsilometerTestViewModel)
+        public string BetalactamaseString
+        {
+            get { return EnumEditor.GetEnumDescription(BetaLactamase); }
+        }
+
+        private EpsilometerTestReportModel CreateEpsilometerTestReportModel(
+            EpsilometerTestViewModel epsilometerTestViewModel)
         {
             var reportModel = new EpsilometerTestReportModel
             {
-                Antibiotic =  EnumEditor.GetEnumDescription(epsilometerTestViewModel.Antibiotic),
-                Measurement = epsilometerTestViewModel.Measurement,
-                Result = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Result)
+                Antibiotic = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Antibiotic),
+                Measurement = FloatToString(epsilometerTestViewModel.Measurement),
+                Result = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Result),
+                MicBreakpointResistent = FloatToString(epsilometerTestViewModel.MicBreakpointResistent),
+                MicBreakpointSusceptible = FloatToString(epsilometerTestViewModel.MicBreakpointSusceptible),
             };
             return reportModel;
+        }
+
+        private static string FloatToString(float value)
+        {
+            return Math.Round(value, 3).ToString(CultureInfo.CurrentCulture);
         }
     }
 
@@ -117,8 +173,8 @@ namespace HaemophilusWeb.ViewModels
     {
         public string Antibiotic { get; set; }
         public string Result { get; set; }
-        public double MicBreakpointSusceptible { get; set; }
-        public double MicBreakpointResistent { get; set; }
-        public double Measurement { get; set; }
+        public string MicBreakpointSusceptible { get; set; }
+        public string MicBreakpointResistent { get; set; }
+        public string Measurement { get; set; }
     }
 }

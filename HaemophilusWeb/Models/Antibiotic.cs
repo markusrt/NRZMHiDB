@@ -1,10 +1,12 @@
-﻿namespace HaemophilusWeb.Models
+﻿using System.ComponentModel;
+
+namespace HaemophilusWeb.Models
 {
     public enum Antibiotic
     {
-        Ampicillin=0,
-        AmoxicillinClavulanate=1,
-        Cefotaxime=2,
-        Meropenem=3
+        Ampicillin = 0,
+        [Description("Amoxicillin / Clavulansäure")] AmoxicillinClavulanate = 1,
+        [Description("Cefotaxim")] Cefotaxime = 2,
+        Meropenem = 3
     }
 }

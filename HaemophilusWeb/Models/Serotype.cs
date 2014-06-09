@@ -17,6 +17,6 @@ namespace HaemophilusWeb.Models
         E = 5,
         [Description("f")]
         F = 6,
-        [Description("Negativ")] Negative = 7,
+        [Description("negativ")] Negative = 7,
     }
 }
