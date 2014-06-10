@@ -103,13 +103,6 @@ namespace HaemophilusWeb.ViewModels
             get { return DateTime.Now.ToString("dd.MM.yyyyy"); }
         }
 
-
-        private static string GetDisplayName(MemberInfo member)
-        {
-            var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
-            return displayAttribute == null ? member.Name : displayAttribute.Name;
-        }
-
         public IEnumerable<EpsilometerTestReportModel> ETests
         {
             get
@@ -143,6 +136,12 @@ namespace HaemophilusWeb.ViewModels
             get { return EnumEditor.GetEnumDescription(BetaLactamase); }
         }
 
+        private static string GetDisplayName(MemberInfo member)
+        {
+            var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
+            return displayAttribute == null ? member.Name : displayAttribute.Name;
+        }
+
         private EpsilometerTestReportModel CreateEpsilometerTestReportModel(
             EpsilometerTestViewModel epsilometerTestViewModel)
         {
@@ -153,6 +152,7 @@ namespace HaemophilusWeb.ViewModels
                 Result = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Result),
                 MicBreakpointResistent = FloatToString(epsilometerTestViewModel.MicBreakpointResistent),
                 MicBreakpointSusceptible = FloatToString(epsilometerTestViewModel.MicBreakpointSusceptible),
+                ValidFromYear = epsilometerTestViewModel.ValidFromYear,
             };
             return reportModel;
         }
@@ -176,5 +176,6 @@ namespace HaemophilusWeb.ViewModels
         public string MicBreakpointSusceptible { get; set; }
         public string MicBreakpointResistent { get; set; }
         public string Measurement { get; set; }
+        public int ValidFromYear { get; set; }
     }
 }

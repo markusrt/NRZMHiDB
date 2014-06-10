@@ -108,6 +108,8 @@ namespace HaemophilusWeb.Controllers
                             eucastClinicalBreakpoint.MicBreakpointResistent;
                         epsilometerTestViewModel.MicBreakpointSusceptible =
                             eucastClinicalBreakpoint.MicBreakpointSusceptible;
+                        epsilometerTestViewModel.ValidFromYear =
+                            eucastClinicalBreakpoint.ValidFrom.Year;
                     }
                 }
             }

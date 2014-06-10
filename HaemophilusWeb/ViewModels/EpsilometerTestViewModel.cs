@@ -22,5 +22,7 @@ namespace HaemophilusWeb.ViewModels
         public float MicBreakpointSusceptible { get; set; }
 
         public float MicBreakpointResistent { get; set; }
+
+        public int ValidFromYear { get; set; }
     }
 }
