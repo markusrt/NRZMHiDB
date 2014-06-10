@@ -86,6 +86,31 @@ namespace HaemophilusWeb.ViewModels
                     yield return
                         new Typing {Attribute = "Faktoren-test", Value = EnumEditor.GetEnumDescription(FactorTest)};
                 }
+                if (ApiNh != UnspecificTestResult.NotDetermined)
+                {
+                    yield return
+                        new Typing
+                        {
+                            Attribute = "api NH",
+                            Value = string.Format("{0}, {1}%", ApiNhBestMatch, DoubleToString(ApiNhMatchInPercent))
+                        };
+                }
+                if (RibosomalRna16S != UnspecificTestResult.NotDetermined)
+                {
+                    yield return
+                        new Typing
+                        {
+                            Attribute = "16S rRNA",
+                            Value =
+                                string.Format("{0}, {1}%", RibosomalRna16SBestMatch,
+                                    DoubleToString(RibosomalRna16SMatchInPercent))
+                        };
+                }
+                if (MaldiTof != UnspecificTestResult.NotDetermined)
+                {
+                    yield return
+                        new Typing {Attribute = "MALDI-TOF", Value = DoubleToString(MaldiTofMatchConfidence)};
+                }
             }
         }
 
@@ -158,6 +183,16 @@ namespace HaemophilusWeb.ViewModels
         }
 
         private static string FloatToString(float value)
+        {
+            return Math.Round(value, 3).ToString(CultureInfo.CurrentCulture);
+        }
+
+        private static string DoubleToString(double? value)
+        {
+            return value.HasValue ? DoubleToString(value.Value) : string.Empty;
+        }
+
+        private static string DoubleToString(double value)
         {
             return Math.Round(value, 3).ToString(CultureInfo.CurrentCulture);
         }

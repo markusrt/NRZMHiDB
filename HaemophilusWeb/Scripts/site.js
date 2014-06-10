@@ -1,5 +1,5 @@
 ﻿function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-    divToShow, inputSelector, valueSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue)
+    divToShow, inputSelector, valueSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue)
     {
     if ($(valueSelector).val() === valueOnWhichToShowDiv)
     {
@@ -24,6 +24,7 @@
         {
             $(divToShow).addClass("hidden");
             $(inputToClearOnOtherValue).val("");
+            $(secondInputToClearOnOtherValue).val("");
         }
     });
 }

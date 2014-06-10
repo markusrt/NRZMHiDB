@@ -133,9 +133,13 @@
     </div>
     <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
         @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-2">
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.RibosomalRna16SBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+            @Html.ValidationMessageFor(model => model.RibosomalRna16SBestMatch)
+        </div>
+        <div class="col-sm-3">
             <div class="input-group">
-                @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "form-control"})
+                @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "form-control", placeholder="in Prozent"})
                 <span class="input-group-addon">%</span>
             </div>
             @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
@@ -144,16 +148,20 @@
 
     <div class="form-group">
         @Html.LabelFor(model => model.ApiNh, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-2">
+        <div class="col-sm-5">
             @Html.EnumRadioButtonFor(model => model.ApiNh)
             @Html.ValidationMessageFor(model => model.ApiNh)
         </div>
     </div>
     <div id="ApiNhMatchInPercentForm" class="form-group">
         @Html.LabelFor(m => m.ApiNhMatchInPercent, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-2">
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.ApiNhBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+            @Html.ValidationMessageFor(model => model.ApiNhBestMatch)
+        </div>
+        <div class="col-sm-3">
             <div class="input-group">
-                @Html.TextBoxFor(m => m.ApiNhMatchInPercent, new {@class = "form-control"})
+                @Html.TextBoxFor(m => m.ApiNhMatchInPercent, new {@class = "form-control", placeholder = "in Prozent"})
                 <span class="input-group-addon">%</span>
             </div>
             @Html.ValidationMessageFor(model => model.ApiNhMatchInPercent)
@@ -162,7 +170,7 @@
     
     <div class="form-group">
         @Html.LabelFor(model => model.MaldiTof, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-2">
+        <div class="col-sm-5">
             @Html.EnumRadioButtonFor(model => model.MaldiTof)
             @Html.ValidationMessageFor(model => model.MaldiTof)
         </div>
@@ -197,7 +205,7 @@
             ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
                 "#RibosomalRna16SMatchInPercentForm", "input:radio[name$='RibosomalRna16S']",
                 "input:radio[name$='RibosomalRna16S']:checked",
-                "Determined", "[id$='RibosomalRna16SMatchInPercent']"
+                "Determined", "[id$='RibosomalRna16SBestMatch']", "[id$='RibosomalRna16SMatchInPercent']"
             );
         }
 
@@ -206,7 +214,7 @@
             ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
                 "#ApiNhMatchInPercentForm", "input:radio[name$='ApiNh']",
                 "input:radio[name$='ApiNh']:checked",
-                "Determined", "[id$='ApiNhMatchInPercent']"
+                "Determined", "[id$='ApiNhBestMatch']", "[id$='ApiNhMatchInPercent']"
             );
         }
 

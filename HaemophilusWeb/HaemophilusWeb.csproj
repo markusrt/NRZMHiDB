@@ -265,6 +265,10 @@
     <Compile Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.Designer.cs">
       <DependentUpon>201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.cs" />
+    <Compile Include="Migrations\201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.Designer.cs">
+      <DependentUpon>201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -834,6 +838,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.resx">
       <DependentUpon>201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.resx">
+      <DependentUpon>201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
