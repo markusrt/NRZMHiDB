@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using FluentValidation.Attributes;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Utils;
 using HaemophilusWeb.Validators;
 using HaemophilusWeb.Views.Utils;
 
@@ -125,7 +126,7 @@ namespace HaemophilusWeb.ViewModels
 
         public string Date
         {
-            get { return DateTime.Now.ToString("dd.MM.yyyyy"); }
+            get { return DateTime.Now.ToReportFormat(); }
         }
 
         public IEnumerable<EpsilometerTestReportModel> ETests
