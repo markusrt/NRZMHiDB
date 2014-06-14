@@ -59,5 +59,8 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "MALDI-TOF Übereinstimmung")]
         public double? MaldiTofMatchConfidence { get; set; }
+
+        [Display(Name = "Bemerkung")]
+        public string Remark { get; set; }
     }
 }

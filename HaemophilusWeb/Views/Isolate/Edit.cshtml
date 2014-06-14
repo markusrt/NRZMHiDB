@@ -185,6 +185,12 @@
             @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
         </div>
     </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Remark, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.TextAreaFor(m => m.Remark, new { @class = "form-control", @rows = "5" })
+        </div>
+    </div>
 }
 
 @section Scripts{
