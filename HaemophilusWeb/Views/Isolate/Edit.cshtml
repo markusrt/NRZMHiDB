@@ -177,9 +177,9 @@
     </div>
     <div id="MaldiTofMatchConfidenceForm" class="form-group">
         @Html.LabelFor(m => m.MaldiTofMatchConfidence, new {@class = "col-sm-2 control-label"})
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="input-group">
-                @Html.TextBoxFor(m => m.MaldiTofMatchConfidence, new {@class = "form-control"})
+                @Html.TextBoxFor(m => m.MaldiTofMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
                 <span class="input-group-addon">00,0</span>
             </div>
             @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
