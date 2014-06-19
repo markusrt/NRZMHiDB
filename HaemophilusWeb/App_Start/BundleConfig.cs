@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace HaemophilusWeb
 {
@@ -9,11 +8,15 @@ namespace HaemophilusWeb
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                "~/Scripts/jquery-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate.js",
-                        "~/Scripts/jquery.validate.unobtrusive.js"));
+                "~/Scripts/jquery.validate.js",
+                "~/Scripts/jquery.validate.unobtrusive.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/jquerydatatable").Include(
+                "~/Scripts/jquery.dataTables.js",
+                "~/Scripts/dataTables.bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/globalize-de-DE")
                 .Include("~/Scripts/globalize/globalize.js")
@@ -25,15 +28,15 @@ namespace HaemophilusWeb
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+                "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
-                      "~/Scripts/bootstrap-datepicker.js",
-                      "~/Scripts/respond.js"));
+                "~/Scripts/bootstrap.js",
+                "~/Scripts/bootstrap-datepicker.js",
+                "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
-                      "~/Scripts/site.js"));
+                "~/Scripts/site.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/docxgen")
                 .Include("~/Scripts/base64.js")
@@ -42,9 +45,10 @@ namespace HaemophilusWeb
                 .Include("~/Scripts/docxgen.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/bootstrap-datepicker.css",
-                      "~/Content/site.css"));
+                "~/Content/bootstrap.css",
+                "~/Content/bootstrap-datepicker.css",
+                "~/Content/dataTables.bootstrap.css",
+                "~/Content/site.css"));
         }
     }
 }
