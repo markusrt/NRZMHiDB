@@ -57,15 +57,19 @@
 
 </table>
 
-<script>
-    $(document).ready(function () {
-        $('#senders').dataTable( {
-            "lengthChange": false,
-            "order": [0, 'asc'],
-            "pageLength": 8,
-            "language": {
-                "url": "/Scripts/dataTables.german.js"
-            }
-        } );
-    });
-</script>
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#senders').dataTable({
+                "lengthChange": false,
+                "order": [0, 'asc'],
+                "pageLength": 8,
+                "language": {
+                    "url": "/Scripts/dataTables.german.js"
+                }
+            });
+        });
+    </script>
+}
+

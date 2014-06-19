@@ -8,70 +8,88 @@
 <p>
     @Html.ActionLink("Neue Einsendung erfassen", "Create", "PatientSending", null, new { @class = "btn btn-default" })
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Patient.Initials)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Patient.BirthDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sending.SendingId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sending.ReceivingDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sending.Material)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Sending.Invasive)
-        </th>
-        <th>
-            Labornummer
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+<table class="table table-striped" id="patientSendings">
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Patient.Initials)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Patient.BirthDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sending.SendingId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sending.ReceivingDate)
-            </td>
-            <td>
-                @(item.Sending.Material == Material.Other ? Html.Encode(item.Sending.OtherMaterial) : EnumEditor.GetEnumDescription(item.Sending.Material))
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sending.Invasive)
-            </td>
-            <td id="isolate_labNr_@item.Sending.SendingId">
-                @Html.ActionLink(@item.Sending.Isolate.LaboratoryNumber, 
-                    "Edit", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn-sm btn btn-default", role = "button" })
-            </td>
-            <td>
-                <div class="btn-group btn-group-sm">
-                    @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Sending.SendingId }, new { @class = "btn btn-default", role = "button" })
-                    @if (item.Sending.Isolate != null)
-                    {
-                        @Html.ActionLink("Bericht erstellen", "Report", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn btn-default", role = "button" })
-                    }
-                    @* |
-                    @Html.ActionLink("Details", "Details", new { id=item.SendingId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.SendingId })*@
-                </div>
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.Patient.Initials)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Patient.BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sending.SendingId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sending.ReceivingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sending.Material)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sending.Invasive)
+            </th>
+            <th>
+                Labornummer
+            </th>
+            <th></th>
         </tr>
-    }
-
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patient.Initials)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patient.BirthDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sending.SendingId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sending.ReceivingDate)
+                </td>
+                <td>
+                    @(item.Sending.Material == Material.Other ? Html.Encode(item.Sending.OtherMaterial) : EnumEditor.GetEnumDescription(item.Sending.Material))
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sending.Invasive)
+                </td>
+                <td id="isolate_labNr_@item.Sending.SendingId">
+                    @Html.ActionLink(@item.Sending.Isolate.LaboratoryNumber,
+                    "Edit", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn-sm btn btn-default", role = "button" })
+                </td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Sending.SendingId }, new { @class = "btn btn-default", role = "button" })
+                        @if (item.Sending.Isolate != null)
+                        {
+                            @Html.ActionLink("Bericht erstellen", "Report", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn btn-default", role = "button" })
+                        }
+                        @* |
+                            @Html.ActionLink("Details", "Details", new { id=item.SendingId }) |
+                            @Html.ActionLink("Delete", "Delete", new { id=item.SendingId })*@
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#patientSendings').dataTable({
+                "lengthChange": false,
+                "order": [2, 'desc'],
+                "pageLength": 8,
+                "language": {
+                    "url": "/Scripts/dataTables.german.js"
+                }
+            });
+        });
+    </script>
+}
