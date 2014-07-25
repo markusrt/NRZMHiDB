@@ -4,8 +4,6 @@ using System.Linq;
 using System.Web.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Models;
-using HaemophilusWeb.TestUtils;
-using HaemophilusWeb.Utils;
 using NUnit.Framework;
 using TestDataGenerator;
 
@@ -69,7 +67,7 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void AssignStemNumber_NoId_ReturnsError()
         {
             var controller = CreateMockSendingController();
@@ -80,7 +78,7 @@ namespace HaemophilusWeb.Controllers
         [Test]
         public void AssignStemNumber_NoIsolate_AssignsCorrectLaboratoryNumber()
         {
-            var expectedLaboratoryNumber = string.Format("1/{0:yy}", DateTime.Now);
+            var expectedLaboratoryNumber = string.Format("001/{0:yy}", DateTime.Now);
             var controller = CreateMockSendingController();
 
             var isolate = controller.AssignStemNumber(FirstSendingId);
@@ -90,7 +88,7 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
+        [ExpectedException(typeof (ArgumentException))]
         public void AssignStemNumber_UnknownId_ReturnsError()
         {
             const int unknownId = 12345;

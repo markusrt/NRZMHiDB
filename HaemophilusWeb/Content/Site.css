@@ -33,7 +33,7 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
 /* Bootstrap customization*/
 
 .navbar-inverse .navbar-brand {
-    background-image: url('/Images/logo3.png');
+    background-image: url('../Images/logo3.png');
     background-position: 8px 9px;
     background-repeat: no-repeat;
     color: #fff;

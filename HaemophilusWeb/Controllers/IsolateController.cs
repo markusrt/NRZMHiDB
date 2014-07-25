@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -177,6 +178,7 @@ namespace HaemophilusWeb.Controllers
                         db.Isolates.Include(i => i.EpsilometerTests)
                             .Single(i => i.IsolateId == isolateViewModel.IsolateId);
                     Mapper.Map(isolateViewModel, isolate);
+                    ParseAndMapLaboratoryNumber(isolateViewModel, isolate);
 
                     ViewModelToModel(isolateViewModel.EpsilometerTestViewModels, isolate.EpsilometerTests);
                     db.Entry(isolate).State = EntityState.Modified;
@@ -189,6 +191,10 @@ namespace HaemophilusWeb.Controllers
                     {
                         ModelState.AddModelError("StemNumber", "Diese Stammnummer ist bereits vergeben");
                     }
+                    else if (e.AnyMessageMentions("IX_LaboratoryNumber"))
+                    {
+                        ModelState.AddModelError("LaboratoryNumber", "Diese Labornummer ist bereits vergeben");
+                    }
                     else
                     {
                         throw e;
@@ -196,6 +202,17 @@ namespace HaemophilusWeb.Controllers
                 }
             }
             return CreateEditView(isolateViewModel);
+        }
+
+        internal static void ParseAndMapLaboratoryNumber(IsolateViewModel isolateViewModel, Isolate isolate)
+        {
+            int decade;
+            int yearlySequentialIsolateNumber;
+            var decadeAndNumber = isolateViewModel.LaboratoryNumber.Split('/');
+            int.TryParse(decadeAndNumber[0], out yearlySequentialIsolateNumber);
+            int.TryParse(decadeAndNumber[1], out decade);
+            isolate.Year = (DateTime.Now.Year/100)*100 + decade;
+            isolate.YearlySequentialIsolateNumber = yearlySequentialIsolateNumber;
         }
 
         protected override void Dispose(bool disposing)
