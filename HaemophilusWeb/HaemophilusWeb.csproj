@@ -319,6 +319,8 @@
     <Compile Include="Views\Utils\EnumEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-select2.css" />
+    <Content Include="Content\select2.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -326,6 +328,9 @@
     <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\dataTables.bootstrap.css" />
     <Content Include="Content\jquery.dataTables.css" />
+    <Content Include="Content\select2-spinner.gif" />
+    <Content Include="Content\select2.png" />
+    <Content Include="Content\select2x2.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -349,6 +354,7 @@
     <Content Include="ReportTemplates\BLNAS v5.docx" />
     <Content Include="ReportTemplates\BLPACR v5.docx" />
     <Content Include="ReportTemplates\BLPACS v5.docx" />
+    <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.bootstrap.js" />
     <Content Include="Scripts\dataTables.german.js" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />

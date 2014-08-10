@@ -5,16 +5,13 @@
 <div class="form-group">
     @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
-        <div class="input-group">
-            @Html.DropDownListFor(model => model.SenderId, ((IEnumerable<Sender>)ViewBag.PossibleSenders).Select(option => new SelectListItem
-            {
-                Text = (option == null ? "None" : option.Name),
-                Value = option.SenderId.ToString(),
-                Selected = (Model != null) && (option.SenderId == Model.SenderId)
-            }), "Auswählen...", new { @class = "form-control" })
+        @Html.DropDownListFor(model => model.SenderId, ((IEnumerable<Sender>)ViewBag.PossibleSenders).Select(option => new SelectListItem
+        {
+            Text = (option == null ? "Kein Einsender" : string.Format("#{0} - {1} - {2}", option.SenderId, option.Name, option.PostalCode, option.City)),
+            Value = option.SenderId.ToString(),
+            Selected = (Model != null) && (option.SenderId == Model.SenderId)
+        }), "Auswählen...", new { @class = "form-control" })
 
-            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
-        </div>
         @Html.ValidationMessageFor(model => model.SenderId)
     </div>
 </div>
@@ -123,6 +120,7 @@
 <script>
     $(document).ready(function () {
         ShowOtherMaterialIfOtherIsSelected();
+        $('#Sending_SenderId').select2({ placeholder: "Wählen sie einen Einsender aus", maximumSelectionSize: 6 });
     });
 
     function ShowOtherMaterialIfOtherIsSelected() {
