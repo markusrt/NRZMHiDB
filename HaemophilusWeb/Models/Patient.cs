@@ -10,6 +10,11 @@ namespace HaemophilusWeb.Models
     [Validator(typeof (PatientValidator))]
     public class Patient
     {
+        public Patient()
+        {
+            HibVaccination = YesNoUnknown.Unknown;
+        }
+
         private string initials;
 
         [Key]
@@ -23,11 +28,10 @@ namespace HaemophilusWeb.Models
             set
             {
                 initials = value;
-                if (initials!=null)
+                if (initials != null)
                 {
                     initials = initials.ToUpper(CultureInfo.InvariantCulture);
                 }
-                
             }
         }
 

@@ -4,9 +4,7 @@ namespace HaemophilusWeb.Models
 {
     public enum YesNo
     {
-        [Description("Ja")]
-        Yes=1,
-        [Description("Nein")]
-        No=2
+        [Description("Nein")] No = 0,
+        [Description("Ja")] Yes = 1,
     }
 }
