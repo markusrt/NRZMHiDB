@@ -1,4 +1,5 @@
-﻿@using HaemophilusWeb.Views.Utils
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.Models.Patient
 
 @Html.Partial("_QueryPostalCodeViaGeonames")
@@ -43,10 +44,33 @@
         @Html.ValidationMessageFor(model => model.State)
     </div>
 </div>
-<div class="form-group">
+@*<div class="form-group">
     @Html.LabelFor(m => m.ClinicalInformation, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-10">
         @Html.EnumRadioButtonFor(m => m.ClinicalInformation)
+    </div>
+</div>*@
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ClinicalInformation, new { @class = "col-sm-2 control-label" })
+    <div class="col-lg-9">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(ClinicalInformation.NotAvailable) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="NotAvailable" @(Model.ClinicalInformation.HasFlag(ClinicalInformation.NotAvailable) ? " checked" : string.Empty) /> k.A.
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(ClinicalInformation.Meningitis) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Meningitis" @(Model.ClinicalInformation.HasFlag(ClinicalInformation.Meningitis) ? " checked" : string.Empty) /> Meningitis
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(ClinicalInformation.Sepsis) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Sepsis" @(Model.ClinicalInformation.HasFlag(ClinicalInformation.Sepsis) ? " checked" : string.Empty) /> Sepsis
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(ClinicalInformation.Pneumonia) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Pneumonia" @(Model.ClinicalInformation.HasFlag(ClinicalInformation.Pneumonia) ? " checked" : string.Empty) /> Pneumonie
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(ClinicalInformation.Other) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Other" @(Model.ClinicalInformation.HasFlag(ClinicalInformation.Other) ? " checked" : string.Empty) /> Andere
+            </label>
+        </div>
     </div>
 </div>
 
@@ -83,9 +107,9 @@
     });
 
     function ShowOtherClinicalInformationIfOtherIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#OtherClinicalInformationForm", "input:radio[name$='ClinicalInformation']",
-            "input:radio[name$='ClinicalInformation']:checked",
+        ShowDivIfCheckBoxHasSpecificSelectedValueOrClearInputOtherwise(
+            "#OtherClinicalInformationForm", "input:checkbox[name$='ClinicalInformation']",
+            "input:checkbox[name$='ClinicalInformation']:checked",
             "Other", "[id$='OtherClinicalInformation']"
         );
     }

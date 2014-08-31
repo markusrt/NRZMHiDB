@@ -1,9 +1,9 @@
 ﻿using System.Data.Entity;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using FluentValidation;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Utils;
 using HaemophilusWeb.Validators;
 using HaemophilusWeb.ViewModels;
 
@@ -36,7 +36,7 @@ namespace HaemophilusWeb.Controllers
             var sendingResult = sendingController.Create() as ViewResult;
 
 
-            return CreateEditView(new PatientSendingViewModel()
+            return CreateEditView(new PatientSendingViewModel
             {
                 Patient = (Patient) patientResult.Model,
                 Sending = (Sending) sendingResult.Model
@@ -52,12 +52,15 @@ namespace HaemophilusWeb.Controllers
         public ActionResult Edit(int? id)
         {
             var sendingResult = sendingController.Edit(id) as ViewResult;
+
             return CreateEditView(CreatePatientSending((Sending) sendingResult.Model));
         }
 
         [HttpPost]
         public ActionResult Edit(PatientSendingViewModel patientSending)
         {
+            AssignClinicalInformationFromCheckboxValues(patientSending);
+
             PerformValidations(patientSending);
 
             if (ModelState.IsValid)
@@ -68,6 +71,13 @@ namespace HaemophilusWeb.Controllers
                 return RedirectToAction("Index");
             }
             return CreateEditView(patientSending);
+        }
+
+        private void AssignClinicalInformationFromCheckboxValues(PatientSendingViewModel patientSending)
+        {
+            patientSending.Patient.ClinicalInformation =
+                EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<ClinicalInformation>(
+                    Request.Form["ClinicalInformation"]);
         }
 
         [HttpPost]

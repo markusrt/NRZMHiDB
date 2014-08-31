@@ -115,6 +115,7 @@
     <Compile Include="TestUtils\Attribute.cs" />
     <Compile Include="TestUtils\ITempDirectoryTest.cs" />
     <Compile Include="TestUtils\JsonUtils.cs" />
+    <Compile Include="Utils\EnumUtilsTests.cs" />
     <Compile Include="Utils\ExceptionUtilsTests.cs" />
     <Compile Include="Utils\FileListerTests.cs" />
     <Compile Include="Utils\ReportFormatterTests.cs" />

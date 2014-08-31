@@ -1,13 +1,16 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace HaemophilusWeb.Models
 {
+    [Flags]
     public enum ClinicalInformation
     {
-        [Description("k.A.")] NotAvailable = 0,
-        [Description("Meningitis")] Meningitis = 1,
-        [Description("Sepsis")] Sepsis = 2,
-        [Description("Pneumonie")] Pneumonia = 3,
-        [Description("Andere")] Other = 4
+        None = 0,
+        [Description("k.A.")] NotAvailable = 1,
+        [Description("Meningitis")] Meningitis = 2,
+        [Description("Sepsis")] Sepsis = 4,
+        [Description("Pneumonie")] Pneumonia = 8,
+        [Description("Andere")] Other = 32768
     }
 }
