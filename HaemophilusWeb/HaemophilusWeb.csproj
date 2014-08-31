@@ -277,6 +277,10 @@
     <Compile Include="Migrations\201408312049376_RefinedPatient2.Designer.cs">
       <DependentUpon>201408312049376_RefinedPatient2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs" />
+    <Compile Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.Designer.cs">
+      <DependentUpon>201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -870,6 +874,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201408312049376_RefinedPatient2.resx">
       <DependentUpon>201408312049376_RefinedPatient2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.resx">
+      <DependentUpon>201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

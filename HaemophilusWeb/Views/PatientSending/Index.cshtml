@@ -66,7 +66,7 @@
                         @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Sending.SendingId }, new { @class = "btn btn-default", role = "button" })
                         @if (item.Sending.Isolate != null)
                         {
-                            @Html.ActionLink("Bericht erstellen", "Report", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn btn-default", role = "button" })
+                            @Html.ActionLink("Befund erstellen", "Report", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn btn-default", role = "button" })
                         }
                         @* |
                             @Html.ActionLink("Details", "Details", new { id=item.SendingId }) |

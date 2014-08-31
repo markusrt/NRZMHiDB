@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HaemophilusWeb.Models
@@ -57,8 +58,18 @@ namespace HaemophilusWeb.Models
         [Display(Name = "MALDI-TOF")]
         public UnspecificTestResult MaldiTof { get; set; }
 
+        [Display(Name = "MALDI-TOF beste Übereinstimmung")]
+        public string MaldiTofBestMatch { get; set; }
+
         [Display(Name = "MALDI-TOF Übereinstimmung")]
         public double? MaldiTofMatchConfidence { get; set; }
+
+        [Display(Name = "Beurteilung")]
+        public Evaluation Evaluation { get; set; }
+
+        [Display(Name = "Befund am")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? ReportDate { get; set; }
 
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }

@@ -30,6 +30,8 @@ namespace HaemophilusWeb.Validators
                 => BeSetIfDetermined(value, model.ApiNh)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.ApiNhMatchInPercent).Must((model, value)
                 => BeSetIfDetermined(value, model.ApiNh)).WithMessage(PropertyMustNotBeEmpty);
+            RuleFor(i => i.MaldiTofBestMatch).Must((model, value)
+                => BeSetIfDetermined(value, model.MaldiTof)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofMatchConfidence).Must((model, value)
                 => BeSetIfDetermined(value, model.MaldiTof)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(p => p.LaboratoryNumber).NotEmpty();

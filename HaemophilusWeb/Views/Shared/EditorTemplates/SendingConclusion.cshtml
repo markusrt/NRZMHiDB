@@ -1,28 +1,10 @@
 ﻿@using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.Models.Sending
 
-<div class="form-group">
-    @Html.LabelFor(m => m.Evaluation, new {@class = "col-sm-2 control-label"})
-    <div class="col-sm-5">
-        @Html.EnumDropDownListFor(model => model.Evaluation, new {@class = "form-control"})
-        @Html.ValidationMessageFor(model => model.Evaluation)
-    </div>
-</div>
+
 <div class="form-group">
     @Html.LabelFor(m => m.Remark, new {@class = "col-sm-2 control-label"})
     <div class="col-sm-5">
         @Html.TextAreaFor(m => m.Remark, new {@class = "form-control", @rows = "5"})
-    </div>
-</div>
-<div class="form-group">
-    @Html.LabelFor(m => m.ReportDate, new {@class = "col-sm-2 control-label"})
-    <div class="col-sm-5">
-        <div class="input-group">
-            @{ Html.EnableClientValidation(false); }
-            @Html.TextBoxFor(m => m.ReportDate, new {@class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.ReportDate)})
-            @{ Html.EnableClientValidation(true); }
-            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-        </div>
-        @Html.ValidationMessageFor(model => model.ReportDate)
     </div>
 </div>

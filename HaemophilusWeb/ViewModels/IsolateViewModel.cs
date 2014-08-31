@@ -120,7 +120,7 @@ namespace HaemophilusWeb.ViewModels
         public string Patient { get; set; }
         public string PatientBirthDate { get; set; }
         public string SenderLaboratoryNumber { get; set; }
-        public string Evaluation { get; set; }
+        public string EvaluationString { get; set; }
         public string Interpretation { get; set; }
         public string InterpretationDisclaimer { get; set; }
 

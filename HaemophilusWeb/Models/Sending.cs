@@ -53,15 +53,8 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Ergebnis Einsender")]
         public string SenderConclusion { get; set; }
 
-        [Display(Name = "Beurteilung")]
-        public Evaluation Evaluation { get; set; }
-
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
-
-        [Display(Name = "Befund am")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? ReportDate { get; set; }
 
         public virtual Isolate Isolate { get; set; }
     }

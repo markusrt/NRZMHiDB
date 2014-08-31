@@ -3,7 +3,7 @@
 @model HaemophilusWeb.ViewModels.IsolateViewModel
 
 @{
-    ViewBag.Title = "Bericht erstellen";
+    ViewBag.Title = "Befund erstellen";
 }
 
 @Scripts.Render("~/bundles/docxgen")
@@ -44,7 +44,7 @@
 
 <div class="form-horizontal">
     <div class="form-group">
-        @Html.Label("Berichtsvorlage", new {@class = "col-sm-2 control-label"})
+        @Html.Label("Befundsvorlage", new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
             @Html.DropDownList("ReportTemplate", ((IEnumerable<FileInfo>) ViewBag.ReportTemplates).Select(option => new SelectListItem
             {
@@ -65,7 +65,7 @@
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <button id="CreateReport" class="btn btn-primary">Bericht erstellen</button>
+            <button id="CreateReport" class="btn btn-primary">Befund erstellen</button>
         </div>
     </div>
 </div>

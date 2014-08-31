@@ -171,12 +171,36 @@
     </div>
     <div id="MaldiTofMatchConfidenceForm" class="form-group">
         @Html.LabelFor(m => m.MaldiTofMatchConfidence, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.MaldiTofBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+            @Html.ValidationMessageFor(model => model.MaldiTofBestMatch)
+        </div>
         <div class="col-sm-3">
             <div class="input-group">
                 @Html.TextBoxFor(m => m.MaldiTofMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
                 <span class="input-group-addon">00,0</span>
             </div>
             @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
+        </div>
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(m => m.Evaluation, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.EnumDropDownListFor(model => model.Evaluation, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Evaluation)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ReportDate, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            <div class="input-group">
+                @{ Html.EnableClientValidation(false); }
+                @Html.TextBoxFor(m => m.ReportDate, new { @class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.ReportDate) })
+                @{ Html.EnableClientValidation(true); }
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+            @Html.ValidationMessageFor(model => model.ReportDate)
         </div>
     </div>
     <div class="form-group">

@@ -80,7 +80,7 @@ namespace HaemophilusWeb.Controllers
             isolateViewModel.Patient = isolate.Sending.Patient.ToReportFormat();
             isolateViewModel.PatientBirthDate = isolate.Sending.Patient.BirthDate.ToReportFormat();
             isolateViewModel.SenderLaboratoryNumber = isolate.Sending.SenderLaboratoryNumber;
-            isolateViewModel.Evaluation = isolate.Sending.Evaluation.ToReportFormat();
+            isolateViewModel.EvaluationString = isolate.Evaluation.ToReportFormat();
             var interpretationResult = IsolateInterpretation.Interpret(isolate);
             isolateViewModel.Interpretation = interpretationResult.Interpretation;
             isolateViewModel.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;

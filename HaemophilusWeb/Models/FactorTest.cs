@@ -8,6 +8,7 @@ namespace HaemophilusWeb.Models
         V = 1,
         VX = 2,
         X = 3,
-        [Description("Nicht beurteilbar")] NotEvaluable = 4,
+        [Description("V/VX")] VVX = 4,
+        [Description("Nicht beurteilbar")] NotEvaluable = 5,
     }
 }
