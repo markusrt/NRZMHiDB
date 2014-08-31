@@ -1,15 +1,15 @@
 ﻿using System.Data.Entity;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
     public class PatientController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: /Patient/
         public ActionResult Index()
@@ -76,7 +76,23 @@ namespace HaemophilusWeb.Controllers
             {
                 return HttpNotFound();
             }
-            return View(patient);
+            return CreateEditView(patient);
+        }
+
+        private ActionResult CreateEditView(Patient sending)
+        {
+            AddReferenceDataToViewBag(ViewBag);
+            return View(sending);
+        }
+
+        internal void AddReferenceDataToViewBag(dynamic viewBag)
+        {
+            viewBag.PossibleOtherClinicalInformation = db.Patients.Where(
+                s => !string.IsNullOrEmpty(s.OtherClinicalInformation)).
+                Select(s => s.OtherClinicalInformation).AsDataList();
+            viewBag.PossibleTherapyDetails = db.Patients.Where(
+                s => !string.IsNullOrEmpty(s.TherapyDetails)).
+                Select(s => s.TherapyDetails).AsDataList();
         }
 
         // POST: /Patient/Edit/5
@@ -96,7 +112,7 @@ namespace HaemophilusWeb.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(patient);
+            return CreateEditView(patient);
         }
 
         // GET: /Patient/Delete/5
@@ -115,7 +131,8 @@ namespace HaemophilusWeb.Controllers
         }
 
         // POST: /Patient/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

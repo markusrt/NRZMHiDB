@@ -273,6 +273,10 @@
     <Compile Include="Migrations\201406142110467_Isolate_7_AddRemark.Designer.cs">
       <DependentUpon>201406142110467_Isolate_7_AddRemark.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201408312049376_RefinedPatient2.cs" />
+    <Compile Include="Migrations\201408312049376_RefinedPatient2.Designer.cs">
+      <DependentUpon>201408312049376_RefinedPatient2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -316,6 +320,7 @@
     <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
     <Compile Include="ViewModels\IsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
+    <Compile Include="Views\Utils\AutoCompleteUtils.cs" />
     <Compile Include="Views\Utils\BootstrapEditor.cs" />
     <Compile Include="Views\Utils\EnumEditor.cs" />
   </ItemGroup>
@@ -862,6 +867,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201406142110467_Isolate_7_AddRemark.resx">
       <DependentUpon>201406142110467_Isolate_7_AddRemark.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408312049376_RefinedPatient2.resx">
+      <DependentUpon>201408312049376_RefinedPatient2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

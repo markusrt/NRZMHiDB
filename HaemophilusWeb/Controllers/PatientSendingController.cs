@@ -46,6 +46,7 @@ namespace HaemophilusWeb.Controllers
         private ViewResult CreateEditView(PatientSendingViewModel patientSending)
         {
             sendingController.AddReferenceDataToViewBag(ViewBag);
+            patientController.AddReferenceDataToViewBag(ViewBag);
             return View(patientSending);
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
@@ -79,7 +80,7 @@ namespace HaemophilusWeb.Controllers
             viewBag.PossibleSenders = db.Senders;
             viewBag.PossiblePatients = db.Patients;
             viewBag.PossibleOtherMaterials = db.Sendings.Where(
-                s => !string.IsNullOrEmpty(s.OtherMaterial)).Select(s => s.OtherMaterial).Distinct();
+                s => !string.IsNullOrEmpty(s.OtherMaterial)).Select(s => s.OtherMaterial).AsDataList();
         }
 
         // GET: /Sending/Edit/5
@@ -188,7 +189,8 @@ namespace HaemophilusWeb.Controllers
         }
 
         // POST: /Sending/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
