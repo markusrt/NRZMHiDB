@@ -34,6 +34,8 @@ namespace HaemophilusWeb.Validators
                 => BeSetIfDetermined(value, model.MaldiTof)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofMatchConfidence).Must((model, value)
                 => BeSetIfDetermined(value, model.MaldiTof)).WithMessage(PropertyMustNotBeEmpty);
+            RuleFor(i => i.MlstSequenceType).Must((model, value)
+                => BeSetIfDetermined(value, model.Mlst)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(p => p.LaboratoryNumber).NotEmpty();
             RuleFor(p => p.LaboratoryNumber).Matches(@"\d+/\d\d").WithMessage(
                 "Die Labornummer muss in der Form '39/14' eingegeben werden.");
@@ -47,6 +49,11 @@ namespace HaemophilusWeb.Validators
         private static bool BeSetIfDetermined(string value, UnspecificTestResult testResult)
         {
             return testResult == UnspecificTestResult.NotDetermined || !string.IsNullOrWhiteSpace(value);
+        }
+
+        private static bool BeSetIfDetermined(string value, UnspecificOrNoTestResult testResult)
+        {
+            return testResult != UnspecificOrNoTestResult.Determined || !string.IsNullOrWhiteSpace(value);
         }
 
         private static bool BeValidMeasurement(EpsilometerTestViewModel eTest, float measurement)

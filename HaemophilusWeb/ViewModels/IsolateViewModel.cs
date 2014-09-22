@@ -87,7 +87,7 @@ namespace HaemophilusWeb.ViewModels
                     yield return
                         new Typing {Attribute = "Faktoren-test", Value = EnumEditor.GetEnumDescription(FactorTest)};
                 }
-                if (ApiNh != UnspecificTestResult.NotDetermined)
+                if (ApiNh == UnspecificTestResult.Determined)
                 {
                     yield return
                         new Typing
@@ -96,7 +96,7 @@ namespace HaemophilusWeb.ViewModels
                             Value = string.Format("{0}, {1}%", ApiNhBestMatch, DoubleToString(ApiNhMatchInPercent))
                         };
                 }
-                if (RibosomalRna16S != UnspecificTestResult.NotDetermined)
+                if (RibosomalRna16S == UnspecificTestResult.Determined)
                 {
                     yield return
                         new Typing
@@ -107,10 +107,30 @@ namespace HaemophilusWeb.ViewModels
                                     DoubleToString(RibosomalRna16SMatchInPercent))
                         };
                 }
-                if (MaldiTof != UnspecificTestResult.NotDetermined)
+                if (MaldiTof == UnspecificTestResult.Determined)
                 {
                     yield return
-                        new Typing {Attribute = "MALDI-TOF", Value = DoubleToString(MaldiTofMatchConfidence)};
+                        new Typing
+                        {
+                            Attribute = "MALDI-TOF",
+                            Value =
+                                string.Format("{0}, {1}", MaldiTofBestMatch,
+                                    DoubleToString(MaldiTofMatchConfidence))
+                        };
+                }
+                if (Ftsi == UnspecificTestResult.Determined)
+                {
+                    yield return
+                        new Typing
+                        {
+                            Attribute = "ftsI",
+                            Value = string.Format("{0} {1}", FtsiEvaluation1, FtsiEvaluation2)
+                        };
+                }
+                if (Mlst == UnspecificOrNoTestResult.Determined)
+                {
+                    yield return
+                        new Typing {Attribute = "MLST", Value = MlstSequenceType};
                 }
             }
         }

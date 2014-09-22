@@ -15,6 +15,13 @@ namespace HaemophilusWeb.Models
         [Description("durchgeführt")] Determined = 1,
     }
 
+    public enum UnspecificOrNoTestResult
+    {
+        [Description("n.d.")] NotDetermined = 0,
+        [Description("durchgeführt")] Determined = 1,
+        [Description("kein Ergebnis")] NoResult = 2,
+    }
+
     public enum SpecificTestResult
     {
         [Description("n.d.")] NotDetermined = 0,

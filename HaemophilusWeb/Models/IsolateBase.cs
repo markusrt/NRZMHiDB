@@ -64,6 +64,21 @@ namespace HaemophilusWeb.Models
         [Display(Name = "MALDI-TOF Übereinstimmung")]
         public double? MaldiTofMatchConfidence { get; set; }
 
+        [Display(Name = "ftsI")]
+        public UnspecificTestResult Ftsi { get; set; }
+
+        [Display(Name = "ftsI Beurteilung")]
+        public string FtsiEvaluation1 { get; set; }
+
+        [Display(Name = "ftsI Beurteilung 1")]
+        public string FtsiEvaluation2 { get; set; }
+
+        [Display(Name = "MLST")]
+        public UnspecificOrNoTestResult Mlst { get; set; }
+
+        [Display(Name = "MLST Sequenztyp")]
+        public string MlstSequenceType { get; set; }
+
         [Display(Name = "Beurteilung")]
         public Evaluation Evaluation { get; set; }
 

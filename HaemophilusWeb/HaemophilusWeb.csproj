@@ -281,6 +281,10 @@
     <Compile Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.Designer.cs">
       <DependentUpon>201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.cs" />
+    <Compile Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.Designer.cs">
+      <DependentUpon>201409221954353_Isolate_9_ftsi_MLST.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -877,6 +881,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.resx">
       <DependentUpon>201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.resx">
+      <DependentUpon>201409221954353_Isolate_9_ftsi_MLST.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

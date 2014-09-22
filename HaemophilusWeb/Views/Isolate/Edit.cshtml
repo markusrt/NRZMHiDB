@@ -183,7 +183,39 @@
             @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Ftsi, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.EnumRadioButtonFor(model => model.Ftsi)
+            @Html.ValidationMessageFor(model => model.Ftsi)
+        </div>
+    </div>
+    <div id="FtsiEvaluationForm" class="form-group">
+        @Html.LabelFor(m => m.FtsiEvaluation1, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.FtsiEvaluation1, new { @class = "form-control" })
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.FtsiEvaluation2, new { @class = "form-control" })
+        </div>
+    </div>
     
+    <div class="form-group">
+        @Html.LabelFor(model => model.Mlst, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.EnumRadioButtonFor(model => model.Mlst)
+            @Html.ValidationMessageFor(model => model.Mlst)
+        </div>
+    </div>
+    <div id="MlstSequenceTypeForm" class="form-group">
+        @Html.LabelFor(m => m.MlstSequenceType, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.MlstSequenceType, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.MlstSequenceType)
+        </div>
+    </div>
+
     <div class="form-group">
         @Html.LabelFor(m => m.Evaluation, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-5">
@@ -222,6 +254,8 @@
             ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
             ShowApiNhMatchInPercentIfDeterminedIsSelected();
             ShowMaldiTofMatchConfidenceIfDeterminedIsSelected();
+            ShowFtsiEvaluationIfDeterminedIsSelected();
+            ShowMlstSequenceTypeIfDeterminedIsSelected();
         });
 
         function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected()
@@ -247,7 +281,25 @@
             ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
                 "#MaldiTofMatchConfidenceForm", "input:radio[name$='MaldiTof']",
                 "input:radio[name$='MaldiTof']:checked",
-                "Determined", "[id$='MaldiTofMatchConfidence']"
+                "Determined", "[id$='MaldiTofBestMatch']", "[id$='MaldiTofMatchConfidence']"
+            );
+        }
+
+        function ShowFtsiEvaluationIfDeterminedIsSelected()
+        {
+            ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+                "#FtsiEvaluationForm", "input:radio[name$='Ftsi']",
+                "input:radio[name$='Ftsi']:checked",
+                "Determined", "[id$='FtsiEvaluation1']", "[id$='FtsiEvaluation2']"
+            );
+        }
+
+        function ShowMlstSequenceTypeIfDeterminedIsSelected()
+        {
+            ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+                "#MlstSequenceTypeForm", "input:radio[name$='Mlst']",
+                "input:radio[name$='Mlst']:checked",
+                "Determined", "[id$='MlstSequenceType']"
             );
         }
 
