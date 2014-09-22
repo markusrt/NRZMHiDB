@@ -12,8 +12,8 @@ namespace HaemophilusWeb.Models
     {
         public Patient()
         {
-            HibVaccination = YesNoUnknown.Unknown;
-            Therapy = YesNoUnknown.Unknown;
+            HibVaccination = YesNoUnknown.NotStated;
+            Therapy = YesNoUnknown.NotStated;
         }
 
         private string initials;

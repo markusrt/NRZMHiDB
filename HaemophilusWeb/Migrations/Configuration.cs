@@ -7,6 +7,7 @@ namespace HaemophilusWeb.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            AutomaticMigrationDataLossAllowed = false;
             ContextKey = "HaemophilusWeb.Models.ApplicationDbContext";
         }
 

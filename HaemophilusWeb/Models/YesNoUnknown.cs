@@ -6,6 +6,7 @@ namespace HaemophilusWeb.Models
     {
         [Description("Nein")] No = 0,
         [Description("Ja")] Yes = 1,
-        [Description("Unbekannt")] Unknown = 2,
+        [Description("keine Angabe")] NotStated = 2,
+        [Description("Unbekannt")] Unknown = 3,
     }
 }
