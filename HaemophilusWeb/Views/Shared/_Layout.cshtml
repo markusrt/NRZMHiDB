@@ -43,7 +43,7 @@
                 <h1>@ViewBag.Title 
                     @if (!String.IsNullOrEmpty(ViewBag.Subtitle))
                     {
-                        <small>@ViewBag.Subtitle</small>
+                        <small>@Html.Raw(ViewBag.Subtitle)</small>
                     }
                 </h1>
             </div>

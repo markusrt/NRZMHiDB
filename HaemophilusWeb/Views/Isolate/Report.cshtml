@@ -19,7 +19,7 @@
 </dl>
 <dl class="dl-horizontal">
     <dt>@Html.DisplayNameFor(model => model.Evaluation)</dt>
-    <dd>@Html.DisplayFor(model => model.Evaluation)</dd>
+    <dd>@EnumEditor.GetEnumDescription(Model.Evaluation)</dd>
     <dt>@Html.DisplayNameFor(model => model.Agglutination)</dt>
     <dd>@EnumEditor.GetEnumDescription(Model.Agglutination)</dd>
     <dt>@Html.DisplayNameFor(model => model.SerotypePcr)</dt>
