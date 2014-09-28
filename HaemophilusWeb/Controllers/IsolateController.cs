@@ -58,9 +58,9 @@ namespace HaemophilusWeb.Controllers
         {
             var isolateViewModel = Mapper.Map<IsolateViewModel>(isolate);
             var sending = isolate.Sending;
-            isolateViewModel.Material = sending.Material == Material.Other
-                ? WebUtility.HtmlEncode(sending.OtherMaterial)
-                : EnumEditor.GetEnumDescription(sending.Material);
+            isolateViewModel.SamplingLocation = sending.SamplingLocation == SamplingLocation.Other
+                ? WebUtility.HtmlEncode(sending.OtherSamplingLocation)
+                : EnumEditor.GetEnumDescription(sending.SamplingLocation);
             isolateViewModel.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
             if (isolate.Sending.Patient.BirthDate.HasValue)
             {

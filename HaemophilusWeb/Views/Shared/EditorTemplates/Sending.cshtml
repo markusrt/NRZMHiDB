@@ -75,18 +75,18 @@
 </div>
 
 <div class="form-group">
-    @Html.LabelFor(m => m.Material, new { @class = "col-sm-2 control-label" })
+    @Html.LabelFor(m => m.SamplingLocation, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
-        @Html.EnumRadioButtonFor(m => m.Material)
+        @Html.EnumRadioButtonFor(m => m.SamplingLocation)
     </div>
 </div>
-<div id="OtherMaterialForm" class="form-group">
-    @Html.LabelFor(m => m.OtherMaterial, new { @class = "col-sm-2 control-label" })
+<div id="OtherSamplingLocationForm" class="form-group">
+    @Html.LabelFor(m => m.OtherSamplingLocation, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
         <div class="input-group">
-            @Html.TextBoxFor(m => m.OtherMaterial, new { @class = "form-control", @list = "otherMaterialsAutocomplete", @autocomplete = "off" })
-            <datalist id="otherMaterialsAutocomplete">
-                @foreach (var item in ViewBag.PossibleOtherMaterials)
+            @Html.TextBoxFor(m => m.OtherSamplingLocation, new { @class = "form-control", @list = "otherSamplingLocationsAutocomplete", @autocomplete = "off" })
+            <datalist id="otherSamplingLocationsAutocomplete">
+                @foreach (var item in ViewBag.PossibleOtherSamplingLocations)
                 {
                     <option value="@item.ToString()" />
                 }
@@ -94,7 +94,7 @@
 
             <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
         </div>
-        @Html.ValidationMessageFor(model => model.OtherMaterial)
+        @Html.ValidationMessageFor(model => model.OtherSamplingLocation)
     </div>
 </div>
 
@@ -119,15 +119,15 @@
 
 <script>
     $(document).ready(function () {
-        ShowOtherMaterialIfOtherIsSelected();
+        ShowOtherSamplingLocationIfOtherIsSelected();
         $('#Sending_SenderId').select2({ placeholder: "Wählen sie einen Einsender aus", maximumSelectionSize: 6 });
     });
 
-    function ShowOtherMaterialIfOtherIsSelected() {
+    function ShowOtherSamplingLocationIfOtherIsSelected() {
         ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#OtherMaterialForm", "input:radio[name$='Material']",
-            "input:radio[name$='Material']:checked",
-            "Other", "[id$='OtherMaterial']"
+            "#OtherSamplingLocationForm", "input:radio[name$='SamplingLocation']",
+            "input:radio[name$='SamplingLocation']:checked",
+            "Other", "[id$='OtherSamplingLocation']"
         );
     }
 </script>

@@ -14,10 +14,10 @@
     @Html.TextEditorFor(m => m.LaboratoryNumber)
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Material, new {@class = "control-label col-sm-2"})
+        @Html.LabelFor(model => model.SamplingLocation, new {@class = "control-label col-sm-2"})
         <div class="col-sm-5 form-control-static">
-            @Html.DisplayFor(model => model.Material)
-            @Html.HiddenFor(model => model.Material)
+            @Html.DisplayFor(model => model.SamplingLocation)
+            @Html.HiddenFor(model => model.SamplingLocation)
         </div>
     </div>
 

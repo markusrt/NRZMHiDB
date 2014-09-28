@@ -24,7 +24,7 @@
                 @Html.DisplayNameFor(model => model.Sending.ReceivingDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Sending.Material)
+                @Html.DisplayNameFor(model => model.Sending.SamplingLocation)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Sending.Invasive)
@@ -52,7 +52,7 @@
                     @Html.DisplayFor(modelItem => item.Sending.ReceivingDate)
                 </td>
                 <td>
-                    @(item.Sending.Material == Material.Other ? Html.Encode(item.Sending.OtherMaterial) : EnumEditor.GetEnumDescription(item.Sending.Material))
+                    @(item.Sending.SamplingLocation == SamplingLocation.Other ? Html.Encode(item.Sending.OtherSamplingLocation) : EnumEditor.GetEnumDescription(item.Sending.SamplingLocation))
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Sending.Invasive)

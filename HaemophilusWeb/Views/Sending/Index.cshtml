@@ -19,7 +19,7 @@
             @Html.DisplayNameFor(model => model.ReceivingDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Material)
+            @Html.DisplayNameFor(model => model.SamplingLocation)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Invasive)
@@ -45,7 +45,7 @@
             @Html.DisplayFor(modelItem => item.ReceivingDate)
         </td>
         <td>
-            @(item.Material == Material.Other ? Html.DisplayFor(modelItem => item.OtherMaterial) : Html.DisplayFor(modelItem => item.Material))
+            @(item.SamplingLocation == SamplingLocation.Other ? Html.DisplayFor(modelItem => item.OtherSamplingLocation) : Html.DisplayFor(modelItem => item.SamplingLocation))
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Invasive)

@@ -98,17 +98,18 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Test]
-        public void Create_AddsOtherMaterials()
+        public void Create_AddsOtherSamplingLocations()
         {
-            var availableOtherMaterials = DbMock.Sendings.Select(s => s.OtherMaterial).Distinct().ToList();
+            var availableOtherSamplingLocations =
+                DbMock.Sendings.Select(s => s.OtherSamplingLocation).Distinct().ToList();
             var controller = CreateMockSendingController();
 
             var result = controller.Create() as ViewResult;
 
             result.Should().NotBeNull();
 
-            CollectionAssert.AreEquivalent(result.ViewBag.PossibleOtherMaterials,
-                availableOtherMaterials);
+            CollectionAssert.AreEquivalent(result.ViewBag.PossibleOtherSamplingLocations,
+                availableOtherSamplingLocations);
         }
 
         [Test]

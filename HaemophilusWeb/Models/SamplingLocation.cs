@@ -2,10 +2,10 @@
 
 namespace HaemophilusWeb.Models
 {
-    public enum Material
+    public enum SamplingLocation
     {
         [Description("Blut")] Blood = 0,
         [Description("Liquor")] Liquor = 1,
-        [Description("Andere")] Other = 2
+        [Description("Anderer")] Other = 2
     }
 }

@@ -17,13 +17,13 @@ namespace HaemophilusWeb.Validators
                 sample => sample.SamplingDate).WithMessage("Das Eingangsdatum muss nach dem Entnahmedatum liegen");
             RuleFor(sending => sending.SenderLaboratoryNumber).NotEmpty();
             RuleFor(sending => sending.SenderConclusion).NotEmpty();
-            RuleFor(sending => sending.OtherMaterial).Must(BeNotEmptyIfMaterialIsOther).WithMessage(
+            RuleFor(sending => sending.OtherSamplingLocation).Must(BeNotEmptyIfSamplingLocationIsOther).WithMessage(
                 "{PropertyName} darf nicht leer sein.");
         }
 
-        private static bool BeNotEmptyIfMaterialIsOther(Sending sending, string otherMaterial)
+        private static bool BeNotEmptyIfSamplingLocationIsOther(Sending sending, string otherSamplingLocation)
         {
-            return sending.Material != Material.Other || !string.IsNullOrEmpty(otherMaterial);
+            return sending.SamplingLocation != SamplingLocation.Other || !string.IsNullOrEmpty(otherSamplingLocation);
         }
     }
 }

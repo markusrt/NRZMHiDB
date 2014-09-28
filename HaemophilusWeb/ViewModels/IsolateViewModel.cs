@@ -29,8 +29,8 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Invasiv")]
         public string Invasive { get; set; }
 
-        [Display(Name = "Material")]
-        public string Material { get; set; }
+        [Display(Name = "Entnahmeort")]
+        public string SamplingLocation { get; set; }
 
         public EpsilometerTestViewModel Ampicillin { get; private set; }
 

@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.ViewModels;
@@ -9,16 +10,19 @@ namespace HaemophilusWeb.Controllers
     public class PatientSendingControllerTests
     {
         private readonly SendingController sendingController = SendingControllerTests.CreateMockSendingController();
+        private readonly PatientController patientController = new PatientController(SendingControllerTests.DbMock);
 
         [Test]
         public void Create_NewPatientSending_ViewDataContainsSameDataAsIfUsingSendingController()
         {
             var controller = CreateController();
+            var sendingResults = sendingController.Create().As<ViewResult>().ViewData.Keys;
+            var patientResults = patientController.Create().As<ViewResult>().ViewData.Keys;
+            var expectedResults = sendingResults.Union(patientResults);
 
-            var expectedResult = sendingController.Create().As<ViewResult>();
-            var actualResult = controller.Create().As<ViewResult>();
+            var actualResult = controller.Create().As<ViewResult>().ViewData.Keys;
 
-            actualResult.ViewData.ShouldBeEquivalentTo(expectedResult.ViewData);
+            actualResult.ShouldBeEquivalentTo(expectedResults);
         }
 
         [Test]
@@ -27,14 +31,14 @@ namespace HaemophilusWeb.Controllers
             const string sendingError = "MockError";
             var controller = CreateController();
 
-            controller.Create(new PatientSendingViewModel() {Patient = new Patient(), Sending = new Sending()});
+            controller.Create(new PatientSendingViewModel {Patient = new Patient(), Sending = new Sending()});
 
             controller.ModelState.Should().NotBeEmpty();
         }
 
         private PatientSendingController CreateController()
         {
-            return new PatientSendingController(SendingControllerTests.DbMock, new PatientController(), sendingController);
+            return new PatientSendingController(SendingControllerTests.DbMock, patientController, sendingController);
         }
     }
 }

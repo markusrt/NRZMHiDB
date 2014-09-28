@@ -53,11 +53,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(
-            [Bind(
-                Include =
-                    "SendingId,SenderId,PatientId,SamplingDate,ReceivingDate,Material,OtherMaterial,Invasive,SenderLaboratoryNumber,SenderConclusion,Evaluation"
-                )] Sending sending)
+        public ActionResult Create(Sending sending)
         {
             if (ModelState.IsValid)
             {
@@ -79,8 +75,8 @@ namespace HaemophilusWeb.Controllers
         {
             viewBag.PossibleSenders = db.Senders;
             viewBag.PossiblePatients = db.Patients;
-            viewBag.PossibleOtherMaterials = db.Sendings.Where(
-                s => !string.IsNullOrEmpty(s.OtherMaterial)).Select(s => s.OtherMaterial).AsDataList();
+            viewBag.PossibleOtherSamplingLocations = db.Sendings.Where(
+                s => !string.IsNullOrEmpty(s.OtherSamplingLocation)).Select(s => s.OtherSamplingLocation).AsDataList();
         }
 
         // GET: /Sending/Edit/5
@@ -152,11 +148,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(
-            [Bind(
-                Include =
-                    "SendingId,SenderId,PatientId,SamplingDate,ReceivingDate,Material,OtherMaterial,Invasive,SenderLaboratoryNumber,SenderConclusion,Evaluation"
-                )] Sending sending)
+        public ActionResult Edit(Sending sending)
         {
             if (ModelState.IsValid)
             {

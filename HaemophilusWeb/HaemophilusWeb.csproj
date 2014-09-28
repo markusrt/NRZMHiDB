@@ -285,6 +285,10 @@
     <Compile Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.Designer.cs">
       <DependentUpon>201409221954353_Isolate_9_ftsi_MLST.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs" />
+    <Compile Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.Designer.cs">
+      <DependentUpon>201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -305,7 +309,7 @@
     <Compile Include="Models\IApplicationDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Isolate.cs" />
-    <Compile Include="Models\Material.cs" />
+    <Compile Include="Models\SamplingLocation.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\TestResult.cs" />
     <Compile Include="Models\Validations.cs" />
@@ -884,6 +888,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.resx">
       <DependentUpon>201409221954353_Isolate_9_ftsi_MLST.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.resx">
+      <DependentUpon>201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

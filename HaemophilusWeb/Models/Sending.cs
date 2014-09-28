@@ -28,6 +28,7 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Patient")]
         [ForeignKey("Patient")]
         public int PatientId { get; set; }
+
         public virtual Patient Patient { get; set; }
 
         [Display(Name = "Entnahmedatum")]
@@ -38,11 +39,11 @@ namespace HaemophilusWeb.Models
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ReceivingDate { get; set; }
 
-        [Display(Name = "Material")]
-        public Material Material { get; set; }
+        [Display(Name = "Entnahmeort")]
+        public SamplingLocation SamplingLocation { get; set; }
 
-        [Display(Name = "Anderes Material")]
-        public string OtherMaterial { get; set; }
+        [Display(Name = "Anderer Entnahmeort")]
+        public string OtherSamplingLocation { get; set; }
 
         [Display(Name = "Invasiv")]
         public YesNo? Invasive { get; set; }

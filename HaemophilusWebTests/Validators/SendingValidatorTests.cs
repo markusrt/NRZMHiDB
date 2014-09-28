@@ -15,8 +15,8 @@ namespace HaemophilusWeb.Validators
                 SenderId = 1,
                 PatientId = 1,
                 SenderLaboratoryNumber = "1234",
-                Material = Material.Other,
-                OtherMaterial = "Other",
+                SamplingLocation = SamplingLocation.Other,
+                OtherSamplingLocation = "Other",
                 Invasive = YesNo.No
             };
         }
@@ -31,14 +31,14 @@ namespace HaemophilusWeb.Validators
 
             yield return Tuple.Create(CreateInvalidSendingWithReceivingDateBeforeReportDate(), new[] { "ReceivingDate"});
 
-            yield return Tuple.Create(CreateInvalidSendingWithOtherMaterialEmpty(), new[] { "OtherMaterial" });
+            yield return Tuple.Create(CreateInvalidSendingWithOtherSamplingLocationEmpty(), new[] { "OtherSamplingLocation" });
         }
 
-        private Sending CreateInvalidSendingWithOtherMaterialEmpty()
+        private Sending CreateInvalidSendingWithOtherSamplingLocationEmpty()
         {
             var sending = CreateValidModel();
-            sending.Material = Material.Other;
-            sending.OtherMaterial = string.Empty;
+            sending.SamplingLocation = SamplingLocation.Other;
+            sending.OtherSamplingLocation = string.Empty;
             return sending;
         }
 

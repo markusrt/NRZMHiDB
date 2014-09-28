@@ -9,7 +9,16 @@ namespace HaemophilusWeb.Controllers
 {
     public class PatientController : Controller
     {
-        private readonly ApplicationDbContext db = new ApplicationDbContext();
+        private readonly IApplicationDbContext db;
+
+        public PatientController() : this(new ApplicationDbContextWrapper(new ApplicationDbContext()))
+        {
+        }
+
+        public PatientController(IApplicationDbContext applicationDbContext)
+        {
+            db = applicationDbContext;
+        }
 
         // GET: /Patient/
         public ActionResult Index()
@@ -35,7 +44,7 @@ namespace HaemophilusWeb.Controllers
         // GET: /Patient/Create
         public ActionResult Create()
         {
-            return View(new Patient());
+            return CreateEditView(new Patient());
         }
 
         // POST: /Patient/Create
@@ -43,11 +52,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(
-            [Bind(
-                Include =
-                    "PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,OtherClinicalInformation,HibVaccination,HibVaccinationDate"
-                )] Patient patient)
+        public ActionResult Create(Patient patient)
         {
             if (ModelState.IsValid)
             {
@@ -55,7 +60,7 @@ namespace HaemophilusWeb.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(patient);
+            return CreateEditView(patient);
         }
 
         internal void CreatePatient(Patient patient)
@@ -79,10 +84,10 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(patient);
         }
 
-        private ActionResult CreateEditView(Patient sending)
+        private ActionResult CreateEditView(Patient patient)
         {
             AddReferenceDataToViewBag(ViewBag);
-            return View(sending);
+            return View(patient);
         }
 
         internal void AddReferenceDataToViewBag(dynamic viewBag)
@@ -100,11 +105,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(
-            [Bind(
-                Include =
-                    "PatientId,Initials,BirthDate,PostalCode,Gender,City,County,State,ClinicalInformation,OtherClinicalInformation,HibVaccination,HibVaccinationDate"
-                )] Patient patient)
+        public ActionResult Edit(Patient patient)
         {
             if (ModelState.IsValid)
             {

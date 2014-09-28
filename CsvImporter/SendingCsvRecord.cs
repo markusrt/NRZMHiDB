@@ -37,9 +37,9 @@ namespace CsvImporter
 
         public DateTime ReceivingDate { get; set; }
 
-        public Material Material { get; set; }
+        public SamplingLocation SamplingLocation { get; set; }
 
-        public string OtherMaterial { get; set; }
+        public string OtherSamplingLocation { get; set; }
 
         public YesNo? Invasive { get; set; }
 
