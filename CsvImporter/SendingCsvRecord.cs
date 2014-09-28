@@ -33,13 +33,15 @@ namespace CsvImporter
 
         public DateTime? HibVaccinationDate { get; set; }
 
-        public DateTime SamplingDate { get; set; }
+        public DateTime? SamplingDate { get; set; }
 
         public DateTime ReceivingDate { get; set; }
 
         public SamplingLocation SamplingLocation { get; set; }
 
         public string OtherSamplingLocation { get; set; }
+
+        public Material Material { get; set; }
 
         public YesNo? Invasive { get; set; }
 

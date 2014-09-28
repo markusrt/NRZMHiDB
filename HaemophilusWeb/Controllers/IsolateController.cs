@@ -61,11 +61,12 @@ namespace HaemophilusWeb.Controllers
             isolateViewModel.SamplingLocation = sending.SamplingLocation == SamplingLocation.Other
                 ? WebUtility.HtmlEncode(sending.OtherSamplingLocation)
                 : EnumEditor.GetEnumDescription(sending.SamplingLocation);
+            isolateViewModel.Material = EnumEditor.GetEnumDescription(sending.Material);
             isolateViewModel.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
             if (isolate.Sending.Patient.BirthDate.HasValue)
             {
                 var birthday = isolate.Sending.Patient.BirthDate.Value;
-                var samplingDate = isolate.Sending.SamplingDate;
+                var samplingDate = isolate.Sending.SamplingDate ?? isolate.Sending.ReceivingDate;
                 var ageAtSampling = samplingDate.Year - birthday.Year;
                 if (birthday > samplingDate.AddYears(-ageAtSampling))
                 {

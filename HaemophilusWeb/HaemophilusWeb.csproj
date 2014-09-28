@@ -289,6 +289,10 @@
     <Compile Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.Designer.cs">
       <DependentUpon>201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs" />
+    <Compile Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.Designer.cs">
+      <DependentUpon>201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
@@ -296,6 +300,7 @@
     <Compile Include="Models\EucastClinicalBreakpoint.cs" />
     <Compile Include="Models\Antibiotic.cs" />
     <Compile Include="Models\IsolateBase.cs" />
+    <Compile Include="Models\Material.cs" />
     <Compile Include="Models\Serotype.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -891,6 +896,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.resx">
       <DependentUpon>201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.resx">
+      <DependentUpon>201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

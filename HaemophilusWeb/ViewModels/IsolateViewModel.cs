@@ -32,6 +32,9 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Entnahmeort")]
         public string SamplingLocation { get; set; }
 
+        [Display(Name = "Material")]
+        public string Material { get; set; }
+
         public EpsilometerTestViewModel Ampicillin { get; private set; }
 
         [Display(Name = "Amoxicillin / Clavulansäure")]

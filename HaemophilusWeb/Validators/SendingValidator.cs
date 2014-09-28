@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using HaemophilusWeb.Models;
 
 namespace HaemophilusWeb.Validators
@@ -14,7 +15,8 @@ namespace HaemophilusWeb.Validators
             RuleFor(sending => sending.Invasive).NotNull();
 
             RuleFor(sending => sending.ReceivingDate).GreaterThanOrEqualTo(
-                sample => sample.SamplingDate).WithMessage("Das Eingangsdatum muss nach dem Entnahmedatum liegen");
+                sample => sample.SamplingDate ?? DateTime.MinValue)
+                .WithMessage("Das Eingangsdatum muss nach dem Entnahmedatum liegen");
             RuleFor(sending => sending.SenderLaboratoryNumber).NotEmpty();
             RuleFor(sending => sending.SenderConclusion).NotEmpty();
             RuleFor(sending => sending.OtherSamplingLocation).Must(BeNotEmptyIfSamplingLocationIsOther).WithMessage(

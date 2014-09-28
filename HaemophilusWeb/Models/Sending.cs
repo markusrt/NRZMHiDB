@@ -33,7 +33,7 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Entnahmedatum")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime SamplingDate { get; set; }
+        public DateTime? SamplingDate { get; set; }
 
         [DisplayName("Eingangsdatum")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
@@ -44,6 +44,9 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Anderer Entnahmeort")]
         public string OtherSamplingLocation { get; set; }
+
+        [Display(Name = "Material")]
+        public Material Material { get; set; }
 
         [Display(Name = "Invasiv")]
         public YesNo? Invasive { get; set; }

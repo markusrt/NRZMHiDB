@@ -11,7 +11,7 @@ namespace HaemophilusWeb.Utils
         {
             if (!dateTime.HasValue)
             {
-                return string.Empty;
+                return "keine Angabe";
             }
             return dateTime.Value.ToReportFormat();
         }
