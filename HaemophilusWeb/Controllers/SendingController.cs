@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Utils;
 using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
@@ -114,16 +115,24 @@ namespace HaemophilusWeb.Controllers
 
         private void CreateIsolateWithNewStemAndLaboratoryNumber(Sending sending)
         {
-            var currentYear = DateTime.Now.Year;
-            var nextSequentialIsolateNumber = GetNextSequentialIsolateNumber(currentYear);
+            var nextSequentialIsolateNumber = GetNextSequentialIsolateNumber();
             var nextSequentialStemNumber = GetNextSequentialStemNumber();
 
             sending.Isolate = new Isolate
             {
-                Year = currentYear,
+                Year = CurrentYear,
                 YearlySequentialIsolateNumber = nextSequentialIsolateNumber,
                 StemNumber = nextSequentialStemNumber
             };
+        }
+
+        private static int CurrentYear
+        {
+            get
+            {
+                var currentYear = DateTime.Now.Year;
+                return currentYear;
+            }
         }
 
         private int GetNextSequentialStemNumber()
@@ -134,10 +143,10 @@ namespace HaemophilusWeb.Controllers
             return lastSequentialStemNumber + 1;
         }
 
-        private int GetNextSequentialIsolateNumber(int currentYear)
+        private int GetNextSequentialIsolateNumber()
         {
             var lastSequentialIsolateNumber =
-                db.Isolates.Where(i => i.Year == currentYear)
+                db.Isolates.Where(i => i.Year == CurrentYear)
                     .DefaultIfEmpty()
                     .Max(i => i == null ? 0 : i.YearlySequentialIsolateNumber);
             return lastSequentialIsolateNumber + 1;
@@ -162,6 +171,9 @@ namespace HaemophilusWeb.Controllers
         private ActionResult CreateEditView(Sending sending)
         {
             AddReferenceDataToViewBag(ViewBag);
+            sending.LaboratoryNumber = sending.Isolate == null
+                ? ReportFormatter.ToLaboratoryNumber(GetNextSequentialIsolateNumber(), CurrentYear)
+                : sending.Isolate.LaboratoryNumber;
             return View(sending);
         }
 

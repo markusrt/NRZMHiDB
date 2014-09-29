@@ -15,6 +15,7 @@ namespace HaemophilusWeb.Controllers
         private const int EntityCount = 11;
         private const int FirstSendingId = 1;
         private const int SecondSendingId = 2;
+        private const int ThirdSendingId = 3;
         internal static readonly ApplicationDbContextMock DbMock = new ApplicationDbContextMock();
 
         private static readonly Catalog Catalog = new Catalog();
@@ -54,8 +55,7 @@ namespace HaemophilusWeb.Controllers
         public void AssignStemNumber_ExistingIsolate_DoesNotRecreateStemNumber()
         {
             var controller = CreateMockSendingController();
-            var viewResult = controller.Details(SecondSendingId) as ViewResult;
-            var sending = viewResult.Model as Sending;
+            var sending = DbMock.Sendings.Single(s => s.SendingId == SecondSendingId);
             sending.Isolate = Catalog.CreateInstance<Isolate>();
             sending.Isolate.Year = 2099;
             sending.Isolate.YearlySequentialIsolateNumber = 999;
@@ -110,6 +110,28 @@ namespace HaemophilusWeb.Controllers
 
             CollectionAssert.AreEquivalent(result.ViewBag.PossibleOtherSamplingLocations,
                 availableOtherSamplingLocations);
+        }
+
+        [Test]
+        public void Create_NewSending_SuggestsLaboratoryNumber()
+        {
+            var controller = CreateMockSendingController();
+
+            var result = controller.Create() as ViewResult;
+
+            result.Model.As<Sending>().LaboratoryNumber.Should().StartWith("001/");
+        }
+
+        [Test]
+        public void Edit_SendingWithIsolate_RedirectsLaboratoryNumber()
+        {
+            var controller = CreateMockSendingController();
+            var sending = DbMock.Sendings.Single(s => s.SendingId == ThirdSendingId);
+            sending.Isolate = new Isolate {YearlySequentialIsolateNumber = 14, Year = 2050};
+
+            var result = controller.Edit(sending.SendingId) as ViewResult;
+
+            result.Model.As<Sending>().LaboratoryNumber.Should().Be("014/50");
         }
 
         [Test]

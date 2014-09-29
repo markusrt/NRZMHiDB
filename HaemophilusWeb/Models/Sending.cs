@@ -61,5 +61,9 @@ namespace HaemophilusWeb.Models
         public string Remark { get; set; }
 
         public virtual Isolate Isolate { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Labornummer")]
+        public string LaboratoryNumber { get; set; }
     }
 }

@@ -90,8 +90,15 @@ namespace HaemophilusWeb.Controllers
             if (ModelState.IsValid)
             {
                 patientController.CreatePatient(patientSending.Patient);
-                patientSending.Sending.PatientId = patientSending.Patient.PatientId;
-                sendingController.CreateSendingAndAssignStemnumber(patientSending.Sending);
+                var sending = patientSending.Sending;
+                sending.PatientId = patientSending.Patient.PatientId;
+                sendingController.CreateSendingAndAssignStemnumber(sending);
+                if (sending.LaboratoryNumber != sending.Isolate.LaboratoryNumber)
+                {
+                    TempData["WarningMessage"] =
+                        "Beim Speichern der letzten Einsendung hat sich die Labornummer geändert. Neue Labornummer: " +
+                        sending.Isolate.LaboratoryNumber;
+                }
                 return RedirectToAction("Index");
             }
             return CreateEditView(patientSending);

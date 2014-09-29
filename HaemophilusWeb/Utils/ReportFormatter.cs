@@ -26,6 +26,10 @@ namespace HaemophilusWeb.Utils
             return string.Format("{0} / {1}", patient.Initials, patient.PostalCode);
         }
 
+        public static string ToLaboratoryNumber(int yearlySequentialIsolateNumber, int year)
+        {
+            return string.Format("{0:000}/{1}", yearlySequentialIsolateNumber, year - 2000);
+        }
 
         private static readonly List<Evaluation> EvaluationHaemophilus = new List<Evaluation>
         {

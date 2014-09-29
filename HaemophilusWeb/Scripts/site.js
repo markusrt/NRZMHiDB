@@ -73,11 +73,19 @@ function showAll(selector)
 
 function ShowError(message)
 {
-    var errorHtml =
-        '<div class="alert alert-danger alert-dismissable">' +
-          '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
-          '<strong>Fehler!</strong> ' + message +
-        '</div>';
-
+    var errorHtml = CreateAlertHtml("alert-danger", "Fehler", message);
     $("#errorMessages").append(errorHtml);
+}
+
+function ShowWarning(message)
+{
+    var warningHtml = CreateAlertHtml("alert-warning", "Warnung", message);
+    $("#errorMessages").append(warningHtml);
+}
+
+function CreateAlertHtml(alertStyle, title, message) {
+    return '<div class="alert ' + alertStyle + ' alert-dismissable">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+        '<strong>' + title + '</strong> ' + message +
+      '</div>';
 }

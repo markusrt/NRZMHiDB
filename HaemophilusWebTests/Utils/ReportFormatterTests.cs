@@ -15,5 +15,11 @@ namespace HaemophilusWeb.Utils
         {
             evaluation.ToReportFormat().Should().Be(expected);
         }
+
+        [Test]
+        public void ToLaboratoryNumber_ValidInput_TruncatesYearToDecimal()
+        {
+            ReportFormatter.ToLaboratoryNumber(10, 2014).Should().Be("010/14");
+        }
     }
 }
