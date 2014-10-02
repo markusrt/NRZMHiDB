@@ -138,6 +138,10 @@ namespace HaemophilusWeb.ViewModels
             }
         }
 
+        public string SenderName { get; set; }
+        public string SenderStreet { get; set; }
+        public string SenderCity { get; set; }
+
         public string SamplingDate { get; set; }
         public string ReceivingDate { get; set; }
         public string Patient { get; set; }
