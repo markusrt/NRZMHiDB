@@ -54,7 +54,7 @@ namespace HaemophilusWeb.Controllers
             ViewBag.ReportSigners = ConfigurationManager.AppSettings["reportSigners"].Split(';');
         }
 
-        private static IsolateViewModel ModelToViewModel(Isolate isolate)
+        private IsolateViewModel ModelToViewModel(Isolate isolate)
         {
             var isolateViewModel = Mapper.Map<IsolateViewModel>(isolate);
             var sending = isolate.Sending;
@@ -85,6 +85,11 @@ namespace HaemophilusWeb.Controllers
             var interpretationResult = IsolateInterpretation.Interpret(isolate);
             isolateViewModel.Interpretation = interpretationResult.Interpretation;
             isolateViewModel.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
+
+            var sender = db.Senders.Find(isolate.Sending.SenderId);
+            isolateViewModel.SenderName = sender.Name;
+            isolateViewModel.SenderStreet = sender.StreetWithNumber;
+            isolateViewModel.SenderCity = string.Format("{0} {1}", sender.PostalCode, sender.City);
 
             return isolateViewModel;
         }

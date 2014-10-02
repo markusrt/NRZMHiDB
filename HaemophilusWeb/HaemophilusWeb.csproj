@@ -373,13 +373,13 @@
     </None>
     <None Include="Properties\PublishProfiles\haemophilus.pubxml" />
     <None Include="Properties\PublishProfiles\Production Server.pubxml" />
-    <Content Include="ReportTemplates\BLNAR v5.docx" />
-    <Content Include="ReportTemplates\BLNAS v5.docx" />
-    <Content Include="ReportTemplates\BLPACR v5.docx" />
-    <Content Include="ReportTemplates\BLPACS v5.docx" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.bootstrap.js" />
     <Content Include="Scripts\dataTables.german.js" />
+    <Content Include="ReportTemplates\BLNAR v6.docx" />
+    <Content Include="ReportTemplates\BLNAS v6.docx" />
+    <Content Include="ReportTemplates\BLPACR v6.docx" />
+    <Content Include="ReportTemplates\BLPACS v6.docx" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
