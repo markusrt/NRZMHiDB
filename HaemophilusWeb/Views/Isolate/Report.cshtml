@@ -89,7 +89,7 @@
             {
                 doc.setTags(documentData);
                 doc.applyTags();
-                doc.output({ name: "@(DateTime.Now.ToString("yyyy-MM-dd_LabNr_")+Model.LaboratoryNumber +".docx")", type:"blob" });
+                doc.output({ name: "@("KL " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")", type:"blob" });
             });
         });
     </script>
