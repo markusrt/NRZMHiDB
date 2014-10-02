@@ -18,30 +18,30 @@ namespace HaemophilusWeb.Domain
             var interpretation = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.";
             var interpretationDisclaimer = string.Empty;
 
-            if (isolate.Agglutination == Serotype.Negative)
+            if (isolate.Agglutination == SerotypeAgg.Negative)
             {
                 if (isolate.BexA == TestResult.Negative)
                 {
-                    if (isolate.SerotypePcr == Serotype.Negative)
+                    if (isolate.SerotypePcr == SerotypePcr.Negative)
                     {
                         interpretation = TypingNotPossible;
                         interpretationDisclaimer = string.Format(DisclaimerTemplate,
                             "Haemophilus influenzae, unbekapselt");
                     }
-                    else if (isolate.SerotypePcr != Serotype.NotDetermined)
+                    else if (isolate.SerotypePcr != SerotypePcr.NotDetermined)
                     {
                         interpretation =
                             string.Format(
                                 "{0} Ein vorhandener genetischer Kapsellocus für Polysaccharide des Serotyps {1} wird nicht exprimiert.",
                                 TypingNotPossible, serotypePcrDescription);
                     }
-                    if (serotypePcr != Serotype.NotDetermined)
+                    if (serotypePcr != SerotypePcr.NotDetermined)
                     {
                         interpretationDisclaimer = string.Format(DisclaimerTemplate,
                             "Haemophilus influenzae, unbekapselt");
                     }
                 }
-                else if (isolate.BexA == TestResult.NotDetermined && isolate.SerotypePcr == Serotype.NotDetermined)
+                else if (isolate.BexA == TestResult.NotDetermined && isolate.SerotypePcr == SerotypePcr.NotDetermined)
                 {
                     interpretation =
                         string.Format(
@@ -49,7 +49,8 @@ namespace HaemophilusWeb.Domain
                             TypingNotPossible);
                 }
             }
-            if (isolate.Agglutination == isolate.SerotypePcr && isolate.BexA == TestResult.Positive)
+            if (isolate.Agglutination.ToString() == isolate.SerotypePcr.ToString() &&
+                isolate.BexA == TestResult.Positive)
             {
                 interpretation =
                     string.Format(

@@ -27,8 +27,14 @@ namespace HaemophilusWeb.Domain
         [TestCase("f")]
         public void Interpret_DistinctSerotypeWithPositiveBexA_IsSpecificTyping(string serotypeString)
         {
-            var serotype = (Serotype) Enum.Parse(typeof (Serotype), serotypeString.ToUpper());
-            var isolate = new IsolateBase {SerotypePcr = serotype, Agglutination = serotype, BexA = TestResult.Positive};
+            var serotypePcr = (SerotypePcr) Enum.Parse(typeof (SerotypePcr), serotypeString.ToUpper());
+            var serotypeAgg = (SerotypeAgg) Enum.Parse(typeof (SerotypeAgg), serotypeString.ToUpper());
+            var isolate = new IsolateBase
+            {
+                SerotypePcr = serotypePcr,
+                Agglutination = serotypeAgg,
+                BexA = TestResult.Positive
+            };
 
             var interpretation = IsolateInterpretation.Interpret(isolate);
 
@@ -50,11 +56,11 @@ namespace HaemophilusWeb.Domain
         public void Interpret_NegativeAgglutinationButDistinctSerotypeWithNegativeBexA_IsSpecificTyping(
             string serotypeString)
         {
-            var serotype = (Serotype) Enum.Parse(typeof (Serotype), serotypeString.ToUpper());
+            var serotypePcr = (SerotypePcr) Enum.Parse(typeof (SerotypePcr), serotypeString.ToUpper());
             var isolate = new IsolateBase
             {
-                SerotypePcr = serotype,
-                Agglutination = Serotype.Negative,
+                SerotypePcr = serotypePcr,
+                Agglutination = SerotypeAgg.Negative,
                 BexA = TestResult.Negative
             };
 
@@ -71,8 +77,8 @@ namespace HaemophilusWeb.Domain
         {
             var isolate = new IsolateBase
             {
-                SerotypePcr = Serotype.NotDetermined,
-                Agglutination = Serotype.Negative,
+                SerotypePcr = SerotypePcr.NotDetermined,
+                Agglutination = SerotypeAgg.Negative,
                 BexA = TestResult.NotDetermined
             };
 

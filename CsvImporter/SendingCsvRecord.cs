@@ -63,7 +63,7 @@ namespace CsvImporter
 
         public FactorTest? FactorTest { get; set; }
 
-        public Serotype? Agglutination { get; set; }
+        public SerotypeAgg? Agglutination { get; set; }
 
         public TestResult? BetaLactamase { get; set; }
 
@@ -77,7 +77,7 @@ namespace CsvImporter
 
         public TestResult? BexA { get; set; }
 
-        public Serotype? SerotypePcr { get; set; }
+        public SerotypePcr? SerotypePcr { get; set; }
 
         public TestResult RibosomalRna16S { get; set; }
 

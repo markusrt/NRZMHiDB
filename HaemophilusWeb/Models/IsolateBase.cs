@@ -15,7 +15,7 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Faktoren-test")]
         public FactorTest FactorTest { get; set; }
 
-        public Serotype Agglutination { get; set; }
+        public SerotypeAgg Agglutination { get; set; }
 
         [Display(Name = "ß-Laktamase")]
         public TestResult BetaLactamase { get; set; }
@@ -35,7 +35,7 @@ namespace HaemophilusWeb.Models
         public TestResult BexA { get; set; }
 
         [Display(Name = "Serotyp-PCR")]
-        public Serotype SerotypePcr { get; set; }
+        public SerotypePcr SerotypePcr { get; set; }
 
         [Display(Name = "16S rRNA")]
         public UnspecificTestResult RibosomalRna16S { get; set; }

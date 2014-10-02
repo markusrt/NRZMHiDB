@@ -80,7 +80,7 @@ namespace HaemophilusWeb.ViewModels
                     yield return
                         new Typing {Attribute = "ompP6", Value = EnumEditor.GetEnumDescription(OuterMembraneProteinP6)};
                 }
-                if (SerotypePcr != Serotype.NotDetermined)
+                if (SerotypePcr != Models.SerotypePcr.NotDetermined)
                 {
                     yield return
                         new Typing {Attribute = "Kapselgenotypen", Value = EnumEditor.GetEnumDescription(SerotypePcr)};

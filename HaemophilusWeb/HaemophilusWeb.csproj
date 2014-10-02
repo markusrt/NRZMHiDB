@@ -301,7 +301,7 @@
     <Compile Include="Models\Antibiotic.cs" />
     <Compile Include="Models\IsolateBase.cs" />
     <Compile Include="Models\Material.cs" />
-    <Compile Include="Models\Serotype.cs" />
+    <Compile Include="Models\SerotypePcr.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\Change.cs" />
