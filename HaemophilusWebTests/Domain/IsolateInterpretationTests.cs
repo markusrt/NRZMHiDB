@@ -86,5 +86,22 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpretation.Should().Contain("aus epidemiologischen und Kostengründen nicht durchgeführt");
         }
+
+        [Test]
+        public void Interpret_BexaSeroAndAgglutionationIsNegative_NotTypable()
+        {
+            var isolate = new IsolateBase
+            {
+                SerotypePcr = SerotypePcr.Negative,
+                Agglutination = SerotypeAgg.Negative,
+                BexA = TestResult.Negative
+            };
+
+            var interpretation = IsolateInterpretation.Interpret(isolate);
+
+            interpretation.Interpretation.Should().Contain("nicht-typisierbar");
+            interpretation.InterpretationDisclaimer.Should()
+                .Contain("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.");
+        }
     }
 }

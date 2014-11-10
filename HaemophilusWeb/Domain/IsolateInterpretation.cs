@@ -14,34 +14,32 @@ namespace HaemophilusWeb.Domain
         public static InterpretationResult Interpret(IsolateBase isolate)
         {
             var serotypePcr = isolate.SerotypePcr;
+            var agglutionation = isolate.Agglutination;
             var serotypePcrDescription = EnumEditor.GetEnumDescription(serotypePcr);
             var interpretation = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.";
             var interpretationDisclaimer = string.Empty;
 
-            if (isolate.Agglutination == SerotypeAgg.Negative)
+            if (agglutionation == SerotypeAgg.Negative)
             {
                 if (isolate.BexA == TestResult.Negative)
                 {
-                    if (isolate.SerotypePcr == SerotypePcr.Negative)
+                    if (serotypePcr == SerotypePcr.Negative)
                     {
                         interpretation = TypingNotPossible;
                         interpretationDisclaimer = string.Format(DisclaimerTemplate,
                             "Haemophilus influenzae, unbekapselt");
                     }
-                    else if (isolate.SerotypePcr != SerotypePcr.NotDetermined)
+                    else if (serotypePcr != SerotypePcr.NotDetermined)
                     {
                         interpretation =
                             string.Format(
                                 "{0} Ein vorhandener genetischer Kapsellocus für Polysaccharide des Serotyps {1} wird nicht exprimiert.",
                                 TypingNotPossible, serotypePcrDescription);
-                    }
-                    if (serotypePcr != SerotypePcr.NotDetermined)
-                    {
                         interpretationDisclaimer = string.Format(DisclaimerTemplate,
                             "Haemophilus influenzae, unbekapselt");
                     }
                 }
-                else if (isolate.BexA == TestResult.NotDetermined && isolate.SerotypePcr == SerotypePcr.NotDetermined)
+                else if (isolate.BexA == TestResult.NotDetermined && serotypePcr == SerotypePcr.NotDetermined)
                 {
                     interpretation =
                         string.Format(
@@ -49,7 +47,7 @@ namespace HaemophilusWeb.Domain
                             TypingNotPossible);
                 }
             }
-            if (isolate.Agglutination.ToString() == isolate.SerotypePcr.ToString() &&
+            if (agglutionation.ToString() == serotypePcr.ToString() &&
                 isolate.BexA == TestResult.Positive)
             {
                 interpretation =

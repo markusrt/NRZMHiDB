@@ -66,7 +66,8 @@ namespace HaemophilusWeb.ViewModels
                 var properties = GetType().GetProperties();
                 foreach (
                     var typingProperty in
-                        properties.Where(p => p.PropertyType == typeof (TestResult) && p.Name != "BetaLactamase"))
+                        properties.Where(p => p.PropertyType == typeof (TestResult) && p.Name != "BetaLactamase"
+                                              && p.Name != "Oxidase"))
                 {
                     var value = (TestResult) typingProperty.GetValue(this);
                     var name = GetDisplayName(typingProperty);
@@ -84,11 +85,6 @@ namespace HaemophilusWeb.ViewModels
                 {
                     yield return
                         new Typing {Attribute = "Kapselgenotypen", Value = EnumEditor.GetEnumDescription(SerotypePcr)};
-                }
-                if (FactorTest != FactorTest.NotDetermined)
-                {
-                    yield return
-                        new Typing {Attribute = "Faktoren-test", Value = EnumEditor.GetEnumDescription(FactorTest)};
                 }
                 if (ApiNh == UnspecificTestResult.Determined)
                 {
