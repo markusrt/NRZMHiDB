@@ -250,7 +250,7 @@
         <div class="col-sm-5">
             <div class="input-group">
                 @{ Html.EnableClientValidation(false); }
-                @Html.TextBoxFor(m => m.ReportDate, new { @class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.ReportDate) })
+                @Html.TextBoxFor(m => m.ReportDate, new { @class = "form-control datetimepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy HH:mm}", Model.ReportDate) })
                 @{ Html.EnableClientValidation(true); }
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
             </div>

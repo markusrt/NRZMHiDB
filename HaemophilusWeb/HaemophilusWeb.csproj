@@ -342,13 +342,14 @@
     <Compile Include="Views\Utils\EnumEditor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-datetimepicker.css" />
+    <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-select2.css" />
     <Content Include="Content\select2.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\bootstrap-datepicker.css" />
     <Content Include="Content\dataTables.bootstrap.css" />
     <Content Include="Content\jquery.dataTables.css" />
     <Content Include="Content\select2-spinner.gif" />
@@ -375,6 +376,12 @@
     <None Include="Properties\PublishProfiles\haemophilus - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\haemophilus.pubxml" />
     <None Include="Properties\PublishProfiles\Production Server.pubxml" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.bootstrap.js" />
     <Content Include="Scripts\dataTables.german.js" />
@@ -387,7 +394,6 @@
     <Content Include="Images\logo2.png" />
     <Content Include="Images\logo3.png" />
     <Content Include="Scripts\base64.js" />
-    <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\docxgen.js" />

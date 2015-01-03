@@ -97,9 +97,16 @@
         <script>
             $(document).ready(function()
             {
-                $(".datepicker").datepicker(
+                $(".datepicker").datetimepicker(
                     {
-                        "format": "dd.mm.yyyy",
+                        format: "DD.MM.YYYY",
+                        pickTime: false,
+                        language: "de",
+                    });
+                $(".datetimepicker").datetimepicker(
+                    {
+                        format: "DD.MM.YYYY HH:mm",
+                        language: "de",
                     });
                 Globalize.culture("de-DE");
 

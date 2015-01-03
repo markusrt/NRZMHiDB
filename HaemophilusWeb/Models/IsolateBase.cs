@@ -83,7 +83,7 @@ namespace HaemophilusWeb.Models
         public Evaluation Evaluation { get; set; }
 
         [Display(Name = "Befund am")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? ReportDate { get; set; }
 
         [Display(Name = "Bemerkung")]
