@@ -10,7 +10,12 @@ namespace HaemophilusWeb.Controllers
     {
         private readonly List<Change> changeLog = new List<Change>
         {
-            new Change(new DateTime(2014, 11, 10), "Korrektur der fehlerhaften Feld-Referenzen in Befundvorlagen",
+            new Change(new DateTime(2015, 1, 15),
+                "Vorschau des Interpretationssatzes auf der Befunderstellungs-Maske", ChangeType.Design),
+            new Change(new DateTime(2015, 1, 15),
+                "Umsetzung der aktualisierten Interpretationssatz-Vorschrift bei welcher Serotyp-PCR auch 'n.d.' sein darf",
+                ChangeType.Feature),
+            new Change(new DateTime(2015, 1, 15), "Korrektur der fehlerhaften Feld-Referenzen in Befundvorlagen",
                 ChangeType.Bug),
             new Change(new DateTime(2014, 11, 10), "Aktualisierung der Befundvorlagen", ChangeType.Feature),
             new Change(new DateTime(2014, 10, 2), "Update der Befundvorlagen und einfügen der Einsender-Adresse",

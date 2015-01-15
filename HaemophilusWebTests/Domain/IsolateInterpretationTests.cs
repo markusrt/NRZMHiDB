@@ -1,5 +1,4 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using HaemophilusWeb.Models;
 using NUnit.Framework;
 
@@ -19,16 +18,24 @@ namespace HaemophilusWeb.Domain
         }
 
         [Test]
-        [TestCase("a")]
-        [TestCase("b")]
-        [TestCase("c")]
-        [TestCase("d")]
-        [TestCase("e")]
-        [TestCase("f")]
-        public void Interpret_DistinctSerotypeWithPositiveBexA_IsSpecificTyping(string serotypeString)
+        [TestCase(SerotypeAgg.A, SerotypePcr.A)]
+        [TestCase(SerotypeAgg.A, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.B, SerotypePcr.B)]
+        [TestCase(SerotypeAgg.B, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.C, SerotypePcr.C)]
+        [TestCase(SerotypeAgg.C, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.D, SerotypePcr.D)]
+        [TestCase(SerotypeAgg.D, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.E, SerotypePcr.E)]
+        [TestCase(SerotypeAgg.E, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.F, SerotypePcr.F)]
+        [TestCase(SerotypeAgg.F, SerotypePcr.NotDetermined)]
+        public void
+            Interpret_DistinctAgglutinationWithPositiveBexA_EitherMatchingOrNotDeterminedSerotype_IsSpecificTyping(
+            SerotypeAgg serotypeAgg,
+            SerotypePcr serotypePcr)
         {
-            var serotypePcr = (SerotypePcr) Enum.Parse(typeof (SerotypePcr), serotypeString.ToUpper());
-            var serotypeAgg = (SerotypeAgg) Enum.Parse(typeof (SerotypeAgg), serotypeString.ToUpper());
+            var serotypeString = serotypeAgg.ToString().ToLower();
             var isolate = new IsolateBase
             {
                 SerotypePcr = serotypePcr,
@@ -47,16 +54,16 @@ namespace HaemophilusWeb.Domain
         }
 
         [Test]
-        [TestCase("a")]
-        [TestCase("b")]
-        [TestCase("c")]
-        [TestCase("d")]
-        [TestCase("e")]
-        [TestCase("f")]
+        [TestCase(SerotypePcr.A)]
+        [TestCase(SerotypePcr.B)]
+        [TestCase(SerotypePcr.C)]
+        [TestCase(SerotypePcr.D)]
+        [TestCase(SerotypePcr.E)]
+        [TestCase(SerotypePcr.F)]
         public void Interpret_NegativeAgglutinationButDistinctSerotypeWithNegativeBexA_IsSpecificTyping(
-            string serotypeString)
+            SerotypePcr serotypePcr)
         {
-            var serotypePcr = (SerotypePcr) Enum.Parse(typeof (SerotypePcr), serotypeString.ToUpper());
+            var serotypeString = serotypePcr.ToString().ToLower();
             var isolate = new IsolateBase
             {
                 SerotypePcr = serotypePcr,
@@ -88,11 +95,13 @@ namespace HaemophilusWeb.Domain
         }
 
         [Test]
-        public void Interpret_BexaSeroAndAgglutionationIsNegative_NotTypable()
+        [TestCase(SerotypePcr.Negative)]
+        [TestCase(SerotypePcr.NotDetermined)]
+        public void Interpret_BexaAndAgglutinationIsNegative_WithRespectiveSeroType_NotTypable(SerotypePcr serotype)
         {
             var isolate = new IsolateBase
             {
-                SerotypePcr = SerotypePcr.Negative,
+                SerotypePcr = serotype,
                 Agglutination = SerotypeAgg.Negative,
                 BexA = TestResult.Negative
             };
