@@ -362,6 +362,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Images\logo4.png" />
     <Content Include="Images\sort_asc.png" />
     <Content Include="Images\sort_both.png" />
     <Content Include="Images\sort_desc.png" />
