@@ -15,8 +15,8 @@ namespace HaemophilusWeb
                 "~/Scripts/jquery.validate.unobtrusive.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jquerydatatable").Include(
-                "~/Scripts/jquery.dataTables.js",
-                "~/Scripts/dataTables.bootstrap.js"));
+                "~/Scripts/DataTables-1.10.4/jquery.dataTables.min.js",
+                "~/Scripts/DataTables-1.10.4/dataTables.bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/globalize-de-DE")
                 .Include("~/Scripts/globalize/globalize.js")
@@ -51,7 +51,7 @@ namespace HaemophilusWeb
                 "~/Content/bootstrap-datetimepicker.css",
                 "~/Content/select2.css",
                 "~/Content/bootstrap-select2.css",
-                "~/Content/dataTables.bootstrap.css",
+                "~/Content/DataTables-1.10.4/css/dataTables.bootstrap.css",
                 "~/Content/site.css"));
         }
     }
