@@ -337,7 +337,7 @@
 
             var currentBreakpointId = $(currentBreakpointSelector).val();
 
-            var currentMeasurement = parseFloat($(currentMeasurementSelector).val());
+            var currentMeasurement = Globalize.parseFloat($(currentMeasurementSelector).val());
             if(isNaN(currentMeasurement))
             {
                 return;

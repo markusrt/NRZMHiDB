@@ -10,6 +10,8 @@ namespace HaemophilusWeb.Controllers
     {
         private readonly List<Change> changeLog = new List<Change>
         {
+            new Change(new DateTime(2015, 1, 29), "Falsche Interpretation von Kommazahlen bei Antibiotika-Resistenzen",
+                ChangeType.Bug),
             new Change(new DateTime(2015, 1, 15), "Wechsel von Isolat zu Befund und umgekehrt", ChangeType.Feature),
             new Change(new DateTime(2015, 1, 15),
                 "Vorschau des Interpretationssatzes auf der Befunderstellungs-Maske", ChangeType.Design),
