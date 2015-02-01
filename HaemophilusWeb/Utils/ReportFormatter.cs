@@ -28,7 +28,7 @@ namespace HaemophilusWeb.Utils
 
         public static string ToLaboratoryNumber(int yearlySequentialIsolateNumber, int year)
         {
-            return string.Format("{0:000}/{1}", yearlySequentialIsolateNumber, year - 2000);
+            return string.Format("{0:000}/{1:00}", yearlySequentialIsolateNumber, year - 2000);
         }
 
         private static readonly List<Evaluation> EvaluationHaemophilus = new List<Evaluation>

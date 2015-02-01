@@ -3,7 +3,7 @@ using HaemophilusWeb.Models;
 
 namespace CsvImporter
 {
-    public class SendingCsvRecord
+    public class SendingCsvRecord : IsolateBase
     {
         public int SendingId { get; set; }
 
@@ -49,53 +49,25 @@ namespace CsvImporter
 
         public string SenderConclusion { get; set; }
 
-        public Evaluation Evaluation { get; set; }
-
-        public string Remark { get; set; }
-
-        public DateTime? ReportDate { get; set; }
-
-        public int IsolateId { get; set; }
+        public string LaboratoryNumber { get; set; }
 
         public int YearlySequentialIsolateNumber { get; set; }
 
         public int Year { get; set; }
 
-        public FactorTest? FactorTest { get; set; }
-
-        public SerotypeAgg? Agglutination { get; set; }
-
-        public TestResult? BetaLactamase { get; set; }
-
-        public TestResult? Oxidase { get; set; }
-
-        public TestResult? OuterMembraneProteinP2 { get; set; }
-
-        public TestResult FuculoKinase { get; set; }
-
-        public SpecificTestResult OuterMembraneProteinP6 { get; set; }
-
-        public TestResult? BexA { get; set; }
-
-        public SerotypePcr? SerotypePcr { get; set; }
-
-        public TestResult RibosomalRna16S { get; set; }
-
-        public TestResult? ApiNh { get; set; }
-
-        public double? AmpicillinMeasurement { get; set; }
+        public float? AmpicillinMeasurement { get; set; }
 
         public EpsilometerTestResult? AmpicillinEpsilometerTestResult { get; set; }
 
-        public double? AmoxicillinClavulanateMeasurement { get; set; }
+        public float? AmoxicillinClavulanateMeasurement { get; set; }
 
         public EpsilometerTestResult? AmoxicillinClavulanateEpsilometerTestResult { get; set; }
 
-        public double? CefotaximeMeasurement { get; set; }
+        public float? CefotaximeMeasurement { get; set; }
 
         public EpsilometerTestResult? CefotaximeEpsilometerTestResult { get; set; }
 
-        public double? MeropenemMeasurement { get; set; }
+        public float? MeropenemMeasurement { get; set; }
 
         public EpsilometerTestResult? MeropenemEpsilometerTestResult { get; set; }
 

@@ -4,8 +4,7 @@ namespace HaemophilusWeb.Models
 {
     public enum State
     {
-        [Description("Unbekannt")]
-        Unknown,
+        [Description("n.n.")] Unknown,
         [Description("Schleswig-Holstein")] SH = 1,
         [Description("Hamburg")] HH = 2,
         [Description("Niedersachsen")] NI = 3,

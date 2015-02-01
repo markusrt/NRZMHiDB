@@ -29,7 +29,7 @@ namespace HaemophilusWeb.Views.Utils
         {
             if (value == null)
             {
-                return null;
+                return string.Empty;
             }
             var field = value.GetType().GetField(value.ToString());
 

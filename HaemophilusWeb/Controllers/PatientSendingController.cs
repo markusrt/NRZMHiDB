@@ -181,7 +181,7 @@ namespace HaemophilusWeb.Controllers
                 var samplingLocation = x.SamplingLocation == SamplingLocation.Other
                     ? Server.HtmlEncode(x.OtherSamplingLocation)
                     : EnumEditor.GetEnumDescription(x.SamplingLocation);
-                var laboratoryNumber = string.Format("{0:000}/{1:00}", x.YearlySequentialIsolateNumber, +x.Year - 2000);
+                var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year);
                 return new QueryRecord
                 {
                     SendingId = x.SendingId,

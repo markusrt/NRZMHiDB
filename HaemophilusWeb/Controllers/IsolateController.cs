@@ -189,7 +189,7 @@ namespace HaemophilusWeb.Controllers
                     ViewModelToModel(isolateViewModel.EpsilometerTestViewModels, isolate.EpsilometerTests);
                     db.Entry(isolate).State = EntityState.Modified;
                     db.SaveChanges();
-                    if (Request.Form["primary-submit"] != null)
+                    if (Request == null || Request.Form["primary-submit"] != null)
                     {
                         return RedirectToAction("Index", "PatientSending");
                     }
