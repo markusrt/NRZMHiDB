@@ -35,61 +35,61 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Patient.Initials)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Patient.BirthDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sending.Isolate.StemNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sending.ReceivingDate)
-                </td>
-                <td>
-                    @(item.Sending.SamplingLocation == SamplingLocation.Other ? Html.Encode(item.Sending.OtherSamplingLocation) : EnumEditor.GetEnumDescription(item.Sending.SamplingLocation))
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Sending.Invasive)
-                </td>
-                <td id="isolate_labNr_@item.Sending.SendingId">
-                    @Html.ActionLink(@item.Sending.Isolate.LaboratoryNumber,
-                    "Edit", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn-sm btn btn-default", role = "button" })
-                </td>
-                <td>
-                    <div class="btn-group btn-group-sm">
-                        @Html.ActionLink("Bearbeiten", "Edit", new { id = item.Sending.SendingId }, new { @class = "btn btn-default", role = "button" })
-                        @if (item.Sending.Isolate != null)
-                        {
-                            @Html.ActionLink("Befund erstellen", "Report", "Isolate", new { id = item.Sending.Isolate.IsolateId }, new { @class = "btn btn-default", role = "button" })
-                        }
-                        @* |
-                            @Html.ActionLink("Details", "Details", new { id=item.SendingId }) |
-                            @Html.ActionLink("Delete", "Delete", new { id=item.SendingId })*@
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
+    
 </table>
 
 @section scripts
 {
     <script>
-        $(document).ready(function () {
+        $(document).ready(function()
+        {
             $('#patientSendings').dataTable({
                 "lengthChange": false,
                 "order": [2, 'desc'],
                 "pageLength": 8,
                 "stateSave": true,
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "@Url.Content("~/PatientSending/DataTableAjax")",
+                    "type": "POST"
+                },
                 "language": {
                     "url": "@Url.Content("~/Scripts/dataTables.german.js")"
-                }
+
+                },
+                "columnDefs": [
+                    {
+                        "defaultContent": "<i>kein Eintrag</i>",
+                        "targets": "_all"
+                    }
+                ],
+                "columns": [
+                    {
+                        "data": "Initials",
+                    },  
+                    {
+                        "data": "BirthDate",
+                    },
+                    {
+                        "data": "StemNumber",
+                    },
+                    {
+                        "data": "ReceivingDate",
+                    },
+                    {
+                        "data": "SamplingLocation",
+                    },
+                    {
+                        "data": "Invasive",
+                    },
+                    {
+                        "data": "LaboratoryNumber",
+                    },
+                    {
+                        "data": "Link",
+                    }
+                ]
             });
         });
     </script>

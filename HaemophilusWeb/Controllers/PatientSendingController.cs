@@ -1,11 +1,15 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
+using DataTables.Mvc;
 using FluentValidation;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.Validators;
 using HaemophilusWeb.ViewModels;
+using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
@@ -141,7 +145,8 @@ namespace HaemophilusWeb.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult Index()
         {
-            return View(db.Sendings.Include(s => s.Patient).Select(CreatePatientSending).ToList());
+            return View(db.Sendings.Include(s => s.Patient).OrderBy(s => s.SendingId)
+                .Take(0).Select(CreatePatientSending).ToList());
         }
 
         private PatientSendingViewModel CreatePatientSending(Sending sending)
@@ -151,6 +156,124 @@ namespace HaemophilusWeb.Controllers
                 Patient = sending.Patient,
                 Sending = sending
             };
+        }
+
+        [HttpPost]
+        public JsonResult DataTableAjax([ModelBinder(typeof (DataTablesBinder))] IDataTablesRequest requestParameters)
+        {
+            var query = db.Sendings.Select(x => new
+            {
+                x.SendingId,
+                x.Isolate.IsolateId,
+                x.Patient.Initials,
+                x.Patient.BirthDate,
+                x.Isolate.StemNumber,
+                x.ReceivingDate,
+                x.SamplingLocation,
+                x.OtherSamplingLocation,
+                x.Invasive,
+                x.Isolate.YearlySequentialIsolateNumber,
+                x.Isolate.Year,
+            });
+            var queryable = query.ToList().Select(x =>
+            {
+                var invasive = EnumEditor.GetEnumDescription(x.Invasive);
+                var samplingLocation = x.SamplingLocation == SamplingLocation.Other
+                    ? Server.HtmlEncode(x.OtherSamplingLocation)
+                    : EnumEditor.GetEnumDescription(x.SamplingLocation);
+                var laboratoryNumber = string.Format("{0:000}/{1:00}", x.YearlySequentialIsolateNumber, +x.Year - 2000);
+                return new QueryRecord
+                {
+                    SendingId = x.SendingId,
+                    IsolateId = x.IsolateId,
+                    Initials = x.Initials,
+                    BirthDate = x.BirthDate,
+                    StemNumber = x.StemNumber,
+                    ReceivingDate = x.ReceivingDate,
+                    SamplingLocation = samplingLocation,
+                    Invasive = invasive,
+                    LaboratoryNumber = x.Year*10000 + x.YearlySequentialIsolateNumber,
+                    LaboratoryNumberString = laboratoryNumber,
+                    FullTextSearch = string.Join(" ",
+                        x.Initials, x.BirthDate.ToReportFormat(),
+                        x.StemNumber, x.ReceivingDate.ToReportFormat(),
+                        invasive, samplingLocation, laboratoryNumber).ToLower()
+                };
+            }).ToList();
+
+            var totalCount = queryable.Count();
+
+            var searchValue = requestParameters.Search.Value.ToLower();
+            if (!string.IsNullOrEmpty(searchValue))
+            {
+                queryable = queryable.Where(x => x.FullTextSearch.Contains(searchValue)).ToList();
+            }
+
+            foreach (var column in requestParameters.Columns.GetSortedColumns())
+            {
+                Func<QueryRecord, object> keySelector = x => x.GetType().GetProperty(column.Data).GetValue(x);
+                queryable = column.SortDirection == Column.OrderDirection.Descendant
+                    ? queryable.OrderByDescending(keySelector).ToList()
+                    : queryable.OrderBy(keySelector).ToList();
+            }
+
+            var pagedData = queryable.Skip(requestParameters.Start)
+                .Take(requestParameters.Length)
+                .Select(x => new
+                {
+                    x.Initials,
+                    BirthDate = x.BirthDate.ToReportFormat(),
+                    x.StemNumber,
+                    ReceivingDate = x.ReceivingDate.ToReportFormat(),
+                    x.SamplingLocation,
+                    x.Invasive,
+                    LaboratoryNumber = CreateIsolateLink(x.IsolateId, x.LaboratoryNumberString),
+                    Link = CreateEditControls(x.SendingId, x.IsolateId)
+                });
+
+
+            var dataTablesResult = new DataTablesResponse(
+                requestParameters.Draw,
+                pagedData,
+                queryable.Count(),
+                totalCount
+                );
+
+            return Json(dataTablesResult);
+        }
+
+        public class QueryRecord
+        {
+            public string Initials { get; set; }
+            public DateTime? BirthDate { get; set; }
+            public int? StemNumber { get; set; }
+            public DateTime ReceivingDate { get; set; }
+            public string SamplingLocation { get; set; }
+            public string Invasive { get; set; }
+            public int LaboratoryNumber { get; set; }
+            public string LaboratoryNumberString { get; set; }
+            public string FullTextSearch { get; set; }
+            public int IsolateId { get; set; }
+            public int SendingId { get; set; }
+        }
+
+        private string CreateIsolateLink(int isolateId, string laboratoryNumber)
+        {
+            return string.Format("<a class=\"btn-sm btn btn-default\" href=\"{0}\" role=\"button\">{1}</a>",
+                Url.Action("Edit", "Isolate", new {id = isolateId}), laboratoryNumber);
+        }
+
+        private string CreateEditControls(int sendingId, int isolateId)
+        {
+            var builder = new StringBuilder();
+            builder.Append("<div class=\"btn-group btn-group-sm\">");
+
+            builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Bearbeiten</a>",
+                Url.Action("Edit", new {id = sendingId}));
+            builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
+                Url.Action("Report", "Isolate", new {id = isolateId}));
+            builder.Append("</div>");
+            return builder.ToString();
         }
     }
 }

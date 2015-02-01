@@ -242,7 +242,7 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Evaluation, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-5">
-            @Html.EnumDropDownListFor(model => model.Evaluation, new { @class = "form-control" })
+            @EnumEditor.EnumDropDownListFor(Html, model => model.Evaluation, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Evaluation)
         </div>
     </div>

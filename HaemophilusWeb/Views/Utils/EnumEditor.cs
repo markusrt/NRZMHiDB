@@ -11,7 +11,7 @@ namespace HaemophilusWeb.Views.Utils
 {
     public static class EnumEditor
     {
-        private static readonly SelectListItem[] SingleEmptyItem = new[] {new SelectListItem {Text = "", Value = ""}};
+        private static readonly SelectListItem[] SingleEmptyItem = {new SelectListItem {Text = "", Value = ""}};
 
         private static Type GetNonNullableModelType(ModelMetadata modelMetadata)
         {
@@ -27,6 +27,10 @@ namespace HaemophilusWeb.Views.Utils
 
         public static string GetEnumDescription<TEnum>(TEnum value)
         {
+            if (value == null)
+            {
+                return null;
+            }
             var field = value.GetType().GetField(value.ToString());
 
             var attributes = (DescriptionAttribute[]) field.GetCustomAttributes(typeof (DescriptionAttribute), false);
@@ -38,7 +42,7 @@ namespace HaemophilusWeb.Views.Utils
             Expression<Func<TModel, TEnum>> expression, object htmlAttributes = null)
         {
             var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
-            
+
             var items = from value in GetEnumValues<TEnum>(modelMetadata)
                 select new SelectListItem
                 {
@@ -65,7 +69,7 @@ namespace HaemophilusWeb.Views.Utils
 
 
         public static MvcHtmlString EnumRadioButtonFor<TModel, TEnum>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TEnum>> expression, bool shortName=false)
+            Expression<Func<TModel, TEnum>> expression, bool shortName = false)
         {
             var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             var currentValue = htmlHelper.ValueFor(expression).ToString();
@@ -84,7 +88,8 @@ namespace HaemophilusWeb.Views.Utils
                 var id = string.Format("{0}_{1}", modelMetadata.PropertyName, name);
 
                 var radio = htmlHelper.RadioButtonFor(expression, name, new {id}).ToHtmlString();
-                sb.AppendFormat("<label class=\"btn btn-default {2}\">{0} {1}</label>", radio, description, currentValue==name?"active":"");
+                sb.AppendFormat("<label class=\"btn btn-default {2}\">{0} {1}</label>", radio, description,
+                    currentValue == name ? "active" : "");
             }
             sb.Append("</div></div>");
             sb.Append(htmlHelper.ValidationMessageFor(expression).ToHtmlString());

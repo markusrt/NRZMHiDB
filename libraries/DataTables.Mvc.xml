@@ -1,0 +1,433 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DataTables.Mvc</name>
+    </assembly>
+    <members>
+        <member name="T:DataTables.Mvc.Column">
+            <summary>
+            Represents a DataTables column for server-side parsing and work.
+            </summary>
+        </member>
+        <member name="M:DataTables.Mvc.Column.SetColumnOrdering(System.Int32,System.String)">
+            <summary>
+            Sets the columns ordering.
+            </summary>
+            <param name="orderNumber">The column's position on the ordering (multi-column ordering).</param>
+            <param name="orderDirection">The column's sort direction.</param>
+            <exception cref="T:System.ArgumentException">Thrown if the provided orderDirection is not valid.</exception>
+        </member>
+        <member name="M:DataTables.Mvc.Column.#ctor(System.String,System.String,System.Boolean,System.Boolean,System.String,System.Boolean)">
+            <summary>
+            Creates a new DataTables column.
+            </summary>
+            <param name="data">The data component (bind property name).</param>
+            <param name="name">The name of the column (if provided).</param>
+            <param name="searchable">True if the column allows searching, false otherwise.</param>
+            <param name="orderable">True if the column allows ordering, false otherwise.</param>
+            <param name="searchValue">The searched value for the column, or an empty string.</param>
+            <param name="isRegexValue">True if the search value is a regex value, false otherwise.</param>
+        </member>
+        <member name="P:DataTables.Mvc.Column.Data">
+            <summary>
+            Gets the data component (bind property name).
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.Column.Name">
+            <summary>
+            Get's the name component (if any provided on client-side script).
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.Column.Searchable">
+            <summary>
+            Indicates if the column is searchable or not.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.Column.Orderable">
+            <summary>
+            Indicates if the column is orderable or not.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.Column.Search">
+            <summary>
+            Gets the search component for the column.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.Column.IsOrdered">
+            <summary>
+            Indicates if the current column should be ordered on server-side or not.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.Column.OrderNumber">
+            <summary>
+            Indicates the column' position on the ordering (multi-column ordering).
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.Column.SortDirection">
+            <summary>
+            Indicates the column's sort direction.
+            </summary>
+        </member>
+        <member name="T:DataTables.Mvc.Column.OrderDirection">
+            <summary>
+            Defines order directions for proper use.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.Column.OrderDirection.Ascendant">
+            <summary>
+            Represents an ascendant (A-Z) ordering.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.Column.OrderDirection.Descendant">
+            <summary>
+            Represents a descendant (Z-A) ordering.
+            </summary>
+        </member>
+        <member name="T:DataTables.Mvc.DataTablesBinder">
+            <summary>
+            Defines a DataTables binder to bind a model with the request parameters from DataTables.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.DataTablesBinder.COLUMN_DATA_FORMATTING">
+            <summary>
+            Formatting to retrieve data for each column.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.DataTablesBinder.COLUMN_NAME_FORMATTING">
+            <summary>
+            Formatting to retrieve name for each column.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.DataTablesBinder.COLUMN_SEARCHABLE_FORMATTING">
+            <summary>
+            Formatting to retrieve searchable indicator for each column.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.DataTablesBinder.COLUMN_ORDERABLE_FORMATTING">
+            <summary>
+            Formatting to retrieve orderable indicator for each column.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.DataTablesBinder.COLUMN_SEARCH_VALUE_FORMATTING">
+            <summary>
+            Formatting to retrieve search value for each column.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.DataTablesBinder.COLUMN_SEARCH_REGEX_FORMATTING">
+            <summary>
+            Formatting to retrieve search regex indicator for each column.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.DataTablesBinder.ORDER_COLUMN_FORMATTING">
+            <summary>
+            Formatting to retrieve ordered columns.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.DataTablesBinder.ORDER_DIRECTION_FORMATTING">
+            <summary>
+            Formatting to retrieve columns order direction.
+            </summary>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesBinder.BindModel(System.Web.Mvc.ControllerContext,System.Web.Mvc.ModelBindingContext)">
+            <summary>
+            Binds a new model with the DataTables request parameters.
+            You should override this method to provide a custom type for internal binding to procees.
+            </summary>
+            <param name="controllerContext">The context for the controller.</param>
+            <param name="bindingContext">The context for the binding.</param>
+            <returns>Your model with all it's properties set.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesBinder.Bind(System.Web.Mvc.ControllerContext,System.Web.Mvc.ModelBindingContext,System.Type)">
+            <summary>
+            Binds a new model with both DataTables and your custom parameters.
+            You should not override this method unless you're using request methods other than GET/POST.
+            If that's the case, you'll have to override ResolveNameValueCollection too.
+            </summary>
+            <param name="controllerContext">The context for the controller.</param>
+            <param name="bindingContext">The context for the binding.</param>
+            <param name="modelType">The type of the model which will be created. Should implement IDataTablesRequest.</param>
+            <returns>Your model with all it's properties set.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesBinder.MapAditionalProperties(DataTables.Mvc.IDataTablesRequest,System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Map aditional properties (aditional fields sent with DataTables) into your custom implementation of IDataTablesRequest.
+            You should override this method to map aditional info (non-standard DataTables parameters) into your custom 
+            implementation of IDataTablesRequest.
+            </summary>
+            <param name="requestModel">The request model which will receive your custom data.</param>
+            <param name="requestParameters">Parameters sent with the request.</param>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesBinder.ResolveNameValueCollection(System.Web.HttpRequestBase)">
+            <summary>
+            Resolves the NameValueCollection from the request.
+            Default implementation supports only GET and POST methods.
+            You may override this method to support other HTTP verbs.
+            </summary>
+            <param name="request">The HttpRequestBase object that represents the MVC request.</param>
+            <returns>The NameValueCollection with request variables.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesBinder.Get``1(System.Collections.Specialized.NameValueCollection,System.String)">
+            <summary>
+            Get's a typed value from the collection using the provided key.
+            This method is provided as an option for you to override the default behavior and add aditional
+            check or change the returned value.
+            </summary>
+            <typeparam name="T">The type of the object to be returned.</typeparam>
+            <param name="collection">The collection.</param>
+            <param name="key">The key to access the collection item.</param>
+            <returns>The stringly-typed object.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesBinder.GetColumns(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Return's the column collection from the request values.
+            This method is provided as an option for you to override the default behavior and add aditional
+            check or change the returned value.
+            </summary>
+            <param name="collection">The request value collection.</param>
+            <returns>The collumn collection or an empty list. For default behavior, do not return null!</returns>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesBinder.ParseColumnOrdering(System.Collections.Specialized.NameValueCollection,System.Collections.Generic.IEnumerable{DataTables.Mvc.Column})">
+            <summary>
+            Configure column's ordering.
+            This method is provided as an option for you to override the default behavior.
+            </summary>
+            <param name="collection">The request value collection.</param>
+            <param name="columns">The column collection as returned from GetColumns method.</param>
+        </member>
+        <member name="T:DataTables.Mvc.DataTablesJsonBinder">
+            <summary>
+            Defines an abstract DataTables binder to bind a model with the JSON request from DataTables.
+            </summary>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesJsonBinder.BindModel(System.Web.Mvc.ControllerContext,System.Web.Mvc.ModelBindingContext)">
+            <summary>
+            Binds a new model with the DataTables request parameters.
+            </summary>
+            <param name="controllerContext"></param>
+            <param name="bindingContext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesJsonBinder.IsJsonRequest(System.Web.HttpRequestBase)">
+            <summary>
+            Checks if a request is a JsonRequest or not. 
+            You may override this to check for other values or indicators.
+            </summary>
+            <param name="request">The HttpRequestBase object representing the MVC request.</param>
+            <returns>True if the ContentType contains "json", False otherwise.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesJsonBinder.Deserialize(System.String)">
+            <summary>
+            When overriden, deserializes the JSON data into a DataTablesRequest object.
+            </summary>
+            <param name="jsonData">The JSON data to be deserialized.</param>
+            <returns>The DataTablesRequest object.</returns>
+        </member>
+        <member name="P:DataTables.Mvc.DataTablesJsonBinder.JSON_PARAMETER_NAME">
+            <summary>
+            Get's the JSON parameter name to retrieve data. 
+            You may override this to change to your parameter.
+            </summary>
+        </member>
+        <member name="T:DataTables.Mvc.DataTablesResponse">
+            <summary>
+            Represents a server-side response for use with DataTables.
+            </summary>
+            <remarks>
+            Variable syntax matches DataTables names to avoid error and avoid aditional parse.
+            </remarks>
+        </member>
+        <member name="M:DataTables.Mvc.DataTablesResponse.#ctor(System.Int32,System.Collections.IEnumerable,System.Int32,System.Int32)">
+            <summary>
+            Creates a new DataTables response object with it's elements.
+            </summary>
+            <param name="draw">The draw counter as received from the DataTablesRequest.</param>
+            <param name="data">The data collection (data page).</param>
+            <param name="recordsFiltered">The resulting number of records after filtering.</param>
+            <param name="recordsTotal">The total number of records (total dataset).</param>
+        </member>
+        <member name="P:DataTables.Mvc.DataTablesResponse.draw">
+            <summary>
+            Gets the draw counter for DataTables.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.DataTablesResponse.data">
+            <summary>
+            Gets the data collection.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.DataTablesResponse.recordsTotal">
+            <summary>
+            Gets the total number of records (without filtering - total dataset).
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.DataTablesResponse.recordsFiltered">
+            <summary>
+            Gets the resulting number of records after filtering.
+            </summary>
+        </member>
+        <member name="T:DataTables.Mvc.DefaultDataTablesRequest">
+            <summary>
+            Implements a default DataTables request.
+            </summary>
+        </member>
+        <member name="T:DataTables.Mvc.IDataTablesRequest">
+            <summary>
+            Defines a server-side request for use with DataTables.
+            </summary>
+            <remarks>
+            Variable syntax does NOT match DataTables names because auto-mapping won't work anyway.
+            Use the DataTablesModelBinder or provide your own binder to bind your model with DataTables's request.
+            </remarks>
+        </member>
+        <member name="P:DataTables.Mvc.IDataTablesRequest.Draw">
+            <summary>
+            Gets and sets the draw counter from client-side to give back on the server's response.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.IDataTablesRequest.Start">
+            <summary>
+            Gets and sets the start record number (count) for paging.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.IDataTablesRequest.Length">
+            <summary>
+            Gets and sets the length of the page (max records per page).
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.IDataTablesRequest.Search">
+            <summary>
+            Gets and sets the global search pagameters.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.IDataTablesRequest.Columns">
+            <summary>
+            Gets and sets the read-only collection of client-side columns with their options and configs.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.DefaultDataTablesRequest.Draw">
+            <summary>
+            Gets/Sets the draw counter from DataTables.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.DefaultDataTablesRequest.Start">
+            <summary>
+            Gets/Sets the start record number (jump) for paging.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.DefaultDataTablesRequest.Length">
+            <summary>
+            Gets/Sets the length of the page (paging).
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.DefaultDataTablesRequest.Search">
+            <summary>
+            Gets/Sets the global search term.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.DefaultDataTablesRequest.Columns">
+            <summary>
+            Gets/Sets the column collection.
+            </summary>
+        </member>
+        <member name="T:DataTables.Mvc.NameValueCollectionExtensions">
+            <summary>
+            Provides extension methods for use with NameValueCollections.
+            </summary>
+        </member>
+        <member name="M:DataTables.Mvc.NameValueCollectionExtensions.G``1(System.Collections.Specialized.NameValueCollection,System.String)">
+            <summary>
+            Gets a typed item from the collection using the provided key.
+            If there's no corresponding item on the collection, returns default(T).
+            </summary>
+            <typeparam name="T">The type to cast the collection item.</typeparam>
+            <param name="collection">The collection.</param>
+            <param name="key">The key to access the item inside the collection.</param>
+            <returns>The typed item.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.NameValueCollectionExtensions.G``1(System.Collections.Specialized.NameValueCollection,System.String,System.Object)">
+            <summary>
+            Gets a typed item from the collection using the provided key.
+            If there's no corresponding item on the collection, returns the provided defaultValue.
+            </summary>
+            <typeparam name="T">The type to cast the collection item.</typeparam>
+            <param name="collection">The collection.</param>
+            <param name="key">The key to access the item inside the collection.</param>
+            <param name="defaultValue">The default value to return if there's no corresponding item on the collection.</param>
+            <returns>The typed item.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.NameValueCollectionExtensions.S(System.Collections.Specialized.NameValueCollection,System.String,System.Object)">
+            <summary>
+            Sets or updates a value inside the provided collection.
+            </summary>
+            <param name="collection">The collection.</param>
+            <param name="key">The key to access the item inside the collection.</param>
+            <param name="value">The value to be set or updated.</param>
+        </member>
+        <member name="T:DataTables.Mvc.ColumnCollection">
+            <summary>
+            Represents a read-only DataTables column collection.
+            </summary>
+        </member>
+        <member name="F:DataTables.Mvc.ColumnCollection.Data">
+            <summary>
+            For internal use only.
+            Stores data.
+            </summary>
+        </member>
+        <member name="M:DataTables.Mvc.ColumnCollection.#ctor(System.Collections.Generic.IEnumerable{DataTables.Mvc.Column})">
+            <summary>
+            Created a new ReadOnlyColumnCollection with predefined data.
+            </summary>
+            <param name="columns">The column collection from DataTables.</param>
+        </member>
+        <member name="M:DataTables.Mvc.ColumnCollection.GetSortedColumns">
+            <summary>
+            Get sorted columns on client-side already on the same order as the client requested.
+            The method checks if the column is bound and if it's ordered on client-side.
+            </summary>
+            <returns>The ordered enumeration of sorted columns.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.ColumnCollection.GetFilteredColumns">
+            <summary>
+            Get filtered columns on client-side.
+            The method checks if the column is bound and if the search has a value.
+            </summary>
+            <returns>The enumeration of filtered columns.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.ColumnCollection.GetEnumerator">
+            <summary>
+            Returns the enumerable element as defined on IEnumerable.
+            </summary>
+            <returns>The enumerable elemento to iterate through data.</returns>
+        </member>
+        <member name="M:DataTables.Mvc.ColumnCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns the enumerable element as defined on IEnumerable.
+            </summary>
+            <returns>The enumerable element to iterate through data.</returns>
+        </member>
+        <member name="T:DataTables.Mvc.Search">
+            <summary>
+            Stores parameters and configs from DataTables search engine.
+            </summary>
+        </member>
+        <member name="M:DataTables.Mvc.Search.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a new search values holder object.
+            </summary>
+            <param name="value">The value of the search.</param>
+            <param name="isRegexValue">True if the value is a regex value or false otherwise.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the provided search value is null.</exception>
+        </member>
+        <member name="P:DataTables.Mvc.Search.Value">
+            <summary>
+            Gets the value of the search.
+            </summary>
+        </member>
+        <member name="P:DataTables.Mvc.Search.IsRegexValue">
+            <summary>
+            Indicates if the value of the search is a regex value or not.
+            </summary>
+        </member>
+    </members>
+</doc>
