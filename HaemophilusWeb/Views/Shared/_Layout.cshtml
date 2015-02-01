@@ -1,4 +1,5 @@
-﻿@using System.IdentityModel.Protocols.WSTrust
+﻿@using System.Configuration
+@using System.IdentityModel.Protocols.WSTrust
 @using System.Reflection
 @using System.Threading
 @using HaemophilusWeb.Controllers
@@ -49,6 +50,14 @@
                 </h1>
             </div>
             <div id="errorMessages">
+                @if ("true".Equals(ConfigurationManager.AppSettings["Beta"]))
+                {
+                    <div class="alert alert-danger">
+                        <strong>Achtung: Änderungen werden nicht zentral gespeichert!</strong>
+                        Diese Software-Version ist nur eine Demonstrations künftiger Funktionen.
+                        Bitte nutzen Sie die <a href="http://wrzh183.rzhousing.uni-wuerzburg.de/Haemophilus">reguläre Version</a> für den produktiven Einsatz!
+                    </div>
+                }
             </div>
 
             @if (IsSectionDefined("CreateModel") || IsSectionDefined("EditModel"))
