@@ -10,6 +10,7 @@ namespace HaemophilusWeb.Controllers
     {
         private readonly List<Change> changeLog = new List<Change>
         {
+            new Change(new DateTime(2015, 1, 31), "Hinzufügen von Beta-Lactamase zu Befundauszug", ChangeType.Feature),
             new Change(new DateTime(2015, 1, 30), "Import der Daten von 1/2008 bis 8/2014", ChangeType.Feature),
             new Change(new DateTime(2015, 1, 29), "Falsche Interpretation von Kommazahlen bei Antibiotika-Resistenzen",
                 ChangeType.Bug),

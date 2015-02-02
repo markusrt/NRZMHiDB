@@ -26,22 +26,14 @@
     <dd>@EnumEditor.GetEnumDescription(Model.SerotypePcr)</dd>
     <dt>@Html.DisplayNameFor(model => model.BexA)</dt>
     <dd>@EnumEditor.GetEnumDescription(Model.BexA)</dd>
+    <dt>@Html.DisplayNameFor(model => model.BetaLactamase)</dt>
+    <dd>@EnumEditor.GetEnumDescription(Model.BetaLactamase)</dd>
+</dl>
+<dl class="dl-horizontal">
     <dt>@Html.DisplayNameFor(model => model.Interpretation)</dt>
     <dd>@Html.DisplayFor(model => model.Interpretation)</dd>
 </dl>
-<hr />
 
-@if (Model.Typings.Any())
-{
-    <h3>Antibiotika Tests</h3>
-    <dl class="dl-horizontal">
-        @foreach (var etest in Model.ETests)
-        {
-            <dt>@etest.Antibiotic</dt>
-            <dd>@etest.Result</dd>
-        }
-    </dl>
-}
 <hr/>
 
 <div class="form-horizontal">
