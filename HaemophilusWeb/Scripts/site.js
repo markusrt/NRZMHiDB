@@ -45,7 +45,7 @@ function ShowDivOrClearInput(
 
     if (showDiv) {
         $(divToShow).removeClass("hidden");
-        if ($(inputToClearOnOtherValue).val().length == 0)
+        if ($(inputToClearOnOtherValue).val().length == 0 && !$(inputToClearOnOtherValue).hasClass("no-focus"))
         {
             $(inputToClearOnOtherValue).focus();
         }
