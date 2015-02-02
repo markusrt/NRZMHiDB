@@ -335,13 +335,22 @@
 
             SetETestResult(antibiotic, null);
 
-            var currentBreakpointId = $(currentBreakpointSelector).val();
-
             var currentMeasurement = Globalize.parseFloat($(currentMeasurementSelector).val());
             if(isNaN(currentMeasurement))
             {
                 return;
             }
+
+            if(currentMeasurement > 0 && $(currentBreakpointSelector).prop("selectedIndex") == 0)
+            {
+                $(currentBreakpointSelector).prop("selectedIndex", 1);
+            }
+            else if(currentMeasurement == 0)
+            {
+                $(currentBreakpointSelector).prop("selectedIndex", 0);
+            }
+
+            var currentBreakpointId = $(currentBreakpointSelector).val();
 
             clinicalBreakpoints.forEach(function(clinicalBreakpoint)
             {
