@@ -10,6 +10,7 @@ namespace HaemophilusWeb.Controllers
     {
         private readonly List<Change> changeLog = new List<Change>
         {
+            new Change(new DateTime(2015, 1, 31), "Update der Befundvorlagen", ChangeType.Feature),
             new Change(new DateTime(2015, 1, 31), "Hinzufügen der EUCAST Grenzwerte für 2015", ChangeType.Feature),
             new Change(new DateTime(2015, 1, 31), "Automatische Selektion der EUCAST Interpretation", ChangeType.Feature),
             new Change(new DateTime(2015, 1, 31), "Hib Impfung - Datum ist optional", ChangeType.Feature),

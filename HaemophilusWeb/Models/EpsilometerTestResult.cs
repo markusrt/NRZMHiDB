@@ -4,8 +4,8 @@ namespace HaemophilusWeb.Models
 {
     public enum EpsilometerTestResult
     {
-        [Description("Sensibel")] Susceptible,
-        [Description("Intermediär")] Intermediate,
-        [Description("Resistent")] Resistant
+        [Description("sensibel")] Susceptible,
+        [Description("intermediär")] Intermediate,
+        [Description("resistent")] Resistant
     }
 }
