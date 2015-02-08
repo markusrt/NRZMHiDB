@@ -341,7 +341,8 @@
                 return;
             }
 
-            if(currentMeasurement > 0 && $(currentBreakpointSelector).prop("selectedIndex") == 0)
+            if(currentMeasurement > 0 && $(currentBreakpointSelector).prop("selectedIndex") == 0 
+                && antibiotic != "Meropenem")
             {
                 $(currentBreakpointSelector).prop("selectedIndex", 1);
             }
