@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Tools;
 
 namespace HaemophilusWeb.Controllers
 {
     public class CountyController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: /County/
         public ActionResult Index()
@@ -27,7 +27,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            County county = db.Counties.Find(id);
+            var county = db.Counties.Find(id);
             if (county == null)
             {
                 return HttpNotFound();
@@ -46,7 +46,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="CountyId,CountyNumber,Name,ValidSince")] County county)
+        public ActionResult Create([Bind(Include = "CountyId,CountyNumber,Name,ValidSince")] County county)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            County county = db.Counties.Find(id);
+            var county = db.Counties.Find(id);
             if (county == null)
             {
                 return HttpNotFound();
@@ -78,7 +78,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="CountyId,CountyNumber,Name,ValidSince")] County county)
+        public ActionResult Edit([Bind(Include = "CountyId,CountyNumber,Name,ValidSince")] County county)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +96,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            County county = db.Counties.Find(id);
+            var county = db.Counties.Find(id);
             if (county == null)
             {
                 return HttpNotFound();
@@ -105,11 +105,12 @@ namespace HaemophilusWeb.Controllers
         }
 
         // POST: /County/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            County county = db.Counties.Find(id);
+            var county = db.Counties.Find(id);
             db.Counties.Remove(county);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -122,6 +123,37 @@ namespace HaemophilusWeb.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult Upload(HttpPostedFileBase file)
+        {
+            if (file != null && file.ContentLength > 0)
+            {
+                try
+                {
+                    var path = Path.GetTempFileName();
+                    file.SaveAs(path);
+                    var importer = new CountyImporter(path);
+                    foreach (var county in importer.LoadCounties())
+                    {
+                        db.Counties.Add(county);
+                    }
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Message = "Fehler:" + ex.Message;
+                }
+            }
+            else
+            {
+                ViewBag.Message = "Bitte geben sie eine Datei an.";
+            }
+            if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                return View();
+            }
+            return RedirectToAction("Index");
         }
     }
 }

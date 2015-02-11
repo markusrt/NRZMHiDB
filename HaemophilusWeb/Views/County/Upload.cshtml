@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "Upload";
+}
+
+<h2>GV100AD acs-Datei hochladen</h2>
+@using (Html.BeginForm("Upload",
+                        "County",
+                        FormMethod.Post,
+                        new { enctype = "multipart/form-data" }))
+{
+    <label for="file">ACS-Datei:</label>
+    <input type="file" name="file" id="file" /><br><br>
+    <input type="submit" value="Hochladen" />
+    <br><br>
+    @ViewBag.Message
+}
+

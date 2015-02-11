@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.TestUtils;
@@ -36,7 +37,7 @@ namespace HaemophilusWeb.Tools
 
         private CountyImporter CreateImporter()
         {
-            File.WriteAllText(TestFile, TestData);
+            File.WriteAllText(TestFile, TestData, Encoding.GetEncoding(1252));
             return new CountyImporter(TestFile);
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using HaemophilusWeb.Models;
 
 namespace HaemophilusWeb.Tools
@@ -47,7 +48,7 @@ namespace HaemophilusWeb.Tools
 
         public IEnumerable<County> LoadCounties()
         {
-            return File.ReadAllLines(filename).
+            return File.ReadAllLines(filename, Encoding.GetEncoding(1252)).
                 Where(line => line.StartsWith(RecordTypeCounty)).
                 Select(DataRecordToCounty);
         }
