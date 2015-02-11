@@ -23,5 +23,7 @@ namespace HaemophilusWeb.Models
         public DbSet<EpsilometerTest> EpsilometerTests { get; set; }
 
         public DbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints { get; set; }
+
+        public System.Data.Entity.DbSet<HaemophilusWeb.Models.County> Counties { get; set; }
     }
 }

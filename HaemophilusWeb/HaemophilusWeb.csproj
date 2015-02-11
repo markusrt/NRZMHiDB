@@ -202,6 +202,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IsolateController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
@@ -296,6 +297,10 @@
     <Compile Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs" />
     <Compile Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.Designer.cs">
       <DependentUpon>201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502112024310_County.cs" />
+    <Compile Include="Migrations\201502112024310_County.Designer.cs">
+      <DependentUpon>201502112024310_County.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -915,6 +920,11 @@
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
     <Content Include="Views\Isolate\Report.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\SendingConclusion.cshtml" />
+    <Content Include="Views\County\Create.cshtml" />
+    <Content Include="Views\County\Delete.cshtml" />
+    <Content Include="Views\County\Details.cshtml" />
+    <Content Include="Views\County\Edit.cshtml" />
+    <Content Include="Views\County\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -994,6 +1004,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.resx">
       <DependentUpon>201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502112024310_County.resx">
+      <DependentUpon>201502112024310_County.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
