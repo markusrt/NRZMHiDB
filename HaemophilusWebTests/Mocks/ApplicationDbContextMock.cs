@@ -12,6 +12,7 @@ namespace HaemophilusWeb.Models
         public readonly InMemoryDbSet<Sender> SenderDbSet = new InMemoryDbSet<Sender>(true);
         public readonly InMemoryDbSet<Sending> SendingDbSet = new MockDbSet<Sending>(true);
         public readonly InMemoryDbSet<Isolate> IsolatesDbSet = new InMemoryDbSet<Isolate>(true);
+        public readonly InMemoryDbSet<County> CountiesDbSet = new InMemoryDbSet<County>(true);
 
         public IDbSet<Sender> Senders
         {
@@ -31,6 +32,11 @@ namespace HaemophilusWeb.Models
         public IDbSet<Isolate> Isolates
         {
             get { return IsolatesDbSet; }
+        }
+
+        public IDbSet<County> Counties
+        {
+            get { return CountiesDbSet; }
         }
 
         public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class

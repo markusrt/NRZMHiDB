@@ -38,6 +38,11 @@ namespace HaemophilusWeb.Models
             get { return wrappedContext.Isolates; }
         }
 
+        public IDbSet<County> Counties
+        {
+            get { return wrappedContext.Counties; }
+        }
+
         public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
         {
             return wrappedContext.Entry(entity);

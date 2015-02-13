@@ -14,6 +14,8 @@ namespace HaemophilusWeb.Models
 
         IDbSet<Isolate> Isolates { get; }
 
+        IDbSet<County> Counties { get; }
+
         DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
         int SaveChanges();
