@@ -1,0 +1,47 @@
+﻿@model HaemophilusWeb.ViewModels.RkiExportQuery
+
+@{
+    ViewBag.Title = "RKI Export";
+}
+
+<h3>Entnahmedatum</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.From, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-5">
+                <div class="input-group">
+                    @{ Html.EnableClientValidation(false); }
+                    @Html.TextBoxFor(m => m.From, new { @class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.From) })
+                    @{ Html.EnableClientValidation(true); }
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                @Html.ValidationMessageFor(model => model.From)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.To, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-5">
+                <div class="input-group">
+                    @{ Html.EnableClientValidation(false); }
+                    @Html.TextBoxFor(m => m.To, new { @class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.To) })
+                    @{ Html.EnableClientValidation(true); }
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                </div>
+                @Html.ValidationMessageFor(model => model.From)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" name="primary-submit" value="Exportieren nach Excel" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+

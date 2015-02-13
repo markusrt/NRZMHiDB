@@ -54,6 +54,9 @@
     <Reference Include="DataTables.Mvc">
       <HintPath>..\libraries\DataTables.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="DocumentFormat.OpenXml">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.0\lib\net45\EntityFramework.dll</HintPath>
@@ -182,6 +185,7 @@
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.AspNet.Identity.Owin">
@@ -311,6 +315,7 @@
     <Compile Include="Models\Antibiotic.cs" />
     <Compile Include="Models\IsolateBase.cs" />
     <Compile Include="Models\Material.cs" />
+    <Compile Include="Models\RkiExportRecord.cs" />
     <Compile Include="Models\SerotypePcr.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -337,6 +342,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Tools\CountyImporter.cs" />
+    <Compile Include="Tools\CreateExcelFile.cs" />
     <Compile Include="Utils\EnumSerializer.cs" />
     <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Utils\ExceptionUtils.cs" />
@@ -349,6 +355,7 @@
     <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
     <Compile Include="ViewModels\IsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
+    <Compile Include="ViewModels\RkiExportQuery.cs" />
     <Compile Include="Views\Utils\AutoCompleteUtils.cs" />
     <Compile Include="Views\Utils\BootstrapEditor.cs" />
     <Compile Include="Views\Utils\EnumEditor.cs" />
@@ -926,6 +933,7 @@
     <Content Include="Views\County\Edit.cshtml" />
     <Content Include="Views\County\Index.cshtml" />
     <Content Include="Views\County\Upload.cshtml" />
+    <Content Include="Views\PatientSending\RkiExport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
