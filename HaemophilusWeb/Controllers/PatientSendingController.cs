@@ -216,7 +216,7 @@ namespace HaemophilusWeb.Controllers
                 laboratoryExportRecord.PatientAgeAtSampling = sending.Isolate.PatientAge();
                 list.Add(laboratoryExportRecord);
             }
-            return ExportToExcel(query, list, "RKI");
+            return ExportToExcel(query, list, "Labor");
         }
 
         private ActionResult ExportToExcel<T>(ExportQuery query, List<T> list, string prefix) where T : ExportRecord
