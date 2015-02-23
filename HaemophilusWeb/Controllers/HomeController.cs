@@ -10,6 +10,7 @@ namespace HaemophilusWeb.Controllers
     {
         private readonly List<Change> changeLog = new List<Change>
         {
+            new Change(new DateTime(2015, 2, 23), "Labor Export Modul", ChangeType.Feature),
             new Change(new DateTime(2015, 2, 13), "RKI Export Modul", ChangeType.Feature),
             new Change(new DateTime(2015, 1, 31), "Update der Befundvorlagen", ChangeType.Feature),
             new Change(new DateTime(2015, 1, 31), "Hinzufügen der EUCAST Grenzwerte für 2015", ChangeType.Feature),

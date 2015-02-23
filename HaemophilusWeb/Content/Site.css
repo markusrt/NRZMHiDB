@@ -69,6 +69,14 @@ input[type="checkbox"].input-validation-error { border: 0 none; }
 .navbar-inverse .navbar-nav > li > a:hover  { 
 	color: #fff;
 	text-decoration: underline;
+    background-color: #174370;
+}
+
+.navbar-inverse .navbar-nav > .open > a,
+.navbar-inverse .navbar-nav > .open > a:hover,
+.navbar-inverse .navbar-nav > .open > a:focus {
+  color: #ffffff;
+  background-color: #174370;
 }
 
 h1,

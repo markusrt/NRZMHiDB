@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HaemophilusWeb.ViewModels
 {
-    public class RkiExportQuery
+    public class ExportQuery
     {
         [Display(Name = "Start-Datum")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]

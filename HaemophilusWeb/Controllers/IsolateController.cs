@@ -63,17 +63,8 @@ namespace HaemophilusWeb.Controllers
                 : EnumEditor.GetEnumDescription(sending.SamplingLocation);
             isolateViewModel.Material = EnumEditor.GetEnumDescription(sending.Material);
             isolateViewModel.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
-            if (isolate.Sending.Patient.BirthDate.HasValue)
-            {
-                var birthday = isolate.Sending.Patient.BirthDate.Value;
-                var samplingDate = isolate.Sending.SamplingDate ?? isolate.Sending.ReceivingDate;
-                var ageAtSampling = samplingDate.Year - birthday.Year;
-                if (birthday > samplingDate.AddYears(-ageAtSampling))
-                {
-                    ageAtSampling--;
-                }
-                isolateViewModel.PatientAgeAtSampling = ageAtSampling;
-            }
+            isolateViewModel.PatientAgeAtSampling = isolate.PatientAge();
+
             ModelToViewModel(isolate.EpsilometerTests, isolateViewModel.EpsilometerTestViewModels);
 
             isolateViewModel.SamplingDate = isolate.Sending.SamplingDate.ToReportFormat();
@@ -93,6 +84,7 @@ namespace HaemophilusWeb.Controllers
 
             return isolateViewModel;
         }
+
 
         private static void ModelToViewModel(ICollection<EpsilometerTest> epsilometerTests,
             IEnumerable<EpsilometerTestViewModel> epsilometerTestViewModels)

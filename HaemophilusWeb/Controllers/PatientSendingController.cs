@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DataTables.Mvc;
 using ExportToExcel;
 using FluentValidation;
+using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.Validators;
@@ -160,81 +161,125 @@ namespace HaemophilusWeb.Controllers
             };
         }
 
-        public ActionResult RkiExport(RkiExportQuery query)
+        public ActionResult RkiExport(ExportQuery query)
         {
             if (query.From == DateTime.MinValue)
             {
                 var lastYear = DateTime.Now.Year - 1;
-                var rkiExportQuery = new RkiExportQuery
+                var exportQuery = new ExportQuery
                 {
                     From = new DateTime(lastYear, 1, 1),
                     To = new DateTime(lastYear, 12, 31)
                 };
-                return View(rkiExportQuery);
+                return View(exportQuery);
             }
 
             var list = new List<RkiExportRecord>();
-
             foreach (
                 var sending in
-                    db.Sendings.Include(s => s.Patient)
-                        .Include(s => s.Patient)
-                        .Where
-                        (s =>
-                            (s.SamplingLocation == SamplingLocation.Blood ||
-                             s.SamplingLocation == SamplingLocation.Liquor)
-                            &&
-                            ((s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To) ||
-                             (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
-                        )
-                        .OrderBy(s => s.Isolate.StemNumber)
-                        .ToList())
+                    SendingsMatchingExportQuery(query,
+                        new List<SamplingLocation> {SamplingLocation.Blood, SamplingLocation.Liquor}))
             {
-                var patientCounty = sending.Patient.County;
-                var rkiExportRecord = new RkiExportRecord
-                {
-                    StemNumber = sending.Isolate.StemNumber,
-                    SamplingDate = sending.SamplingDate.ToReportFormat(),
-                    ReceivingDate = sending.ReceivingDate.ToReportFormat(),
-                    Birthmonth = sending.Patient.BirthDate.HasValue ? sending.Patient.BirthDate.Value.Month : 0,
-                    Birthyear = sending.Patient.BirthDate.HasValue ? sending.Patient.BirthDate.Value.Year : 0,
-                    Gender =
-                        sending.Patient.Gender == null
-                            ? "?"
-                            : EnumEditor.GetEnumDescription(sending.Patient.Gender).Substring(0, 1),
-                    County = patientCounty,
-                    State = EnumEditor.GetEnumDescription(sending.Patient.State),
-                    SamplingLocation = EnumEditor.GetEnumDescription(sending.SamplingLocation),
-                    SenderId = sending.SenderId,
-                    HibVaccination = EnumEditor.GetEnumDescription(sending.Patient.HibVaccination),
-                    Evaluation = EnumEditor.GetEnumDescription(sending.Isolate.Evaluation),
-                    BetaLactamase = EnumEditor.GetEnumDescription(sending.Isolate.BetaLactamase),
-                };
-
-                var county =
-                    db.Counties.OrderBy(c => c.ValidSince).ToList().FirstOrDefault(c => c.IsEqualTo(patientCounty));
-                if (county != null)
-                {
-                    rkiExportRecord.CountyNumber = county.CountyNumber;
-                    rkiExportRecord.StateNumber = county.CountyNumber.Substring(0, 2);
-                }
-
-                PopulateEpsilometerTestResult(sending, Antibiotic.Ampicillin,
-                    result => rkiExportRecord.AmpicillinEpsilometerTestResult = EnumEditor.GetEnumDescription(result),
-                    measurement => rkiExportRecord.AmpicillinMeasurement = measurement);
-
-                PopulateEpsilometerTestResult(sending, Antibiotic.AmoxicillinClavulanate,
-                    result =>
-                        rkiExportRecord.AmoxicillinClavulanateEpsilometerTestResult =
-                            EnumEditor.GetEnumDescription(result),
-                    measurement => rkiExportRecord.AmoxicillinClavulanateMeasurement = measurement);
+                var rkiExportRecord = new RkiExportRecord();
+                PopulateExportRecord(sending, rkiExportRecord);
                 list.Add(rkiExportRecord);
             }
+            return ExportToExcel(query, list, "RKI");
+        }
+
+        public ActionResult LaboratoryExport(ExportQuery query)
+        {
+            if (query.From == DateTime.MinValue)
+            {
+                var lastYear = DateTime.Now.Year - 1;
+                var exportQuery = new ExportQuery
+                {
+                    From = new DateTime(lastYear, 1, 1),
+                    To = new DateTime(lastYear, 12, 31)
+                };
+                return View(exportQuery);
+            }
+
+            var list = new List<LaboratoryExportRecord>();
+            foreach (
+                var sending in
+                    SendingsMatchingExportQuery(query,
+                        new List<SamplingLocation>
+                        {
+                            SamplingLocation.Blood,
+                            SamplingLocation.Liquor,
+                            SamplingLocation.Other
+                        }))
+            {
+                var laboratoryExportRecord = new LaboratoryExportRecord();
+                PopulateExportRecord(sending, laboratoryExportRecord);
+                laboratoryExportRecord.PatientAgeAtSampling = sending.Isolate.PatientAge();
+                list.Add(laboratoryExportRecord);
+            }
+            return ExportToExcel(query, list, "RKI");
+        }
+
+        private ActionResult ExportToExcel<T>(ExportQuery query, List<T> list, string prefix) where T : ExportRecord
+        {
             var tempFile = System.IO.Path.GetTempFileName();
             CreateExcelFile.CreateExcelDocument(list, tempFile);
             return File(System.IO.File.ReadAllBytes(tempFile),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                String.Format("RKI-Export_{0:yyyyMMdd}-{1:yyyyMMdd}.xlsx", query.From, query.To));
+                String.Format("{0}-Export_{1:yyyyMMdd}-{2:yyyyMMdd}.xlsx", prefix, query.From, query.To));
+        }
+
+        private List<Sending> SendingsMatchingExportQuery(ExportQuery query, List<SamplingLocation> samplingLocations)
+        {
+            return db.Sendings.Include(s => s.Patient)
+                .Include(s => s.Patient)
+                .Where
+                (s => samplingLocations.Contains(s.SamplingLocation)
+                      && ((s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
+                          || (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
+                )
+                .OrderBy(s => s.Isolate.StemNumber)
+                .ToList();
+        }
+
+        private void PopulateExportRecord(Sending sending, ExportRecord exportRecord)
+        {
+            var patientCounty = sending.Patient.County;
+            exportRecord.BetaLactamase = EnumEditor.GetEnumDescription(sending.Isolate.BetaLactamase);
+            exportRecord.Evaluation = EnumEditor.GetEnumDescription(sending.Isolate.Evaluation);
+            exportRecord.HibVaccination = EnumEditor.GetEnumDescription(sending.Patient.HibVaccination);
+            exportRecord.SenderId = sending.SenderId;
+            exportRecord.SamplingLocation = EnumEditor.GetEnumDescription(sending.SamplingLocation);
+            if (sending.SamplingLocation == SamplingLocation.Other)
+            {
+                exportRecord.SamplingLocation = sending.OtherSamplingLocation;
+            }
+            exportRecord.State = EnumEditor.GetEnumDescription(sending.Patient.State);
+            exportRecord.County = patientCounty;
+            exportRecord.Gender = sending.Patient.Gender == null
+                ? "?"
+                : EnumEditor.GetEnumDescription(sending.Patient.Gender).Substring(0, 1);
+            exportRecord.Birthyear = sending.Patient.BirthDate.HasValue ? sending.Patient.BirthDate.Value.Year : 0;
+            exportRecord.Birthmonth = sending.Patient.BirthDate.HasValue ? sending.Patient.BirthDate.Value.Month : 0;
+            exportRecord.ReceivingDate = sending.ReceivingDate.ToReportFormat();
+            exportRecord.SamplingDate = sending.SamplingDate.ToReportFormat();
+            exportRecord.StemNumber = sending.Isolate.StemNumber;
+
+            var county =
+                db.Counties.OrderBy(c => c.ValidSince).ToList().FirstOrDefault(c => c.IsEqualTo(patientCounty));
+            if (county != null)
+            {
+                exportRecord.CountyNumber = county.CountyNumber;
+                exportRecord.StateNumber = county.CountyNumber.Substring(0, 2);
+            }
+
+            PopulateEpsilometerTestResult(sending, Antibiotic.Ampicillin,
+                result => exportRecord.AmpicillinEpsilometerTestResult = EnumEditor.GetEnumDescription(result),
+                measurement => exportRecord.AmpicillinMeasurement = measurement);
+
+            PopulateEpsilometerTestResult(sending, Antibiotic.AmoxicillinClavulanate,
+                result =>
+                    exportRecord.AmoxicillinClavulanateEpsilometerTestResult = EnumEditor.GetEnumDescription(result),
+                measurement => exportRecord.AmoxicillinClavulanateMeasurement = measurement);
         }
 
         private static void PopulateEpsilometerTestResult(Sending sending, Antibiotic antibiotic,
@@ -247,7 +292,7 @@ namespace HaemophilusWeb.Controllers
                 return;
             }
             populateTestResult(eTestResult.Result);
-            populateMeasurement(eTestResult.Measurement);
+            populateMeasurement(Math.Round(eTestResult.Measurement, 3));
         }
 
         [HttpPost]

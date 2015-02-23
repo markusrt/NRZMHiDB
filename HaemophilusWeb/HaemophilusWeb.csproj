@@ -214,6 +214,7 @@
     <Compile Include="Controllers\SenderController.cs" />
     <Compile Include="Controllers\SendingController.cs" />
     <Compile Include="App_Start\ExceptionLogger.cs" />
+    <Compile Include="Domain\IsolateExtensions.cs" />
     <Compile Include="Domain\IsolateInterpretation.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -313,8 +314,10 @@
     <Compile Include="Models\EpsilometerTestResult.cs" />
     <Compile Include="Models\EucastClinicalBreakpoint.cs" />
     <Compile Include="Models\Antibiotic.cs" />
+    <Compile Include="Models\ExportRecord.cs" />
     <Compile Include="Models\IsolateBase.cs" />
     <Compile Include="Models\Material.cs" />
+    <Compile Include="Models\LaboratoryExportRecord.cs" />
     <Compile Include="Models\RkiExportRecord.cs" />
     <Compile Include="Models\SerotypePcr.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
@@ -355,7 +358,7 @@
     <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
     <Compile Include="ViewModels\IsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
-    <Compile Include="ViewModels\RkiExportQuery.cs" />
+    <Compile Include="ViewModels\ExportQuery.cs" />
     <Compile Include="Views\Utils\AutoCompleteUtils.cs" />
     <Compile Include="Views\Utils\BootstrapEditor.cs" />
     <Compile Include="Views\Utils\EnumEditor.cs" />
@@ -934,6 +937,7 @@
     <Content Include="Views\County\Index.cshtml" />
     <Content Include="Views\County\Upload.cshtml" />
     <Content Include="Views\PatientSending\RkiExport.cshtml" />
+    <Content Include="Views\PatientSending\LaboratoryExport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
