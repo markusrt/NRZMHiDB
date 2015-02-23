@@ -179,9 +179,15 @@ namespace HaemophilusWeb.Controllers
                 var sending in
                     db.Sendings.Include(s => s.Patient)
                         .Include(s => s.Patient)
-                        .Where(
-                            s => s.Invasive == YesNo.Yes && s.SamplingDate >= query.From && s.SamplingDate <= query.To)
-                        .OrderBy(s => s.SamplingDate)
+                        .Where
+                        (s =>
+                            (s.SamplingLocation == SamplingLocation.Blood ||
+                             s.SamplingLocation == SamplingLocation.Liquor)
+                            &&
+                            ((s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To) ||
+                             (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
+                        )
+                        .OrderBy(s => s.Isolate.StemNumber)
                         .ToList())
             {
                 var patientCounty = sending.Patient.County;
