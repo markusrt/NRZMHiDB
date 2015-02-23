@@ -23,7 +23,7 @@ namespace HaemophilusWeb.Tools
             {
                 StartIndex = 22,
                 Length = 50,
-                AssignValue = (county, value) => county.Name = ExtractCountyName(value)
+                AssignValue = (county, value) => county.Name = value
             },
             new CountyRecordImport
             {
@@ -40,12 +40,6 @@ namespace HaemophilusWeb.Tools
                 AssignValue = (county, value) => county.CountyNumber = value
             }
         };
-
-        private static string ExtractCountyName(string value)
-        {
-            var index = value.IndexOf(',');
-            return index > 0 ? value.Substring(0, index) : value;
-        }
 
         public CountyImporter(string filename)
         {

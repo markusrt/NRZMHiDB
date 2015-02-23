@@ -46,7 +46,7 @@ namespace HaemophilusWeb.Tools
         {
             var counties = LoadCounties();
 
-            var expectedNames = new List<string> {"Flensburg", "Kiel", "Lübeck"};
+            var expectedNames = new List<string> {"Flensburg, Stadt", "Kiel, Landeshauptstadt", "Lübeck, Hansestadt"};
             counties.Select(c => c.Name).Should().ContainInOrder(expectedNames);
         }
 

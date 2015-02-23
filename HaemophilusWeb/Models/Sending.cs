@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using FluentValidation.Attributes;
@@ -35,7 +34,7 @@ namespace HaemophilusWeb.Models
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? SamplingDate { get; set; }
 
-        [DisplayName("Eingangsdatum")]
+        [Display(Name = "Eingangsdatum")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime ReceivingDate { get; set; }
 

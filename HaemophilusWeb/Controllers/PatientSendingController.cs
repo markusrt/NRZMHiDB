@@ -206,15 +206,7 @@ namespace HaemophilusWeb.Controllers
                 };
 
                 var county =
-                    db.Counties.OrderBy(c => c.ValidSince)
-                        .FirstOrDefault(c => c.Name.Equals(patientCounty));
-                if (county == null)
-                {
-                    county =
-                        db.Counties.OrderBy(c => c.ValidSince)
-                            .FirstOrDefault(
-                                c => c.Name.EndsWith(" " + patientCounty) || c.Name.StartsWith(patientCounty + " "));
-                }
+                    db.Counties.OrderBy(c => c.ValidSince).ToList().FirstOrDefault(c => c.IsEqualTo(patientCounty));
                 if (county != null)
                 {
                     rkiExportRecord.CountyNumber = county.CountyNumber;
@@ -236,7 +228,7 @@ namespace HaemophilusWeb.Controllers
             CreateExcelFile.CreateExcelDocument(list, tempFile);
             return File(System.IO.File.ReadAllBytes(tempFile),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                String.Format("RKI-Export-{0}.xlsx", DateTime.Now.ToString("yyyy-MM-dd")));
+                String.Format("RKI-Export_{0:yyyyMMdd}-{1:yyyyMMdd}.xlsx", query.From, query.To));
         }
 
         private static void PopulateEpsilometerTestResult(Sending sending, Antibiotic antibiotic,
