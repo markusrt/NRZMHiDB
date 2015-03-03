@@ -8,6 +8,7 @@ namespace HaemophilusWeb
         {
             filters.Add(new ExceptionLogger());
             filters.Add(new HandleErrorAttribute());
+            filters.Add(new AuthorizeAttribute());
         }
     }
 }

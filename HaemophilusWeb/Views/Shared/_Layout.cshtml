@@ -29,21 +29,21 @@
                     @Html.ActionLink("Haemophilus", "Index", "Home", null, new {@class = "navbar-brand"})
                 </div>
                 <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Einsender", "Index", "Sender")</li>
-                        <li>@Html.ActionLink("Einsendungen", "Index", "PatientSending")</li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Export <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>@Html.ActionLink("RKI Export", "RkiExport", "PatientSending")</li>
-                                <li>@Html.ActionLink("Labor Export", "LaboratoryExport", "PatientSending")</li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>@Html.ActionLink("Über", "About", "Home")</li>
-                    </ul>
-                    @*@Html.Partial("_LoginPartial")*@
+                    @if (Request.IsAuthenticated)
+                    {
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Einsender", "Index", "Sender")</li>
+                            <li>@Html.ActionLink("Einsendungen", "Index", "PatientSending")</li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Export <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("RKI Export", "RkiExport", "PatientSending")</li>
+                                    <li>@Html.ActionLink("Labor Export", "LaboratoryExport", "PatientSending")</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+                    @Html.Partial("_LoginPartial")
                 </div>
             </div>
         </div>
