@@ -26,8 +26,8 @@ namespace HaemophilusWeb.Models
     {
         [Description("n.d.")] NotDetermined = 0,
         [Description("negativ")] Negative = 1,
-        [Description("H.influenzae")] HaemophilusInfluenzae = 2,
-        [Description("H.haemolyticus")] HaemophilusHaemolyticus = 3,
+        [Description("H. influenzae")] HaemophilusInfluenzae = 2,
+        [Description("H. haemolyticus")] HaemophilusHaemolyticus = 3,
         [Description("nicht auswertbar")] NotEvaluable = 4,
     }
 }

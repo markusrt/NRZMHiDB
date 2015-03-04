@@ -9,7 +9,7 @@ namespace HaemophilusWeb.Utils
         [Test]
         [TestCase(Evaluation.HaemophilusTypeA, "Haemophilus influenzae")]
         [TestCase(Evaluation.HaemophilusTypeC, "Haemophilus influenzae")]
-        [TestCase(Evaluation.HaemophilusParainfluenzae, "H.parainfluenzae")]
+        [TestCase(Evaluation.HaemophilusParainfluenzae, "H. parainfluenzae")]
         [TestCase(Evaluation.NoHaemophilusSpecies, "keine Haemophilus-Spezies")]
         public void ToReportFormat_Evaluation_ReturnsCorrectString(Evaluation evaluation, string expected)
         {

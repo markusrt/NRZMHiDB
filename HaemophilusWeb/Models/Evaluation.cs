@@ -11,12 +11,12 @@ namespace HaemophilusWeb.Models
         [Description("Hid")] HaemophilusTypeD = 4,
         [Description("Hie")] HaemophilusTypeE = 5,
         [Description("Hif")] HaemophilusTypeF = 6,
-        [Description("H.haemolyticus")] HaemophilusHemolyticus = 7,
-        [Description("H.parainfluenzae")] HaemophilusParainfluenzae = 8,
+        [Description("H. haemolyticus")] HaemophilusHemolyticus = 7,
+        [Description("H. parainfluenzae")] HaemophilusParainfluenzae = 8,
         [Description("kein Wachstum")] NoGrowth = 9,
         [Description("keine Haemophilus-Spezies")] NoHaemophilusSpecies = 10,
-        [Description("H.influenzae")] HaemophilusInfluenzae = 11,
-        [Description("Haemophilus sp., nicht H.influenzae")] HaemophilusSpeciesNoHaemophilusInfluenzae = 12,
-        [Description("kein H.influenzae")] NoHaemophilusInfluenzae = 13,
+        [Description("H. influenzae")] HaemophilusInfluenzae = 11,
+        [Description("Haemophilus sp., nicht H. influenzae")] HaemophilusSpeciesNoHaemophilusInfluenzae = 12,
+        [Description("kein H. influenzae")] NoHaemophilusInfluenzae = 13,
     }
 }
