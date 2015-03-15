@@ -302,6 +302,7 @@ namespace HaemophilusWeb.Controllers
             {
                 x.SendingId,
                 x.Isolate.IsolateId,
+                x.Isolate.ReportDate,
                 x.Patient.Initials,
                 x.Patient.BirthDate,
                 x.Isolate.StemNumber,
@@ -331,6 +332,7 @@ namespace HaemophilusWeb.Controllers
                     Invasive = invasive,
                     LaboratoryNumber = x.Year*10000 + x.YearlySequentialIsolateNumber,
                     LaboratoryNumberString = laboratoryNumber,
+                    ReportGenerated = x.ReportDate.HasValue,
                     FullTextSearch = string.Join(" ",
                         x.Initials, x.BirthDate.ToReportFormat(),
                         x.StemNumber, x.ReceivingDate.ToReportFormat(),
@@ -364,6 +366,7 @@ namespace HaemophilusWeb.Controllers
                     ReceivingDate = x.ReceivingDate.ToReportFormat(),
                     x.SamplingLocation,
                     x.Invasive,
+                    ReportGenerated = CreateReportGeneratedIcon(x.ReportGenerated),
                     LaboratoryNumber = CreateIsolateLink(x.IsolateId, x.LaboratoryNumberString),
                     Link = CreateEditControls(x.SendingId, x.IsolateId)
                 });
@@ -379,6 +382,14 @@ namespace HaemophilusWeb.Controllers
             return Json(dataTablesResult);
         }
 
+        private static string CreateReportGeneratedIcon(bool reportGenerated)
+        {
+            return string.Format(
+                "<span style=\"color:{0}\" class=\"glyphicon {1}\" aria-hidden=\"true\"></span>",
+                reportGenerated ? "#00CC00" : "#CC0000",
+                reportGenerated ? "glyphicon-ok-sign" : "glyphicon-remove-sign");
+        }
+
         public class QueryRecord
         {
             public string Initials { get; set; }
@@ -392,6 +403,7 @@ namespace HaemophilusWeb.Controllers
             public string FullTextSearch { get; set; }
             public int IsolateId { get; set; }
             public int SendingId { get; set; }
+            public bool ReportGenerated { get; set; }
         }
 
         private string CreateIsolateLink(int isolateId, string laboratoryNumber)

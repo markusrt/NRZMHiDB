@@ -13,8 +13,6 @@ namespace HaemophilusWeb.Controllers
                 new Change(DateTime.MinValue, "Absicherung des Servers mit HTTPS", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Suche von Einsendungen nach Einsender-Labornummer und -PLZ",
                     ChangeType.Feature),
-                new Change(DateTime.MinValue, "Markierung von Einsendungen für die bereits ein Befund erstellt wurde",
-                    ChangeType.Feature),
                 new Change(DateTime.MinValue, "Abfrage über Isolate", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Erweiterte Erfassung von Isolaten VII (Wachstum und Art des Wachstums)",
                     ChangeType.Feature),
@@ -23,6 +21,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 3, 15),
+                    "Markierung von Einsendungen für die bereits ein Befund erstellt wurde",
+                    ChangeType.Feature),
                 new Change(new DateTime(2015, 3, 15), "Auditierung der Befunderstellung", ChangeType.Feature),
                 new Change(new DateTime(2015, 2, 25), "Leerzeichen bei H.xxx einfügen (-> H. xxx)", ChangeType.Bug),
                 new Change(new DateTime(2015, 2, 25), "Login mit einfachem Benutzernamen und Passwort",
