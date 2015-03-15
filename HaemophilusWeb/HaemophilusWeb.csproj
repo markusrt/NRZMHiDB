@@ -309,6 +309,7 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ChangeLog.cs" />
     <Compile Include="Models\County.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
     <Compile Include="Models\EpsilometerTestResult.cs" />

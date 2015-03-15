@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Models;
@@ -14,7 +13,7 @@ namespace HaemophilusWeb.Controllers
         public void Index()
         {
             var controller = new HomeController();
-            
+
             var result = controller.Index() as ViewResult;
 
             result.Should().NotBeNull();
@@ -38,9 +37,10 @@ namespace HaemophilusWeb.Controllers
             var result = controller.About() as ViewResult;
 
             result.Should().NotBeNull();
-            var changes = result.Model as IEnumerable<Change>;
-            changes.Should().NotBeNull();
-            changes.Select(c => c.Date).Should().BeInDescendingOrder();
+            var changeLog = result.Model as ChangeLog;
+            var previousChanges = changeLog.PreviousChanges;
+            previousChanges.Should().NotBeNull();
+            previousChanges.Select(c => c.Date).Should().BeInDescendingOrder();
         }
     }
 }

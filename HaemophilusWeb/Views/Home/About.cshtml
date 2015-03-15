@@ -1,7 +1,8 @@
 ﻿@using System.Reflection
 @using HaemophilusWeb.Controllers
 @using HaemophilusWeb.Models
-@model IEnumerable<HaemophilusWeb.Models.Change>
+@using Microsoft.Ajax.Utilities
+@model HaemophilusWeb.Models.ChangeLog
 @{
     ViewBag.Title = "Über";
     ViewBag.Subtitle = "Informationen über Haemophilus Web";
@@ -16,47 +17,78 @@
     <dd><a href="mailto:mreinhardt@hygiene.uni-wuerzburg.de">Markus Reinhardt</a></dd>
 </dl>
 
-<h2>Letzte Änderungen</h2>
+@if (Model.NextChanges.Any())
+{
+    <h2>Künftige Änderungen</h2>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Details)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Type)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>
-                    @item.Date.ToShortDateString()
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Details)
-                </td>
-                <td>
-                    @if (item.Type == ChangeType.Bug)
-                    {
-                        <span class="label label-danger">Fehlerbehebung</span>
-                    }
-                    else if (item.Type == ChangeType.Feature)
-                    {
-                        <span class="label label-info">Neue Funktion</span>
-                    }
-                    else if (item.Type == ChangeType.Design)
-                    {
-                        <span class="label label-success">Design</span>
-                    }
-                </td>
+                <th>@Html.DisplayNameFor(model => model.NextChanges.First().Priority)</th>
+                <th>@Html.DisplayNameFor(model => model.NextChanges.First().Details)</th>
+                <th>@Html.DisplayNameFor(model => model.NextChanges.First().Type)</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.NextChanges)
+            {
+                <tr>
+                    <td>@item.Priority</td>
+                    <td>@Html.DisplayFor(modelItem => item.Details)</td>
+                    <td>
+                        @if (item.Type == ChangeType.Bug)
+                        {
+                            <span class="label label-danger">Fehlerbehebung</span>
+                        }
+                        else if (item.Type == ChangeType.Feature)
+                        {
+                            <span class="label label-info">Neue Funktion</span>
+                        }
+                        else if (item.Type == ChangeType.Design)
+                        {
+                            <span class="label label-success">Design</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.PreviousChanges.Any())
+{
+    <h2>Letzte Änderungen</h2>
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.NextChanges.First().Date)</th>
+                <th>@Html.DisplayNameFor(model => model.NextChanges.First().Details)</th>
+                <th>@Html.DisplayNameFor(model => model.NextChanges.First().Type)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.PreviousChanges)
+            {
+                <tr>
+                    <td>@item.Date.ToShortDateString()</td>
+                    <td>@Html.DisplayFor(modelItem => item.Details)</td>
+                    <td>
+                        @if (item.Type == ChangeType.Bug)
+                        {
+                            <span class="label label-danger">Fehlerbehebung</span>
+                        }
+                        else if (item.Type == ChangeType.Feature)
+                        {
+                            <span class="label label-info">Neue Funktion</span>
+                        }
+                        else if (item.Type == ChangeType.Design)
+                        {
+                            <span class="label label-success">Design</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
