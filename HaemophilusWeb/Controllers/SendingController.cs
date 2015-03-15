@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -161,7 +160,7 @@ namespace HaemophilusWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(sending).State = EntityState.Modified;
+                db.MarkAsModified(sending);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

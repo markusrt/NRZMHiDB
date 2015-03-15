@@ -17,7 +17,17 @@ namespace HaemophilusWeb.Controllers
 {
     public class IsolateController : Controller
     {
-        private readonly ApplicationDbContext db = new ApplicationDbContext();
+        private readonly IApplicationDbContext db;
+
+        public IsolateController()
+            : this(new ApplicationDbContextWrapper(new ApplicationDbContext()))
+        {
+        }
+
+        public IsolateController(IApplicationDbContext applicationDbContext)
+        {
+            db = applicationDbContext;
+        }
 
         public ActionResult Edit(int? id)
         {
@@ -25,7 +35,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var isolate = db.Isolates.Include(i => i.Sending).SingleOrDefault(i => i.IsolateId == id);
+            var isolate = LoadIsolateById(id);
             if (isolate == null)
             {
                 return HttpNotFound();
@@ -35,12 +45,33 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(isolateViewModel);
         }
 
+        private Isolate LoadIsolateById(int? id)
+        {
+            var isolate = db.Isolates.Include(i => i.Sending).SingleOrDefault(i => i.IsolateId == id);
+            return isolate;
+        }
+
         public ActionResult Report(int? id)
         {
             AddReportTemplatesToViewBag();
             AddReportSignersToViewBag();
             return Edit(id);
         }
+
+
+        [HttpPost]
+        public JsonResult ReportGenerated(int? id)
+        {
+            var isolate = LoadIsolateById(id);
+            if (isolate != null)
+            {
+                isolate.ReportDate = DateTime.Now;
+                db.MarkAsModified(isolate);
+                db.SaveChanges();
+            }
+            return Json(true);
+        }
+
 
         private void AddReportTemplatesToViewBag()
         {
@@ -179,7 +210,7 @@ namespace HaemophilusWeb.Controllers
                     ParseAndMapLaboratoryNumber(isolateViewModel, isolate);
 
                     ViewModelToModel(isolateViewModel.EpsilometerTestViewModels, isolate.EpsilometerTests);
-                    db.Entry(isolate).State = EntityState.Modified;
+                    db.MarkAsModified(isolate);
                     db.SaveChanges();
                     if (Request == null || Request.Form["primary-submit"] != null)
                     {

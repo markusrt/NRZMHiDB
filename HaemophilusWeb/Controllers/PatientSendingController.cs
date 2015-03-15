@@ -73,8 +73,8 @@ namespace HaemophilusWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                db.Entry(patientSending.Patient).State = EntityState.Modified;
-                db.Entry(patientSending.Sending).State = EntityState.Modified;
+                db.MarkAsModified(patientSending.Patient);
+                db.MarkAsModified(patientSending.Sending);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

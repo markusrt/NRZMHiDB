@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using HaemophilusWeb.Mocks;
 
@@ -13,6 +12,10 @@ namespace HaemophilusWeb.Models
         public readonly InMemoryDbSet<Sending> SendingDbSet = new MockDbSet<Sending>(true);
         public readonly InMemoryDbSet<Isolate> IsolatesDbSet = new InMemoryDbSet<Isolate>(true);
         public readonly InMemoryDbSet<County> CountiesDbSet = new InMemoryDbSet<County>(true);
+        public readonly InMemoryDbSet<EpsilometerTest> EpsilometerTestsDbSet = new InMemoryDbSet<EpsilometerTest>(true);
+
+        public readonly InMemoryDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpointsDbSet =
+            new InMemoryDbSet<EucastClinicalBreakpoint>(true);
 
         public IDbSet<Sender> Senders
         {
@@ -39,9 +42,18 @@ namespace HaemophilusWeb.Models
             get { return CountiesDbSet; }
         }
 
-        public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
+        public IDbSet<EpsilometerTest> EpsilometerTests
         {
-            return null;
+            get { return EpsilometerTestsDbSet; }
+        }
+
+        public IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints
+        {
+            get { return EucastClinicalBreakpointsDbSet; }
+        }
+
+        public void MarkAsModified<TEntity>(TEntity entity) where TEntity : class
+        {
         }
 
         public int SaveChanges()

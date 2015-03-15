@@ -1,5 +1,4 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
@@ -109,7 +108,7 @@ namespace HaemophilusWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(patient).State = EntityState.Modified;
+                db.MarkAsModified(patient);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

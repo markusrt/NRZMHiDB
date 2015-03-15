@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 
 namespace HaemophilusWeb.Models
 {
@@ -16,7 +15,11 @@ namespace HaemophilusWeb.Models
 
         IDbSet<County> Counties { get; }
 
-        DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
+        IDbSet<EpsilometerTest> EpsilometerTests { get; }
+
+        IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints { get; }
+
+        void MarkAsModified<TEntity>(TEntity entity) where TEntity : class;
 
         int SaveChanges();
 

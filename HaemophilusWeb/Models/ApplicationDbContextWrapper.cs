@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 
 namespace HaemophilusWeb.Models
 {
@@ -43,9 +42,19 @@ namespace HaemophilusWeb.Models
             get { return wrappedContext.Counties; }
         }
 
-        public DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class
+        public IDbSet<EpsilometerTest> EpsilometerTests
         {
-            return wrappedContext.Entry(entity);
+            get { return wrappedContext.EpsilometerTests; }
+        }
+
+        public IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints
+        {
+            get { return wrappedContext.EucastClinicalBreakpoints; }
+        }
+
+        public void MarkAsModified<TEntity>(TEntity entity) where TEntity : class
+        {
+            wrappedContext.Entry(entity).State = EntityState.Modified;
         }
 
         public int SaveChanges()
