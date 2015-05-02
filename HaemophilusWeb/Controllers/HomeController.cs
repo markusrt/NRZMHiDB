@@ -10,7 +10,6 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
-                new Change(DateTime.MinValue, "Absicherung des Servers mit HTTPS", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Suche von Einsendungen nach Einsender-Labornummer und -PLZ",
                     ChangeType.Feature),
                 new Change(DateTime.MinValue, "Abfrage über Isolate", ChangeType.Feature),
@@ -21,6 +20,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 4, 29), "Absicherung des Servers mit HTTPS", ChangeType.Feature),
                 new Change(new DateTime(2015, 3, 15),
                     "Markierung von Einsendungen für die bereits ein Befund erstellt wurde",
                     ChangeType.Feature),
