@@ -10,6 +10,11 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
+                new Change(DateTime.MinValue, "Update der Befundvorlagen (Adresse, Layout, Telefon, Url)",
+                    ChangeType.Feature),
+                new Change(DateTime.MinValue, "Warnung bei diskrepanten Ergebnissen vor Befunderstellung",
+                    ChangeType.Feature),
+                new Change(DateTime.MinValue, "Ausgabe aller Felder beim Labor-Export", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Suche von Einsendungen nach Einsender-Labornummer und -PLZ",
                     ChangeType.Feature),
                 new Change(DateTime.MinValue, "Abfrage über Isolate", ChangeType.Feature),
