@@ -20,6 +20,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 5, 5), "Umstellung der Geodaten-Abfrage auf HTTPS", ChangeType.Bug),
                 new Change(new DateTime(2015, 4, 29), "Absicherung des Servers mit HTTPS", ChangeType.Feature),
                 new Change(new DateTime(2015, 3, 15),
                     "Markierung von Einsendungen für die bereits ein Befund erstellt wurde",

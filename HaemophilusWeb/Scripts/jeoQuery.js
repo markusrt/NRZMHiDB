@@ -32,14 +32,21 @@ var jeoquery = (function ($) {
 
     my.getGeoNames = function (method, data, callback) {
         var deferred = $.Deferred();
+        var extendedData = $.extend({}, my.defaultData, data);
+        var geoUrl = my.geoNamesProtocol + '://' + my.geoNamesApiServer + '/' + method + 'JSON?' + $.param(extendedData);
+        console.log(geoUrl);
         // TODO: validate method(exists), and params
         $.ajax({
-            url: my.geoNamesProtocol + '://' + my.geoNamesApiServer + '/' + method + 'JSON',
+            url: "https://query.yahooapis.com/v1/public/yql",
             dataType: 'jsonp',
-            data: $.extend({}, my.defaultData, data),
+            data: {
+                q: "select * from json where url='" + geoUrl + "'",
+                format: "json",
+                jsonCompat: "new"
+            },
             success: function (data) {
                 deferred.resolve(data);
-                if (!!callback) callback(data);
+                if (!!callback) callback(data.query.results.json);
             },
             error: function (xhr, textStatus) {
                 deferred.reject(xhr, textStatus);
@@ -122,8 +129,7 @@ var jeoquery = (function ($) {
     $.fn.jeoPostalCodeLookup = function (options) {
         this.on("input", function () {
             var code = $(this).val();
-            if (options.lengthTrigger && code.length != options.lengthTrigger)
-            {
+            if (options.lengthTrigger && code.length != options.lengthTrigger) {
                 return;
             }
             var country = options.country || jeoquery.defaultCountryCode;
