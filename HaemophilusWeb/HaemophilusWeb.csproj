@@ -486,11 +486,11 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.german.js" />
-    <Content Include="ReportTemplates\BLNAR v8.docx" />
-    <Content Include="ReportTemplates\BLNAS v8.docx" />
-    <Content Include="ReportTemplates\BLPACR v8.docx" />
-    <Content Include="ReportTemplates\BLPACS v8.docx" />
     <None Include="Properties\PublishProfiles\Test Server.pubxml" />
+    <Content Include="ReportTemplates\BLNAR v7.docx" />
+    <Content Include="ReportTemplates\BLNAS v7.docx" />
+    <Content Include="ReportTemplates\BLPACR v7.docx" />
+    <Content Include="ReportTemplates\BLPACS v7.docx" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
