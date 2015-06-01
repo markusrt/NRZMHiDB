@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using AutoMapper.Internal;
 
 namespace HaemophilusWeb.Utils
 {
@@ -27,9 +29,9 @@ namespace HaemophilusWeb.Utils
         /// <returns>
         ///     List with enum values, never <c>null</c>
         /// </returns>
-        public static IEnumerable<TEnum> AllEnumValues<TEnum>() where TEnum : struct
+        public static IEnumerable<TEnum> AllEnumValues<TEnum>()
         {
-            return Enum.GetValues(typeof (TEnum)).Cast<TEnum>().ToList();
+            return Enum.GetValues(GetEnumType<TEnum>()).Cast<TEnum>().ToList();
         }
 
         /// <summary>
@@ -100,9 +102,9 @@ namespace HaemophilusWeb.Utils
         ///     Checks if a given enum type has the <see cref="FlagsAttribute" /> attached
         /// </summary>
         /// <returns>true for flag enums, otherwise false</returns>
-        public static bool IsFlagsEnum<TEnum>() where TEnum : struct, IConvertible
+        public static bool IsFlagsEnum<TEnum>()
         {
-            return typeof (TEnum).GetCustomAttribute<FlagsAttribute>() != null;
+            return GetEnumType<TEnum>().GetCustomAttribute<FlagsAttribute>() != null;
         }
 
         /// <summary>
@@ -145,6 +147,38 @@ namespace HaemophilusWeb.Utils
         public static bool HasAnyFlag(this Enum thisEnum, params Enum[] flags)
         {
             return flags.Any(thisEnum.HasFlag);
+        }
+
+        public static string GetEnumDescription<TEnum>(object enumValue)
+        {
+            var value = enumValue.ToString();
+            var enumType = GetEnumType<TEnum>();
+            if (enumValue is int)
+            {
+                value = Enum.GetName(enumType, enumValue);
+            }
+            if (value == null)
+            {
+                return enumValue.ToString();
+            }
+            var field = (enumType.IsNullableType() ? enumType.GetTypeOfNullable() : enumType).GetField(value);
+            if (field == null)
+            {
+                return value;
+            }
+            var attributes =
+                (DescriptionAttribute[]) field.GetCustomAttributes(typeof (DescriptionAttribute), false);
+            return (attributes.Length > 0) ? attributes[0].Description : value;
+        }
+
+        private static Type GetEnumType<TEnum>()
+        {
+            var enumType = typeof (TEnum);
+            if (enumType.IsNullableType())
+            {
+                enumType = Nullable.GetUnderlyingType(enumType);
+            }
+            return enumType;
         }
     }
 }

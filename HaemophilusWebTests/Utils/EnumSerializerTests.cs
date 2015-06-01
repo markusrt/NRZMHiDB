@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.TestDoubles;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Utils
@@ -8,17 +9,6 @@ namespace HaemophilusWeb.Utils
     [TestFixture]
     public class EnumSerializerTests
     {
-        public enum UtilsTest
-        {
-            Zero = 0,
-            [Mock] One = 1,
-            [System.ComponentModel.Description("Zwei")] Two = 2
-        }
-
-        private class MockAttribute : Attribute
-        {
-        }
-
         [Test]
         [Sequential]
         public void DeserializeEnumStrict_InvalidString_ThrowsException(
@@ -50,9 +40,9 @@ namespace HaemophilusWeb.Utils
         }
 
         [Test]
-        [TestCase("Zwei", UtilsTest.Two)]
-        [TestCase("Z", UtilsTest.Two)]
-        [TestCase("Zw", UtilsTest.Two)]
+        [TestCase("Eins", UtilsTest.One)]
+        [TestCase("E", UtilsTest.One)]
+        [TestCase("Ei", UtilsTest.One)]
         public void DeserializeEnumStrict_ValidDisplayString_ReturnsCorrectValue(string inputString,
             UtilsTest definedEnumValue)
         {

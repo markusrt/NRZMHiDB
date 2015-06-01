@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.TestDoubles;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Utils
@@ -20,17 +21,6 @@ namespace HaemophilusWeb.Utils
             var result = EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<ClinicalInformation>(commaSeperatedList);
 
             result.Should().Be(expectedResult);
-        }
-
-        private enum UtilsTest
-        {
-            Zero = 0,
-            [Mock] One = 1,
-            Two = 2
-        }
-
-        private class MockAttribute : Attribute
-        {
         }
 
         [Test]
@@ -73,6 +63,37 @@ namespace HaemophilusWeb.Utils
 
             definedFlagValueOfCombination.Should().BeTrue();
             definedFlagValueOfequivalentSingleEntry.Should().BeTrue();
+        }
+
+        private readonly UtilsTest? ZeroAsNullable = UtilsTest.Zero;
+
+        [TestCase(0)]
+        [TestCase("Zero")]
+        [TestCase(UtilsTest.Zero)]
+        public void GetEnumDescription_Attribute_ReturnsDescription(object value)
+        {
+            EnumUtils.GetEnumDescription<UtilsTest>(value).Should().Be("Null");
+        }
+
+        [TestCase(UtilsTest.Zero, "Null")]
+        [TestCase(1, "Eins")]
+        public void GetEnumDescription_NullableType_ReturnsDescription(object value, string expected)
+        {
+            EnumUtils.GetEnumDescription<UtilsTest?>(value).Should().Be(expected);
+        }
+
+        [Test]
+        public void GetEnumDescription_NoAttribute_ReturnsEnumName()
+        {
+            EnumUtils.GetEnumDescription<UtilsTest>("Two").Should().Be("Two");
+        }
+
+        [Test]
+        [TestCase(3, "3")]
+        [TestCase("Three", "Three")]
+        public void GetEnumDescription_NoEnumEntry_ReturnsInput(object value, string expected)
+        {
+            EnumUtils.GetEnumDescription<UtilsTest>(value).Should().Be(expected);
         }
     }
 }

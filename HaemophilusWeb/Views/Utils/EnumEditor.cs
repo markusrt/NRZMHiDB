@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
+using HaemophilusWeb.Utils;
 
 namespace HaemophilusWeb.Views.Utils
 {
@@ -31,11 +31,17 @@ namespace HaemophilusWeb.Views.Utils
             {
                 return string.Empty;
             }
-            var field = value.GetType().GetField(value.ToString());
 
-            var attributes = (DescriptionAttribute[]) field.GetCustomAttributes(typeof (DescriptionAttribute), false);
+            if (!EnumUtils.IsFlagsEnum<TEnum>())
+            {
+                return EnumUtils.GetEnumDescription<TEnum>(value);
+            }
 
-            return (attributes.Length > 0) ? attributes[0].Description : value.ToString();
+            var integerValue = (int) (object) value;
+            var descriptions = EnumUtils.AllEnumValues<TEnum>().Cast<int>()
+                .Where(enumValue => enumValue != 0 && (enumValue & integerValue) == enumValue)
+                .Select(enumValue => EnumUtils.GetEnumDescription<TEnum>(enumValue)).ToList();
+            return string.Join(", ", descriptions);
         }
 
         public static MvcHtmlString EnumDropDownListFor<TModel, TEnum>(this HtmlHelper<TModel> htmlHelper,

@@ -113,6 +113,9 @@
     <Compile Include="Mocks\FakeDbSet.cs" />
     <Compile Include="Models\CountyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDoubles\MockAttribute.cs" />
+    <Compile Include="TestDoubles\FlagsEnum.cs" />
+    <Compile Include="TestDoubles\UtilsTest.cs" />
     <Compile Include="TestUtils\Attribute.cs" />
     <Compile Include="TestUtils\ITempDirectoryTest.cs" />
     <Compile Include="TestUtils\JsonUtils.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="Validators\PatientValidatorTests.cs" />
     <Compile Include="Validators\SendingValidatorTests.cs" />
     <Compile Include="ViewModels\IsolateViewModelTests.cs" />
+    <Compile Include="Views\Utils\EnumEditorTests.cs" />
     <Compile Include="Views\Utils\BootstrapEditorTests.cs" />
   </ItemGroup>
   <ItemGroup>
