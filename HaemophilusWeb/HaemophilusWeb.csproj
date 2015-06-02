@@ -315,11 +315,8 @@
     <Compile Include="Models\EpsilometerTestResult.cs" />
     <Compile Include="Models\EucastClinicalBreakpoint.cs" />
     <Compile Include="Models\Antibiotic.cs" />
-    <Compile Include="Models\ExportRecord.cs" />
     <Compile Include="Models\IsolateBase.cs" />
     <Compile Include="Models\Material.cs" />
-    <Compile Include="Models\LaboratoryExportRecord.cs" />
-    <Compile Include="Models\RkiExportRecord.cs" />
     <Compile Include="Models\SerotypePcr.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
