@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -10,6 +9,8 @@ using System.Reflection;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using HaemophilusWeb.Tools;
+using HaemophilusWeb.Utils;
 
 namespace ExportToExcel
 {
@@ -38,6 +39,15 @@ namespace ExportToExcel
         {
             var ds = new DataSet();
             ds.Tables.Add(ListToDataTable(list));
+
+            return CreateExcelDocument(ds, xlsxFilePath);
+        }
+
+        public static bool CreateExcelDocument<T>(List<T> list, ExportDefinition<T> exportDefinition,
+            string xlsxFilePath)
+        {
+            var ds = new DataSet();
+            ds.Tables.Add(exportDefinition.ToDataTable(list));
 
             return CreateExcelDocument(ds, xlsxFilePath);
         }
@@ -72,8 +82,7 @@ namespace ExportToExcel
 
         private static string GetColumnName(MemberInfo member)
         {
-            var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
-            return displayAttribute == null ? member.Name : displayAttribute.Name;
+            return member.GetDisplayName();
         }
 
         private static Type GetNullableType(Type t)

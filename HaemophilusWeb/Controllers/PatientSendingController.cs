@@ -9,6 +9,7 @@ using ExportToExcel;
 using FluentValidation;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Tools;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.Validators;
 using HaemophilusWeb.ViewModels;
@@ -174,17 +175,15 @@ namespace HaemophilusWeb.Controllers
                 return View(exportQuery);
             }
 
-            var list = new List<RkiExportRecord>();
-            foreach (
-                var sending in
-                    SendingsMatchingExportQuery(query,
-                        new List<SamplingLocation> {SamplingLocation.Blood, SamplingLocation.Liquor}))
-            {
-                var rkiExportRecord = new RkiExportRecord();
-                PopulateExportRecord(sending, rkiExportRecord);
-                list.Add(rkiExportRecord);
-            }
-            return ExportToExcel(query, list, "RKI");
+            var sendings = SendingsMatchingExportQuery(query,
+                new List<SamplingLocation> {SamplingLocation.Blood, SamplingLocation.Liquor}).ToList();
+            var export = CreateRkiExportDefinition();
+
+            var tempFile = System.IO.Path.GetTempFileName();
+            CreateExcelFile.CreateExcelDocument(sendings, export, tempFile);
+            return File(System.IO.File.ReadAllBytes(tempFile),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                String.Format("{0}-Export_{1:yyyyMMdd}-{2:yyyyMMdd}.xlsx", "RKI", query.From, query.To));
         }
 
         public ActionResult LaboratoryExport(ExportQuery query)
@@ -213,10 +212,74 @@ namespace HaemophilusWeb.Controllers
             {
                 var laboratoryExportRecord = new LaboratoryExportRecord();
                 PopulateExportRecord(sending, laboratoryExportRecord);
-                laboratoryExportRecord.PatientAgeAtSampling = sending.Isolate.PatientAge();
+                PopulateLaboratoryRecord(laboratoryExportRecord, sending);
                 list.Add(laboratoryExportRecord);
             }
             return ExportToExcel(query, list, "Labor");
+        }
+
+        private static void PopulateLaboratoryRecord(LaboratoryExportRecord exportRecord, Sending sending)
+        {
+            var isolate = sending.Isolate;
+            var patient = sending.Patient;
+
+            exportRecord.LaboratoryNumber = isolate.LaboratoryNumber;
+            exportRecord.ReportDate = isolate.ReportDate;
+            exportRecord.Material = EnumEditor.GetEnumDescription(sending.Material);
+            exportRecord.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
+            exportRecord.SenderLaboratoryNumber = sending.SenderLaboratoryNumber;
+            exportRecord.SenderConclusion = sending.SenderConclusion;
+
+            exportRecord.Initials = patient.Initials;
+            exportRecord.BirthDate = patient.BirthDate;
+            exportRecord.PatientAgeAtSampling = isolate.PatientAge();
+            exportRecord.PostalCode = patient.PostalCode;
+            exportRecord.City = patient.City;
+            exportRecord.ClinicalInformation = EnumEditor.GetEnumDescription(patient.ClinicalInformation);
+            if (patient.ClinicalInformation.HasFlag(ClinicalInformation.Other))
+            {
+                exportRecord.ClinicalInformation =
+                    exportRecord.ClinicalInformation.Replace(EnumEditor.GetEnumDescription(ClinicalInformation.Other),
+                        patient.OtherClinicalInformation);
+            }
+            exportRecord.HibVaccination = EnumEditor.GetEnumDescription(patient.HibVaccination);
+            exportRecord.HibVaccinationDate = patient.HibVaccinationDate;
+            exportRecord.Therapy = EnumEditor.GetEnumDescription(patient.Therapy);
+            exportRecord.TherapyDetails = patient.TherapyDetails;
+
+
+            exportRecord.FactorTest = EnumEditor.GetEnumDescription(isolate.FactorTest);
+            exportRecord.Agglutination = EnumEditor.GetEnumDescription(isolate.Agglutination);
+            exportRecord.Oxidase = EnumEditor.GetEnumDescription(isolate.Oxidase);
+            exportRecord.OuterMembraneProteinP2 = EnumEditor.GetEnumDescription(isolate.OuterMembraneProteinP2);
+            exportRecord.OuterMembraneProteinP6 = EnumEditor.GetEnumDescription(isolate.OuterMembraneProteinP6);
+            exportRecord.FuculoKinase = EnumEditor.GetEnumDescription(isolate.FuculoKinase);
+            exportRecord.BexA = EnumEditor.GetEnumDescription(isolate.BexA);
+            exportRecord.SerotypePcr = EnumEditor.GetEnumDescription(isolate.SerotypePcr);
+            exportRecord.RibosomalRna16S = EnumEditor.GetEnumDescription(isolate.RibosomalRna16S);
+            exportRecord.RibosomalRna16SBestMatch = isolate.RibosomalRna16SBestMatch;
+            exportRecord.RibosomalRna16SMatchInPercent = isolate.RibosomalRna16SMatchInPercent;
+            exportRecord.ApiNh = EnumEditor.GetEnumDescription(isolate.ApiNh);
+            exportRecord.ApiNhBestMatch = isolate.ApiNhBestMatch;
+            exportRecord.ApiNhMatchInPercent = isolate.ApiNhMatchInPercent;
+            exportRecord.MaldiTof = EnumEditor.GetEnumDescription(isolate.MaldiTof);
+            exportRecord.MaldiTofBestMatch = isolate.MaldiTofBestMatch;
+            exportRecord.MaldiTofMatchConfidence = isolate.MaldiTofMatchConfidence;
+            exportRecord.Ftsi = EnumEditor.GetEnumDescription(isolate.Ftsi);
+            exportRecord.FtsiEvaluation1 = isolate.FtsiEvaluation1;
+            exportRecord.FtsiEvaluation2 = isolate.FtsiEvaluation2;
+            exportRecord.Mlst = EnumEditor.GetEnumDescription(isolate.Mlst);
+            exportRecord.MlstSequenceType = isolate.MlstSequenceType;
+            exportRecord.IsolateRemark = isolate.Remark;
+            exportRecord.SendingRemark = sending.Remark;
+
+            PopulateEpsilometerTestResult(sending, Antibiotic.Cefotaxime,
+                result => exportRecord.CefotaximeEpsilometerTestResult = EnumEditor.GetEnumDescription(result),
+                measurement => exportRecord.CefotaximeMeasurement = measurement);
+
+            PopulateEpsilometerTestResult(sending, Antibiotic.Meropenem,
+                result => exportRecord.MeropenemEpsilometerTestResult = EnumEditor.GetEnumDescription(result),
+                measurement => exportRecord.MeropenemMeasurement = measurement);
         }
 
         private ActionResult ExportToExcel<T>(ExportQuery query, List<T> list, string prefix) where T : ExportRecord
@@ -239,6 +302,80 @@ namespace HaemophilusWeb.Controllers
                 )
                 .OrderBy(s => s.Isolate.StemNumber)
                 .ToList();
+        }
+
+        private ExportDefinition<Sending> CreateRkiExportDefinition()
+        {
+            var export = new ExportDefinition<Sending>();
+            var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
+
+            var emptyCounty = new County {CountyNumber = ""};
+            Func<Sending, County> findCounty =
+                s => counties.FirstOrDefault(c => c.IsEqualTo(s.Patient.County)) ?? emptyCounty;
+
+            export.AddField(s => s.Isolate.StemNumber);
+            export.AddField(s => ExportToString(s.ReceivingDate));
+            export.AddField(s => ExportToString(s.SamplingDate));
+            export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s), "Material");
+            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "Geburtsmonat");
+            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "Geburtsjahr");
+            export.AddField(s => ExportGender(s.Patient.Gender));
+            export.AddField(s => ExportToString(s.Patient.County));
+            export.AddField(s => findCounty(s).CountyNumber, "Kreisnr");
+            export.AddField(s => ExportToString(s.Patient.State));
+            export.AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "Kennziffer");
+            export.AddField(s => ExportToString(s.Patient.HibVaccination));
+            export.AddField(s => ExportToString(s.Isolate.BetaLactamase));
+            export.AddField(s => ExportToString(s.Isolate.Evaluation), "Serotyp");
+            AddEpsilometerTestFields(export, Antibiotic.Ampicillin);
+            AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate);
+            export.AddField(s => s.SenderId, "Einsendernummer");
+
+            return export;
+        }
+
+        private static void AddEpsilometerTestFields(ExportDefinition<Sending> export, Antibiotic antibiotic)
+        {
+            var antibioticName = ExportToString(antibiotic);
+            var measurementHeader = string.Format("{0} MHK", antibioticName);
+            var evaluationHeader = string.Format("{0} Bewertung", antibioticName);
+
+            export.AddField(s => FindEpsilometerTestMeasurement(s, antibiotic), measurementHeader);
+            export.AddField(s => ExportToString(FindEpsilometerTestEvaluation(s, antibiotic)), evaluationHeader);
+        }
+
+        private static string ExportGender(Gender? gender)
+        {
+            return gender == null
+                ? "?"
+                : EnumEditor.GetEnumDescription(gender).Substring(0, 1);
+        }
+
+        private static string ExportSamplingLocation(SamplingLocation location, Sending sending)
+        {
+            if (location == SamplingLocation.Other)
+            {
+                return sending.OtherSamplingLocation;
+            }
+            return ExportToString(location);
+        }
+
+        private static string ExportToString(object value)
+        {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+            var type = value.GetTypeOrNullableType();
+            if (type.IsEnum)
+            {
+                return EnumEditor.GetEnumDescription(value);
+            }
+            if (type == typeof (DateTime))
+            {
+                return ((DateTime) value).ToReportFormat();
+            }
+            return value.ToString();
         }
 
         private void PopulateExportRecord(Sending sending, ExportRecord exportRecord)
@@ -285,14 +422,40 @@ namespace HaemophilusWeb.Controllers
         private static void PopulateEpsilometerTestResult(Sending sending, Antibiotic antibiotic,
             Action<EpsilometerTestResult> populateTestResult, Action<double> populateMeasurement)
         {
-            var eTestResult = sending.Isolate.EpsilometerTests.SingleOrDefault(
-                e => e.EucastClinicalBreakpoint.Antibiotic == antibiotic);
+            var eTestResult = FindEpsilometerTestResult(sending, antibiotic);
             if (eTestResult == null)
             {
                 return;
             }
             populateTestResult(eTestResult.Result);
             populateMeasurement(Math.Round(eTestResult.Measurement, 3));
+        }
+
+        private static EpsilometerTest FindEpsilometerTestResult(Sending sending, Antibiotic antibiotic)
+        {
+            var eTestResult = sending.Isolate.EpsilometerTests.SingleOrDefault(
+                e => e.EucastClinicalBreakpoint.Antibiotic == antibiotic);
+            return eTestResult;
+        }
+
+        private static double? FindEpsilometerTestMeasurement(Sending sending, Antibiotic antibiotic)
+        {
+            var eTestResult = FindEpsilometerTestResult(sending, antibiotic);
+            if (eTestResult == null)
+            {
+                return null;
+            }
+            return Math.Round(eTestResult.Measurement, 3);
+        }
+
+        private static EpsilometerTestResult? FindEpsilometerTestEvaluation(Sending sending, Antibiotic antibiotic)
+        {
+            var eTestResult = FindEpsilometerTestResult(sending, antibiotic);
+            if (eTestResult == null)
+            {
+                return null;
+            }
+            return eTestResult.Result;
         }
 
         [HttpPost]

@@ -113,8 +113,10 @@
     <Compile Include="Mocks\FakeDbSet.cs" />
     <Compile Include="Models\CountyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestDoubles\Isolate.cs" />
     <Compile Include="TestDoubles\MockAttribute.cs" />
     <Compile Include="TestDoubles\FlagsEnum.cs" />
+    <Compile Include="TestDoubles\Patient.cs" />
     <Compile Include="TestDoubles\UtilsTest.cs" />
     <Compile Include="TestUtils\Attribute.cs" />
     <Compile Include="TestUtils\ITempDirectoryTest.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="Utils\EnumSerializerTests.cs" />
     <Compile Include="Utils\EnumUtilsTests.cs" />
     <Compile Include="Utils\ExceptionUtilsTests.cs" />
+    <Compile Include="Utils\ExpressionUtilsTests.cs" />
     <Compile Include="Utils\FileListerTests.cs" />
     <Compile Include="Utils\ReportFormatterTests.cs" />
     <Compile Include="Validators\AbstractValidatorTests.cs" />

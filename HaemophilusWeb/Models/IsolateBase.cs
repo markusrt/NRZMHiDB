@@ -70,7 +70,7 @@ namespace HaemophilusWeb.Models
         [Display(Name = "ftsI Beurteilung")]
         public string FtsiEvaluation1 { get; set; }
 
-        [Display(Name = "ftsI Beurteilung 1")]
+        [Display(Name = "ftsI Beurteilung 2")]
         public string FtsiEvaluation2 { get; set; }
 
         [Display(Name = "MLST")]

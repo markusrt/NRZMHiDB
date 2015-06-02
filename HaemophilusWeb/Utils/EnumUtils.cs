@@ -153,6 +153,10 @@ namespace HaemophilusWeb.Utils
         {
             var value = enumValue.ToString();
             var enumType = GetEnumType<TEnum>();
+            if (enumType == typeof (object))
+            {
+                enumType = GetEnumType(enumValue.GetType());
+            }
             if (enumValue is int)
             {
                 value = Enum.GetName(enumType, enumValue);
@@ -174,6 +178,11 @@ namespace HaemophilusWeb.Utils
         private static Type GetEnumType<TEnum>()
         {
             var enumType = typeof (TEnum);
+            return GetEnumType(enumType);
+        }
+
+        private static Type GetEnumType(Type enumType)
+        {
             if (enumType.IsNullableType())
             {
                 enumType = Nullable.GetUnderlyingType(enumType);

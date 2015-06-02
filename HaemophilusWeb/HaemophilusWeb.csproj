@@ -347,12 +347,15 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Tools\CountyImporter.cs" />
     <Compile Include="Tools\CreateExcelFile.cs" />
+    <Compile Include="Tools\ExportDefinition.cs" />
     <Compile Include="Utils\EnumSerializer.cs" />
     <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Utils\ExceptionUtils.cs" />
+    <Compile Include="Utils\ExpressionUtils.cs" />
     <Compile Include="Utils\FileLister.cs" />
     <Compile Include="Utils\ReportFormatter.cs" />
     <Compile Include="Utils\ServerUtils.cs" />
+    <Compile Include="Utils\TypeUtils.cs" />
     <Compile Include="Validators\IsolateViewModelValidator.cs" />
     <Compile Include="Validators\PatientValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
