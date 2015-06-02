@@ -417,6 +417,8 @@ namespace HaemophilusWeb.Controllers
                 x.Invasive,
                 x.Isolate.YearlySequentialIsolateNumber,
                 x.Isolate.Year,
+                x.SenderLaboratoryNumber,
+                db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode
             });
             var queryable = query.ToList().Select(x =>
             {
@@ -441,7 +443,8 @@ namespace HaemophilusWeb.Controllers
                     FullTextSearch = string.Join(" ",
                         x.Initials, x.BirthDate.ToReportFormat(),
                         x.StemNumber, x.ReceivingDate.ToReportFormat(),
-                        invasive, samplingLocation, laboratoryNumber).ToLower()
+                        invasive, samplingLocation, laboratoryNumber, x.SenderLaboratoryNumber, x.PostalCode)
+                        .ToLower()
                 };
             }).ToList();
 

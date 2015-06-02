@@ -10,8 +10,6 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
-                new Change(DateTime.MinValue, "Suche von Einsendungen nach Einsender-Labornummer und -PLZ",
-                    ChangeType.Feature),
                 new Change(DateTime.MinValue, "Löschen von Isolaten und Einsendungen", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Löschen von Einsendern", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Abfrage über Isolate", ChangeType.Feature),
@@ -22,6 +20,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 5, 31), "Suche von Einsendungen nach Einsender-Labornummer und -PLZ",
+                    ChangeType.Feature),
                 new Change(new DateTime(2015, 5, 30), "Ausgabe aller Felder beim Labor-Export", ChangeType.Feature),
                 new Change(new DateTime(2015, 5, 28), "Warnung bei diskrepanten Ergebnissen vor Befunderstellung",
                     ChangeType.Feature),
