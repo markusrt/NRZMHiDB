@@ -10,13 +10,17 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
-                new Change(DateTime.MinValue, "Löschen von Isolaten und Einsendungen", ChangeType.Feature),
-                new Change(DateTime.MinValue, "Löschen von Einsendern", ChangeType.Feature),
-                new Change(DateTime.MinValue, "Abfrage über Isolate", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Erweiterte Erfassung von Isolaten VII (Wachstum und Art des Wachstums)",
                     ChangeType.Feature),
+                new Change(DateTime.MinValue, "Löschen von Isolaten und Einsendungen", ChangeType.Feature),
+                new Change(DateTime.MinValue, "Löschen von Einsendern", ChangeType.Feature),
+
                 new Change(DateTime.MinValue, "Unterstützung für doppelte Einsendungen eines Patienten",
                     ChangeType.Feature),
+                new Change(DateTime.MinValue, "Automatische Bestimmung des zugehörigen Gesundheitsamtes",
+                    ChangeType.Feature),
+                new Change(DateTime.MinValue, "Auditierung von Zugriffen", ChangeType.Feature),
+                new Change(DateTime.MinValue, "Abfrage über Isolate", ChangeType.Feature)
             },
             new List<Change>
             {
