@@ -14,7 +14,6 @@ namespace HaemophilusWeb.Controllers
                     ChangeType.Feature),
                 new Change(DateTime.MinValue, "Löschen von Isolaten und Einsendungen", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Löschen von Einsendern", ChangeType.Feature),
-
                 new Change(DateTime.MinValue, "Unterstützung für doppelte Einsendungen eines Patienten",
                     ChangeType.Feature),
                 new Change(DateTime.MinValue, "Automatische Bestimmung des zugehörigen Gesundheitsamtes",
@@ -24,6 +23,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 6, 29),
+                    "Erweiterte Suche von Einsendungen nach Geburtsdatum, Initialien, Patient PLZ, Einsender-Labornummer und Einsender PLZ",
+                    ChangeType.Feature),
                 new Change(new DateTime(2015, 5, 31), "Suche von Einsendungen nach Einsender-Labornummer und -PLZ",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 5, 30), "Ausgabe aller Felder beim Labor-Export", ChangeType.Feature),

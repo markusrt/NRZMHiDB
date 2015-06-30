@@ -418,7 +418,8 @@ namespace HaemophilusWeb.Controllers
                 x.Isolate.YearlySequentialIsolateNumber,
                 x.Isolate.Year,
                 x.SenderLaboratoryNumber,
-                db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode
+                PatientPostalCode = x.Patient.PostalCode,
+                SenderPostalCode = db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode,
             });
             var queryable = query.ToList().Select(x =>
             {
@@ -440,10 +441,14 @@ namespace HaemophilusWeb.Controllers
                     LaboratoryNumber = x.Year*10000 + x.YearlySequentialIsolateNumber,
                     LaboratoryNumberString = laboratoryNumber,
                     ReportGenerated = x.ReportDate.HasValue,
+                    PatientPostalCode = x.PatientPostalCode,
+                    SenderPostalCode = x.SenderPostalCode,
+                    SenderLaboratoryNumber = x.SenderLaboratoryNumber,
                     FullTextSearch = string.Join(" ",
                         x.Initials, x.BirthDate.ToReportFormat(),
                         x.StemNumber, x.ReceivingDate.ToReportFormat(),
-                        invasive, samplingLocation, laboratoryNumber, x.SenderLaboratoryNumber, x.PostalCode)
+                        invasive, samplingLocation, laboratoryNumber,
+                        x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber)
                         .ToLower()
                 };
             }).ToList();
@@ -451,12 +456,27 @@ namespace HaemophilusWeb.Controllers
             var totalCount = queryable.Count();
 
             var searchValue = requestParameters.Search.Value.ToLower();
+            var columns = requestParameters.Columns;
+            var filteredColumns = columns.GetFilteredColumns().ToList();
             if (!string.IsNullOrEmpty(searchValue))
             {
                 queryable = queryable.Where(x => x.FullTextSearch.Contains(searchValue)).ToList();
             }
+            else if (filteredColumns.Any())
+            {
+                foreach (var column in filteredColumns)
+                {
+                    Func<QueryRecord, object> keySelector = x => x.GetType().GetProperty(column.Data).GetValue(x);
+                    if (column.Data == "BirthDate")
+                    {
+                        keySelector = x => x.BirthDate.ToReportFormat();
+                    }
+                    queryable = queryable.Where(x => keySelector(x) != null && keySelector(x).ToString().
+                        ToLower().Contains(column.Search.Value.ToLower())).ToList();
+                }
+            }
 
-            foreach (var column in requestParameters.Columns.GetSortedColumns())
+            foreach (var column in columns.GetSortedColumns())
             {
                 Func<QueryRecord, object> keySelector = x => x.GetType().GetProperty(column.Data).GetValue(x);
                 queryable = column.SortDirection == Column.OrderDirection.Descendant
@@ -476,6 +496,9 @@ namespace HaemophilusWeb.Controllers
                     x.Invasive,
                     ReportGenerated = CreateReportGeneratedIcon(x.ReportGenerated),
                     LaboratoryNumber = CreateIsolateLink(x.IsolateId, x.LaboratoryNumberString),
+                    x.PatientPostalCode,
+                    x.SenderPostalCode,
+                    x.SenderLaboratoryNumber,
                     Link = CreateEditControls(x.SendingId, x.IsolateId)
                 });
 
@@ -484,8 +507,7 @@ namespace HaemophilusWeb.Controllers
                 requestParameters.Draw,
                 pagedData,
                 queryable.Count(),
-                totalCount
-                );
+                totalCount);
 
             return Json(dataTablesResult);
         }
@@ -512,6 +534,9 @@ namespace HaemophilusWeb.Controllers
             public int IsolateId { get; set; }
             public int SendingId { get; set; }
             public bool ReportGenerated { get; set; }
+            public string PatientPostalCode { get; set; }
+            public string SenderPostalCode { get; set; }
+            public string SenderLaboratoryNumber { get; set; }
         }
 
         private string CreateIsolateLink(int isolateId, string laboratoryNumber)
