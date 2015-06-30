@@ -1,4 +1,5 @@
-﻿@using HaemophilusWeb.Views.Utils
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.ViewModels.IsolateViewModel
 
 @{
@@ -43,6 +44,33 @@
         <div class="col-sm-5 form-control-static">
             @Html.DisplayFor(model => model.PatientAgeAtSampling)
             @Html.HiddenFor(model => model.PatientAgeAtSampling)
+        </div>
+    </div>
+    
+    <div class="form-group">
+        @Html.LabelFor(model => model.Growth, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.EnumRadioButtonFor(model => model.Growth)
+        </div>
+    </div>
+    <div id="GrowthTypeForm" class="form-group">
+        @Html.LabelFor(m => m.TypeOfGrowth, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-default@(Model.TypeOfGrowth.HasFlag(GrowthType.GrowthOnBlood) ? " active" : string.Empty)">
+                    <input type="checkbox" name="TypeOfGrowth" value="GrowthOnBlood" @(Model.TypeOfGrowth.HasFlag(GrowthType.GrowthOnBlood) ? " checked" : string.Empty) /> Wachstum auf Blut
+                </label>
+                <label class="btn btn-default@(Model.TypeOfGrowth.HasFlag(GrowthType.TypicalGrowthOnKb) ? " active" : string.Empty)">
+                    <input id="defaultTypeOfGrowth" type="checkbox" name="TypeOfGrowth" value="TypicalGrowthOnKb" @(Model.TypeOfGrowth.HasFlag(GrowthType.TypicalGrowthOnKb) ? " checked" : string.Empty) /> Typisches Wachstum auf KB
+                </label>
+                <label class="btn btn-default@(Model.TypeOfGrowth.HasFlag(GrowthType.AtypicalGrowthOnKb) ? " active" : string.Empty)">
+                    <input type="checkbox" name="TypeOfGrowth" value="AtypicalGrowthOnKb" @(Model.TypeOfGrowth.HasFlag(GrowthType.AtypicalGrowthOnKb) ? " checked" : string.Empty) /> Atypisches Wachstum auf KB
+                </label>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10">
+            @Html.ValidationMessageFor(model => model.TypeOfGrowth)
         </div>
     </div>
 
@@ -274,12 +302,34 @@
         {
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("input[id$=_Measurement]").keyup(ETestChange);
+            ShowGrowthTypeIfGrowthIsSelectedWithYes();
             ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
             ShowApiNhMatchInPercentIfDeterminedIsSelected();
             ShowMaldiTofMatchConfidenceIfDeterminedIsSelected();
             ShowFtsiEvaluationIfDeterminedIsSelected();
             ShowMlstSequenceTypeIfDeterminedIsSelected();
         });
+
+        function ShowGrowthTypeIfGrowthIsSelectedWithYes()
+        {
+            ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+                "#GrowthTypeForm", "input:radio[name$='Growth']",
+                "input:radio[name$='Growth']:checked",
+                "Yes", "input:checkbox[name$='TypeOfGrowth']"
+            );
+            $("input:radio[name$='Growth']").change(function () {
+                if($("input:radio[name$='Growth']:checked").val() == "Yes")
+                {
+                    var checkedTypeOfGrowth = $("input:checkbox[name$='TypeOfGrowth']:checked");
+                    if(!checkedTypeOfGrowth.val())
+                    {
+                        $("#defaultTypeOfGrowth").attr("checked","checked");
+                        $("#defaultTypeOfGrowth").parent().addClass("active");
+                    }
+                }
+            });
+        }
+
 
         function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected()
         {

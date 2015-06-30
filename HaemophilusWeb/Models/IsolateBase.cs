@@ -88,5 +88,11 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
+
+        [Display(Name = "Wachstum")]
+        public YesNoOptional Growth { get; set; }
+
+        [Display(Name = "Art des Wachstums")]
+        public GrowthType TypeOfGrowth { get; set; }
     }
 }

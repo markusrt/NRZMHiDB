@@ -52,8 +52,17 @@ function ShowDivOrClearInput(
     }
     else {
         $(divToShow).addClass("hidden");
-        $(inputToClearOnOtherValue).val("");
-        $(secondInputToClearOnOtherValue).val("");
+
+        if($(inputToClearOnOtherValue).is(':checkbox'))
+        {
+            $(inputToClearOnOtherValue).removeAttr('checked');
+            $(inputToClearOnOtherValue).parent().removeClass('active');
+        }
+        else
+        {
+            $(inputToClearOnOtherValue).val("");
+            $(secondInputToClearOnOtherValue).val("");
+        }
     }
 }
 

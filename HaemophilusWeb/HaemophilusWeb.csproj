@@ -307,6 +307,10 @@
     <Compile Include="Migrations\201502112024310_County.Designer.cs">
       <DependentUpon>201502112024310_County.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201506301117277_Isolate_10_Growth.cs" />
+    <Compile Include="Migrations\201506301117277_Isolate_10_Growth.Designer.cs">
+      <DependentUpon>201506301117277_Isolate_10_Growth.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -315,6 +319,7 @@
     <Compile Include="Models\EpsilometerTestResult.cs" />
     <Compile Include="Models\EucastClinicalBreakpoint.cs" />
     <Compile Include="Models\Antibiotic.cs" />
+    <Compile Include="Models\GrowthType.cs" />
     <Compile Include="Models\IsolateBase.cs" />
     <Compile Include="Models\Material.cs" />
     <Compile Include="Models\SerotypePcr.cs" />
@@ -338,6 +343,7 @@
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Sender.cs" />
     <Compile Include="Models\YesNo.cs" />
+    <Compile Include="Models\YesNoOptional.cs" />
     <Compile Include="Models\YesNoUnknown.cs" />
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1021,6 +1027,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502112024310_County.resx">
       <DependentUpon>201502112024310_County.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506301117277_Isolate_10_Growth.resx">
+      <DependentUpon>201506301117277_Isolate_10_Growth.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

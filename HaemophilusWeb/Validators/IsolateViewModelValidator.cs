@@ -37,6 +37,9 @@ namespace HaemophilusWeb.Validators
             RuleFor(i => i.MlstSequenceType).Must((model, value)
                 => BeSetIfDetermined(value, model.Mlst)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(p => p.LaboratoryNumber).NotEmpty();
+            RuleFor(p => p.TypeOfGrowth).Must(
+                (model, value) => model.Growth != YesNoOptional.Yes || value > 0).WithMessage(
+                    "Die Art des Wachstums muss angegeben werden.");
             RuleFor(p => p.LaboratoryNumber).Matches(@"\d+/\d\d").WithMessage(
                 "Die Labornummer muss in der Form '39/14' eingegeben werden.");
         }

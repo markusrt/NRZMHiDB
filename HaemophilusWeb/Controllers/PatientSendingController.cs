@@ -257,6 +257,8 @@ namespace HaemophilusWeb.Controllers
             export.AddField(s => s.Patient.TherapyDetails);
             export.AddField(s => s.Remark, "Bemerkung (Einsendung)");
 
+            export.AddField(s => ExportToString(s.Isolate.Growth));
+            export.AddField(s => ExportToString(s.Isolate.TypeOfGrowth));
             export.AddField(s => ExportToString(s.Isolate.Oxidase));
             export.AddField(s => ExportToString(s.Isolate.BetaLactamase));
             export.AddField(s => ExportToString(s.Isolate.Agglutination));
@@ -359,7 +361,7 @@ namespace HaemophilusWeb.Controllers
             return ExportToString(location);
         }
 
-        private static string ExportToString(object value)
+        private static string ExportToString<T>(T value)
         {
             if (value == null)
             {

@@ -208,7 +208,8 @@ namespace HaemophilusWeb.Controllers
                             .Single(i => i.IsolateId == isolateViewModel.IsolateId);
                     Mapper.Map(isolateViewModel, isolate);
                     ParseAndMapLaboratoryNumber(isolateViewModel, isolate);
-
+                    isolate.TypeOfGrowth =
+                        EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<GrowthType>(Request.Form["TypeOfGrowth"]);
                     ViewModelToModel(isolateViewModel.EpsilometerTestViewModels, isolate.EpsilometerTests);
                     db.MarkAsModified(isolate);
                     db.SaveChanges();
