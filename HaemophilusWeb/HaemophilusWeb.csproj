@@ -448,6 +448,12 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Images\changes\20150630.png" />
+    <Content Include="Images\changes\20150715_1.png" />
+    <Content Include="Images\changes\20150715_2.png" />
+    <Content Include="Images\changes\20150715_3.png" />
+    <Content Include="Images\changes\20150715_4.png" />
+    <Content Include="Images\changes\20150715_5.png" />
     <Content Include="Images\logo4.png" />
     <Content Include="Images\sort_asc.png" />
     <Content Include="Images\sort_both.png" />
@@ -955,7 +961,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\changes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
