@@ -1,0 +1,26 @@
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Utils
+@model HaemophilusWeb.Models.Change
+
+@{
+    ViewBag.Subtitle = "Änderung vom " + Model.Date.ToReportFormat();
+}
+<p>
+    <h2>
+        @if (Model.Type == ChangeType.Bug)
+        {
+            <h3><span class="label label-danger">Fehlerbehebung</span></h3>
+        }
+        else if (Model.Type == ChangeType.Feature)
+        {
+            <span class="label label-info">Neue Funktion</span>
+        }
+        else if (Model.Type == ChangeType.Design)
+        {
+            <span class="label label-success">Design</span>
+        }
+    </h2>
+</p>
+<p>
+    @Html.Raw(Model.Details)
+</p>

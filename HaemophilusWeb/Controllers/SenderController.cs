@@ -24,6 +24,12 @@ namespace HaemophilusWeb.Controllers
             return View(db.Senders.Where(s => !s.Deleted).ToList());
         }
 
+        // GET: /Sender/Deleted
+        public ActionResult Deleted()
+        {
+            return View(db.Senders.Where(s => s.Deleted).ToList());
+        }
+
         // GET: /Sender/Details/5
         public ActionResult Details(int? id)
         {
@@ -120,7 +126,30 @@ namespace HaemophilusWeb.Controllers
         {
             var sender = db.Senders.Find(id);
             sender.Deleted = true;
-            return Edit(sender);
+            return EditUnvalidated(sender);
+        }
+
+        private ActionResult EditUnvalidated(Sender sender)
+        {
+            ActionResult result = View();
+            db.PerformWithoutSaveValidation(() => result = Edit(sender));
+            return result;
+        }
+
+        // GET: /Sender/Undelete/5
+        public ActionResult Undelete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var sender = db.Senders.Find(id);
+            if (sender == null)
+            {
+                return HttpNotFound();
+            }
+            sender.Deleted = false;
+            return EditUnvalidated(sender);
         }
 
         protected override void Dispose(bool disposing)

@@ -950,9 +950,12 @@
     <Content Include="Views\PatientSending\RkiExport.cshtml" />
     <Content Include="Views\PatientSending\LaboratoryExport.cshtml" />
     <Content Include="Views\Shared\_DeleteButton.cshtml" />
+    <Content Include="Views\Sender\Deleted.cshtml" />
+    <Content Include="Views\Home\Change.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\changes\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

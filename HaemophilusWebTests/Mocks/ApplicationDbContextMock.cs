@@ -71,6 +71,11 @@ namespace HaemophilusWeb.Models
             action();
         }
 
+        public void PerformWithoutSaveValidation(Action action)
+        {
+            action();
+        }
+
         public void Dispose()
         {
         }

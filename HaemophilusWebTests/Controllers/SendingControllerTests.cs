@@ -135,15 +135,16 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Test]
-        public void Create_AddsPossiblePatientsAndSenders()
+        public void Create_AddsPossiblePatientsAndNonDeletedSenders()
         {
             var controller = CreateMockSendingController();
+            DbMock.Senders.First().Deleted = true;
 
             var result = controller.Create() as ViewResult;
 
             result.Should().NotBeNull();
 
-            CollectionAssert.AreEquivalent(result.ViewBag.PossibleSenders, DbMock.Senders);
+            CollectionAssert.AreEquivalent(result.ViewBag.PossibleSenders, DbMock.Senders.Where(s => !s.Deleted));
             CollectionAssert.AreEquivalent(result.ViewBag.PossiblePatients, DbMock.Patients);
         }
 

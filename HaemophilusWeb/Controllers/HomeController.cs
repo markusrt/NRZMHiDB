@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
 
@@ -11,7 +12,6 @@ namespace HaemophilusWeb.Controllers
             new List<Change>
             {
                 new Change(DateTime.MinValue, "Löschen von Isolaten und Einsendungen", ChangeType.Feature),
-                new Change(DateTime.MinValue, "Löschen von Einsendern", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Unterstützung für doppelte Einsendungen eines Patienten",
                     ChangeType.Feature),
                 new Change(DateTime.MinValue, "Automatische Bestimmung des zugehörigen Gesundheitsamtes",
@@ -21,8 +21,23 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 7, 15),
+                    "<p>Löschen von Einsendern</p>" +
+                    "<p>Am Ende der Bearbeitungsmaske für Einsender gibt es jetzt einen neuen Knopf zum Löschen.<p>" +
+                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_1.png'/>" +
+                    "<p>Falls einem Einsender noch Einsendungen zugeordnet sind, so ist ein Löschen nicht möglich. In dem Fall muss der Anwender die betroffenen Einsendungen erst einem anderen Einsender zuordnen.</p>" +
+                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_2.png'/>" +
+                    "<p>Einsender, von denen keine Einsendungen mehr existieren können nach einer Sicherheitsabfrage gelöscht werden.<p>" +
+                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_3.png'/>" +
+                    "<p>Gelöschte Einsender können über das Menü 'Administration' jederzeit wiederhergestellt werden</p>" +
+                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_4.png'/>" +
+                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_5.png'/>",
+                    ChangeType.Feature),
                 new Change(new DateTime(2015, 6, 30),
-                    "Erweiterte Erfassung von Isolaten VII (Wachstum und Art des Wachstums)",
+                    "<p>Erweiterte Erfassung von Isolaten VII (Wachstum und Art des Wachstums)</p>" +
+                    "<p>Es ist jetzt möglich bei der Isolat-Maske das Wachstum und die Art des Wachstums auszuwählen. Inhaltlich ist es so wie wir es Ende letzten Jahres festgelegt hatten. Ich habe die beiden neuen Felder auch in den Labor-Export mit aufgenommen.</p>" +
+                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150630.png'/>" +
+                    "<p>Alle bisherigen Datensätze wurden mit 'keine Angabe' initialisiert.</p>",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 6, 29),
                     "Erweiterte Suche von Einsendungen nach Geburtsdatum, Initialien, Patient PLZ, Einsender-Labornummer und Einsender PLZ",
@@ -113,6 +128,16 @@ namespace HaemophilusWeb.Controllers
         public ActionResult About()
         {
             return View(changeLog);
+        }
+
+        public ActionResult Change(DateTime? id)
+        {
+            var change = changeLog.PreviousChanges.FirstOrDefault(c => c.Date.Equals(id));
+            if (change == null)
+            {
+                return HttpNotFound();
+            }
+            return View(change);
         }
     }
 }

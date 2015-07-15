@@ -1,0 +1,41 @@
+﻿@model IEnumerable<HaemophilusWeb.Models.Sender>
+
+@{
+    ViewBag.Title = "Gelöschte Einsender";
+}
+<table class="table table-striped" id="senders">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PostalCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostalCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
+                    @Html.ActionLink("Wiederherstellen", "Undelete", new { id = item.SenderId }, new { @class = "btn btn-success" })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

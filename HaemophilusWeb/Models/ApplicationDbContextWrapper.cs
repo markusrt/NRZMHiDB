@@ -78,5 +78,12 @@ namespace HaemophilusWeb.Models
                 }
             }
         }
+
+        public void PerformWithoutSaveValidation(Action action)
+        {
+            wrappedContext.Configuration.ValidateOnSaveEnabled = false;
+            action();
+            wrappedContext.Configuration.ValidateOnSaveEnabled = true;
+        }
     }
 }

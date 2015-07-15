@@ -24,5 +24,7 @@ namespace HaemophilusWeb.Models
         int SaveChanges();
 
         void WrapInTransaction(Action action);
+
+        void PerformWithoutSaveValidation(Action action);
     }
 }
