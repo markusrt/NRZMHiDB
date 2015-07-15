@@ -311,6 +311,10 @@
     <Compile Include="Migrations\201506301117277_Isolate_10_Growth.Designer.cs">
       <DependentUpon>201506301117277_Isolate_10_Growth.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201507140902578_Sender_Delete.cs" />
+    <Compile Include="Migrations\201507140902578_Sender_Delete.Designer.cs">
+      <DependentUpon>201507140902578_Sender_Delete.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -945,6 +949,7 @@
     <Content Include="Views\County\Upload.cshtml" />
     <Content Include="Views\PatientSending\RkiExport.cshtml" />
     <Content Include="Views\PatientSending\LaboratoryExport.cshtml" />
+    <Content Include="Views\Shared\_DeleteButton.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1030,6 +1035,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201506301117277_Isolate_10_Growth.resx">
       <DependentUpon>201506301117277_Isolate_10_Growth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507140902578_Sender_Delete.resx">
+      <DependentUpon>201507140902578_Sender_Delete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

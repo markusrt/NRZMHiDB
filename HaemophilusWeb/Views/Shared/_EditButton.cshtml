@@ -6,5 +6,9 @@
             <input type="submit" name="secondary-submit" value="@ViewBag.SecondarySubmit" class="btn btn-info" />
         }
         @Html.ActionLink("Zurück zur Liste", "Index", (string)ViewBag.Controller, null, new { @class = "btn btn-default" })
+        @if (ViewBag.DeleteId != null)
+        {
+            @Html.ActionLink("Eintrag löschen", "Delete", (string)ViewBag.Controller, new { id = ViewBag.DeleteId }, new { @class = "btn btn-danger" })
+        }
     </div>
 </div>

@@ -23,7 +23,7 @@ namespace HaemophilusWeb.Models
         [RegularExpression(Validations.PostalCodeValidation, ErrorMessage = Validations.PostalCodeValidationError)]
         public string PostalCode { get; set; }
 
-        [Display(Name = "Wohnort")]
+        [Display(Name = "Ort")]
         public string City { get; set; }
 
         [Display(Name = "Telefon #1")]
@@ -45,5 +45,8 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
+
+        [Display(Name = "Gelöscht")]
+        public bool Deleted { get; set; }
     }
 }

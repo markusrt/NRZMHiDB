@@ -63,10 +63,7 @@ namespace HaemophilusWeb.Mocks
                 {
                     return StaticData;
                 }
-                else
-                {
-                    return nonStaticData;
-                }
+                return nonStaticData;
             }
         }
 
@@ -97,15 +94,12 @@ namespace HaemophilusWeb.Mocks
 
         public virtual T Find(params object[] keyValues)
         {
-            if (FindFunction == null)
+            if (FindFunction != null)
             {
                 return FindFunction(Data, keyValues);
             }
-            else
-            {
-                throw new NotImplementedException(
-                    "Derive from InMemoryDbSet and override Find, or provide a FindFunction.");
-            }
+            throw new NotImplementedException(
+                "Derive from InMemoryDbSet and override Find, or provide a FindFunction.");
         }
 
         public ObservableCollection<T> Local

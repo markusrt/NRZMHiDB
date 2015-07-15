@@ -73,7 +73,7 @@ namespace HaemophilusWeb.Controllers
 
         internal void AddReferenceDataToViewBag(dynamic viewBag)
         {
-            viewBag.PossibleSenders = db.Senders;
+            viewBag.PossibleSenders = db.Senders.Where(s => !s.Deleted);
             viewBag.PossiblePatients = db.Patients;
             viewBag.PossibleOtherSamplingLocations = db.Sendings.Where(
                 s => !string.IsNullOrEmpty(s.OtherSamplingLocation)).Select(s => s.OtherSamplingLocation).AsDataList();

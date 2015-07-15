@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
 
@@ -12,12 +7,21 @@ namespace HaemophilusWeb.Controllers
 {
     public class SenderController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private readonly IApplicationDbContext db;
+
+        public SenderController() : this(new ApplicationDbContextWrapper(new ApplicationDbContext()))
+        {
+        }
+
+        public SenderController(IApplicationDbContext applicationDbContext)
+        {
+            db = applicationDbContext;
+        }
 
         // GET: /Sender/
         public ActionResult Index()
         {
-            return View(db.Senders.ToList());
+            return View(db.Senders.Where(s => !s.Deleted).ToList());
         }
 
         // GET: /Sender/Details/5
@@ -27,7 +31,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Sender sender = db.Senders.Find(id);
+            var sender = db.Senders.Find(id);
             if (sender == null)
             {
                 return HttpNotFound();
@@ -46,7 +50,8 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
+        public ActionResult Create(
+            [Bind(Include = "SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +70,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Sender sender = db.Senders.Find(id);
+            var sender = db.Senders.Find(id);
             if (sender == null)
             {
                 return HttpNotFound();
@@ -78,11 +83,12 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
+        public ActionResult Edit(
+            [Bind(Include = "SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(sender).State = EntityState.Modified;
+                db.MarkAsModified(sender);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -96,23 +102,25 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Sender sender = db.Senders.Find(id);
+            var sender = db.Senders.Find(id);
             if (sender == null)
             {
                 return HttpNotFound();
             }
+            var sendings = db.Sendings.Where(s => s.SenderId == sender.SenderId).ToList();
+            ViewBag.Sendings = sendings;
             return View(sender);
         }
 
         // POST: /Sender/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
+        [ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Sender sender = db.Senders.Find(id);
-            db.Senders.Remove(sender);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            var sender = db.Senders.Find(id);
+            sender.Deleted = true;
+            return Edit(sender);
         }
 
         protected override void Dispose(bool disposing)

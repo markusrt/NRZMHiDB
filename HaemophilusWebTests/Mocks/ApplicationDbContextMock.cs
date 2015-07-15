@@ -8,7 +8,12 @@ namespace HaemophilusWeb.Models
     public class ApplicationDbContextMock : IApplicationDbContext
     {
         public readonly InMemoryDbSet<Patient> PatientDbSet = new InMemoryDbSet<Patient>(true);
-        public readonly InMemoryDbSet<Sender> SenderDbSet = new InMemoryDbSet<Sender>(true);
+
+        public readonly InMemoryDbSet<Sender> SenderDbSet = new InMemoryDbSet<Sender>(true)
+        {
+            FindFunction = (senders, objects) => senders.Single(s => s.SenderId == (int) objects[0])
+        };
+
         public readonly InMemoryDbSet<Sending> SendingDbSet = new MockDbSet<Sending>(true);
         public readonly InMemoryDbSet<Isolate> IsolatesDbSet = new InMemoryDbSet<Isolate>(true);
         public readonly InMemoryDbSet<County> CountiesDbSet = new InMemoryDbSet<County>(true);

@@ -67,7 +67,7 @@
                 }
             </div>
 
-            @if (IsSectionDefined("CreateModel") || IsSectionDefined("EditModel"))
+            @if (IsSectionDefined("CreateModel") || IsSectionDefined("EditModel") || IsSectionDefined("DeleteModel"))
             {
                 using (Html.BeginForm())
                 {
@@ -80,19 +80,17 @@
                         @if (IsSectionDefined("CreateModel"))
                         {
                             @RenderSection("CreateModel")
+                            @Html.Partial("_CreateButton")
                         }
                         @if (IsSectionDefined("EditModel"))
                         {
                             @RenderSection("EditModel")
-                        }
-                     
-                        @if (IsSectionDefined("CreateModel"))
-                        {
-                            @Html.Partial("_CreateButton")
-                        }
-                        else if (IsSectionDefined("EditModel"))
-                        {
                             @Html.Partial("_EditButton")
+                        }
+                        @if (IsSectionDefined("DeleteModel"))
+                        {
+                            @RenderSection("DeleteModel")
+                            @Html.Partial("_DeleteButton")
                         }
                     </div>
                 }
