@@ -1,0 +1,53 @@
+﻿@using HaemophilusWeb.Models
+@model HaemophilusWeb.Models.Sending
+
+@{
+    ViewBag.Title = "Löschen bestätigen";
+}
+
+@section DeleteModel
+{
+    <h3>Sind Sie sicher, dass sie die folgende Einsendung löschen wollen?</h3>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.Initials)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient.Initials)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.BirthDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient.BirthDate)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Isolate.StemNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Isolate.StemNumber)
+        </dd>
+        
+        <dt>
+            @Html.DisplayNameFor(model => model.Isolate.LaboratoryNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Isolate.LaboratoryNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReceivingDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReceivingDate)
+        </dd>
+
+    </dl>
+}

@@ -28,8 +28,6 @@ namespace HaemophilusWeb.Models
         [ForeignKey("Patient")]
         public int PatientId { get; set; }
 
-        public virtual Patient Patient { get; set; }
-
         [Display(Name = "Entnahmedatum")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? SamplingDate { get; set; }
@@ -59,10 +57,14 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
 
-        public virtual Isolate Isolate { get; set; }
-
         [NotMapped]
         [Display(Name = "Labornummer")]
         public string LaboratoryNumber { get; set; }
+
+        [Display(Name = "Gelöscht")]
+        public bool Deleted { get; set; }
+
+        public virtual Isolate Isolate { get; set; }
+        public virtual Patient Patient { get; set; }
     }
 }

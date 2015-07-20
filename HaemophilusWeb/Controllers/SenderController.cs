@@ -113,7 +113,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return HttpNotFound();
             }
-            var sendings = db.Sendings.Where(s => s.SenderId == sender.SenderId).ToList();
+            var sendings = db.Sendings.Where(s => s.SenderId == sender.SenderId && !s.Deleted).ToList();
             ViewBag.Sendings = sendings;
             return View(sender);
         }

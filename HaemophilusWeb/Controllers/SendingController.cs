@@ -21,10 +21,19 @@ namespace HaemophilusWeb.Controllers
             db = applicationDbContext;
         }
 
+        private static int CurrentYear
+        {
+            get
+            {
+                var currentYear = DateTime.Now.Year;
+                return currentYear;
+            }
+        }
+
         // GET: /Sending/
         public ActionResult Index()
         {
-            return View(db.Sendings.ToList());
+            return View(db.Sendings.Where(s => !s.Deleted).ToList());
         }
 
         // GET: /Sending/Details/5
@@ -125,15 +134,6 @@ namespace HaemophilusWeb.Controllers
             };
         }
 
-        private static int CurrentYear
-        {
-            get
-            {
-                var currentYear = DateTime.Now.Year;
-                return currentYear;
-            }
-        }
-
         private int GetNextSequentialStemNumber()
         {
             var lastSequentialStemNumber =
@@ -174,33 +174,6 @@ namespace HaemophilusWeb.Controllers
                 ? ReportFormatter.ToLaboratoryNumber(GetNextSequentialIsolateNumber(), CurrentYear)
                 : sending.Isolate.LaboratoryNumber;
             return View(sending);
-        }
-
-        // GET: /Sending/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var sending = db.Sendings.Find(id);
-            if (sending == null)
-            {
-                return HttpNotFound();
-            }
-            return View(sending);
-        }
-
-        // POST: /Sending/Delete/5
-        [HttpPost]
-        [ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            var sending = db.Sendings.Find(id);
-            db.Sendings.Remove(sending);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

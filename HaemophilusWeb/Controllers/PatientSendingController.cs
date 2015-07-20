@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
@@ -43,7 +44,6 @@ namespace HaemophilusWeb.Controllers
             var patientResult = patientController.Create() as ViewResult;
             var sendingResult = sendingController.Create() as ViewResult;
 
-
             return CreateEditView(new PatientSendingViewModel
             {
                 Patient = (Patient) patientResult.Model,
@@ -60,9 +60,15 @@ namespace HaemophilusWeb.Controllers
 
         public ActionResult Edit(int? id)
         {
-            var sendingResult = sendingController.Edit(id) as ViewResult;
+            var sending = LoadSendingFromSendingController(id);
+            return CreateEditView(CreatePatientSending(sending));
+        }
 
-            return CreateEditView(CreatePatientSending((Sending) sendingResult.Model));
+        private Sending LoadSendingFromSendingController(int? id)
+        {
+            var sendingResult = sendingController.Edit(id) as ViewResult;
+            var sending = (Sending) sendingResult.Model;
+            return sending;
         }
 
         [HttpPost]
@@ -80,6 +86,28 @@ namespace HaemophilusWeb.Controllers
                 return RedirectToAction("Index");
             }
             return CreateEditView(patientSending);
+        }
+
+        public ActionResult Delete(int? id)
+        {
+            return View(LoadSendingFromSendingController(id));
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var sending = LoadSendingFromSendingController(id);
+            sending.Deleted = true;
+            return EditUnvalidated(sending);
+        }
+
+        private ActionResult EditUnvalidated(Sending sending)
+        {
+            ActionResult result = View();
+            db.PerformWithoutSaveValidation(() => result = sendingController.Edit(sending));
+            return result;
         }
 
         private void AssignClinicalInformationFromCheckboxValues(PatientSendingViewModel patientSending)
@@ -149,8 +177,7 @@ namespace HaemophilusWeb.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public ActionResult Index()
         {
-            return View(db.Sendings.Include(s => s.Patient).OrderBy(s => s.SendingId)
-                .Take(0).Select(CreatePatientSending).ToList());
+            return View(NotDeletedSendings().Take(0).Select(CreatePatientSending).ToList());
         }
 
         private PatientSendingViewModel CreatePatientSending(Sending sending)
@@ -207,7 +234,7 @@ namespace HaemophilusWeb.Controllers
         private ActionResult ExportToExcel<T>(ExportQuery query, List<T> list, ExportDefinition<T> exportDefinition,
             string prefix)
         {
-            var tempFile = System.IO.Path.GetTempFileName();
+            var tempFile = Path.GetTempFileName();
             CreateExcelFile.CreateExcelDocument(list, exportDefinition, tempFile);
             return File(System.IO.File.ReadAllBytes(tempFile),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -216,7 +243,7 @@ namespace HaemophilusWeb.Controllers
 
         private List<Sending> SendingsMatchingExportQuery(ExportQuery query, List<SamplingLocation> samplingLocations)
         {
-            return db.Sendings.Include(s => s.Patient)
+            return NotDeletedSendings()
                 .Include(s => s.Patient)
                 .Where
                 (s => samplingLocations.Contains(s.SamplingLocation)
@@ -405,7 +432,7 @@ namespace HaemophilusWeb.Controllers
         [HttpPost]
         public JsonResult DataTableAjax([ModelBinder(typeof (DataTablesBinder))] IDataTablesRequest requestParameters)
         {
-            var query = db.Sendings.Select(x => new
+            var query = NotDeletedSendings().Select(x => new
             {
                 x.SendingId,
                 x.Isolate.IsolateId,
@@ -504,7 +531,6 @@ namespace HaemophilusWeb.Controllers
                     Link = CreateEditControls(x.SendingId, x.IsolateId)
                 });
 
-
             var dataTablesResult = new DataTablesResponse(
                 requestParameters.Draw,
                 pagedData,
@@ -514,31 +540,17 @@ namespace HaemophilusWeb.Controllers
             return Json(dataTablesResult);
         }
 
+        private IQueryable<Sending> NotDeletedSendings()
+        {
+            return db.Sendings.Where(s => !s.Deleted);
+        }
+
         private static string CreateReportGeneratedIcon(bool reportGenerated)
         {
             return string.Format(
                 "<span style=\"color:{0}\" class=\"glyphicon {1}\" aria-hidden=\"true\"></span>",
                 reportGenerated ? "#00CC00" : "#CC0000",
                 reportGenerated ? "glyphicon-ok-sign" : "glyphicon-remove-sign");
-        }
-
-        public class QueryRecord
-        {
-            public string Initials { get; set; }
-            public DateTime? BirthDate { get; set; }
-            public int? StemNumber { get; set; }
-            public DateTime ReceivingDate { get; set; }
-            public string SamplingLocation { get; set; }
-            public string Invasive { get; set; }
-            public int LaboratoryNumber { get; set; }
-            public string LaboratoryNumberString { get; set; }
-            public string FullTextSearch { get; set; }
-            public int IsolateId { get; set; }
-            public int SendingId { get; set; }
-            public bool ReportGenerated { get; set; }
-            public string PatientPostalCode { get; set; }
-            public string SenderPostalCode { get; set; }
-            public string SenderLaboratoryNumber { get; set; }
         }
 
         private string CreateIsolateLink(int isolateId, string laboratoryNumber)
@@ -558,6 +570,25 @@ namespace HaemophilusWeb.Controllers
                 Url.Action("Report", "Isolate", new {id = isolateId}));
             builder.Append("</div>");
             return builder.ToString();
+        }
+
+        public class QueryRecord
+        {
+            public string Initials { get; set; }
+            public DateTime? BirthDate { get; set; }
+            public int? StemNumber { get; set; }
+            public DateTime ReceivingDate { get; set; }
+            public string SamplingLocation { get; set; }
+            public string Invasive { get; set; }
+            public int LaboratoryNumber { get; set; }
+            public string LaboratoryNumberString { get; set; }
+            public string FullTextSearch { get; set; }
+            public int IsolateId { get; set; }
+            public int SendingId { get; set; }
+            public bool ReportGenerated { get; set; }
+            public string PatientPostalCode { get; set; }
+            public string SenderPostalCode { get; set; }
+            public string SenderLaboratoryNumber { get; set; }
         }
     }
 }
