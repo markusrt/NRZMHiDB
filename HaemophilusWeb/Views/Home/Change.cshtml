@@ -9,7 +9,7 @@
     <h2>
         @if (Model.Type == ChangeType.Bug)
         {
-            <h3><span class="label label-danger">Fehlerbehebung</span></h3>
+            <span class="label label-danger">Fehlerbehebung</span>
         }
         else if (Model.Type == ChangeType.Feature)
         {
@@ -22,5 +22,5 @@
     </h2>
 </p>
 <p>
-    @Html.Raw(Model.Details)
+    @Html.Raw(Model.Details.Replace("~/", Url.Content("~/")))
 </p>

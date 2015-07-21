@@ -24,19 +24,19 @@ namespace HaemophilusWeb.Controllers
                 new Change(new DateTime(2015, 7, 15),
                     "<p>Löschen von Einsendern</p>" +
                     "<p>Am Ende der Bearbeitungsmaske für Einsender gibt es jetzt einen neuen Knopf zum Löschen.<p>" +
-                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_1.png'/>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20150715_1.png'/>" +
                     "<p>Falls einem Einsender noch Einsendungen zugeordnet sind, so ist ein Löschen nicht möglich. In dem Fall muss der Anwender die betroffenen Einsendungen erst einem anderen Einsender zuordnen.</p>" +
-                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_2.png'/>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20150715_2.png'/>" +
                     "<p>Einsender, von denen keine Einsendungen mehr existieren können nach einer Sicherheitsabfrage gelöscht werden.<p>" +
-                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_3.png'/>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20150715_3.png'/>" +
                     "<p>Gelöschte Einsender können über das Menü 'Administration' jederzeit wiederhergestellt werden</p>" +
-                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_4.png'/>" +
-                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150715_5.png'/>",
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20150715_4.png'/>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20150715_5.png'/>",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 6, 30),
                     "<p>Erweiterte Erfassung von Isolaten VII (Wachstum und Art des Wachstums)</p>" +
                     "<p>Es ist jetzt möglich bei der Isolat-Maske das Wachstum und die Art des Wachstums auszuwählen. Inhaltlich ist es so wie wir es Ende letzten Jahres festgelegt hatten. Ich habe die beiden neuen Felder auch in den Labor-Export mit aufgenommen.</p>" +
-                    "<img class='img-rounded img-responsive' src='../../Images/changes/20150630.png'/>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20150630.png'/>" +
                     "<p>Alle bisherigen Datensätze wurden mit 'keine Angabe' initialisiert.</p>",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 6, 29),

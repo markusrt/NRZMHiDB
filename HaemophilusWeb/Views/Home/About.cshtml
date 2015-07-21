@@ -34,7 +34,7 @@
             {
                 <tr>
                     <td>@item.Priority</td>
-                    <td>@Html.Raw(item.Details)</td>
+                    <td>@Html.Raw(item.Details.Replace("~/", Url.Content("~/")))</td>
                     <td>
                         @if (item.Type == ChangeType.Bug)
                         {
@@ -72,7 +72,7 @@
             {
                 <tr>
                     <td>@Html.ActionLink(item.Date.ToShortDateString(), "Change", new { id = item.Date.ToString("yyyy-MM-dd") })</td>
-                    <td>@Html.Raw(item.Details)</td>
+                    <td>@Html.Raw(item.Details.Replace("~/", Url.Content("~/")))</td>
                     <td>
                         @if (item.Type == ChangeType.Bug)
                         {
