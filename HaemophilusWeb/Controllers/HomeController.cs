@@ -11,7 +11,6 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
-                new Change(DateTime.MinValue, "Löschen von Isolaten und Einsendungen", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Unterstützung für doppelte Einsendungen eines Patienten",
                     ChangeType.Feature),
                 new Change(DateTime.MinValue, "Automatische Bestimmung des zugehörigen Gesundheitsamtes",
@@ -21,9 +20,14 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 7, 28), 
+                    "<p>Löschen von Isolaten und Einsendungen</p>" +
+                    "<p>Analog zum Löschen von Einsendern ist es jetzt möglich Einsendungen als gelöscht zu markieren. " +
+                    "In der Bearbeitungsmaske für Einsendungen gibt es einen neuen Knopf zum Löschen</p>" +
+                    "<p>Gelöschte Einsendungen können über 'Administration→Gelöschte Einsendungen' wiederhergestellt werden</p>", ChangeType.Feature),
                 new Change(new DateTime(2015, 7, 15),
                     "<p>Löschen von Einsendern</p>" +
-                    "<p>Am Ende der Bearbeitungsmaske für Einsender gibt es jetzt einen neuen Knopf zum Löschen.<p>" +
+                    "<p>Am Ende der Bearbeitungsmaske für Einsender gibt es einen neuen Knopf zum Löschen.<p>" +
                     "<img class='img-rounded img-responsive' src='~/Images/changes/20150715_1.png'/>" +
                     "<p>Falls einem Einsender noch Einsendungen zugeordnet sind, so ist ein Löschen nicht möglich. In dem Fall muss der Anwender die betroffenen Einsendungen erst einem anderen Einsender zuordnen.</p>" +
                     "<img class='img-rounded img-responsive' src='~/Images/changes/20150715_2.png'/>" +

@@ -963,6 +963,7 @@
     <Content Include="Views\Sender\Deleted.cshtml" />
     <Content Include="Views\Home\Change.cshtml" />
     <Content Include="Views\PatientSending\Delete.cshtml" />
+    <Content Include="Views\PatientSending\Deleted.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

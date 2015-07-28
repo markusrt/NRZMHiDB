@@ -1,0 +1,53 @@
+﻿@model IEnumerable<HaemophilusWeb.ViewModels.PatientSendingViewModel>
+
+@{
+    ViewBag.Title = "Gelöschte Einsendungen";
+}
+<table class="table table-striped" id="senders">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Patient.Initials)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Patient.BirthDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sending.Isolate.StemNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sending.Isolate.LaboratoryNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sending.ReceivingDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patient.Initials)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Patient.BirthDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sending.Isolate.StemNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sending.Isolate.LaboratoryNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sending.ReceivingDate)
+                </td>
+                <td>
+                    @Html.ActionLink("Wiederherstellen", "Undelete", new { id = item.Sending.SendingId }, new { @class = "btn btn-success" })
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

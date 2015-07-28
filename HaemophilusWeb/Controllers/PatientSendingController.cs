@@ -103,6 +103,19 @@ namespace HaemophilusWeb.Controllers
             return EditUnvalidated(sending);
         }
 
+        public ActionResult Deleted()
+        {
+            return View(db.Sendings.Include(s=>s.Patient).Where(s => s.Deleted).Select(CreatePatientSending).ToList());
+        }
+
+        public ActionResult Undelete(int? id)
+        {
+            var sending = LoadSendingFromSendingController(id);
+            sending.Deleted = false;
+            return EditUnvalidated(sending);
+        }
+
+
         private ActionResult EditUnvalidated(Sending sending)
         {
             ActionResult result = View();
