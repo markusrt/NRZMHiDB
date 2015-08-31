@@ -39,3 +39,20 @@
     </tbody>
 
 </table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#senders').dataTable({
+                "lengthChange": false,
+                "order": [0, 'asc'],
+                "pageLength": 8,
+                "stateSave": true,
+                "language": {
+                    "url": "@Url.Content("~/Scripts/dataTables.german.js")"
+                }
+            });
+        });
+    </script>
+}

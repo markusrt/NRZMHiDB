@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Gelöschte Einsendungen";
 }
-<table class="table table-striped" id="senders">
+<table class="table table-striped" id="sendings">
     <thead>
         <tr>
             <th>
@@ -51,3 +51,20 @@
     </tbody>
 
 </table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#sendings').dataTable({
+                "lengthChange": false,
+                "order": [0, 'asc'],
+                "pageLength": 8,
+                "stateSave": true,
+                "language": {
+                    "url": "@Url.Content("~/Scripts/dataTables.german.js")"
+                }
+            });
+        });
+    </script>
+}

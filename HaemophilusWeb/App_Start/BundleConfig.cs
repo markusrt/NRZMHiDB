@@ -16,6 +16,7 @@ namespace HaemophilusWeb
 
             bundles.Add(new ScriptBundle("~/bundles/jquerydatatable").Include(
                 "~/Scripts/DataTables/jquery.dataTables.min.js",
+                "~/Scripts/DataTables/datetime-moment.js",
                 "~/Scripts/DataTables/dataTables.bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/globalize-de-DE")

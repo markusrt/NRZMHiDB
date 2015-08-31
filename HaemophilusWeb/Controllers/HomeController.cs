@@ -20,6 +20,10 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 8, 22), 
+                    "<p>Sortierung von gelöschten Einsendungen und Einsendern</p>" +
+                    "<p>Die Listen der gelöschten Einsendungen und Einsender sind nach allen Feldern sortierbar.</p>", 
+                    ChangeType.Feature),
                 new Change(new DateTime(2015, 7, 28), 
                     "<p>Löschen von Isolaten und Einsendungen</p>" +
                     "<p>Analog zum Löschen von Einsendern ist es jetzt möglich Einsendungen als gelöscht zu markieren. " +
