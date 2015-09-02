@@ -134,13 +134,13 @@ namespace HaemophilusWeb.Controllers
         public ActionResult Create(PatientSendingViewModel patientSending)
         {
             PerformValidations(patientSending);
-            ValidatePatientDoesNotAlreadyExist(patientSending.Patient);
+            ValidatePatientDoesNotAlreadyExist(patientSending);
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && !patientSending.DuplicatePatientDetected)
             {
-                patientController.CreatePatient(patientSending.Patient);
+                var patient = CreateOrUpdatePatient(patientSending);
                 var sending = patientSending.Sending;
-                sending.PatientId = patientSending.Patient.PatientId;
+                sending.PatientId = patient.PatientId;
                 sendingController.CreateSendingAndAssignStemnumber(sending);
                 if (sending.LaboratoryNumber != sending.Isolate.LaboratoryNumber)
                 {
@@ -153,25 +153,59 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(patientSending);
         }
 
+        private Patient CreateOrUpdatePatient(PatientSendingViewModel patientSending)
+        {
+            var patient = patientSending.Patient;
+            if (patientSending.DuplicatePatientResolution == DuplicatePatientResolution.UseExistingPatient)
+            {
+                var duplicatePatients = FindDuplicatePatients(patient);
+                var existingPatient = duplicatePatients.Single();
+                patient.PatientId = existingPatient.PatientId;
+                patientController.EditPatient(patient);
+            }
+            else
+            {
+                patientController.CreatePatient(patient);
+            }
+            return patient;
+        }
+
         private void PerformValidations(PatientSendingViewModel patientSending)
         {
             ValidateModel(patientSending.Sending, new SendingValidator());
             ValidateModel(patientSending.Patient, new PatientValidator());
         }
 
-        private void ValidatePatientDoesNotAlreadyExist(Patient patient)
+        private void ValidatePatientDoesNotAlreadyExist(PatientSendingViewModel patientSending)
         {
-            var existingPatient = db.Patients.SingleOrDefault(
+            patientSending.DuplicatePatientDetected = false;
+            if (patientSending.DuplicatePatientResolution != null)
+            {
+                return;
+            }
+
+            var duplicatePatients = FindDuplicatePatients(patientSending.Patient);
+            if (duplicatePatients.Count() == 1)
+            {
+                patientSending.DuplicatePatientDetected = true;
+            }
+            else if (duplicatePatients.Count() > 1)
+            {
+                ModelState.AddModelError("",
+                    "Es existieren bereits zwei Patienten mit den selben Initialen, Geburtsdatum und Postleitzahl. " +
+                    "Ein dritter Patient mit den selben Eigenschaften kann leider nicht gespeichert werden.");
+            }
+        }
+
+        private IQueryable<Patient> FindDuplicatePatients(Patient patient)
+        {
+            var existingPatients = db.Patients.Where(
                 p => p.Initials == patient.Initials &&
                      ((p.BirthDate.HasValue && patient.BirthDate.HasValue &&
                        p.BirthDate.Value == patient.BirthDate.Value)
                       || (!p.BirthDate.HasValue && !patient.BirthDate.HasValue))
                      && p.PostalCode == patient.PostalCode);
-            if (existingPatient != null)
-            {
-                ModelState.AddModelError("",
-                    "Ein Patient mit den selben Initialen, Geburtsdatum und Postleitzahl existiert bereits");
-            }
+            return existingPatients;
         }
 
         private void ValidateModel<T>(T objectToValidate, IValidator<T> validator)

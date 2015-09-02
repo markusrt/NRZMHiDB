@@ -11,15 +11,21 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
-                new Change(DateTime.MinValue, "Unterstützung für doppelte Einsendungen eines Patienten",
-                    ChangeType.Feature),
                 new Change(DateTime.MinValue, "Automatische Bestimmung des zugehörigen Gesundheitsamtes",
                     ChangeType.Feature),
-                new Change(DateTime.MinValue, "Auditierung von Zugriffen", ChangeType.Feature),
-                new Change(DateTime.MinValue, "Abfrage über Isolate", ChangeType.Feature)
+                new Change(DateTime.MinValue, "<del>Auditierung von Zugriffen</del>", ChangeType.Feature),
+                new Change(DateTime.MinValue, "<del>Abfrage über Isolate</del>", ChangeType.Feature)
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 8, 31),
+                    "<p>Unterstützung für doppelte Einsendungen eines Patienten</p>" +
+                    "<p>Falls ein Patient mit den selben Initialen, Postleitzahl und Geburtsdatum bereits " +
+                    "im System gespeichert ist, erscheint folgender Dialog:<p>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20150831_1.png'/>" +
+                    "<p>Je nach Auswahl des Anwenders wird entweder ein zweiter Patient angelegt oder der " +
+                    "bestehende Patient wird erweitert.</p>",
+                    ChangeType.Feature),
                 new Change(new DateTime(2015, 8, 22), 
                     "<p>Sortierung von gelöschten Einsendungen und Einsendern</p>" +
                     "<p>Die Listen der gelöschten Einsendungen und Einsender sind nach allen Feldern sortierbar.</p>", 

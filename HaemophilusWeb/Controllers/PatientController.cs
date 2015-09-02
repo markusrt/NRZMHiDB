@@ -108,11 +108,16 @@ namespace HaemophilusWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.MarkAsModified(patient);
-                db.SaveChanges();
+                EditPatient(patient);
                 return RedirectToAction("Index");
             }
             return CreateEditView(patient);
+        }
+
+        internal void EditPatient(Patient patient)
+        {
+            db.MarkAsModified(patient);
+            db.SaveChanges();
         }
 
         // GET: /Patient/Delete/5
