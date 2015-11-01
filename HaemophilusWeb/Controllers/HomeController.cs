@@ -13,11 +13,15 @@ namespace HaemophilusWeb.Controllers
             {
                 new Change(DateTime.MinValue, "Automatische Bestimmung des zugehörigen Gesundheitsamtes",
                     ChangeType.Feature),
+                new Change(DateTime.MinValue, "Spezieller Zugang für Robert Koch Institut", ChangeType.Feature),
+                new Change(DateTime.MinValue, "Automatische Bestimmung des zugehörigen Gesundheitsamtes",
+                    ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Auditierung von Zugriffen</del>", ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Abfrage über Isolate</del>", ChangeType.Feature)
             },
             new List<Change>
             {
+                new Change(new DateTime(2015, 10, 30), "Befundvorlagen für Fax-Versand", ChangeType.Feature),
                 new Change(new DateTime(2015, 8, 31),
                     "<p>Unterstützung für doppelte Einsendungen eines Patienten</p>" +
                     "<p>Falls ein Patient mit den selben Initialen, Postleitzahl und Geburtsdatum bereits " +

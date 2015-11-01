@@ -513,6 +513,10 @@
     <Content Include="ReportTemplates\BLNAS v7.docx" />
     <Content Include="ReportTemplates\BLPACR v7.docx" />
     <Content Include="ReportTemplates\BLPACS v7.docx" />
+    <Content Include="ReportTemplates\Fax - BLNAR v7.docx" />
+    <Content Include="ReportTemplates\Fax - BLNAS v7.docx" />
+    <Content Include="ReportTemplates\Fax - BLPACR v7.docx" />
+    <Content Include="ReportTemplates\Fax - BLPACS v7.docx" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
