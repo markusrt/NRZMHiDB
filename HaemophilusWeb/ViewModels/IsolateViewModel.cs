@@ -142,6 +142,7 @@ namespace HaemophilusWeb.ViewModels
         public string ReceivingDate { get; set; }
         public string Patient { get; set; }
         public string PatientBirthDate { get; set; }
+        public string PatientPostalCode { get; set; }
         public string SenderLaboratoryNumber { get; set; }
         public string EvaluationString { get; set; }
         public string Interpretation { get; set; }

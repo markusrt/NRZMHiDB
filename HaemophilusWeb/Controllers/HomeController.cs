@@ -11,17 +11,21 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
-                new Change(DateTime.MinValue, "Automatische Bestimmung des zugehörigen Gesundheitsamtes",
-                    ChangeType.Feature),
                 new Change(DateTime.MinValue, "Spezieller Zugang für Robert Koch Institut", ChangeType.Feature),
-                new Change(DateTime.MinValue, "Automatische Bestimmung des zugehörigen Gesundheitsamtes",
-                    ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Auditierung von Zugriffen</del>", ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Abfrage über Isolate</del>", ChangeType.Feature)
             },
             new List<Change>
             {
-                new Change(new DateTime(2015, 10, 30), "Befundvorlagen für Fax-Versand", ChangeType.Feature),
+                 new Change(new DateTime(2015, 10, 31), "<p>Automatische Bestimmung des zugehörigen Gesundheitsamtes</p>" +
+                    "<p>Anhand der Postleitzahl des Patienten wird über eine Hintergrundabfrage an das <a href='https://tools.rki.de/plztool/'>RKI PLZ Tool</a> " +
+                    "ermittelt, welches Gesundheitsamt zuständig ist.",
+                    ChangeType.Feature),
+                new Change(new DateTime(2015, 10, 21), "<p>Befundvorlagen für Fax-Versand</p>" +
+                    "<p>In der Liste der Befundvorlagen sind gibt es jetzt Einträge mit dem Prefix \"Fax\".</p>" +
+                    "<p>Die Fax-Vorlagen beinhalten neben der Empfangsbestätigung noch eine Zeile die darauf " +
+                    "hinweist, dass das Dokument ohne Unterschrift gültig ist.</p>",
+                    ChangeType.Feature),
                 new Change(new DateTime(2015, 8, 31),
                     "<p>Unterstützung für doppelte Einsendungen eines Patienten</p>" +
                     "<p>Falls ein Patient mit den selben Initialen, Postleitzahl und Geburtsdatum bereits " +

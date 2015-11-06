@@ -102,6 +102,7 @@ namespace HaemophilusWeb.Controllers
             isolateViewModel.ReceivingDate = isolate.Sending.ReceivingDate.ToReportFormat();
             isolateViewModel.Patient = isolate.Sending.Patient.ToReportFormat();
             isolateViewModel.PatientBirthDate = isolate.Sending.Patient.BirthDate.ToReportFormat();
+            isolateViewModel.PatientPostalCode = isolate.Sending.Patient.PostalCode;
             isolateViewModel.SenderLaboratoryNumber = isolate.Sending.SenderLaboratoryNumber;
             isolateViewModel.EvaluationString = isolate.Evaluation.ToReportFormat();
             var interpretationResult = IsolateInterpretation.Interpret(isolate);
