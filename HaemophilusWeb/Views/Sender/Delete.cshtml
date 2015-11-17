@@ -5,8 +5,7 @@
     ViewBag.Title = "Löschen bestätigen";
 }
 
-@if (ViewBag.Sendings.Count == 0)
-{
+
 @section DeleteModel
     {
     
@@ -36,30 +35,33 @@
             @Html.DisplayFor(model => model.PostalCode) @Html.DisplayFor(model => model.City)
         </dd>
     </dl>
-}
-}
-else
-{
-    <div class="alert alert-danger" role="alert">
-      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-      <span class="sr-only">Fehler:</span>
-        Der Einsender "@Model.Name" kann nicht gelöscht werden, so lange ihm noch Einsendungen zugeordnet sind.
-    </div>
-    <p>
-        Bitte ordnen Sie die unten aufgeführten Einsendungen einem anderen Einsender zu und wiederholen sie
-        anschließend den Löschvorgang.
-    </p>
-    foreach (Sending sending in ViewBag.Sendings)
+    @if (ViewBag.Sendings.Count > 0)
     {
-    <p>
-        @Html.ActionLink("Einsendung " + sending.Isolate.LaboratoryNumber, "Edit", "PatientSending", new { id = sending.SendingId }, null)
-    </p>
+        <div class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Fehler:</span>
+            Dem Einsender "@Model.Name" sind noch Einsendungen zugeordnet.
+        </div>
+        <p>
+            Sind sie sicher, dass sie den Einsender trotzdem löschen wollen? Er bleibt in diesem Fall den unten genannten
+            Einsendungen zugeordnet ist aber für neue Einsendungen nicht mehr verfügbar.
+        </p>
+        <p>
+            Falls die bestehenden Einsendungen einem neuen Einsender zugeordnet werden sollen können sie es an dieser
+            Stelle tun.
+        </p>
+        foreach (Sending sending in ViewBag.Sendings)
+        {
+            <p>
+                @Html.ActionLink("Einsendung " + sending.Isolate.LaboratoryNumber, "Edit", "PatientSending", new { id = sending.SendingId }, null)
+            </p>
+        }
+        <div class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+            <span class="sr-only">Info:</span>
+            Am einfachsten lässt sich die Neuzuordnung durchführen in dem Sie jeden der obigen Links in einem neuen Fenster
+            öffenen, einen anderen Einsender auswählen und den Datensatz speichern. Anschließend können Sie dieses Fenster
+            neu laden (F5) um den Löschvorgang fortzusetzten.
+        </div>
     }
-    <div class="alert alert-info" role="alert">
-      <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-      <span class="sr-only">Info:</span>
-        Am einfachsten lässt sich die Neuzuordnung durchführen in dem Sie jeden der obigen Links in einem neuen Fenster
-        öffenen, einen anderen Einsender auswählen und den Datensatz speichern. Anschließend können Sie dieses Fenster
-        neu laden (F5) um den Löschvorgang fortzusetzten.
-    </div>
 }

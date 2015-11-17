@@ -80,9 +80,9 @@ namespace HaemophilusWeb.Controllers
             AssignStemNumber(sending.SendingId);
         }
 
-        internal void AddReferenceDataToViewBag(dynamic viewBag)
+        internal void AddReferenceDataToViewBag(dynamic viewBag, Sending sending)
         {
-            viewBag.PossibleSenders = db.Senders.Where(s => !s.Deleted);
+            viewBag.PossibleSenders = db.Senders.Where(s => !s.Deleted || s.SenderId == sending.SenderId);
             viewBag.PossiblePatients = db.Patients;
             viewBag.PossibleOtherSamplingLocations = db.Sendings.Where(
                 s => !string.IsNullOrEmpty(s.OtherSamplingLocation)).Select(s => s.OtherSamplingLocation).AsDataList();
@@ -169,7 +169,7 @@ namespace HaemophilusWeb.Controllers
 
         private ActionResult CreateEditView(Sending sending)
         {
-            AddReferenceDataToViewBag(ViewBag);
+            AddReferenceDataToViewBag(ViewBag, sending);
             sending.LaboratoryNumber = sending.Isolate == null
                 ? ReportFormatter.ToLaboratoryNumber(GetNextSequentialIsolateNumber(), CurrentYear)
                 : sending.Isolate.LaboratoryNumber;

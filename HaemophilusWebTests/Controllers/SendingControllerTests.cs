@@ -149,14 +149,14 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Test]
-        public void Index_ReturnsAllSendings()
+        public void Index_ReturnsOnlyNonDeletedSendings()
         {
             var controller = CreateMockSendingController();
 
             var result = controller.Index() as ViewResult;
 
             result.Should().NotBeNull();
-            CollectionAssert.AreEquivalent((IEnumerable) result.Model, DbMock.Sendings);
+            CollectionAssert.AreEquivalent((IEnumerable) result.Model, DbMock.Sendings.Where(s => !s.Deleted));
         }
     }
 }

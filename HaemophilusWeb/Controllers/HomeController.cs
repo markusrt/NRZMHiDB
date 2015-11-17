@@ -12,12 +12,17 @@ namespace HaemophilusWeb.Controllers
             new List<Change>
             {
                 new Change(DateTime.MinValue, "Spezieller Zugang für Robert Koch Institut", ChangeType.Feature),
+                new Change(DateTime.MinValue, "Entwickler Dokumentation", ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Auditierung von Zugriffen</del>", ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Abfrage über Isolate</del>", ChangeType.Feature)
             },
             new List<Change>
             {
-                 new Change(new DateTime(2015, 10, 31), "<p>Automatische Bestimmung des zugehörigen Gesundheitsamtes</p>" +
+                new Change(new DateTime(2015, 11, 16),
+                    "<p>Löschen von Einsendern ist jetzt trotz zugeordneter Einsendungen möglich.</p>" +
+                    "<p>Gelöschte Einsendern sind jedoch nur noch in der Bearbeitungsmaske von zughörigen Einsendungen sichtbar.</p>",
+                    ChangeType.Feature),
+                new Change(new DateTime(2015, 10, 31), "<p>Automatische Bestimmung des zugehörigen Gesundheitsamtes</p>" +
                     "<p>Anhand der Postleitzahl des Patienten wird über eine Hintergrundabfrage an das <a href='https://tools.rki.de/plztool/'>RKI PLZ Tool</a> " +
                     "ermittelt, welches Gesundheitsamt zuständig ist.",
                     ChangeType.Feature),

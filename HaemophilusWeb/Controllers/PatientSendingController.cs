@@ -53,7 +53,7 @@ namespace HaemophilusWeb.Controllers
 
         private ViewResult CreateEditView(PatientSendingViewModel patientSending)
         {
-            sendingController.AddReferenceDataToViewBag(ViewBag);
+            sendingController.AddReferenceDataToViewBag(ViewBag, patientSending.Sending);
             patientController.AddReferenceDataToViewBag(ViewBag);
             return View(patientSending);
         }
