@@ -206,6 +206,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IsolateController.cs" />
@@ -970,6 +971,7 @@
     <Content Include="Views\Home\Change.cshtml" />
     <Content Include="Views\PatientSending\Delete.cshtml" />
     <Content Include="Views\PatientSending\Deleted.cshtml" />
+    <Content Include="Views\Sender\Export.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

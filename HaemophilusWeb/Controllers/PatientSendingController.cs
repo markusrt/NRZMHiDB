@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using DataTables.Mvc;
-using ExportToExcel;
 using FluentValidation;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
@@ -18,7 +16,7 @@ using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
-    public class PatientSendingController : Controller
+    public class PatientSendingController : ControllerBase
     {
         private readonly IApplicationDbContext db;
         private readonly PatientController patientController;
@@ -276,16 +274,6 @@ namespace HaemophilusWeb.Controllers
                     SamplingLocation.Other
                 }).ToList();
             return ExportToExcel(query, sendings, CreateLaboratoryExportDefinition(), "Labor");
-        }
-
-        private ActionResult ExportToExcel<T>(ExportQuery query, List<T> list, ExportDefinition<T> exportDefinition,
-            string prefix)
-        {
-            var tempFile = Path.GetTempFileName();
-            CreateExcelFile.CreateExcelDocument(list, exportDefinition, tempFile);
-            return File(System.IO.File.ReadAllBytes(tempFile),
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                String.Format("{0}-Export_{1:yyyyMMdd}-{2:yyyyMMdd}.xlsx", prefix, query.From, query.To));
         }
 
         private List<Sending> SendingsMatchingExportQuery(ExportQuery query, List<SamplingLocation> samplingLocations)

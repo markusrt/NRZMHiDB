@@ -18,6 +18,11 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2016, 01, 03),
+                    "<p>Exort der Einsenderdaten.</p>" +
+                    "<p>Unter dem Menüpunkt \"Export->Einsender Export\" gibt es jezt eine Maske um alle Einsender aus einem bestimmten Zeitraum zu exportieren.</p>" +
+                    "<p>Der Excel-Export enthält alle Einsender von denen Einsendungen mit einem Entnahme-/Eingangsdatum im gewählten Zeitraum existieren./</p>",
+                    ChangeType.Feature),
                 new Change(new DateTime(2015, 11, 16),
                     "<p>Löschen von Einsendern ist jetzt trotz zugeordneter Einsendungen möglich.</p>" +
                     "<p>Gelöschte Einsendern sind jedoch nur noch in der Bearbeitungsmaske von zughörigen Einsendungen sichtbar.</p>",

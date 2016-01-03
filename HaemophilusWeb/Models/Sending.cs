@@ -21,7 +21,7 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Einsendungsnummer")]
         public int SendingId { get; set; }
 
-        [Display(Name = "Einsender")]
+        [Display(Name = "Einsendernummer")]
         public int SenderId { get; set; }
 
         [Display(Name = "Patient")]

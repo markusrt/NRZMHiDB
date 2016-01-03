@@ -1,11 +1,17 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Tools;
+using HaemophilusWeb.Utils;
+using HaemophilusWeb.ViewModels;
 
 namespace HaemophilusWeb.Controllers
 {
-    public class SenderController : Controller
+    public class SenderController : ControllerBase
     {
         private readonly IApplicationDbContext db;
 
@@ -21,7 +27,7 @@ namespace HaemophilusWeb.Controllers
         // GET: /Sender/
         public ActionResult Index()
         {
-            return View(db.Senders.Where(s => !s.Deleted).ToList());
+            return View(NotDeletedSenders().ToList());
         }
 
         // GET: /Sender/Deleted
@@ -150,6 +156,72 @@ namespace HaemophilusWeb.Controllers
             }
             sender.Deleted = false;
             return EditUnvalidated(sender);
+        }
+
+        public ActionResult Export(ExportQuery query)
+        {
+            if (query.From == DateTime.MinValue)
+            {
+                var lastYear = DateTime.Now.Year - 1;
+                var exportQuery = new ExportQuery
+                {
+                    From = new DateTime(lastYear, 1, 1),
+                    To = new DateTime(lastYear, 12, 31)
+                };
+                return View(exportQuery);
+            }
+
+            var sendings = SendersMatchingExportQuery(query).ToList();
+
+            return ExportToExcel(query, sendings, CreateExportDefinition(), "Einsender");
+        }
+
+        private ExportDefinition<Sender> CreateExportDefinition()
+        {
+            var export = new ExportDefinition<Sender>();
+            var sendings = db.Sendings.Include(s=>s.Isolate).ToList();
+
+            Func<Sender, long> senderSendingCount = sender => sendings.Count(s => sender.SenderId == s.SenderId);
+            Func<Sender, String> senderLaboratoryNumbers =
+                sender => String.Join(",", sendings.Where(s => sender.SenderId==s.SenderId).Select(s => s.Isolate.LaboratoryNumber));
+            Func<Sender, String> senderStemNumbers =
+                sender => String.Join(",", sendings.Where(s => sender.SenderId == s.SenderId).Select(s => s.Isolate.StemNumber.HasValue ? s.Isolate.StemNumber.ToString() : "-"));
+
+            export.AddField(s => s.SenderId);
+            export.AddField(s => s.Name);
+            export.AddField(s => s.Department);
+            export.AddField(s => s.StreetWithNumber);
+            export.AddField(s => s.PostalCode);
+            export.AddField(s => s.City);
+            export.AddField(s => s.Phone1);
+            export.AddField(s => s.Phone2);
+            export.AddField(s => s.Fax);
+            export.AddField(s => s.Email);
+            export.AddField(s => s.Remark);
+            export.AddField(s => senderSendingCount(s), "Anzahl Einsendungen");
+            export.AddField(s => senderStemNumbers(s), "Stammnummern");
+            export.AddField(s => senderLaboratoryNumbers(s), "Labornummern");
+
+            return export;
+        }
+
+        private List<Sender> SendersMatchingExportQuery(ExportQuery query)
+        {
+            var sendings = db.Sendings.Where(s => !s.Deleted)
+                .Include(s => s.Patient)
+                .Where
+                (s => (s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
+                          || (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
+                .OrderBy(s => s.Isolate.StemNumber)
+                .ToList();
+            var senderIds = sendings.Select(s => s.SenderId).Distinct().ToList();
+            return NotDeletedSenders().Where(s => senderIds.Contains(s.SenderId)).ToList();
+
+        }
+
+        private IQueryable<Sender> NotDeletedSenders()
+        {
+            return db.Senders.Where(s => !s.Deleted);
         }
 
         protected override void Dispose(bool disposing)

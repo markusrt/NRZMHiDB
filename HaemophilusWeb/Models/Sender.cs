@@ -7,6 +7,7 @@ namespace HaemophilusWeb.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Display(Name = "Einsendernummer")]
         public int SenderId { get; set; }
 
         [Display(Name = "Name")]
