@@ -173,13 +173,15 @@ namespace HaemophilusWeb.Controllers
 
             var sendings = SendersMatchingExportQuery(query).ToList();
 
-            return ExportToExcel(query, sendings, CreateExportDefinition(), "Einsender");
+            return ExportToExcel(query, sendings, CreateExportDefinition(query), "Einsender");
         }
 
-        private ExportDefinition<Sender> CreateExportDefinition()
+        private ExportDefinition<Sender> CreateExportDefinition(ExportQuery query)
         {
             var export = new ExportDefinition<Sender>();
-            var sendings = db.Sendings.Include(s=>s.Isolate).ToList();
+            var sendings = db.Sendings.Include(s => s.Isolate).Where
+                (s => (s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
+                          || (s.SamplingDate >= query.From && s.SamplingDate <= query.To)).ToList();
 
             Func<Sender, long> senderSendingCount = sender => sendings.Count(s => sender.SenderId == s.SenderId);
             Func<Sender, String> senderLaboratoryNumbers =
@@ -207,14 +209,13 @@ namespace HaemophilusWeb.Controllers
 
         private List<Sender> SendersMatchingExportQuery(ExportQuery query)
         {
-            var sendings = db.Sendings.Where(s => !s.Deleted)
+            var senderIds = db.Sendings.Where(s => !s.Deleted)
                 .Include(s => s.Patient)
                 .Where
                 (s => (s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
                           || (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
-                .OrderBy(s => s.Isolate.StemNumber)
+                .Select(s=>s.SenderId)
                 .ToList();
-            var senderIds = sendings.Select(s => s.SenderId).Distinct().ToList();
             return NotDeletedSenders().Where(s => senderIds.Contains(s.SenderId)).ToList();
 
         }
