@@ -19,12 +19,8 @@
         @Html.ValidationMessageFor(model => model.BirthDate)
     </div>
 </div>
-<div class="form-group">
-    @Html.LabelFor(m => m.Gender, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        @Html.EnumRadioButtonFor(m => m.Gender)
-    </div>
-</div>
+
+@Html.EnumRadioEditorFor(m => m.Gender)
 
 <div class="form-group">
     @Html.LabelFor(m => m.PostalCode, new { @class = "col-sm-2 control-label" })
@@ -83,12 +79,8 @@
     </div>
 </div>
 
-<div class="form-group">
-    @Html.LabelFor(m => m.HibVaccination, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        @Html.EnumRadioButtonFor(m => m.HibVaccination)
-    </div>
-</div>
+@Html.EnumRadioEditorFor(m => m.HibVaccination)
+
 <div id="HibVaccinationDateForm" class="form-group">
     @Html.LabelFor(m => m.HibVaccinationDate, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
@@ -102,12 +94,7 @@
     </div>
 </div>
 
-<div class="form-group">
-    @Html.LabelFor(m => m.Therapy, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        @Html.EnumRadioButtonFor(m => m.Therapy)
-    </div>
-</div>
+@Html.EnumRadioEditorFor(m => m.Therapy)
 <div id="TherapyDetailsForm" class="form-group">
     @Html.LabelFor(m => m.TherapyDetails, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">

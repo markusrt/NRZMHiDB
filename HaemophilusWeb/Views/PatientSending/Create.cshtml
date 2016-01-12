@@ -14,16 +14,11 @@
                 Ein Patient mit den selben Initialen, Geburtsdatum und Postleitzahl existiert bereits. Soll das System
                 einen neuen Patienten anlegen oder soll es die Einsendung dem bestehenden Patienten zuordnen?
             </p>
-            <p>
-                Wählen Sie eine entsprechende Konfliktlösung und klicken Sie dann erneut am Ende dieser Seite auf 
+            <p style="padding-bottom: 1em">
+                Wählen Sie eine entsprechende Konfliktlösung und klicken Sie dann erneut am Ende dieser Seite auf
                 "Neu anlegen" um den Datensatz für die Einsendung zu erstellen.
             </p>
-            <div class="form-group" style="padding-top: 1em">
-                @Html.LabelFor(model => model.DuplicatePatientResolution, new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-5">
-                    @Html.EnumRadioButtonFor(m => m.DuplicatePatientResolution)
-                </div>
-            </div>
+            @Html.EnumRadioEditorFor(model => model.DuplicatePatientResolution)
         </div>
 
     }

@@ -70,24 +70,11 @@
     </div>
 </div>
 
-<div class="form-group">
-    @Html.LabelFor(m => m.SenderLaboratoryNumber, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        <div class="input-group">
-            @Html.TextBoxFor(m => m.SenderLaboratoryNumber, new { @class = "form-control" })
 
-            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
-        </div>
-        @Html.ValidationMessageFor(model => model.SenderLaboratoryNumber)
-    </div>
-</div>
+@Html.TextEditorFor(m => m.SenderLaboratoryNumber)
 
-<div class="form-group">
-    @Html.LabelFor(m => m.SamplingLocation, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        @Html.EnumRadioButtonFor(m => m.SamplingLocation)
-    </div>
-</div>
+@Html.EnumRadioEditorFor(m=>m.SamplingLocation)
+
 <div id="OtherSamplingLocationForm" class="form-group">
     @Html.LabelFor(m => m.OtherSamplingLocation, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
@@ -106,31 +93,11 @@
     </div>
 </div>
 
-<div class="form-group">
-    @Html.LabelFor(m => m.Material, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        @Html.EnumRadioButtonFor(m => m.Material)
-    </div>
-</div>
+@Html.EnumRadioEditorFor(m => m.Material)
 
-<div class="form-group">
-    @Html.LabelFor(m => m.Invasive, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        @Html.EnumRadioButtonFor(m => m.Invasive)
-    </div>
-</div>
+@Html.EnumRadioEditorFor(m => m.Invasive)
 
-<div class="form-group">
-    @Html.LabelFor(m => m.SenderConclusion, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        <div class="input-group">
-            @Html.TextBoxFor(m => m.SenderConclusion, new { @class = "form-control" })
-
-            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
-        </div>
-        @Html.ValidationMessageFor(model => model.SenderConclusion)
-    </div>
-</div>
+@Html.TextEditorFor(m => m.SenderConclusion)
 
 <script>
     $(document).ready(function () {

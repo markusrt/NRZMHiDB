@@ -11,7 +11,7 @@ namespace HaemophilusWeb.Validators
             RuleFor(sending => sending.SenderId).NotNull();
             RuleFor(sending => sending.PatientId).NotNull();
             RuleFor(sending => sending.ReceivingDate).NotNull();
-            RuleFor(sending => sending.Invasive).NotNull();
+            RuleFor(sending => sending.Invasive).NotEmpty();
 
             RuleFor(sending => sending.ReceivingDate).GreaterThanOrEqualTo(
                 sample => sample.SamplingDate ?? DateTime.MinValue)

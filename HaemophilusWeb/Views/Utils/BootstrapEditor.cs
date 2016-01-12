@@ -9,27 +9,49 @@ namespace HaemophilusWeb.Views.Utils
     {
         private const string FormGroupTemplate = "<div class=\"form-group\">{0}{1}</div>";
 
-        private const string TextBoxTemplate = "<div class=\"col-sm-5\">{0}{1}</div>";
+        private const string ColSm5 = "col-sm-5";
+
+        private const string DivSmX = "<div class=\"{0}\">{1}{2}</div>";
+        
+        private const string DivSmFive = "<div class=\"col-sm-5\">{0}{1}</div>";
         
         private const string RequiredTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-star\"></span></span></div>";
 
         public static MvcHtmlString TextEditorFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression, string placeholder = null)
         {
-            var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
-            var required = modelMetadata.IsRequired;
-            var label = htmlHelper.LabelFor(expression, new {@class = "col-sm-2 control-label"}).ToHtmlString();
+            var label = htmlHelper.LabelFor(expression);
             var textBox = htmlHelper.TextBoxFor(expression, new {placeholder, @class = "form-control"}).ToHtmlString();
             var validationHtml = GetValidationHtml(htmlHelper, expression);
-
+            
+            //TODO: IsRequired does not work with fluent validations. I.e. implement FluentValidation based ModelMetadata if the view should render a required state 
+            var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
+            var required = modelMetadata.IsRequired;
             if (required)
             {
                 textBox = string.Format(RequiredTemplate, textBox);
             }
 
-            var textBoxHtml = string.Format(TextBoxTemplate, textBox, validationHtml);
+            var textBoxHtml = string.Format(DivSmFive, textBox, validationHtml);
 
             return MvcHtmlString.Create(string.Format(FormGroupTemplate, label, textBoxHtml));
+        }
+
+
+        public static MvcHtmlString EnumRadioEditorFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TProperty>> expression, string radioColSmXClass = ColSm5)
+        {
+            var label = htmlHelper.LabelFor(expression);
+            var enumRadioButton = htmlHelper.EnumRadioButtonFor(expression).ToHtmlString();
+
+            var enumRadioEditor = string.Format(DivSmX, radioColSmXClass, enumRadioButton, string.Empty);
+
+            return MvcHtmlString.Create(string.Format(FormGroupTemplate, label, enumRadioEditor));
+        }
+
+        private static string LabelFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
+        {
+            return htmlHelper.LabelFor(expression, new { @class = "col-sm-2 control-label" }).ToHtmlString();
         }
 
         private static string GetValidationHtml<TModel, TProperty>(HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
