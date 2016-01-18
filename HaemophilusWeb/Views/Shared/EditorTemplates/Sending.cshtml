@@ -2,13 +2,7 @@
 @using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.Models.Sending
 
-<div class="form-group">
-    @Html.LabelFor(model => model.LaboratoryNumber, new { @class = "control-label col-sm-2" })
-    <div class="col-sm-5 form-control-static">
-        @Html.DisplayFor(model => model.LaboratoryNumber)
-        @Html.HiddenFor(model => model.LaboratoryNumber)
-    </div>
-</div>
+@Html.ReadonlyFor(model => model.LaboratoryNumber)
 
 <div class="form-group">
     @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 control-label" })

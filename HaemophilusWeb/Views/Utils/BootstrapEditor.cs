@@ -12,6 +12,8 @@ namespace HaemophilusWeb.Views.Utils
         private const string ColSm5 = "col-sm-5";
 
         private const string DivSmX = "<div class=\"{0}\">{1}{2}</div>";
+
+        private const string DivSmXStatic = "<div class=\"{0} form-control-static\">{1}{2}</div>";
         
         private const string DivSmFive = "<div class=\"col-sm-5\">{0}{1}</div>";
         
@@ -49,6 +51,16 @@ namespace HaemophilusWeb.Views.Utils
             return MvcHtmlString.Create(string.Format(FormGroupTemplate, label, enumRadioEditor));
         }
 
+        public static MvcHtmlString ReadonlyFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TProperty>> expression, string smXClass = ColSm5)
+        {
+            var label = htmlHelper.LabelFor(expression);
+            var display = htmlHelper.DisplayFor(expression).ToHtmlString();
+            var hidden = htmlHelper.HiddenFor(expression).ToHtmlString();
+            var readonlyField = string.Format(DivSmXStatic, smXClass, display, hidden);
+
+            return MvcHtmlString.Create(string.Format(FormGroupTemplate, label, readonlyField));
+        }
         private static string LabelFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
         {
             return htmlHelper.LabelFor(expression, new { @class = "col-sm-2 control-label" }).ToHtmlString();

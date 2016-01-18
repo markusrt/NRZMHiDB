@@ -15,37 +15,10 @@
 
     @Html.TextEditorFor(m => m.LaboratoryNumber)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.SamplingLocation, new {@class = "control-label col-sm-2"})
-        <div class="col-sm-5 form-control-static">
-            @Html.DisplayFor(model => model.SamplingLocation)
-            @Html.HiddenFor(model => model.SamplingLocation)
-        </div>
-    </div>
-    
-    <div class="form-group">
-        @Html.LabelFor(model => model.Material, new { @class = "control-label col-sm-2" })
-        <div class="col-sm-5 form-control-static">
-            @Html.DisplayFor(model => model.Material)
-            @Html.HiddenFor(model => model.Material)
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Invasive, new {@class = "control-label col-sm-2"})
-        <div class="col-sm-5 form-control-static">
-            @Html.DisplayFor(model => model.Invasive)
-            @Html.HiddenFor(model => model.Invasive)
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.PatientAgeAtSampling, new {@class = "control-label col-sm-2"})
-        <div class="col-sm-5 form-control-static">
-            @Html.DisplayFor(model => model.PatientAgeAtSampling)
-            @Html.HiddenFor(model => model.PatientAgeAtSampling)
-        </div>
-    </div>
+    @Html.ReadonlyFor(m => m.SamplingLocation)
+    @Html.ReadonlyFor(m => m.Material)
+    @Html.ReadonlyFor(m => m.Invasive)
+    @Html.ReadonlyFor(m => m.PatientAgeAtSampling)
     
     @Html.EnumRadioEditorFor(model => model.Growth)
     
