@@ -18,6 +18,16 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2016, 2, 3),
+                    "<p>Aktualisierung der Befundvorlagen</p>" +
+                    "<ul>" +
+                    "<li>Korrektur der Grußformel</li>" +
+                    "<li>Neue Vorlage: Ampi-S Cipro-R</li>" +
+                    "<li>Neue Vorlage: Ampi-S Imi-R</li>" +
+                    "<li>Neue Vorlage: Kein Haemophilus v1</li>" +
+                    "<li>Neue Vorlage: lowBLNAR CTX-R Imi-R</li>" +
+                    "</ul>",
+                    ChangeType.Feature),
                 new Change(new DateTime(2016, 2, 3), "Hinzufügen der EUCAST Grenzwerte für 2016", ChangeType.Feature),
                 new Change(new DateTime(2016, 1, 3),
                     "<p>Exort der Einsenderdaten.</p>" +

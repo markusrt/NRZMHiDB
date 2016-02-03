@@ -518,6 +518,14 @@
     <Content Include="ReportTemplates\Fax - BLNAS v8.docx" />
     <Content Include="ReportTemplates\Fax - BLPACR v8.docx" />
     <Content Include="ReportTemplates\Fax - BLPACS v8.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Cipro-R v1.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Imi-R v1.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Kein Haemophilus v1.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - lowBLNAR CTX-R Imi-R v1.docx" />
+    <Content Include="ReportTemplates\Sonstige - Ampi-S Cipro-R v1.docx" />
+    <Content Include="ReportTemplates\Sonstige - Ampi-S Imi-R v1.docx" />
+    <Content Include="ReportTemplates\Sonstige - Kein Haemophilus v1.docx" />
+    <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v1 - Kopie.docx" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
