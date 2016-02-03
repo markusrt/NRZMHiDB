@@ -18,7 +18,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2016, 01, 03),
+                new Change(new DateTime(2016, 2, 3), "Hinzufügen der EUCAST Grenzwerte für 2016", ChangeType.Feature),
+                new Change(new DateTime(2016, 1, 3),
                     "<p>Exort der Einsenderdaten.</p>" +
                     "<p>Unter dem Menüpunkt \"Export->Einsender Export\" gibt es jezt eine Maske um alle Einsender aus einem bestimmten Zeitraum zu exportieren.</p>" +
                     "<p>Der Excel-Export enthält alle Einsender von denen Einsendungen mit einem Entnahme-/Eingangsdatum im gewählten Zeitraum existieren.</p>",
