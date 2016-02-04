@@ -148,6 +148,10 @@
 
             documentData["Signer"] = signer;
 
+            $(documentData.Typings).each(function(index, typing) {
+                documentData["Typing-"+typing.Attribute] = typing.Value;
+            });
+
             new DocxGen().loadFromFile(templateFile, { async: true, intelligentTagging: true }).success(function(doc)
             {
                 doc.setTags(documentData);
