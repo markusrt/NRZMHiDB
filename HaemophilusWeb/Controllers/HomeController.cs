@@ -18,7 +18,11 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2016, 2, 3),
+                new Change(new DateTime(2016, 2, 4),
+                    "<p>Warnung bei ungespeicherten Änderungen</p>" +
+                    "<p>Beim Versuch eine Seite mit einem Formular zu verlassen, welches " +
+                    "ungespeicherte Änderungen enthält, wird ein Warndialog angezeigt.</p>", ChangeType.Feature),
+                new Change(new DateTime(2016, 2, 4),
                     "<p>Fehlende Information bei Abfrage Gesundheitsamt</p>" +
                     "<p>Wenn der Datensatz vom RKI-Tool keine Telefonnummer enthält wird " +
                     "die ggf. vorhandene Faxnummer und Email-Adresse nicht angezeigt</p>", ChangeType.Bug),

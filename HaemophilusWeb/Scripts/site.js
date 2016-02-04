@@ -130,3 +130,29 @@ function queryHealthOfficeViaRkiTool(patientPostalCode) {
         }
     });
 }
+
+function preventSiteNavigationWithPendingChanges() {
+    var installBeforeUnloadListener = function () {
+        if (window.installedBeforeUnloadListenerOnPendingChanges) {
+            return;
+        }
+        $(window).on("beforeunload", function () {
+            return "Sie besitzen ungespeicherte Änderungen!";
+        });
+        window.installedBeforeUnloadListenerOnPendingChanges = true;
+    };
+
+    $(document).ready(function () {
+        $('input').on("change keydown", installBeforeUnloadListener);
+        $('select').on("change", installBeforeUnloadListener);
+        $('textarea').on("change keydown", installBeforeUnloadListener);
+    });
+
+    $(document).ready(function () {
+        $('form').on("submit", function (e) {
+            $(window).off("beforeunload");
+            delete window.installedBeforeUnloadListenerOnPendingChanges;
+            return true;
+        });
+    });
+}

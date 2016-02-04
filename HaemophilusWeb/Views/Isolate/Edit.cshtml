@@ -187,6 +187,8 @@
 
 @section Scripts{
     <script>
+        preventSiteNavigationWithPendingChanges();
+
         var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
 
         $(document).ready(function()

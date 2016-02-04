@@ -8,3 +8,10 @@
 {
     @Html.EditorForModel()
 }
+
+@section scripts
+{
+    <script>
+        preventSiteNavigationWithPendingChanges();
+    </script>
+}

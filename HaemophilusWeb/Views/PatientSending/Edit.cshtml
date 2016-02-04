@@ -15,3 +15,10 @@
     @Html.EditorFor(m => m.Patient)
     @Html.EditorFor(m => m.Sending, "SendingConclusion")
 }
+
+@section scripts
+{
+    <script>
+        preventSiteNavigationWithPendingChanges();
+    </script>
+}
