@@ -132,6 +132,9 @@ var jeoquery = (function ($) {
             if (options.lengthTrigger && code.length != options.lengthTrigger) {
                 return;
             }
+            if (options.regexTrigger && !options.regexTrigger.test(code)) {
+                return;
+            }
             var country = options.country || jeoquery.defaultCountryCode;
             if (options.countryInput) {
                 country = options.countryInput.val() || jeoquery.defaultCountry;

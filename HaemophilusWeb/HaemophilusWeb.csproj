@@ -347,7 +347,6 @@
     <Compile Include="Models\SamplingLocation.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\TestResult.cs" />
-    <Compile Include="Models\Validations.cs" />
     <Compile Include="Models\Sending.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Sender.cs" />

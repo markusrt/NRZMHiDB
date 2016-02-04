@@ -11,7 +11,7 @@
     function RegisterPostalCodeDetailsLookup() {
         $("[id$='PostalCode']").jeoPostalCodeLookup({
             country: "DE",
-            lengthTrigger: 5,
+            regexTrigger: /\d{5}/,
             callback: function (data) {
                 PopulateCityInput(data.placeName);
                 PopulateCountyInput(data.adminName3);

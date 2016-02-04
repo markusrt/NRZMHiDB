@@ -21,7 +21,6 @@ namespace HaemophilusWeb.Models
         public string StreetWithNumber { get; set; }
 
         [Display(Name = "Postleitzahl")]
-        [RegularExpression(Validations.PostalCodeValidation, ErrorMessage = Validations.PostalCodeValidationError)]
         public string PostalCode { get; set; }
 
         [Display(Name = "Ort")]

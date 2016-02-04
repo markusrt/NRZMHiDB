@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2016, 2, 4), "Unterstützung von ausländischen Postleitzahlen.", ChangeType.Feature),
                 new Change(new DateTime(2016, 2, 4),
                     "<p>Warnung bei ungespeicherten Änderungen</p>" +
                     "<p>Beim Versuch eine Seite mit einem Formular zu verlassen, welches " +
