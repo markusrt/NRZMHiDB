@@ -26,7 +26,7 @@ namespace HaemophilusWeb.Validators
                 Initials = "Herbert"
             };
 
-            yield return Tuple.Create(invalidPatient, new[] {"Initials", "PostalCode", "Gender"});
+            yield return Tuple.Create(invalidPatient, new[] {"Initials", "Gender"});
 
             yield return Tuple.Create(CreatePatientWithEmptyInitials(), new[] {"Initials"});
         }
