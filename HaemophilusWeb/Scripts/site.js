@@ -112,14 +112,15 @@ function queryHealthOfficeViaRkiTool(patientPostalCode) {
                 console.log("Error querying RKI-Tool: " + data['error'].description);
             } else {
                 var divs = data.query.results.postresult.div;
-                $("#healthOfficeAddress").append(divs[0].textarea.content.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+                var address = divs[0].textarea.content ? divs[0].textarea.content : "";
+                $("#healthOfficeAddress").append(address.replace(/(?:\r\n|\r|\n)/g, '<br />'));
 
-                var phoneText = divs[1].textarea.content;
-                var phoneNumber = '0' + phoneText.replace(/(?:\s|-)/g, '');
+                var phoneText = divs[1].textarea.content ? divs[1].textarea.content : "";
+                var phoneNumber = phoneText.replace(/(?:\s|-)/g, '');
                 $("#healthOfficePhone").append("<a href='tel:" + phoneNumber + "'>" + phoneText + "</a>");
 
-                var faxText = divs[2].textarea.content;
-                var faxNumber = '0' + faxText.replace(/(?:\s|-)/g, '');
+                var faxText = divs[2].textarea.content ? divs[2].textarea.content : "";
+                var faxNumber = faxText ? '0' + faxText.replace(/(?:\s|-)/g, '') : "-";
                 $("#healthOfficeFax").append("<a href='mailto:" + faxNumber + "@fax'>" + faxText + "</a>");
 
                 var email = divs[3].a.content;

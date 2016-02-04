@@ -19,6 +19,10 @@ namespace HaemophilusWeb.Controllers
             new List<Change>
             {
                 new Change(new DateTime(2016, 2, 3),
+                    "<p>Fehlende Information bei Abfrage Gesundheitsamt</p>" +
+                    "<p>Wenn der Datensatz vom RKI-Tool keine Telefonnummer enthält wird " +
+                    "die ggf. vorhandene Faxnummer und Email-Adresse nicht angezeigt</p>", ChangeType.Bug),
+                new Change(new DateTime(2016, 2, 3),
                     "<p>Aktualisierung der Befundvorlagen</p>" +
                     "<ul>" +
                     "<li>Korrektur der Grußformel</li>" +
