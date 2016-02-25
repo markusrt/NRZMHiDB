@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using FluentAssertions;
 using HaemophilusWeb.Models;
 using NUnit.Framework;
 
@@ -19,10 +22,13 @@ namespace HaemophilusWeb.Controllers
         public void Delete_AddsExistingSendingsToViewBag()
         {
             const int senderToDelete = SendingControllerTests.FirstId;
+            
             var result = senderController.Delete(senderToDelete) as ViewResult;
 
-            CollectionAssert.AreEquivalent(result.ViewBag.Sendings,
-                SendingControllerTests.DbMock.Sendings.Where(s => s.SenderId == senderToDelete));
+            var sendingsInViewBag = (List<Sending>)result.ViewBag.Sendings;
+            var sendingsOfSender = SendingControllerTests.DbMock.Sendings.Where(s => s.SenderId == senderToDelete).ToList();
+            sendingsInViewBag.Count.Should().Be(1);
+            CollectionAssert.AreEquivalent(sendingsOfSender, sendingsInViewBag);
         }
 
         [Test]
