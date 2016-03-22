@@ -53,26 +53,8 @@
 
     @Html.EnumRadioEditorFor(model => model.FactorTest)
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.Ampicillin, new {@class = "col-sm-2 col-xs-12 control-label"})
-        @Html.EditorFor(model => model.Ampicillin, new {@class = "form-control"})
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.AmoxicillinClavulanate, new {@class = "col-sm-2 col-xs-12 control-label"})
-        @Html.EditorFor(model => model.AmoxicillinClavulanate, new {@class = "form-control"})
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Meropenem, new {@class = "col-sm-2 col-xs-12 control-label"})
-        @Html.EditorFor(model => model.Meropenem, new {@class = "form-control"})
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Cefotaxime, new {@class = "col-sm-2 col-xs-12 control-label"})
-        @Html.EditorFor(model => model.Cefotaxime, new {@class = "form-control"})
-    </div>
-
+    @Html.EditorFor(model => model.EpsilometerTestViewModels)
+    
     @Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP2)
 
     @Html.EnumRadioEditorFor(model => model.BexA)
@@ -272,11 +254,13 @@
         function ETestChange()
         {
             var id = $(this).attr('id');
-            var antibiotic = id.substring(0, id.indexOf('_'));
-            var currentBreakpointSelector = '#' + antibiotic + '_EucastClinicalBreakpointId';
-            var currentMeasurementSelector = '#' + antibiotic + '_Measurement';
+            var prefix = id.substring(0, id.indexOf('__'));
+            var currentBreakpointSelector = '#' + prefix + '__EucastClinicalBreakpointId';
+            var currentMeasurementSelector = '#' + prefix + '__Measurement';
+            var antibiotic = $(currentBreakpointSelector).data("antibiotic");
 
-            SetETestResult(antibiotic, null);
+
+            SetETestResult(antibiotic, prefix, null);
 
             var currentMeasurement = Globalize.parseFloat($(currentMeasurementSelector).val());
             if(isNaN(currentMeasurement))
@@ -302,23 +286,23 @@
                 {
                     if(currentMeasurement > clinicalBreakpoint.MicBreakpointResistent)
                     {
-                        SetETestResult(antibiotic, 'Resistant');
+                        SetETestResult(antibiotic, prefix, 'Resistant');
                     }
                     else if(currentMeasurement <= clinicalBreakpoint.MicBreakpointSusceptible)
                     {
-                        SetETestResult(antibiotic, 'Susceptible');
+                        SetETestResult(antibiotic, prefix, 'Susceptible');
                     }
                     else if(currentMeasurement != null)
                     {
-                        SetETestResult(antibiotic, 'Intermediate');
+                        SetETestResult(antibiotic, prefix, 'Intermediate');
                     }
                 }
             });
         }
 
-        function SetETestResult(antibiotic, result)
+        function SetETestResult(antibiotic, prefix, result)
         {
-            var resultSelector = '#' + antibiotic + '_Result';
+            var resultSelector = '#' + prefix + '__Result';
 
             $(resultSelector).val('');
             hideAll('span[id^=' + antibiotic + '_ETest]');

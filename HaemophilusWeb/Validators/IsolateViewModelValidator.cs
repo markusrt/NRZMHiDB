@@ -13,15 +13,8 @@ namespace HaemophilusWeb.Validators
 
         public IsolateViewModelValidator()
         {
-            RuleFor(i => i.Ampicillin.Measurement).Must((model, value)
-                => BeValidMeasurement(model.Ampicillin, value)).WithMessage(MeasurementMustBeGreaterThanZero);
-            RuleFor(i => i.AmoxicillinClavulanate.Measurement).Must((model, value)
-                => BeValidMeasurement(model.AmoxicillinClavulanate, value))
-                .WithMessage(MeasurementMustBeGreaterThanZero);
-            RuleFor(i => i.Cefotaxime.Measurement).Must((model, value)
-                => BeValidMeasurement(model.Cefotaxime, value)).WithMessage(MeasurementMustBeGreaterThanZero);
-            RuleFor(i => i.Meropenem.Measurement).Must((model, value)
-                => BeValidMeasurement(model.Meropenem, value)).WithMessage(MeasurementMustBeGreaterThanZero);
+            RuleFor(i => i.EpsilometerTestViewModels).SetCollectionValidator(new EpsilometerTestValidator());
+            
             RuleFor(i => i.RibosomalRna16SBestMatch).Must((model, value)
                 => BeSetIfDetermined(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.RibosomalRna16SMatchInPercent).Must((model, value)
@@ -66,6 +59,14 @@ namespace HaemophilusWeb.Validators
                 return true;
             }
             return measurement > 0;
+        }
+
+        private class EpsilometerTestValidator : AbstractValidator<EpsilometerTestViewModel>
+        {
+            public EpsilometerTestValidator()
+            {
+                RuleFor(e => e.Measurement).Must(BeValidMeasurement).WithMessage(MeasurementMustBeGreaterThanZero);
+            }
         }
     }
 }

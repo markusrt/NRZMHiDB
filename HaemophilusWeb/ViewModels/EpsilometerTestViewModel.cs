@@ -5,12 +5,17 @@ namespace HaemophilusWeb.ViewModels
 {
     public class EpsilometerTestViewModel
     {
+        public EpsilometerTestViewModel()
+        {
+            
+        }
+
         public EpsilometerTestViewModel(Antibiotic antibiotic)
         {
             Antibiotic = antibiotic;
         }
 
-        public Antibiotic Antibiotic { get; private set; }
+        public Antibiotic Antibiotic { get; set; }
 
         public int? EucastClinicalBreakpointId { get; set; }
 

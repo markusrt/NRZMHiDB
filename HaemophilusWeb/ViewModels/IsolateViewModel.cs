@@ -15,12 +15,19 @@ namespace HaemophilusWeb.ViewModels
     [Validator(typeof (IsolateViewModelValidator))]
     public class IsolateViewModel : IsolateBase
     {
+        private List<EpsilometerTestViewModel> etests;
+
         public IsolateViewModel()
         {
-            Ampicillin = new EpsilometerTestViewModel(Antibiotic.Ampicillin);
-            AmoxicillinClavulanate = new EpsilometerTestViewModel(Antibiotic.AmoxicillinClavulanate);
-            Cefotaxime = new EpsilometerTestViewModel(Antibiotic.Cefotaxime);
-            Meropenem = new EpsilometerTestViewModel(Antibiotic.Meropenem);
+            EpsilometerTestViewModels = new List<EpsilometerTestViewModel>
+            {
+                new EpsilometerTestViewModel(Antibiotic.Ampicillin),
+                new EpsilometerTestViewModel(Antibiotic.AmoxicillinClavulanate),
+                new EpsilometerTestViewModel(Antibiotic.Cefotaxime),
+                new EpsilometerTestViewModel(Antibiotic.Meropenem),
+                new EpsilometerTestViewModel(Antibiotic.Imipenem),
+                new EpsilometerTestViewModel(Antibiotic.Ciprofloxacin)
+            };
         }
 
         [Display(Name = "Labornummer")]
@@ -35,42 +42,21 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Material")]
         public string Material { get; set; }
 
-        public EpsilometerTestViewModel Ampicillin { get; private set; }
-
-        [Display(Name = "Amoxicillin / Clavulansäure")]
-        public EpsilometerTestViewModel AmoxicillinClavulanate { get; private set; }
-
-        [Display(Name = "Cefotaxim")]
-        public EpsilometerTestViewModel Cefotaxime { get; private set; }
-
-        public EpsilometerTestViewModel Meropenem { get; private set; }
-
         [Display(Name = "Patientenalter bei Entnahme")]
         public int PatientAgeAtSampling { get; set; }
-
-        public IEnumerable<EpsilometerTestViewModel> EpsilometerTestViewModels
-        {
-            get
-            {
-                yield return Ampicillin;
-                yield return AmoxicillinClavulanate;
-                yield return Cefotaxime;
-                yield return Meropenem;
-            }
-        }
 
         public IEnumerable<Typing> Typings
         {
             get
             {
-                var properties = GetType().GetProperties();
+                PropertyInfo[] properties = GetType().GetProperties();
                 foreach (
-                    var typingProperty in
+                    PropertyInfo typingProperty in
                         properties.Where(p => p.PropertyType == typeof (TestResult) && p.Name != "BetaLactamase"
                                               && p.Name != "Oxidase"))
                 {
                     var value = (TestResult) typingProperty.GetValue(this);
-                    var name = GetDisplayName(typingProperty);
+                    string name = GetDisplayName(typingProperty);
                     if (value != TestResult.NotDetermined)
                     {
                         yield return new Typing {Attribute = name, Value = EnumEditor.GetEnumDescription(value)};
@@ -81,7 +67,7 @@ namespace HaemophilusWeb.ViewModels
                     yield return
                         new Typing {Attribute = "ompP6", Value = EnumEditor.GetEnumDescription(OuterMembraneProteinP6)};
                 }
-                if (SerotypePcr != Models.SerotypePcr.NotDetermined)
+                if (SerotypePcr != SerotypePcr.NotDetermined)
                 {
                     yield return
                         new Typing {Attribute = "Kapselgenotypen", Value = EnumEditor.GetEnumDescription(SerotypePcr)};
@@ -153,26 +139,15 @@ namespace HaemophilusWeb.ViewModels
             get { return DateTime.Now.ToReportFormat(); }
         }
 
+        public IEnumerable<EpsilometerTestViewModel> EpsilometerTestViewModels { get; set; }
+
         public IEnumerable<EpsilometerTestReportModel> ETests
         {
             get
             {
-                if (Ampicillin.EucastClinicalBreakpointId != null && Ampicillin.Result.HasValue)
-                {
-                    yield return CreateEpsilometerTestReportModel(Ampicillin);
-                }
-                if (AmoxicillinClavulanate.EucastClinicalBreakpointId != null && AmoxicillinClavulanate.Result.HasValue)
-                {
-                    yield return CreateEpsilometerTestReportModel(AmoxicillinClavulanate);
-                }
-                if (Cefotaxime.EucastClinicalBreakpointId != null && Cefotaxime.Result.HasValue)
-                {
-                    yield return CreateEpsilometerTestReportModel(Cefotaxime);
-                }
-                if (Meropenem.EucastClinicalBreakpointId != null && Meropenem.Result.HasValue)
-                {
-                    yield return CreateEpsilometerTestReportModel(Meropenem);
-                }
+                return
+                    EpsilometerTestViewModels.Where(e => e.EucastClinicalBreakpointId != null == e.Result.HasValue)
+                        .Select(CreateEpsilometerTestReportModel);
             }
         }
 

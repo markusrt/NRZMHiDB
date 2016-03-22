@@ -329,6 +329,8 @@ namespace HaemophilusWeb.Controllers
             AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate);
             AddEpsilometerTestFields(export, Antibiotic.Meropenem);
             AddEpsilometerTestFields(export, Antibiotic.Cefotaxime);
+            AddEpsilometerTestFields(export, Antibiotic.Imipenem);
+            AddEpsilometerTestFields(export, Antibiotic.Ciprofloxacin);
             export.AddField(s => ExportToString(s.Isolate.OuterMembraneProteinP2));
             export.AddField(s => ExportToString(s.Isolate.BexA));
             export.AddField(s => ExportToString(s.Isolate.SerotypePcr));
