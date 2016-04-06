@@ -19,15 +19,7 @@ namespace HaemophilusWeb.ViewModels
 
         public IsolateViewModel()
         {
-            EpsilometerTestViewModels = new List<EpsilometerTestViewModel>
-            {
-                new EpsilometerTestViewModel(Antibiotic.Ampicillin),
-                new EpsilometerTestViewModel(Antibiotic.AmoxicillinClavulanate),
-                new EpsilometerTestViewModel(Antibiotic.Cefotaxime),
-                new EpsilometerTestViewModel(Antibiotic.Meropenem),
-                new EpsilometerTestViewModel(Antibiotic.Imipenem),
-                new EpsilometerTestViewModel(Antibiotic.Ciprofloxacin)
-            };
+            EpsilometerTestViewModels = new List<EpsilometerTestViewModel>();
         }
 
         [Display(Name = "Labornummer")]
@@ -139,7 +131,7 @@ namespace HaemophilusWeb.ViewModels
             get { return DateTime.Now.ToReportFormat(); }
         }
 
-        public IEnumerable<EpsilometerTestViewModel> EpsilometerTestViewModels { get; set; }
+        public List<EpsilometerTestViewModel> EpsilometerTestViewModels { get; set; }
 
         public IEnumerable<EpsilometerTestReportModel> ETests
         {
@@ -173,7 +165,7 @@ namespace HaemophilusWeb.ViewModels
             var reportModel = new EpsilometerTestReportModel
             {
                 Antibiotic = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Antibiotic),
-                Measurement = FloatToString(epsilometerTestViewModel.Measurement),
+                Measurement = FloatToString(epsilometerTestViewModel.Measurement.Value),
                 Result = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Result),
                 MicBreakpointResistent = FloatToString(epsilometerTestViewModel.MicBreakpointResistent),
                 MicBreakpointSusceptible = FloatToString(epsilometerTestViewModel.MicBreakpointSusceptible),

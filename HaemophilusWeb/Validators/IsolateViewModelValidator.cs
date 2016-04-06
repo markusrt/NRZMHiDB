@@ -9,6 +9,9 @@ namespace HaemophilusWeb.Validators
         private const string MeasurementMustBeGreaterThanZero =
             "Der Wert von '{PropertyName}' muss grösser sein als '0'.";
 
+        private const string EucastClinicalBreakpointIdIsRequired =
+            "'{PropertyName}' darf nicht leer sein";
+
         private const string PropertyMustNotBeEmpty = "{PropertyName} darf nicht leer sein.";
 
         public IsolateViewModelValidator()
@@ -52,20 +55,22 @@ namespace HaemophilusWeb.Validators
             return testResult != UnspecificOrNoTestResult.Determined || !string.IsNullOrWhiteSpace(value);
         }
 
-        private static bool BeValidMeasurement(EpsilometerTestViewModel eTest, float measurement)
-        {
-            if (!eTest.EucastClinicalBreakpointId.HasValue)
-            {
-                return true;
-            }
-            return measurement > 0;
-        }
-
         private class EpsilometerTestValidator : AbstractValidator<EpsilometerTestViewModel>
         {
             public EpsilometerTestValidator()
             {
                 RuleFor(e => e.Measurement).Must(BeValidMeasurement).WithMessage(MeasurementMustBeGreaterThanZero);
+                RuleFor(e => e.EucastClinicalBreakpointId).Must(BeSetIfAntibioticIsSelected).WithMessage(EucastClinicalBreakpointIdIsRequired);
+            }
+
+            private static bool BeSetIfAntibioticIsSelected(EpsilometerTestViewModel eTest, int? eucastClinicalBreakpointId)
+            {
+                return !eTest.Antibiotic.HasValue || eucastClinicalBreakpointId.HasValue;
+            }
+
+            private static bool BeValidMeasurement(EpsilometerTestViewModel eTest, float? measurement)
+            {
+                return !eTest.Antibiotic.HasValue || measurement > 0;
             }
         }
     }

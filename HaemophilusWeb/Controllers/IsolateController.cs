@@ -96,7 +96,8 @@ namespace HaemophilusWeb.Controllers
             isolateViewModel.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
             isolateViewModel.PatientAgeAtSampling = isolate.PatientAge();
 
-            ModelToViewModel(isolate.EpsilometerTests, isolateViewModel.EpsilometerTestViewModels);
+
+            EpsilometerTestsModelToViewModel(isolate, isolateViewModel);
 
             isolateViewModel.SamplingDate = isolate.Sending.SamplingDate.ToReportFormat();
             isolateViewModel.ReceivingDate = isolate.Sending.ReceivingDate.ToReportFormat();
@@ -117,63 +118,56 @@ namespace HaemophilusWeb.Controllers
             return isolateViewModel;
         }
 
-
-        private static void ModelToViewModel(ICollection<EpsilometerTest> epsilometerTests,
-            IEnumerable<EpsilometerTestViewModel> epsilometerTestViewModels)
+        private static void EpsilometerTestsModelToViewModel(Isolate isolate, IsolateViewModel isolateViewModel)
         {
-            foreach (var epsilometerTestViewModel in epsilometerTestViewModels)
+            foreach (var epsilometerTest in isolate.EpsilometerTests)
             {
-                var epsilometerTest =
-                    epsilometerTests.SingleOrDefault(
-                        e => e.EucastClinicalBreakpoint.Antibiotic == epsilometerTestViewModel.Antibiotic);
-                if (epsilometerTest != null)
+                var epsilometerTestViewModel = new EpsilometerTestViewModel
                 {
-                    epsilometerTestViewModel.EucastClinicalBreakpointId = epsilometerTest.EucastClinicalBreakpointId;
-                    epsilometerTestViewModel.Measurement = epsilometerTest.Measurement;
-                    epsilometerTestViewModel.Result = epsilometerTest.Result;
+                    EucastClinicalBreakpointId = epsilometerTest.EucastClinicalBreakpointId,
+                    Measurement = epsilometerTest.Measurement,
+                    Result = epsilometerTest.Result,
+                };
 
-                    var eucastClinicalBreakpoint = epsilometerTest.EucastClinicalBreakpoint;
-                    if (eucastClinicalBreakpoint != null)
-                    {
-                        epsilometerTestViewModel.MicBreakpointResistent =
-                            eucastClinicalBreakpoint.MicBreakpointResistent;
-                        epsilometerTestViewModel.MicBreakpointSusceptible =
-                            eucastClinicalBreakpoint.MicBreakpointSusceptible;
-                        epsilometerTestViewModel.ValidFromYear =
-                            eucastClinicalBreakpoint.ValidFrom.Year;
-                    }
+                var eucastClinicalBreakpoint = epsilometerTest.EucastClinicalBreakpoint;
+                if (eucastClinicalBreakpoint != null)
+                {
+                    epsilometerTestViewModel.MicBreakpointResistent =
+                        eucastClinicalBreakpoint.MicBreakpointResistent;
+                    epsilometerTestViewModel.MicBreakpointSusceptible =
+                        eucastClinicalBreakpoint.MicBreakpointSusceptible;
+                    epsilometerTestViewModel.ValidFromYear =
+                        eucastClinicalBreakpoint.ValidFrom.Year;
+                    epsilometerTestViewModel.Antibiotic = eucastClinicalBreakpoint.Antibiotic;
                 }
+
+                isolateViewModel.EpsilometerTestViewModels.Add(epsilometerTestViewModel);
             }
+
+            isolateViewModel.EpsilometerTestViewModels.Insert(0, new EpsilometerTestViewModel());
         }
 
-        private void ViewModelToModel(IEnumerable<EpsilometerTestViewModel> eTestViewModels,
-            ICollection<EpsilometerTest> eTests)
+        private void EpsilometerTestsViewModelToModel(IsolateViewModel isolateViewModel, Isolate isolate)
         {
-            var allInitialETests = eTests.ToList();
-            foreach (var eTestViewModel in eTestViewModels)
-            {
-                var eTest = allInitialETests.SingleOrDefault(
-                    e => e.EucastClinicalBreakpoint.Antibiotic == eTestViewModel.Antibiotic);
+            isolate.EpsilometerTests.Clear();
 
+            foreach (var epsilometerTest in isolate.EpsilometerTests.ToList())
+            {
+                db.EpsilometerTests.Remove(epsilometerTest);
+            }
+            foreach (var eTestViewModel in isolateViewModel.EpsilometerTestViewModels)
+            {
                 if (HasValidETestValue(eTestViewModel))
                 {
-                    AddNewOrUpdateExistingETest(eTests, eTest, eTestViewModel);
-                }
-                else
-                {
-                    if (eTest != null)
-                    {
-                        allInitialETests.Remove(eTest);
-                        eTests.Remove(eTest);
-                        db.EpsilometerTests.Remove(eTest);
-                    }
+                    AddNewOrUpdateExistingETest(isolate.EpsilometerTests, null, eTestViewModel);
                 }
             }
+
         }
 
         private static bool HasValidETestValue(EpsilometerTestViewModel eTestViewModel)
         {
-            return eTestViewModel.EucastClinicalBreakpointId.HasValue && eTestViewModel.Result.HasValue;
+            return eTestViewModel.Antibiotic.HasValue && eTestViewModel.Measurement.HasValue;
         }
 
         private static void AddNewOrUpdateExistingETest(ICollection<EpsilometerTest> eTests, EpsilometerTest eTest,
@@ -186,13 +180,23 @@ namespace HaemophilusWeb.Controllers
             }
 
             eTest.EucastClinicalBreakpointId = eTestViewModel.EucastClinicalBreakpointId.Value;
-            eTest.Measurement = eTestViewModel.Measurement;
+            eTest.Measurement = eTestViewModel.Measurement.Value;
             eTest.Result = eTestViewModel.Result.Value;
         }
 
         private ActionResult CreateEditView(IsolateViewModel isolateViewModel)
         {
             ViewBag.ClinicalBreakpoints = db.EucastClinicalBreakpoints.OrderByDescending(b => b.ValidFrom);
+            ViewBag.Antibiotics = new List<Antibiotic>
+            {
+                Antibiotic.Ampicillin,
+                Antibiotic.AmoxicillinClavulanate,
+                Antibiotic.Cefotaxime,
+                Antibiotic.Meropenem,
+                Antibiotic.Imipenem,
+                Antibiotic.Ciprofloxacin,
+                Antibiotic.Amikacin
+            };
             return View(isolateViewModel);
         }
 
@@ -211,7 +215,7 @@ namespace HaemophilusWeb.Controllers
                     ParseAndMapLaboratoryNumber(isolateViewModel, isolate);
                     isolate.TypeOfGrowth =
                         EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<GrowthType>(Request.Form["TypeOfGrowth"]);
-                    ViewModelToModel(isolateViewModel.EpsilometerTestViewModels, isolate.EpsilometerTests);
+                    EpsilometerTestsViewModelToModel(isolateViewModel, isolate);
                     db.MarkAsModified(isolate);
                     db.SaveChanges();
                     if (Request == null || Request.Form["primary-submit"] != null)

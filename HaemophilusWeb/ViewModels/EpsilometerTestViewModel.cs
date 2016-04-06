@@ -15,12 +15,13 @@ namespace HaemophilusWeb.ViewModels
             Antibiotic = antibiotic;
         }
 
-        public Antibiotic Antibiotic { get; set; }
+        public Antibiotic? Antibiotic { get; set; }
 
+        [Display(Name = "EUCAST Breakpoint")]
         public int? EucastClinicalBreakpointId { get; set; }
 
         [Display(Name = "Messwert")]
-        public float Measurement { get; set; }
+        public float? Measurement { get; set; }
 
         public EpsilometerTestResult? Result { get; set; }
 

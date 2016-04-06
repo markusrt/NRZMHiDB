@@ -53,6 +53,10 @@
 
     @Html.EnumRadioEditorFor(model => model.FactorTest)
 
+    <div class="form-group">
+        <label class="col-sm-2 control-label">E-Test Messwerte</label>
+    </div>
+
     @Html.EditorFor(model => model.EpsilometerTestViewModels)
     
     @Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP2)
@@ -177,6 +181,7 @@
         {
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("input[id$=_Measurement]").keyup(ETestChange);
+            $("select[id$=_Antibiotic]").change(ETestChange);
             ShowGrowthTypeIfGrowthIsSelectedWithYes();
             ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
             ShowApiNhMatchInPercentIfDeterminedIsSelected();
@@ -254,13 +259,41 @@
         function ETestChange()
         {
             var id = $(this).attr('id');
-            var prefix = id.substring(0, id.indexOf('__'));
+            var indexOfSeparator = id.indexOf('__');
+            var prefix = id.substring(0, indexOfSeparator);
+            var suffix = id.substring(indexOfSeparator + 2);
             var currentBreakpointSelector = '#' + prefix + '__EucastClinicalBreakpointId';
             var currentMeasurementSelector = '#' + prefix + '__Measurement';
-            var antibiotic = $(currentBreakpointSelector).data("antibiotic");
 
+            SetETestResult(prefix, null);
 
-            SetETestResult(antibiotic, prefix, null);
+            if (suffix === "Antibiotic") {
+                var antibiotic = $(this).val();
+
+                $(currentBreakpointSelector)
+                    .find('option')
+                    .remove();
+                $(currentBreakpointSelector).append('<option value>Auswählen...</option>');
+
+                if (antibiotic === "") {
+                    $(currentMeasurementSelector).val("");
+                    return;
+                }
+
+                clinicalBreakpoints.forEach(function(clinicalBreakpoint)
+                {
+                    if(antibiotic == clinicalBreakpoint.Antibiotic) {
+                        $(currentBreakpointSelector).append(
+                            '<option value="'
+                                + clinicalBreakpoint.EucastClinicalBreakpointId + '">'
+                                + clinicalBreakpoint.AntibioticDetails
+                                + ' - v' + clinicalBreakpoint.Version
+                                + ' - vom ' + moment(clinicalBreakpoint.ValidFrom).format('DD. MMM YY') + '</option>'
+                        );
+                    }
+                });
+            }
+
 
             var currentMeasurement = Globalize.parseFloat($(currentMeasurementSelector).val());
             if(isNaN(currentMeasurement))
@@ -268,8 +301,7 @@
                 return;
             }
 
-            if(currentMeasurement > 0 && $(currentBreakpointSelector).prop("selectedIndex") == 0 
-                && antibiotic != "Meropenem")
+            if(currentMeasurement > 0 && $(currentBreakpointSelector).prop("selectedIndex") == 0)
             {
                 $(currentBreakpointSelector).prop("selectedIndex", 1);
             }
@@ -286,30 +318,29 @@
                 {
                     if(currentMeasurement > clinicalBreakpoint.MicBreakpointResistent)
                     {
-                        SetETestResult(antibiotic, prefix, 'Resistant');
+                        SetETestResult(prefix, 'Resistant');
                     }
                     else if(currentMeasurement <= clinicalBreakpoint.MicBreakpointSusceptible)
                     {
-                        SetETestResult(antibiotic, prefix, 'Susceptible');
+                        SetETestResult(prefix, 'Susceptible');
                     }
                     else if(currentMeasurement != null)
                     {
-                        SetETestResult(antibiotic, prefix, 'Intermediate');
+                        SetETestResult(prefix, 'Intermediate');
                     }
                 }
             });
         }
 
-        function SetETestResult(antibiotic, prefix, result)
+        function SetETestResult(prefix, result)
         {
             var resultSelector = '#' + prefix + '__Result';
 
             $(resultSelector).val('');
-            hideAll('span[id^=' + antibiotic + '_ETest]');
+            $(resultSelector).parent().find(".label").hide();
 
-            if(result != null)
-            {
-                showAll('#' + antibiotic + '_ETest' + result);
+            if(result != null) {
+                $(resultSelector).parent().find(".label-etest-" + result).show();
                 $(resultSelector).val(result);
             }
         }
