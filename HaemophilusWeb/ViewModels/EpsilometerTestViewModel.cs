@@ -15,6 +15,7 @@ namespace HaemophilusWeb.ViewModels
             Antibiotic = antibiotic;
         }
 
+        [Display(Name = "Antibiotikum")]
         public Antibiotic? Antibiotic { get; set; }
 
         [Display(Name = "EUCAST Breakpoint")]

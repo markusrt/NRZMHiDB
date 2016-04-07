@@ -9,10 +9,8 @@
 }
 
 <div class="form-group">
-    @*<label class="col-sm-2 col-xs-12 control-label">@EnumEditor.GetEnumDescription(Model.Antibiotic)</label>*@
-    
     <div class="col-sm-2 col-xs-12">
-        @Html.DropDownListFor(model => model.Antibiotic, ((List<Antibiotic>)ViewBag.Antibiotics).Select(
+        @Html.DropDownListFor(model => model.Antibiotic, ((IEnumerable<Antibiotic>)ViewBag.Antibiotics).Select(
         option => new SelectListItem
         {
             Text = EnumUtils.GetEnumDescription<Antibiotic>(option),

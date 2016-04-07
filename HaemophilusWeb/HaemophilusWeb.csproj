@@ -208,6 +208,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\CountyController.cs" />
+    <Compile Include="Controllers\EucastClinicalBreakpointsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IsolateController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
@@ -979,6 +980,12 @@
     <Content Include="Views\PatientSending\Delete.cshtml" />
     <Content Include="Views\PatientSending\Deleted.cshtml" />
     <Content Include="Views\Sender\Export.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Create.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Delete.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Details.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Edit.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Index.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\_CreateOrEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

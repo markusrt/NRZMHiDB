@@ -1,0 +1,33 @@
+﻿@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.Models.EucastClinicalBreakpoint
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Antibiotic, htmlAttributes: new { @class = "control-label col-sm-2" })
+    <div class="col-sm-5">
+        @EnumEditor.EnumDropDownListFor(Html, model => model.Antibiotic, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Antibiotic, "", new { @class = "text-danger" })
+    </div>
+</div>
+
+@Html.TextEditorFor(m => m.AntibioticDetails, "Meropenem (meningitis)")
+@Html.TextEditorFor(m => m.Version, "1.0")
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ValidFrom, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        <div class="input-group">
+            @{ Html.EnableClientValidation(false); }
+            @Html.TextBoxFor(m => m.ValidFrom, new { @class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.ValidFrom) })
+            @{ Html.EnableClientValidation(true); }
+            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+        @Html.ValidationMessageFor(model => model.ValidFrom)
+    </div>
+</div>
+
+@Html.TextEditorFor(m => m.MicBreakpointSusceptible, "0,5")
+@Html.TextEditorFor(m => m.MicBreakpointResistent, "0,5")
+
+<script>
+    preventSiteNavigationWithPendingChanges();
+</script>

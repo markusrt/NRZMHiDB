@@ -1,0 +1,12 @@
+﻿@model HaemophilusWeb.Models.EucastClinicalBreakpoint
+
+@{
+    ViewBag.Title = "EUCAST Grenzwert bearbeiten";
+}
+
+@section EditModel
+{
+    @Html.HiddenFor(model => model.EucastClinicalBreakpointId)
+
+    @Html.Partial("_CreateOrEdit", Model)
+}

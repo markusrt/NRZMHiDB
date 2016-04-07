@@ -1,0 +1,85 @@
+﻿@using HaemophilusWeb.Utils
+@using HaemophilusWeb.Models
+@using HaemophilusWeb.Views.Utils
+@model IEnumerable<HaemophilusWeb.Models.EucastClinicalBreakpoint>
+
+@{
+    ViewBag.Title = "EUCAST Grenzwerte";
+}
+<p>
+    @Html.ActionLink("Neuen EUCAST Grenzwert anlegen", "Create", "EucastClinicalBreakpoints", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table table-striped" id="eucastClinicalBreakpoints">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Antibiotic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AntibioticDetails)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Version)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValidFrom)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MicBreakpointSusceptible)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MicBreakpointResistent)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @EnumEditor.GetEnumDescription(item.Antibiotic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AntibioticDetails)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Version)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValidFrom)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MicBreakpointSusceptible)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MicBreakpointResistent)
+                </td>
+                <td>
+                    @Html.ActionLink("Bearbeiten", "Edit", new { id = item.EucastClinicalBreakpointId }, new { @class = "btn btn-default btn-sm" })@* |
+                        @Html.ActionLink("Details", "Details", new { id = item.EucastClinicalBreakpointId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.EucastClinicalBreakpointId })*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#eucastClinicalBreakpoints').dataTable({
+                "lengthChange": false,
+                "order": [2, 'desc'],
+                "pageLength": 8,
+                "stateSave": true,
+                "language": {
+                    "url": "@Url.Content("~/Scripts/dataTables.german.js")"
+                }
+            });
+        });
+    </script>
+}
+
+

@@ -187,16 +187,10 @@ namespace HaemophilusWeb.Controllers
         private ActionResult CreateEditView(IsolateViewModel isolateViewModel)
         {
             ViewBag.ClinicalBreakpoints = db.EucastClinicalBreakpoints.OrderByDescending(b => b.ValidFrom);
-            ViewBag.Antibiotics = new List<Antibiotic>
-            {
-                Antibiotic.Ampicillin,
-                Antibiotic.AmoxicillinClavulanate,
-                Antibiotic.Cefotaxime,
-                Antibiotic.Meropenem,
-                Antibiotic.Imipenem,
-                Antibiotic.Ciprofloxacin,
-                Antibiotic.Amikacin
-            };
+            ViewBag.Antibiotics =
+                db.EucastClinicalBreakpoints.Select(e => e.Antibiotic)
+                    .Distinct()
+                    .ToList().OrderBy(EnumEditor.GetEnumDescription);
             return View(isolateViewModel);
         }
 

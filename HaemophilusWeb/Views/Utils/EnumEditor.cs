@@ -50,6 +50,7 @@ namespace HaemophilusWeb.Views.Utils
             var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
 
             var items = from value in GetEnumValues<TEnum>(modelMetadata)
+                orderby GetEnumDescription(value)
                 select new SelectListItem
                 {
                     Text = GetEnumDescription(value),
