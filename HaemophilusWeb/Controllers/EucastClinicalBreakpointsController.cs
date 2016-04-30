@@ -10,6 +10,7 @@ using HaemophilusWeb.Models;
 
 namespace HaemophilusWeb.Controllers
 {
+    [Authorize(Roles = DefaultRoles.User)]
     public class EucastClinicalBreakpointsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();

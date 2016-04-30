@@ -37,6 +37,7 @@ namespace HaemophilusWeb.Controllers
             this.sendingController = sendingController;
         }
 
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Create()
         {
             var patientResult = patientController.Create() as ViewResult;
@@ -56,6 +57,7 @@ namespace HaemophilusWeb.Controllers
             return View(patientSending);
         }
 
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Edit(int? id)
         {
             var sending = LoadSendingFromSendingController(id);
@@ -70,6 +72,7 @@ namespace HaemophilusWeb.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Edit(PatientSendingViewModel patientSending)
         {
             AssignClinicalInformationFromCheckboxValues(patientSending);
@@ -86,6 +89,7 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(patientSending);
         }
 
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Delete(int? id)
         {
             return View(LoadSendingFromSendingController(id));
@@ -94,6 +98,7 @@ namespace HaemophilusWeb.Controllers
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult DeleteConfirmed(int id)
         {
             var sending = LoadSendingFromSendingController(id);
@@ -101,11 +106,13 @@ namespace HaemophilusWeb.Controllers
             return EditUnvalidated(sending);
         }
 
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Deleted()
         {
             return View(db.Sendings.Include(s=>s.Patient).Where(s => s.Deleted).Select(CreatePatientSending).ToList());
         }
 
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Undelete(int? id)
         {
             var sending = LoadSendingFromSendingController(id);
@@ -129,6 +136,7 @@ namespace HaemophilusWeb.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Create(PatientSendingViewModel patientSending)
         {
             PerformValidations(patientSending);
@@ -220,6 +228,7 @@ namespace HaemophilusWeb.Controllers
         }
 
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Index()
         {
             return View(NotDeletedSendings().Take(0).Select(CreatePatientSending).ToList());
@@ -234,6 +243,7 @@ namespace HaemophilusWeb.Controllers
             };
         }
 
+        [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
         public ActionResult RkiExport(ExportQuery query)
         {
             if (query.From == DateTime.MinValue)
@@ -253,6 +263,7 @@ namespace HaemophilusWeb.Controllers
             return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI");
         }
 
+        [Authorize(Roles = DefaultRoles.User)]
         public ActionResult LaboratoryExport(ExportQuery query)
         {
             if (query.From == DateTime.MinValue)
@@ -467,7 +478,8 @@ namespace HaemophilusWeb.Controllers
         }
 
         [HttpPost]
-        public JsonResult DataTableAjax([ModelBinder(typeof (DataTablesBinder))] IDataTablesRequest requestParameters)
+        [Authorize(Roles = DefaultRoles.User)]
+        public JsonResult DataTableAjax([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestParameters)
         {
             var query = NotDeletedSendings().Select(x => new
             {

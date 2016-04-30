@@ -10,6 +10,7 @@ using HaemophilusWeb.Tools;
 
 namespace HaemophilusWeb.Controllers
 {
+    [Authorize(Roles = DefaultRoles.User)]
     public class CountyController : Controller
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();

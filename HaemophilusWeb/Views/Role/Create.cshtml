@@ -1,0 +1,21 @@
+﻿@model Microsoft.AspNet.Identity.EntityFramework.IdentityRole
+@{
+    ViewBag.Title = "Neuen Rolle anlegen";
+}
+
+@section CreateModel
+{
+    @using (Html.BeginForm("Create", "Role", FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+    {
+        @Html.AntiForgeryToken()
+        <h4>Bitte legen Sie eine neue Rolle an:</h4>
+        <hr />
+        @Html.ValidationSummary()
+        <div class="form-group">
+            @Html.LabelFor(m => m.Name, new {@class = "col-md-2 control-label"})
+            <div class="col-md-4">
+                @Html.TextBoxFor(m => m.Name, new {@class = "form-control"})
+            </div>
+        </div>
+    }
+}

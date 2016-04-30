@@ -11,6 +11,7 @@ using HaemophilusWeb.ViewModels;
 
 namespace HaemophilusWeb.Controllers
 {
+    [Authorize(Roles = DefaultRoles.User)]
     public class SenderController : ControllerBase
     {
         private readonly IApplicationDbContext db;
@@ -24,7 +25,6 @@ namespace HaemophilusWeb.Controllers
             db = applicationDbContext;
         }
 
-        // GET: /Sender/
         public ActionResult Index()
         {
             return View(NotDeletedSenders().ToList());

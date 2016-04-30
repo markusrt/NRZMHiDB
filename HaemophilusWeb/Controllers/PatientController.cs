@@ -6,6 +6,7 @@ using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
+    [Authorize(Roles = DefaultRoles.User)]
     public class PatientController : Controller
     {
         private readonly IApplicationDbContext db;

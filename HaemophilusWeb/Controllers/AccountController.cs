@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
@@ -11,6 +12,8 @@ namespace HaemophilusWeb.Controllers
     [Authorize]
     public class AccountController : Controller
     {
+        ApplicationDbContext context = new ApplicationDbContext();
+
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
@@ -63,7 +66,8 @@ namespace HaemophilusWeb.Controllers
             {
                 return View("Login");
             }
-            return View();
+
+            return ShowRegisterView(new RegisterViewModel());
         }
 
         //
@@ -79,6 +83,7 @@ namespace HaemophilusWeb.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await UserManager.AddToRoleAsync(user.Id, model.RoleName);
                     await SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }
@@ -86,6 +91,12 @@ namespace HaemophilusWeb.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+            return ShowRegisterView(model);
+        }
+
+        private ActionResult ShowRegisterView(RegisterViewModel model)
+        {
+            ViewBag.Roles = new SelectList(context.Roles.ToList(), "Name", "Name");
             return View(model);
         }
 
@@ -128,6 +139,7 @@ namespace HaemophilusWeb.Controllers
             ViewBag.HasLocalPassword = HasPassword();
             ViewBag.ReturnUrl = Url.Action("Manage");
             return View();
+        
         }
 
         //

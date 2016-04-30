@@ -8,6 +8,7 @@ using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
+    [Authorize(Roles = DefaultRoles.User)]
     public class SendingController : Controller
     {
         private readonly IApplicationDbContext db;

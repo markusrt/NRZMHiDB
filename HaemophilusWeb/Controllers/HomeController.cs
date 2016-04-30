@@ -11,13 +11,15 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
-                new Change(DateTime.MinValue, "Spezieller Zugang für Robert Koch Institut", ChangeType.Feature),
+                new Change(DateTime.MinValue, "Allgemeine Implementierung für Antibiotikafelder", ChangeType.Feature),
+                new Change(DateTime.MinValue, "Umstrukturierungen für Meningokokken", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Entwickler Dokumentation", ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Auditierung von Zugriffen</del>", ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Abfrage über Isolate</del>", ChangeType.Feature)
             },
             new List<Change>
             {
+                new Change(new DateTime(2016, 3, 30), "Spezieller Zugang für das Robert Koch Institut", ChangeType.Feature),
                 new Change(new DateTime(2016, 3, 22), "Neue Antibiotikafelder für Imipenem  und Ciprofloxacin.", ChangeType.Feature),
                 new Change(new DateTime(2016, 2, 4), "Unterstützung von ausländischen Postleitzahlen.", ChangeType.Feature),
                 new Change(new DateTime(2016, 2, 4),

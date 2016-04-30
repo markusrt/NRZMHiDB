@@ -213,6 +213,7 @@
     <Compile Include="Controllers\IsolateController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PatientSendingController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SenderController.cs" />
     <Compile Include="Controllers\SendingController.cs" />
     <Compile Include="App_Start\ExceptionLogger.cs" />
@@ -329,6 +330,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
     <Compile Include="Models\County.cs" />
+    <Compile Include="Models\DefaultRoles.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
     <Compile Include="Models\EpsilometerTestResult.cs" />
     <Compile Include="Models\EucastClinicalBreakpoint.cs" />
@@ -935,7 +937,7 @@
     <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Role\Create.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Sender\Create.cshtml" />
     <Content Include="Views\Sender\Delete.cshtml" />
@@ -991,6 +993,8 @@
     <Content Include="Views\EucastClinicalBreakpoints\Edit.cshtml" />
     <Content Include="Views\EucastClinicalBreakpoints\Index.cshtml" />
     <Content Include="Views\EucastClinicalBreakpoints\_CreateOrEdit.cshtml" />
+    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

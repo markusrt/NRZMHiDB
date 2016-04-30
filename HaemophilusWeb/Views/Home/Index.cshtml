@@ -1,31 +1,47 @@
-﻿@{
+﻿@using HaemophilusWeb.Models
+@{
     ViewBag.Title = "Haemophilus Web";
     ViewBag.Subtitle = "Webanwendung zur Verwaltung von <i>Haemophilus influenzae</i> Isolaten";
 }
-
 <div class="row">
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <h3>Einsender</h3>
-        <p>
-            Suchen, anlegen und bearbeiten von Einsendern.
-        </p>
-        <p>
-            @Html.ActionLink("Alle Einsender anzeigen", "Index", "Sender", null, new { @class = "btn btn-default btn-block" })
-        </p>
-        <p>
-            @Html.ActionLink("Neuen Einsender anlegen", "Create", "Sender", null, new { @class = "btn btn-primary btn-block" })
-        </p>
-    </div>
-    <div class="col-md-3 col-sm-6 col-xs-12">
-        <h3>Einsendungen</h3>
-        <p>
-            Suchen, anlegen und bearbeiten von Einsendungen.
-        </p>
-        <p>
-            @Html.ActionLink("Alle Einsendungen anzeigen", "Index", "PatientSending", null, new { @class = "btn btn-default btn-block" })
-        </p>
-        <p>
-            @Html.ActionLink("Neue Einsendung anlegen", "Create", "PatientSending", null, new { @class = "btn btn-primary btn-block" })
-        </p>
-    </div>
+    @if (User.IsInRole(DefaultRoles.User) || User.IsInRole(DefaultRoles.Administrator))
+    {
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <h3>Einsender</h3>
+            <p>
+                Suchen, anlegen und bearbeiten von Einsendern.
+            </p>
+            <p>
+                @Html.ActionLink("Alle Einsender anzeigen", "Index", "Sender", null, new { @class = "btn btn-default btn-block" })
+            </p>
+            <p>
+                @Html.ActionLink("Neuen Einsender anlegen", "Create", "Sender", null, new { @class = "btn btn-primary btn-block" })
+            </p>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <h3>Einsendungen</h3>
+            <p>
+                Suchen, anlegen und bearbeiten von Einsendungen.
+            </p>
+            <p>
+                @Html.ActionLink("Alle Einsendungen anzeigen", "Index", "PatientSending", null, new { @class = "btn btn-default btn-block" })
+            </p>
+            <p>
+                @Html.ActionLink("Neue Einsendung anlegen", "Create", "PatientSending", null, new { @class = "btn btn-primary btn-block" })
+            </p>
+        </div>
+    }
+    else if (User.IsInRole(DefaultRoles.PublicHealth))
+    {
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <h3>Export</h3>
+            <p>
+                Export von Daten
+            </p>
+            <p>
+                @Html.ActionLink("RKI Export", "RkiExport", "PatientSending", null, new { @class = "btn btn-primary btn-block" })
+            </p>
+        </div>
+    }
 </div>
+

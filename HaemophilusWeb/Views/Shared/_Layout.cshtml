@@ -1,8 +1,10 @@
 ﻿@using System.Configuration
+@using System.Diagnostics.Eventing.Reader
 @using System.IdentityModel.Protocols.WSTrust
 @using System.Reflection
 @using System.Threading
 @using HaemophilusWeb.Controllers
+@using HaemophilusWeb.Models
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,6 +34,8 @@
                     @if (Request.IsAuthenticated)
                     {
                         <ul class="nav navbar-nav">
+                        @if (User.IsInRole(DefaultRoles.User) || User.IsInRole(DefaultRoles.Administrator))
+                        {
                             <li>@Html.ActionLink("Einsender", "Index", "Sender")</li>
                             <li>@Html.ActionLink("Einsendungen", "Index", "PatientSending")</li>
                             <li class="dropdown">
@@ -50,6 +54,11 @@
                                     @*<li>@Html.ActionLink("EUCAST Grenzwerte", "Index", "EucastClinicalBreakpoints")</li>*@
                                 </ul>
                             </li>
+                        }
+                        else if (User.IsInRole(DefaultRoles.PublicHealth))
+                        {
+                            <li>@Html.ActionLink("RKI Export", "RkiExport", "PatientSending")</li>
+                        }
                         </ul>
                     }
                     @Html.Partial("_LoginPartial")
