@@ -321,6 +321,10 @@
     <Compile Include="Migrations\201507201311481_Sending_Delete.Designer.cs">
       <DependentUpon>201507201311481_Sending_Delete.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.cs" />
+    <Compile Include="Migrations\201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.Designer.cs">
+      <DependentUpon>201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -369,6 +373,7 @@
     <Compile Include="Utils\ServerUtils.cs" />
     <Compile Include="Utils\TypeUtils.cs" />
     <Compile Include="Validators\IsolateViewModelValidator.cs" />
+    <Compile Include="Validators\EucastClinicalBreakpointValidator.cs" />
     <Compile Include="Validators\PatientValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
     <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
@@ -1077,6 +1082,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201507201311481_Sending_Delete.resx">
       <DependentUpon>201507201311481_Sending_Delete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.resx">
+      <DependentUpon>201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

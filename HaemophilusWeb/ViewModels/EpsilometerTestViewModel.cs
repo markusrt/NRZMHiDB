@@ -26,10 +26,10 @@ namespace HaemophilusWeb.ViewModels
 
         public EpsilometerTestResult? Result { get; set; }
 
-        public float MicBreakpointSusceptible { get; set; }
+        public float? MicBreakpointSusceptible { get; set; }
 
-        public float MicBreakpointResistent { get; set; }
+        public float? MicBreakpointResistent { get; set; }
 
-        public int ValidFromYear { get; set; }
+        public int? ValidFromYear { get; set; }
     }
 }

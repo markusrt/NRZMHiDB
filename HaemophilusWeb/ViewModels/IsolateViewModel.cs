@@ -165,7 +165,7 @@ namespace HaemophilusWeb.ViewModels
             var reportModel = new EpsilometerTestReportModel
             {
                 Antibiotic = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Antibiotic),
-                Measurement = FloatToString(epsilometerTestViewModel.Measurement.Value),
+                Measurement = FloatToString(epsilometerTestViewModel.Measurement),
                 Result = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Result),
                 MicBreakpointResistent = FloatToString(epsilometerTestViewModel.MicBreakpointResistent),
                 MicBreakpointSusceptible = FloatToString(epsilometerTestViewModel.MicBreakpointSusceptible),
@@ -174,9 +174,13 @@ namespace HaemophilusWeb.ViewModels
             return reportModel;
         }
 
-        private static string FloatToString(float value)
+        private static string FloatToString(float? number)
         {
-            return Math.Round(value, 3).ToString(CultureInfo.CurrentCulture);
+            if (!number.HasValue)
+            {
+                return string.Empty;
+            }
+            return Math.Round(number.Value, 3).ToString(CultureInfo.CurrentCulture);
         }
 
         private static string DoubleToString(double? value)
@@ -203,6 +207,6 @@ namespace HaemophilusWeb.ViewModels
         public string MicBreakpointSusceptible { get; set; }
         public string MicBreakpointResistent { get; set; }
         public string Measurement { get; set; }
-        public int ValidFromYear { get; set; }
+        public int? ValidFromYear { get; set; }
     }
 }
