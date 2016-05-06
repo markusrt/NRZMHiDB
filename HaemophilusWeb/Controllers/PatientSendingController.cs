@@ -389,32 +389,32 @@ namespace HaemophilusWeb.Controllers
             Func<Sending, County> findCounty =
                 s => counties.FirstOrDefault(c => c.IsEqualTo(s.Patient.County)) ?? emptyCounty;
 
-            export.AddField(s => s.Isolate.StemNumber);
-            export.AddField(s => s.ReceivingDate.ToReportFormat());
-            export.AddField(s => s.SamplingDate.ToReportFormat());
-            export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s), "Material");
-            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "Geburtsmonat");
-            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "Geburtsjahr");
-            export.AddField(s => ExportGender(s.Patient.Gender));
-            export.AddField(s => ExportToString(s.Patient.County));
-            export.AddField(s => findCounty(s).CountyNumber, "Kreisnr");
-            export.AddField(s => ExportToString(s.Patient.State));
-            export.AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "Kennziffer");
-            export.AddField(s => ExportToString(s.Patient.HibVaccination));
-            export.AddField(s => ExportToString(s.Isolate.BetaLactamase));
-            AddEpsilometerTestFields(export, Antibiotic.Ampicillin);
-            AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate);
-            export.AddField(s => ExportToString(s.Isolate.Evaluation), "Serotyp");
-            export.AddField(s => s.SenderId, "Einsendernummer");
+            export.AddField(s => s.Isolate.StemNumber, "klhi_nr");
+            export.AddField(s => s.ReceivingDate.ToReportFormat(), "eing");
+            export.AddField(s => s.SamplingDate.ToReportFormat(), "ent");
+            export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s), "mat");
+            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "geb_monat");
+            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "geb_jahr");
+            export.AddField(s => ExportGender(s.Patient.Gender), "geschlecht");
+            export.AddField(s => ExportToString(s.Patient.HibVaccination), "hib_impf");
+            export.AddField(s => ExportToString(s.Isolate.Evaluation), "styp");
+            export.AddField(s => ExportToString(s.Isolate.BetaLactamase), "b_lac");
+            export.AddField(s => findCounty(s).CountyNumber, "kreis_nr");
+            export.AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "bundesland");
+            export.AddField(s => s.SenderId, "einsender");
+            export.AddField(s => ExportToString(s.Patient.County), "landkreis");
+            export.AddField(s => ExportToString(s.Patient.State), "bundeslandName");
+            AddEpsilometerTestFields(export, Antibiotic.Ampicillin, "ampicillinMHK", "ampicillinBewertung");
+            AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate, "amoxicillinClavulansaeureMHK", "bewertungAmoxicillinClavulansaeure");
 
             return export;
         }
 
-        private static void AddEpsilometerTestFields(ExportDefinition<Sending> export, Antibiotic antibiotic)
+        private static void AddEpsilometerTestFields(ExportDefinition<Sending> export, Antibiotic antibiotic, string measurementHeaderParameter = null, string evaluationHeaderParameter = null)
         {
             var antibioticName = ExportToString(antibiotic);
-            var measurementHeader = string.Format("{0} MHK", antibioticName);
-            var evaluationHeader = string.Format("{0} Bewertung", antibioticName);
+            var measurementHeader = measurementHeaderParameter ?? string.Format("{0} MHK", antibioticName);
+            var evaluationHeader = evaluationHeaderParameter ?? string.Format("{0} Bewertung", antibioticName);
 
             export.AddField(s => FindEpsilometerTestMeasurement(s, antibiotic), measurementHeader);
             export.AddField(s => ExportToString(FindEpsilometerTestEvaluation(s, antibiotic)), evaluationHeader);

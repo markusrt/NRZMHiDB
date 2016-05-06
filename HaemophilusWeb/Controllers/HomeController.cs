@@ -19,7 +19,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2016, 3, 30), "Spezieller Zugang für das Robert Koch Institut", ChangeType.Feature),
+                new Change(new DateTime(2016, 5, 4), "Umbenennen und umsortieren der Spaltennamen für den RKI Export", ChangeType.Feature),
+                new Change(new DateTime(2016, 4, 30), "Spezieller Zugang für das Robert Koch Institut", ChangeType.Feature),
                 new Change(new DateTime(2016, 3, 22), "Neue Antibiotikafelder für Imipenem  und Ciprofloxacin.", ChangeType.Feature),
                 new Change(new DateTime(2016, 2, 4), "Unterstützung von ausländischen Postleitzahlen.", ChangeType.Feature),
                 new Change(new DateTime(2016, 2, 4),
