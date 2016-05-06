@@ -131,6 +131,7 @@
     <Compile Include="Utils\FileListerTests.cs" />
     <Compile Include="Utils\ReportFormatterTests.cs" />
     <Compile Include="Validators\AbstractValidatorTests.cs" />
+    <Compile Include="Validators\EpsilometerTestValidatorTest.cs" />
     <Compile Include="Validators\PatientValidatorTests.cs" />
     <Compile Include="Validators\SendingValidatorTests.cs" />
     <Compile Include="ViewModels\IsolateViewModelTests.cs" />
