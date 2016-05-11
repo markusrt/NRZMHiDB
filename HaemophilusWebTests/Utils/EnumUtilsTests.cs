@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using HaemophilusWeb.Models;
@@ -22,6 +23,36 @@ namespace HaemophilusWeb.Utils
 
             result.Should().Be(expectedResult);
         }
+
+        [Test]
+        public void ParseCommaSeperatedListOfNames_ValidList_ParsesCorrectly()
+        {
+            var commaSeperatedList = "Bacitracin, Amikacin";
+            var expectedResult = new List<Antibiotic> {Antibiotic.Bacitracin, Antibiotic.Amikacin};
+
+            var result = EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>(commaSeperatedList);
+
+            result.Should().ContainInOrder(expectedResult);
+        }
+
+        [Test]
+        public void ParseCommaSeperatedListOfNames_EmptyList_EmptyResult()
+        {
+            var commaSeperatedList = ", ";
+
+            var result = EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>(commaSeperatedList);
+
+            result.Should().BeEmpty();
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentException))]
+        public void ParseCommaSeperatedListOfNames_InvalidEntry_ThrowsException()
+        {
+            EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>("Bacitracin, Blub, Amikacin");
+        }
+
+
 
         [Test]
         [ExpectedException(typeof (ArgumentException))]

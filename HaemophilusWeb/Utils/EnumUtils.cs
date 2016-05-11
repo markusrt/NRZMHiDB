@@ -22,6 +22,14 @@ namespace HaemophilusWeb.Utils
                 enabledFlagNames.Aggregate(0, (acc, v) => acc | (int) Enum.Parse(typeof (TEnum), v), acc => acc);
         }
 
+        public static List<TEnum> ParseCommaSeperatedListOfNames<TEnum>(string commaSeperatedList)
+            where TEnum : struct, IConvertible
+        {
+            commaSeperatedList = commaSeperatedList ?? string.Empty;
+            var enumEntries = commaSeperatedList.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            return enumEntries.Where(v => !string.IsNullOrEmpty(v.Trim())).Select(e => (TEnum)Enum.Parse(typeof(TEnum), e)).ToList();
+        }
+
         /// <summary>
         ///     Creates a list of all available values for a given <typeparamref name="TEnum" />
         /// </summary>

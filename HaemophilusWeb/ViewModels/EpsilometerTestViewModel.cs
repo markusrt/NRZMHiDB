@@ -31,5 +31,6 @@ namespace HaemophilusWeb.ViewModels
         public float? MicBreakpointResistent { get; set; }
 
         public int? ValidFromYear { get; set; }
+        public bool ReadonlyAntibiotic { get; set; }
     }
 }

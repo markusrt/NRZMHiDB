@@ -9,15 +9,23 @@
 }
 
 <div class="form-group">
-    <div class="col-sm-2 col-xs-12">
-        @Html.DropDownListFor(model => model.Antibiotic, ((IEnumerable<Antibiotic>)ViewBag.Antibiotics).Select(
-        option => new SelectListItem
+        @if (Model.ReadonlyAntibiotic)
         {
-            Text = EnumUtils.GetEnumDescription<Antibiotic>(option),
-            Value = ((int)option).ToString(),
-            Selected = (Model != null) && (option == Model.Antibiotic)
-        }), "Antibiotikum auswählen...", new { @class = "form-control" })
-    </div>
+            <label title="@EnumEditor.GetEnumDescription(Model.Antibiotic)" class="col-sm-2 control-label nowrap-ellipsis">@EnumEditor.GetEnumDescription(Model.Antibiotic)</label>
+            @Html.HiddenFor(model => model.Antibiotic);
+        }
+        else
+        {
+            <div class="col-sm-2 col-xs-12">
+                @Html.DropDownListFor(model => model.Antibiotic, ((IEnumerable<Antibiotic>)ViewBag.Antibiotics).Select(
+                option => new SelectListItem
+                {
+                    Text = EnumUtils.GetEnumDescription<Antibiotic>(option),
+                    Value = ((int)option).ToString(),
+                    Selected = (Model != null) && (option == Model.Antibiotic),
+                }), "Antibiotikum auswählen...", new { @class = "form-control" })
+            </div>
+        }
 
     <div class="col-sm-2 col-xs-3">
         @Html.TextBoxFor(m => m.Measurement, new { @class = "form-control" })

@@ -366,6 +366,7 @@
     <Compile Include="Tools\CountyImporter.cs" />
     <Compile Include="Tools\CreateExcelFile.cs" />
     <Compile Include="Tools\ExportDefinition.cs" />
+    <Compile Include="Utils\AntibioticPriorityListComparer.cs" />
     <Compile Include="Utils\EnumSerializer.cs" />
     <Compile Include="Utils\EnumUtils.cs" />
     <Compile Include="Utils\ExceptionUtils.cs" />

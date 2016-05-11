@@ -19,6 +19,8 @@ namespace HaemophilusWeb.Controllers
     public class IsolateController : Controller
     {
         private readonly IApplicationDbContext db;
+        private readonly AntibioticPriorityListComparer antibioticPriorityListComparer;
+        private readonly List<Antibiotic> primaryAntibiotics;
 
         public IsolateController()
             : this(new ApplicationDbContextWrapper(new ApplicationDbContext()))
@@ -28,6 +30,8 @@ namespace HaemophilusWeb.Controllers
         public IsolateController(IApplicationDbContext applicationDbContext)
         {
             db = applicationDbContext;
+            antibioticPriorityListComparer = new AntibioticPriorityListComparer(ConfigurationManager.AppSettings["AntibioticsOrder"]);
+            primaryAntibiotics = EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>(ConfigurationManager.AppSettings["PrimaryAntibiotics"]);
         }
 
         public ActionResult Edit(int? id)
@@ -119,15 +123,22 @@ namespace HaemophilusWeb.Controllers
             return isolateViewModel;
         }
 
-        private static void EpsilometerTestsModelToViewModel(Isolate isolate, IsolateViewModel isolateViewModel)
+        private void EpsilometerTestsModelToViewModel(Isolate isolate, IsolateViewModel isolateViewModel)
         {
-            foreach (var epsilometerTest in isolate.EpsilometerTests)
+            var epsilometerTestViewModels = new List<EpsilometerTestViewModel>();
+            var availableAntibiotics = AvailableAntibiotics;
+            var missingPrimaryAntibiotics = new List<Antibiotic>(primaryAntibiotics.Where(a => availableAntibiotics.Contains(a)));
+
+            isolateViewModel.EpsilometerTestViewModels.Clear();
+
+            foreach (var epsilometerTest in isolate.EpsilometerTests.ToList().OrderBy(e => e.EucastClinicalBreakpoint.Antibiotic, antibioticPriorityListComparer))
             {
                 var epsilometerTestViewModel = new EpsilometerTestViewModel
                 {
                     EucastClinicalBreakpointId = epsilometerTest.EucastClinicalBreakpointId,
                     Measurement = epsilometerTest.Measurement,
                     Result = epsilometerTest.Result,
+                    ReadonlyAntibiotic = true
                 };
 
                 var eucastClinicalBreakpoint = epsilometerTest.EucastClinicalBreakpoint;
@@ -143,10 +154,22 @@ namespace HaemophilusWeb.Controllers
                     }
 
                     epsilometerTestViewModel.Antibiotic = eucastClinicalBreakpoint.Antibiotic;
+                    missingPrimaryAntibiotics.Remove(eucastClinicalBreakpoint.Antibiotic);
                 }
 
-                isolateViewModel.EpsilometerTestViewModels.Add(epsilometerTestViewModel);
+                epsilometerTestViewModels.Add(epsilometerTestViewModel);
             }
+
+            epsilometerTestViewModels.AddRange(
+                missingPrimaryAntibiotics.Select(
+                    missingPrimaryAntibiotic => new EpsilometerTestViewModel
+                    {
+                        Antibiotic = missingPrimaryAntibiotic,
+                        ReadonlyAntibiotic = true
+                    }
+            ));
+
+            isolateViewModel.EpsilometerTestViewModels.AddRange(epsilometerTestViewModels.OrderBy(e => e.Antibiotic.Value, antibioticPriorityListComparer));
 
             isolateViewModel.EpsilometerTestViewModels.Insert(0, new EpsilometerTestViewModel());
         }
@@ -191,11 +214,18 @@ namespace HaemophilusWeb.Controllers
         private ActionResult CreateEditView(IsolateViewModel isolateViewModel)
         {
             ViewBag.ClinicalBreakpoints = db.EucastClinicalBreakpoints.OrderByDescending(b => b.ValidFrom);
-            ViewBag.Antibiotics =
-                db.EucastClinicalBreakpoints.Select(e => e.Antibiotic)
-                    .Distinct()
-                    .ToList().OrderBy(EnumEditor.GetEnumDescription);
+            ViewBag.Antibiotics = AvailableAntibiotics.OrderBy(a => a, antibioticPriorityListComparer);
             return View(isolateViewModel);
+        }
+
+        private List<Antibiotic> AvailableAntibiotics
+        {
+            get
+            {
+                return db.EucastClinicalBreakpoints.Select(e => e.Antibiotic)
+                    .Distinct()
+                    .ToList();
+            }
         }
 
         [HttpPost]

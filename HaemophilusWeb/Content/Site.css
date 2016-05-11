@@ -124,3 +124,9 @@ h6,
 .topmargin {
     margin-top: 1em;
 }
+
+.nowrap-ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
