@@ -173,12 +173,12 @@
 
 @section Scripts{
     <script>
-        preventSiteNavigationWithPendingChanges();
+    preventSiteNavigationWithPendingChanges();
 
-        var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
+    var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
 
-        $(document).ready(function()
-        {
+    $(document)
+        .ready(function() {
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("input[id$=_Measurement]").keyup(ETestChange);
             $("select[id$=_Antibiotic]").change(ETestChange);
@@ -190,156 +190,150 @@
             ShowMlstSequenceTypeIfDeterminedIsSelected();
         });
 
-        function ShowGrowthTypeIfGrowthIsSelectedWithYes()
-        {
-            ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-                "#GrowthTypeForm", "input:radio[name$='Growth']",
-                "input:radio[name$='Growth']:checked",
-                "Yes", "input:checkbox[name$='TypeOfGrowth']"
-            );
-            $("input:radio[name$='Growth']").change(function () {
-                if($("input:radio[name$='Growth']:checked").val() == "Yes")
-                {
+    function ShowGrowthTypeIfGrowthIsSelectedWithYes() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#GrowthTypeForm",
+            "input:radio[name$='Growth']",
+            "input:radio[name$='Growth']:checked",
+            "Yes",
+            "input:checkbox[name$='TypeOfGrowth']"
+        );
+        $("input:radio[name$='Growth']")
+            .change(function() {
+                if ($("input:radio[name$='Growth']:checked").val() == "Yes") {
                     var checkedTypeOfGrowth = $("input:checkbox[name$='TypeOfGrowth']:checked");
-                    if(!checkedTypeOfGrowth.val())
-                    {
-                        $("#defaultTypeOfGrowth").attr("checked","checked");
+                    if (!checkedTypeOfGrowth.val()) {
+                        $("#defaultTypeOfGrowth").attr("checked", "checked");
                         $("#defaultTypeOfGrowth").parent().addClass("active");
                     }
                 }
             });
-        }
+    }
 
 
-        function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected()
-        {
-            ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-                "#RibosomalRna16SMatchInPercentForm", "input:radio[name$='RibosomalRna16S']",
-                "input:radio[name$='RibosomalRna16S']:checked",
-                "Determined", "[id$='RibosomalRna16SBestMatch']", "[id$='RibosomalRna16SMatchInPercent']"
-            );
-        }
+    function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#RibosomalRna16SMatchInPercentForm",
+            "input:radio[name$='RibosomalRna16S']",
+            "input:radio[name$='RibosomalRna16S']:checked",
+            "Determined",
+            "[id$='RibosomalRna16SBestMatch']",
+            "[id$='RibosomalRna16SMatchInPercent']"
+        );
+    }
 
-        function ShowApiNhMatchInPercentIfDeterminedIsSelected()
-        {
-            ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-                "#ApiNhMatchInPercentForm", "input:radio[name$='ApiNh']",
-                "input:radio[name$='ApiNh']:checked",
-                "Determined", "[id$='ApiNhBestMatch']", "[id$='ApiNhMatchInPercent']"
-            );
-        }
+    function ShowApiNhMatchInPercentIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#ApiNhMatchInPercentForm",
+            "input:radio[name$='ApiNh']",
+            "input:radio[name$='ApiNh']:checked",
+            "Determined",
+            "[id$='ApiNhBestMatch']",
+            "[id$='ApiNhMatchInPercent']"
+        );
+    }
 
-        function ShowMaldiTofMatchConfidenceIfDeterminedIsSelected()
-        {
-            ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-                "#MaldiTofMatchConfidenceForm", "input:radio[name$='MaldiTof']",
-                "input:radio[name$='MaldiTof']:checked",
-                "Determined", "[id$='MaldiTofBestMatch']", "[id$='MaldiTofMatchConfidence']"
-            );
-        }
+    function ShowMaldiTofMatchConfidenceIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#MaldiTofMatchConfidenceForm",
+            "input:radio[name$='MaldiTof']",
+            "input:radio[name$='MaldiTof']:checked",
+            "Determined",
+            "[id$='MaldiTofBestMatch']",
+            "[id$='MaldiTofMatchConfidence']"
+        );
+    }
 
-        function ShowFtsiEvaluationIfDeterminedIsSelected()
-        {
-            ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-                "#FtsiEvaluationForm", "input:radio[name$='Ftsi']",
-                "input:radio[name$='Ftsi']:checked",
-                "Determined", "[id$='FtsiEvaluation1']", "[id$='FtsiEvaluation2']"
-            );
-        }
+    function ShowFtsiEvaluationIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#FtsiEvaluationForm",
+            "input:radio[name$='Ftsi']",
+            "input:radio[name$='Ftsi']:checked",
+            "Determined",
+            "[id$='FtsiEvaluation1']",
+            "[id$='FtsiEvaluation2']"
+        );
+    }
 
-        function ShowMlstSequenceTypeIfDeterminedIsSelected()
-        {
-            ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-                "#MlstSequenceTypeForm", "input:radio[name$='Mlst']",
-                "input:radio[name$='Mlst']:checked",
-                "Determined", "[id$='MlstSequenceType']"
-            );
-        }
+    function ShowMlstSequenceTypeIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#MlstSequenceTypeForm",
+            "input:radio[name$='Mlst']",
+            "input:radio[name$='Mlst']:checked",
+            "Determined",
+            "[id$='MlstSequenceType']"
+        );
+    }
 
-        function ETestChange()
-        {
-            var id = $(this).attr('id');
-            var indexOfSeparator = id.indexOf('__');
-            var prefix = id.substring(0, indexOfSeparator);
-            var suffix = id.substring(indexOfSeparator + 2);
-            var currentBreakpointSelector = '#' + prefix + '__EucastClinicalBreakpointId';
-            var currentMeasurementSelector = '#' + prefix + '__Measurement';
+    function ETestChange() {
+        var id = $(this).attr('id');
+        var indexOfSeparator = id.indexOf('__');
+        var prefix = id.substring(0, indexOfSeparator);
+        var suffix = id.substring(indexOfSeparator + 2);
+        var currentBreakpointSelector = '#' + prefix + '__EucastClinicalBreakpointId';
+        var currentMeasurementSelector = '#' + prefix + '__Measurement';
 
-            SetETestResult(prefix, null);
+        SetETestResult(prefix, null);
 
-            if (suffix === "Antibiotic") {
-                var antibiotic = $(this).val();
+        if (suffix === "Antibiotic") {
+            var antibiotic = $(this).val();
 
-                $(currentBreakpointSelector)
-                    .find('option')
-                    .remove();
-                $(currentBreakpointSelector).append('<option value>Auswählen...</option>');
+            $(currentBreakpointSelector)
+                .find('option')
+                .remove();
+            $(currentBreakpointSelector).append('<option value>Auswählen...</option>');
 
-                if (antibiotic === "") {
-                    $(currentMeasurementSelector).val("");
-                    return;
-                }
-
-                clinicalBreakpoints.forEach(function(clinicalBreakpoint)
-                {
-                    if(antibiotic == clinicalBreakpoint.Antibiotic) {
-                        $(currentBreakpointSelector).append(
-                            '<option value="'
-                                + clinicalBreakpoint.EucastClinicalBreakpointId + '">'
-                                + clinicalBreakpoint.AntibioticDetails
-                                + ' - v' + clinicalBreakpoint.Version
-                                + ' - vom ' + moment(clinicalBreakpoint.ValidFrom).format('DD. MMM YY') + '</option>'
-                        );
-                    }
-                });
-            }
-
-
-            var currentMeasurement = Globalize.parseFloat($(currentMeasurementSelector).val());
-            if(isNaN(currentMeasurement))
-            {
+            if (antibiotic === "") {
+                $(currentMeasurementSelector).val("");
                 return;
             }
 
-            if(currentMeasurement > 0 && $(currentBreakpointSelector).prop("selectedIndex") == 0)
-            {
-                $(currentBreakpointSelector).prop("selectedIndex", 1);
-            }
-            else if(currentMeasurement == 0)
-            {
-                $(currentBreakpointSelector).prop("selectedIndex", 0);
-            }
+            clinicalBreakpoints.forEach(function(clinicalBreakpoint) {
+                if (antibiotic == clinicalBreakpoint.Antibiotic) {
+                    $(currentBreakpointSelector)
+                        .append(
+                            '<option value="' + clinicalBreakpoint.EucastClinicalBreakpointId + '">' + clinicalBreakpoint.Title + '</option>'
+                        );
+                }
+            });
+        }
 
-            var currentBreakpointId = $(currentBreakpointSelector).val();
 
-            clinicalBreakpoints.forEach(function(clinicalBreakpoint)
-            {
-                if(currentBreakpointId == clinicalBreakpoint.EucastClinicalBreakpointId)
-                {
-                    if(currentMeasurement > clinicalBreakpoint.MicBreakpointResistent)
-                    {
-                        SetETestResult(prefix, 'Resistant');
-                    }
-                    else if(currentMeasurement <= clinicalBreakpoint.MicBreakpointSusceptible)
-                    {
-                        SetETestResult(prefix, 'Susceptible');
-                    }
-                    else if(currentMeasurement != null)
-                    {
-                        SetETestResult(prefix, 'Intermediate');
+        var currentMeasurement = Globalize.parseFloat($(currentMeasurementSelector).val());
+        if (isNaN(currentMeasurement)) {
+            return;
+        }
+
+        if (currentMeasurement > 0 && $(currentBreakpointSelector).prop("selectedIndex") == 0) {
+            $(currentBreakpointSelector).prop("selectedIndex", 1);
+        } else if (currentMeasurement == 0) {
+            $(currentBreakpointSelector).prop("selectedIndex", 0);
+        }
+
+        var currentBreakpointId = parseInt($(currentBreakpointSelector).val());
+
+        clinicalBreakpoints.forEach(function(clinicalBreakpoint) {
+                if (currentBreakpointId === clinicalBreakpoint.EucastClinicalBreakpointId) {
+                    if (clinicalBreakpoint.NoEucastAvailable) {
+                        SetETestResult(prefix, '@(EpsilometerTestResult.NotDetermined.ToString())');
+                    } else if (currentMeasurement > clinicalBreakpoint.MicBreakpointResistent) {
+                        SetETestResult(prefix, '@(EpsilometerTestResult.Resistant.ToString())');
+                    } else if (currentMeasurement <= clinicalBreakpoint.MicBreakpointSusceptible) {
+                        SetETestResult(prefix, '@(EpsilometerTestResult.Susceptible.ToString())');
+                    } else if (currentMeasurement != null) {
+                        SetETestResult(prefix, '@(EpsilometerTestResult.Intermediate.ToString())');
                     }
                 }
             });
         }
 
-        function SetETestResult(prefix, result)
-        {
+        function SetETestResult(prefix, result) {
             var resultSelector = '#' + prefix + '__Result';
 
             $(resultSelector).val('');
             $(resultSelector).parent().find(".label").hide();
 
-            if(result != null) {
+            if (result != null) {
                 $(resultSelector).parent().find(".label-etest-" + result).show();
                 $(resultSelector).val(result);
             }

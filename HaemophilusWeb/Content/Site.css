@@ -121,6 +121,10 @@ h6,
   background-color: #f0ad4e;
 }
 
+.label-etest-NotDetermined {
+  background-color: #808080;
+}
+
 .topmargin {
     margin-top: 1em;
 }

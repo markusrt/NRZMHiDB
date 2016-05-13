@@ -11,7 +11,6 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
-                new Change(DateTime.MinValue, "Allgemeine Implementierung für Antibiotikafelder", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Umstrukturierungen für Meningokokken", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Entwickler Dokumentation", ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Auditierung von Zugriffen</del>", ChangeType.Feature),
@@ -19,6 +18,19 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2016, 5, 13),
+                    "<p>Allgemeine Implementierung für E-Test Messwerte</p>" +
+                    "<p>Felder für neue Antibiotika Messwerte lassen sich jetzt im Menü 'Administration->EUCAST Grenzwerte' definieren. " +
+                    "Es ist dabei möglich Antibiotika mit und ohne EUCAST-Daten einzutragen. Falls keine EUCAST Grenzwerte für ein " +
+                    "Antibiotikum definiert sind wird die Resistenz-Einstufung immer als 'n.d.' gewertet.</p>" +
+                    "<p>In der 'Isolat bearbeiten' Maske gibt es weiter feste Felder für die gängigen Antibiotika. Es ist aber auch möglich " +
+                    "ein weniger häufig getestetes Medikament via Auswahlfeld zu wählen</p>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20160513_1.png'/>" +
+                    "<p>und einen Messwert dafür einzutragen</p>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20160513_2.png'/>" +
+                    "<p>Beim Speichern des Isolates wird der Messwert entsprechend hinzugefügt. Um ein weiteres 'Nicht-Standard' " +
+                    "Antibiotikum hinzuzufügen muss die Bearbeitungs-Maske nach dem Speichern erneut geöffnet werden.</p>" +
+                    "<p>Die Auswahlliste enthält nur die Antibiotika, die im administrativen Bereich angelegt wurden.</p>", ChangeType.Feature),
                 new Change(new DateTime(2016, 5, 4), "Umbenennen und umsortieren der Spaltennamen für den RKI Export", ChangeType.Feature),
                 new Change(new DateTime(2016, 4, 30), "Spezieller Zugang für das Robert Koch Institut", ChangeType.Feature),
                 new Change(new DateTime(2016, 3, 22), "Neue Antibiotikafelder für Imipenem  und Ciprofloxacin.", ChangeType.Feature),

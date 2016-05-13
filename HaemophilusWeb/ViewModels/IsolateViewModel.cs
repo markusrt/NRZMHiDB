@@ -138,7 +138,7 @@ namespace HaemophilusWeb.ViewModels
             get
             {
                 return
-                    EpsilometerTestViewModels.Where(e => e.EucastClinicalBreakpointId != null == e.Result.HasValue)
+                    EpsilometerTestViewModels.Where(e => e.EucastClinicalBreakpointId != null && e.Measurement.HasValue)
                         .Select(CreateEpsilometerTestReportModel);
             }
         }
@@ -169,8 +169,14 @@ namespace HaemophilusWeb.ViewModels
                 Result = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Result),
                 MicBreakpointResistent = FloatToString(epsilometerTestViewModel.MicBreakpointResistent),
                 MicBreakpointSusceptible = FloatToString(epsilometerTestViewModel.MicBreakpointSusceptible),
-                ValidFromYear = epsilometerTestViewModel.ValidFromYear,
+                ValidFromYear = epsilometerTestViewModel.ValidFromYear.ToString(),
             };
+            if (epsilometerTestViewModel.Result == EpsilometerTestResult.NotDetermined)
+            {
+                reportModel.MicBreakpointResistent = "---";
+                reportModel.MicBreakpointSusceptible = "---";
+                reportModel.ValidFromYear = "---";
+            }
             return reportModel;
         }
 
@@ -207,6 +213,6 @@ namespace HaemophilusWeb.ViewModels
         public string MicBreakpointSusceptible { get; set; }
         public string MicBreakpointResistent { get; set; }
         public string Measurement { get; set; }
-        public int? ValidFromYear { get; set; }
+        public string ValidFromYear { get; set; }
     }
 }

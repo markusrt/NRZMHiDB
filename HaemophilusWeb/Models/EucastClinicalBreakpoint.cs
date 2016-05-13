@@ -31,5 +31,29 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Resistent >")]
         public float? MicBreakpointResistent { get; set; }
+
+
+        [NotMapped]
+        public string Title
+        {
+            get
+            {
+                if (NoEucastAvailable)
+                {
+                    return string.Format("{0} - ohne EUCAST Grenzwerte", AntibioticDetails);
+                }
+                return string.Format("{0} - v{1} vom {2:dd. MMM. yy}", AntibioticDetails, Version,
+                    ValidFrom);
+            }
+        }
+
+        [NotMapped]
+        public bool NoEucastAvailable
+        {
+            get
+            {
+                return Version == null && ValidFrom == null && MicBreakpointResistent == null && MicBreakpointSusceptible == null;
+            }
+        }
     }
 }

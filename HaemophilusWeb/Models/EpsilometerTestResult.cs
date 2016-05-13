@@ -6,6 +6,7 @@ namespace HaemophilusWeb.Models
     {
         [Description("sensibel")] Susceptible,
         [Description("intermediär")] Intermediate,
-        [Description("resistent")] Resistant
+        [Description("resistent")] Resistant,
+        [Description("n.d.")] NotDetermined
     }
 }

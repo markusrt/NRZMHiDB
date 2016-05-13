@@ -35,22 +35,19 @@
         @Html.DropDownListFor(model => model.EucastClinicalBreakpointId, relevantBreakPoints.Select(
             option => new SelectListItem
             {
-                Text = string.Format("{0} - v{1} vom {2:dd. MMM. yy}", option.AntibioticDetails, option.Version, option.ValidFrom),
+                Text = option.Title,
                 Value = option.EucastClinicalBreakpointId.ToString(),
                 Selected = (Model != null) && (option.EucastClinicalBreakpointId == Model.EucastClinicalBreakpointId)
             }), "EUCAST Breakpoint auswählen...", new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.EucastClinicalBreakpointId)
     </div>
     <div class="col-sm-4 col-xs-2 etest-labels">
-        <span class="label label-etest-Susceptible" style="@(Model.Result==EpsilometerTestResult.Susceptible?"":"display:none")">
-            @EnumEditor.GetEnumDescription(EpsilometerTestResult.Susceptible)
-        </span>
-        <span class="label label-etest-Intermediate" style="@(Model.Result == EpsilometerTestResult.Intermediate ? "" : "display:none")">
-            @EnumEditor.GetEnumDescription(EpsilometerTestResult.Intermediate)
-        </span>
-        <span class="label label-etest-Resistant" style="@(Model.Result == EpsilometerTestResult.Resistant ? "" : "display:none")">
-            @EnumEditor.GetEnumDescription(EpsilometerTestResult.Resistant)
-        </span>
+        @foreach (var eTestResult in EnumUtils.AllEnumValues<EpsilometerTestResult>())
+        {
+            <span class="label label-etest-@(eTestResult.ToString())" style="@(Model.Result == eTestResult ? "" : "display:none")">
+                @EnumEditor.GetEnumDescription(eTestResult)
+            </span>
+        }
         @Html.HiddenFor(m => m.Result)
     </div>
 </div>
