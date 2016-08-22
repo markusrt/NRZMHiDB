@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2016, 8, 22), "'Typisches Wachstum auf KB' ist nicht korrekt vorausgewählt.", ChangeType.Bug),
                 new Change(new DateTime(2016, 5, 13),
                     "<p>Allgemeine Implementierung für E-Test Messwerte</p>" +
                     "<p>Felder für neue Antibiotika Messwerte lassen sich jetzt im Menü 'Administration->EUCAST Grenzwerte' definieren. " +

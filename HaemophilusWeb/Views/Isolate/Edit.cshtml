@@ -203,7 +203,7 @@
                 if ($("input:radio[name$='Growth']:checked").val() == "Yes") {
                     var checkedTypeOfGrowth = $("input:checkbox[name$='TypeOfGrowth']:checked");
                     if (!checkedTypeOfGrowth.val()) {
-                        $("#defaultTypeOfGrowth").attr("checked", "checked");
+                        $("#defaultTypeOfGrowth").prop("checked", true);
                         $("#defaultTypeOfGrowth").parent().addClass("active");
                     }
                 }
