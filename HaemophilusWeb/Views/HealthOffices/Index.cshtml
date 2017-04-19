@@ -1,0 +1,71 @@
+﻿@model IEnumerable<HaemophilusWeb.Models.HealthOffice>
+
+@{
+    ViewBag.Title = "Gesundheitsämter";
+}
+
+<p>
+    @Html.ActionLink("Neues Gesundheitsamt anlegen", "Create", "HealthOffices", null, new {@class = "btn btn-primary"})
+</p>
+
+<table class="table table-striped" id="healthOffices">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PostalCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fax)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PostalCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Fax)
+                </td>
+                <td>
+                    @Html.ActionLink("Bearbeiten", "Edit", new { id = item.HealthOfficeId }, new { @class = "btn btn-default btn-sm" }) @*|
+                        @Html.ActionLink("Details", "Details", new { id=item.HealthOfficeId }) |
+                        @Html.ActionLink("Delete", "Delete", new { id=item.HealthOfficeId })*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            $('#healthOffices').dataTable({
+                "lengthChange": false,
+                "order": [0, 'asc'],
+                "pageLength": 8,
+                "stateSave": true,
+                "language": {
+                    "url": "@Url.Content("~/Scripts/dataTables.german.js")"
+                }
+            });
+        });
+    </script>
+}

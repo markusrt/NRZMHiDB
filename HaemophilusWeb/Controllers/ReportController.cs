@@ -7,16 +7,18 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Tools;
 using HaemophilusWeb.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
     public class ReportController : Controller
     {
-
         private readonly IApplicationDbContext db;
 
         private readonly IsolateController isolateController;
+
+        private readonly RkiTool rkiTool = new RkiTool();
 
         public ReportController()
             : this(new ApplicationDbContextWrapper(new ApplicationDbContext()))
@@ -32,7 +34,6 @@ namespace HaemophilusWeb.Controllers
 
         public ActionResult Isolate(int? id)
         {
-
             AddReportTemplatesToViewBag();
             AddReportSignersToViewBag();
             if (id == null)
@@ -47,6 +48,22 @@ namespace HaemophilusWeb.Controllers
 
             var isolateViewModel = isolateController.ModelToViewModel(isolate);
             return View(isolateViewModel);
+        }
+
+        [HttpPost]
+        public JsonResult QueryHealthOffice(string postalCode)
+        {
+            var healthOffice = db.HealthOffices.FirstOrDefault(ho => ho.PostalCode == postalCode);
+            if (healthOffice == null)
+            {
+                healthOffice = rkiTool.QueryHealthOffice(postalCode);
+                if (healthOffice != null)
+                {
+                    db.HealthOffices.Add(healthOffice);
+                    db.SaveChanges();
+                }
+            }
+            return Json(healthOffice);
         }
 
 

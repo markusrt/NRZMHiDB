@@ -42,6 +42,11 @@ namespace HaemophilusWeb.Models
             get { return wrappedContext.Counties; }
         }
 
+        public IDbSet<HealthOffice> HealthOffices
+        {
+            get { return wrappedContext.HealthOffices; }
+        }
+
         public IDbSet<EpsilometerTest> EpsilometerTests
         {
             get { return wrappedContext.EpsilometerTests; }

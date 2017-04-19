@@ -126,6 +126,7 @@
     <Compile Include="TestUtils\JsonUtils.cs" />
     <Compile Include="TestUtils\MockData.cs" />
     <Compile Include="Tools\CountyImporterTests.cs" />
+    <Compile Include="Tools\RkiToolTests.cs" />
     <Compile Include="Utils\AntibioticPriorityListComparerTest.cs" />
     <Compile Include="Utils\EnumSerializerTests.cs" />
     <Compile Include="Utils\EnumUtilsTests.cs" />

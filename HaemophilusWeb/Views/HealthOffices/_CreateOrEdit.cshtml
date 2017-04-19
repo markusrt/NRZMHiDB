@@ -1,0 +1,14 @@
+﻿@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.Models.HealthOffice
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Address, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        @Html.TextAreaFor(m => m.Address, new { @class = "form-control", @rows = "4" })
+    </div>
+</div>
+
+@Html.TextEditorFor(m => m.Phone, "09191-86-3504")
+@Html.TextEditorFor(m => m.Fax, "09191-86-3508")
+@Html.TextEditorFor(m => m.Email, "Gesundheitsamt@lra-fo.de")
+@Html.TextEditorFor(m => m.PostalCode, "91301")

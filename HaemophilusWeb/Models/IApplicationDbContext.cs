@@ -15,6 +15,8 @@ namespace HaemophilusWeb.Models
 
         IDbSet<County> Counties { get; }
 
+        IDbSet<HealthOffice> HealthOffices { get; }
+
         IDbSet<EpsilometerTest> EpsilometerTests { get; }
 
         IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints { get; }

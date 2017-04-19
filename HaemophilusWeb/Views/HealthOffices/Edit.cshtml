@@ -1,0 +1,13 @@
+﻿@model HaemophilusWeb.Models.HealthOffice
+
+@{
+    ViewBag.Title = "Gesundheitsamt bearbeiten";
+    //ViewBag.DeleteId = Model.HealthOfficeId;
+}
+
+@section EditModel
+{
+    @Html.HiddenFor(model => model.HealthOfficeId)
+
+    @Html.Partial("_CreateOrEdit", Model)
+}

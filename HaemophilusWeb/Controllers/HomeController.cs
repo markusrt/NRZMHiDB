@@ -18,6 +18,18 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2017, 4, 20),
+                    "<p>Bearbeitung von Gesundheitsamtsdaten</p>" +
+                    "<p>Die RKI Datensätze zu den zuständigen Gesundheitsämtern sind oft nicht aktuell. " +
+                    "Daher ist es jetzt möglich ein vom RKI-Tool ermitteltes Amt nachträglich zu editieren.</p>" +
+                    "<p>Hierfür gibt es zum einen in der Befund-Maske einen entsprechende Aktion:</p>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20170420_1.png'/>" +
+                    "<p>Zudem gibt es auch im Administrations-Menü einen Eintrag für Gesundheitsämter:</p>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20170420_2.png'/>" +
+                    "<p>Unbekannte Postleitzahlen werden mittels des RKI-Tools nachgeschlagen und anschließend " +
+                    "in der Datenbank gespeichert. Dort lassen sie sich dann wie andere Datensätze editieren.<p>" +
+                    "<p>Weiterhin ist es möglich zu bestimmten Postleitzahlen eigene Datensätze anzulegen, falls " +
+                    "über das RKI-Tool keine Treffer gefunden werden.</p>", ChangeType.Feature),
                 new Change(new DateTime(2017, 1, 31), "Hinzufügen der EUCAST Grenzwerte für 2017", ChangeType.Feature),
                 new Change(new DateTime(2017, 1, 30), "'Typisches Wachstum auf KB' ist nicht korrekt vorausgewählt.", ChangeType.Bug),
                 new Change(new DateTime(2016, 5, 13),

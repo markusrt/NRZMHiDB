@@ -24,6 +24,8 @@ namespace HaemophilusWeb.Models
 
         public DbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints { get; set; }
 
-        public System.Data.Entity.DbSet<HaemophilusWeb.Models.County> Counties { get; set; }
+        public DbSet<County> Counties { get; set; }
+
+        public DbSet<HealthOffice> HealthOffices { get; set; }
     }
 }

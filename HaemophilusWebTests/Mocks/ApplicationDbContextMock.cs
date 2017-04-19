@@ -17,6 +17,7 @@ namespace HaemophilusWeb.Models
         public readonly InMemoryDbSet<Sending> SendingDbSet = new MockDbSet<Sending>(true);
         public readonly InMemoryDbSet<Isolate> IsolatesDbSet = new InMemoryDbSet<Isolate>(true);
         public readonly InMemoryDbSet<County> CountiesDbSet = new InMemoryDbSet<County>(true);
+        public readonly InMemoryDbSet<HealthOffice> HealthOfficesDbSet = new InMemoryDbSet<HealthOffice>(true);
         public readonly InMemoryDbSet<EpsilometerTest> EpsilometerTestsDbSet = new InMemoryDbSet<EpsilometerTest>(true);
 
         public readonly InMemoryDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpointsDbSet =
@@ -45,6 +46,11 @@ namespace HaemophilusWeb.Models
         public IDbSet<County> Counties
         {
             get { return CountiesDbSet; }
+        }
+
+        public IDbSet<HealthOffice> HealthOffices
+        {
+            get { return HealthOfficesDbSet; }
         }
 
         public IDbSet<EpsilometerTest> EpsilometerTests
