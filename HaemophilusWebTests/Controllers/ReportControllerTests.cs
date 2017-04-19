@@ -8,16 +8,16 @@ using TestDataGenerator;
 
 namespace HaemophilusWeb.Controllers
 {
-    public class IsolateControllerTests
+    public class ReportControllerTests
     {
         private const int IsolateId = 10;
 
         private static readonly ApplicationDbContextMock DbMock = new ApplicationDbContextMock();
 
         private static readonly Catalog Catalog = new Catalog();
-        private IsolateController controller;
+        private ReportController controller;
 
-        static IsolateControllerTests()
+        static ReportControllerTests()
         {
             CreateMockData();
         }
@@ -34,20 +34,24 @@ namespace HaemophilusWeb.Controllers
         [SetUp]
         public void SetUp()
         {
-            controller = new IsolateController(DbMock);
+            controller = new ReportController(DbMock);
         }
 
         [Test]
-        public void ParseAndMapLaboratoryNumber_ValidLaboratoryNumber_AssignsYearAndSequentialNumberCorrectly()
+        public void ReportGenerated_ValidIsolateId_AssignsReportDate()
         {
-            var isolateViewModel = new IsolateViewModel();
-            isolateViewModel.LaboratoryNumber = "0000123/15";
-            var isolate = new Isolate();
+            controller.ReportGenerated(IsolateId);
 
-            IsolateController.ParseAndMapLaboratoryNumber(isolateViewModel, isolate);
+            var isolate = DbMock.Isolates.Single(i => i.IsolateId == IsolateId);
+            isolate.ReportDate.Should().BeCloseTo(DateTime.Now);
+        }
 
-            isolate.Year.Should().Be(2015);
-            isolate.YearlySequentialIsolateNumber.Should().Be(123);
+        [TestCase(1)]
+        [TestCase(null)]
+        [TestCase(-1)]
+        public void ReportGenerated_InvalidIsolateId_DoesNotThrow(int? isolateId)
+        {
+            controller.Invoking(c => c.ReportGenerated(isolateId)).ShouldNotThrow();
         }
     }
 }

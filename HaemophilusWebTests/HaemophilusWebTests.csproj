@@ -105,6 +105,7 @@
     <Compile Include="..\HaemophilusWeb\Properties\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Controllers\ReportControllerTests.cs" />
     <Compile Include="Controllers\SenderControllerTests.cs" />
     <Compile Include="Controllers\IsolateControllerTests.cs" />
     <Compile Include="Controllers\PatientSendingControllerTests.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="TestUtils\Attribute.cs" />
     <Compile Include="TestUtils\ITempDirectoryTest.cs" />
     <Compile Include="TestUtils\JsonUtils.cs" />
+    <Compile Include="TestUtils\MockData.cs" />
     <Compile Include="Tools\CountyImporterTests.cs" />
     <Compile Include="Utils\AntibioticPriorityListComparerTest.cs" />
     <Compile Include="Utils\EnumSerializerTests.cs" />

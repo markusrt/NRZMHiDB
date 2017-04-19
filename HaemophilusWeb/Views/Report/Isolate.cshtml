@@ -104,7 +104,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <button id="TryCreateReport" class="btn btn-primary">Befund erstellen</button>
-                @Html.ActionLink("Isolat bearbeiten", "Edit", null, new { id = Model.IsolateId }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Isolat bearbeiten", "Edit", "Isolate", new { id = Model.IsolateId }, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>
@@ -140,7 +140,7 @@
         {
             var templateFile = $("#ReportTemplate").val();
             var signer = $("#ReportSigner").val();
-            if(templateFile == "" || signer == "")
+            if(templateFile === "" || signer === "")
             {
                 ShowError("Bitte wählen Sie eine Befundvorlage und einen Unterzeichner aus.");
                 return;

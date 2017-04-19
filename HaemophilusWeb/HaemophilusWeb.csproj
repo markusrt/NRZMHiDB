@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -213,6 +214,7 @@
     <Compile Include="Controllers\IsolateController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PatientSendingController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SenderController.cs" />
     <Compile Include="Controllers\SendingController.cs" />
@@ -975,7 +977,7 @@
     <Content Include="Views\Isolate\Edit.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\EpsilometerTestViewModel.cshtml" />
     <Content Include="Scripts\jquery.validate.globalize.min.js.map" />
-    <Content Include="Views\Isolate\Report.cshtml" />
+    <Content Include="Views\Report\Isolate.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\SendingConclusion.cshtml" />
     <Content Include="Views\County\Create.cshtml" />
     <Content Include="Views\County\Delete.cshtml" />

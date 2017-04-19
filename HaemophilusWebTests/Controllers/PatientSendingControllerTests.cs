@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.TestUtils;
 using HaemophilusWeb.ViewModels;
 using NUnit.Framework;
 
@@ -10,7 +11,14 @@ namespace HaemophilusWeb.Controllers
     public class PatientSendingControllerTests
     {
         private readonly SendingController sendingController = SendingControllerTests.CreateMockSendingController();
-        private readonly PatientController patientController = new PatientController(SendingControllerTests.DbMock);
+        private readonly PatientController patientController = new PatientController(DbMock);
+
+        private static readonly ApplicationDbContextMock DbMock = new ApplicationDbContextMock();
+
+        static PatientSendingControllerTests()
+        {
+            MockData.CreateMockData(DbMock);
+        }
 
         [Test]
         public void Create_NewPatientSending_ViewDataContainsSameDataAsIfUsingSendingController()
@@ -38,7 +46,7 @@ namespace HaemophilusWeb.Controllers
 
         private PatientSendingController CreateController()
         {
-            return new PatientSendingController(SendingControllerTests.DbMock, patientController, sendingController);
+            return new PatientSendingController(DbMock, patientController, sendingController);
         }
     }
 }

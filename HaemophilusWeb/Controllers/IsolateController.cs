@@ -50,47 +50,15 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(isolateViewModel);
         }
 
-        private Isolate LoadIsolateById(int? id)
+        public Isolate LoadIsolateById(int? id)
         {
             var isolate = db.Isolates.Include(i => i.Sending).SingleOrDefault(i => i.IsolateId == id);
             return isolate;
         }
 
-        public ActionResult Report(int? id)
-        {
-            AddReportTemplatesToViewBag();
-            AddReportSignersToViewBag();
-            return Edit(id);
-        }
 
 
-        [HttpPost]
-        public JsonResult ReportGenerated(int? id)
-        {
-            var isolate = LoadIsolateById(id);
-            if (isolate != null)
-            {
-                isolate.ReportDate = DateTime.Now;
-                db.MarkAsModified(isolate);
-                db.SaveChanges();
-            }
-            return Json(true);
-        }
-
-
-        private void AddReportTemplatesToViewBag()
-        {
-            var templatePath = Server.MapPath("~/ReportTemplates");
-            var lister = new FileLister(templatePath, ".docx");
-            ViewBag.ReportTemplates = lister.Files;
-        }
-
-        private void AddReportSignersToViewBag()
-        {
-            ViewBag.ReportSigners = ConfigurationManager.AppSettings["reportSigners"].Split(';');
-        }
-
-        private IsolateViewModel ModelToViewModel(Isolate isolate)
+        public IsolateViewModel ModelToViewModel(Isolate isolate)
         {
             var isolateViewModel = Mapper.Map<IsolateViewModel>(isolate);
             var sending = isolate.Sending;
@@ -252,7 +220,7 @@ namespace HaemophilusWeb.Controllers
                     }
                     if (Request.Form["secondary-submit"] != null)
                     {
-                        return RedirectToAction("Report", new {id = isolateViewModel.IsolateId});
+                        return RedirectToAction("Isolate", "Report", new {id = isolateViewModel.IsolateId});
                     }
                 }
                 catch (DbUpdateException e)
@@ -292,6 +260,12 @@ namespace HaemophilusWeb.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public JsonResult CarCreate()
+        {
+            return new JsonResult();
+            //throw new NotImplementedException();
         }
     }
 }

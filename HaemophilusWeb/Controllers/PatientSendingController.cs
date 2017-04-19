@@ -616,7 +616,7 @@ namespace HaemophilusWeb.Controllers
             builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Bearbeiten</a>",
                 Url.Action("Edit", new {id = sendingId}));
             builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
-                Url.Action("Report", "Isolate", new {id = isolateId}));
+                Url.Action("Isolate", "Report", new {id = isolateId}));
             builder.Append("</div>");
             return builder.ToString();
         }

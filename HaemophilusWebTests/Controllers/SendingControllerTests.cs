@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.TestUtils;
 using NUnit.Framework;
 using TestDataGenerator;
 
@@ -12,38 +13,11 @@ namespace HaemophilusWeb.Controllers
     [TestFixture]
     public class SendingControllerTests
     {
-        private const int EntityCount = 11;
-        internal const int FirstId = 1;
-        private const int SecondId = 2;
-        private const int ThirdId = 3;
-        internal static readonly ApplicationDbContextMock DbMock = new ApplicationDbContextMock();
-
-        private static readonly Catalog Catalog = new Catalog();
+        private static readonly ApplicationDbContextMock DbMock = new ApplicationDbContextMock();
 
         static SendingControllerTests()
         {
-            CreateMockData();
-        }
-
-        private static void CreateMockData()
-        {
-            for (var i = FirstId; i < EntityCount; i++)
-            {
-                var patient = Catalog.CreateInstance<Patient>();
-                patient.PatientId = i;
-                DbMock.PatientDbSet.Add(patient);
-
-                var sender = Catalog.CreateInstance<Sender>();
-                sender.SenderId = i;
-                DbMock.Senders.Add(sender);
-
-                var sending = Catalog.CreateInstance<Sending>();
-                sending.PatientId = i;
-                sending.SenderId = i;
-                sending.SendingId = i;
-                sending.Isolate = null;
-                DbMock.Sendings.Add(sending);
-            }
+            MockData.CreateMockData(DbMock);
         }
 
         internal static SendingController CreateMockSendingController()
@@ -55,12 +29,12 @@ namespace HaemophilusWeb.Controllers
         public void AssignStemNumber_ExistingIsolate_DoesNotRecreateStemNumber()
         {
             var controller = CreateMockSendingController();
-            var sending = DbMock.Sendings.Single(s => s.SendingId == SecondId);
-            sending.Isolate = Catalog.CreateInstance<Isolate>();
+            var sending = DbMock.Sendings.Single(s => s.SendingId == MockData.SecondId);
+            sending.Isolate = MockData.CreateInstance<Isolate>();
             sending.Isolate.Year = 2099;
             sending.Isolate.YearlySequentialIsolateNumber = 999;
 
-            var isolate = controller.AssignStemNumber(SecondId);
+            var isolate = controller.AssignStemNumber(MockData.SecondId);
 
             isolate.Year.Should().Be(2099);
             isolate.YearlySequentialIsolateNumber.Should().Be(999);
@@ -81,7 +55,7 @@ namespace HaemophilusWeb.Controllers
             var expectedLaboratoryNumber = string.Format("001/{0:yy}", DateTime.Now);
             var controller = CreateMockSendingController();
 
-            var isolate = controller.AssignStemNumber(FirstId);
+            var isolate = controller.AssignStemNumber(MockData.FirstId);
 
             isolate.Should().NotBeNull();
             isolate.LaboratoryNumber.Should().Be(expectedLaboratoryNumber);
@@ -126,7 +100,7 @@ namespace HaemophilusWeb.Controllers
         public void Edit_SendingWithIsolate_RedirectsLaboratoryNumber()
         {
             var controller = CreateMockSendingController();
-            var sending = DbMock.Sendings.Single(s => s.SendingId == ThirdId);
+            var sending = DbMock.Sendings.Single(s => s.SendingId == MockData.ThirdId);
             sending.Isolate = new Isolate {YearlySequentialIsolateNumber = 14, Year = 2050};
 
             var result = controller.Edit(sending.SendingId) as ViewResult;
