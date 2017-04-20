@@ -101,7 +101,7 @@ namespace HaemophilusWeb.ViewModels
                         new Typing
                         {
                             Attribute = "ftsI",
-                            Value = string.Format("{0} {1}", FtsiEvaluation1, FtsiEvaluation2)
+                            Value = string.Format("{0} {1} {2}", FtsiEvaluation1, FtsiEvaluation2, FtsiEvaluation3)
                         };
                 }
                 if (Mlst == UnspecificOrNoTestResult.Determined)

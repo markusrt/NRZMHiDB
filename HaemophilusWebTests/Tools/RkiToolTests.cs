@@ -38,7 +38,7 @@ namespace HaemophilusWeb.Tools
         [Test]
         public void QueryHealthOffice_ThrowsException_ReturnsNull()
         {
-            var rkiTool = new RkiTool(s => throw new Exception());
+            var rkiTool = new RkiTool(s => { throw new Exception(); });
 
             var healthOffice = rkiTool.QueryHealthOffice("111111");
 

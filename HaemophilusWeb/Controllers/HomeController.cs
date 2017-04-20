@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2017, 4, 21), "Drittes Zusatzfeld für 'ftsI'", ChangeType.Feature),
                 new Change(new DateTime(2017, 4, 20),
                     "<p>Bearbeitung von Gesundheitsamtsdaten</p>" +
                     "<p>Die RKI Datensätze zu den zuständigen Gesundheitsämtern sind oft nicht aktuell. " +

@@ -359,6 +359,7 @@ namespace HaemophilusWeb.Controllers
             export.AddField(s => ExportToString(s.Isolate.Ftsi));
             export.AddField(s => s.Isolate.FtsiEvaluation1);
             export.AddField(s => s.Isolate.FtsiEvaluation2);
+            export.AddField(s => s.Isolate.FtsiEvaluation3);
             export.AddField(s => ExportToString(s.Isolate.Mlst));
             export.AddField(s => s.Isolate.MlstSequenceType);
             export.AddField(s => ExportToString(s.Isolate.Evaluation));
