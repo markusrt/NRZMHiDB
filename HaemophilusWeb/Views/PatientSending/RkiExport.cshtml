@@ -1,4 +1,5 @@
-﻿@model HaemophilusWeb.ViewModels.ExportQuery
+﻿@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.ExportQuery
 
 @{
     ViewBag.Title = "RKI Export";
@@ -13,30 +14,9 @@
     <div class="form-horizontal">
         @Html.ValidationSummary(true)
 
-        <div class="form-group">
-            @Html.LabelFor(m => m.From, new { @class = "col-sm-2 control-label" })
-            <div class="col-sm-5">
-                <div class="input-group">
-                    @{ Html.EnableClientValidation(false); }
-                    @Html.TextBoxFor(m => m.From, new { @class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.From) })
-                    @{ Html.EnableClientValidation(true); }
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-                @Html.ValidationMessageFor(model => model.From)
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.To, new { @class = "col-sm-2 control-label" })
-            <div class="col-sm-5">
-                <div class="input-group">
-                    @{ Html.EnableClientValidation(false); }
-                    @Html.TextBoxFor(m => m.To, new { @class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.To) })
-                    @{ Html.EnableClientValidation(true); }
-                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-                </div>
-                @Html.ValidationMessageFor(model => model.From)
-            </div>
-        </div>
+        @Html.DateEditorFor(m => m.From)
+        @Html.DateEditorFor(m => m.To)
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" name="primary-submit" value="Exportieren nach Excel" class="btn btn-primary" />

@@ -38,32 +38,9 @@
     </div>
 }
 
-<div class="form-group">
-    @Html.LabelFor(m => m.ReceivingDate, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        <div class="input-group">
-            @{ Html.EnableClientValidation(false); }
-            @Html.TextBoxFor(m => m.ReceivingDate, new { @class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.ReceivingDate) })
-            @{ Html.EnableClientValidation(true); }
-            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-        </div>
-        @Html.ValidationMessageFor(model => model.ReceivingDate)
-    </div>
-</div>
+@Html.DateEditorFor(m => m.ReceivingDate)
 
-<div class="form-group">
-    @Html.LabelFor(m => m.SamplingDate, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        <div class="input-group">
-            @{ Html.EnableClientValidation(false); }
-            @Html.TextBoxFor(m => m.SamplingDate, new { @class = "form-control datepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy}", Model.SamplingDate) })
-            @{ Html.EnableClientValidation(true); }
-            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-        </div>
-        @Html.ValidationMessageFor(model => model.SamplingDate)
-    </div>
-</div>
-
+@Html.DateEditorFor(m => m.SamplingDate)
 
 @Html.TextEditorFor(m => m.SenderLaboratoryNumber)
 
