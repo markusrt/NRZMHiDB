@@ -3,12 +3,15 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Tools;
 
 namespace HaemophilusWeb.Controllers
 {
     public class HealthOfficesController : Controller
     {
         private readonly ApplicationDbContext db = new ApplicationDbContext();
+
+        private readonly RkiTool rkiTool = new RkiTool();
 
         // GET: HealthOffices
         public ActionResult Index()
@@ -60,7 +63,12 @@ namespace HaemophilusWeb.Controllers
             HealthOffice healthOffice;
             if (!string.IsNullOrEmpty(postalCode))
             {
-                healthOffice = db.HealthOffices.FirstOrDefault(ho => ho.PostalCode == postalCode);
+                healthOffice = rkiTool.QueryHealthOffice(postalCode);
+                if (healthOffice != null)
+                {
+                    var healthOfficeAddressWithoutNewline = healthOffice.Address.Replace("\n", "");
+                    healthOffice = db.HealthOffices.FirstOrDefault(ho => ho.Address.Replace("\n", "").Replace("\r", "").Equals(healthOfficeAddressWithoutNewline));
+                }
             }
             else
             {

@@ -53,17 +53,22 @@ namespace HaemophilusWeb.Controllers
         [HttpPost]
         public JsonResult QueryHealthOffice(string postalCode)
         {
-            var healthOffice = db.HealthOffices.FirstOrDefault(ho => ho.PostalCode == postalCode);
+            var healthOffice = rkiTool.QueryHealthOffice(postalCode);
             if (healthOffice == null)
             {
-                healthOffice = rkiTool.QueryHealthOffice(postalCode);
-                if (healthOffice != null)
-                {
-                    db.HealthOffices.Add(healthOffice);
-                    db.SaveChanges();
-                }
+                return Json(null);
             }
-            return Json(healthOffice);
+
+            var healthOfficeAddressWithoutNewline = healthOffice.Address.Replace("\n", "");
+            var existingHealthOffice = db.HealthOffices.FirstOrDefault(ho => ho.Address.Replace("\n", "").Replace("\r", "").Equals(healthOfficeAddressWithoutNewline));
+
+            if (existingHealthOffice == null)
+            {
+                db.HealthOffices.Add(healthOffice);
+                db.SaveChanges();
+            }
+
+            return existingHealthOffice != null ? Json(existingHealthOffice) : Json(healthOffice);
         }
 
 

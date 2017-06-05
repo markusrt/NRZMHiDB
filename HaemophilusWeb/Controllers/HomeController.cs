@@ -18,6 +18,12 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2017, 5, 31, 20, 0, 0),
+                    "<p>Verbesserung der Zuordnung von Gesundheitsamtdaten</p>" +
+                    "<p>Die vom RKI abgerufenen Datensätze werden nun mittels Adresse zugeordnet. D.h. wenn lokal ein veränderter Datensatz " +
+                    "mit der gleichen Postadresse existiert, dann wird dieser zurückgegeben. Somit ist es möglich die Telefonnummer, Faxnummer " +
+                    "und Email-Adresse zu ändern. Diese Änderung gilt dann automatisch für alle Postleitzahlen im Einzugsbereich dieses Gesundheitsamtes.</p>  " , ChangeType.Feature),
+                new Change(new DateTime(2017, 5, 31, 18, 0, 0), "Anpassung der Gesundheitsamtabfrage an Änderung des RKI", ChangeType.Feature),
                 new Change(new DateTime(2017, 4, 21), "Drittes Zusatzfeld für 'ftsI'", ChangeType.Feature),
                 new Change(new DateTime(2017, 4, 20),
                     "<p>Bearbeitung von Gesundheitsamtsdaten</p>" +

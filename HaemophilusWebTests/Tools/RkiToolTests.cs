@@ -18,7 +18,7 @@ namespace HaemophilusWeb.Tools
                 Email = "Gesundheitsamt@lra-fo.de",
                 PostalCode = "91301"
             };
-            var rkiTool = new RkiTool(s => "{\"query\":{\"count\":1,\"created\":\"2017-04-19T20:50:17Z\",\"lang\":\"de-DE\",\"results\":{\"postresult\":{\"div\":[{\"class\":\"tab-row\",\"span\":\"Adresse:\",\"br\":null,\"textarea\":{\"class\":\"tbxAdress\",\"id\":\"tbxAdress\",\"rows\":\"4\",\"content\":\"Landratsamt Forchheim\\r\\nGesundheitsamt\\r\\nAm Streckerplatz 3\\r\\n91301 Forchheim\"}},{\"class\":\"tab-row\",\"span\":\"Telefon:\",\"br\":null,\"textarea\":{\"class\":\"textbox\",\"cols\":\"20\",\"id\":\"tbxPhone\",\"name\":\"SelectedGA.Phone\",\"rows\":\"2\",\"content\":\"09191 86-3504\"}},{\"class\":\"tab-row\",\"span\":\"Fax:\",\"br\":null,\"textarea\":{\"class\":\"textbox\",\"cols\":\"20\",\"id\":\"tbxFax\",\"name\":\"SelectedGA.Fax\",\"rows\":\"2\",\"content\":\"09191 86-3508\"}},{\"class\":\"tab-row\",\"span\":\"E-Mail:  \",\"a\":{\"href\":\"mailto:Gesundheitsamt@lra-fo.de\",\"content\":\"Gesundheitsamt@lra-fo.de\"}}]}}}}");
+            var rkiTool = new RkiTool(s => "{\"query\":{\"count\":7,\"created\":\"2017-06-05T10:03:47Z\",\"lang\":\"en-US\",\"results\":{\"input\":[{\"class\":\"form-control\",\"readonly\":\"readonly\",\"type\":\"text\",\"value\":\"09191 86-3504\"},{\"class\":\"form-control\",\"readonly\":\"readonly\",\"type\":\"text\",\"value\":\"09191 86-3508\"},{\"class\":\"form-control\",\"readonly\":\"readonly\",\"type\":\"text\",\"value\":\"Gesundheitsamt@lra-fo.de\"}],\"content\":\"Landratsamt Forchheim\\r\\nGesundheitsamt\\r\\n            Am Streckerplatz 3\\r\\n            91301 Forchheim\"}}}");
 
             var healthOffice = rkiTool.QueryHealthOffice("91301");
 
@@ -28,7 +28,7 @@ namespace HaemophilusWeb.Tools
         [Test]
         public void QueryHealthOffice_InvalidPostalCode_ReturnsNull()
         {
-            var rkiTool = new RkiTool(s => "{\"query\":{\"count\":1,\"created\":\"2017-04-19T21:13:23Z\",\"lang\":\"de-DE\",\"results\":{\"postresult\":null}}}");
+            var rkiTool = new RkiTool(s => "{\"query\":{\"count\":0,\"created\":\"2017-06-05T10:04:33Z\",\"lang\":\"en-US\",\"results\":null}}");
 
             var healthOffice = rkiTool.QueryHealthOffice("111111");
 
