@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2017, 6, 16), "Korrektur der geänderten Schnittstelle zum RKITool", ChangeType.Bug),
                 new Change(new DateTime(2017, 5, 31, 20, 0, 0),
                     "<p>Verbesserung der Zuordnung von Gesundheitsamtdaten</p>" +
                     "<p>Die vom RKI abgerufenen Datensätze werden nun mittels Adresse zugeordnet. D.h. wenn lokal ein veränderter Datensatz " +
