@@ -1,0 +1,1912 @@
+﻿
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RKI PLZTool</title>
+    <link rel="shortcut icon" href="/PLZTool/favicon.ico" type="image/x-icon" />
+    <link rel="SHORTCUT ICON" href="/PLZTool/favicon.ico" />
+    <link href="/PLZTool/Content/css?v=jU-HPfl2-9CNlWuj8xc73ZXVmB4N3cg0vo-9GMaa0EM1" rel="stylesheet"/>
+
+    <script src="/PLZTool/bundles/modernizr?v=HhNsJUFW8CuFkWhikUDyf5iaNXhIQqcgENOn5HNOhg01"></script>
+
+    <script src="/PLZTool/bundles/jquery?v=bN3RzutCvXCytIQAapNBRHcSoPNVUA1hTqerTzrBp5c1"></script>
+
+    
+</head>
+<body>
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="http://www.rki.de">
+                <img src="/PLZTool/Content/images/rki_logo.gif" alt="RKI-Logo" />
+            </a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                    
+
+                <ul class="list-unstyled list-inline culture-selection">
+
+                    <li class="culture-item">
+                        <a lang="en-GB" href="/PLZTool/en-GB?q=96317">
+                            <img src="/PLZTool/Content/images/en-GB.png" />
+                        </a>
+                    </li>
+                    <li class="culture-item">
+                        <a lang="es-ES" href="/PLZTool/es-ES?q=96317">
+                            <img src="/PLZTool/Content/images/es-ES.png" />
+                        </a>
+                    </li>
+                    <li class="culture-item">
+                        <a lang="fr-FR" href="/PLZTool/fr-FR?q=96317">
+                            <img src="/PLZTool/Content/images/fr-FR.png" />
+                        </a>
+                    </li>
+                </ul>
+
+                <script type="text/javascript">
+                    (function () {
+                        var options = {
+                            cookieName: "lang",
+                            cookieDaysUntilExpire: 365,
+                            elementType: "a",
+                            attributeName: "lang"
+                        };
+
+                        function changeLanguage(lang) {
+                            var date = new Date();
+                            date.setTime(date.getTime() + (options.cookieDaysUntilExpire * 24 * 60 * 60 * 1000));
+                            var expires = '; expires=' + date.toGMTString();
+
+                            document.cookie = options.cookieName + '=' + lang + expires + '; path=/';
+                        };
+
+                        var elementSelector = options.elementType + "[" + options.attributeName + "]";
+                        $(elementSelector).click(function () {
+                            changeLanguage($(this).attr(options.attributeName));
+                        });
+                    })();
+                </script>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container body-content">
+<div class="row">
+<div class="col-md-9 col-sm-12">
+<div class="panel panel-primary">
+<div class="panel-heading">
+    <h3 class="panel-title">Gesundheitsamt nach Postleitzahl oder Ort</h3>
+</div>
+<div class="panel-body">
+                        
+
+
+
+
+<form action="/PLZTool/" class="form-horizontal" method="get">    <div class="form-group">
+        <div class="col-xs-12">
+            <div class="input-group">
+                <input class="form-control" id="q" name="q" placeholder="Postleitzahl oder Ort eingeben..." type="search" value="96317" />
+                <span class="input-group-btn">
+                    <input class="btn btn-default" type="submit" value="Suchen" />
+                </span>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="page-header">
+    <h3>Gefundene Gesundheits&#228;mter <span class="label label-default">1</span></h3>
+</div>
+<div id="result">
+<select autocomplete="off" class="form-control" id="SelectedAddress_Code" name="SelectedAddress.Code" size="1"><option selected="selected" value="1.09.4.76.">Landratsamt Kronach</option>
+</select>
+<br />
+<div id="transmittingSiteDetail">
+                    
+
+<div class="input-group">
+    <span class="input-group-addon" style="vertical-align: top;" title="Adresse">
+        <span class="glyphicon glyphicon-home"></span>
+    </span>
+    <div class="form-control" style="height: auto;">
+        <address>
+            <strong>Landratsamt Kronach</strong><br />
+            Sachgebiet 36 - Gesundheitsamt<br />
+            G&#252;terstrasse 18<br />
+            96317 Kronach<br />
+        </address>
+    </div>
+</div>
+
+<br />
+
+<div class="input-group">
+    <span class="input-group-btn" title="Telefon">
+        <a class="btn btn-default" type="button" href="tel:09261678-227">
+            <span class="glyphicon glyphicon-earphone"></span>
+        </a>
+    </span>
+    
+    <input type="text" class="form-control" value="09261 678-227" readonly="readonly">
+</div>
+
+<br />
+
+<div class="input-group">
+    <span class="input-group-addon" title="Fax"><span class="glyphicon glyphicon-phone-alt"></span></span>
+    <input type="text" class="form-control" value="09261 678 18-227" readonly="readonly">
+</div>
+
+<br />
+
+<div class="input-group">
+    <span class="input-group-btn" title="E-Mail">
+        <a class="btn btn-default" type="button" href="mailto:gesundheitsamt@lra-kc.bayern.de">@</a>
+    </span>
+    <input type="text" class="form-control" value="gesundheitsamt@lra-kc.bayern.de" readonly="readonly"/>
+</div>
+
+<br/>
+<div class="input-group">
+<span class="input-group-addon" title="Tags" style="vertical-align: top;"><span class="glyphicon glyphicon-tags"></span></span>
+<ul class="form-control list-inline" style="height: auto; max-height: 300px; overflow-y: scroll;">
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=95355" style="color: white;">95355</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96268" style="color: white;">96268</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96277" style="color: white;">96277</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96317" style="color: white;">96317</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96328" style="color: white;">96328</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96332" style="color: white;">96332</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96337" style="color: white;">96337</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96342" style="color: white;">96342</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96346" style="color: white;">96346</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96349" style="color: white;">96349</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96352" style="color: white;">96352</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96355" style="color: white;">96355</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96358" style="color: white;">96358</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96361" style="color: white;">96361</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96364" style="color: white;">96364</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96365" style="color: white;">96365</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96367" style="color: white;">96367</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=96369" style="color: white;">96369</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Alexanderh%C3%BCtte" style="color: white;">Alexanderh&#252;tte</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Allern" style="color: white;">Allern</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Angerwustung" style="color: white;">Angerwustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Au" style="color: white;">Au</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=B%C3%A4chlein" style="color: white;">B&#228;chlein</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=B%C3%A4rengrund" style="color: white;">B&#228;rengrund</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=B%C3%A4tzenwustung" style="color: white;">B&#228;tzenwustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Beikheim" style="color: white;">Beikheim</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Berghaus" style="color: white;">Berghaus</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Berglesdorf" style="color: white;">Berglesdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Bernsroth" style="color: white;">Bernsroth</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Biegenm%C3%BChle" style="color: white;">Biegenm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Bierberg" style="color: white;">Bierberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Birkach" style="color: white;">Birkach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Birnbaum" style="color: white;">Birnbaum</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Blumau" style="color: white;">Blumau</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=B%C3%B6hlbach" style="color: white;">B&#246;hlbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Bohlswustung" style="color: white;">Bohlswustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Brauersdorf" style="color: white;">Brauersdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Buch" style="color: white;">Buch</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Buchbach" style="color: white;">Buchbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Buckenreuth" style="color: white;">Buckenreuth</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Bug" style="color: white;">Bug</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=B%C3%BCrg" style="color: white;">B&#252;rg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Burggrub" style="color: white;">Burggrub</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Burgstall" style="color: white;">Burgstall</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Burkersdorf" style="color: white;">Burkersdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Dennach" style="color: white;">Dennach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Detschram%C3%BChle" style="color: white;">Detschram&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Dickenwustung" style="color: white;">Dickenwustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Doberm%C3%BChle" style="color: white;">Doberm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Dobersgrund" style="color: white;">Dobersgrund</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Dobrach" style="color: white;">Dobrach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=D%C3%B6rfles" style="color: white;">D&#246;rfles</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=D%C3%B6rnach" style="color: white;">D&#246;rnach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ebersdorf" style="color: white;">Ebersdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ebersm%C3%BChle" style="color: white;">Ebersm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Effelter" style="color: white;">Effelter</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Eibenberg" style="color: white;">Eibenberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Eichelberg" style="color: white;">Eichelberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Eichenb%C3%BChl" style="color: white;">Eichenb&#252;hl</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Eila" style="color: white;">Eila</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Eisenhammer" style="color: white;">Eisenhammer</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Emmersheim" style="color: white;">Emmersheim</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Erlabr%C3%BCck" style="color: white;">Erlabr&#252;ck</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Fehnenschneidm%C3%BChle" style="color: white;">Fehnenschneidm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Felsm%C3%BChle" style="color: white;">Felsm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Finkenm%C3%BChle" style="color: white;">Finkenm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Fischbach" style="color: white;">Fischbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Fischbachsm%C3%BChle" style="color: white;">Fischbachsm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Forstloh" style="color: white;">Forstloh</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=F%C3%B6rtschendorf" style="color: white;">F&#246;rtschendorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Friedersdorf" style="color: white;">Friedersdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Friedrichsburg" style="color: white;">Friedrichsburg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Friesen" style="color: white;">Friesen</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Fr%C3%B6schbrunn" style="color: white;">Fr&#246;schbrunn</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Froschgr%C3%BCn" style="color: white;">Froschgr&#252;n</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Geh%C3%BClz" style="color: white;">Geh&#252;lz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Geschwend" style="color: white;">Geschwend</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Gesundheitsamt" style="color: white;">Gesundheitsamt</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Geuser" style="color: white;">Geuser</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Giess%C3%BCbel" style="color: white;">Giess&#252;bel</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Gifting" style="color: white;">Gifting</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Glosberg" style="color: white;">Glosberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=G%C3%B6ssersdorf" style="color: white;">G&#246;ssersdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Gries" style="color: white;">Gries</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Gr%C3%B6ssau" style="color: white;">Gr&#246;ssau</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Gro%C3%9Fvichtach" style="color: white;">Gro&#223;vichtach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Gr%C3%BCmpel" style="color: white;">Gr&#252;mpel</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Gr%C3%BCn" style="color: white;">Gr&#252;n</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Grund" style="color: white;">Grund</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Grundm%C3%BChle" style="color: white;">Grundm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Gr%C3%BCnlinden" style="color: white;">Gr&#252;nlinden</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Gundelsdorf" style="color: white;">Gundelsdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Haderleinswustung" style="color: white;">Haderleinswustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Haig" style="color: white;">Haig</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Hain" style="color: white;">Hain</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Hammer" style="color: white;">Hammer</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ha%C3%9Flach" style="color: white;">Ha&#223;lach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=H%C3%A4usles" style="color: white;">H&#228;usles</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Heinersberg" style="color: white;">Heinersberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Hesselbach" style="color: white;">Hesselbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Hinterloh" style="color: white;">Hinterloh</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Hinterst%C3%B6cken" style="color: white;">Hinterst&#246;cken</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Hirschfeld" style="color: white;">Hirschfeld</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=H%C3%B6fles" style="color: white;">H&#246;fles</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Holzhaus" style="color: white;">Holzhaus</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Horlachen" style="color: white;">Horlachen</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Hubertush%C3%B6he" style="color: white;">Hubertush&#246;he</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=H%C3%BChnerleithe" style="color: white;">H&#252;hnerleithe</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Hummenberg" style="color: white;">Hummenberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Hummendorf" style="color: white;">Hummendorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=H%C3%BCttenwustung" style="color: white;">H&#252;ttenwustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Johannisthal" style="color: white;">Johannisthal</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kachelmannsberg" style="color: white;">Kachelmannsberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kaltenbrunn" style="color: white;">Kaltenbrunn</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%A4mmerlein" style="color: white;">K&#228;mmerlein</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kathragrub" style="color: white;">Kathragrub</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Katzwich" style="color: white;">Katzwich</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kehlbach" style="color: white;">Kehlbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kestel" style="color: white;">Kestel</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kleienm%C3%BChle" style="color: white;">Kleienm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kleintettau" style="color: white;">Kleintettau</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kleinthiemitz" style="color: white;">Kleinthiemitz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kleinvichtach" style="color: white;">Kleinvichtach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Klingersm%C3%BChle" style="color: white;">Klingersm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Knellendorf" style="color: white;">Knellendorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kochsm%C3%BChle" style="color: white;">Kochsm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%B6delberg" style="color: white;">K&#246;delberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%B6hlersloh" style="color: white;">K&#246;hlersloh</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kotschersgrund" style="color: white;">Kotschersgrund</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kremnitzm%C3%BChle" style="color: white;">Kremnitzm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kreuzberg" style="color: white;">Kreuzberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Krienesschneidm%C3%BChle" style="color: white;">Krienesschneidm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach" style="color: white;">Kronach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Allern%29" style="color: white;">Kronach (Allern)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Bernsroth%29" style="color: white;">Kronach (Bernsroth)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Biegenm%C3%BChle%29" style="color: white;">Kronach (Biegenm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Bierberg%29" style="color: white;">Kronach (Bierberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Birkach%29" style="color: white;">Kronach (Birkach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Blumau%29" style="color: white;">Kronach (Blumau)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28B%C3%BCrg%29" style="color: white;">Kronach (B&#252;rg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Dennach%29" style="color: white;">Kronach (Dennach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Detschram%C3%BChle%29" style="color: white;">Kronach (Detschram&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Dobersgrund%29" style="color: white;">Kronach (Dobersgrund)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Dobrach%29" style="color: white;">Kronach (Dobrach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28D%C3%B6rfles%29" style="color: white;">Kronach (D&#246;rfles)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Fischbach%29" style="color: white;">Kronach (Fischbach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Friesen%29" style="color: white;">Kronach (Friesen)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Fr%C3%B6schbrunn%29" style="color: white;">Kronach (Fr&#246;schbrunn)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Geh%C3%BClz%29" style="color: white;">Kronach (Geh&#252;lz)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Giess%C3%BCbel%29" style="color: white;">Kronach (Giess&#252;bel)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Glosberg%29" style="color: white;">Kronach (Glosberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Grundm%C3%BChle%29" style="color: white;">Kronach (Grundm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Gr%C3%BCnlinden%29" style="color: white;">Kronach (Gr&#252;nlinden)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Gundelsdorf%29" style="color: white;">Kronach (Gundelsdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Hinterst%C3%B6cken%29" style="color: white;">Kronach (Hinterst&#246;cken)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28H%C3%B6fles%29" style="color: white;">Kronach (H&#246;fles)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Horlachen%29" style="color: white;">Kronach (Horlachen)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Kathragrub%29" style="color: white;">Kronach (Kathragrub)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Kestel%29" style="color: white;">Kronach (Kestel)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Kleienm%C3%BChle%29" style="color: white;">Kronach (Kleienm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Knellendorf%29" style="color: white;">Kronach (Knellendorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Krugsberg%29" style="color: white;">Kronach (Krugsberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Kuhberg%29" style="color: white;">Kronach (Kuhberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Letzenberg%29" style="color: white;">Kronach (Letzenberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Letzenhof%29" style="color: white;">Kronach (Letzenhof)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Mostrach%29" style="color: white;">Kronach (Mostrach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Neuses%29" style="color: white;">Kronach (Neuses)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Planersgut%29" style="color: white;">Kronach (Planersgut)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Poppenhof%29" style="color: white;">Kronach (Poppenhof)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Rennesberg%29" style="color: white;">Kronach (Rennesberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Rotschreuth%29" style="color: white;">Kronach (Rotschreuth)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Rottelsdorf%29" style="color: white;">Kronach (Rottelsdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Ruppen%29" style="color: white;">Kronach (Ruppen)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Ru%C3%9Fm%C3%BChle%29" style="color: white;">Kronach (Ru&#223;m&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Seelach%29" style="color: white;">Kronach (Seelach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Staibra%29" style="color: white;">Kronach (Staibra)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Stressenberg%29" style="color: white;">Kronach (Stressenberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28St%C3%BCben%29" style="color: white;">Kronach (St&#252;ben)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Tauschendorf%29" style="color: white;">Kronach (Tauschendorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Trebesgrund%29" style="color: white;">Kronach (Trebesgrund)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Vogtendorf%29" style="color: white;">Kronach (Vogtendorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Vonz%29" style="color: white;">Kronach (Vonz)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Vorderst%C3%B6cken%29" style="color: white;">Kronach (Vorderst&#246;cken)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28W%C3%B6tzelsdorf%29" style="color: white;">Kronach (W&#246;tzelsdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28W%C3%BCstbuch%29" style="color: white;">Kronach (W&#252;stbuch)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Ziegelerden%29" style="color: white;">Kronach (Ziegelerden)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kronach%20%28Zollschneidm%C3%BChle%29" style="color: white;">Kronach (Zollschneidm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kr%C3%B6tendorfswustung" style="color: white;">Kr&#246;tendorfswustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Krugsberg" style="color: white;">Krugsberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCbelberg" style="color: white;">K&#252;belberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kugelm%C3%BChle" style="color: white;">Kugelm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kuhberg" style="color: white;">Kuhberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Kulmbach" style="color: white;">Kulmbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps" style="color: white;">K&#252;ps</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Au%29" style="color: white;">K&#252;ps (Au)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Burkersdorf%29" style="color: white;">K&#252;ps (Burkersdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Emmersheim%29" style="color: white;">K&#252;ps (Emmersheim)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Hain%29" style="color: white;">K&#252;ps (Hain)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Hinterloh%29" style="color: white;">K&#252;ps (Hinterloh)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Hummenberg%29" style="color: white;">K&#252;ps (Hummenberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Johannisthal%29" style="color: white;">K&#252;ps (Johannisthal)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Kachelmannsberg%29" style="color: white;">K&#252;ps (Kachelmannsberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28K%C3%B6hlersloh%29" style="color: white;">K&#252;ps (K&#246;hlersloh)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Krienesschneidm%C3%BChle%29" style="color: white;">K&#252;ps (Krienesschneidm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Lerchenhof%29" style="color: white;">K&#252;ps (Lerchenhof)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28L%C3%B6hlein%29" style="color: white;">K&#252;ps (L&#246;hlein)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Nagel%29" style="color: white;">K&#252;ps (Nagel)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Oberberg%29" style="color: white;">K&#252;ps (Oberberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Oberlangenstadt%29" style="color: white;">K&#252;ps (Oberlangenstadt)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28R%C3%B6dern%29" style="color: white;">K&#252;ps (R&#246;dern)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Schafhof%29" style="color: white;">K&#252;ps (Schafhof)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Schm%C3%B6lz%29" style="color: white;">K&#252;ps (Schm&#246;lz)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Theisenort%29" style="color: white;">K&#252;ps (Theisenort)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Tiefenklein%29" style="color: white;">K&#252;ps (Tiefenklein)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28T%C3%BCschnitz%29" style="color: white;">K&#252;ps (T&#252;schnitz)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Unterberg%29" style="color: white;">K&#252;ps (Unterberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=K%C3%BCps%20%28Weides%29" style="color: white;">K&#252;ps (Weides)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Lahm" style="color: white;">Lahm</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Landratsamt%20Kronach" style="color: white;">Landratsamt Kronach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Langenau" style="color: white;">Langenau</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Lauenhain" style="color: white;">Lauenhain</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Lauenstein" style="color: white;">Lauenstein</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Leinenm%C3%BChle" style="color: white;">Leinenm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Leitsch" style="color: white;">Leitsch</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Lerchenhof" style="color: white;">Lerchenhof</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Letzenberg" style="color: white;">Letzenberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Letzenhof" style="color: white;">Letzenhof</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Leutendorf" style="color: white;">Leutendorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=LK%20Kronach" style="color: white;">LK Kronach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=LK%20Kulmbach" style="color: white;">LK Kulmbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Lochleithen" style="color: white;">Lochleithen</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=L%C3%B6fflersm%C3%BChle" style="color: white;">L&#246;fflersm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=L%C3%B6hlein" style="color: white;">L&#246;hlein</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsland" style="color: white;">Ludwigsland</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt" style="color: white;">Ludwigsstadt</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt%20%28Ebersdorf%29" style="color: white;">Ludwigsstadt (Ebersdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt%20%28Fischbachsm%C3%BChle%29" style="color: white;">Ludwigsstadt (Fischbachsm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt%20%28Katzwich%29" style="color: white;">Ludwigsstadt (Katzwich)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt%20%28Lauenhain%29" style="color: white;">Ludwigsstadt (Lauenhain)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt%20%28Lauenstein%29" style="color: white;">Ludwigsstadt (Lauenstein)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt%20%28Leinenm%C3%BChle%29" style="color: white;">Ludwigsstadt (Leinenm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt%20%28Ottendorf%29" style="color: white;">Ludwigsstadt (Ottendorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt%20%28Spitzberg%29" style="color: white;">Ludwigsstadt (Spitzberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ludwigsstadt%20%28Ziegelh%C3%BCtte%29" style="color: white;">Ludwigsstadt (Ziegelh&#252;tte)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marienroth" style="color: white;">Marienroth</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach" style="color: white;">Marktrodach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Ebersm%C3%BChle%29" style="color: white;">Marktrodach (Ebersm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Gro%C3%9Fvichtach%29" style="color: white;">Marktrodach (Gro&#223;vichtach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Kleinvichtach%29" style="color: white;">Marktrodach (Kleinvichtach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Kreuzberg%29" style="color: white;">Marktrodach (Kreuzberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Mittelberg%29" style="color: white;">Marktrodach (Mittelberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Oberrodach%29" style="color: white;">Marktrodach (Oberrodach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Seibelsdorf%29" style="color: white;">Marktrodach (Seibelsdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Unterrodach%29" style="color: white;">Marktrodach (Unterrodach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Vogtsm%C3%BChle%29" style="color: white;">Marktrodach (Vogtsm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Waldbuch%29" style="color: white;">Marktrodach (Waldbuch)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Wichenm%C3%BChle%29" style="color: white;">Marktrodach (Wichenm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Wurbach%29" style="color: white;">Marktrodach (Wurbach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Marktrodach%20%28Zeyern%29" style="color: white;">Marktrodach (Zeyern)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mittelberg" style="color: white;">Mittelberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz" style="color: white;">Mitwitz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Angerwustung%29" style="color: white;">Mitwitz (Angerwustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28B%C3%A4chlein%29" style="color: white;">Mitwitz (B&#228;chlein)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28B%C3%A4tzenwustung%29" style="color: white;">Mitwitz (B&#228;tzenwustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Bohlswustung%29" style="color: white;">Mitwitz (Bohlswustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Burgstall%29" style="color: white;">Mitwitz (Burgstall)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Dickenwustung%29" style="color: white;">Mitwitz (Dickenwustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Froschgr%C3%BCn%29" style="color: white;">Mitwitz (Froschgr&#252;n)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Haderleinswustung%29" style="color: white;">Mitwitz (Haderleinswustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28H%C3%A4usles%29" style="color: white;">Mitwitz (H&#228;usles)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28H%C3%BCttenwustung%29" style="color: white;">Mitwitz (H&#252;ttenwustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Kaltenbrunn%29" style="color: white;">Mitwitz (Kaltenbrunn)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Kr%C3%B6tendorfswustung%29" style="color: white;">Mitwitz (Kr&#246;tendorfswustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Leutendorf%29" style="color: white;">Mitwitz (Leutendorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Lochleithen%29" style="color: white;">Mitwitz (Lochleithen)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Neubau%29" style="color: white;">Mitwitz (Neubau)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Neundorf%29" style="color: white;">Mitwitz (Neundorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Reuterwustung%29" style="color: white;">Mitwitz (Reuterwustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Rotberg%29" style="color: white;">Mitwitz (Rotberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Schaumbergswustung%29" style="color: white;">Mitwitz (Schaumbergswustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Schnitzerswustung%29" style="color: white;">Mitwitz (Schnitzerswustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Schw%C3%A4rzdorf%29" style="color: white;">Mitwitz (Schw&#228;rzdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mitwitz%20%28Veitenwustung%29" style="color: white;">Mitwitz (Veitenwustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=M%C3%B6dlitz" style="color: white;">M&#246;dlitz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mostholz" style="color: white;">Mostholz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Mostrach" style="color: white;">Mostrach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nagel" style="color: white;">Nagel</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neubau" style="color: white;">Neubau</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neubrand" style="color: white;">Neubrand</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neuengr%C3%BCn" style="color: white;">Neuengr&#252;n</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neuenreuth" style="color: white;">Neuenreuth</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neufang" style="color: white;">Neufang</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neukenroth" style="color: white;">Neukenroth</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neum%C3%BChle" style="color: white;">Neum&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neundorf" style="color: white;">Neundorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neuses" style="color: white;">Neuses</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Neutennig" style="color: white;">Neutennig</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben" style="color: white;">Nordhalben</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28Buckenreuth%29" style="color: white;">Nordhalben (Buckenreuth)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28Grund%29" style="color: white;">Nordhalben (Grund)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28Heinersberg%29" style="color: white;">Nordhalben (Heinersberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28K%C3%B6delberg%29" style="color: white;">Nordhalben (K&#246;delberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28Neum%C3%BChle%29" style="color: white;">Nordhalben (Neum&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28Regberg%29" style="color: white;">Nordhalben (Regberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28Stengelshof%29" style="color: white;">Nordhalben (Stengelshof)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28Stoffelsm%C3%BChle%29" style="color: white;">Nordhalben (Stoffelsm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28Thomasm%C3%BChle%29" style="color: white;">Nordhalben (Thomasm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nordhalben%20%28Wetthof%29" style="color: white;">Nordhalben (Wetthof)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Nurn" style="color: white;">Nurn</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Oberberg" style="color: white;">Oberberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Oberlangenstadt" style="color: white;">Oberlangenstadt</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Oberrodach" style="color: white;">Oberrodach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Obertennig" style="color: white;">Obertennig</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Oberwellesm%C3%BChle" style="color: white;">Oberwellesm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ortsteil%20unbekannt" style="color: white;">Ortsteil unbekannt</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ottendorf" style="color: white;">Ottendorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Planersgut" style="color: white;">Planersgut</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pl%C3%B6senthal" style="color: white;">Pl&#246;senthal</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Poppenhof" style="color: white;">Poppenhof</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pressig" style="color: white;">Pressig</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pressig%20%28Brauersdorf%29" style="color: white;">Pressig (Brauersdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pressig%20%28Eila%29" style="color: white;">Pressig (Eila)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pressig%20%28F%C3%B6rtschendorf%29" style="color: white;">Pressig (F&#246;rtschendorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pressig%20%28Friedersdorf%29" style="color: white;">Pressig (Friedersdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pressig%20%28Gr%C3%B6ssau%29" style="color: white;">Pressig (Gr&#246;ssau)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pressig%20%28Marienroth%29" style="color: white;">Pressig (Marienroth)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pressig%20%28Rothenkirchen%29" style="color: white;">Pressig (Rothenkirchen)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Pressig%20%28Welitsch%29" style="color: white;">Pressig (Welitsch)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rangen" style="color: white;">Rangen</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rappoltengr%C3%BCn" style="color: white;">Rappoltengr&#252;n</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rauschenhof" style="color: white;">Rauschenhof</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Redwitzerh%C3%B6h" style="color: white;">Redwitzerh&#246;h</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Regberg" style="color: white;">Regberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Reichenbach" style="color: white;">Reichenbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Reitsch" style="color: white;">Reitsch</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Remitzhof" style="color: white;">Remitzhof</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Remschlitz" style="color: white;">Remschlitz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rennesberg" style="color: white;">Rennesberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Reuterwustung" style="color: white;">Reuterwustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Reuth" style="color: white;">Reuth</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rieblich" style="color: white;">Rieblich</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rittersm%C3%BChle" style="color: white;">Rittersm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=R%C3%B6dern" style="color: white;">R&#246;dern</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ro%C3%9Flach" style="color: white;">Ro&#223;lach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rotberg" style="color: white;">Rotberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rothenkirchen" style="color: white;">Rothenkirchen</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rotschreuth" style="color: white;">Rotschreuth</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rottelsdorf" style="color: white;">Rottelsdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rucksga%C3%9Fe" style="color: white;">Rucksga&#223;e</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Rucksm%C3%BChle" style="color: white;">Rucksm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ruppen" style="color: white;">Ruppen</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ru%C3%9Fm%C3%BChle" style="color: white;">Ru&#223;m&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Sachgebiet%2036%20-%20Gesundheitsamt" style="color: white;">Sachgebiet 36 - Gesundheitsamt</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Sachspfeife" style="color: white;">Sachspfeife</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Sattelgrund" style="color: white;">Sattelgrund</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Sattelm%C3%BChle" style="color: white;">Sattelm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Sch%C3%A4ferei" style="color: white;">Sch&#228;ferei</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schafhof" style="color: white;">Schafhof</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schafhut" style="color: white;">Schafhut</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schauberg" style="color: white;">Schauberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schaufel" style="color: white;">Schaufel</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schaumbergswustung" style="color: white;">Schaumbergswustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schindelthal" style="color: white;">Schindelthal</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schlegelshaid" style="color: white;">Schlegelshaid</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schlotterm%C3%BChle" style="color: white;">Schlotterm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schm%C3%B6lz" style="color: white;">Schm&#246;lz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schnabrichsm%C3%BChle" style="color: white;">Schnabrichsm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schnaid%20%28hintere%29" style="color: white;">Schnaid (hintere)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schnaid%20%28mittlere%29" style="color: white;">Schnaid (mittlere)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schnaid%20%28vordere%29" style="color: white;">Schnaid (vordere)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schnappenhammer" style="color: white;">Schnappenhammer</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schneckenlohe" style="color: white;">Schneckenlohe</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schneckenlohe%20%28Beikheim%29" style="color: white;">Schneckenlohe (Beikheim)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schneckenlohe%20%28M%C3%B6dlitz%29" style="color: white;">Schneckenlohe (M&#246;dlitz)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schneckenlohe%20%28Neubrand%29" style="color: white;">Schneckenlohe (Neubrand)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schnitzerswustung" style="color: white;">Schnitzerswustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Schw%C3%A4rzdorf" style="color: white;">Schw&#228;rzdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Seelach" style="color: white;">Seelach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Seibelsdorf" style="color: white;">Seibelsdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Sorg" style="color: white;">Sorg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Spitzberg" style="color: white;">Spitzberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Staibra" style="color: white;">Staibra</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinbach%20a.Wald" style="color: white;">Steinbach a.Wald</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinbach%20a.Wald%20%28Buchbach%29" style="color: white;">Steinbach a.Wald (Buchbach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinbach%20a.Wald%20%28Hirschfeld%29" style="color: white;">Steinbach a.Wald (Hirschfeld)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinbach%20a.Wald%20%28Kehlbach%29" style="color: white;">Steinbach a.Wald (Kehlbach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinbach%20a.Wald%20%28Windheim%29" style="color: white;">Steinbach a.Wald (Windheim)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinberg" style="color: white;">Steinberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steingraben" style="color: white;">Steingraben</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen" style="color: white;">Steinwiesen</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Berglesdorf%29" style="color: white;">Steinwiesen (Berglesdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Birnbaum%29" style="color: white;">Steinwiesen (Birnbaum)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Eisenhammer%29" style="color: white;">Steinwiesen (Eisenhammer)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Erlabr%C3%BCck%29" style="color: white;">Steinwiesen (Erlabr&#252;ck)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Hubertush%C3%B6he%29" style="color: white;">Steinwiesen (Hubertush&#246;he)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Klingersm%C3%BChle%29" style="color: white;">Steinwiesen (Klingersm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Kochsm%C3%BChle%29" style="color: white;">Steinwiesen (Kochsm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28K%C3%BCbelberg%29" style="color: white;">Steinwiesen (K&#252;belberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Leitsch%29" style="color: white;">Steinwiesen (Leitsch)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28L%C3%B6fflersm%C3%BChle%29" style="color: white;">Steinwiesen (L&#246;fflersm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Neufang%29" style="color: white;">Steinwiesen (Neufang)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Nurn%29" style="color: white;">Steinwiesen (Nurn)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Remitzhof%29" style="color: white;">Steinwiesen (Remitzhof)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Rieblich%29" style="color: white;">Steinwiesen (Rieblich)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Schlegelshaid%29" style="color: white;">Steinwiesen (Schlegelshaid)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Schnabrichsm%C3%BChle%29" style="color: white;">Steinwiesen (Schnabrichsm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Steinwiesen%20%28Tempenberg%29" style="color: white;">Steinwiesen (Tempenberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stengelshof" style="color: white;">Stengelshof</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stockheim" style="color: white;">Stockheim</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stockheim%20%28Burggrub%29" style="color: white;">Stockheim (Burggrub)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stockheim%20%28Haig%29" style="color: white;">Stockheim (Haig)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stockheim%20%28Mostholz%29" style="color: white;">Stockheim (Mostholz)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stockheim%20%28Neukenroth%29" style="color: white;">Stockheim (Neukenroth)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stockheim%20%28Reitsch%29" style="color: white;">Stockheim (Reitsch)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stockheim%20%28Rittersm%C3%BChle%29" style="color: white;">Stockheim (Rittersm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stockheim%20%28Wolfersdorf%29" style="color: white;">Stockheim (Wolfersdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stoffelsm%C3%BChle" style="color: white;">Stoffelsm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Stressenberg" style="color: white;">Stressenberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=St%C3%BCben" style="color: white;">St&#252;ben</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tauschendorf" style="color: white;">Tauschendorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tempenberg" style="color: white;">Tempenberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tettau" style="color: white;">Tettau</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tettau%20%28Alexanderh%C3%BCtte%29" style="color: white;">Tettau (Alexanderh&#252;tte)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tettau%20%28Kleintettau%29" style="color: white;">Tettau (Kleintettau)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tettau%20%28Langenau%29" style="color: white;">Tettau (Langenau)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tettau%20%28Sattelgrund%29" style="color: white;">Tettau (Sattelgrund)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tettau%20%28Schauberg%29" style="color: white;">Tettau (Schauberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Teuschnitz" style="color: white;">Teuschnitz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Teuschnitz%20%28Finkenm%C3%BChle%29" style="color: white;">Teuschnitz (Finkenm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Teuschnitz%20%28Ha%C3%9Flach%29" style="color: white;">Teuschnitz (Ha&#223;lach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Teuschnitz%20%28Kremnitzm%C3%BChle%29" style="color: white;">Teuschnitz (Kremnitzm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Teuschnitz%20%28Rappoltengr%C3%BCn%29" style="color: white;">Teuschnitz (Rappoltengr&#252;n)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Teuschnitz%20%28Rauschenhof%29" style="color: white;">Teuschnitz (Rauschenhof)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Teuschnitz%20%28Wickendorf%29" style="color: white;">Teuschnitz (Wickendorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Teuschnitz%20%28Wiesenm%C3%BChle%29" style="color: white;">Teuschnitz (Wiesenm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Theisenort" style="color: white;">Theisenort</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Thiemitz" style="color: white;">Thiemitz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Thomasm%C3%BChle" style="color: white;">Thomasm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Thonberg" style="color: white;">Thonberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tiefenbach" style="color: white;">Tiefenbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tiefenklein" style="color: white;">Tiefenklein</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Trebesberg" style="color: white;">Trebesberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Trebesgrund" style="color: white;">Trebesgrund</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tschirn" style="color: white;">Tschirn</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Tschirn%20%28Doberm%C3%BChle%29" style="color: white;">Tschirn (Doberm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=T%C3%BCschnitz" style="color: white;">T&#252;schnitz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Unterberg" style="color: white;">Unterberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Untergr%C3%BCmpelm%C3%BChle" style="color: white;">Untergr&#252;mpelm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Unterrodach" style="color: white;">Unterrodach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Untertennig" style="color: white;">Untertennig</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Unterwellesm%C3%BChle" style="color: white;">Unterwellesm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Veitenwustung" style="color: white;">Veitenwustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Voglerei" style="color: white;">Voglerei</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Vogtendorf" style="color: white;">Vogtendorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Vogtsm%C3%BChle" style="color: white;">Vogtsm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Vonz" style="color: white;">Vonz</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Vorderst%C3%B6cken" style="color: white;">Vorderst&#246;cken</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Waldbuch" style="color: white;">Waldbuch</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels" style="color: white;">Wallenfels</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Berghaus%29" style="color: white;">Wallenfels (Berghaus)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28D%C3%B6rnach%29" style="color: white;">Wallenfels (D&#246;rnach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Forstloh%29" style="color: white;">Wallenfels (Forstloh)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Geuser%29" style="color: white;">Wallenfels (Geuser)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Hammer%29" style="color: white;">Wallenfels (Hammer)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Kleinthiemitz%29" style="color: white;">Wallenfels (Kleinthiemitz)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Neuengr%C3%BCn%29" style="color: white;">Wallenfels (Neuengr&#252;n)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Neum%C3%BChle%29" style="color: white;">Wallenfels (Neum&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Oberwellesm%C3%BChle%29" style="color: white;">Wallenfels (Oberwellesm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Schindelthal%29" style="color: white;">Wallenfels (Schindelthal)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Schnaid%20%28hintere%29%29" style="color: white;">Wallenfels (Schnaid (hintere))</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Schnaid%20%28mittlere%29%29" style="color: white;">Wallenfels (Schnaid (mittlere))</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Schnaid%20%28vordere%29%29" style="color: white;">Wallenfels (Schnaid (vordere))</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Schnappenhammer%29" style="color: white;">Wallenfels (Schnappenhammer)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Thiemitz%29" style="color: white;">Wallenfels (Thiemitz)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Unterwellesm%C3%BChle%29" style="color: white;">Wallenfels (Unterwellesm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Voglerei%29" style="color: white;">Wallenfels (Voglerei)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Wellesbach%29" style="color: white;">Wallenfels (Wellesbach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Wellesberg%29" style="color: white;">Wallenfels (Wellesberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wallenfels%20%28Wolfersgr%C3%BCn%29" style="color: white;">Wallenfels (Wolfersgr&#252;n)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Weides" style="color: white;">Weides</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn" style="color: white;">Wei&#223;enbrunn</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28B%C3%B6hlbach%29" style="color: white;">Wei&#223;enbrunn (B&#246;hlbach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Buch%29" style="color: white;">Wei&#223;enbrunn (Buch)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Eichenb%C3%BChl%29" style="color: white;">Wei&#223;enbrunn (Eichenb&#252;hl)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Friedrichsburg%29" style="color: white;">Wei&#223;enbrunn (Friedrichsburg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28G%C3%B6ssersdorf%29" style="color: white;">Wei&#223;enbrunn (G&#246;ssersdorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Gr%C3%BCn%29" style="color: white;">Wei&#223;enbrunn (Gr&#252;n)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Holzhaus%29" style="color: white;">Wei&#223;enbrunn (Holzhaus)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Hummendorf%29" style="color: white;">Wei&#223;enbrunn (Hummendorf)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Neuenreuth%29" style="color: white;">Wei&#223;enbrunn (Neuenreuth)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Neutennig%29" style="color: white;">Wei&#223;enbrunn (Neutennig)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Obertennig%29" style="color: white;">Wei&#223;enbrunn (Obertennig)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Pl%C3%B6senthal%29" style="color: white;">Wei&#223;enbrunn (Pl&#246;senthal)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Rangen%29" style="color: white;">Wei&#223;enbrunn (Rangen)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Reuth%29" style="color: white;">Wei&#223;enbrunn (Reuth)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Rucksga%C3%9Fe%29" style="color: white;">Wei&#223;enbrunn (Rucksga&#223;e)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Rucksm%C3%BChle%29" style="color: white;">Wei&#223;enbrunn (Rucksm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Sachspfeife%29" style="color: white;">Wei&#223;enbrunn (Sachspfeife)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Schaufel%29" style="color: white;">Wei&#223;enbrunn (Schaufel)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Schlotterm%C3%BChle%29" style="color: white;">Wei&#223;enbrunn (Schlotterm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Sorg%29" style="color: white;">Wei&#223;enbrunn (Sorg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Thonberg%29" style="color: white;">Wei&#223;enbrunn (Thonberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Untertennig%29" style="color: white;">Wei&#223;enbrunn (Untertennig)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Wildenberg%29" style="color: white;">Wei&#223;enbrunn (Wildenberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wei%C3%9Fenbrunn%20%28Wustung%29" style="color: white;">Wei&#223;enbrunn (Wustung)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Welitsch" style="color: white;">Welitsch</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wellesbach" style="color: white;">Wellesbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wellesberg" style="color: white;">Wellesberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wetthof" style="color: white;">Wetthof</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wichenm%C3%BChle" style="color: white;">Wichenm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wickendorf" style="color: white;">Wickendorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wiesenm%C3%BChle" style="color: white;">Wiesenm&#252;hle</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wildenberg" style="color: white;">Wildenberg</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal" style="color: white;">Wilhelmsthal</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28B%C3%A4rengrund%29" style="color: white;">Wilhelmsthal (B&#228;rengrund)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Bug%29" style="color: white;">Wilhelmsthal (Bug)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Effelter%29" style="color: white;">Wilhelmsthal (Effelter)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Eibenberg%29" style="color: white;">Wilhelmsthal (Eibenberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Eichelberg%29" style="color: white;">Wilhelmsthal (Eichelberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Eichenb%C3%BChl%29" style="color: white;">Wilhelmsthal (Eichenb&#252;hl)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Fehnenschneidm%C3%BChle%29" style="color: white;">Wilhelmsthal (Fehnenschneidm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Felsm%C3%BChle%29" style="color: white;">Wilhelmsthal (Felsm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Geschwend%29" style="color: white;">Wilhelmsthal (Geschwend)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Gifting%29" style="color: white;">Wilhelmsthal (Gifting)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Gries%29" style="color: white;">Wilhelmsthal (Gries)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Gr%C3%BCmpel%29" style="color: white;">Wilhelmsthal (Gr&#252;mpel)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Hesselbach%29" style="color: white;">Wilhelmsthal (Hesselbach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28H%C3%BChnerleithe%29" style="color: white;">Wilhelmsthal (H&#252;hnerleithe)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28K%C3%A4mmerlein%29" style="color: white;">Wilhelmsthal (K&#228;mmerlein)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Kotschersgrund%29" style="color: white;">Wilhelmsthal (Kotschersgrund)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Kugelm%C3%BChle%29" style="color: white;">Wilhelmsthal (Kugelm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Lahm%29" style="color: white;">Wilhelmsthal (Lahm)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Ludwigsland%29" style="color: white;">Wilhelmsthal (Ludwigsland)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Redwitzerh%C3%B6h%29" style="color: white;">Wilhelmsthal (Redwitzerh&#246;h)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Remschlitz%29" style="color: white;">Wilhelmsthal (Remschlitz)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Ro%C3%9Flach%29" style="color: white;">Wilhelmsthal (Ro&#223;lach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Sattelm%C3%BChle%29" style="color: white;">Wilhelmsthal (Sattelm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Sch%C3%A4ferei%29" style="color: white;">Wilhelmsthal (Sch&#228;ferei)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Schafhut%29" style="color: white;">Wilhelmsthal (Schafhut)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Steinberg%29" style="color: white;">Wilhelmsthal (Steinberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Steingraben%29" style="color: white;">Wilhelmsthal (Steingraben)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Tiefenbach%29" style="color: white;">Wilhelmsthal (Tiefenbach)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Trebesberg%29" style="color: white;">Wilhelmsthal (Trebesberg)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Untergr%C3%BCmpelm%C3%BChle%29" style="color: white;">Wilhelmsthal (Untergr&#252;mpelm&#252;hle)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wilhelmsthal%20%28Winterleithen%29" style="color: white;">Wilhelmsthal (Winterleithen)</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Windheim" style="color: white;">Windheim</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Winterleithen" style="color: white;">Winterleithen</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wolfersdorf" style="color: white;">Wolfersdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wolfersgr%C3%BCn" style="color: white;">Wolfersgr&#252;n</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=W%C3%B6tzelsdorf" style="color: white;">W&#246;tzelsdorf</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wurbach" style="color: white;">Wurbach</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=W%C3%BCstbuch" style="color: white;">W&#252;stbuch</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Wustung" style="color: white;">Wustung</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Zeyern" style="color: white;">Zeyern</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ziegelerden" style="color: white;">Ziegelerden</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Ziegelh%C3%BCtte" style="color: white;">Ziegelh&#252;tte</a></span>
+</li>
+<li style="margin-bottom: 3px;">
+    <span class="label label-default"><a href="/PLZTool/?q=Zollschneidm%C3%BChle" style="color: white;">Zollschneidm&#252;hle</a></span>
+</li>
+</ul>
+</div>    
+
+</div>
+</div>
+
+</div>
+</div>
+<footer>
+    <p>Copyright &#169; Robert Koch-Institut. Alle Rechte vorbehalten, soweit nicht ausdr&#252;cklich anders vermerkt.</p>
+    <p>
+        <a href="http://tools.rki.de/Legal.htm">Impressum</a>&nbsp;
+        <a href="http://tools.rki.de/Privacy.htm">Datenschutzerkl&#228;rung</a>
+                        
+    </p>
+</footer>
+</div>
+<div class="col-md-3 hidden-sm hidden-xs">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Hilfe</h3>
+        </div>
+        <div class="panel-body">
+            <ol class="slim">
+                <li>
+                    Geben sie eine Postleitzahl oder einen Ort ein
+                </li>
+                <li>
+                    Dr&#252;cken sie auf Suchen
+                </li>
+                <li>
+                    W&#228;hlen sie das Gesundheitsamt aus der Liste der Gesundheits&#228;mter aus
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+<script src="/PLZTool/bundles/bootstrap?v=uBBLny9uAhri_SgYJsb_fdxgr9x_dYqvoi11_HENWD81"></script>
+
+    
+<script type="text/javascript">
+    $(function () {
+        var onTransmittingSiteSelectionChanged = function (selectedValue) {
+            location.hash = selectedValue;
+
+            $.ajax({
+                url: '/PLZTool/Home/GetTransmittingSiteView',
+                type: "POST",
+                data: { code: selectedValue },
+                success: function (result) {
+                    $("#transmittingSiteDetail").html(result);
+                },
+                error: function () {
+                    if (!$("#transmittingSiteDetail #error").length) {
+                        $("#transmittingSiteDetail").html('<div id="error" role="alert" class="alert alert-danger alert-dismissible fade in">' +
+                            '<button aria-label="Close" data-dismiss="alert" class="close" type="button"><span aria-hidden="true">&times;</span></button>' +
+                            '<p>Es ist ein unerwarter Fehler aufgetreten!</p>' +
+                            '</div>');
+                    }
+                }
+            });
+        };
+
+        $("#SelectedAddress_Code").change(function () {
+            onTransmittingSiteSelectionChanged(this.value);
+        });
+
+        if (location.hash && location.hash.length > 0) {
+            var selection = location.hash.slice(1);
+            if (selection && $("#SelectedAddress_Code").val() != selection && $("#SelectedAddress_Code option[value='" + selection + "']").length) {
+                $("#SelectedAddress_Code").val(selection);
+                onTransmittingSiteSelectionChanged(selection);
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

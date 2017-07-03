@@ -13,6 +13,8 @@ namespace HaemophilusWeb.Tools
         private string RkiToolQuerySingleResult;
         private string RkiToolQueryNoResult;
         private string RkiToolQueryMultipleResults;
+        private string RkiToolQueryResultWithUmlaut;
+
         [SetUp]
         public void LoadRkiToolQueryResult()
         {
@@ -21,6 +23,7 @@ namespace HaemophilusWeb.Tools
             RkiToolQuerySingleResult = GetResource(assembly, "HaemophilusWeb.Resources.RkiToolQuerySingleResult.html");
             RkiToolQueryNoResult = GetResource(assembly, "HaemophilusWeb.Resources.RkiToolQueryNoResult.html");
             RkiToolQueryMultipleResults = GetResource(assembly, "HaemophilusWeb.Resources.RkiToolQueryMultipleResults.html");
+            RkiToolQueryResultWithUmlaut = GetResource(assembly, "HaemophilusWeb.Resources.RkiToolQueryResultWithUmlaut.html");
         }
 
         private static string GetResource(Assembly assembly, string resourceName)
@@ -60,15 +63,22 @@ namespace HaemophilusWeb.Tools
             healthOffice.Should().BeNull();
         }
 
-
         [Test]
-        public void QueryHealthOffice_MultipleResults_ReturnsNull()
+        public void QueryHealthOffice_MultipleResults_ReturnsFirst()
         {
+            var expectedHealthOffice = new HealthOffice
+            {
+                Address = "Landratsamt Forchheim\nGesundheitsamt\nAm Streckerplatz 3\n91301 Forchheim",
+                Phone = "09191 86-3504",
+                Fax = "09191 86-3508",
+                Email = "Gesundheitsamt@lra-fo.de",
+                PostalCode = "91301"
+            };
             var rkiTool = new RkiTool(s => RkiToolQueryMultipleResults);
 
-            var healthOffice = rkiTool.QueryHealthOffice("111111");
+            var healthOffice = rkiTool.QueryHealthOffice("91301");
 
-            healthOffice.Should().BeNull();
+            healthOffice.ShouldBeEquivalentTo(expectedHealthOffice);
         }
 
         [Test]
@@ -79,6 +89,18 @@ namespace HaemophilusWeb.Tools
             var healthOffice = rkiTool.QueryHealthOffice("111111");
 
             healthOffice.Should().BeNull();
+        }
+
+        [Test]
+        public void QueryHealthOffice_AddressWithUmlaut_UnescapesHtml()
+        {
+            var rkiTool = new RkiTool(s => RkiToolQueryResultWithUmlaut);
+
+            var healthOffice = rkiTool.QueryHealthOffice("96317");
+
+            healthOffice.Should().NotBeNull();
+            healthOffice.Address.Should()
+                .Be("Landratsamt Kronach\nSachgebiet 36 - Gesundheitsamt\nGüterstrasse 18\n96317 Kronach");
         }
     }
 }

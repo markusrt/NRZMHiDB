@@ -45,7 +45,7 @@ namespace HaemophilusWeb.Tools
                 document.LoadHtml(result);
 
                 var results = document.DocumentNode.SelectNodes("//div[@id='result']/select/option");
-                if (results == null || results.Count != 1)
+                if (results == null || results.Count < 1)
                 {
                     return null;
                 }
@@ -53,6 +53,7 @@ namespace HaemophilusWeb.Tools
                     SelectNodes("//input[@type='text'] | //address");
                 
                 var address = Regex.Replace(dataNodes[0].InnerText.Trim(), "\r\n[ \t]*", "\n");
+                address = WebUtility.HtmlDecode(address);
                 return new HealthOffice
                 {
                     Address = address,

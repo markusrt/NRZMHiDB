@@ -18,6 +18,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2017, 7, 3, 21, 0, 0), "Bei mehreren gefundenen Gesundheitsämtern wird das Erste zurückgeliefert", ChangeType.Feature),
+                new Change(new DateTime(2017, 7, 3, 20, 0, 0), "Bearbeiten von Gesundheitsämtern mit Umlaut schlägt fehl", ChangeType.Bug),
                 new Change(new DateTime(2017, 6, 16), "Korrektur der geänderten Schnittstelle zum RKITool", ChangeType.Bug),
                 new Change(new DateTime(2017, 5, 31, 20, 0, 0),
                     "<p>Verbesserung der Zuordnung von Gesundheitsamtdaten</p>" +
