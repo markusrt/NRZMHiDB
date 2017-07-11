@@ -1,0 +1,17 @@
+﻿@model HaemophilusWeb.Models.Meningo.MeningoPatient
+
+@{
+    ViewBag.Title = "Neuen Patienten anlegen";
+}
+
+@section CreateModel
+{
+    @Html.EditorForModel()
+}
+
+@section scripts
+{
+    <script>
+        preventSiteNavigationWithPendingChanges();
+    </script>
+}

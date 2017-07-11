@@ -57,6 +57,11 @@ namespace HaemophilusWeb.Models
             get { return wrappedContext.EucastClinicalBreakpoints; }
         }
 
+        public IDbSet<Meningo.MeningoPatient> MeningoPatients
+        {
+            get { return wrappedContext.MeningoPatients; }
+        }
+
         public void MarkAsModified<TEntity>(TEntity entity) where TEntity : class
         {
             wrappedContext.Entry(entity).State = EntityState.Modified;

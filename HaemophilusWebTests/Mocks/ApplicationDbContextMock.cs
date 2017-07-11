@@ -19,6 +19,7 @@ namespace HaemophilusWeb.Models
         public readonly InMemoryDbSet<County> CountiesDbSet = new InMemoryDbSet<County>(true);
         public readonly InMemoryDbSet<HealthOffice> HealthOfficesDbSet = new InMemoryDbSet<HealthOffice>(true);
         public readonly InMemoryDbSet<EpsilometerTest> EpsilometerTestsDbSet = new InMemoryDbSet<EpsilometerTest>(true);
+        public readonly InMemoryDbSet<Meningo.MeningoPatient> MeningoPatientsDbSet = new InMemoryDbSet<Meningo.MeningoPatient>(true);
 
         public readonly InMemoryDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpointsDbSet =
             new InMemoryDbSet<EucastClinicalBreakpoint>(true);
@@ -61,6 +62,11 @@ namespace HaemophilusWeb.Models
         public IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints
         {
             get { return EucastClinicalBreakpointsDbSet; }
+        }
+
+        public IDbSet<Meningo.MeningoPatient> MeningoPatients
+        {
+            get { return MeningoPatientsDbSet; }
         }
 
         public void MarkAsModified<TEntity>(TEntity entity) where TEntity : class

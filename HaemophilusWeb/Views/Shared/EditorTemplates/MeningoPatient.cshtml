@@ -1,0 +1,152 @@
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Models.Meningo
+@using HaemophilusWeb.Utils
+@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.Models.Meningo.MeningoPatient
+
+@Html.Partial("_QueryPostalCodeViaGeonames")
+
+@Html.TextEditorFor(m => m.Initials, "E.M.")
+
+@Html.DateEditorFor(m => m.BirthDate)
+
+@Html.EnumRadioEditorFor(m => m.Gender)
+
+<div class="form-group">
+    @Html.LabelFor(m => m.PostalCode, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        @Html.TextBoxFor(m => m.PostalCode, new { @placeholder = "97080", @class = "form-control", @list = "postalCodeSearchresults", @autocomplete = "off" })
+        <datalist id="postalCodeSearchresults"></datalist>
+        @Html.ValidationMessageFor(model => model.PostalCode)
+    </div>
+</div>
+
+@Html.TextEditorFor(m => m.City, "Würzburg")
+@Html.TextEditorFor(m => m.County, "Würzburg")
+
+<div class="form-group">
+    @Html.LabelFor(m => m.State, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        @EnumEditor.EnumDropDownListFor(Html, model => model.State, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.State)
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ClinicalInformation, new { @class = "col-sm-2 control-label" })
+    <div class="col-lg-9">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NotAvailable) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="NotAvailable" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NotAvailable) ? " checked" : string.Empty) /> k.A.
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Meningitis) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Meningitis" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Meningitis) ? " checked" : string.Empty) /> Meningitis
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Sepsis) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Sepsis" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Sepsis) ? " checked" : string.Empty) /> Sepsis
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.WaterhouseFriderichsenSyndrome) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="WaterhouseFriderichsenSyndrome" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.WaterhouseFriderichsenSyndrome) ? " checked" : string.Empty) /> WFS
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Lethal) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Lethal" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Lethal) ? " checked" : string.Empty) /> Letal
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NoSymptoms) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="NoSymptoms" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NoSymptoms) ? " checked" : string.Empty) /> Keine Symptome
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Unknown) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Unknown" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Unknown) ? " checked" : string.Empty) /> Unbekannt
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Cured) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Cured" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Cured) ? " checked" : string.Empty) /> Geheilt
+            </label>
+            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Other) ? " active" : string.Empty)">
+                <input type="checkbox" name="ClinicalInformation" value="Other" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Other) ? " checked" : string.Empty) /> Andere
+            </label>
+        </div>
+    </div>
+</div>
+
+
+<div id="OtherClinicalInformationForm" class="form-group">
+    @Html.LabelFor(m => m.OtherClinicalInformation, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        @Html.TextBoxFor(m => m.OtherClinicalInformation, new { @class = "form-control", @list = "otherClinicalInformationAutocomplete", @autocomplete = "off" })
+        <datalist id="otherClinicalInformationAutocomplete">
+            @foreach (var item in ViewBag.PossibleOtherClinicalInformation)
+            {
+                <option value="@item.ToString()" />
+            }
+        </datalist>
+
+        @Html.ValidationMessageFor(model => model.OtherClinicalInformation)
+    </div>
+</div>
+
+@Html.TextEditorFor(m => m.UnderlyingDisease)
+
+@Html.TextEditorFor(m => m.Residua)
+
+
+<div class="form-group">
+    @Html.LabelFor(m => m.ClinicalInformation, new { @class = "col-sm-2 control-label" })
+    <div class="col-lg-9">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.NotAvailable) ? " active" : string.Empty)">
+                <input type="checkbox" name="Epidemiology" value="NotAvailable" @(Model.Epidemiology.HasFlag(Epidemiology.NotAvailable) ? " checked" : string.Empty) /> k.A.
+            </label>
+            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.SingleDisease) ? " active" : string.Empty)">
+                <input type="checkbox" name="Epidemiology" value="SingleDisease" @(Model.Epidemiology.HasFlag(Epidemiology.SingleDisease) ? " checked" : string.Empty) /> Einzelerkrankung
+            </label>
+            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.GermCarrier) ? " active" : string.Empty)">
+                <input type="checkbox" name="Epidemiology" value="GermCarrier" @(Model.Epidemiology.HasFlag(Epidemiology.GermCarrier) ? " checked" : string.Empty) /> Keimträger
+            </label>
+            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.Cluster) ? " active" : string.Empty)">
+                <input type="checkbox" name="Epidemiology" value="Cluster" @(Model.Epidemiology.HasFlag(Epidemiology.Cluster) ? " checked" : string.Empty) /> Cluster
+            </label>
+            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.ContactInvestigation) ? " active" : string.Empty)">
+                <input type="checkbox" name="Epidemiology" value="ContactInvestigation" @(Model.Epidemiology.HasFlag(Epidemiology.ContactInvestigation) ? " checked" : string.Empty) /> Umgebungsuntersuchung
+            </label>
+        </div>
+    </div>
+</div>
+
+@Html.EnumRadioEditorFor(m => m.Therapy)
+<div id="TherapyDetailsForm" class="form-group">
+    @Html.LabelFor(m => m.TherapyDetails, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        @Html.TextBoxFor(m => m.TherapyDetails, new { @class = "form-control", @list = "therapyDetailsAutocomplete", @autocomplete = "off" })
+        <datalist id="therapyDetailsAutocomplete">
+            @foreach (var item in ViewBag.PossibleTherapyDetails)
+            {
+                <option value="@item.ToString()" />
+            }
+        </datalist>
+        @Html.ValidationMessageFor(model => model.TherapyDetails)
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        ShowOtherClinicalInformationIfOtherIsSelected();
+        ShowTherapyDetailsIfTherapyIsYes();
+    });
+
+    function ShowOtherClinicalInformationIfOtherIsSelected() {
+        ShowDivIfCheckBoxHasSpecificSelectedValueOrClearInputOtherwise(
+            "#OtherClinicalInformationForm", "input:checkbox[name$='ClinicalInformation']",
+            "input:checkbox[name$='ClinicalInformation']:checked",
+            "Other", "[id$='OtherClinicalInformation']"
+        );
+    }
+
+    function ShowTherapyDetailsIfTherapyIsYes() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#TherapyDetailsForm", "input:radio[name$='Therapy']",
+            "input:radio[name$='Therapy']:checked",
+            "Yes", "[id$='TherapyDetails']"
+        );
+    }
+
+</script>
+

@@ -1,0 +1,19 @@
+﻿@model HaemophilusWeb.Models.Meningo.MeningoPatient
+
+@{
+    ViewBag.Title = "Patient bearbeiten";
+}
+
+@section EditModel
+{
+    @Html.HiddenFor(model => model.PatientId)
+
+    @Html.EditorForModel()
+}
+
+@section scripts
+{
+    <script>
+        preventSiteNavigationWithPendingChanges();
+    </script>
+}

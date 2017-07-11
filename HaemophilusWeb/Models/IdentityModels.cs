@@ -27,5 +27,7 @@ namespace HaemophilusWeb.Models
         public DbSet<County> Counties { get; set; }
 
         public DbSet<HealthOffice> HealthOffices { get; set; }
-    }
+
+        public DbSet<Meningo.MeningoPatient> MeningoPatients { get; set; }
+}
 }

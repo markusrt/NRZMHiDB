@@ -21,6 +21,8 @@ namespace HaemophilusWeb.Models
 
         IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints { get; }
 
+        IDbSet<Meningo.MeningoPatient> MeningoPatients { get; }
+
         void MarkAsModified<TEntity>(TEntity entity) where TEntity : class;
 
         int SaveChanges();
