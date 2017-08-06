@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using HaemophilusWeb.Models.Meningo;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace HaemophilusWeb.Models
@@ -47,5 +48,7 @@ namespace HaemophilusWeb.Models
         public DbSet<HealthOffice> HealthOffices { get; set; }
 
         public DbSet<Meningo.MeningoPatient> MeningoPatients { get; set; }
-}
+
+        public DbSet<MeningoSending> MeningoSendings { get; set; }
+    }
 }

@@ -1,0 +1,91 @@
+﻿@model HaemophilusWeb.Models.Meningo.MeningoSending
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>MeningoSending</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.OtherClinicalInformation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patient.OtherClinicalInformation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SamplingLocation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SamplingLocation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Material)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Material)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OtherSamplingLocation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OtherSamplingLocation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SenderId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SenderId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SamplingDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SamplingDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReceivingDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ReceivingDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Deleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Deleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SenderLaboratoryNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SenderLaboratoryNumber)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.MeningoSendingId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

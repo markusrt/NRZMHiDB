@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using HaemophilusWeb.Models.Meningo;
 
 namespace HaemophilusWeb.Models
 {
@@ -60,6 +61,11 @@ namespace HaemophilusWeb.Models
         public IDbSet<Meningo.MeningoPatient> MeningoPatients
         {
             get { return wrappedContext.MeningoPatients; }
+        }
+
+        public DbSet<MeningoSending> MeningoSendings
+        {
+            get { return wrappedContext.MeningoSendings; }
         }
 
         public void MarkAsModified<TEntity>(TEntity entity) where TEntity : class

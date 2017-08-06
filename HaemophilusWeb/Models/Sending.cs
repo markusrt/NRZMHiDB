@@ -7,7 +7,7 @@ using HaemophilusWeb.Validators;
 namespace HaemophilusWeb.Models
 {
     [Validator(typeof (SendingValidator))]
-    public class Sending
+    public class Sending : SendingBase
     {
         public Sending()
         {
@@ -21,20 +21,9 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Einsendungsnummer")]
         public int SendingId { get; set; }
 
-        [Display(Name = "Einsendernummer")]
-        public int SenderId { get; set; }
-
         [Display(Name = "Patient")]
         [ForeignKey("Patient")]
         public int PatientId { get; set; }
-
-        [Display(Name = "Entnahmedatum")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime? SamplingDate { get; set; }
-
-        [Display(Name = "Eingangsdatum")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime ReceivingDate { get; set; }
 
         [Display(Name = "Entnahmeort")]
         public SamplingLocation SamplingLocation { get; set; }
@@ -45,24 +34,11 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Material")]
         public Material Material { get; set; }
 
-        [Display(Name = "Invasiv")]
-        public YesNo? Invasive { get; set; }
-
-        [Display(Name = "Labnr. Einsender")]
-        public string SenderLaboratoryNumber { get; set; }
-
         [Display(Name = "Ergebnis Einsender")]
         public string SenderConclusion { get; set; }
 
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
-
-        [NotMapped]
-        [Display(Name = "Labornummer")]
-        public string LaboratoryNumber { get; set; }
-
-        [Display(Name = "Gelöscht")]
-        public bool Deleted { get; set; }
 
         public virtual RkiMatchRecord RkiMatchRecord { get; set; }
         public virtual Isolate Isolate { get; set; }

@@ -1,0 +1,19 @@
+﻿@model HaemophilusWeb.Models.Meningo.MeningoSending
+
+@{
+    ViewBag.Title = "Einsendung bearbeiten";
+}
+
+@section EditModel
+{
+    @Html.HiddenFor(model => model.MeningoSendingId)
+
+    @Html.EditorForModel()
+}
+
+@section scripts
+{
+    <script>
+        preventSiteNavigationWithPendingChanges();
+    </script>
+}

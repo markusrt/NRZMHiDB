@@ -1,0 +1,102 @@
+﻿@using HaemophilusWeb.Models
+@model IEnumerable<HaemophilusWeb.Models.Meningo.MeningoSending>
+
+@{
+    ViewBag.Title = "Einsendungen";
+}
+<p>
+    @Html.ActionLink("Neue Einsendung anlegen", "Create", "MeningoSending", null, new { @class = "btn btn-default" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MeningoSendingId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SamplingDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ReceivingDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SamplingLocation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Invasive)
+        </th>
+        <th>
+            Stammnummer
+        </th>
+        <th>
+            Labornummer
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeningoSendingId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SamplingDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReceivingDate)
+            </td>
+            <td>
+                @(item.SamplingLocation == MeningoSamplingLocation.Other ? Html.DisplayFor(modelItem => item.OtherSamplingLocation) : Html.DisplayFor(modelItem => item.SamplingLocation))
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Invasive)
+            </td>
+            <td id="isolate_Id_@item.MeningoSendingId">
+                @*@if (item.Isolate != null)
+                {
+                    @Html.DisplayFor(modelItem => item.Isolate.IsolateId)
+                }
+                else
+                {
+                    <a href="#" data-sending-id="@item.SendingId">Stammnummer zuweisen</a>
+                }*@
+            </td>
+            <td id="isolate_labNr_@item.MeningoSendingId">
+                @* TODO Uncomment all once Isolate is ready *@
+                @*@if (item.Isolate != null)
+                {
+                    @item.Isolate.LaboratoryNumber
+                }*@
+            </td>
+            <td>
+                @Html.ActionLink("Bearbeiten", "Edit", new { id=item.MeningoSendingId })@* |
+            @Html.ActionLink("Details", "Details", new { id=item.SendingId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.SendingId })*@
+            </td>
+        </tr>
+    }
+
+</table>
+
+@*<script>
+    $("td[id ^= 'isolate_Id_'] a").click(function ()
+    {
+        var sendingId = $(this).attr("data-sending-id");
+        $.ajax({
+            url: '@Url.Action("AssignStemNumber")' + '/' + sendingId,
+            type: 'POST',
+            dataType: 'json',
+            success: function(data)
+            {
+                if (data.ErrorMessage)
+                {
+                    ShowError(data.ErrorMessage);
+                }
+                $("#isolate_Id_" + sendingId).html(data.IsolateId);
+                $("#isolate_labNr_" + sendingId).html(data.LaboratoryNumber);
+            },
+            error: function (error) {
+                ShowError(error.status + " " + error.statusText);
+            },
+        });
+    });
+</script>*@

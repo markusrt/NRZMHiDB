@@ -219,6 +219,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IsolateController.cs" />
     <Compile Include="Controllers\MeningoPatientController.cs" />
+    <Compile Include="Controllers\MeningoSendingController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PatientSendingController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
@@ -344,9 +345,6 @@
     <Compile Include="Migrations\201704202158587_Isolate_11_ftsi_Eval3.Designer.cs">
       <DependentUpon>201704202158587_Isolate_11_ftsi_Eval3.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201707032012086_MeningoPatient_1.cs" />
-    <Compile Include="Migrations\201707032012086_MeningoPatient_1.Designer.cs">
-      <DependentUpon>201707032012086_MeningoPatient_1.cs</DependentUpon>
     <Compile Include="Migrations\201802182157080_RkiMatch.cs" />
     <Compile Include="Migrations\201802182157080_RkiMatch.Designer.cs">
       <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
@@ -369,11 +367,15 @@
     <Compile Include="Models\IsolateBase.cs" />
     <Compile Include="Models\Material.cs" />
     <Compile Include="Models\Meningo\Epidemiology.cs" />
+    <Compile Include="Models\Meningo\MeningoMaterial.cs" />
     <Compile Include="Models\Meningo\MeningoClinicalInformation.cs" />
     <Compile Include="Models\Meningo\MeningoPatient.cs" />
+    <Compile Include="Models\Meningo\MeningoSending.cs" />
+    <Compile Include="Models\Meningo\MeningoSamplingLocation.cs" />
     <Compile Include="Models\PatientBase.cs" />
     <Compile Include="Models\RkiMatchRecord.cs" />
     <Compile Include="Models\RkiStatus.cs" />
+    <Compile Include="Models\SendingBase.cs" />
     <Compile Include="Models\SerotypePcr.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -1052,6 +1054,12 @@
     <Content Include="Views\MeningoPatient\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MeningoPatient.cshtml" />
     <Content Include="Views\RkiMatch\Index.cshtml" />
+    <Content Include="Views\MeningoSending\Create.cshtml" />
+    <Content Include="Views\MeningoSending\Delete.cshtml" />
+    <Content Include="Views\MeningoSending\Details.cshtml" />
+    <Content Include="Views\MeningoSending\Edit.cshtml" />
+    <Content Include="Views\MeningoSending\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MeningoSending.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1153,16 +1161,11 @@
     <EmbeddedResource Include="Migrations\201704202158587_Isolate_11_ftsi_Eval3.resx">
       <DependentUpon>201704202158587_Isolate_11_ftsi_Eval3.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201707032012086_MeningoPatient_1.resx">
-      <DependentUpon>201707032012086_MeningoPatient_1.cs</DependentUpon>
     <EmbeddedResource Include="Migrations\201802182157080_RkiMatch.resx">
       <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803182109307_MeningoPatient_1.resx">
       <DependentUpon>201803182109307_MeningoPatient_1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802182157080_RkiMatch.resx">
-      <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -1,0 +1,17 @@
+﻿@model HaemophilusWeb.Models.Meningo.MeningoSending
+
+@{
+    ViewBag.Title = "Neuen Einsendung anlegen";
+}
+
+@section CreateModel
+{
+    @Html.EditorForModel()
+}
+
+@section scripts
+{
+    <script>
+        preventSiteNavigationWithPendingChanges();
+    </script>
+}
