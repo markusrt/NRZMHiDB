@@ -15,7 +15,8 @@ namespace HaemophilusWeb.TestUtils
 
         public override void BeforeTest(ITest test)
         {
-            if (!(test.Fixture is ITempDirectoryTest tempDirectoryTest))
+            var tempDirectoryTest = test.Fixture as ITempDirectoryTest;
+            if (tempDirectoryTest == null)
             {
                 return;
             }

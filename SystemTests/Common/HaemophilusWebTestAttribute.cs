@@ -20,7 +20,8 @@ namespace SystemTests.Common
 
         public override void BeforeTest(ITest test)
         {
-            if (!(test.Fixture is IHaemophilusWebTest haemophilusWebTest))
+            var haemophilusWebTest = test.Fixture as IHaemophilusWebTest;
+            if (haemophilusWebTest == null)
             {
                 return;
             }
