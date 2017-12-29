@@ -15,10 +15,9 @@ namespace HaemophilusWeb.Utils
         private string[] filesToCreate = new[] {"test1.docx", "test2.docx", "test1.exe"};
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void Ctor_InvalidExtension_ThrowsException()
         {
-            new FileLister(TemporaryDirectoryToStoreTestData, "doc");
+            Assert.Throws<ArgumentException>(() => new FileLister(TemporaryDirectoryToStoreTestData, "doc"));
         }
 
         [Test]

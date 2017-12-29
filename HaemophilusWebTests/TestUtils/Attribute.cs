@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 
 namespace HaemophilusWeb.TestUtils
 {
@@ -12,10 +13,9 @@ namespace HaemophilusWeb.TestUtils
             get { return ActionTargets.Test; }
         }
 
-        public override void BeforeTest(TestDetails details)
+        public override void BeforeTest(ITest test)
         {
-            var tempDirectoryTest = details.Fixture as ITempDirectoryTest;
-            if (tempDirectoryTest == null)
+            if (!(test.Fixture is ITempDirectoryTest tempDirectoryTest))
             {
                 return;
             }
@@ -23,12 +23,9 @@ namespace HaemophilusWeb.TestUtils
             CreateTemporaryDirectoryAndAssignToTest(tempDirectoryTest);
         }
 
-        public override void AfterTest(TestDetails testDetails)
+        public override void AfterTest(ITest test)
         {
-            if (tempDirectoryToStoreTestData != null)
-            {
-                tempDirectoryToStoreTestData.Delete(true);
-            }
+            tempDirectoryToStoreTestData?.Delete(true);
         }
 
         private void CreateTemporaryDirectoryAndAssignToTest(ITempDirectoryTest tempDirectoryTest)

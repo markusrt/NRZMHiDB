@@ -46,19 +46,17 @@ namespace HaemophilusWeb.Utils
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ParseCommaSeperatedListOfNames_InvalidEntry_ThrowsException()
         {
-            EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>("Bacitracin, Blub, Amikacin");
+            Assert.Throws<ArgumentException>(() => EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>("Bacitracin, Blub, Amikacin"));
         }
 
 
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void AllEnumValues_NotAnEnum_ThrowsException()
         {
-            EnumUtils.AllEnumValues<int>();
+            Assert.Throws<ArgumentException>(() => EnumUtils.AllEnumValues<int>());
         }
 
         [Test]
