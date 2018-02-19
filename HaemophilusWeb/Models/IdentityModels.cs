@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace HaemophilusWeb.Models
@@ -10,6 +11,23 @@ namespace HaemophilusWeb.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema:false)
         {
+        }
+
+        protected virtual void InitializeDatabase()
+        {
+            if (!Database.Exists())
+            {
+                Database.Initialize(true);
+                SeedRoles();
+            }
+        }
+
+        private void SeedRoles()
+        {
+            Roles.Add(new IdentityRole(DefaultRoles.Administrator));
+            Roles.Add(new IdentityRole(DefaultRoles.User));
+            Roles.Add(new IdentityRole(DefaultRoles.PublicHealth));
+            SaveChanges();
         }
 
         public DbSet<Sender> Senders { get; set; }
