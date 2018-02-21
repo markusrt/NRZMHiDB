@@ -365,8 +365,16 @@ namespace HaemophilusWeb.Controllers
             export.AddField(s => ExportToString(s.Isolate.Evaluation));
             export.AddField(s => s.Isolate.ReportDate);
             export.AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
+            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord=>rkiMatchRecord.RkiReferenceId.ToString()), "RKI InterneRef");
+            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord=>rkiMatchRecord.RkiReferenceNumber), "RKI Aktenzeichen");
+            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord=>rkiMatchRecord.RkiStatus), "RKI Status");
 
             return export;
+        }
+
+        private string ExportRkiMatchRecord(RkiMatchRecord rkiMatchRecord, Func<RkiMatchRecord, object> accessValue)
+        {
+            return rkiMatchRecord != null ? ExportToString(accessValue(rkiMatchRecord)) : string.Empty;
         }
 
         private string ExportClinicalInformation(ClinicalInformation clinicalInformation, Sending sending)
