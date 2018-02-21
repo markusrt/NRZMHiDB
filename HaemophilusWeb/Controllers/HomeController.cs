@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2018, 2, 21), "Beim ersten Anlegen einer Einsendung werden die klinischen Angaben nicht gespeichert.", ChangeType.Bug),
                 new Change(new DateTime(2018, 2, 20), "Import-Funktion für RKI Match Datensätze", ChangeType.Feature),
                 new Change(new DateTime(2017, 7, 3, 21, 0, 0), "Bei mehreren gefundenen Gesundheitsämtern wird das Erste zurückgeliefert", ChangeType.Feature),
                 new Change(new DateTime(2017, 7, 3, 20, 0, 0), "Bearbeiten von Gesundheitsämtern mit Umlaut schlägt fehl", ChangeType.Bug),

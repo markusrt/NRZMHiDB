@@ -75,9 +75,7 @@ namespace HaemophilusWeb.Controllers
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Edit(PatientSendingViewModel patientSending)
         {
-            AssignClinicalInformationFromCheckboxValues(patientSending);
-
-            PerformValidations(patientSending);
+            CreateAndEditPreparations(patientSending);
 
             if (ModelState.IsValid)
             {
@@ -139,7 +137,7 @@ namespace HaemophilusWeb.Controllers
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Create(PatientSendingViewModel patientSending)
         {
-            PerformValidations(patientSending);
+            CreateAndEditPreparations(patientSending);
             ValidatePatientDoesNotAlreadyExist(patientSending);
 
             if (ModelState.IsValid && !patientSending.DuplicatePatientDetected)
@@ -176,8 +174,10 @@ namespace HaemophilusWeb.Controllers
             return patient;
         }
 
-        private void PerformValidations(PatientSendingViewModel patientSending)
+        private void CreateAndEditPreparations(PatientSendingViewModel patientSending)
         {
+            AssignClinicalInformationFromCheckboxValues(patientSending);
+
             ValidateModel(patientSending.Sending, new SendingValidator());
             ValidateModel(patientSending.Patient, new PatientValidator());
         }

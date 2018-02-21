@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections.Specialized;
+using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.TestUtils;
 using HaemophilusWeb.ViewModels;
+using Moq;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Controllers
@@ -14,10 +18,10 @@ namespace HaemophilusWeb.Controllers
         private readonly PatientController patientController = new PatientController(DbMock);
 
         private static readonly ApplicationDbContextMock DbMock = new ApplicationDbContextMock();
+        private NameValueCollection requestForm = new NameValueCollection();
 
         static PatientSendingControllerTests()
         {
-            MockData.CreateMockData(DbMock);
         }
 
         [Test]
@@ -36,7 +40,6 @@ namespace HaemophilusWeb.Controllers
         [Test]
         public void Create_InvalidModel_ProducesValidationErrors()
         {
-            const string sendingError = "MockError";
             var controller = CreateController();
 
             controller.Create(new PatientSendingViewModel {Patient = new Patient(), Sending = new Sending()});
@@ -44,9 +47,29 @@ namespace HaemophilusWeb.Controllers
             controller.ModelState.Should().NotBeEmpty();
         }
 
+        [Test]
+        public void Create_AssignsClinicalInformation()
+        {
+            var controller = CreateController();
+            requestForm.Set("ClinicalInformation", "Pneumonia,Sepsis");
+
+            var patient = MockData.CreateInstance<Patient>();
+            controller.Create(new PatientSendingViewModel {Patient = patient, Sending = MockData.CreateInstance<Sending>()});
+
+            var patientInDatabase = DbMock.Patients.Last();
+            patientInDatabase.Initials.Should().Be(patient.Initials);
+            patientInDatabase.ClinicalInformation.Should().Be(ClinicalInformation.Sepsis|ClinicalInformation.Pneumonia);
+        }
+
         private PatientSendingController CreateController()
         {
-            return new PatientSendingController(DbMock, patientController, sendingController);
+            var request = new Mock<HttpRequestBase>();
+            request.SetupGet(r => r.Form).Returns(requestForm);
+            var context = new Mock<HttpContextBase>();
+            context.SetupGet(x => x.Request).Returns(request.Object);
+            var controller = new PatientSendingController(DbMock, patientController, sendingController);
+            controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
+            return controller;
         }
     }
 }
