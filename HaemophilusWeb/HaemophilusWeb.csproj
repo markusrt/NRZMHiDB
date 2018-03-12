@@ -515,8 +515,6 @@
     </None>
     <None Include="Properties\PublishProfiles\haemophilus - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\haemophilus - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\haemophilus.pubxml" />
-    <None Include="Properties\PublishProfiles\Production Server.pubxml" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\DataTables\dataTables.autoFill.js" />
@@ -549,7 +547,6 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.german.js" />
-    <None Include="Properties\PublishProfiles\Test Server.pubxml" />
     <Content Include="ReportTemplates\BLNAR v8.docx" />
     <Content Include="ReportTemplates\BLNAS v8.docx" />
     <Content Include="ReportTemplates\BLPACR v8.docx" />
@@ -566,6 +563,8 @@
     <Content Include="ReportTemplates\Sonstige - Ampi-S Imi-R v1.docx" />
     <Content Include="ReportTemplates\Sonstige - Kein Haemophilus v1.docx" />
     <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v1 - Kopie.docx" />
+    <None Include="Properties\PublishProfiles\Prod Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Test Deploy.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />

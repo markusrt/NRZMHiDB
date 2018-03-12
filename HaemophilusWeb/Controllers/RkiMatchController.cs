@@ -25,8 +25,7 @@ namespace HaemophilusWeb.Controllers
             {
                 if (file.ContentLength > 0)
                 {
-                    string fileName = Path.GetFileName(file.FileName);
-                    string path = Path.GetTempFileName();
+                    var path = Path.GetTempFileName();
                     file.SaveAs(path);
                     var importer = new RkiMatchImporter(path, db);
                     importer.ImportMatches();
