@@ -38,21 +38,28 @@ namespace HaemophilusWeb.Tools
                 CsvSerializer.UseEncoding = Encoding.UTF8;
                 CsvConfig.ItemSeperatorString = ";";
                 var rkiMatches = CsvSerializer.DeserializeFromStream<List<RkiMatchImportRecord>>(fileStream);
-                foreach (var rkiMatch in rkiMatches)
+                foreach (var rkiMatch in rkiMatches.Where(r => r.klhi_nr.HasValue))
                 {
-                    if (!rkiMatch.klhi_nr.HasValue)
+                    var dbMatch = context.Sendings.SingleOrDefault(i => i.Isolate.StemNumber==rkiMatch.klhi_nr);
+                    if (dbMatch == null && rkiMatch.Jahr.HasValue && rkiMatch.LaufendeNummer.HasValue)
                     {
-                        continue;
+                        dbMatch = context.Sendings.SingleOrDefault(s =>
+                            s.Isolate.YearlySequentialIsolateNumber == rkiMatch.LaufendeNummer &&
+                            s.Isolate.Year == rkiMatch.Jahr);
                     }
-                    var dbMatch = context.Sendings.SingleOrDefault(i => i.SendingId.Equals(rkiMatch.klhi_nr.Value));
-                    if (dbMatch != null && dbMatch.SamplingDate >= MinImportDate)
+                    if (dbMatch != null && dbMatch.ReceivingDate >= MinImportDate && rkiMatch.InterneRef.HasValue)
                     {
-                        dbMatch.RkiMatchRecord = new RkiMatchRecord
+                        if (dbMatch.RkiMatchRecord == null)
                         {
-                            RkiReferenceId = rkiMatch.InterneRef,
-                            RkiStatus = EnumSerializer.DeserializeEnumStrict<RkiStatus>(rkiMatch.StatusName),
-                            RkiReferenceNumber = rkiMatch.Aktenzeichen
-                        };
+                            dbMatch.RkiMatchRecord = new RkiMatchRecord {RkiStatus = (RkiStatus) (-1)};
+                        }
+                        var status = EnumSerializer.DeserializeEnumStrict<RkiStatus>(rkiMatch.StatusName);
+                        if (dbMatch.RkiMatchRecord.RkiStatus <= status)
+                        {
+                            dbMatch.RkiMatchRecord.RkiReferenceId = rkiMatch.InterneRef.Value;
+                            dbMatch.RkiMatchRecord.RkiStatus = status;
+                            dbMatch.RkiMatchRecord.RkiReferenceNumber = rkiMatch.Aktenzeichen;
+                        }
                     }
                 }
             }
@@ -60,11 +67,12 @@ namespace HaemophilusWeb.Tools
 
         private class RkiMatchImportRecord
         {
-            public int InterneRef { get; set; }
+            public int? InterneRef { get; set; }
             public string Aktenzeichen { get; set; }
             public string StatusName { get; set; }
             public int? klhi_nr { get; set; }
-
-        }
+            public int? LaufendeNummer { get; set; }
+            public int? Jahr { get; set; }
+            }
     }
 }
