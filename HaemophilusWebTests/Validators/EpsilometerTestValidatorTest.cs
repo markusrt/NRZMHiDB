@@ -9,6 +9,13 @@ namespace HaemophilusWeb.Validators
     [TestFixture]
     public class EpsilometerTestValidatorTest : AbstractValidatorTests<EpsilometerTestValidator, EpsilometerTestViewModel>
     {
+        protected static IEnumerable<Tuple<EpsilometerTestViewModel, string[]>> InvalidModels;
+
+        static EpsilometerTestValidatorTest()
+        {
+            InvalidModels = CreateInvalidModels();
+        }
+
         protected override EpsilometerTestViewModel CreateValidModel()
         {
             return new EpsilometerTestViewModel
@@ -19,7 +26,7 @@ namespace HaemophilusWeb.Validators
             };
         }
 
-        protected override IEnumerable<Tuple<EpsilometerTestViewModel, string[]>> CreateInvalidModels()
+        protected static IEnumerable<Tuple<EpsilometerTestViewModel, string[]>> CreateInvalidModels()
         {
             yield return Tuple.Create(new EpsilometerTestViewModel
             {

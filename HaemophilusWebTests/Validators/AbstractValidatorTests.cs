@@ -33,12 +33,11 @@ namespace HaemophilusWeb.Validators
         ///     <typeparamref
         ///         name="TModel" />
         /// </returns>
-        protected abstract IEnumerable<Tuple<TModel, string[]>> CreateInvalidModels();
 
         protected readonly TValidator Validator = new TValidator();
 
 
-        [TestCaseSource("CreateInvalidModels")]
+        [TestCaseSource("InvalidModels")]
         public void Validate_WithAMaximalInvalidModel_ReturnsAllInvalidFields(
             Tuple<TModel, string[]> invalidDtoDescription)
         {

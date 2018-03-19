@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using OpenQA.Selenium.Firefox;
 
 namespace SystemTests.Common
@@ -17,9 +18,9 @@ namespace SystemTests.Common
             get { return ActionTargets.Suite; }
         }
 
-        public override void BeforeTest(TestDetails details)
+        public override void BeforeTest(ITest test)
         {
-            var haemophilusWebTest = details.Fixture as IHaemophilusWebTest;
+            var haemophilusWebTest = test.Fixture as IHaemophilusWebTest;
             if (haemophilusWebTest == null)
             {
                 return;
@@ -31,7 +32,7 @@ namespace SystemTests.Common
             Login_CorrectUserAndPassword_Success();
         }
 
-        public override void AfterTest(TestDetails details)
+        public override void AfterTest(ITest test)
         {
             driver.Quit();
         }

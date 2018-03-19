@@ -41,12 +41,11 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void AssignStemNumber_NoId_ReturnsError()
         {
             var controller = CreateMockSendingController();
 
-            controller.AssignStemNumber(null);
+            Assert.Throws<ArgumentException>(() => controller.AssignStemNumber(null));
         }
 
         [Test]
@@ -62,13 +61,12 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void AssignStemNumber_UnknownId_ReturnsError()
         {
             const int unknownId = 12345;
             var controller = CreateMockSendingController();
 
-            controller.AssignStemNumber(unknownId);
+            Assert.Throws<ArgumentException>(() => controller.AssignStemNumber(unknownId));
         }
 
         [Test]

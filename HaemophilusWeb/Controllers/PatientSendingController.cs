@@ -75,9 +75,7 @@ namespace HaemophilusWeb.Controllers
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Edit(PatientSendingViewModel patientSending)
         {
-            AssignClinicalInformationFromCheckboxValues(patientSending);
-
-            PerformValidations(patientSending);
+            CreateAndEditPreparations(patientSending);
 
             if (ModelState.IsValid)
             {
@@ -139,7 +137,7 @@ namespace HaemophilusWeb.Controllers
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Create(PatientSendingViewModel patientSending)
         {
-            PerformValidations(patientSending);
+            CreateAndEditPreparations(patientSending);
             ValidatePatientDoesNotAlreadyExist(patientSending);
 
             if (ModelState.IsValid && !patientSending.DuplicatePatientDetected)
@@ -176,8 +174,10 @@ namespace HaemophilusWeb.Controllers
             return patient;
         }
 
-        private void PerformValidations(PatientSendingViewModel patientSending)
+        private void CreateAndEditPreparations(PatientSendingViewModel patientSending)
         {
+            AssignClinicalInformationFromCheckboxValues(patientSending);
+
             ValidateModel(patientSending.Sending, new SendingValidator());
             ValidateModel(patientSending.Patient, new PatientValidator());
         }
@@ -365,8 +365,21 @@ namespace HaemophilusWeb.Controllers
             export.AddField(s => ExportToString(s.Isolate.Evaluation));
             export.AddField(s => s.Isolate.ReportDate);
             export.AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
+            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord=>rkiMatchRecord.RkiReferenceId.ToString()), "RKI InterneRef");
+            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord=>rkiMatchRecord.RkiReferenceNumber), "RKI Aktenzeichen");
+            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord=>rkiMatchRecord.RkiStatus, ExportToString(RkiStatus.None)), "RKI Status");
 
             return export;
+        }
+
+        private string ExportRkiMatchRecord(RkiMatchRecord rkiMatchRecord, Func<RkiMatchRecord, object> accessValue)
+        {
+            return ExportRkiMatchRecord(rkiMatchRecord, accessValue, string.Empty);
+        }
+
+        private string ExportRkiMatchRecord(RkiMatchRecord rkiMatchRecord, Func<RkiMatchRecord, object> accessValue, string nullValue)
+        {
+            return rkiMatchRecord != null ? ExportToString(accessValue(rkiMatchRecord)) : nullValue;
         }
 
         private string ExportClinicalInformation(ClinicalInformation clinicalInformation, Sending sending)

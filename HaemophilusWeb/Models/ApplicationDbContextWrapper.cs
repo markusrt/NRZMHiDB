@@ -82,9 +82,10 @@ namespace HaemophilusWeb.Models
                     SaveChanges();
                     transaction.Commit();
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     transaction.Rollback();
+                    throw e;
                 }
             }
         }

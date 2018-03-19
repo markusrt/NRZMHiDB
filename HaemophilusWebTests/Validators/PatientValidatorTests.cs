@@ -8,7 +8,19 @@ namespace HaemophilusWeb.Validators
     [TestFixture]
     public class PatientValidatorTests : AbstractValidatorTests<PatientValidator, Patient>
     {
+        protected static IEnumerable<Tuple<Patient, string[]>> InvalidModels;
+
+        static PatientValidatorTests()
+        {
+            InvalidModels = CreateInvalidModels();
+        }
+
         protected override Patient CreateValidModel()
+        {
+            return CreatePatient();
+        }
+
+        private static Patient CreatePatient()
         {
             return new Patient
             {
@@ -18,7 +30,7 @@ namespace HaemophilusWeb.Validators
             };
         }
 
-        protected override IEnumerable<Tuple<Patient, string[]>> CreateInvalidModels()
+        protected static IEnumerable<Tuple<Patient, string[]>> CreateInvalidModels()
         {
             var invalidPatient = new Patient()
             {
@@ -31,9 +43,9 @@ namespace HaemophilusWeb.Validators
             yield return Tuple.Create(CreatePatientWithEmptyInitials(), new[] {"Initials"});
         }
 
-        private Patient CreatePatientWithEmptyInitials()
+        private static Patient CreatePatientWithEmptyInitials()
         {
-            var patient = CreateValidModel();
+            var patient = CreatePatient();
             patient.Initials = string.Empty;
             return patient;
         }

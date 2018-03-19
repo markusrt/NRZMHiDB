@@ -64,6 +64,7 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Gelöscht")]
         public bool Deleted { get; set; }
 
+        public virtual RkiMatchRecord RkiMatchRecord { get; set; }
         public virtual Isolate Isolate { get; set; }
         public virtual Patient Patient { get; set; }
     }

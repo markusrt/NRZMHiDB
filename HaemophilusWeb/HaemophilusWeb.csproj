@@ -23,6 +23,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -128,6 +129,9 @@
     <Reference Include="NLog.Extended">
       <HintPath>..\packages\NLog.Extended.2.1.0.1\lib\net45-full\NLog.Extended.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Text, Version=4.5.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.4.5.14\lib\net45\ServiceStack.Text.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -218,6 +222,7 @@
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PatientSendingController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\RkiMatchController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SenderController.cs" />
     <Compile Include="Controllers\SendingController.cs" />
@@ -367,6 +372,8 @@
     <Compile Include="Models\Meningo\MeningoClinicalInformation.cs" />
     <Compile Include="Models\Meningo\MeningoPatient.cs" />
     <Compile Include="Models\PatientBase.cs" />
+    <Compile Include="Models\RkiMatchRecord.cs" />
+    <Compile Include="Models\RkiStatus.cs" />
     <Compile Include="Models\SerotypePcr.cs" />
     <Compile Include="Models\ApplicationDbContextWrapper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
@@ -392,6 +399,7 @@
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Tools\RkiMatchImporter.cs" />
     <Compile Include="Tools\CountyImporter.cs" />
     <Compile Include="Tools\CreateExcelFile.cs" />
     <Compile Include="Tools\ExportDefinition.cs" />
@@ -519,8 +527,6 @@
     </None>
     <None Include="Properties\PublishProfiles\haemophilus - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\haemophilus - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\haemophilus.pubxml" />
-    <None Include="Properties\PublishProfiles\Production Server.pubxml" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\DataTables\dataTables.autoFill.js" />
@@ -553,7 +559,6 @@
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.german.js" />
-    <None Include="Properties\PublishProfiles\Test Server.pubxml" />
     <Content Include="ReportTemplates\BLNAR v8.docx" />
     <Content Include="ReportTemplates\BLNAS v8.docx" />
     <Content Include="ReportTemplates\BLPACR v8.docx" />
@@ -570,6 +575,8 @@
     <Content Include="ReportTemplates\Sonstige - Ampi-S Imi-R v1.docx" />
     <Content Include="ReportTemplates\Sonstige - Kein Haemophilus v1.docx" />
     <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v1 - Kopie.docx" />
+    <None Include="Properties\PublishProfiles\Prod Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Test Deploy.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
@@ -1044,6 +1051,7 @@
     <Content Include="Views\MeningoPatient\Edit.cshtml" />
     <Content Include="Views\MeningoPatient\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MeningoPatient.cshtml" />
+    <Content Include="Views\RkiMatch\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1152,6 +1160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803182109307_MeningoPatient_1.resx">
       <DependentUpon>201803182109307_MeningoPatient_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802182157080_RkiMatch.resx">
+      <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -8,7 +8,19 @@ namespace HaemophilusWeb.Validators
     [TestFixture]
     public class SendingValidatorTests : AbstractValidatorTests<SendingValidator, Sending>
     {
+        protected static IEnumerable<Tuple<Sending, string[]>> InvalidModels;
+
+        static SendingValidatorTests()
+        {
+            InvalidModels = CreateInvalidModels();
+        }
+
         protected override Sending CreateValidModel()
+        {
+            return CreateSending();
+        }
+
+        private static Sending CreateSending()
         {
             return new Sending
             {
@@ -21,7 +33,7 @@ namespace HaemophilusWeb.Validators
             };
         }
 
-        protected override IEnumerable<Tuple<Sending, string[]>> CreateInvalidModels()
+        protected static IEnumerable<Tuple<Sending, string[]>> CreateInvalidModels()
         {
             var invalidSending = new Sending
             {
@@ -34,17 +46,17 @@ namespace HaemophilusWeb.Validators
             yield return Tuple.Create(CreateInvalidSendingWithOtherSamplingLocationEmpty(), new[] { "OtherSamplingLocation" });
         }
 
-        private Sending CreateInvalidSendingWithOtherSamplingLocationEmpty()
+        private static Sending CreateInvalidSendingWithOtherSamplingLocationEmpty()
         {
-            var sending = CreateValidModel();
+            var sending = CreateSending();
             sending.SamplingLocation = SamplingLocation.Other;
             sending.OtherSamplingLocation = string.Empty;
             return sending;
         }
 
-        private Sending CreateInvalidSendingWithReceivingDateBeforeReportDate()
+        private static Sending CreateInvalidSendingWithReceivingDateBeforeReportDate()
         {
-            var sending = CreateValidModel();
+            var sending = CreateSending();
             sending.ReceivingDate = new DateTime(2010, 1, 1);
             return sending;
         }
