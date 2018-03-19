@@ -13,7 +13,7 @@ namespace HaemophilusWeb.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201707032012086_MeningoPatient_1"; }
+            get { return "201803182109307_MeningoPatient_1"; }
         }
         
         string IMigrationMetadata.Source
