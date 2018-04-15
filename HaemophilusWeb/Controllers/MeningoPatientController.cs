@@ -112,6 +112,9 @@ namespace HaemophilusWeb.Controllers
             viewBag.PossibleTherapyDetails = db.MeningoPatients.Where(
                 s => !string.IsNullOrEmpty(s.TherapyDetails)).
                 Select(s => s.TherapyDetails).AsDataList();
+            viewBag.PossibleOtherUnderlyingDisease = db.MeningoPatients.Where(
+                    s => !string.IsNullOrEmpty(s.OtherUnderlyingDisease)).
+                Select(s => s.OtherUnderlyingDisease).AsDataList();
         }
 
         // POST: /Patient/Edit/5

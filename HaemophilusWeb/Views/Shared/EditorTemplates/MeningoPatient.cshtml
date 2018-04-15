@@ -60,8 +60,6 @@
         </div>
     </div>
 </div>
-
-
 <div id="OtherClinicalInformationForm" class="form-group">
     @Html.LabelFor(m => m.OtherClinicalInformation, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
@@ -77,13 +75,27 @@
     </div>
 </div>
 
-@Html.TextEditorFor(m => m.UnderlyingDisease)
+@Html.EnumRadioEditorFor(m => m.UnderlyingDisease)
+<div id="OtherUnderlyingDiseaseForm" class="form-group">
+    @Html.LabelFor(m => m.OtherUnderlyingDisease, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        @Html.TextBoxFor(m => m.OtherUnderlyingDisease, new { @class = "form-control", @list = "otherUnderlyingDiseaseAutocomplete", @autocomplete = "off" })
+        <datalist id="otherUnderlyingDiseaseAutocomplete">
+            @foreach (var item in ViewBag.PossibleOtherUnderlyingDisease)
+            {
+                <option value="@item.ToString()" />
+            }
+        </datalist>
+
+        @Html.ValidationMessageFor(model => model.OtherUnderlyingDisease)
+    </div>
+</div>
 
 @Html.TextEditorFor(m => m.Residua)
 
 
 <div class="form-group">
-    @Html.LabelFor(m => m.ClinicalInformation, new { @class = "col-sm-2 control-label" })
+    @Html.LabelFor(m => m.Epidemiology, new { @class = "col-sm-2 control-label" })
     <div class="col-lg-9">
         <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.NotAvailable) ? " active" : string.Empty)">
@@ -124,6 +136,7 @@
     $(document).ready(function () {
         ShowOtherClinicalInformationIfOtherIsSelected();
         ShowTherapyDetailsIfTherapyIsYes();
+        ShowOtherUnderlyingDiseaseIfOtherIsSelected();
     });
 
     function ShowOtherClinicalInformationIfOtherIsSelected() {
@@ -139,6 +152,14 @@
             "#TherapyDetailsForm", "input:radio[name$='Therapy']",
             "input:radio[name$='Therapy']:checked",
             "Yes", "[id$='TherapyDetails']"
+        );
+    }
+
+    function ShowOtherUnderlyingDiseaseIfOtherIsSelected() {
+        ShowDivIfCheckBoxHasSpecificSelectedValueOrClearInputOtherwise(
+            "#OtherUnderlyingDiseaseForm", "input:radio[name$='UnderlyingDisease']",
+            "input:radio[name$='UnderlyingDisease']:checked",
+            "Other", "[id$='OtherUnderlyingDisease']"
         );
     }
 

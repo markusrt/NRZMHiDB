@@ -11,7 +11,10 @@ namespace HaemophilusWeb.Models.Meningo
         public string OtherClinicalInformation { get; set; }
 
         [Display(Name = "Grunderkrankung")]
-        public string UnderlyingDisease { get; set; }
+        public UnderlyingDisease UnderlyingDisease { get; set; }
+
+        [Display(Name = "Andere Grunderkrankung")]
+        public string OtherUnderlyingDisease { get; set; }
 
         [Display(Name = "Residuen")]
         public string Residua { get; set; }
