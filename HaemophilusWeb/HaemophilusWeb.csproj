@@ -353,6 +353,10 @@
     <Compile Include="Migrations\201803182109307_MeningoPatient_1.Designer.cs">
       <DependentUpon>201803182109307_MeningoPatient_1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201803192053476_MeningoSending_1.cs" />
+    <Compile Include="Migrations\201803192053476_MeningoSending_1.Designer.cs">
+      <DependentUpon>201803192053476_MeningoSending_1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -1166,6 +1170,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201803182109307_MeningoPatient_1.resx">
       <DependentUpon>201803182109307_MeningoPatient_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803192053476_MeningoSending_1.resx">
+      <DependentUpon>201803192053476_MeningoSending_1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
