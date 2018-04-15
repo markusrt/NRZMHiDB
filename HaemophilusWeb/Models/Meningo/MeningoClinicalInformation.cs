@@ -13,8 +13,6 @@ namespace HaemophilusWeb.Models.Meningo
         [Description("WFS")] WaterhouseFriderichsenSyndrome = 8,
         [Description("Letal")] Lethal = 16,
         [Description("Keine Symptome")] NoSymptoms = 32,
-        [Description("Unbekannt")] Unknown = 64,
-        [Description("Geheilt")] Cured = 128,
         [Description("Andere")] Other = 32768
     }
 }

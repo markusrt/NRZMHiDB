@@ -54,12 +54,6 @@
             <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NoSymptoms) ? " active" : string.Empty)">
                 <input type="checkbox" name="ClinicalInformation" value="NoSymptoms" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NoSymptoms) ? " checked" : string.Empty) /> Keine Symptome
             </label>
-            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Unknown) ? " active" : string.Empty)">
-                <input type="checkbox" name="ClinicalInformation" value="Unknown" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Unknown) ? " checked" : string.Empty) /> Unbekannt
-            </label>
-            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Cured) ? " active" : string.Empty)">
-                <input type="checkbox" name="ClinicalInformation" value="Cured" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Cured) ? " checked" : string.Empty) /> Geheilt
-            </label>
             <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Other) ? " active" : string.Empty)">
                 <input type="checkbox" name="ClinicalInformation" value="Other" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Other) ? " checked" : string.Empty) /> Andere
             </label>
