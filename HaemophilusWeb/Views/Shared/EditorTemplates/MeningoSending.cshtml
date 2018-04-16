@@ -17,8 +17,7 @@
         @Html.ValidationMessageFor(model => model.SenderId)
     </div>
 </div>
-
-@if (false)
+@if (@Request.Path.Contains("MeningoSending/"))
 {
     <div class="form-group">
         @Html.LabelFor(model => model.MeningoPatientId, new {@class = "col-sm-2 control-label"})
@@ -49,17 +48,14 @@
 <div id="OtherSamplingLocationForm" class="form-group">
     @Html.LabelFor(m => m.OtherSamplingLocation, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
-        <div class="input-group">
-            @Html.TextBoxFor(m => m.OtherSamplingLocation, new { @class = "form-control", @list = "otherSamplingLocationsAutocomplete", @autocomplete = "off" })
-            <datalist id="otherSamplingLocationsAutocomplete">
-                @foreach (var item in ViewBag.PossibleOtherSamplingLocations)
-                {
-                    <option value="@item.ToString()" />
-                }
-            </datalist>
+        @Html.TextBoxFor(m => m.OtherSamplingLocation, new { @class = "form-control", @list = "otherSamplingLocationsAutocomplete", @autocomplete = "off" })
+        <datalist id="otherSamplingLocationsAutocomplete">
+            @foreach (var item in ViewBag.PossibleOtherSamplingLocations)
+            {
+                <option value="@item.ToString()" />
+            }
+        </datalist>
 
-            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
-        </div>
         @Html.ValidationMessageFor(model => model.OtherSamplingLocation)
     </div>
 </div>
