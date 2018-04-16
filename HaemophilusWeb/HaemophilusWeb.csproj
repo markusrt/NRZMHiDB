@@ -361,6 +361,10 @@
     <Compile Include="Migrations\201804151759417_MeningoPatient_2_UnderlyingDisease.Designer.cs">
       <DependentUpon>201804151759417_MeningoPatient_2_UnderlyingDisease.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804161927493_MeningoPatient_3_RiskFactors.cs" />
+    <Compile Include="Migrations\201804161927493_MeningoPatient_3_RiskFactors.Designer.cs">
+      <DependentUpon>201804161927493_MeningoPatient_3_RiskFactors.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -380,6 +384,7 @@
     <Compile Include="Models\Meningo\MeningoPatient.cs" />
     <Compile Include="Models\Meningo\MeningoSending.cs" />
     <Compile Include="Models\Meningo\MeningoSamplingLocation.cs" />
+    <Compile Include="Models\Meningo\RiskFactors.cs" />
     <Compile Include="Models\Meningo\UnderlyingDisease.cs" />
     <Compile Include="Models\PatientBase.cs" />
     <Compile Include="Models\RkiMatchRecord.cs" />
@@ -1181,6 +1186,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804151759417_MeningoPatient_2_UnderlyingDisease.resx">
       <DependentUpon>201804151759417_MeningoPatient_2_UnderlyingDisease.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804161927493_MeningoPatient_3_RiskFactors.resx">
+      <DependentUpon>201804161927493_MeningoPatient_3_RiskFactors.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

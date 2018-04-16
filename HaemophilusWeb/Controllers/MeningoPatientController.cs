@@ -75,6 +75,9 @@ namespace HaemophilusWeb.Controllers
             patient.Epidemiology =
                 EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<Epidemiology>(
                     Request.Form["Epidemiology"]);
+            patient.RiskFactors =
+                EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<RiskFactors>(
+                    Request.Form["RiskFactors"]);
         }
 
         internal void CreatePatient(MeningoPatient patient)
@@ -115,6 +118,9 @@ namespace HaemophilusWeb.Controllers
             viewBag.PossibleOtherUnderlyingDisease = db.MeningoPatients.Where(
                     s => !string.IsNullOrEmpty(s.OtherUnderlyingDisease)).
                 Select(s => s.OtherUnderlyingDisease).AsDataList();
+            viewBag.PossibleOtherRiskFactors = db.MeningoPatients.Where(
+                    s => !string.IsNullOrEmpty(s.OtherRiskFactor)).
+                Select(s => s.OtherRiskFactor).AsDataList();
         }
 
         // POST: /Patient/Edit/5

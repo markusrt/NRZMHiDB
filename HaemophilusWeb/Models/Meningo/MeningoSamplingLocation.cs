@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel;
 
-namespace HaemophilusWeb.Models
+namespace HaemophilusWeb.Models.Meningo
 {
     public enum MeningoSamplingLocation
     {
-        None = 0,
         [Description("Bindehautabstrich")] ConjunctivalSwab = 1,
         [Description("Blut")] Blood = 2,
         [Description("Bronchiallavage")] BronchoalveolarLavage = 3,

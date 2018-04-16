@@ -34,7 +34,7 @@
 
 <div class="form-group">
     @Html.LabelFor(m => m.ClinicalInformation, new { @class = "col-sm-2 control-label" })
-    <div class="col-lg-9">
+    <div class="col-sm-10">
         <div class="btn-group" data-toggle="buttons">
             <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NotAvailable) ? " active" : string.Empty)">
                 <input type="checkbox" name="ClinicalInformation" value="NotAvailable" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NotAvailable) ? " checked" : string.Empty) /> k.A.
@@ -75,7 +75,7 @@
     </div>
 </div>
 
-@Html.EnumRadioEditorFor(m => m.UnderlyingDisease)
+@Html.EnumRadioEditorFor(m => m.UnderlyingDisease, "col-sm-10")
 <div id="OtherUnderlyingDiseaseForm" class="form-group">
     @Html.LabelFor(m => m.OtherUnderlyingDisease, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
@@ -91,8 +91,48 @@
     </div>
 </div>
 
-@Html.TextEditorFor(m => m.Residua)
+<div class="form-group">
+    @Html.LabelFor(m => m.RiskFactors, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-10">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.NotAvailable) ? " active" : string.Empty)">
+                <input type="checkbox" name="RiskFactors" value="NotAvailable" @(Model.RiskFactors.HasFlag(RiskFactors.NotAvailable) ? " checked" : string.Empty) /> k.A.
+            </label>
+            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.Asplenia) ? " active" : string.Empty)">
+                <input type="checkbox" name="RiskFactors" value="Asplenia" @(Model.RiskFactors.HasFlag(RiskFactors.Asplenia) ? " checked" : string.Empty) /> Asplenie
+            </label>
+            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.ComplementDefect) ? " active" : string.Empty)">
+                <input type="checkbox" name="RiskFactors" value="ComplementDefect" @(Model.RiskFactors.HasFlag(RiskFactors.ComplementDefect) ? " checked" : string.Empty) /> Komplementdefekt
+            </label>
+            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.EculizumabTherapy) ? " active" : string.Empty)">
+                <input type="checkbox" name="RiskFactors" value="EculizumabTherapy" @(Model.RiskFactors.HasFlag(RiskFactors.EculizumabTherapy) ? " checked" : string.Empty) /> Eculizumab-Therapie
+            </label>
+            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.MalignantTumor) ? " active" : string.Empty)">
+                <input type="checkbox" name="RiskFactors" value="MalignantTumor" @(Model.RiskFactors.HasFlag(RiskFactors.MalignantTumor) ? " checked" : string.Empty) /> Malignom
+            </label>
+            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.HumanImmunodeficiencyVirus) ? " active" : string.Empty)">
+                <input type="checkbox" name="RiskFactors" value="HumanImmunodeficiencyVirus" @(Model.RiskFactors.HasFlag(RiskFactors.HumanImmunodeficiencyVirus) ? " checked" : string.Empty) /> HIV
+            </label>
+            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.Other) ? " active" : string.Empty)">
+                <input type="checkbox" name="RiskFactors" value="Other" @(Model.RiskFactors.HasFlag(RiskFactors.Other) ? " checked" : string.Empty) /> Anderer
+            </label>
+        </div>
+    </div>
+</div>
+<div id="OtherRiskFactorForm" class="form-group">
+    @Html.LabelFor(m => m.OtherRiskFactor, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        @Html.TextBoxFor(m => m.OtherRiskFactor, new { @class = "form-control", @list = "otherRiskFactorAutocomplete", @autocomplete = "off" })
+        <datalist id="otherRiskFactorAutocomplete">
+            @foreach (var item in ViewBag.PossibleOtherRiskFactors)
+            {
+                <option value="@item.ToString()" />
+            }
+        </datalist>
 
+        @Html.ValidationMessageFor(model => model.OtherRiskFactor)
+    </div>
+</div>
 
 <div class="form-group">
     @Html.LabelFor(m => m.Epidemiology, new { @class = "col-sm-2 control-label" })
@@ -135,8 +175,9 @@
 <script>
     $(document).ready(function () {
         ShowOtherClinicalInformationIfOtherIsSelected();
-        ShowTherapyDetailsIfTherapyIsYes();
         ShowOtherUnderlyingDiseaseIfOtherIsSelected();
+        ShowOtherRiskFactorIfOtherIsSelected();
+        ShowTherapyDetailsIfTherapyIsYes();
     });
 
     function ShowOtherClinicalInformationIfOtherIsSelected() {
@@ -160,6 +201,14 @@
             "#OtherUnderlyingDiseaseForm", "input:radio[name$='UnderlyingDisease']",
             "input:radio[name$='UnderlyingDisease']:checked",
             "Other", "[id$='OtherUnderlyingDisease']"
+        );
+    }
+
+    function ShowOtherRiskFactorIfOtherIsSelected() {
+        ShowDivIfCheckBoxHasSpecificSelectedValueOrClearInputOtherwise(
+            "#OtherRiskFactorForm", "input:checkbox[name$='RiskFactors']",
+            "input:checkbox[name$='RiskFactors']:checked",
+            "Other", "[id$='OtherRiskFactor']"
         );
     }
 
