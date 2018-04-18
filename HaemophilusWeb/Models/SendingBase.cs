@@ -29,5 +29,8 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Invasiv")]
         public YesNo? Invasive { get; set; }
+
+        [Display(Name = "Ergebnis Einsender")]
+        public string SenderConclusion { get; set; }
     }
 }

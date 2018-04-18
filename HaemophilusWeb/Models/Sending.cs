@@ -34,9 +34,6 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Material")]
         public Material Material { get; set; }
 
-        [Display(Name = "Ergebnis Einsender")]
-        public string SenderConclusion { get; set; }
-
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
 
