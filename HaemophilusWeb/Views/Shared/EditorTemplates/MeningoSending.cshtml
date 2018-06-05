@@ -1,4 +1,5 @@
 ﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Models.Meningo
 @using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.Models.Meningo.MeningoSending
 
@@ -23,7 +24,7 @@
         @Html.LabelFor(model => model.MeningoPatientId, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-5">
             <div class="input-group">
-                @Html.DropDownListFor(model => model.MeningoPatientId, ((IEnumerable<Patient>) ViewBag.PossiblePatients).Select(option => new SelectListItem
+                @Html.DropDownListFor(model => model.MeningoPatientId, ((IEnumerable<MeningoPatient>) ViewBag.PossiblePatients).Select(option => new SelectListItem
                 {
                     Text = (option == null ? "None" : option.Initials),
                     Value = option.PatientId.ToString(),

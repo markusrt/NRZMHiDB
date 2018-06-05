@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using HaemophilusWeb.Models.Meningo;
 
 namespace HaemophilusWeb.Models
 {
-    public class SendingBase
+    public abstract class SendingBase<TPatient>
     {
         [Display(Name = "Einsendernummer")]
         public int SenderId { get; set; }
@@ -32,5 +33,19 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Ergebnis Einsender")]
         public string SenderConclusion { get; set; }
+
+        [Display(Name = "Anderer Entnahmeort")]
+        public string OtherSamplingLocation { get; set; }
+
+        [NotMapped]
+        public string IsolateLaboratoryNumber => GetIsolate()?.LaboratoryNumber;
+
+        public virtual TPatient Patient { get; set; }
+
+        public abstract void SetPatientId(int patientId);
+
+        public abstract int GetSendingId();
+        public abstract Isolate GetIsolate();
+        public abstract void SetIsolate(Isolate isolate);
     }
 }

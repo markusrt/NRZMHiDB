@@ -4,11 +4,13 @@ using HaemophilusWeb.Models;
 
 namespace HaemophilusWeb.ViewModels
 {
-    public class PatientSendingViewModel
+    public class PatientSendingViewModel<TPatient, TSending>
+        where TPatient : PatientBase 
+        where TSending : SendingBase<TPatient>
     {
-        public Patient Patient { get; set; }
+        public TPatient Patient { get; set; }
 
-        public Sending Sending { get; set; }
+        public TSending Sending { get; set; }
 
         public bool DuplicatePatientDetected { get; set; }
 

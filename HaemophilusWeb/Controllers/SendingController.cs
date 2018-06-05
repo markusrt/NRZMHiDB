@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -8,16 +9,41 @@ using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
-    [Authorize(Roles = DefaultRoles.User)]
-    public class SendingController : Controller
+    public class SendingController : SendingControllerBase<Sending, Patient>
     {
-        private readonly IApplicationDbContext db;
-
         public SendingController() : this(new ApplicationDbContextWrapper(new ApplicationDbContext()))
         {
         }
 
-        public SendingController(IApplicationDbContext applicationDbContext)
+        public SendingController(IApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        {
+        }
+
+        protected override IDbSet<Isolate> IsolateDbSet()
+        {
+            return db.Isolates;
+        }
+
+        protected override IDbSet<Sending> SendingDbSet()
+        {
+            return db.Sendings;
+        }
+
+        protected override IDbSet<Patient> PatientDbSet()
+        {
+            return db.Patients;
+        }
+    }
+
+
+    [Authorize(Roles = DefaultRoles.User)]
+    public abstract class SendingControllerBase<TSending, TPatient> : Controller 
+        where TPatient : PatientBase, new()
+        where TSending : SendingBase<TPatient>, new()
+    {
+        protected readonly IApplicationDbContext db;
+
+        protected SendingControllerBase(IApplicationDbContext applicationDbContext)
         {
             db = applicationDbContext;
         }
@@ -34,7 +60,7 @@ namespace HaemophilusWeb.Controllers
         // GET: /Sending/
         public ActionResult Index()
         {
-            return View(db.Sendings.Where(s => !s.Deleted).ToList());
+            return View(SendingDbSet().Where(s => !s.Deleted).ToList());
         }
 
         // GET: /Sending/Details/5
@@ -44,7 +70,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var sending = db.Sendings.Find(id);
+            var sending = FindSendingById(id);
             if (sending == null)
             {
                 return HttpNotFound();
@@ -55,7 +81,7 @@ namespace HaemophilusWeb.Controllers
         // GET: /Sending/Create
         public ActionResult Create()
         {
-            return CreateEditView(new Sending());
+            return CreateEditView(new TSending());
         }
 
         // POST: /Sending/Create
@@ -63,7 +89,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Sending sending)
+        public ActionResult Create(TSending sending)
         {
             if (ModelState.IsValid)
             {
@@ -74,21 +100,6 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(sending);
         }
 
-        internal void CreateSendingAndAssignStemnumber(Sending sending)
-        {
-            db.Sendings.Add(sending);
-            db.SaveChanges();
-            AssignStemNumber(sending.SendingId);
-        }
-
-        internal void AddReferenceDataToViewBag(dynamic viewBag, Sending sending)
-        {
-            viewBag.PossibleSenders = db.Senders.Where(s => !s.Deleted || s.SenderId == sending.SenderId);
-            viewBag.PossiblePatients = db.Patients;
-            viewBag.PossibleOtherSamplingLocations = db.Sendings.Where(
-                s => !string.IsNullOrEmpty(s.OtherSamplingLocation)).Select(s => s.OtherSamplingLocation).AsDataList();
-        }
-
         // GET: /Sending/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -96,7 +107,7 @@ namespace HaemophilusWeb.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var sending = db.Sendings.Find(id);
+            var sending = FindSendingById(id);
             if (sending == null)
             {
                 return HttpNotFound();
@@ -104,60 +115,12 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(sending);
         }
 
-        public Isolate AssignStemNumber(int? id)
-        {
-            if (id == null)
-            {
-                throw new ArgumentException("Sending id is required", "id");
-            }
-            var sending = db.Sendings.Find(id);
-            if (sending == null)
-            {
-                throw new ArgumentException("Sending id does not exist", "id");
-            }
-            if (sending.Isolate == null)
-            {
-                db.WrapInTransaction(() => CreateIsolateWithNewStemAndLaboratoryNumber(sending));
-            }
-            return sending.Isolate;
-        }
-
-        private void CreateIsolateWithNewStemAndLaboratoryNumber(Sending sending)
-        {
-            var nextSequentialIsolateNumber = GetNextSequentialIsolateNumber();
-            var nextSequentialStemNumber = GetNextSequentialStemNumber();
-
-            sending.Isolate = new Isolate
-            {
-                Year = CurrentYear,
-                YearlySequentialIsolateNumber = nextSequentialIsolateNumber,
-                StemNumber = nextSequentialStemNumber
-            };
-        }
-
-        private int GetNextSequentialStemNumber()
-        {
-            var lastSequentialStemNumber =
-                db.Isolates.DefaultIfEmpty()
-                    .Max(i => i == null || !i.StemNumber.HasValue ? 0 : i.StemNumber.Value);
-            return lastSequentialStemNumber + 1;
-        }
-
-        private int GetNextSequentialIsolateNumber()
-        {
-            var lastSequentialIsolateNumber =
-                db.Isolates.Where(i => i.Year == CurrentYear)
-                    .DefaultIfEmpty()
-                    .Max(i => i == null ? 0 : i.YearlySequentialIsolateNumber);
-            return lastSequentialIsolateNumber + 1;
-        }
-
         // POST: /Sending/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(Sending sending)
+        public ActionResult Edit(TSending sending)
         {
             if (ModelState.IsValid)
             {
@@ -168,13 +131,86 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(sending);
         }
 
-        private ActionResult CreateEditView(Sending sending)
+        public Isolate AssignStemNumber(int? id)
+        {
+            if (id == null)
+            {
+                throw new ArgumentException("Sending id is required", "id");
+            }
+            var sending = FindSendingById(id);
+            if (sending == null)
+            {
+                throw new ArgumentException("Sending id does not exist", "id");
+            }
+            if (sending.GetIsolate() == null)
+            {
+                db.WrapInTransaction(() => CreateIsolateWithNewStemAndLaboratoryNumber(sending));
+            }
+            return sending.GetIsolate();
+        }
+
+        public void CreateSendingAndAssignStemnumber(TSending sending)
+        {
+            SendingDbSet().Add(sending);
+            db.SaveChanges();
+            AssignStemNumber(sending.GetSendingId());
+        }
+
+        internal void AddReferenceDataToViewBag(dynamic viewBag, TSending sending)
+        {
+            viewBag.PossibleSenders = db.Senders.Where(s => !s.Deleted || s.SenderId == sending.SenderId);
+            viewBag.PossiblePatients = PatientDbSet();
+            viewBag.PossibleOtherSamplingLocations = SendingDbSet().Where(
+                s => !string.IsNullOrEmpty(s.OtherSamplingLocation)).Select(s => s.OtherSamplingLocation).AsDataList();
+        }
+
+        protected abstract IDbSet<Isolate> IsolateDbSet();
+
+        protected abstract IDbSet<TSending> SendingDbSet();
+
+        protected abstract IDbSet<TPatient> PatientDbSet();
+
+        private void CreateIsolateWithNewStemAndLaboratoryNumber(TSending sending)
+        {
+            var nextSequentialIsolateNumber = GetNextSequentialIsolateNumber();
+            var nextSequentialStemNumber = GetNextSequentialStemNumber();
+
+            sending.SetIsolate(new Isolate
+            {
+                Year = CurrentYear,
+                YearlySequentialIsolateNumber = nextSequentialIsolateNumber,
+                StemNumber = nextSequentialStemNumber
+            });
+        }
+
+        private int GetNextSequentialStemNumber()
+        {
+            var lastSequentialStemNumber =
+                IsolateDbSet().DefaultIfEmpty()
+                    .Max(i => i == null || !i.StemNumber.HasValue ? 0 : i.StemNumber.Value);
+            return lastSequentialStemNumber + 1;
+        }
+
+        private ActionResult CreateEditView(TSending sending)
         {
             AddReferenceDataToViewBag(ViewBag, sending);
-            sending.LaboratoryNumber = sending.Isolate == null
-                ? ReportFormatter.ToLaboratoryNumber(GetNextSequentialIsolateNumber(), CurrentYear)
-                : sending.Isolate.LaboratoryNumber;
+            sending.LaboratoryNumber = sending.IsolateLaboratoryNumber
+                                       ?? ReportFormatter.ToLaboratoryNumber(GetNextSequentialIsolateNumber(), CurrentYear);
             return View(sending);
+        }
+
+        private TSending FindSendingById(int? id)
+        {
+            return SendingDbSet().Find(id);
+        }
+
+        private int GetNextSequentialIsolateNumber()
+        {
+            var lastSequentialIsolateNumber =
+                db.Isolates.Where(i => i.Year == CurrentYear)
+                    .DefaultIfEmpty()
+                    .Max(i => i == null ? 0 : i.YearlySequentialIsolateNumber);
+            return lastSequentialIsolateNumber + 1;
         }
 
         protected override void Dispose(bool disposing)

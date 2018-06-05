@@ -42,7 +42,7 @@ namespace HaemophilusWeb.Controllers
         {
             var controller = CreateController();
 
-            controller.Create(new PatientSendingViewModel {Patient = new Patient(), Sending = new Sending()});
+            controller.Create(new PatientSendingViewModel<Patient,Sending> {Patient = new Patient(), Sending = new Sending()});
 
             controller.ModelState.Should().NotBeEmpty();
         }
@@ -54,7 +54,7 @@ namespace HaemophilusWeb.Controllers
             requestForm.Set("ClinicalInformation", "Pneumonia,Sepsis");
 
             var patient = MockData.CreateInstance<Patient>();
-            controller.Create(new PatientSendingViewModel {Patient = patient, Sending = MockData.CreateInstance<Sending>()});
+            controller.Create(new PatientSendingViewModel<Patient, Sending> { Patient = patient, Sending = MockData.CreateInstance<Sending>()});
 
             var patientInDatabase = DbMock.Patients.Last();
             patientInDatabase.Initials.Should().Be(patient.Initials);

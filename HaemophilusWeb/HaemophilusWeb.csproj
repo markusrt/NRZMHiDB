@@ -221,7 +221,9 @@
     <Compile Include="Controllers\MeningoPatientController.cs" />
     <Compile Include="Controllers\MeningoSendingController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Controllers\PatientControllerBase.cs" />
     <Compile Include="Controllers\PatientSendingController.cs" />
+    <Compile Include="Controllers\QueryRecord.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\RkiMatchController.cs" />
     <Compile Include="Controllers\RoleController.cs" />

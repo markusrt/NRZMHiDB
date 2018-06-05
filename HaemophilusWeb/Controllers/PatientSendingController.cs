@@ -16,12 +16,9 @@ using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
-    public class PatientSendingController : ControllerBase
+    public class PatientSendingController : PatientSendingControllerBase<PatientSendingViewModel<Patient, Sending>,
+        Patient, Sending>
     {
-        private readonly IApplicationDbContext db;
-        private readonly PatientController patientController;
-        private readonly SendingController sendingController;
-
         public PatientSendingController()
             : this(
                 new ApplicationDbContextWrapper(new ApplicationDbContext()), new PatientController(),
@@ -30,151 +27,18 @@ namespace HaemophilusWeb.Controllers
         }
 
         public PatientSendingController(IApplicationDbContext applicationDbContext, PatientController patientController,
-            SendingController sendingController)
+            SendingController sendingController) : base(applicationDbContext, patientController, sendingController)
         {
-            db = applicationDbContext;
-            this.patientController = patientController;
-            this.sendingController = sendingController;
-        }
-
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Create()
-        {
-            var patientResult = patientController.Create() as ViewResult;
-            var sendingResult = sendingController.Create() as ViewResult;
-
-            return CreateEditView(new PatientSendingViewModel
-            {
-                Patient = (Patient) patientResult.Model,
-                Sending = (Sending) sendingResult.Model
-            });
-        }
-
-        private ViewResult CreateEditView(PatientSendingViewModel patientSending)
-        {
-            sendingController.AddReferenceDataToViewBag(ViewBag, patientSending.Sending);
-            patientController.AddReferenceDataToViewBag(ViewBag);
-            return View(patientSending);
-        }
-
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Edit(int? id)
-        {
-            var sending = LoadSendingFromSendingController(id);
-            return CreateEditView(CreatePatientSending(sending));
-        }
-
-        private Sending LoadSendingFromSendingController(int? id)
-        {
-            var sendingResult = sendingController.Edit(id) as ViewResult;
-            var sending = (Sending) sendingResult.Model;
-            return sending;
-        }
-
-        [HttpPost]
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Edit(PatientSendingViewModel patientSending)
-        {
-            CreateAndEditPreparations(patientSending);
-
-            if (ModelState.IsValid)
-            {
-                db.MarkAsModified(patientSending.Patient);
-                db.MarkAsModified(patientSending.Sending);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return CreateEditView(patientSending);
-        }
-
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Delete(int? id)
-        {
-            return View(LoadSendingFromSendingController(id));
-        }
-
-        [HttpPost]
-        [ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            var sending = LoadSendingFromSendingController(id);
-            sending.Deleted = true;
-            return EditUnvalidated(sending);
-        }
-
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Deleted()
-        {
-            return View(db.Sendings.Include(s=>s.Patient).Where(s => s.Deleted).Select(CreatePatientSending).ToList());
-        }
-
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Undelete(int? id)
-        {
-            var sending = LoadSendingFromSendingController(id);
-            sending.Deleted = false;
-            return EditUnvalidated(sending);
         }
 
 
-        private ActionResult EditUnvalidated(Sending sending)
+        protected override IDbSet<Sending> SendingDbSet()
         {
-            ActionResult result = View();
-            db.PerformWithoutSaveValidation(() => result = sendingController.Edit(sending));
-            return result;
+            return db.Sendings;
         }
 
-        private void AssignClinicalInformationFromCheckboxValues(PatientSendingViewModel patientSending)
-        {
-            patientSending.Patient.ClinicalInformation =
-                EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<ClinicalInformation>(
-                    Request.Form["ClinicalInformation"]);
-        }
+        protected override void CreateAndEditPreparations(PatientSendingViewModel<Patient, Sending> patientSending)
 
-        [HttpPost]
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Create(PatientSendingViewModel patientSending)
-        {
-            CreateAndEditPreparations(patientSending);
-            ValidatePatientDoesNotAlreadyExist(patientSending);
-
-            if (ModelState.IsValid && !patientSending.DuplicatePatientDetected)
-            {
-                var patient = CreateOrUpdatePatient(patientSending);
-                var sending = patientSending.Sending;
-                sending.PatientId = patient.PatientId;
-                sendingController.CreateSendingAndAssignStemnumber(sending);
-                if (sending.LaboratoryNumber != sending.Isolate.LaboratoryNumber)
-                {
-                    TempData["WarningMessage"] =
-                        "Beim Speichern der letzten Einsendung hat sich die Labornummer geändert. Neue Labornummer: " +
-                        sending.Isolate.LaboratoryNumber;
-                }
-                return RedirectToAction("Index");
-            }
-            return CreateEditView(patientSending);
-        }
-
-        private Patient CreateOrUpdatePatient(PatientSendingViewModel patientSending)
-        {
-            var patient = patientSending.Patient;
-            if (patientSending.DuplicatePatientResolution == DuplicatePatientResolution.UseExistingPatient)
-            {
-                var duplicatePatients = FindDuplicatePatients(patient);
-                var existingPatient = duplicatePatients.Single();
-                patient.PatientId = existingPatient.PatientId;
-                patientController.EditPatient(patient);
-            }
-            else
-            {
-                patientController.CreatePatient(patient);
-            }
-            return patient;
-        }
-
-        private void CreateAndEditPreparations(PatientSendingViewModel patientSending)
         {
             AssignClinicalInformationFromCheckboxValues(patientSending);
 
@@ -182,112 +46,14 @@ namespace HaemophilusWeb.Controllers
             ValidateModel(patientSending.Patient, new PatientValidator());
         }
 
-        private void ValidatePatientDoesNotAlreadyExist(PatientSendingViewModel patientSending)
+        private void AssignClinicalInformationFromCheckboxValues(PatientSendingViewModel<Patient, Sending> patientSending)
         {
-            patientSending.DuplicatePatientDetected = false;
-            if (patientSending.DuplicatePatientResolution != null)
-            {
-                return;
-            }
-
-            var duplicatePatients = FindDuplicatePatients(patientSending.Patient);
-            if (duplicatePatients.Count() == 1)
-            {
-                patientSending.DuplicatePatientDetected = true;
-            }
-            else if (duplicatePatients.Count() > 1)
-            {
-                ModelState.AddModelError("",
-                    "Es existieren bereits zwei Patienten mit den selben Initialen, Geburtsdatum und Postleitzahl. " +
-                    "Ein dritter Patient mit den selben Eigenschaften kann leider nicht gespeichert werden.");
-            }
+            patientSending.Patient.ClinicalInformation =
+                EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<ClinicalInformation>(
+                    Request.Form["ClinicalInformation"]);
         }
 
-        private IQueryable<Patient> FindDuplicatePatients(Patient patient)
-        {
-            var existingPatients = db.Patients.Where(
-                p => p.Initials == patient.Initials &&
-                     ((p.BirthDate.HasValue && patient.BirthDate.HasValue &&
-                       p.BirthDate.Value == patient.BirthDate.Value)
-                      || (!p.BirthDate.HasValue && !patient.BirthDate.HasValue))
-                     && p.PostalCode == patient.PostalCode);
-            return existingPatients;
-        }
-
-        private void ValidateModel<T>(T objectToValidate, IValidator<T> validator)
-        {
-            var result = validator.Validate(objectToValidate);
-            if (result.IsValid)
-            {
-                return;
-            }
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
-            }
-        }
-
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Index()
-        {
-            return View(NotDeletedSendings().Take(0).Select(CreatePatientSending).ToList());
-        }
-
-        private PatientSendingViewModel CreatePatientSending(Sending sending)
-        {
-            return new PatientSendingViewModel
-            {
-                Patient = sending.Patient,
-                Sending = sending
-            };
-        }
-
-        [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
-        public ActionResult RkiExport(ExportQuery query)
-        {
-            if (query.From == DateTime.MinValue)
-            {
-                var lastYear = DateTime.Now.Year - 1;
-                var exportQuery = new ExportQuery
-                {
-                    From = new DateTime(lastYear, 1, 1),
-                    To = new DateTime(lastYear, 12, 31)
-                };
-                return View(exportQuery);
-            }
-
-            var sendings = SendingsMatchingExportQuery(query,
-                new List<SamplingLocation> {SamplingLocation.Blood, SamplingLocation.Liquor}).ToList();
-
-            return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI");
-        }
-
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult LaboratoryExport(ExportQuery query)
-        {
-            if (query.From == DateTime.MinValue)
-            {
-                var lastYear = DateTime.Now.Year - 1;
-                var exportQuery = new ExportQuery
-                {
-                    From = new DateTime(lastYear, 1, 1),
-                    To = new DateTime(lastYear, 12, 31)
-                };
-                return View(exportQuery);
-            }
-
-            var sendings = SendingsMatchingExportQuery(query,
-                new List<SamplingLocation>
-                {
-                    SamplingLocation.Blood,
-                    SamplingLocation.Liquor,
-                    SamplingLocation.Other
-                }).ToList();
-            return ExportToExcel(query, sendings, CreateLaboratoryExportDefinition(), "Labor");
-        }
-
-        private List<Sending> SendingsMatchingExportQuery(ExportQuery query, List<SamplingLocation> samplingLocations)
+        protected override IEnumerable<Sending> SendingsMatchingExportQuery(ExportQuery query, List<SamplingLocation> samplingLocations)
         {
             return NotDeletedSendings()
                 .Include(s => s.Patient)
@@ -300,7 +66,37 @@ namespace HaemophilusWeb.Controllers
                 .ToList();
         }
 
-        private ExportDefinition<Sending> CreateLaboratoryExportDefinition()
+        protected override ExportDefinition<Sending> CreateRkiExportDefinition()
+        {
+            var export = new ExportDefinition<Sending>();
+            var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
+
+            var emptyCounty = new County { CountyNumber = "" };
+            Func<Sending, County> findCounty =
+                s => counties.FirstOrDefault(c => c.IsEqualTo(s.Patient.County)) ?? emptyCounty;
+
+            export.AddField(s => s.Isolate.StemNumber, "klhi_nr");
+            export.AddField(s => s.ReceivingDate.ToReportFormat(), "eing");
+            export.AddField(s => s.SamplingDate.ToReportFormat(), "ent");
+            export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s), "mat");
+            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "geb_monat");
+            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "geb_jahr");
+            export.AddField(s => ExportGender(s.Patient.Gender), "geschlecht");
+            export.AddField(s => ExportToString(s.Patient.HibVaccination), "hib_impf");
+            export.AddField(s => ExportToString(s.Isolate.Evaluation), "styp");
+            export.AddField(s => ExportToString(s.Isolate.BetaLactamase), "b_lac");
+            export.AddField(s => findCounty(s).CountyNumber, "kreis_nr");
+            export.AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "bundesland");
+            export.AddField(s => s.SenderId, "einsender");
+            export.AddField(s => ExportToString(s.Patient.County), "landkreis");
+            export.AddField(s => ExportToString(s.Patient.State), "bundeslandName");
+            AddEpsilometerTestFields(export, Antibiotic.Ampicillin, "ampicillinMHK", "ampicillinBewertung");
+            AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate, "amoxicillinClavulansaeureMHK", "bewertungAmoxicillinClavulansaeure");
+
+            return export;
+        }
+
+        protected override ExportDefinition<Sending> CreateLaboratoryExportDefinition()
         {
             var export = new ExportDefinition<Sending>();
 
@@ -365,24 +161,375 @@ namespace HaemophilusWeb.Controllers
             export.AddField(s => ExportToString(s.Isolate.Evaluation));
             export.AddField(s => s.Isolate.ReportDate);
             export.AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
-            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord=>rkiMatchRecord.RkiReferenceId.ToString()), "RKI InterneRef");
-            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord=>rkiMatchRecord.RkiReferenceNumber), "RKI Aktenzeichen");
-            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord=>rkiMatchRecord.RkiStatus, ExportToString(RkiStatus.None)), "RKI Status");
+            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceId.ToString()), "RKI InterneRef");
+            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceNumber), "RKI Aktenzeichen");
+            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiStatus, ExportToString(RkiStatus.None)), "RKI Status");
 
             return export;
         }
 
-        private string ExportRkiMatchRecord(RkiMatchRecord rkiMatchRecord, Func<RkiMatchRecord, object> accessValue)
+        protected override List<QueryRecord> QueryRecords()
+        {
+            var query = NotDeletedSendings().Select(x => new
+            {
+                x.SendingId,
+                x.Isolate.IsolateId,
+                x.Isolate.ReportDate,
+                x.Patient.Initials,
+                x.Patient.BirthDate,
+                x.Isolate.StemNumber,
+                x.ReceivingDate,
+                x.SamplingLocation,
+                x.OtherSamplingLocation,
+                x.Invasive,
+                x.Isolate.YearlySequentialIsolateNumber,
+                x.Isolate.Year,
+                x.SenderLaboratoryNumber,
+                PatientPostalCode = x.Patient.PostalCode,
+                SenderPostalCode = db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode,
+            });
+            var queryRecords = query.ToList().Select(x =>
+            {
+                var invasive = EnumEditor.GetEnumDescription(x.Invasive);
+                var samplingLocation = x.SamplingLocation == SamplingLocation.Other
+                    ? Server.HtmlEncode(x.OtherSamplingLocation)
+                    : EnumEditor.GetEnumDescription(x.SamplingLocation);
+                var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year);
+                return new QueryRecord
+                {
+                    SendingId = x.SendingId,
+                    IsolateId = x.IsolateId,
+                    Initials = x.Initials,
+                    BirthDate = x.BirthDate,
+                    StemNumber = x.StemNumber,
+                    ReceivingDate = x.ReceivingDate,
+                    SamplingLocation = samplingLocation,
+                    Invasive = invasive,
+                    LaboratoryNumber = x.Year * 10000 + x.YearlySequentialIsolateNumber,
+                    LaboratoryNumberString = laboratoryNumber,
+                    ReportGenerated = x.ReportDate.HasValue,
+                    PatientPostalCode = x.PatientPostalCode,
+                    SenderPostalCode = x.SenderPostalCode,
+                    SenderLaboratoryNumber = x.SenderLaboratoryNumber,
+                    FullTextSearch = string.Join(" ",
+                            x.Initials, x.BirthDate.ToReportFormat(),
+                            x.StemNumber, x.ReceivingDate.ToReportFormat(),
+                            invasive, samplingLocation, laboratoryNumber,
+                            x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber)
+                        .ToLower()
+                };
+            }).ToList();
+            return queryRecords;
+        }
+    }
+    
+    //public class MPatientSendingController : PatientSendingControllerBase<PatientSendingViewModel<MeningoPatient, MeningoSending>,
+    //    MeningoPatient, MeningoSending>
+    //{
+    //    public MPatientSendingController()
+    //        : this(
+    //            new ApplicationDbContextWrapper(new ApplicationDbContext()), new PatientController(),
+    //            new SendingController<Sending>())
+    //    {
+    //    }
+
+    //    public MPatientSendingController(IApplicationDbContext applicationDbContext, PatientController patientController,
+    //        SendingController sendingController) : base(applicationDbContext, patientController, sendingController)
+    //    {
+    //    }
+
+    //}
+
+    public abstract class PatientSendingControllerBase<TViewModel, TPatient, TSending> : ControllerBase
+        where TViewModel : PatientSendingViewModel<TPatient, TSending>, new()
+        where TPatient : PatientBase, new()
+        where TSending : SendingBase<TPatient>, new()
+    {
+        protected readonly IApplicationDbContext db;
+        private readonly PatientControllerBase<TPatient> patientController;
+        private readonly SendingControllerBase<TSending, TPatient> sendingController;
+
+        public PatientSendingControllerBase(IApplicationDbContext applicationDbContext, PatientControllerBase<TPatient> patientController,
+            SendingControllerBase<TSending, TPatient> sendingController)
+        {
+            db = applicationDbContext;
+            this.patientController = patientController;
+            this.sendingController = sendingController;
+        }
+
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult Create()
+        {
+            var patientResult = patientController.Create() as ViewResult;
+            var sendingResult = sendingController.Create() as ViewResult;
+
+            return CreateEditView(new TViewModel
+            {
+                Patient = (TPatient) patientResult.Model,
+                Sending = (TSending) sendingResult.Model
+            });
+        }
+
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult Delete(int? id)
+        {
+            return View(LoadSendingFromSendingController(id));
+        }
+
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult Deleted()
+        {
+            return View(NotDeletedSendings().Include(s=>s.Patient).AsEnumerable().Select(CreatePatientSending).ToList());
+        }
+
+        protected abstract IDbSet<TSending> SendingDbSet();
+
+        protected abstract void CreateAndEditPreparations(TViewModel patientSending);
+
+        private TViewModel CreatePatientSending(TSending sending)
+        {
+            return new TViewModel
+            {
+                Patient = sending.Patient,
+                Sending = sending
+            };
+        }
+
+        protected IQueryable<TSending> NotDeletedSendings()
+        {
+            return SendingDbSet().Where(s => !s.Deleted);
+        }
+
+        protected abstract IEnumerable<TSending> SendingsMatchingExportQuery(ExportQuery query,
+            List<SamplingLocation> samplingLocations);
+
+        protected abstract ExportDefinition<TSending> CreateRkiExportDefinition();
+
+        protected abstract ExportDefinition<TSending> CreateLaboratoryExportDefinition();
+
+        protected abstract List<QueryRecord> QueryRecords();
+
+        private ViewResult CreateEditView(TViewModel patientSending)
+        {
+            sendingController.AddReferenceDataToViewBag(ViewBag, patientSending.Sending);
+            patientController.AddReferenceDataToViewBag(ViewBag);
+            return View(patientSending);
+        }
+
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult Edit(int? id)
+        {
+            var sending = LoadSendingFromSendingController(id);
+            return CreateEditView(CreatePatientSending(sending));
+        }
+
+        protected TSending LoadSendingFromSendingController(int? id)
+        {
+            var sendingResult = sendingController.Edit(id) as ViewResult;
+            var sending = (TSending) sendingResult.Model;
+            return sending;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult Edit(TViewModel patientSending)
+        {
+            CreateAndEditPreparations(patientSending);
+
+            if (ModelState.IsValid)
+            {
+                db.MarkAsModified(patientSending.Patient);
+                db.MarkAsModified(patientSending.Sending);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return CreateEditView(patientSending);
+        }
+
+        
+
+        [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var sending = LoadSendingFromSendingController(id);
+            sending.Deleted = true;
+            return EditUnvalidated(sending);
+        }
+
+        
+
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult Undelete(int? id)
+        {
+            var sending = LoadSendingFromSendingController(id);
+            sending.Deleted = false;
+            return EditUnvalidated(sending);
+        }
+
+
+        private ActionResult EditUnvalidated(TSending sending)
+        {
+            ActionResult result = View();
+            db.PerformWithoutSaveValidation(() => result = sendingController.Edit(sending));
+            return result;
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult Create(TViewModel patientSending)
+        {
+            CreateAndEditPreparations(patientSending);
+            ValidatePatientDoesNotAlreadyExist(patientSending);
+
+            if (ModelState.IsValid && !patientSending.DuplicatePatientDetected)
+            {
+                var patient = CreateOrUpdatePatient(patientSending);
+                var sending = patientSending.Sending;
+                sending.SetPatientId(patient.PatientId);
+                sendingController.CreateSendingAndAssignStemnumber(sending);
+                if (sending.LaboratoryNumber != sending.IsolateLaboratoryNumber)
+                {
+                    TempData["WarningMessage"] =
+                        "Beim Speichern der letzten Einsendung hat sich die Labornummer geändert. Neue Labornummer: " +
+                        sending.IsolateLaboratoryNumber;
+                }
+                return RedirectToAction("Index");
+            }
+            return CreateEditView(patientSending);
+        }
+
+        private TPatient CreateOrUpdatePatient(TViewModel patientSending)
+        {
+            var patient = patientSending.Patient;
+            if (patientSending.DuplicatePatientResolution == DuplicatePatientResolution.UseExistingPatient)
+            {
+                var duplicatePatients = FindDuplicatePatients(patient);
+                var existingPatient = duplicatePatients.Single();
+                patient.PatientId = existingPatient.PatientId;
+                patientController.EditPatient(patient);
+            }
+            else
+            {
+                patientController.CreatePatient(patient);
+            }
+            return patient;
+        }
+
+        
+
+        private void ValidatePatientDoesNotAlreadyExist(TViewModel patientSending)
+        {
+            patientSending.DuplicatePatientDetected = false;
+            if (patientSending.DuplicatePatientResolution != null)
+            {
+                return;
+            }
+
+            var duplicatePatients = FindDuplicatePatients(patientSending.Patient);
+            if (duplicatePatients.Count() == 1)
+            {
+                patientSending.DuplicatePatientDetected = true;
+            }
+            else if (duplicatePatients.Count() > 1)
+            {
+                ModelState.AddModelError("",
+                    "Es existieren bereits zwei Patienten mit den selben Initialen, Geburtsdatum und Postleitzahl. " +
+                    "Ein dritter Patient mit den selben Eigenschaften kann leider nicht gespeichert werden.");
+            }
+        }
+
+        private IQueryable<Patient> FindDuplicatePatients(TPatient patient)
+        {
+            var existingPatients = db.Patients.Where(
+                p => p.Initials == patient.Initials &&
+                     ((p.BirthDate.HasValue && patient.BirthDate.HasValue &&
+                       p.BirthDate.Value == patient.BirthDate.Value)
+                      || (!p.BirthDate.HasValue && !patient.BirthDate.HasValue))
+                     && p.PostalCode == patient.PostalCode);
+            return existingPatients;
+        }
+
+        protected void ValidateModel<T>(T objectToValidate, IValidator<T> validator)
+        {
+            var result = validator.Validate(objectToValidate);
+            if (result.IsValid)
+            {
+                return;
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.PropertyName, error.ErrorMessage);
+            }
+        }
+
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult Index()
+        {
+            return View(NotDeletedSendings().Take(0).Select(CreatePatientSending).ToList());
+        }
+
+        
+
+        [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
+        public ActionResult RkiExport(ExportQuery query)
+        {
+            if (query.From == DateTime.MinValue)
+            {
+                var lastYear = DateTime.Now.Year - 1;
+                var exportQuery = new ExportQuery
+                {
+                    From = new DateTime(lastYear, 1, 1),
+                    To = new DateTime(lastYear, 12, 31)
+                };
+                return View(exportQuery);
+            }
+
+            var sendings = SendingsMatchingExportQuery(query,
+                new List<SamplingLocation> {SamplingLocation.Blood, SamplingLocation.Liquor}).ToList();
+
+            return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI");
+        }
+
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult LaboratoryExport(ExportQuery query)
+        {
+            if (query.From == DateTime.MinValue)
+            {
+                var lastYear = DateTime.Now.Year - 1;
+                var exportQuery = new ExportQuery
+                {
+                    From = new DateTime(lastYear, 1, 1),
+                    To = new DateTime(lastYear, 12, 31)
+                };
+                return View(exportQuery);
+            }
+
+            var sendings = SendingsMatchingExportQuery(query,
+                new List<SamplingLocation>
+                {
+                    SamplingLocation.Blood,
+                    SamplingLocation.Liquor,
+                    SamplingLocation.Other
+                }).ToList();
+            return ExportToExcel(query, sendings, CreateLaboratoryExportDefinition(), "Labor");
+        }
+
+        protected string ExportRkiMatchRecord(RkiMatchRecord rkiMatchRecord, Func<RkiMatchRecord, object> accessValue)
         {
             return ExportRkiMatchRecord(rkiMatchRecord, accessValue, string.Empty);
         }
 
-        private string ExportRkiMatchRecord(RkiMatchRecord rkiMatchRecord, Func<RkiMatchRecord, object> accessValue, string nullValue)
+        protected string ExportRkiMatchRecord(RkiMatchRecord rkiMatchRecord, Func<RkiMatchRecord, object> accessValue, string nullValue)
         {
             return rkiMatchRecord != null ? ExportToString(accessValue(rkiMatchRecord)) : nullValue;
         }
 
-        private string ExportClinicalInformation(ClinicalInformation clinicalInformation, Sending sending)
+        protected string ExportClinicalInformation(ClinicalInformation clinicalInformation, Sending sending)
         {
             var clinicalInformationAsString = EnumEditor.GetEnumDescription(clinicalInformation);
             if (sending.Patient.ClinicalInformation.HasFlag(ClinicalInformation.Other))
@@ -394,37 +541,8 @@ namespace HaemophilusWeb.Controllers
             return clinicalInformationAsString;
         }
 
-        private ExportDefinition<Sending> CreateRkiExportDefinition()
-        {
-            var export = new ExportDefinition<Sending>();
-            var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
 
-            var emptyCounty = new County {CountyNumber = ""};
-            Func<Sending, County> findCounty =
-                s => counties.FirstOrDefault(c => c.IsEqualTo(s.Patient.County)) ?? emptyCounty;
-
-            export.AddField(s => s.Isolate.StemNumber, "klhi_nr");
-            export.AddField(s => s.ReceivingDate.ToReportFormat(), "eing");
-            export.AddField(s => s.SamplingDate.ToReportFormat(), "ent");
-            export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s), "mat");
-            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "geb_monat");
-            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "geb_jahr");
-            export.AddField(s => ExportGender(s.Patient.Gender), "geschlecht");
-            export.AddField(s => ExportToString(s.Patient.HibVaccination), "hib_impf");
-            export.AddField(s => ExportToString(s.Isolate.Evaluation), "styp");
-            export.AddField(s => ExportToString(s.Isolate.BetaLactamase), "b_lac");
-            export.AddField(s => findCounty(s).CountyNumber, "kreis_nr");
-            export.AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "bundesland");
-            export.AddField(s => s.SenderId, "einsender");
-            export.AddField(s => ExportToString(s.Patient.County), "landkreis");
-            export.AddField(s => ExportToString(s.Patient.State), "bundeslandName");
-            AddEpsilometerTestFields(export, Antibiotic.Ampicillin, "ampicillinMHK", "ampicillinBewertung");
-            AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate, "amoxicillinClavulansaeureMHK", "bewertungAmoxicillinClavulansaeure");
-
-            return export;
-        }
-
-        private static void AddEpsilometerTestFields(ExportDefinition<Sending> export, Antibiotic antibiotic, string measurementHeaderParameter = null, string evaluationHeaderParameter = null)
+        protected static void AddEpsilometerTestFields(ExportDefinition<Sending> export, Antibiotic antibiotic, string measurementHeaderParameter = null, string evaluationHeaderParameter = null)
         {
             var antibioticName = ExportToString(antibiotic);
             var measurementHeader = measurementHeaderParameter ?? string.Format("{0} MHK", antibioticName);
@@ -434,14 +552,14 @@ namespace HaemophilusWeb.Controllers
             export.AddField(s => ExportToString(FindEpsilometerTestEvaluation(s, antibiotic)), evaluationHeader);
         }
 
-        private static string ExportGender(Gender? gender)
+        protected static string ExportGender(Gender? gender)
         {
             return gender == null
                 ? "?"
                 : EnumEditor.GetEnumDescription(gender).Substring(0, 1);
         }
 
-        private static string ExportSamplingLocation(SamplingLocation location, Sending sending)
+        protected static string ExportSamplingLocation(SamplingLocation location, Sending sending)
         {
             if (location == SamplingLocation.Other)
             {
@@ -450,7 +568,7 @@ namespace HaemophilusWeb.Controllers
             return ExportToString(location);
         }
 
-        private static string ExportToString<T>(T value)
+        protected static string ExportToString<T>(T value)
         {
             if (value == null)
             {
@@ -495,56 +613,7 @@ namespace HaemophilusWeb.Controllers
         [Authorize(Roles = DefaultRoles.User)]
         public JsonResult DataTableAjax([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestParameters)
         {
-            var query = NotDeletedSendings().Select(x => new
-            {
-                x.SendingId,
-                x.Isolate.IsolateId,
-                x.Isolate.ReportDate,
-                x.Patient.Initials,
-                x.Patient.BirthDate,
-                x.Isolate.StemNumber,
-                x.ReceivingDate,
-                x.SamplingLocation,
-                x.OtherSamplingLocation,
-                x.Invasive,
-                x.Isolate.YearlySequentialIsolateNumber,
-                x.Isolate.Year,
-                x.SenderLaboratoryNumber,
-                PatientPostalCode = x.Patient.PostalCode,
-                SenderPostalCode = db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode,
-            });
-            var queryable = query.ToList().Select(x =>
-            {
-                var invasive = EnumEditor.GetEnumDescription(x.Invasive);
-                var samplingLocation = x.SamplingLocation == SamplingLocation.Other
-                    ? Server.HtmlEncode(x.OtherSamplingLocation)
-                    : EnumEditor.GetEnumDescription(x.SamplingLocation);
-                var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year);
-                return new QueryRecord
-                {
-                    SendingId = x.SendingId,
-                    IsolateId = x.IsolateId,
-                    Initials = x.Initials,
-                    BirthDate = x.BirthDate,
-                    StemNumber = x.StemNumber,
-                    ReceivingDate = x.ReceivingDate,
-                    SamplingLocation = samplingLocation,
-                    Invasive = invasive,
-                    LaboratoryNumber = x.Year*10000 + x.YearlySequentialIsolateNumber,
-                    LaboratoryNumberString = laboratoryNumber,
-                    ReportGenerated = x.ReportDate.HasValue,
-                    PatientPostalCode = x.PatientPostalCode,
-                    SenderPostalCode = x.SenderPostalCode,
-                    SenderLaboratoryNumber = x.SenderLaboratoryNumber,
-                    FullTextSearch = string.Join(" ",
-                        x.Initials, x.BirthDate.ToReportFormat(),
-                        x.StemNumber, x.ReceivingDate.ToReportFormat(),
-                        invasive, samplingLocation, laboratoryNumber,
-                        x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber)
-                        .ToLower()
-                };
-            }).ToList();
-
+            var queryable = QueryRecords();
             var totalCount = queryable.Count();
 
             var searchValue = requestParameters.Search.Value.ToLower();
@@ -602,13 +671,8 @@ namespace HaemophilusWeb.Controllers
 
             return Json(dataTablesResult);
         }
-
-        private IQueryable<Sending> NotDeletedSendings()
-        {
-            return db.Sendings.Where(s => !s.Deleted);
-        }
-
-        private static string CreateReportGeneratedIcon(bool reportGenerated)
+        
+        protected static string CreateReportGeneratedIcon(bool reportGenerated)
         {
             return string.Format(
                 "<span style=\"color:{0}\" class=\"glyphicon {1}\" aria-hidden=\"true\"></span>",
@@ -619,7 +683,7 @@ namespace HaemophilusWeb.Controllers
         private string CreateIsolateLink(int isolateId, string laboratoryNumber)
         {
             return string.Format("<a class=\"btn-sm btn btn-default\" href=\"{0}\" role=\"button\">{1}</a>",
-                Url.Action("Edit", "Isolate", new {id = isolateId}), laboratoryNumber);
+                Url.Action("Edit", "Isolate", new { id = isolateId }), laboratoryNumber);
         }
 
         private string CreateEditControls(int sendingId, int isolateId)
@@ -628,30 +692,11 @@ namespace HaemophilusWeb.Controllers
             builder.Append("<div class=\"btn-group btn-group-sm\">");
 
             builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Bearbeiten</a>",
-                Url.Action("Edit", new {id = sendingId}));
+                Url.Action("Edit", new { id = sendingId }));
             builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
-                Url.Action("Isolate", "Report", new {id = isolateId}));
+                Url.Action("Isolate", "Report", new { id = isolateId }));
             builder.Append("</div>");
             return builder.ToString();
-        }
-
-        public class QueryRecord
-        {
-            public string Initials { get; set; }
-            public DateTime? BirthDate { get; set; }
-            public int? StemNumber { get; set; }
-            public DateTime ReceivingDate { get; set; }
-            public string SamplingLocation { get; set; }
-            public string Invasive { get; set; }
-            public int LaboratoryNumber { get; set; }
-            public string LaboratoryNumberString { get; set; }
-            public string FullTextSearch { get; set; }
-            public int IsolateId { get; set; }
-            public int SendingId { get; set; }
-            public bool ReportGenerated { get; set; }
-            public string PatientPostalCode { get; set; }
-            public string SenderPostalCode { get; set; }
-            public string SenderLaboratoryNumber { get; set; }
         }
     }
 }

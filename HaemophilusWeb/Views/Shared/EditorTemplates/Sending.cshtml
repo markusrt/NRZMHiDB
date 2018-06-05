@@ -18,7 +18,7 @@
     </div>
 </div>
 
-@if (false)
+@if (@Request.Path.Contains("Sending/"))
 {
     <div class="form-group">
         @Html.LabelFor(model => model.PatientId, new {@class = "col-sm-2 control-label"})

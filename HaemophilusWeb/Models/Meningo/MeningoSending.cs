@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HaemophilusWeb.Models.Meningo
 {
     //TODO Validator
-    public class MeningoSending : SendingBase
+    public class MeningoSending : SendingBase<MeningoPatient>
     {
         public MeningoSending()
         {
@@ -28,10 +28,29 @@ namespace HaemophilusWeb.Models.Meningo
         [Display(Name = "Material")]
         public MeningoMaterial Material { get; set; }
 
-        [Display(Name = "Anderer Entnahmeort")]
-        public string OtherSamplingLocation { get; set; }
+        
 
         //public virtual Isolate Isolate { get; set; }
-        public virtual MeningoPatient Patient { get; set; }
+
+        public override void SetPatientId(int patientId)
+        {
+            MeningoPatientId = patientId;
+        }
+
+        public override int GetSendingId()
+        {
+            return MeningoSendingId;
+        }
+
+        public override Isolate GetIsolate()
+        {
+            //TODO move to IsolateBase
+            return null;
+        }
+
+        public override void SetIsolate(Isolate isolate)
+        {
+            //TODO move to IsolateBase
+        }
     }
 }

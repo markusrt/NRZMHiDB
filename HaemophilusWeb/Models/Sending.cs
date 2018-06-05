@@ -7,7 +7,7 @@ using HaemophilusWeb.Validators;
 namespace HaemophilusWeb.Models
 {
     [Validator(typeof (SendingValidator))]
-    public class Sending : SendingBase
+    public class Sending : SendingBase<Patient>
     {
         public Sending()
         {
@@ -28,9 +28,6 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Entnahmeort")]
         public SamplingLocation SamplingLocation { get; set; }
 
-        [Display(Name = "Anderer Entnahmeort")]
-        public string OtherSamplingLocation { get; set; }
-
         [Display(Name = "Material")]
         public Material Material { get; set; }
 
@@ -39,6 +36,25 @@ namespace HaemophilusWeb.Models
 
         public virtual RkiMatchRecord RkiMatchRecord { get; set; }
         public virtual Isolate Isolate { get; set; }
-        public virtual Patient Patient { get; set; }
+
+        public override void SetPatientId(int patientId)
+        {
+            PatientId = patientId;
+        }
+
+        public override int GetSendingId()
+        {
+            return SendingId;
+        }
+
+        public override Isolate GetIsolate()
+        {
+            return Isolate;
+        }
+
+        public override void SetIsolate(Isolate isolate)
+        {
+            Isolate = isolate;
+        }
     }
 }
