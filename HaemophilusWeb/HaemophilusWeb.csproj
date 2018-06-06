@@ -219,6 +219,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IsolateController.cs" />
     <Compile Include="Controllers\MeningoPatientController.cs" />
+    <Compile Include="Controllers\MeningoPatientSendingController.cs" />
     <Compile Include="Controllers\MeningoSendingController.cs" />
     <Compile Include="Controllers\PatientController.cs" />
     <Compile Include="Controllers\PatientControllerBase.cs" />
@@ -1080,6 +1081,7 @@
     <Content Include="Views\MeningoSending\Edit.cshtml" />
     <Content Include="Views\MeningoSending\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MeningoSending.cshtml" />
+    <Content Include="Views\MeningoPatientSending\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

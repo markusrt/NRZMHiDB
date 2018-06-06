@@ -1,0 +1,187 @@
+﻿@using HaemophilusWeb.Models.Meningo
+@model IEnumerable<HaemophilusWeb.ViewModels.PatientSendingViewModel<MeningoPatient, MeningoSending>>
+
+@{
+    ViewBag.Title = "Einsendungen";
+}
+
+<div class="btn-toolbar" role="toolbar">
+    <div class="btn-group" role="group">
+        @Html.ActionLink("Neue Einsendung erfassen", "Create", "MeningoPatientSending", null, new { @class = "btn btn-primary" })
+    </div>
+    <div class="btn-group" role="group">
+        <button id="extendedSearchToggleButton" class="btn btn-default" onclick="toggleExtendedSearch()">Erweiterte Suche</button>
+    </div>
+</div>
+<div class="row topmargin" id="extendedSearch" style="display:none">
+    <div class="col-md-12">Erweiterte Suche:</div>
+    <div class="col-md-2 col-sm-4 col-xs-12">
+        <input id="searchInitials" data-search-col="0" class="form-control col-sm-2" type="text" placeholder="Initialen" />
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-12">
+        <input id="searchBirthDate" data-search-col="1" class="form-control col-sm-2" type="text" placeholder="Geburtsdatum" />
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-12">
+        <input id="searchPatientPostalCode" data-search-col="7" class="form-control col-sm-2" type="text" placeholder="Patient PLZ" />
+    </div>
+    <div class="col-md-3 col-sm-4 col-xs-12">
+        <input id="searchSenderLaboratoryNumber" data-search-col="9" class="form-control col-sm-2" type="text" placeholder="Einsender Labornummer" />
+    </div>
+    <div class="col-md-3 col-sm-4 col-xs-12">
+        <input id="searchSenderPostalCode" data-search-col="8" class="form-control col-sm-2" type="text" placeholder="Einsender PLZ" />
+    </div>
+</div>
+<div class="topmargin">
+    <table class="table table-striped" id="patientSendings">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Patient.Initials)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Patient.BirthDate)
+                </th>
+                <th>
+                    TODO
+                    @*@Html.DisplayNameFor(model => model.Sending.Isolate.StemNumber)*@
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sending.ReceivingDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sending.SamplingLocation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Sending.Invasive)
+                </th>
+                <th>
+                    Labor-Nr
+                </th>
+                <th>
+                    PatientPostalCode
+                </th>
+                <th>
+                    SenderPostalCode
+                </th>
+                <th>
+                    SenderLaboratoryNumber
+                </th>
+                <th></th>
+                <th>
+                    Befund
+                </th>
+            </tr>
+        </thead>
+
+    </table>
+</div>
+
+    @section scripts
+{
+        <script>
+            var table;
+            $(document).ready(function () {
+                table = $('#patientSendings').on('init.dt', restoreUIAccordingToSavedState).
+                    DataTable(
+                    {
+                    "lengthChange": false,
+                    "order": [2, 'desc'],
+                    "pageLength": 8,
+                    "stateSave": true,
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": "@Url.Action("DataTableAjax")",
+                        "type": "POST"
+                    },
+                    "language": {
+                        "url": "@Url.Content("~/Scripts/dataTables.german.js")"
+
+                    },
+                    "columnDefs": [
+                        {
+                            "defaultContent": "<i>kein Eintrag</i>",
+                            "targets": "_all"
+                        }
+                    ],
+                    "columns": [
+                        {
+                            "data": "Initials",
+                        },
+                        {
+                            "data": "BirthDate",
+                        },
+                        {
+                            "data": "StemNumber",
+                        },
+                        {
+                            "data": "ReceivingDate",
+                        },
+                        {
+                            "data": "SamplingLocation",
+                        },
+                        {
+                            "data": "Invasive",
+                        },
+                        {
+                            "data": "LaboratoryNumber",
+                        },
+                        {
+                            "data": "PatientPostalCode",
+                        },
+                        {
+                            "data": "SenderPostalCode",
+                        },
+                        {
+                            "data": "SenderLaboratoryNumber",
+                        },
+                        {
+                            "data": "Link",
+                            "sortable": false,
+                        },
+                        {
+                            "data": "ReportGenerated",
+                        }
+                    ]
+                });
+
+                $("#extendedSearch").find("input").keyup(function () {
+                    table.columns($(this).attr("data-search-col")).search(this.value).draw();
+                });
+
+                table.search('').columns().search('');
+                table.columns(7).visible(false);
+                table.columns(8).visible(false);
+                table.columns(9).visible(false);
+            });
+
+            function toggleExtendedSearch()
+            {
+                $('#extendedSearch').toggle();
+                $('#patientSendings_filter').parent().parent().toggle();
+                if($('#extendedSearch').is(":visible"))
+                {
+                    $('#extendedSearchToggleButton').text("Einfache Suche");
+                    $('#patientSendings_filter').find('input[type=search]').first().val("");
+                }
+                else
+                {
+                    $('#extendedSearchToggleButton').text("Erweiterte Suche");
+                    $("#extendedSearch").find("input").val("");
+                }
+
+                table
+                    .search('')
+                    .columns().search('')
+                    .draw();
+            }
+
+            function restoreUIAccordingToSavedState()
+            {
+                console.log("DataTable is initialized");
+                //TODO Maybe users do not like the search state to be resetted
+                //     this would be the right place to implement UI-restoration
+                //     if column search is applied
+            }
+        </script>
+    }
