@@ -122,8 +122,6 @@ namespace HaemophilusWeb.Controllers
             //export.AddField(s => ExportClinicalInformation(s.Patient.ClinicalInformation, s));
             //export.AddField(s => ExportToString(s.Patient.HibVaccination));
             //export.AddField(s => s.Patient.HibVaccinationDate.ToReportFormat());
-            export.AddField(s => ExportToString(s.Patient.Therapy));
-            export.AddField(s => s.Patient.TherapyDetails);
             //export.AddField(s => s.Remark, "Bemerkung (Einsendung)");
 
             //export.AddField(s => ExportToString(s.Isolate.Growth));

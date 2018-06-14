@@ -45,11 +45,5 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Bundesland")]
         public State State { get; set; }
-
-        [Display(Name = "Therapie")]
-        public YesNoUnknown Therapy { get; set; }
-
-        [Display(Name = "Therapie Details")]
-        public string TherapyDetails { get; set; }
     }
 }

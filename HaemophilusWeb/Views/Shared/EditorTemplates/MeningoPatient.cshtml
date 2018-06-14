@@ -75,22 +75,6 @@
     </div>
 </div>
 
-@Html.EnumRadioEditorFor(m => m.UnderlyingDisease, "col-sm-10")
-<div id="OtherUnderlyingDiseaseForm" class="form-group">
-    @Html.LabelFor(m => m.OtherUnderlyingDisease, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        @Html.TextBoxFor(m => m.OtherUnderlyingDisease, new { @class = "form-control", @list = "otherUnderlyingDiseaseAutocomplete", @autocomplete = "off" })
-        <datalist id="otherUnderlyingDiseaseAutocomplete">
-            @foreach (var item in ViewBag.PossibleOtherUnderlyingDisease)
-            {
-                <option value="@item.ToString()" />
-            }
-        </datalist>
-
-        @Html.ValidationMessageFor(model => model.OtherUnderlyingDisease)
-    </div>
-</div>
-
 <div class="form-group">
     @Html.LabelFor(m => m.RiskFactors, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-10">
@@ -106,12 +90,6 @@
             </label>
             <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.EculizumabTherapy) ? " active" : string.Empty)">
                 <input type="checkbox" name="RiskFactors" value="EculizumabTherapy" @(Model.RiskFactors.HasFlag(RiskFactors.EculizumabTherapy) ? " checked" : string.Empty) /> Eculizumab-Therapie
-            </label>
-            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.MalignantTumor) ? " active" : string.Empty)">
-                <input type="checkbox" name="RiskFactors" value="MalignantTumor" @(Model.RiskFactors.HasFlag(RiskFactors.MalignantTumor) ? " checked" : string.Empty) /> Malignom
-            </label>
-            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.HumanImmunodeficiencyVirus) ? " active" : string.Empty)">
-                <input type="checkbox" name="RiskFactors" value="HumanImmunodeficiencyVirus" @(Model.RiskFactors.HasFlag(RiskFactors.HumanImmunodeficiencyVirus) ? " checked" : string.Empty) /> HIV
             </label>
             <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.Other) ? " active" : string.Empty)">
                 <input type="checkbox" name="RiskFactors" value="Other" @(Model.RiskFactors.HasFlag(RiskFactors.Other) ? " checked" : string.Empty) /> Anderer
@@ -134,50 +112,10 @@
     </div>
 </div>
 
-<div class="form-group">
-    @Html.LabelFor(m => m.Epidemiology, new { @class = "col-sm-2 control-label" })
-    <div class="col-lg-9">
-        <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.NotAvailable) ? " active" : string.Empty)">
-                <input type="checkbox" name="Epidemiology" value="NotAvailable" @(Model.Epidemiology.HasFlag(Epidemiology.NotAvailable) ? " checked" : string.Empty) /> k.A.
-            </label>
-            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.SingleDisease) ? " active" : string.Empty)">
-                <input type="checkbox" name="Epidemiology" value="SingleDisease" @(Model.Epidemiology.HasFlag(Epidemiology.SingleDisease) ? " checked" : string.Empty) /> Einzelerkrankung
-            </label>
-            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.GermCarrier) ? " active" : string.Empty)">
-                <input type="checkbox" name="Epidemiology" value="GermCarrier" @(Model.Epidemiology.HasFlag(Epidemiology.GermCarrier) ? " checked" : string.Empty) /> Keimträger
-            </label>
-            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.Cluster) ? " active" : string.Empty)">
-                <input type="checkbox" name="Epidemiology" value="Cluster" @(Model.Epidemiology.HasFlag(Epidemiology.Cluster) ? " checked" : string.Empty) /> Cluster
-            </label>
-            <label class="btn btn-default@(Model.Epidemiology.HasFlag(Epidemiology.ContactInvestigation) ? " active" : string.Empty)">
-                <input type="checkbox" name="Epidemiology" value="ContactInvestigation" @(Model.Epidemiology.HasFlag(Epidemiology.ContactInvestigation) ? " checked" : string.Empty) /> Umgebungsuntersuchung
-            </label>
-        </div>
-    </div>
-</div>
-
-@Html.EnumRadioEditorFor(m => m.Therapy)
-<div id="TherapyDetailsForm" class="form-group">
-    @Html.LabelFor(m => m.TherapyDetails, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        @Html.TextBoxFor(m => m.TherapyDetails, new { @class = "form-control", @list = "therapyDetailsAutocomplete", @autocomplete = "off" })
-        <datalist id="therapyDetailsAutocomplete">
-            @foreach (var item in ViewBag.PossibleTherapyDetails)
-            {
-                <option value="@item.ToString()" />
-            }
-        </datalist>
-        @Html.ValidationMessageFor(model => model.TherapyDetails)
-    </div>
-</div>
-
 <script>
     $(document).ready(function () {
         ShowOtherClinicalInformationIfOtherIsSelected();
-        ShowOtherUnderlyingDiseaseIfOtherIsSelected();
         ShowOtherRiskFactorIfOtherIsSelected();
-        ShowTherapyDetailsIfTherapyIsYes();
     });
 
     function ShowOtherClinicalInformationIfOtherIsSelected() {
@@ -185,22 +123,6 @@
             "#OtherClinicalInformationForm", "input:checkbox[name$='ClinicalInformation']",
             "input:checkbox[name$='ClinicalInformation']:checked",
             "Other", "[id$='OtherClinicalInformation']"
-        );
-    }
-
-    function ShowTherapyDetailsIfTherapyIsYes() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#TherapyDetailsForm", "input:radio[name$='Therapy']",
-            "input:radio[name$='Therapy']:checked",
-            "Yes", "[id$='TherapyDetails']"
-        );
-    }
-
-    function ShowOtherUnderlyingDiseaseIfOtherIsSelected() {
-        ShowDivIfCheckBoxHasSpecificSelectedValueOrClearInputOtherwise(
-            "#OtherUnderlyingDiseaseForm", "input:radio[name$='UnderlyingDisease']",
-            "input:radio[name$='UnderlyingDisease']:checked",
-            "Other", "[id$='OtherUnderlyingDisease']"
         );
     }
 

@@ -30,9 +30,6 @@ namespace HaemophilusWeb.Controllers
             patient.ClinicalInformation =
                 EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<MeningoClinicalInformation>(
                     Request.Form["ClinicalInformation"]);
-            patient.Epidemiology =
-                EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<Epidemiology>(
-                    Request.Form["Epidemiology"]);
             patient.RiskFactors =
                 EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<RiskFactors>(
                     Request.Form["RiskFactors"]);
@@ -43,12 +40,6 @@ namespace HaemophilusWeb.Controllers
             viewBag.PossibleOtherClinicalInformation = DbSet().Where(
                     s => !string.IsNullOrEmpty(s.OtherClinicalInformation)).
                 Select(s => s.OtherClinicalInformation).AsDataList();
-            viewBag.PossibleTherapyDetails = DbSet().Where(
-                    s => !string.IsNullOrEmpty(s.TherapyDetails)).
-                Select(s => s.TherapyDetails).AsDataList();
-            viewBag.PossibleOtherUnderlyingDisease = DbSet().Where(
-                    s => !string.IsNullOrEmpty(s.OtherUnderlyingDisease)).
-                Select(s => s.OtherUnderlyingDisease).AsDataList();
             viewBag.PossibleOtherRiskFactors = DbSet().Where(
                     s => !string.IsNullOrEmpty(s.OtherRiskFactor)).
                 Select(s => s.OtherRiskFactor).AsDataList();

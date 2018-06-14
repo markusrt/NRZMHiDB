@@ -11,8 +11,6 @@ namespace HaemophilusWeb.Models.Meningo
         [Description("Asplenie")] Asplenia = 2,
         [Description("Komplementdefekt")] ComplementDefect = 4,
         [Description("Eculizumab-Therapie")] EculizumabTherapy = 8,
-        [Description("Malignom")] MalignantTumor = 16,
-        [Description("HIV")] HumanImmunodeficiencyVirus = 32,
         [Description("Anderer")] Other = 32768
     }
 }

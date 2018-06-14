@@ -372,6 +372,10 @@
     <Compile Include="Migrations\201804181949382_MeningoSending_2_SenderConclusion.Designer.cs">
       <DependentUpon>201804181949382_MeningoSending_2_SenderConclusion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201806142008112_Meningo_Patient_2_RemovedFields.cs" />
+    <Compile Include="Migrations\201806142008112_Meningo_Patient_2_RemovedFields.Designer.cs">
+      <DependentUpon>201806142008112_Meningo_Patient_2_RemovedFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -1200,6 +1204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201804181949382_MeningoSending_2_SenderConclusion.resx">
       <DependentUpon>201804181949382_MeningoSending_2_SenderConclusion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201806142008112_Meningo_Patient_2_RemovedFields.resx">
+      <DependentUpon>201806142008112_Meningo_Patient_2_RemovedFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
