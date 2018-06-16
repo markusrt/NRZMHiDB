@@ -109,7 +109,7 @@ namespace HaemophilusWeb.Controllers
             //export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s));
             export.AddField(s => ExportToString(s.Material));
             export.AddField(s => ExportToString(s.Invasive));
-            export.AddField(s => s.SenderConclusion);
+            export.AddField(s => s.SerogroupSender);
 
             export.AddField(s => s.Patient.Initials);
             export.AddField(s => s.Patient.BirthDate.ToReportFormat());

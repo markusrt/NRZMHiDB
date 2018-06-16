@@ -28,7 +28,9 @@ namespace HaemophilusWeb.Models.Meningo
         [Display(Name = "Material")]
         public MeningoMaterial Material { get; set; }
 
-        
+        [Display(Name = "Serogruppe Einsender")]
+        public string SerogroupSender { get; set; }
+
 
         //public virtual Isolate Isolate { get; set; }
 

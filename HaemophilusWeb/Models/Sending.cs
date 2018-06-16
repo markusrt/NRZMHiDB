@@ -31,8 +31,8 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Material")]
         public Material Material { get; set; }
 
-        [Display(Name = "Bemerkung")]
-        public string Remark { get; set; }
+        [Display(Name = "Ergebnis Einsender")]
+        public string SenderConclusion { get; set; }
 
         public virtual RkiMatchRecord RkiMatchRecord { get; set; }
         public virtual Isolate Isolate { get; set; }

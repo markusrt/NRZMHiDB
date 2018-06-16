@@ -31,11 +31,11 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Invasiv")]
         public YesNo? Invasive { get; set; }
 
-        [Display(Name = "Ergebnis Einsender")]
-        public string SenderConclusion { get; set; }
-
         [Display(Name = "Anderer Entnahmeort")]
         public string OtherSamplingLocation { get; set; }
+
+        [Display(Name = "Bemerkung")]
+        public string Remark { get; set; }
 
         [NotMapped]
         public string IsolateLaboratoryNumber => GetIsolate()?.LaboratoryNumber;
