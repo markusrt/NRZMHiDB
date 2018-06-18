@@ -18,8 +18,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2018, 6, 18, 22, 0, 0), "Kombinierte Eingabemaske für Patent und Einsendungen (Meningokokken).", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 16, 22, 0, 0), "Eingabemaske für Einsendungen (Meningokokken).", ChangeType.Feature),
-                new Change(new DateTime(2018, 6, 14, 22, 0, 0), "Eingabemaske für Patientendaten (Meningokokken).", ChangeType.Feature),
+                new Change(new DateTime(2018, 6, 14, 22, 0, 0), "Eingabemaske für Patienten (Meningokokken).", ChangeType.Feature),
                 new Change(new DateTime(2018, 3, 18), "Überarbeitung der RKI Match Funktion (Duplikate, Matching mit Labornummer).", ChangeType.Feature),
                 new Change(new DateTime(2018, 2, 21), "Beim ersten Anlegen einer Einsendung werden die klinischen Angaben nicht gespeichert.", ChangeType.Bug),
                 new Change(new DateTime(2018, 2, 20), "Import-Funktion für RKI Match Datensätze", ChangeType.Feature),

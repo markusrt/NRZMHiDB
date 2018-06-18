@@ -1,0 +1,37 @@
+﻿@using HaemophilusWeb.Views.Utils
+@using HaemophilusWeb.Models.Meningo
+@model HaemophilusWeb.ViewModels.PatientSendingViewModel<MeningoPatient, MeningoSending>
+
+@{
+    ViewBag.Title = "Einsendung erfassen";
+}
+
+@section CreateModel
+{
+    @if (Model.DuplicatePatientDetected)
+    {
+        <div class="alert alert-warning">
+            <p>
+                Ein Patient mit den selben Initialen, Geburtsdatum und Postleitzahl existiert bereits. Soll das System
+                einen neuen Patienten anlegen oder soll es die Einsendung dem bestehenden Patienten zuordnen?
+            </p>
+            <p style="padding-bottom: 1em">
+                Wählen Sie eine entsprechende Konfliktlösung und klicken Sie dann erneut am Ende dieser Seite auf
+                "Neu anlegen" um den Datensatz für die Einsendung zu erstellen.
+            </p>
+            @Html.EnumRadioEditorFor(model => model.DuplicatePatientResolution)
+        </div>
+
+    }
+
+    @Html.EditorFor(m => m.Sending)
+    @Html.EditorFor(m => m.Patient)
+    @Html.EditorFor(m => m.Sending, "MeningoSendingConclusion")
+}
+
+@section scripts
+{
+    <script>
+        preventSiteNavigationWithPendingChanges();
+    </script>
+}

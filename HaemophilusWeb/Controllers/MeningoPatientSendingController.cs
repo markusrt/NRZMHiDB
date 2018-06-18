@@ -35,6 +35,11 @@ namespace HaemophilusWeb.Controllers
             return db.MeningoSendings;
         }
 
+        protected override IDbSet<MeningoPatient> PatientDbSet()
+        {
+            return db.MeningoPatients;
+        }
+
         protected override void CreateAndEditPreparations(PatientSendingViewModel<MeningoPatient, MeningoSending> patientSending)
 
         {

@@ -1,0 +1,25 @@
+﻿@using HaemophilusWeb.Models.Meningo
+@model HaemophilusWeb.ViewModels.PatientSendingViewModel<MeningoPatient, MeningoSending>
+
+@{
+    ViewBag.Title = "Einsendung bearbeiten";
+    ViewBag.DeleteId = Model.Sending.MeningoSendingId;
+}
+
+@section EditModel
+{
+    @Html.HiddenFor(model => model.Sending.MeningoSendingId)
+    @Html.HiddenFor(model => model.Sending.MeningoPatientId)
+    @Html.HiddenFor(model => model.Patient.PatientId)
+
+    @Html.EditorFor(m => m.Sending)
+    @Html.EditorFor(m => m.Patient)
+    @Html.EditorFor(m => m.Sending, "MeningoSendingConclusion")
+}
+
+@section scripts
+{
+    <script>
+        preventSiteNavigationWithPendingChanges();
+    </script>
+}

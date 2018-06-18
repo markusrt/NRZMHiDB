@@ -1091,6 +1091,8 @@
     <Content Include="Views\Shared\EditorTemplates\MeningoSending.cshtml" />
     <Content Include="Views\MeningoPatientSending\Index.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\MeningoSendingConclusion.cshtml" />
+    <Content Include="Views\MeningoPatientSending\Edit.cshtml" />
+    <Content Include="Views\MeningoPatientSending\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

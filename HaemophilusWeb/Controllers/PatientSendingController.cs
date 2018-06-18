@@ -37,6 +37,11 @@ namespace HaemophilusWeb.Controllers
             return db.Sendings;
         }
 
+        protected override IDbSet<Patient> PatientDbSet()
+        {
+            return db.Patients;
+        }
+
         protected override void CreateAndEditPreparations(PatientSendingViewModel<Patient, Sending> patientSending)
 
         {
@@ -284,6 +289,8 @@ namespace HaemophilusWeb.Controllers
 
         protected abstract IDbSet<TSending> SendingDbSet();
 
+        protected abstract IDbSet<TPatient> PatientDbSet();
+
         protected abstract void CreateAndEditPreparations(TViewModel patientSending);
 
         private TViewModel CreatePatientSending(TSending sending)
@@ -442,9 +449,9 @@ namespace HaemophilusWeb.Controllers
             }
         }
 
-        private IQueryable<Patient> FindDuplicatePatients(TPatient patient)
+        private IQueryable<TPatient> FindDuplicatePatients(TPatient patient)
         {
-            var existingPatients = db.Patients.Where(
+            var existingPatients = PatientDbSet().Where(
                 p => p.Initials == patient.Initials &&
                      ((p.BirthDate.HasValue && patient.BirthDate.HasValue &&
                        p.BirthDate.Value == patient.BirthDate.Value)
