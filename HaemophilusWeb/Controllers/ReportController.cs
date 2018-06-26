@@ -65,10 +65,15 @@ namespace HaemophilusWeb.Controllers
             if (existingHealthOffice == null)
             {
                 db.HealthOffices.Add(healthOffice);
-                db.SaveChanges();
+                SaveWithoutValidationAsSourceDataIsWebsiteAndMayBeInvalid();
             }
 
             return existingHealthOffice != null ? Json(existingHealthOffice) : Json(healthOffice);
+        }
+
+        private void SaveWithoutValidationAsSourceDataIsWebsiteAndMayBeInvalid()
+        {
+            db.PerformWithoutSaveValidation(() => db.SaveChanges());
         }
 
 

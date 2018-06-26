@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2018, 6, 26), "Bereinigung von Fehlerhaften Telefonnummern vom RKI Tool.", ChangeType.Bug),
                 new Change(new DateTime(2018, 3, 18), "Überarbeitung der RKI Match Funktion (Duplikate, Matching mit Labornummer).", ChangeType.Feature),
                 new Change(new DateTime(2018, 2, 21), "Beim ersten Anlegen einer Einsendung werden die klinischen Angaben nicht gespeichert.", ChangeType.Bug),
                 new Change(new DateTime(2018, 2, 20), "Import-Funktion für RKI Match Datensätze", ChangeType.Feature),
