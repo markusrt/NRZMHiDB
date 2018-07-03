@@ -78,12 +78,20 @@ namespace HaemophilusWeb.Controllers
 
 
         [HttpPost]
-        public JsonResult ReportGenerated(int? id)
+        public JsonResult ReportGenerated(int? id, bool preliminary=false)
         {
             var isolate = isolateController.LoadIsolateById(id);
             if (isolate != null)
             {
-                isolate.ReportDate = DateTime.Now;
+                if (preliminary && isolate.ReportStatus != ReportStatus.Final)
+                {
+                    isolate.ReportStatus = ReportStatus.Preliminary;
+                }
+                else if(!preliminary)
+                {
+                    isolate.ReportDate = DateTime.Now;
+                    isolate.ReportStatus = ReportStatus.Final;
+                }
                 db.MarkAsModified(isolate);
                 db.SaveChanges();
             }
@@ -95,6 +103,7 @@ namespace HaemophilusWeb.Controllers
             var templatePath = Server.MapPath("~/ReportTemplates");
             var lister = new FileLister(templatePath, ".docx");
             ViewBag.ReportTemplates = lister.Files;
+            ViewBag.PreliminaryReportMarker = ConfigurationManager.AppSettings["PreliminaryReportMarker"];
         }
 
         private void AddReportSignersToViewBag()

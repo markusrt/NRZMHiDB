@@ -13,15 +13,12 @@ namespace HaemophilusWeb.Controllers
     [TestFixture]
     public class SendingControllerTests
     {
-        private static readonly ApplicationDbContextMock DbMock = new ApplicationDbContextMock();
+        private ApplicationDbContextMock DbMock;
 
-        static SendingControllerTests()
+        internal SendingController CreateMockSendingController()
         {
+            DbMock = new ApplicationDbContextMock();
             MockData.CreateMockData(DbMock);
-        }
-
-        internal static SendingController CreateMockSendingController()
-        {
             return new SendingController(DbMock);
         }
 
@@ -72,9 +69,9 @@ namespace HaemophilusWeb.Controllers
         [Test]
         public void Create_AddsOtherSamplingLocations()
         {
+            var controller = CreateMockSendingController();
             var availableOtherSamplingLocations =
                 DbMock.Sendings.Select(s => s.OtherSamplingLocation).Distinct().ToList();
-            var controller = CreateMockSendingController();
 
             var result = controller.Create() as ViewResult;
 
@@ -99,7 +96,7 @@ namespace HaemophilusWeb.Controllers
         {
             var controller = CreateMockSendingController();
             var sending = DbMock.Sendings.Single(s => s.SendingId == MockData.ThirdId);
-            sending.Isolate = new Isolate {YearlySequentialIsolateNumber = 14, Year = 2050};
+            sending.Isolate = new Isolate { YearlySequentialIsolateNumber = 14, Year = 2050 };
 
             var result = controller.Edit(sending.SendingId) as ViewResult;
 
@@ -128,7 +125,7 @@ namespace HaemophilusWeb.Controllers
             var result = controller.Index() as ViewResult;
 
             result.Should().NotBeNull();
-            CollectionAssert.AreEquivalent((IEnumerable) result.Model, DbMock.Sendings.Where(s => !s.Deleted));
+            CollectionAssert.AreEquivalent((IEnumerable)result.Model, DbMock.Sendings.Where(s => !s.Deleted));
         }
     }
 }

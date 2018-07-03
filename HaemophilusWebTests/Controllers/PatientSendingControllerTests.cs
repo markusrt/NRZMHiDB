@@ -1,8 +1,12 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using DataTables.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.TestUtils;
@@ -14,14 +18,22 @@ namespace HaemophilusWeb.Controllers
 {
     public class PatientSendingControllerTests
     {
-        private readonly SendingController sendingController = SendingControllerTests.CreateMockSendingController();
-        private readonly PatientController patientController = new PatientController(DbMock);
-
-        private static readonly ApplicationDbContextMock DbMock = new ApplicationDbContextMock();
+        private SendingController sendingController;
+        private PatientController patientController;
+        private ApplicationDbContextMock DbMock;
         private NameValueCollection requestForm = new NameValueCollection();
 
-        static PatientSendingControllerTests()
+        [SetUp]
+        public void SetUp()
         {
+            DbMock = new ApplicationDbContextMock();
+            MockData.CreateMockData(DbMock);
+            patientController = new PatientController(DbMock);
+            sendingController = new SendingController(DbMock);
+            foreach (var sending in DbMock.Sendings)
+            {
+                sending.Isolate = MockData.CreateInstance<Isolate>();
+            }
         }
 
         [Test]
@@ -61,14 +73,40 @@ namespace HaemophilusWeb.Controllers
             patientInDatabase.ClinicalInformation.Should().Be(ClinicalInformation.Sepsis|ClinicalInformation.Pneumonia);
         }
 
+
+        [TestCase(ReportStatus.None, "glyphicon-remove-sign")]
+        [TestCase(ReportStatus.Preliminary, "glyphicon-time")]
+        [TestCase(ReportStatus.Final, "glyphicon-ok-sign")]
+        public void DataTableAjax_ReportGenerated_IsSetAccordingToReportState(ReportStatus reportStatus, string expectedIcon)
+        {
+            var controller = CreateController();
+            var firstIsolate = DbMock.Sendings.First(s => !s.Deleted).Isolate;
+            firstIsolate.ReportStatus = reportStatus;
+            var request = new DefaultDataTablesRequest {Search = new Search("", false), Columns = new ColumnCollection(new List<Column>()), Length = 10};
+
+            var result = controller.DataTableAjax(request);
+
+            var firstRow = ((DataTablesResponse)result.Data).data.Cast<dynamic>().First();
+            ((string)firstRow.ReportGenerated).Should().Contain(expectedIcon);
+        }
+
         private PatientSendingController CreateController()
         {
             var request = new Mock<HttpRequestBase>();
             request.SetupGet(r => r.Form).Returns(requestForm);
             var context = new Mock<HttpContextBase>();
+            var server = new Mock<HttpServerUtilityBase>();
             context.SetupGet(x => x.Request).Returns(request.Object);
+            context.SetupGet(x => x.Server).Returns(server.Object);
             var controller = new PatientSendingController(DbMock, patientController, sendingController);
             controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
+            var urlHelper = new Mock<UrlHelper>();
+            urlHelper.Setup(u => u.Action(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(string.Empty);
+            urlHelper.Setup(u => u.Action(It.IsAny<string>(), It.IsAny<object>()))
+                .Returns(string.Empty);
+
+            controller.Url = urlHelper.Object;
             return controller;
         }
     }
