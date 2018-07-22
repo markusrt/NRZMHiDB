@@ -14,6 +14,7 @@ namespace HaemophilusWeb.Controllers
 {
     public class ReportController : Controller
     {
+        public const string ReportTemplatesPath = "~/ReportTemplates";
         private readonly IApplicationDbContext db;
 
         private readonly IsolateController isolateController;
@@ -100,7 +101,7 @@ namespace HaemophilusWeb.Controllers
 
         private void AddReportTemplatesToViewBag()
         {
-            var templatePath = Server.MapPath("~/ReportTemplates");
+            var templatePath = Server.MapPath(ReportTemplatesPath);
             var lister = new FileLister(templatePath, ".docx");
             ViewBag.ReportTemplates = lister.Files;
             ViewBag.PreliminaryReportMarker = ConfigurationManager.AppSettings["PreliminaryReportMarker"];

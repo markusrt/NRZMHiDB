@@ -123,7 +123,12 @@ namespace HaemophilusWeb.ViewModels
         public string PatientPostalCode { get; set; }
         public string SenderLaboratoryNumber { get; set; }
         public string EvaluationString { get; set; }
+
+        [Display(Name = "Befund")]
         public string Interpretation { get; set; }
+
+        [Display(Name = "Teilbefund")]
+        public string InterpretationPreliminary { get; set; }
         public string InterpretationDisclaimer { get; set; }
 
         public string Date

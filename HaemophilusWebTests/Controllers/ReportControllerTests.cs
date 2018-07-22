@@ -1,21 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
 using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.TestUtils;
 using HaemophilusWeb.ViewModels;
+using Moq;
 using NUnit.Framework;
 using TestDataGenerator;
 
 namespace HaemophilusWeb.Controllers
 {
-    public class ReportControllerTests
+    public class ReportControllerTests : ITempDirectoryTest
     {
         private const int IsolateId = 10;
+        private const string Report1 = "report1.docx";
+        private const string Report2 = "report2.docx";
 
         private static ApplicationDbContextMock DbMock;
 
         private static readonly Catalog Catalog = new Catalog();
+
         private ReportController controller;
+
+        public string TemporaryDirectoryToStoreTestData { get; set; }
 
         private static void CreateMockData()
         {
@@ -26,6 +39,26 @@ namespace HaemophilusWeb.Controllers
             isolate.IsolateId = IsolateId;
 
             DbMock.Isolates.Add(isolate);
+
+            var senderId = isolate.Sending.SenderId;
+            var sender = DbMock.Senders.SingleOrDefault(s => s.SenderId == senderId)
+                ?? Catalog.CreateInstance<Sender>();
+            sender.SenderId = senderId;
+            DbMock.Senders.Add(sender);
+        }
+
+        private void CreateMockReportTemplates()
+        {
+            CreateMockReportTemplate(Report1);
+            CreateMockReportTemplate(Report2);
+        }
+
+        private void CreateMockReportTemplate(string name)
+        {
+            using (var file = File.Create(Path.Combine(TemporaryDirectoryToStoreTestData, name), 1, FileOptions.RandomAccess))
+            {
+                file.Close();
+            }
         }
 
         [SetUp]
@@ -33,7 +66,56 @@ namespace HaemophilusWeb.Controllers
         {
             DbMock = new ApplicationDbContextMock();
             controller = new ReportController(DbMock);
+            var context = new Mock<HttpContextBase>();
+            var server = new Mock<HttpServerUtilityBase>(MockBehavior.Loose);
+            server.Setup(i => i.MapPath(ReportController.ReportTemplatesPath))
+                .Returns(TemporaryDirectoryToStoreTestData);
+            context.SetupGet(x => x.Server).Returns(server.Object);
+            controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
+
+            ConfigurationManager.AppSettings["reportSigners"] = "signer1";
+            MvcApplication.InitializeAutomapper();
+
+            CreateMockReportTemplates();
+
             CreateMockData();
+        }
+
+        [Test]
+        public void Isolate_ReportTemplatesAvailable_AddsFileInfosToViewBag()
+        {
+            var viewResult = controller.Isolate(IsolateId) as ViewResult;
+
+            var reportTemplates = viewResult.ViewBag.ReportTemplates as List<FileInfo>;
+            reportTemplates.Count.Should().Be(2);
+            reportTemplates.Should().Contain(f => f.FullName.EndsWith(Report1));
+            reportTemplates.Should().Contain(f => f.FullName.EndsWith(Report2));
+        }
+
+        [Test]
+        public void Isolate_ValidModel_FillsInterpretationProperties()
+        {
+            var isolate = DbMock.Isolates.SingleOrDefault(i => i.IsolateId == IsolateId);
+            isolate.Agglutination = SerotypeAgg.Negative;
+            isolate.BexA = TestResult.NotDetermined;
+            isolate.SerotypePcr = SerotypePcr.NotDetermined;
+            isolate.Agglutination = SerotypeAgg.Negative;
+            var viewResult = controller.Isolate(IsolateId) as ViewResult;
+
+            var model = viewResult.Model as IsolateViewModel;
+            model.InterpretationPreliminary.Should().Contain("Das Ergebnis spricht für einen nicht-typisierbaren Haemophilus influenzae (NTHi).");
+            model.InterpretationPreliminary.Should().NotContain("Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.");
+            model.Interpretation.Should().Contain("Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.");
+        }
+
+        [Test]
+        public void Isolate_NoReportTemplatesAvailable_AddsFileInfosToViewBag()
+        {
+            Directory.Delete(TemporaryDirectoryToStoreTestData, true);
+            var viewResult = controller.Isolate(IsolateId) as ViewResult;
+
+            var reportTemplates = viewResult.ViewBag.ReportTemplates as List<FileInfo>;
+            reportTemplates.Count.Should().Be(0);
         }
 
         [Test]
@@ -91,5 +173,6 @@ namespace HaemophilusWeb.Controllers
         {
             controller.Invoking(c => c.ReportGenerated(isolateId)).ShouldNotThrow();
         }
+
     }
 }

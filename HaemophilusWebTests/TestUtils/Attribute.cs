@@ -26,7 +26,10 @@ namespace HaemophilusWeb.TestUtils
 
         public override void AfterTest(ITest test)
         {
-            tempDirectoryToStoreTestData?.Delete(true);
+            if (tempDirectoryToStoreTestData.Exists)
+            {
+                tempDirectoryToStoreTestData?.Delete(true);
+            }
         }
 
         private void CreateTemporaryDirectoryAndAssignToTest(ITempDirectoryTest tempDirectoryTest)

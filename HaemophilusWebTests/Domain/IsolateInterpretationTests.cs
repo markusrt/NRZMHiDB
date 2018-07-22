@@ -19,17 +19,11 @@ namespace HaemophilusWeb.Domain
 
         [Test]
         [TestCase(SerotypeAgg.A, SerotypePcr.A)]
-        [TestCase(SerotypeAgg.A, SerotypePcr.NotDetermined)]
         [TestCase(SerotypeAgg.B, SerotypePcr.B)]
-        [TestCase(SerotypeAgg.B, SerotypePcr.NotDetermined)]
         [TestCase(SerotypeAgg.C, SerotypePcr.C)]
-        [TestCase(SerotypeAgg.C, SerotypePcr.NotDetermined)]
         [TestCase(SerotypeAgg.D, SerotypePcr.D)]
-        [TestCase(SerotypeAgg.D, SerotypePcr.NotDetermined)]
         [TestCase(SerotypeAgg.E, SerotypePcr.E)]
-        [TestCase(SerotypeAgg.E, SerotypePcr.NotDetermined)]
         [TestCase(SerotypeAgg.F, SerotypePcr.F)]
-        [TestCase(SerotypeAgg.F, SerotypePcr.NotDetermined)]
         public void
             Interpret_DistinctAgglutinationWithPositiveBexA_EitherMatchingOrNotDeterminedSerotype_IsSpecificTyping(
             SerotypeAgg serotypeAgg,
@@ -45,11 +39,42 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = IsolateInterpretation.Interpret(isolate);
 
-            var expectedInterpretation = string.Format("Infektion mit Haemophilus influenzae des Serotyp {0} (Hi{0}).",
+            var expectedInterpretation = string.Format("Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {0} (Hi{0}).",
                 serotypeString);
-            var expectedDisclaimer = string.Format(
-                "Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp {0}", serotypeString);
-            interpretation.Interpretation.Should().Contain(expectedInterpretation);
+            var expectedDisclaimer = $"Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp {serotypeString}";
+            interpretation.Interpretation.Should().Be(expectedInterpretation);
+            interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
+            interpretation.InterpretationDisclaimer.Should().Contain(expectedDisclaimer);
+        }
+
+        [Test]
+        [TestCase(SerotypeAgg.A, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.B, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.C, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.D, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.E, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.F, SerotypePcr.NotDetermined)]
+        public void
+            Interpret_DistinctAgglutinationWithPositiveBexA_NotDeterminedSerotype_IsSpecificPreliminaryTyping(
+                SerotypeAgg serotypeAgg,
+                SerotypePcr serotypePcr)
+        {
+            var serotypeString = serotypeAgg.ToString().ToLower();
+            var isolate = new IsolateBase
+            {
+                SerotypePcr = serotypePcr,
+                Agglutination = serotypeAgg,
+                BexA = TestResult.Positive
+            };
+
+            var interpretation = IsolateInterpretation.Interpret(isolate);
+
+            var expectedInterpretationPreliminary = string.Format("Das Ergebnis spricht für eine Infektion mit Haemophilus influenzae des Serotyp {0} (Hi{0}).",
+                serotypeString);
+            var expectedDisclaimer =
+                $"Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp {serotypeString}";
+            interpretation.Interpretation.Should().Contain("Diskrepante");
+            interpretation.InterpretationPreliminary.Should().Be(expectedInterpretationPreliminary);
             interpretation.InterpretationDisclaimer.Should().Contain(expectedDisclaimer);
         }
 
@@ -72,9 +97,9 @@ namespace HaemophilusWeb.Domain
             };
 
             var interpretation = IsolateInterpretation.Interpret(isolate);
-
-            var expectedInterpretation = string.Format("Kapsellocus für Polysaccharide des Serotyps {0}", serotypeString);
-            interpretation.Interpretation.Should().Contain(expectedInterpretation);
+            var expectedInterpretation = $"Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren Haemophilus influenzae (NTHi). Ein vorhandener genetischer Kapsellocus für Polysaccharide des Serotyps {serotypeString} wird nicht exprimiert.";
+            interpretation.Interpretation.Should().Be(expectedInterpretation);
+            interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
             interpretation.InterpretationDisclaimer.Should()
                 .Contain("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.");
         }
@@ -91,7 +116,9 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = IsolateInterpretation.Interpret(isolate);
 
-            interpretation.Interpretation.Should().Contain("aus epidemiologischen und Kostengründen nicht durchgeführt");
+            var expectedInterpretation = "Das Ergebnis spricht für einen nicht-typisierbaren Haemophilus influenzae (NTHi).";
+            interpretation.Interpretation.Should().Be(expectedInterpretation + " Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.");
+            interpretation.InterpretationPreliminary.Should().Be(expectedInterpretation);
         }
 
         [Test]
@@ -109,8 +136,10 @@ namespace HaemophilusWeb.Domain
             var interpretation = IsolateInterpretation.Interpret(isolate);
 
             interpretation.Interpretation.Should().Contain("nicht-typisierbar");
+            interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
             interpretation.InterpretationDisclaimer.Should()
                 .Contain("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.");
+
         }
     }
 }

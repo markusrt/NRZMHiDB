@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2018, 7, 22), "Update der Interpretationssätze für End- und Teilbefunde.", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 30), "<p>Einführung von Teilbefunden</p>" +
                     "<p>Es gibt jetzt eine Befundvorlage mit dem Präfix \"Teilbefund -\" welche zur verwendet " +
                     "werden kann um einem Einsender zeitnah den Serotyp mitzuteilen.</p>" +
