@@ -3,10 +3,29 @@ namespace HaemophilusWeb.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class MeningoSending_1 : DbMigration
+    public partial class MeningoPatientAndSending : DbMigration
     {
         public override void Up()
         {
+            CreateTable(
+                "dbo.MeningoPatients",
+                c => new
+                    {
+                        PatientId = c.Int(nullable: false, identity: true),
+                        ClinicalInformation = c.Int(nullable: false),
+                        OtherClinicalInformation = c.String(),
+                        RiskFactors = c.Int(nullable: false),
+                        OtherRiskFactor = c.String(),
+                        Initials = c.String(),
+                        BirthDate = c.DateTime(),
+                        PostalCode = c.String(),
+                        Gender = c.Int(),
+                        City = c.String(),
+                        County = c.String(),
+                        State = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.PatientId);
+            
             CreateTable(
                 "dbo.MeningoSendings",
                 c => new
@@ -15,13 +34,15 @@ namespace HaemophilusWeb.Migrations
                         MeningoPatientId = c.Int(nullable: false),
                         SamplingLocation = c.Int(nullable: false),
                         Material = c.Int(nullable: false),
-                        OtherSamplingLocation = c.String(),
+                        SerogroupSender = c.String(),
                         SenderId = c.Int(nullable: false),
                         SamplingDate = c.DateTime(),
                         ReceivingDate = c.DateTime(nullable: false),
                         Deleted = c.Boolean(nullable: false),
                         SenderLaboratoryNumber = c.String(),
                         Invasive = c.Int(),
+                        OtherSamplingLocation = c.String(),
+                        Remark = c.String(),
                     })
                 .PrimaryKey(t => t.MeningoSendingId)
                 .ForeignKey("dbo.MeningoPatients", t => t.MeningoPatientId, cascadeDelete: true)
@@ -34,6 +55,7 @@ namespace HaemophilusWeb.Migrations
             DropForeignKey("dbo.MeningoSendings", "MeningoPatientId", "dbo.MeningoPatients");
             DropIndex("dbo.MeningoSendings", new[] { "MeningoPatientId" });
             DropTable("dbo.MeningoSendings");
+            DropTable("dbo.MeningoPatients");
         }
     }
 }

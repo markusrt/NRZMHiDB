@@ -7,13 +7,13 @@ namespace HaemophilusWeb.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Meningo_Patient_2_RemovedFields : IMigrationMetadata
+    public sealed partial class MeningoPatientAndSending : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Meningo_Patient_2_RemovedFields));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(MeningoPatientAndSending));
         
         string IMigrationMetadata.Id
         {
-            get { return "201806142008112_Meningo_Patient_2_RemovedFields"; }
+            get { return "201807251901482_MeningoPatientAndSending"; }
         }
         
         string IMigrationMetadata.Source

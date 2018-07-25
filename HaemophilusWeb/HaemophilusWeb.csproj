@@ -356,37 +356,13 @@
     <Compile Include="Migrations\201802182157080_RkiMatch.Designer.cs">
       <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201803182109307_MeningoPatient_1.cs" />
-    <Compile Include="Migrations\201803182109307_MeningoPatient_1.Designer.cs">
-      <DependentUpon>201803182109307_MeningoPatient_1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201803192053476_MeningoSending_1.cs" />
-    <Compile Include="Migrations\201803192053476_MeningoSending_1.Designer.cs">
-      <DependentUpon>201803192053476_MeningoSending_1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804151759417_MeningoPatient_2_UnderlyingDisease.cs" />
-    <Compile Include="Migrations\201804151759417_MeningoPatient_2_UnderlyingDisease.Designer.cs">
-      <DependentUpon>201804151759417_MeningoPatient_2_UnderlyingDisease.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804161927493_MeningoPatient_3_RiskFactors.cs" />
-    <Compile Include="Migrations\201804161927493_MeningoPatient_3_RiskFactors.Designer.cs">
-      <DependentUpon>201804161927493_MeningoPatient_3_RiskFactors.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201804181949382_MeningoSending_2_SenderConclusion.cs" />
-    <Compile Include="Migrations\201804181949382_MeningoSending_2_SenderConclusion.Designer.cs">
-      <DependentUpon>201804181949382_MeningoSending_2_SenderConclusion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806142008112_Meningo_Patient_2_RemovedFields.cs" />
-    <Compile Include="Migrations\201806142008112_Meningo_Patient_2_RemovedFields.Designer.cs">
-      <DependentUpon>201806142008112_Meningo_Patient_2_RemovedFields.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201806161934440_Meningo_Sending_2_RemovedFields.cs" />
-    <Compile Include="Migrations\201806161934440_Meningo_Sending_2_RemovedFields.Designer.cs">
-      <DependentUpon>201806161934440_Meningo_Sending_2_RemovedFields.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201807022228523_Isolate_12_ReportStatus.cs" />
     <Compile Include="Migrations\201807022228523_Isolate_12_ReportStatus.Designer.cs">
       <DependentUpon>201807022228523_Isolate_12_ReportStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807251901482_MeningoPatientAndSending.cs" />
+    <Compile Include="Migrations\201807251901482_MeningoPatientAndSending.Designer.cs">
+      <DependentUpon>201807251901482_MeningoPatientAndSending.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -1208,29 +1184,11 @@
     <EmbeddedResource Include="Migrations\201802182157080_RkiMatch.resx">
       <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803182109307_MeningoPatient_1.resx">
-      <DependentUpon>201803182109307_MeningoPatient_1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201803192053476_MeningoSending_1.resx">
-      <DependentUpon>201803192053476_MeningoSending_1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804151759417_MeningoPatient_2_UnderlyingDisease.resx">
-      <DependentUpon>201804151759417_MeningoPatient_2_UnderlyingDisease.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804161927493_MeningoPatient_3_RiskFactors.resx">
-      <DependentUpon>201804161927493_MeningoPatient_3_RiskFactors.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201804181949382_MeningoSending_2_SenderConclusion.resx">
-      <DependentUpon>201804181949382_MeningoSending_2_SenderConclusion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806142008112_Meningo_Patient_2_RemovedFields.resx">
-      <DependentUpon>201806142008112_Meningo_Patient_2_RemovedFields.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201806161934440_Meningo_Sending_2_RemovedFields.resx">
-      <DependentUpon>201806161934440_Meningo_Sending_2_RemovedFields.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807022228523_Isolate_12_ReportStatus.resx">
       <DependentUpon>201807022228523_Isolate_12_ReportStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807251901482_MeningoPatientAndSending.resx">
+      <DependentUpon>201807251901482_MeningoPatientAndSending.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
