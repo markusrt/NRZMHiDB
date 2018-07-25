@@ -179,6 +179,7 @@ namespace HaemophilusWeb.Controllers
             {
                 x.SendingId,
                 x.Isolate.IsolateId,
+                x.Isolate.ReportStatus,
                 x.Isolate.ReportDate,
                 x.Patient.Initials,
                 x.Patient.BirthDate,
@@ -193,7 +194,8 @@ namespace HaemophilusWeb.Controllers
                 PatientPostalCode = x.Patient.PostalCode,
                 SenderPostalCode = db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode,
             });
-            var queryRecords = query.ToList().Select(x =>
+            var list = query.ToList();
+            var queryRecords = list.Select(x =>
             {
                 var invasive = EnumEditor.GetEnumDescription(x.Invasive);
                 var samplingLocation = x.SamplingLocation == SamplingLocation.Other
@@ -212,7 +214,7 @@ namespace HaemophilusWeb.Controllers
                     Invasive = invasive,
                     LaboratoryNumber = x.Year * 10000 + x.YearlySequentialIsolateNumber,
                     LaboratoryNumberString = laboratoryNumber,
-                    ReportGenerated = x.ReportDate.HasValue,
+                    ReportStatus = x.ReportStatus,
                     PatientPostalCode = x.PatientPostalCode,
                     SenderPostalCode = x.SenderPostalCode,
                     SenderLaboratoryNumber = x.SenderLaboratoryNumber,
@@ -621,7 +623,7 @@ namespace HaemophilusWeb.Controllers
         public JsonResult DataTableAjax([ModelBinder(typeof(DataTablesBinder))] IDataTablesRequest requestParameters)
         {
             var queryable = QueryRecords();
-            var totalCount = queryable.Count();
+            var totalCount = queryable.Count;
 
             var searchValue = requestParameters.Search.Value.ToLower();
             var columns = requestParameters.Columns;
@@ -662,7 +664,7 @@ namespace HaemophilusWeb.Controllers
                     ReceivingDate = x.ReceivingDate.ToReportFormat(),
                     x.SamplingLocation,
                     x.Invasive,
-                    ReportGenerated = CreateReportGeneratedIcon(x.ReportGenerated),
+                    ReportGenerated = CreateReportGeneratedIcon(x.ReportStatus),
                     LaboratoryNumber = CreateIsolateLink(x.IsolateId, x.LaboratoryNumberString),
                     x.PatientPostalCode,
                     x.SenderPostalCode,
@@ -678,19 +680,28 @@ namespace HaemophilusWeb.Controllers
 
             return Json(dataTablesResult);
         }
-        
-        protected static string CreateReportGeneratedIcon(bool reportGenerated)
+
+        private static string CreateReportGeneratedIcon(ReportStatus reportStatus)
         {
-            return string.Format(
-                "<span style=\"color:{0}\" class=\"glyphicon {1}\" aria-hidden=\"true\"></span>",
-                reportGenerated ? "#00CC00" : "#CC0000",
-                reportGenerated ? "glyphicon-ok-sign" : "glyphicon-remove-sign");
+            var color = "#CC0000";
+            var icon = "glyphicon-remove-sign";
+            if (reportStatus == ReportStatus.Preliminary)
+            {
+                color = "#FFCC00";
+                icon = "glyphicon-time";
+            }
+            else if (reportStatus == ReportStatus.Final)
+            {
+                color = "#00CC00";
+                icon = "glyphicon-ok-sign";
+            }
+            return $"<span style=\"color:{color}\" class=\"glyphicon {icon}\" aria-hidden=\"true\" title=\"{EnumEditor.GetEnumDescription(reportStatus)}\"></span>";
         }
 
         private string CreateIsolateLink(int isolateId, string laboratoryNumber)
         {
-            return string.Format("<a class=\"btn-sm btn btn-default\" href=\"{0}\" role=\"button\">{1}</a>",
-                Url.Action("Edit", "Isolate", new { id = isolateId }), laboratoryNumber);
+            return
+                $"<a class=\"btn-sm btn btn-default\" href=\"{Url.Action("Edit", "Isolate", new {id = isolateId})}\" role=\"button\">{laboratoryNumber}</a>";
         }
 
         private string CreateEditControls(int sendingId, int isolateId)

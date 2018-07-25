@@ -31,7 +31,7 @@ namespace HaemophilusWeb
             InitializeAutomapper();
         }
 
-        private static void InitializeAutomapper()
+        public static void InitializeAutomapper()
         {
             Mapper.CreateMap<IsolateViewModel, Isolate>();
             Mapper.CreateMap<Isolate, IsolateViewModel>();

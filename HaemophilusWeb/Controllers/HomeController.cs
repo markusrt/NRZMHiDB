@@ -18,6 +18,14 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2018, 7, 22), "Update der Interpretationssätze für End- und Teilbefunde.", ChangeType.Feature),
+                new Change(new DateTime(2018, 6, 30), "<p>Einführung von Teilbefunden</p>" +
+                    "<p>Es gibt jetzt eine Befundvorlage mit dem Präfix \"Teilbefund -\" welche zur verwendet " +
+                    "werden kann um einem Einsender zeitnah den Serotyp mitzuteilen.</p>" +
+                    "<p>Einsendungen mit Teilbefunden werden in der Übersicht mit einem speziellen Symbol dargestellt:</p>" +
+                    "<img class='img-rounded img-responsive' src='~/Images/changes/20180703.png'/>" +
+                    "<p>Sobald einmal ein Endbefund erstellt wurde lässt sich der Zustand einer nicht mehr auf \"Teilbefund\" zurücksetzen.", ChangeType.Feature),
+                new Change(new DateTime(2018, 6, 26), "Bereinigung von Fehlerhaften Telefonnummern vom RKI Tool.", ChangeType.Bug),
                 new Change(new DateTime(2018, 6, 18, 22, 0, 0), "Kombinierte Eingabemaske für Patent und Einsendungen (Meningokokken).", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 16, 22, 0, 0), "Eingabemaske für Einsendungen (Meningokokken).", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 14, 22, 0, 0), "Eingabemaske für Patienten (Meningokokken).", ChangeType.Feature),

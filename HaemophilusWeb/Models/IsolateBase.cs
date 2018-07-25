@@ -89,6 +89,9 @@ namespace HaemophilusWeb.Models
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? ReportDate { get; set; }
 
+        [Display(Name = "Befund-Status")]
+        public ReportStatus ReportStatus { get; set; }
+
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
 

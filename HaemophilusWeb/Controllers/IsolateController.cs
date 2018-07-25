@@ -81,6 +81,7 @@ namespace HaemophilusWeb.Controllers
             isolateViewModel.EvaluationString = isolate.Evaluation.ToReportFormat();
             var interpretationResult = IsolateInterpretation.Interpret(isolate);
             isolateViewModel.Interpretation = interpretationResult.Interpretation;
+            isolateViewModel.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
             isolateViewModel.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
 
             var sender = db.Senders.Find(isolate.Sending.SenderId);

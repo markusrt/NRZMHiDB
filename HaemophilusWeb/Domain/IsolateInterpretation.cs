@@ -9,8 +9,14 @@ namespace HaemophilusWeb.Domain
         private const string DisclaimerTemplate =
             "Der Nachweis von Haemophilus influenzae aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: {0}.";
 
-        private const string TypingNotPossible =
+        private const string TypingNotPossiblePlural =
             "Die Ergebnisse sprechen für einen nicht-typisierbaren Haemophilus influenzae (NTHi).";
+
+        private const string TypingNotPossibleSingular =
+            "Das Ergebnis spricht für einen nicht-typisierbaren Haemophilus influenzae (NTHi).";
+
+        private const string TypingNotPossiblePlural2 =
+            "Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren Haemophilus influenzae (NTHi).";
 
         private static readonly List<SerotypeAgg> SpecificAgglutination = new List<SerotypeAgg>
         {
@@ -29,6 +35,7 @@ namespace HaemophilusWeb.Domain
             var agglutination = isolate.Agglutination;
             var agglutinationDescription = EnumEditor.GetEnumDescription(agglutination);
             var interpretation = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.";
+            var interpretationPreliminary = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.";
             var interpretationDisclaimer = string.Empty;
 
             if (agglutination == SerotypeAgg.Negative)
@@ -37,41 +44,45 @@ namespace HaemophilusWeb.Domain
                 {
                     if (serotypePcr == SerotypePcr.Negative || serotypePcr == SerotypePcr.NotDetermined)
                     {
-                        interpretation = TypingNotPossible;
+                        interpretation = TypingNotPossiblePlural;
                         interpretationDisclaimer = string.Format(DisclaimerTemplate,
                             "Haemophilus influenzae, unbekapselt");
                     }
                     else if (serotypePcr != SerotypePcr.NotDetermined)
                     {
                         interpretation =
-                            string.Format(
-                                "{0} Ein vorhandener genetischer Kapsellocus für Polysaccharide des Serotyps {1} wird nicht exprimiert.",
-                                TypingNotPossible, serotypePcrDescription);
+                            $"{TypingNotPossiblePlural2} Ein vorhandener genetischer Kapsellocus für Polysaccharide des Serotyps {serotypePcrDescription} wird nicht exprimiert.";
                         interpretationDisclaimer = string.Format(DisclaimerTemplate,
                             "Haemophilus influenzae, unbekapselt");
                     }
                 }
                 else if (isolate.BexA == TestResult.NotDetermined && serotypePcr == SerotypePcr.NotDetermined)
                 {
+                    interpretationPreliminary = TypingNotPossibleSingular;
                     interpretation =
-                        string.Format(
-                            "{0} Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.",
-                            TypingNotPossible);
+                        $"{TypingNotPossibleSingular} Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.";
                 }
             }
             if (SpecificAgglutination.Contains(agglutination) && isolate.BexA == TestResult.Positive &&
                 (agglutination.ToString() == serotypePcr.ToString() || serotypePcr == SerotypePcr.NotDetermined))
             {
-                interpretation =
-                    string.Format(
-                        "Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {0} (Hi{0}).",
-                        agglutinationDescription);
+                if (serotypePcr == SerotypePcr.NotDetermined)
+                {
+                    interpretationPreliminary =
+                        $"Das Ergebnis spricht für eine Infektion mit Haemophilus influenzae des Serotyp {agglutinationDescription} (Hi{agglutinationDescription}).";
+                }
+                else
+                {
+                    interpretation =
+                        $"Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {agglutinationDescription} (Hi{agglutinationDescription}).";
+                }
                 interpretationDisclaimer = string.Format(DisclaimerTemplate,
-                    string.Format("Haemophilus influenzae, Serotyp {0}", agglutinationDescription));
+                    $"Haemophilus influenzae, Serotyp {agglutinationDescription}");
             }
             return new InterpretationResult
             {
                 Interpretation = interpretation,
+                InterpretationPreliminary = interpretationPreliminary,
                 InterpretationDisclaimer = interpretationDisclaimer
             };
         }
@@ -80,6 +91,7 @@ namespace HaemophilusWeb.Domain
     public class InterpretationResult
     {
         public string Interpretation { get; set; }
+        public string InterpretationPreliminary { get; set; }
         public string InterpretationDisclaimer { get; set; }
     }
 }

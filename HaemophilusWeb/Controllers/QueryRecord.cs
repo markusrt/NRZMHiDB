@@ -21,5 +21,6 @@ namespace HaemophilusWeb.Controllers
         public string PatientPostalCode { get; set; }
         public string SenderPostalCode { get; set; }
         public string SenderLaboratoryNumber { get; set; }
+        public ReportStatus ReportStatus { get; internal set; }
     }
 }

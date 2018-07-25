@@ -16,6 +16,7 @@ namespace HaemophilusWeb.Tools
     {
         private const string Uri = "https://tools.rki.de/PLZTool/?q={0}";
         private readonly Func<string, string> queryPostalCode;
+        private readonly Regex DuplicateInnerSpaces = new Regex(@"\s\s+");
 
         public RkiTool() : this(QueryUsingWebClient)
         {
@@ -57,8 +58,8 @@ namespace HaemophilusWeb.Tools
                 return new HealthOffice
                 {
                     Address = address,
-                    Phone = dataNodes[1].GetAttributeValue("Value", string.Empty),
-                    Fax = dataNodes[2].GetAttributeValue("Value", string.Empty),
+                    Phone = DuplicateInnerSpaces.Replace(dataNodes[1].GetAttributeValue("Value", string.Empty), " ").Trim(),
+                    Fax = DuplicateInnerSpaces.Replace(dataNodes[2].GetAttributeValue("Value", string.Empty)," ").Trim(),
                     Email = dataNodes[3].GetAttributeValue("Value", string.Empty),
                     PostalCode = postalCode
                 };

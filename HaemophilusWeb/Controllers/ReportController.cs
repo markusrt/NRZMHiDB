@@ -14,6 +14,7 @@ namespace HaemophilusWeb.Controllers
 {
     public class ReportController : Controller
     {
+        public const string ReportTemplatesPath = "~/ReportTemplates";
         private readonly IApplicationDbContext db;
 
         private readonly IsolateController isolateController;
@@ -65,20 +66,33 @@ namespace HaemophilusWeb.Controllers
             if (existingHealthOffice == null)
             {
                 db.HealthOffices.Add(healthOffice);
-                db.SaveChanges();
+                SaveWithoutValidationAsSourceDataIsWebsiteAndMayBeInvalid();
             }
 
             return existingHealthOffice != null ? Json(existingHealthOffice) : Json(healthOffice);
         }
 
+        private void SaveWithoutValidationAsSourceDataIsWebsiteAndMayBeInvalid()
+        {
+            db.PerformWithoutSaveValidation(() => db.SaveChanges());
+        }
+
 
         [HttpPost]
-        public JsonResult ReportGenerated(int? id)
+        public JsonResult ReportGenerated(int? id, bool preliminary=false)
         {
             var isolate = isolateController.LoadIsolateById(id);
             if (isolate != null)
             {
-                isolate.ReportDate = DateTime.Now;
+                if (preliminary && isolate.ReportStatus != ReportStatus.Final)
+                {
+                    isolate.ReportStatus = ReportStatus.Preliminary;
+                }
+                else if(!preliminary)
+                {
+                    isolate.ReportDate = DateTime.Now;
+                    isolate.ReportStatus = ReportStatus.Final;
+                }
                 db.MarkAsModified(isolate);
                 db.SaveChanges();
             }
@@ -87,9 +101,10 @@ namespace HaemophilusWeb.Controllers
 
         private void AddReportTemplatesToViewBag()
         {
-            var templatePath = Server.MapPath("~/ReportTemplates");
+            var templatePath = Server.MapPath(ReportTemplatesPath);
             var lister = new FileLister(templatePath, ".docx");
             ViewBag.ReportTemplates = lister.Files;
+            ViewBag.PreliminaryReportMarker = ConfigurationManager.AppSettings["PreliminaryReportMarker"];
         }
 
         private void AddReportSignersToViewBag()

@@ -14,6 +14,7 @@ namespace HaemophilusWeb.Tools
         private string RkiToolQueryNoResult;
         private string RkiToolQueryMultipleResults;
         private string RkiToolQueryResultWithUmlaut;
+        private string RkiToolQueryResultWithInvalidPhoneAndFax;
 
         [SetUp]
         public void LoadRkiToolQueryResult()
@@ -24,6 +25,7 @@ namespace HaemophilusWeb.Tools
             RkiToolQueryNoResult = GetResource(assembly, "HaemophilusWeb.Resources.RkiToolQueryNoResult.html");
             RkiToolQueryMultipleResults = GetResource(assembly, "HaemophilusWeb.Resources.RkiToolQueryMultipleResults.html");
             RkiToolQueryResultWithUmlaut = GetResource(assembly, "HaemophilusWeb.Resources.RkiToolQueryResultWithUmlaut.html");
+            RkiToolQueryResultWithInvalidPhoneAndFax = GetResource(assembly, "HaemophilusWeb.Resources.RkiToolQueryResultWithInvalidFaxAndPhone.html");
         }
 
         private static string GetResource(Assembly assembly, string resourceName)
@@ -101,6 +103,24 @@ namespace HaemophilusWeb.Tools
             healthOffice.Should().NotBeNull();
             healthOffice.Address.Should()
                 .Be("Landratsamt Kronach\nSachgebiet 36 - Gesundheitsamt\nGüterstrasse 18\n96317 Kronach");
+        }
+
+        [Test]
+        public void QueryHealthOffice_InvalidPhoneAndFax_RemovesExcessSpaces()
+        {
+            var expectedHealthOffice = new HealthOffice
+            {
+                Address = "Landratsamt Forchheim\nGesundheitsamt\nAm Streckerplatz 3\n91301 Forchheim",
+                Phone = "09191 86-3504",
+                Fax = "09191 86-3508",
+                Email = "Gesundheitsamt@lra-fo.de",
+                PostalCode = "91301"
+            };
+            var rkiTool = new RkiTool(s => RkiToolQueryResultWithInvalidPhoneAndFax);
+
+            var healthOffice = rkiTool.QueryHealthOffice("91301");
+
+            healthOffice.ShouldBeEquivalentTo(expectedHealthOffice);
         }
     }
 }
