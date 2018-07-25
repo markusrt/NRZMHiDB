@@ -4,16 +4,20 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
+using System.Web.Mvc;
 using System.Xml.XPath;
 using HaemophilusWeb.Models;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NLog;
 
 namespace HaemophilusWeb.Tools
 {
     public class RkiTool
     {
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
         private const string Uri = "https://tools.rki.de/PLZTool/?q={0}";
         private readonly Func<string, string> queryPostalCode;
         private readonly Regex DuplicateInnerSpaces = new Regex(@"\s\s+");
@@ -64,8 +68,9 @@ namespace HaemophilusWeb.Tools
                     PostalCode = postalCode
                 };
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Log.Warn(e, "Failed to query RKI Tool");
                 return null;
             }
         }
