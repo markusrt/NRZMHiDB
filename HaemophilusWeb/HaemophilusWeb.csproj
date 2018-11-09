@@ -376,6 +376,7 @@
     <Compile Include="Models\GrowthType.cs" />
     <Compile Include="Models\HealthOffice.cs" />
     <Compile Include="Models\IsolateBase.cs" />
+    <Compile Include="Models\IsolateCommon.cs" />
     <Compile Include="Models\Material.cs" />
     <Compile Include="Models\Meningo\Epidemiology.cs" />
     <Compile Include="Models\Meningo\MeningoMaterial.cs" />

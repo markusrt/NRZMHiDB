@@ -21,7 +21,7 @@ namespace HaemophilusWeb.Utils
             return dateTime.ToString("dd.MM.yyyy");
         }
 
-        public static string ToReportFormat(this Patient patient)
+        public static string ToReportFormat(this PatientBase patient)
         {
             return string.Format("{0} / {1}", patient.Initials, patient.PostalCode);
         }
