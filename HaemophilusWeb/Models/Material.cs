@@ -6,6 +6,6 @@ namespace HaemophilusWeb.Models
     {
         [Description("Isolat")] Isolate = 0,
         [Description("Isolierte DNA")] IsolatedDna = 1,
-        [Description("Nativmaterial")] NativeMaterial
+        [Description("Nativmaterial")] NativeMaterial = 2
     }
 }
