@@ -491,6 +491,15 @@
     <Content Include="Content\select2-spinner.gif" />
     <Content Include="Content\select2.png" />
     <Content Include="Content\select2x2.png" />
+    <Content Include="Database\backup.sql" />
+    <Content Include="Database\EntityDiagram.png" />
+    <Content Include="Database\heidisql_01.png" />
+    <Content Include="Database\heidisql_02.png" />
+    <Content Include="Database\heidisql_03.png" />
+    <Content Include="Database\heidisql_04.png" />
+    <Content Include="Database\NRZMHiDBReader.sql" />
+    <Content Include="Database\PlantUMLDiagram.sql" />
+    <Content Include="Database\restore.sql" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -520,6 +529,10 @@
     </Content>
     <Content Include="Content\DataTables\css\dataTables.responsive.scss" />
     <Content Include="Content\DataTables\css\dataTables.jqueryui.scss" />
+    <Content Include="Database\backup.bat" />
+    <Content Include="Database\EntityDiagram.uml" />
+    <Content Include="Database\Readme.md" />
+    <Content Include="Database\restore_to_test.bat" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
