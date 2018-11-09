@@ -1,11 +1,13 @@
 ﻿@using HaemophilusWeb.Models
 @using HaemophilusWeb.Utils
+@using HaemophilusWeb.Validators
 @using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.ViewModels.EpsilometerTestViewModel
 
 @{ 
     var relevantBreakPoints = ((IEnumerable<EucastClinicalBreakpoint>) ViewBag.ClinicalBreakpoints).Where(
         b => b.Antibiotic == Model.Antibiotic).ToList();
+    var measurements = EpsilometerTestValidator.GetETestScale(Model.Antibiotic);
 }
 
 <div class="form-group">
@@ -13,6 +15,7 @@
         {
             <label title="@EnumEditor.GetEnumDescription(Model.Antibiotic)" class="col-sm-2 control-label nowrap-ellipsis">@EnumEditor.GetEnumDescription(Model.Antibiotic)</label>
             @Html.HiddenFor(model => model.Antibiotic);
+            @Html.HiddenFor(model => model.ReadonlyAntibiotic);
         }
         else
         {
@@ -23,12 +26,18 @@
                     Text = EnumUtils.GetEnumDescription<Antibiotic>(option),
                     Value = ((int)option).ToString(),
                     Selected = (Model != null) && (option == Model.Antibiotic),
-                }), "Antibiotikum auswählen...", new { @class = "form-control" })
+                }), "Antibiotikum auswählen...", new { @class = "form-control", @onchange = "CallChangefunc(this.value)" })
             </div>
         }
 
     <div class="col-sm-2 col-xs-3">
-        @Html.TextBoxFor(m => m.Measurement, new { @class = "form-control" })
+        @Html.DropDownListFor(m => m.Measurement, measurements.Select(
+            option => new SelectListItem
+            {
+                Text = option.ToString(),
+                Value = option.ToString(),
+                Selected = Model != null && option.Equals(Model.Measurement)
+            }), "E-Test Wert auswählen...", new {@class = "form-control"})
         @Html.ValidationMessageFor(m => m.Measurement)
     </div>
     <div class="col-sm-4 col-xs-7">
@@ -51,4 +60,19 @@
         @Html.HiddenFor(m => m.Result)
     </div>
 </div>
+
+<script>
+    function CallChangefunc(val) {
+        var measurements = @Html.Raw(Json.Encode(EpsilometerTestValidator.OtherAntibioticsETestScale));
+        $('#EpsilometerTestViewModels_0__Measurement').children().remove();
+        if (val == @Html.Raw((int)Antibiotic.Ampicillin) || val == @Html.Raw((int)Antibiotic.AmoxicillinClavulanate) ) {
+            measurements = @Html.Raw(Json.Encode(EpsilometerTestValidator.AmpicillinAndAmoxicillinClavulanateETestScale));
+        }
+
+        $('<option/>').html("E-Test Wert auswählen...").appendTo('#EpsilometerTestViewModels_0__Measurement');
+        for (var i = 0; i < measurements.length;i++){
+            $('<option/>').val(measurements[i].toLocaleString()).html(measurements[i].toLocaleString()).appendTo('#EpsilometerTestViewModels_0__Measurement');
+        }
+    }
+</script>
 
