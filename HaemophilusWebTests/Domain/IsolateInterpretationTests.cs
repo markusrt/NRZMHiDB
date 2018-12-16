@@ -24,6 +24,12 @@ namespace HaemophilusWeb.Domain
         [TestCase(SerotypeAgg.D, SerotypePcr.D)]
         [TestCase(SerotypeAgg.E, SerotypePcr.E)]
         [TestCase(SerotypeAgg.F, SerotypePcr.F)]
+        [TestCase(SerotypeAgg.A, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.B, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.C, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.D, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.E, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.F, SerotypePcr.NotDetermined)]
         public void
             Interpret_DistinctAgglutinationWithPositiveBexA_EitherMatchingOrNotDeterminedSerotype_IsSpecificTyping(
             SerotypeAgg serotypeAgg,
@@ -55,7 +61,7 @@ namespace HaemophilusWeb.Domain
         [TestCase(SerotypeAgg.E, SerotypePcr.NotDetermined)]
         [TestCase(SerotypeAgg.F, SerotypePcr.NotDetermined)]
         public void
-            Interpret_DistinctAgglutinationWithPositiveBexA_NotDeterminedSerotype_IsSpecificPreliminaryTyping(
+            Interpret_DistinctAgglutinationWithNotDeterminedBexA_NotDeterminedSerotype_IsSpecificPreliminaryTyping(
                 SerotypeAgg serotypeAgg,
                 SerotypePcr serotypePcr)
         {
@@ -64,7 +70,7 @@ namespace HaemophilusWeb.Domain
             {
                 SerotypePcr = serotypePcr,
                 Agglutination = serotypeAgg,
-                BexA = TestResult.Positive
+                BexA = TestResult.NotDetermined
             };
 
             var interpretation = IsolateInterpretation.Interpret(isolate);
