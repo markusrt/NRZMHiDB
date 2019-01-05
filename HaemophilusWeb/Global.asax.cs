@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -29,6 +30,13 @@ namespace HaemophilusWeb
             FluentValidationModelValidatorProvider.Configure();
             OverwriteDefaultErrorMessages();
             InitializeAutomapper();
+            DisableTls1AndEnableTls12();
+        }
+
+        private static void DisableTls1AndEnableTls12()
+        {
+            ServicePointManager.SecurityProtocol &= ~SecurityProtocolType.Tls;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
         }
 
         public static void InitializeAutomapper()

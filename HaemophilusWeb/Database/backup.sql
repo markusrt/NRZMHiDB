@@ -1,0 +1,1 @@
+BACKUP DATABASE [HaemophilusWeb] TO  DISK = N'$(BackupPath)\HaemophilusWeb.bak' WITH NOFORMAT, INIT,  NAME = N'HaemophilusWeb', SKIP, NOREWIND, NOUNLOAD,  STATS = 10

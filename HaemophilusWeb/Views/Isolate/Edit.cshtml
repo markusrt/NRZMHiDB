@@ -183,7 +183,7 @@
     $(document)
         .ready(function() {
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
-            $("input[id$=_Measurement]").keyup(ETestChange);
+            $("select[id$=_Measurement]").change(ETestChange);
             $("select[id$=_Antibiotic]").change(ETestChange);
             ShowGrowthTypeIfGrowthIsSelectedWithYes();
             ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();

@@ -18,6 +18,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2018, 12, 16), "Korrektur der Interpretationssätze für Endbefunde.", ChangeType.Bug),
+                new Change(new DateTime(2018, 12, 15), "Feste Skala für E-Test Werte", ChangeType.Feature),
+                new Change(new DateTime(2018, 7, 25), "Anpassung des Sicherheitsprotokolles zur Kommunikation mit dem RKI Tool", ChangeType.Bug),
                 new Change(new DateTime(2018, 7, 22), "Update der Interpretationssätze für End- und Teilbefunde.", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 30), "<p>Einführung von Teilbefunden</p>" +
                     "<p>Es gibt jetzt eine Befundvorlage mit dem Präfix \"Teilbefund -\" welche zur verwendet " +

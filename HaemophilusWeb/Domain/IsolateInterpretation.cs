@@ -63,15 +63,15 @@ namespace HaemophilusWeb.Domain
                         $"{TypingNotPossibleSingular} Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.";
                 }
             }
-            if (SpecificAgglutination.Contains(agglutination) && isolate.BexA == TestResult.Positive &&
+            if (SpecificAgglutination.Contains(agglutination) && (isolate.BexA == TestResult.Positive || isolate.BexA == TestResult.NotDetermined) &&
                 (agglutination.ToString() == serotypePcr.ToString() || serotypePcr == SerotypePcr.NotDetermined))
             {
-                if (serotypePcr == SerotypePcr.NotDetermined)
+                if (serotypePcr == SerotypePcr.NotDetermined && isolate.BexA == TestResult.NotDetermined)
                 {
                     interpretationPreliminary =
                         $"Das Ergebnis spricht für eine Infektion mit Haemophilus influenzae des Serotyp {agglutinationDescription} (Hi{agglutinationDescription}).";
                 }
-                else
+                if (isolate.BexA == TestResult.Positive)
                 {
                     interpretation =
                         $"Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {agglutinationDescription} (Hi{agglutinationDescription}).";

@@ -1,0 +1,335 @@
+﻿' This diagram is mostly generated using the stored procedure defined in
+' "PlantUMLDiagram.sql"
+
+@startuml
+
+!define table(x) class x << (T,mistyrose) >>
+!define view(x) class x << (V,lightblue) >>
+!define table(x) class x << (T,mistyrose) >>  !define tr(x) class x << (R,red) >>  !define tf(x) class x << (F,darkorange) >>
+!define af(x) class x << (F,white) >>
+!define fn(x) class x << (F,plum) >>
+!define fs(x) class x << (F,tan) >>
+!define ft(x) class x << (F,wheat) >>
+!define if(x) class x << (F,gaisboro) >>
+!define p(x) class x << (P,indianred) >>
+!define pc(x) class x << (P,lemonshiffon) >>
+!define x(x) class x << (P,linen) >>
+
+hide methods
+hide stereotypes  skinparam classarrowcolor gray
+
+skinparam handwritten true
+skinparam monochrome true
+skinparam DefaultTextAlignment left
+
+table(dbo.Senders) {
+City: nvarchar
+Deleted: bit
+Department: nvarchar
+Email: nvarchar
+Fax: nvarchar
+Name: nvarchar
+Phone1: nvarchar
+Phone2: nvarchar
+PostalCode: nvarchar
+Remark: nvarchar
+SenderId: int <<pk>>
+StreetWithNumber: nvarchar
+}
+
+table(dbo.Patients) {
+BirthDate: datetime
+City: nvarchar
+ClinicalInformation: ClinicalInformation
+County: nvarchar
+Gender: Gender
+HibVaccination: YesNoUnknown
+HibVaccinationDate: datetime
+Initials: nvarchar
+OtherClinicalInformation: nvarchar
+PatientId: int <<pk>>
+PostalCode: nvarchar
+State: State
+Therapy: YesNoUnknown
+TherapyDetails: nvarchar
+}
+
+table(dbo.Sendings) {
+Deleted: bit
+Invasive: YesNo
+Material: Material
+OtherSamplingLocation: nvarchar
+PatientId: int <<fk>>
+ReceivingDate: datetime
+Remark: nvarchar
+SamplingDate: datetime
+SamplingLocation: SamplingLocation
+SenderConclusion: nvarchar
+SenderId: int
+SenderLaboratoryNumber: nvarchar
+SendingId: int <<pk>>
+}
+
+table(dbo.Isolates) {
+Agglutination: SerotypeAgg
+ApiNh: UnspecificTestResult
+ApiNhBestMatch: nvarchar
+ApiNhMatchInPercent: float
+BetaLactamase: TestResult
+BexA: TestResult
+Evaluation: Evaluation
+FactorTest: FactorTest
+Ftsi: UnspecificTestResult
+FtsiEvaluation1: nvarchar
+FtsiEvaluation2: nvarchar
+FtsiEvaluation3: nvarchar
+FuculoKinase: TestResult
+IsolateId: int
+MaldiTof: UnspecificTestResult
+MaldiTofBestMatch: nvarchar
+MaldiTofMatchConfidence: float
+Mlst: UnspecificOrNoTestResult
+MlstSequenceType: nvarchar
+OuterMembraneProteinP2: TestResult
+OuterMembraneProteinP6: SpecificTestResult
+Oxidase: TestResult
+Remark: nvarchar
+ReportDate: datetime
+ReportStatus: int
+RibosomalRna16S: int
+RibosomalRna16SBestMatch: nvarchar
+RibosomalRna16SMatchInPercent: float
+SendingId: int <<pk>> <<fk>>
+SerotypePcr: SerotypePcr
+StemNumber: int
+TypeOfGrowth: GrowthType
+Year: int
+YearlySequentialIsolateNumber: int
+}
+
+table(dbo.EpsilometerTests) {
+EpsilometerTestId: int <<pk>>
+EucastClinicalBreakpointId: int <<fk>>
+Isolate_SendingId: int <<fk>>
+Measurement: real
+Result: EpsilometerTestResult
+}
+
+table(dbo.EucastClinicalBreakpoints) {
+Antibiotic: int
+AntibioticDetails: nvarchar
+EucastClinicalBreakpointId: int <<pk>>
+MicBreakpointResistent: real
+MicBreakpointSusceptible: real
+ValidFrom: datetime
+Version: nvarchar
+}
+
+table(dbo.RkiMatchRecords) {
+RkiReferenceId: int
+RkiReferenceNumber: nvarchar
+RkiStatus: int
+SendingId: int <<pk>> <<fk>>
+}  
+
+' The relationships have been edited manually
+
+dbo.Sendings "*" -- "1" dbo.Senders: "Many sendings\ncan originate\nfrom one sender"
+dbo.Sendings "*" -- "1" dbo.Patients: "A patient may have\none or more sendings"
+dbo.Isolates "0..1" -- "1" dbo.Sendings : "A sending may\nhave isolate data"
+
+dbo.RkiMatchRecords "0..1" -- "1" dbo.Sendings : "Matched\nrecord\nreturned\nfrom RKI"
+dbo.EpsilometerTests "*" -- "0..1" dbo.Isolates : "Epsilometer test results"
+dbo.EpsilometerTests "*" -- "1" dbo.EucastClinicalBreakpoints : "Corresponding breakpoint"
+
+' The enumerations have been added manually
+
+enum Enumerations.YesNo
+{
+No = 0
+Yes = 1
+}
+
+enum Enumerations.Material
+{
+Isolate = 0
+IsolatedDna = 1
+NativeMaterial = 2
+}
+
+enum Enumerations.RkiStatus
+{
+None = 0,
+Possible = 1
+Probable = 2
+Definite = 3
+}
+
+enum Enumerations.SamplingLocation
+{
+Blood = 0
+Liquor = 1
+Other = 2
+}
+
+enum Enumerations.SerotypePcr
+{
+NotDetermined = 0
+A = 1
+B = 2
+C = 3
+D = 4
+E = 5
+F = 6
+Negative = 7
+}
+
+enum Enumerations.SerotypeAgg
+{
+NotDetermined = 0
+A = 1
+B = 2
+C = 3
+D = 4
+E = 5
+F = 6
+Negative = 7
+Auto = 8
+Poly = 9
+NotEvaluable = 10
+}
+
+enum Enumerations.TestResult
+{
+NotDetermined = 0
+Negative = 1
+Positive = 2
+}
+
+enum Enumerations.UnspecificTestResult
+{
+NotDetermined = 0
+Determined = 1
+}
+
+enum Enumerations.UnspecificOrNoTestResult
+{
+NotDetermined = 0
+Determined = 1
+NoResult = 2
+}
+
+enum Enumerations.SpecificTestResult
+{
+NotDetermined = 0
+Negative = 1
+HaemophilusInfluenzae = 2
+HaemophilusHaemolyticus = 3
+NotEvaluable = 4
+}
+
+enum Enumerations.Evaluation
+{
+HaemophilusNonEncapsulated = 0
+HaemophilusTypeA = 1
+HaemophilusTypeB = 2
+HaemophilusTypeC = 3
+HaemophilusTypeD = 4
+HaemophilusTypeE = 5
+HaemophilusTypeF = 6
+HaemophilusHemolyticus = 7
+HaemophilusParainfluenzae = 8
+NoGrowth = 9
+NoHaemophilusSpecies = 10
+HaemophilusInfluenzae = 11
+HaemophilusSpeciesNoHaemophilusInfluenzae = 12
+NoHaemophilusInfluenzae = 13
+}
+
+enum Enumerations.FactorTest
+{
+NotDetermined = 0
+V = 1
+VX = 2
+X = 3
+VVX = 4
+NotEvaluable = 5
+}
+
+enum Enumerations.GrowthType << flags >>
+{
+None = 0
+GrowthOnBlood = 1
+TypicalGrowthOnKb = 2
+AtypicalGrowthOnKb = 4
+}
+
+
+enum Enumerations.ClinicalInformation << flags >>
+{
+None = 0
+NotAvailable = 1
+Meningitis = 2
+Sepsis = 4
+Pneumonia = 8
+Other = 32768
+}
+
+enum Enumerations.Gender
+{
+Male = 0
+Female = 1
+}
+
+enum Enumerations.YesNoUnknown
+{
+No = 0
+Yes = 1
+NotStated = 2
+Unknown = 3
+}
+
+enum Enumerations.State
+{
+Unknown
+SH = 1 << sdjhf >>
+HH = 2
+NI = 3
+HB = 4
+NW = 5
+HE = 6
+RP = 7
+BW = 8
+BY = 9
+SL = 10
+BE = 11
+BB = 12
+MV = 13
+SN = 14
+ST = 15
+TH = 16
+Overseas = 17
+}
+
+enum Enumerations.EpsilometerTestResult
+{
+Susceptible
+Intermediate
+Resistant
+NotDetermined
+}
+
+enum Enumerations.Antibiotic
+{
+Ampicillin = 0
+AmoxicillinClavulanate = 1
+Cefotaxime = 2
+Meropenem = 3
+Imipenem = 4
+Ciprofloxacin = 5
+[...]
+Voriconazole = 182
+}
+
+
+@enduml
