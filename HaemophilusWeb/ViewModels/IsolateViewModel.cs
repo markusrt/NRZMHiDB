@@ -136,7 +136,7 @@ namespace HaemophilusWeb.ViewModels
             get { return DateTime.Now.ToReportFormat(); }
         }
 
-        public List<EpsilometerTestViewModel> EpsilometerTestViewModels { get; set; }
+        public ICollection<EpsilometerTestViewModel> EpsilometerTestViewModels { get; set; }
 
         public IEnumerable<EpsilometerTestReportModel> ETests
         {

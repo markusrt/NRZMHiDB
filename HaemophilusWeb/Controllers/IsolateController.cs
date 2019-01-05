@@ -16,49 +16,27 @@ using HaemophilusWeb.Views.Utils;
 namespace HaemophilusWeb.Controllers
 {
     [Authorize(Roles = DefaultRoles.User)]
-    public class IsolateController : Controller
+    public class IsolateController : IsolateControllerBase<Isolate>
     {
         private readonly IApplicationDbContext db;
-        private readonly AntibioticPriorityListComparer antibioticPriorityListComparer;
-        private readonly List<Antibiotic> primaryAntibiotics;
 
         public IsolateController()
             : this(new ApplicationDbContextWrapper(new ApplicationDbContext()))
         {
         }
 
-        public IsolateController(IApplicationDbContext applicationDbContext)
+        public IsolateController(IApplicationDbContext applicationDbContext) : base(applicationDbContext)
         {
             db = applicationDbContext;
-            antibioticPriorityListComparer = new AntibioticPriorityListComparer(ConfigurationManager.AppSettings["AntibioticsOrder"]);
-            primaryAntibiotics = EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>(ConfigurationManager.AppSettings["PrimaryAntibiotics"]);
         }
 
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var isolate = LoadIsolateById(id);
-            if (isolate == null)
-            {
-                return HttpNotFound();
-            }
-
-            var isolateViewModel = ModelToViewModel(isolate);
-            return CreateEditView(isolateViewModel);
-        }
-
-        public Isolate LoadIsolateById(int? id)
+        public override Isolate LoadIsolateById(int? id)
         {
             var isolate = db.Isolates.Include(i => i.Sending).SingleOrDefault(i => i.IsolateId == id);
             return isolate;
         }
 
-
-
-        public IsolateViewModel ModelToViewModel(Isolate isolate)
+        public override IsolateViewModel ModelToViewModel(Isolate isolate)
         {
             var isolateViewModel = Mapper.Map<IsolateViewModel>(isolate);
             var sending = isolate.Sending;
@@ -68,10 +46,7 @@ namespace HaemophilusWeb.Controllers
             isolateViewModel.Material = EnumEditor.GetEnumDescription(sending.Material);
             isolateViewModel.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
             isolateViewModel.PatientAgeAtSampling = isolate.PatientAge();
-
-
-            EpsilometerTestsModelToViewModel(isolate, isolateViewModel);
-
+            isolateViewModel.EpsilometerTestViewModels = EpsilometerTestsModelToViewModel(isolate.EpsilometerTests);
             isolateViewModel.SamplingDate = isolate.Sending.SamplingDate.ToReportFormat();
             isolateViewModel.ReceivingDate = isolate.Sending.ReceivingDate.ToReportFormat();
             isolateViewModel.Patient = isolate.Sending.Patient.ToReportFormat();
@@ -87,115 +62,11 @@ namespace HaemophilusWeb.Controllers
             var sender = db.Senders.Find(isolate.Sending.SenderId);
             isolateViewModel.SenderName = sender.Name;
             isolateViewModel.SenderStreet = sender.StreetWithNumber;
-            isolateViewModel.SenderCity = string.Format("{0} {1}", sender.PostalCode, sender.City);
+            isolateViewModel.SenderCity = $"{sender.PostalCode} {sender.City}";
 
             return isolateViewModel;
         }
 
-        private void EpsilometerTestsModelToViewModel(Isolate isolate, IsolateViewModel isolateViewModel)
-        {
-            var epsilometerTestViewModels = new List<EpsilometerTestViewModel>();
-            var availableAntibiotics = AvailableAntibiotics;
-            var missingPrimaryAntibiotics = new List<Antibiotic>(primaryAntibiotics.Where(a => availableAntibiotics.Contains(a)));
-
-            isolateViewModel.EpsilometerTestViewModels.Clear();
-
-            foreach (var epsilometerTest in isolate.EpsilometerTests.ToList().OrderBy(e => e.EucastClinicalBreakpoint.Antibiotic, antibioticPriorityListComparer))
-            {
-                var epsilometerTestViewModel = new EpsilometerTestViewModel
-                {
-                    EucastClinicalBreakpointId = epsilometerTest.EucastClinicalBreakpointId,
-                    Measurement = epsilometerTest.Measurement,
-                    Result = epsilometerTest.Result,
-                    ReadonlyAntibiotic = true
-                };
-
-                var eucastClinicalBreakpoint = epsilometerTest.EucastClinicalBreakpoint;
-                if (eucastClinicalBreakpoint != null)
-                {
-                    epsilometerTestViewModel.MicBreakpointResistent =
-                        eucastClinicalBreakpoint.MicBreakpointResistent;
-                    epsilometerTestViewModel.MicBreakpointSusceptible =
-                        eucastClinicalBreakpoint.MicBreakpointSusceptible;
-                    if (eucastClinicalBreakpoint.ValidFrom.HasValue)
-                    {
-                        epsilometerTestViewModel.ValidFromYear = eucastClinicalBreakpoint.ValidFrom.Value.Year;
-                    }
-
-                    epsilometerTestViewModel.Antibiotic = eucastClinicalBreakpoint.Antibiotic;
-                    missingPrimaryAntibiotics.Remove(eucastClinicalBreakpoint.Antibiotic);
-                }
-
-                epsilometerTestViewModels.Add(epsilometerTestViewModel);
-            }
-
-            epsilometerTestViewModels.AddRange(
-                missingPrimaryAntibiotics.Select(
-                    missingPrimaryAntibiotic => new EpsilometerTestViewModel
-                    {
-                        Antibiotic = missingPrimaryAntibiotic,
-                        ReadonlyAntibiotic = true
-                    }
-            ));
-
-            isolateViewModel.EpsilometerTestViewModels.AddRange(epsilometerTestViewModels.OrderBy(e => e.Antibiotic.Value, antibioticPriorityListComparer));
-
-            isolateViewModel.EpsilometerTestViewModels.Insert(0, new EpsilometerTestViewModel());
-        }
-
-        private void EpsilometerTestsViewModelToModel(IsolateViewModel isolateViewModel, Isolate isolate)
-        {
-            isolate.EpsilometerTests.Clear();
-
-            foreach (var epsilometerTest in isolate.EpsilometerTests.ToList())
-            {
-                db.EpsilometerTests.Remove(epsilometerTest);
-            }
-            foreach (var eTestViewModel in isolateViewModel.EpsilometerTestViewModels)
-            {
-                if (HasValidETestValue(eTestViewModel))
-                {
-                    AddNewOrUpdateExistingETest(isolate.EpsilometerTests, null, eTestViewModel);
-                }
-            }
-
-        }
-
-        private static bool HasValidETestValue(EpsilometerTestViewModel eTestViewModel)
-        {
-            return eTestViewModel.Antibiotic.HasValue && eTestViewModel.Measurement.HasValue;
-        }
-
-        private static void AddNewOrUpdateExistingETest(ICollection<EpsilometerTest> eTests, EpsilometerTest eTest,
-            EpsilometerTestViewModel eTestViewModel)
-        {
-            if (eTest == null)
-            {
-                eTest = new EpsilometerTest();
-                eTests.Add(eTest);
-            }
-
-            eTest.EucastClinicalBreakpointId = eTestViewModel.EucastClinicalBreakpointId.Value;
-            eTest.Measurement = eTestViewModel.Measurement.Value;
-            eTest.Result = eTestViewModel.Result.Value;
-        }
-
-        private ActionResult CreateEditView(IsolateViewModel isolateViewModel)
-        {
-            ViewBag.ClinicalBreakpoints = db.EucastClinicalBreakpoints.OrderByDescending(b => b.ValidFrom);
-            ViewBag.Antibiotics = AvailableAntibiotics.OrderBy(a => a, antibioticPriorityListComparer);
-            return View(isolateViewModel);
-        }
-
-        private List<Antibiotic> AvailableAntibiotics
-        {
-            get
-            {
-                return db.EucastClinicalBreakpoints.Select(e => e.Antibiotic)
-                    .Distinct()
-                    .ToList();
-            }
-        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -212,7 +83,8 @@ namespace HaemophilusWeb.Controllers
                     ParseAndMapLaboratoryNumber(isolateViewModel, isolate);
                     isolate.TypeOfGrowth =
                         EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<GrowthType>(Request.Form["TypeOfGrowth"]);
-                    EpsilometerTestsViewModelToModel(isolateViewModel, isolate);
+                    isolate.EpsilometerTests =
+                        EpsilometerTestsViewModelToModel(isolateViewModel.EpsilometerTestViewModels);
                     db.MarkAsModified(isolate);
                     db.SaveChanges();
                     if (Request == null || Request.Form["primary-submit"] != null)
@@ -245,28 +117,11 @@ namespace HaemophilusWeb.Controllers
 
         internal static void ParseAndMapLaboratoryNumber(IsolateViewModel isolateViewModel, Isolate isolate)
         {
-            int decade;
-            int yearlySequentialIsolateNumber;
             var decadeAndNumber = isolateViewModel.LaboratoryNumber.Split('/');
-            int.TryParse(decadeAndNumber[0], out yearlySequentialIsolateNumber);
-            int.TryParse(decadeAndNumber[1], out decade);
-            isolate.Year = (DateTime.Now.Year/100)*100 + decade;
+            int.TryParse(decadeAndNumber[0], out var yearlySequentialIsolateNumber);
+            int.TryParse(decadeAndNumber[1], out var decade);
+            isolate.Year = DateTime.Now.Year / 100 * 100 + decade;
             isolate.YearlySequentialIsolateNumber = yearlySequentialIsolateNumber;
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        public JsonResult CarCreate()
-        {
-            return new JsonResult();
-            //throw new NotImplementedException();
         }
     }
 }

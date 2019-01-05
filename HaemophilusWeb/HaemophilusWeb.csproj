@@ -223,6 +223,7 @@
     <Compile Include="Controllers\HealthOfficesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IsolateController.cs" />
+    <Compile Include="Controllers\IsolateControllerBase.cs" />
     <Compile Include="Controllers\MeningoPatientController.cs" />
     <Compile Include="Controllers\MeningoPatientSendingController.cs" />
     <Compile Include="Controllers\MeningoSendingController.cs" />
