@@ -52,8 +52,5 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Beurteilung")]
         public Evaluation Evaluation { get; set; }
-
-        [Display(Name = "Art des Wachstums")]
-        public GrowthType TypeOfGrowth { get; set; }
     }
 }

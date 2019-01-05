@@ -45,7 +45,9 @@ namespace HaemophilusWeb.Models
         public abstract void SetPatientId(int patientId);
 
         public abstract int GetSendingId();
-        public abstract Isolate GetIsolate();
-        public abstract void SetIsolate(Isolate isolate);
+
+        public abstract IsolateCommon GetIsolate();
+
+        public abstract IsolateCommon CreateIsolate();
     }
 }

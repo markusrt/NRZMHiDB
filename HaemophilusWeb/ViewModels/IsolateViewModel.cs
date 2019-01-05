@@ -22,9 +22,6 @@ namespace HaemophilusWeb.ViewModels
             EpsilometerTestViewModels = new List<EpsilometerTestViewModel>();
         }
 
-        [Display(Name = "Labornummer")]
-        public string LaboratoryNumber { get; set; }
-
         [Display(Name = "Invasiv")]
         public string Invasive { get; set; }
 

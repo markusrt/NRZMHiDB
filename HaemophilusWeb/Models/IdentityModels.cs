@@ -47,8 +47,10 @@ namespace HaemophilusWeb.Models
 
         public DbSet<HealthOffice> HealthOffices { get; set; }
 
-        public DbSet<Meningo.MeningoPatient> MeningoPatients { get; set; }
+        public DbSet<MeningoPatient> MeningoPatients { get; set; }
 
         public DbSet<MeningoSending> MeningoSendings { get; set; }
+
+        public DbSet<MeningoIsolate> MeningoIsolates { get; set; }
     }
 }

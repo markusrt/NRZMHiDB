@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Script.Serialization;
+using HaemophilusWeb.Utils;
 
 namespace HaemophilusWeb.Models
 {
-    public class IsolateCommon
+    public abstract class IsolateCommon
     {
+        private string customLaboratoryNumber;
+
         [Display(Name = "Stammnummer")]
         public int? StemNumber { get; set; }
 
@@ -52,6 +56,21 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Wachstum")]
         public YesNoOptional Growth { get; set; }
 
+        [Display(Name = "Art des Wachstums")]
+        public GrowthType TypeOfGrowth { get; set; }
+
         public virtual ICollection<EpsilometerTest> EpsilometerTests { get; set; }
+
+        [Display(Name = "Labornummer")]
+        [NotMapped]
+        public string LaboratoryNumber
+        {
+            get => customLaboratoryNumber ?? ReportFormatter.ToLaboratoryNumber(YearlySequentialIsolateNumber, Year);
+            set => customLaboratoryNumber = value;
+        }
+
+        public int YearlySequentialIsolateNumber { get; set; }
+
+        public int Year { get; set; }
     }
 }

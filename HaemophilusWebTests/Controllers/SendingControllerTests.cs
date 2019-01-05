@@ -31,10 +31,10 @@ namespace HaemophilusWeb.Controllers
             sending.Isolate.Year = 2099;
             sending.Isolate.YearlySequentialIsolateNumber = 999;
 
-            var isolate = controller.AssignStemNumber(MockData.SecondId);
+            controller.AssignStemNumber(MockData.SecondId);
 
-            isolate.Year.Should().Be(2099);
-            isolate.YearlySequentialIsolateNumber.Should().Be(999);
+            sending.Isolate.Year.Should().Be(2099);
+            sending.Isolate.YearlySequentialIsolateNumber.Should().Be(999);
         }
 
         [Test]
@@ -51,8 +51,9 @@ namespace HaemophilusWeb.Controllers
             var expectedLaboratoryNumber = string.Format("001/{0:yy}", DateTime.Now);
             var controller = CreateMockSendingController();
 
-            var isolate = controller.AssignStemNumber(MockData.FirstId);
+            controller.AssignStemNumber(MockData.FirstId);
 
+            var isolate = DbMock.Sendings.Single(s => s.SendingId == MockData.FirstId).Isolate;
             isolate.Should().NotBeNull();
             isolate.LaboratoryNumber.Should().Be(expectedLaboratoryNumber);
         }

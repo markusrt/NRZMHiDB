@@ -16,7 +16,7 @@ using HaemophilusWeb.Views.Utils;
 namespace HaemophilusWeb.Controllers
 {
     [Authorize(Roles = DefaultRoles.User)]
-    public class IsolateController : IsolateControllerBase<Isolate>
+    public class IsolateController : IsolateControllerBase<Isolate, IsolateViewModel>
     {
         private readonly IApplicationDbContext db;
 
@@ -38,35 +38,8 @@ namespace HaemophilusWeb.Controllers
 
         public override IsolateViewModel ModelToViewModel(Isolate isolate)
         {
-            var isolateViewModel = Mapper.Map<IsolateViewModel>(isolate);
-            var sending = isolate.Sending;
-            isolateViewModel.SamplingLocation = sending.SamplingLocation == SamplingLocation.Other
-                ? WebUtility.HtmlEncode(sending.OtherSamplingLocation)
-                : EnumEditor.GetEnumDescription(sending.SamplingLocation);
-            isolateViewModel.Material = EnumEditor.GetEnumDescription(sending.Material);
-            isolateViewModel.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
-            isolateViewModel.PatientAgeAtSampling = isolate.PatientAge();
-            isolateViewModel.EpsilometerTestViewModels = EpsilometerTestsModelToViewModel(isolate.EpsilometerTests);
-            isolateViewModel.SamplingDate = isolate.Sending.SamplingDate.ToReportFormat();
-            isolateViewModel.ReceivingDate = isolate.Sending.ReceivingDate.ToReportFormat();
-            isolateViewModel.Patient = isolate.Sending.Patient.ToReportFormat();
-            isolateViewModel.PatientBirthDate = isolate.Sending.Patient.BirthDate.ToReportFormat();
-            isolateViewModel.PatientPostalCode = isolate.Sending.Patient.PostalCode;
-            isolateViewModel.SenderLaboratoryNumber = isolate.Sending.SenderLaboratoryNumber;
-            isolateViewModel.EvaluationString = isolate.Evaluation.ToReportFormat();
-            var interpretationResult = IsolateInterpretation.Interpret(isolate);
-            isolateViewModel.Interpretation = interpretationResult.Interpretation;
-            isolateViewModel.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
-            isolateViewModel.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
-
-            var sender = db.Senders.Find(isolate.Sending.SenderId);
-            isolateViewModel.SenderName = sender.Name;
-            isolateViewModel.SenderStreet = sender.StreetWithNumber;
-            isolateViewModel.SenderCity = $"{sender.PostalCode} {sender.City}";
-
-            return isolateViewModel;
+            return Mapper.Map<IsolateViewModel>(isolate);
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -80,11 +53,9 @@ namespace HaemophilusWeb.Controllers
                         db.Isolates.Include(i => i.EpsilometerTests)
                             .Single(i => i.IsolateId == isolateViewModel.IsolateId);
                     Mapper.Map(isolateViewModel, isolate);
-                    ParseAndMapLaboratoryNumber(isolateViewModel, isolate);
                     isolate.TypeOfGrowth =
                         EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<GrowthType>(Request.Form["TypeOfGrowth"]);
-                    isolate.EpsilometerTests =
-                        EpsilometerTestsViewModelToModel(isolateViewModel.EpsilometerTestViewModels);
+
                     db.MarkAsModified(isolate);
                     db.SaveChanges();
                     if (Request == null || Request.Form["primary-submit"] != null)
@@ -113,15 +84,6 @@ namespace HaemophilusWeb.Controllers
                 }
             }
             return CreateEditView(isolateViewModel);
-        }
-
-        internal static void ParseAndMapLaboratoryNumber(IsolateViewModel isolateViewModel, Isolate isolate)
-        {
-            var decadeAndNumber = isolateViewModel.LaboratoryNumber.Split('/');
-            int.TryParse(decadeAndNumber[0], out var yearlySequentialIsolateNumber);
-            int.TryParse(decadeAndNumber[1], out var decade);
-            isolate.Year = DateTime.Now.Year / 100 * 100 + decade;
-            isolate.YearlySequentialIsolateNumber = yearlySequentialIsolateNumber;
         }
     }
 }

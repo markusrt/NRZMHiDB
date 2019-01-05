@@ -31,8 +31,7 @@ namespace HaemophilusWeb.Models.Meningo
         [Display(Name = "Serogruppe Einsender")]
         public string SerogroupSender { get; set; }
 
-
-        //public virtual Isolate Isolate { get; set; }
+        public virtual MeningoIsolate Isolate { get; set; }
 
         public override void SetPatientId(int patientId)
         {
@@ -44,15 +43,14 @@ namespace HaemophilusWeb.Models.Meningo
             return MeningoSendingId;
         }
 
-        public override Isolate GetIsolate()
+        public override IsolateCommon GetIsolate()
         {
-            //TODO move to IsolateBase
-            return null;
+            return Isolate;
         }
 
-        public override void SetIsolate(Isolate isolate)
+        public override IsolateCommon CreateIsolate()
         {
-            //TODO move to IsolateBase
+            return Isolate = new MeningoIsolate();
         }
     }
 }

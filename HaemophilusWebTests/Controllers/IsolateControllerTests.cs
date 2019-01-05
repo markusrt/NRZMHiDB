@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using FluentAssertions;
+using HaemophilusWeb.Automapper;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.ViewModels;
 using NUnit.Framework;
@@ -40,11 +41,10 @@ namespace HaemophilusWeb.Controllers
         [Test]
         public void ParseAndMapLaboratoryNumber_ValidLaboratoryNumber_AssignsYearAndSequentialNumberCorrectly()
         {
-            var isolateViewModel = new IsolateViewModel();
-            isolateViewModel.LaboratoryNumber = "0000123/15";
+            var isolateViewModel = new IsolateViewModel {LaboratoryNumber = "0000123/15"};
             var isolate = new Isolate();
 
-            IsolateController.ParseAndMapLaboratoryNumber(isolateViewModel, isolate);
+            IsolateViewModelMappingActionBase.ParseAndMapLaboratoryNumber(isolateViewModel, isolate);
 
             isolate.Year.Should().Be(2015);
             isolate.YearlySequentialIsolateNumber.Should().Be(123);

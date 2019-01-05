@@ -22,59 +22,31 @@ namespace HaemophilusWeb.Models
         public readonly InMemoryDbSet<EpsilometerTest> EpsilometerTestsDbSet = new InMemoryDbSet<EpsilometerTest>(true);
         public readonly InMemoryDbSet<MeningoPatient> MeningoPatientsDbSet = new InMemoryDbSet<MeningoPatient>(true);
         public readonly InMemoryDbSet<MeningoSending> MeningoSendingsDbSet = new InMemoryDbSet<MeningoSending>(true);
-
+        public readonly InMemoryDbSet<MeningoIsolate> MeningoIsolatesDbSet = new InMemoryDbSet<MeningoIsolate>(true);
         public readonly InMemoryDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpointsDbSet =
             new InMemoryDbSet<EucastClinicalBreakpoint>(true);
 
-        public IDbSet<Sender> Senders
-        {
-            get { return SenderDbSet; }
-        }
+        public IDbSet<Sender> Senders => SenderDbSet;
 
-        public IDbSet<Patient> Patients
-        {
-            get { return PatientDbSet; }
-        }
+        public IDbSet<Patient> Patients => PatientDbSet;
 
-        public IDbSet<Sending> Sendings
-        {
-            get { return SendingDbSet; }
-        }
+        public IDbSet<Sending> Sendings => SendingDbSet;
 
-        public IDbSet<Isolate> Isolates
-        {
-            get { return IsolatesDbSet; }
-        }
+        public IDbSet<Isolate> Isolates => IsolatesDbSet;
 
-        public IDbSet<County> Counties
-        {
-            get { return CountiesDbSet; }
-        }
+        public IDbSet<County> Counties => CountiesDbSet;
 
-        public IDbSet<HealthOffice> HealthOffices
-        {
-            get { return HealthOfficesDbSet; }
-        }
+        public IDbSet<HealthOffice> HealthOffices => HealthOfficesDbSet;
 
-        public IDbSet<EpsilometerTest> EpsilometerTests
-        {
-            get { return EpsilometerTestsDbSet; }
-        }
+        public IDbSet<EpsilometerTest> EpsilometerTests => EpsilometerTestsDbSet;
 
-        public IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints
-        {
-            get { return EucastClinicalBreakpointsDbSet; }
-        }
+        public IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints => EucastClinicalBreakpointsDbSet;
 
-        public IDbSet<Meningo.MeningoPatient> MeningoPatients
-        {
-            get { return MeningoPatientsDbSet; }
-        }
+        public IDbSet<MeningoPatient> MeningoPatients => MeningoPatientsDbSet;
 
-        public DbSet<MeningoSending> MeningoSendings
-        {
-            get { return MeningoSendings; }
-        }
+        public IDbSet<MeningoSending> MeningoSendings => MeningoSendingsDbSet;
+
+        public IDbSet<MeningoIsolate> MeningoIsolates => MeningoIsolatesDbSet;
 
         public void MarkAsModified<TEntity>(TEntity entity) where TEntity : class
         {

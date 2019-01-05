@@ -51,6 +51,8 @@ namespace HaemophilusWeb.Controllers
             ValidateModel(patientSending.Patient, new PatientValidator());
         }
 
+        protected override string IsolateControllerName => "Isolate";
+
         private void AssignClinicalInformationFromCheckboxValues(PatientSendingViewModel<Patient, Sending> patientSending)
         {
             patientSending.Patient.ClinicalInformation =
@@ -294,6 +296,8 @@ namespace HaemophilusWeb.Controllers
         protected abstract IDbSet<TPatient> PatientDbSet();
 
         protected abstract void CreateAndEditPreparations(TViewModel patientSending);
+
+        protected abstract string IsolateControllerName { get; }
 
         private TViewModel CreatePatientSending(TSending sending)
         {
@@ -701,7 +705,7 @@ namespace HaemophilusWeb.Controllers
         private string CreateIsolateLink(int isolateId, string laboratoryNumber)
         {
             return
-                $"<a class=\"btn-sm btn btn-default\" href=\"{Url.Action("Edit", "Isolate", new {id = isolateId})}\" role=\"button\">{laboratoryNumber}</a>";
+                $"<a class=\"btn-sm btn btn-default\" href=\"{Url.Action("Edit", IsolateControllerName, new {id = isolateId})}\" role=\"button\">{laboratoryNumber}</a>";
         }
 
         private string CreateEditControls(int sendingId, int isolateId)
@@ -713,6 +717,7 @@ namespace HaemophilusWeb.Controllers
                 Url.Action("Edit", new { id = sendingId }));
             builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
                 Url.Action("Isolate", "Report", new { id = isolateId }));
+            //TODO check report for meningo isolates
             builder.Append("</div>");
             return builder.ToString();
         }

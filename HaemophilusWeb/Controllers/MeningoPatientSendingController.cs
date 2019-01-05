@@ -50,6 +50,8 @@ namespace HaemophilusWeb.Controllers
             //ValidateModel(patientSending.Patient, new PatientValidator());
         }
 
+        protected override string IsolateControllerName => "MeningoIsolate";
+
         private void AssignClinicalInformationFromCheckboxValues(PatientSendingViewModel<MeningoPatient, MeningoSending> patientSending)
         {
             patientSending.Patient.ClinicalInformation =
@@ -176,17 +178,17 @@ namespace HaemophilusWeb.Controllers
             var query = NotDeletedSendings().Select(x => new
             {
                 x.MeningoSendingId,
-                //x.Isolate.IsolateId,
-                //x.Isolate.ReportDate,
+                x.Isolate.MeningoIsolateId,
+                x.Isolate.ReportDate,
                 x.Patient.Initials,
                 x.Patient.BirthDate,
-                //x.Isolate.StemNumber,
+                x.Isolate.StemNumber,
                 x.ReceivingDate,
                 x.SamplingLocation,
                 x.OtherSamplingLocation,
                 x.Invasive,
-                //x.Isolate.YearlySequentialIsolateNumber,
-                //x.Isolate.Year,
+                x.Isolate.YearlySequentialIsolateNumber,
+                x.Isolate.Year,
                 x.SenderLaboratoryNumber,
                 PatientPostalCode = x.Patient.PostalCode,
                 SenderPostalCode = db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode,
@@ -197,26 +199,26 @@ namespace HaemophilusWeb.Controllers
                 var samplingLocation = x.SamplingLocation == MeningoSamplingLocation.Other
                     ? Server.HtmlEncode(x.OtherSamplingLocation)
                     : EnumEditor.GetEnumDescription(x.SamplingLocation);
-                var laboratoryNumber = "";//ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year);
+                var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year);
                 return new QueryRecord
                 {
                     SendingId = x.MeningoSendingId,
-                    //IsolateId = x.IsolateId,
+                    IsolateId = x.MeningoIsolateId,
                     Initials = x.Initials,
                     BirthDate = x.BirthDate,
-                    //StemNumber = x.StemNumber,
+                    StemNumber = x.StemNumber,
                     ReceivingDate = x.ReceivingDate,
                     SamplingLocation = samplingLocation,
                     Invasive = invasive,
-                    //LaboratoryNumber = x.Year * 10000 + x.YearlySequentialIsolateNumber,
+                    LaboratoryNumber = x.Year * 10000 + x.YearlySequentialIsolateNumber,
                     LaboratoryNumberString = laboratoryNumber,
-                    //ReportGenerated = x.ReportDate.HasValue,
+                    ReportGenerated = x.ReportDate.HasValue,
                     PatientPostalCode = x.PatientPostalCode,
                     SenderPostalCode = x.SenderPostalCode,
                     SenderLaboratoryNumber = x.SenderLaboratoryNumber,
                     FullTextSearch = string.Join(" ",
                             x.Initials, x.BirthDate.ToReportFormat(),
-                            //x.StemNumber, 
+                            x.StemNumber,
                             x.ReceivingDate.ToReportFormat(),
                             invasive, samplingLocation, laboratoryNumber,
                             x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber)

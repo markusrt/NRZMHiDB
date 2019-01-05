@@ -16,17 +16,6 @@ namespace HaemophilusWeb.Models
         [ScriptIgnore]
         public Sending Sending { get; set; }
 
-        public int YearlySequentialIsolateNumber { get; set; }
-
-        public int Year { get; set; }
-
-        [Display(Name = "Labornummer")]
-        public string LaboratoryNumber
-        {
-            get { return ReportFormatter.ToLaboratoryNumber(YearlySequentialIsolateNumber, Year); }
-        }
-
-
         public virtual ICollection<EpsilometerTest> EpsilometerTests { get; set; }
     }
 }

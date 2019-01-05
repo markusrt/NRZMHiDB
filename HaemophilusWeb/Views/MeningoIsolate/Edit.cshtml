@@ -1,0 +1,322 @@
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.MeningoIsolateViewModel
+
+@{
+    ViewBag.Title = "Isolat bearbeiten";
+    ViewBag.Controller = "PatientSending";
+    ViewBag.SecondarySubmit = "Änderungen speichern und Befund erstellen";
+}
+
+@section EditModel
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.MeningoIsolateId)
+
+    @Html.TextEditorFor(m => m.LaboratoryNumber)
+
+    @Html.ReadonlyFor(m => m.SamplingLocation)
+    @Html.ReadonlyFor(m => m.Material)
+    @Html.ReadonlyFor(m => m.Invasive)
+    @Html.ReadonlyFor(m => m.PatientAgeAtSampling)
+    
+    @Html.EnumRadioEditorFor(model => model.Growth)
+    
+    @Html.EnumRadioEditorFor(model => model.TypeOfGrowth, "col-sm-10", "GrowthTypeForm")
+    
+    @Html.TextEditorFor(m => m.StemNumber)
+
+    @Html.EnumRadioEditorFor(model => model.Oxidase)
+
+    @*@Html.EnumRadioEditorFor(model => model.BetaLactamase)
+
+    @Html.EnumRadioEditorFor(model => model.Agglutination, "col-sm-10")
+
+    @Html.EnumRadioEditorFor(model => model.FactorTest)*@
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">E-Test Messwerte</label>
+    </div>
+
+    @Html.EditorFor(model => model.EpsilometerTestViewModels)
+    
+    @*@Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP2)
+
+    @Html.EnumRadioEditorFor(model => model.BexA)
+
+    @Html.EnumRadioEditorFor(model => model.SerotypePcr)
+
+    @Html.EnumRadioEditorFor(model => model.FuculoKinase)
+
+    @Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP6, "col-sm-10")*@
+
+    @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
+    <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
+        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.RibosomalRna16SBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+            @Html.ValidationMessageFor(model => model.RibosomalRna16SBestMatch)
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "form-control", placeholder="in Prozent"})
+                <span class="input-group-addon">%</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
+        </div>
+    </div>
+
+    @Html.EnumRadioEditorFor(model => model.ApiNh)
+    <div id="ApiNhMatchInPercentForm" class="form-group">
+        @Html.LabelFor(m => m.ApiNhMatchInPercent, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.ApiNhBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+            @Html.ValidationMessageFor(model => model.ApiNhBestMatch)
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                @Html.TextBoxFor(m => m.ApiNhMatchInPercent, new {@class = "form-control", placeholder = "in Prozent"})
+                <span class="input-group-addon">%</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.ApiNhMatchInPercent)
+        </div>
+    </div>
+    
+    @Html.EnumRadioEditorFor(model => model.MaldiTof)
+    <div id="MaldiTofMatchConfidenceForm" class="form-group">
+        @Html.LabelFor(m => m.MaldiTofMatchConfidence, new {@class = "col-sm-2 control-label"})
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.MaldiTofBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+            @Html.ValidationMessageFor(model => model.MaldiTofBestMatch)
+        </div>
+        <div class="col-sm-3">
+            <div class="input-group">
+                @Html.TextBoxFor(m => m.MaldiTofMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
+                <span class="input-group-addon">00,0</span>
+            </div>
+            @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
+        </div>
+    </div>
+
+    @*@Html.EnumRadioEditorFor(model => model.Ftsi)
+    <div id="FtsiEvaluationForm" class="form-group">
+        @Html.LabelFor(m => m.FtsiEvaluation1, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.FtsiEvaluation1, new { @class = "form-control" })
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.FtsiEvaluation2, new { @class = "form-control" })
+        </div>
+        <div class="col-sm-3">
+            @Html.TextBoxFor(m => m.FtsiEvaluation3, new { @class = "form-control" })
+        </div>
+    </div>*@
+ 
+    @*@Html.EnumRadioEditorFor(model => model.Mlst)
+    <div id="MlstSequenceTypeForm" class="form-group">
+        @Html.LabelFor(m => m.MlstSequenceType, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-4">
+            @Html.TextBoxFor(m => m.MlstSequenceType, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.MlstSequenceType)
+        </div>
+    </div>*@
+
+    @*<div class="form-group">
+        @Html.LabelFor(m => m.Evaluation, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @EnumEditor.EnumDropDownListFor(Html, model => model.Evaluation, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Evaluation)
+        </div>
+    </div>*@
+
+    @*<div class="form-group">
+        @Html.LabelFor(m => m.ReportDate, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            <div class="input-group">
+                @{ Html.EnableClientValidation(false); }
+                @Html.TextBoxFor(m => m.ReportDate, new { @class = "form-control datetimepicker", @type = "datetime", @Value = Model == null ? "" : String.Format("{0:dd.MM.yyyy HH:mm}", Model.ReportDate) })
+                @{ Html.EnableClientValidation(true); }
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
+            @Html.ValidationMessageFor(model => model.ReportDate)
+        </div>
+    </div>*@
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Remark, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.TextAreaFor(m => m.Remark, new { @class = "form-control", @rows = "5" })
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script>
+    preventSiteNavigationWithPendingChanges();
+
+    var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
+
+    $(document)
+        .ready(function() {
+            $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
+            $("select[id$=_Measurement]").change(ETestChange);
+            $("select[id$=_Antibiotic]").change(ETestChange);
+            ShowGrowthTypeIfGrowthIsSelectedWithYes();
+            ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
+            ShowApiNhMatchInPercentIfDeterminedIsSelected();
+            ShowMaldiTofMatchConfidenceIfDeterminedIsSelected();
+            ShowFtsiEvaluationIfDeterminedIsSelected();
+            ShowMlstSequenceTypeIfDeterminedIsSelected();
+        });
+
+    function ShowGrowthTypeIfGrowthIsSelectedWithYes() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#GrowthTypeForm",
+            "input:radio[name$='Growth']",
+            "input:radio[name$='Growth']:checked",
+            "Yes",
+            "input:checkbox[name$='TypeOfGrowth']"
+        );
+        $("input:radio[name$='Growth']")
+            .change(function() {
+                if ($("input:radio[name$='Growth']:checked").val() == "Yes") {
+                    var checkedTypeOfGrowth = $("input:checkbox[name$='TypeOfGrowth']:checked");
+                    if (!checkedTypeOfGrowth.val()) {
+                        $("#TypeOfGrowth_TypicalGrowthOnKb").prop("checked", true);
+                        $("#TypeOfGrowth_TypicalGrowthOnKb").parent().addClass("active");
+                    }
+                }
+            });
+    }
+
+
+    function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#RibosomalRna16SMatchInPercentForm",
+            "input:radio[name$='RibosomalRna16S']",
+            "input:radio[name$='RibosomalRna16S']:checked",
+            "Determined",
+            "[id$='RibosomalRna16SBestMatch']",
+            "[id$='RibosomalRna16SMatchInPercent']"
+        );
+    }
+
+    function ShowApiNhMatchInPercentIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#ApiNhMatchInPercentForm",
+            "input:radio[name$='ApiNh']",
+            "input:radio[name$='ApiNh']:checked",
+            "Determined",
+            "[id$='ApiNhBestMatch']",
+            "[id$='ApiNhMatchInPercent']"
+        );
+    }
+
+    function ShowMaldiTofMatchConfidenceIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#MaldiTofMatchConfidenceForm",
+            "input:radio[name$='MaldiTof']",
+            "input:radio[name$='MaldiTof']:checked",
+            "Determined",
+            "[id$='MaldiTofBestMatch']",
+            "[id$='MaldiTofMatchConfidence']"
+        );
+    }
+
+    function ShowFtsiEvaluationIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#FtsiEvaluationForm",
+            "input:radio[name$='Ftsi']",
+            "input:radio[name$='Ftsi']:checked",
+            "Determined",
+            "[id$='FtsiEvaluation1']",
+            "[id$='FtsiEvaluation2']"
+        );
+    }
+
+    function ShowMlstSequenceTypeIfDeterminedIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#MlstSequenceTypeForm",
+            "input:radio[name$='Mlst']",
+            "input:radio[name$='Mlst']:checked",
+            "Determined",
+            "[id$='MlstSequenceType']"
+        );
+    }
+
+    function ETestChange() {
+        var id = $(this).attr('id');
+        var indexOfSeparator = id.indexOf('__');
+        var prefix = id.substring(0, indexOfSeparator);
+        var suffix = id.substring(indexOfSeparator + 2);
+        var currentBreakpointSelector = '#' + prefix + '__EucastClinicalBreakpointId';
+        var currentMeasurementSelector = '#' + prefix + '__Measurement';
+
+        SetETestResult(prefix, null);
+
+        if (suffix === "Antibiotic") {
+            var antibiotic = $(this).val();
+
+            $(currentBreakpointSelector)
+                .find('option')
+                .remove();
+            $(currentBreakpointSelector).append('<option value>Auswählen...</option>');
+
+            if (antibiotic === "") {
+                $(currentMeasurementSelector).val("");
+                return;
+            }
+
+            clinicalBreakpoints.forEach(function(clinicalBreakpoint) {
+                if (antibiotic == clinicalBreakpoint.Antibiotic) {
+                    $(currentBreakpointSelector)
+                        .append(
+                            '<option value="' + clinicalBreakpoint.EucastClinicalBreakpointId + '">' + clinicalBreakpoint.Title + '</option>'
+                        );
+                }
+            });
+        }
+
+
+        var currentMeasurement = Globalize.parseFloat($(currentMeasurementSelector).val());
+        if (isNaN(currentMeasurement)) {
+            return;
+        }
+
+        if (currentMeasurement > 0 && $(currentBreakpointSelector).prop("selectedIndex") == 0) {
+            $(currentBreakpointSelector).prop("selectedIndex", 1);
+        } else if (currentMeasurement == 0) {
+            $(currentBreakpointSelector).prop("selectedIndex", 0);
+        }
+
+        var currentBreakpointId = parseInt($(currentBreakpointSelector).val());
+
+        clinicalBreakpoints.forEach(function(clinicalBreakpoint) {
+                if (currentBreakpointId === clinicalBreakpoint.EucastClinicalBreakpointId) {
+                    if (clinicalBreakpoint.NoEucastAvailable) {
+                        SetETestResult(prefix, '@(EpsilometerTestResult.NotDetermined.ToString())');
+                    } else if (currentMeasurement > clinicalBreakpoint.MicBreakpointResistent) {
+                        SetETestResult(prefix, '@(EpsilometerTestResult.Resistant.ToString())');
+                    } else if (currentMeasurement <= clinicalBreakpoint.MicBreakpointSusceptible) {
+                        SetETestResult(prefix, '@(EpsilometerTestResult.Susceptible.ToString())');
+                    } else if (currentMeasurement != null) {
+                        SetETestResult(prefix, '@(EpsilometerTestResult.Intermediate.ToString())');
+                    }
+                }
+            });
+        }
+
+        function SetETestResult(prefix, result) {
+            var resultSelector = '#' + prefix + '__Result';
+
+            $(resultSelector).val('');
+            $(resultSelector).parent().find(".label").hide();
+
+            if (result != null) {
+                $(resultSelector).parent().find(".label-etest-" + result).show();
+                $(resultSelector).val(result);
+            }
+        }
+
+    </script>
+} 

@@ -18,55 +18,27 @@ namespace HaemophilusWeb.Models
             wrappedContext.Dispose();
         }
 
-        public IDbSet<Sender> Senders
-        {
-            get { return wrappedContext.Senders; }
-        }
+        public IDbSet<Sender> Senders => wrappedContext.Senders;
 
-        public IDbSet<Patient> Patients
-        {
-            get { return wrappedContext.Patients; }
-        }
+        public IDbSet<Patient> Patients => wrappedContext.Patients;
 
-        public IDbSet<Sending> Sendings
-        {
-            get { return wrappedContext.Sendings; }
-        }
+        public IDbSet<Sending> Sendings => wrappedContext.Sendings;
 
-        public IDbSet<Isolate> Isolates
-        {
-            get { return wrappedContext.Isolates; }
-        }
+        public IDbSet<Isolate> Isolates => wrappedContext.Isolates;
 
-        public IDbSet<County> Counties
-        {
-            get { return wrappedContext.Counties; }
-        }
+        public IDbSet<County> Counties => wrappedContext.Counties;
 
-        public IDbSet<HealthOffice> HealthOffices
-        {
-            get { return wrappedContext.HealthOffices; }
-        }
+        public IDbSet<HealthOffice> HealthOffices => wrappedContext.HealthOffices;
 
-        public IDbSet<EpsilometerTest> EpsilometerTests
-        {
-            get { return wrappedContext.EpsilometerTests; }
-        }
+        public IDbSet<EpsilometerTest> EpsilometerTests => wrappedContext.EpsilometerTests;
 
-        public IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints
-        {
-            get { return wrappedContext.EucastClinicalBreakpoints; }
-        }
+        public IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints => wrappedContext.EucastClinicalBreakpoints;
 
-        public IDbSet<Meningo.MeningoPatient> MeningoPatients
-        {
-            get { return wrappedContext.MeningoPatients; }
-        }
+        public IDbSet<MeningoPatient> MeningoPatients => wrappedContext.MeningoPatients;
 
-        public DbSet<MeningoSending> MeningoSendings
-        {
-            get { return wrappedContext.MeningoSendings; }
-        }
+        public IDbSet<MeningoSending> MeningoSendings => wrappedContext.MeningoSendings;
+
+        public IDbSet<MeningoIsolate> MeningoIsolates => wrappedContext.MeningoIsolates;
 
         public void MarkAsModified<TEntity>(TEntity entity) where TEntity : class
         {

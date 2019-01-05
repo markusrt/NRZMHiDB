@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -7,8 +8,10 @@ using System.Web.Routing;
 using System.Web.Script.Serialization;
 using AutoMapper;
 using FluentValidation.Mvc;
+using HaemophilusWeb.Automapper;
 using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.ViewModels;
 using NLog;
 
@@ -41,8 +44,12 @@ namespace HaemophilusWeb
 
         public static void InitializeAutomapper()
         {
-            Mapper.CreateMap<IsolateViewModel, Isolate>();
-            Mapper.CreateMap<Isolate, IsolateViewModel>();
+            Mapper.Initialize(cfg => {
+                cfg.CreateMap<IsolateViewModel, Isolate>().AfterMap<IsolateViewModelMappingAction>();
+                cfg.CreateMap<Isolate, IsolateViewModel>().AfterMap<IsolateViewModelMappingAction>();
+                cfg.CreateMap<MeningoIsolate, MeningoIsolateViewModel>().AfterMap<MeningoIsolateViewModelMappingAction>(); ;
+                cfg.CreateMap<MeningoIsolateViewModel, MeningoIsolate>().AfterMap<MeningoIsolateViewModelMappingAction>();
+            });
         }
 
         private static void OverwriteDefaultErrorMessages()

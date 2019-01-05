@@ -47,14 +47,14 @@ namespace HaemophilusWeb.Models
             return SendingId;
         }
 
-        public override Isolate GetIsolate()
+        public override IsolateCommon GetIsolate()
         {
             return Isolate;
         }
 
-        public override void SetIsolate(Isolate isolate)
+        public override IsolateCommon CreateIsolate()
         {
-            Isolate = isolate;
+            return Isolate = new Isolate();
         }
     }
 }

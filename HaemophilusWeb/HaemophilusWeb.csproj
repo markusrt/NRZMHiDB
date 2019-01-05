@@ -216,12 +216,16 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Automapper\IsolateViewModelMappingAction.cs" />
+    <Compile Include="Automapper\IsolateViewModelMappingActionBase.cs" />
+    <Compile Include="Automapper\MeningoIsolateViewModelMappingAction.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\EucastClinicalBreakpointsController.cs" />
     <Compile Include="Controllers\HealthOfficesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MeningoIsolateController.cs" />
     <Compile Include="Controllers\IsolateController.cs" />
     <Compile Include="Controllers\IsolateControllerBase.cs" />
     <Compile Include="Controllers\MeningoPatientController.cs" />
@@ -366,6 +370,14 @@
     <Compile Include="Migrations\201807251901482_MeningoPatientAndSending.Designer.cs">
       <DependentUpon>201807251901482_MeningoPatientAndSending.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901052104363_Meningo_Isolate_1.cs" />
+    <Compile Include="Migrations\201901052104363_Meningo_Isolate_1.Designer.cs">
+      <DependentUpon>201901052104363_Meningo_Isolate_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs" />
+    <Compile Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.Designer.cs">
+      <DependentUpon>201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -381,6 +393,8 @@
     <Compile Include="Models\IsolateCommon.cs" />
     <Compile Include="Models\Material.cs" />
     <Compile Include="Models\Meningo\Epidemiology.cs" />
+    <Compile Include="Models\Meningo\MeningoIsolate.cs" />
+    <Compile Include="Models\Meningo\MeningoIsolateBase.cs" />
     <Compile Include="Models\Meningo\MeningoMaterial.cs" />
     <Compile Include="Models\Meningo\MeningoClinicalInformation.cs" />
     <Compile Include="Models\Meningo\MeningoPatient.cs" />
@@ -440,6 +454,7 @@
     <Compile Include="Validators\SendingValidator.cs" />
     <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
     <Compile Include="ViewModels\IsolateViewModel.cs" />
+    <Compile Include="ViewModels\MeningoIsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
     <Compile Include="ViewModels\ExportQuery.cs" />
     <Compile Include="Views\Utils\AutoCompleteUtils.cs" />
@@ -1096,6 +1111,7 @@
     <Content Include="Views\Shared\EditorTemplates\MeningoSendingConclusion.cshtml" />
     <Content Include="Views\MeningoPatientSending\Edit.cshtml" />
     <Content Include="Views\MeningoPatientSending\Create.cshtml" />
+    <Content Include="Views\MeningoIsolate\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1205,6 +1221,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201807251901482_MeningoPatientAndSending.resx">
       <DependentUpon>201807251901482_MeningoPatientAndSending.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901052104363_Meningo_Isolate_1.resx">
+      <DependentUpon>201901052104363_Meningo_Isolate_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.resx">
+      <DependentUpon>201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

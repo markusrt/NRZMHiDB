@@ -22,9 +22,11 @@ namespace HaemophilusWeb.Models
 
         IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints { get; }
 
-        IDbSet<Meningo.MeningoPatient> MeningoPatients { get; }
+        IDbSet<MeningoPatient> MeningoPatients { get; }
 
-        DbSet<MeningoSending> MeningoSendings { get; }
+        IDbSet<MeningoSending> MeningoSendings { get; }
+
+        IDbSet<MeningoIsolate> MeningoIsolates { get; }
 
         void MarkAsModified<TEntity>(TEntity entity) where TEntity : class;
 

@@ -19,9 +19,21 @@ namespace HaemophilusWeb.Controllers
         {
         }
 
-        protected override IDbSet<Isolate> IsolateDbSet()
+        protected override int GetNextSequentialStemNumber()
         {
-            return db.Isolates;
+            var lastSequentialStemNumber =
+                db.Isolates.DefaultIfEmpty()
+                    .Max(i => i == null || !i.StemNumber.HasValue ? 0 : i.StemNumber.Value);
+            return lastSequentialStemNumber + 1;
+        }
+
+        protected override int GetNextSequentialIsolateNumber()
+        {
+            var lastSequentialIsolateNumber =
+                db.Isolates.Where(i => i.Year == CurrentYear)
+                    .DefaultIfEmpty()
+                    .Max(i => i == null ? 0 : i.YearlySequentialIsolateNumber);
+            return lastSequentialIsolateNumber + 1;
         }
 
         protected override IDbSet<Sending> SendingDbSet()
@@ -48,7 +60,7 @@ namespace HaemophilusWeb.Controllers
             db = applicationDbContext;
         }
 
-        private static int CurrentYear
+        protected static int CurrentYear
         {
             get
             {
@@ -131,7 +143,7 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(sending);
         }
 
-        public Isolate AssignStemNumber(int? id)
+        public void AssignStemNumber(int? id)
         {
             if (id == null)
             {
@@ -146,7 +158,6 @@ namespace HaemophilusWeb.Controllers
             {
                 db.WrapInTransaction(() => CreateIsolateWithNewStemAndLaboratoryNumber(sending));
             }
-            return sending.GetIsolate();
         }
 
         public void CreateSendingAndAssignStemnumber(TSending sending)
@@ -164,31 +175,21 @@ namespace HaemophilusWeb.Controllers
                 s => !string.IsNullOrEmpty(s.OtherSamplingLocation)).Select(s => s.OtherSamplingLocation).AsDataList();
         }
 
-        protected abstract IDbSet<Isolate> IsolateDbSet();
-
         protected abstract IDbSet<TSending> SendingDbSet();
 
         protected abstract IDbSet<TPatient> PatientDbSet();
 
+        protected abstract int GetNextSequentialStemNumber();
+
+        protected abstract int GetNextSequentialIsolateNumber();
+
         private void CreateIsolateWithNewStemAndLaboratoryNumber(TSending sending)
         {
-            var nextSequentialIsolateNumber = GetNextSequentialIsolateNumber();
-            var nextSequentialStemNumber = GetNextSequentialStemNumber();
+            var isolate = sending.CreateIsolate();
 
-            sending.SetIsolate(new Isolate
-            {
-                Year = CurrentYear,
-                YearlySequentialIsolateNumber = nextSequentialIsolateNumber,
-                StemNumber = nextSequentialStemNumber
-            });
-        }
-
-        private int GetNextSequentialStemNumber()
-        {
-            var lastSequentialStemNumber =
-                IsolateDbSet().DefaultIfEmpty()
-                    .Max(i => i == null || !i.StemNumber.HasValue ? 0 : i.StemNumber.Value);
-            return lastSequentialStemNumber + 1;
+            isolate.Year = CurrentYear;
+            isolate.YearlySequentialIsolateNumber = GetNextSequentialIsolateNumber();
+            isolate.StemNumber = GetNextSequentialStemNumber();
         }
 
         private ActionResult CreateEditView(TSending sending)
@@ -202,15 +203,6 @@ namespace HaemophilusWeb.Controllers
         private TSending FindSendingById(int? id)
         {
             return SendingDbSet().Find(id);
-        }
-
-        private int GetNextSequentialIsolateNumber()
-        {
-            var lastSequentialIsolateNumber =
-                db.Isolates.Where(i => i.Year == CurrentYear)
-                    .DefaultIfEmpty()
-                    .Max(i => i == null ? 0 : i.YearlySequentialIsolateNumber);
-            return lastSequentialIsolateNumber + 1;
         }
 
         protected override void Dispose(bool disposing)

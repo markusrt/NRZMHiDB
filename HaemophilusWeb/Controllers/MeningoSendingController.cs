@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Linq;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 
@@ -14,9 +15,21 @@ namespace HaemophilusWeb.Controllers
         {
         }
 
-        protected override IDbSet<Isolate> IsolateDbSet()
+        protected override int GetNextSequentialStemNumber()
         {
-            return db.Isolates;
+            var lastSequentialStemNumber =
+                db.MeningoIsolates.DefaultIfEmpty()
+                    .Max(i => i == null || !i.StemNumber.HasValue ? 0 : i.StemNumber.Value);
+            return lastSequentialStemNumber + 1;
+        }
+
+        protected override int GetNextSequentialIsolateNumber()
+        {
+            var lastSequentialIsolateNumber =
+                db.MeningoIsolates.Where(i => i.Year == CurrentYear)
+                    .DefaultIfEmpty()
+                    .Max(i => i == null ? 0 : i.YearlySequentialIsolateNumber);
+            return lastSequentialIsolateNumber + 1;
         }
 
         protected override IDbSet<MeningoSending> SendingDbSet()
