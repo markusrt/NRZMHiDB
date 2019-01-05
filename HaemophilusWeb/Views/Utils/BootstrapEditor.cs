@@ -61,14 +61,14 @@ namespace HaemophilusWeb.Views.Utils
 
 
         public static MvcHtmlString EnumRadioEditorFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TProperty>> expression, string radioColSmXClass = ColSm5)
+            Expression<Func<TModel, TProperty>> expression, string radioColSmXClass = ColSm5, string id = null)
         {
             var label = htmlHelper.LabelFor(expression);
             var enumRadioButton = htmlHelper.EnumRadioButtonFor(expression).ToHtmlString();
 
             var enumRadioEditor = string.Format(DivSmX, radioColSmXClass, enumRadioButton, string.Empty);
 
-            return CreateFormGroup(label, enumRadioEditor);
+            return CreateFormGroup(label, enumRadioEditor, id);
         }
 
         public static MvcHtmlString ReadonlyFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,

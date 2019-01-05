@@ -32,34 +32,7 @@
     </div>
 </div>
 
-<div class="form-group">
-    @Html.LabelFor(m => m.ClinicalInformation, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-10">
-        <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NotAvailable) ? " active" : string.Empty)">
-                <input type="checkbox" name="ClinicalInformation" value="NotAvailable" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NotAvailable) ? " checked" : string.Empty) /> k.A.
-            </label>
-            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Meningitis) ? " active" : string.Empty)">
-                <input type="checkbox" name="ClinicalInformation" value="Meningitis" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Meningitis) ? " checked" : string.Empty) /> Meningitis
-            </label>
-            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Sepsis) ? " active" : string.Empty)">
-                <input type="checkbox" name="ClinicalInformation" value="Sepsis" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Sepsis) ? " checked" : string.Empty) /> Sepsis
-            </label>
-            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.WaterhouseFriderichsenSyndrome) ? " active" : string.Empty)">
-                <input type="checkbox" name="ClinicalInformation" value="WaterhouseFriderichsenSyndrome" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.WaterhouseFriderichsenSyndrome) ? " checked" : string.Empty) /> WFS
-            </label>
-            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Lethal) ? " active" : string.Empty)">
-                <input type="checkbox" name="ClinicalInformation" value="Lethal" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Lethal) ? " checked" : string.Empty) /> Letal
-            </label>
-            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NoSymptoms) ? " active" : string.Empty)">
-                <input type="checkbox" name="ClinicalInformation" value="NoSymptoms" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.NoSymptoms) ? " checked" : string.Empty) /> Keine Symptome
-            </label>
-            <label class="btn btn-default@(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Other) ? " active" : string.Empty)">
-                <input type="checkbox" name="ClinicalInformation" value="Other" @(Model.ClinicalInformation.HasFlag(MeningoClinicalInformation.Other) ? " checked" : string.Empty) /> Andere
-            </label>
-        </div>
-    </div>
-</div>
+@Html.EnumRadioEditorFor(m => m.ClinicalInformation, "col-sm-10")
 <div id="OtherClinicalInformationForm" class="form-group">
     @Html.LabelFor(m => m.OtherClinicalInformation, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
@@ -75,28 +48,7 @@
     </div>
 </div>
 
-<div class="form-group">
-    @Html.LabelFor(m => m.RiskFactors, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-10">
-        <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.NotAvailable) ? " active" : string.Empty)">
-                <input type="checkbox" name="RiskFactors" value="NotAvailable" @(Model.RiskFactors.HasFlag(RiskFactors.NotAvailable) ? " checked" : string.Empty) /> k.A.
-            </label>
-            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.Asplenia) ? " active" : string.Empty)">
-                <input type="checkbox" name="RiskFactors" value="Asplenia" @(Model.RiskFactors.HasFlag(RiskFactors.Asplenia) ? " checked" : string.Empty) /> Asplenie
-            </label>
-            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.ComplementDefect) ? " active" : string.Empty)">
-                <input type="checkbox" name="RiskFactors" value="ComplementDefect" @(Model.RiskFactors.HasFlag(RiskFactors.ComplementDefect) ? " checked" : string.Empty) /> Komplementdefekt
-            </label>
-            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.EculizumabTherapy) ? " active" : string.Empty)">
-                <input type="checkbox" name="RiskFactors" value="EculizumabTherapy" @(Model.RiskFactors.HasFlag(RiskFactors.EculizumabTherapy) ? " checked" : string.Empty) /> Eculizumab-Therapie
-            </label>
-            <label class="btn btn-default@(Model.RiskFactors.HasFlag(RiskFactors.Other) ? " active" : string.Empty)">
-                <input type="checkbox" name="RiskFactors" value="Other" @(Model.RiskFactors.HasFlag(RiskFactors.Other) ? " checked" : string.Empty) /> Anderer
-            </label>
-        </div>
-    </div>
-</div>
+@Html.EnumRadioEditorFor(m => m.RiskFactors, "col-sm-10")
 <div id="OtherRiskFactorForm" class="form-group">
     @Html.LabelFor(m => m.OtherRiskFactor, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">

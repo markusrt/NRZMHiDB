@@ -147,6 +147,8 @@
     <Compile Include="ViewModels\IsolateViewModelTests.cs" />
     <Compile Include="Views\Utils\EnumEditorTests.cs" />
     <Compile Include="Views\Utils\BootstrapEditorTests.cs" />
+    <Compile Include="Views\Utils\SimpleModel.cs" />
+    <Compile Include="Views\Utils\TestUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

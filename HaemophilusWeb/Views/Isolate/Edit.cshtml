@@ -22,27 +22,8 @@
     
     @Html.EnumRadioEditorFor(model => model.Growth)
     
-    <div id="GrowthTypeForm" class="form-group">
-        @Html.LabelFor(m => m.TypeOfGrowth, new { @class = "col-sm-2 control-label" })
-        <div class="col-sm-10">
-            <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default@(Model.TypeOfGrowth.HasFlag(GrowthType.GrowthOnBlood) ? " active" : string.Empty)">
-                    <input type="checkbox" name="TypeOfGrowth" value="GrowthOnBlood" @(Model.TypeOfGrowth.HasFlag(GrowthType.GrowthOnBlood) ? " checked" : string.Empty) /> Wachstum auf Blut
-                </label>
-                <label class="btn btn-default@(Model.TypeOfGrowth.HasFlag(GrowthType.TypicalGrowthOnKb) ? " active" : string.Empty)">
-                    <input id="defaultTypeOfGrowth" type="checkbox" name="TypeOfGrowth" value="TypicalGrowthOnKb" @(Model.TypeOfGrowth.HasFlag(GrowthType.TypicalGrowthOnKb) ? " checked" : string.Empty) /> Typisches Wachstum auf KB
-                </label>
-                <label class="btn btn-default@(Model.TypeOfGrowth.HasFlag(GrowthType.AtypicalGrowthOnKb) ? " active" : string.Empty)">
-                    <input type="checkbox" name="TypeOfGrowth" value="AtypicalGrowthOnKb" @(Model.TypeOfGrowth.HasFlag(GrowthType.AtypicalGrowthOnKb) ? " checked" : string.Empty) /> Atypisches Wachstum auf KB
-                </label>
-            </div>
-        </div>
-        <div class="col-sm-2"></div>
-        <div class="col-sm-10">
-            @Html.ValidationMessageFor(model => model.TypeOfGrowth)
-        </div>
-    </div>
-
+    @Html.EnumRadioEditorFor(model => model.TypeOfGrowth, "col-sm-10", "GrowthTypeForm")
+    
     @Html.TextEditorFor(m => m.StemNumber)
 
     @Html.EnumRadioEditorFor(model => model.Oxidase)
@@ -70,7 +51,6 @@
     @Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP6, "col-sm-10")
 
     @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
-
     <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
         @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-4">
@@ -87,7 +67,6 @@
     </div>
 
     @Html.EnumRadioEditorFor(model => model.ApiNh)
-    
     <div id="ApiNhMatchInPercentForm" class="form-group">
         @Html.LabelFor(m => m.ApiNhMatchInPercent, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-4">
@@ -104,7 +83,6 @@
     </div>
     
     @Html.EnumRadioEditorFor(model => model.MaldiTof)
-    
     <div id="MaldiTofMatchConfidenceForm" class="form-group">
         @Html.LabelFor(m => m.MaldiTofMatchConfidence, new {@class = "col-sm-2 control-label"})
         <div class="col-sm-4">
@@ -121,7 +99,6 @@
     </div>
 
     @Html.EnumRadioEditorFor(model => model.Ftsi)
-
     <div id="FtsiEvaluationForm" class="form-group">
         @Html.LabelFor(m => m.FtsiEvaluation1, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-4">
@@ -136,7 +113,6 @@
     </div>
  
     @Html.EnumRadioEditorFor(model => model.Mlst)
-
     <div id="MlstSequenceTypeForm" class="form-group">
         @Html.LabelFor(m => m.MlstSequenceType, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-4">
@@ -206,8 +182,8 @@
                 if ($("input:radio[name$='Growth']:checked").val() == "Yes") {
                     var checkedTypeOfGrowth = $("input:checkbox[name$='TypeOfGrowth']:checked");
                     if (!checkedTypeOfGrowth.val()) {
-                        $("#defaultTypeOfGrowth").prop("checked", true);
-                        $("#defaultTypeOfGrowth").parent().addClass("active");
+                        $("#TypeOfGrowth_TypicalGrowthOnKb").prop("checked", true);
+                        $("#TypeOfGrowth_TypicalGrowthOnKb").parent().addClass("active");
                     }
                 }
             });

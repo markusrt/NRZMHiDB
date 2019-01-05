@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Web.Mvc;
+using FluentAssertions;
 using HaemophilusWeb.TestDoubles;
 using NUnit.Framework;
 
@@ -22,6 +23,18 @@ namespace HaemophilusWeb.Views.Utils
             string expectedStringRepresentation)
         {
             EnumEditor.GetEnumDescription(enumValue).Should().Be(expectedStringRepresentation);
+        }
+
+
+
+        [Test]
+        public void EnumRadioButtonFor_FlagsEnum_UnboxesNullable()
+        {
+            var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(new SimpleModel()));
+            var enumRadioEditorHtml = helper.EnumRadioButtonFor(m => m.GrowthType);
+
+            enumRadioEditorHtml.ToHtmlString().Should().NotContain("GrowthType_None");
+            enumRadioEditorHtml.ToHtmlString().Should().Contain("<input id=\\\"GrowthType_GrowthOnBlood\\\" name=\\\"GrowthType\\\" type=\\\"checkbox\\\" value=\\\"GrowthOnBlood\\\" /> Wachstum auf Blut");
         }
     }
 }
