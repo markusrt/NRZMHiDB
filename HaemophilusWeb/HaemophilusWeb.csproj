@@ -220,6 +220,7 @@
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\EucastClinicalBreakpointsController.cs" />
+    <Compile Include="Controllers\GeonamesController.cs" />
     <Compile Include="Controllers\HealthOfficesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IsolateController.cs" />
@@ -953,7 +954,6 @@
     <Content Include="Scripts\globalize\cultures\globalize.culture.zu.js" />
     <Content Include="Scripts\globalize\cultures\globalize.cultures.js" />
     <Content Include="Scripts\globalize\globalize.js" />
-    <Content Include="Scripts\jeoQuery.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-browser.min.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
