@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 01, 08), "Entfernung der fehlerhaften Warnung bei Teilbefunden", ChangeType.Bug),
                 new Change(new DateTime(2019, 01, 07), "Update der Postleitzahl Abfrage", ChangeType.Feature),
                 new Change(new DateTime(2018, 12, 16), "Korrektur der Interpretationssätze für Endbefunde.", ChangeType.Bug),
                 new Change(new DateTime(2018, 12, 15), "Feste Skala für E-Test Werte", ChangeType.Feature),
