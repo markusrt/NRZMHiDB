@@ -120,25 +120,8 @@
     <script>
         var documentData = @(Html.Raw(Json.Encode(Model)));
 
+
         $("#TryCreateReport").click(function()
-        {
-            if (documentData["Interpretation"].indexOf("Diskrepant") > -1)
-            {
-                $("#discrepantResultsModal").modal("show");
-            }
-            else
-            {
-                DoCreateReport();
-            }
-        });
-
-        $("#ForceCreateReport").click(function()
-        {
-            $("#discrepantResultsModal").modal("hide");
-            DoCreateReport();
-        });
-
-        function DoCreateReport()
         {
             var templateFile = $("#ReportTemplate").val();
             var preliminary = templateFile.indexOf("@ViewBag.PreliminaryReportMarker") !== -1;
@@ -149,6 +132,28 @@
                 return;
             }
 
+            var interpretation = "Interpretation";
+            if (preliminary) {
+                interpretation = "InterpretationPreliminary";
+            }
+            if (documentData[interpretation].indexOf("Diskrepant") > -1)
+            {
+                $("#discrepantResultsModal").modal("show");
+            }
+            else
+            {
+                DoCreateReport(templateFile, preliminary, signer);
+            }
+        });
+
+        $("#ForceCreateReport").click(function()
+        {
+            $("#discrepantResultsModal").modal("hide");
+            DoCreateReport();
+        });
+
+        function DoCreateReport(templateFile, preliminary, signer)
+        {
             documentData["Signer"] = signer;
 
             $(documentData.Typings).each(function(index, typing) {

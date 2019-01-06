@@ -1,6 +1,4 @@
-﻿<script src="~/Scripts/jeoQuery.js"></script>
-
-<script>
+﻿<script>
 
     $(document).ready(function () {
         RegisterPostalCodeAutocompletion();
@@ -9,19 +7,33 @@
     });
 
     function RegisterPostalCodeDetailsLookup() {
-        $("[id$='PostalCode']").jeoPostalCodeLookup({
-            country: "DE",
-            regexTrigger: /\d{5}/,
-            callback: function (data) {
-                PopulateCityInput(data.placeName);
-                PopulateCountyInput(data.adminName3);
-                PopulateStateComboBox(data.adminCode1);
-            },
-            noDataCallback: function () {
-                PopulateCityInput("Unbekannt");
-                PopulateCountyInput("Unbekannt");
-                PopulateStateComboBox("Unknown");
+        $("[id$='PostalCode']").on("input", function () {
+            var val = $(this).val();
+            if (val.length !== 5) {
+                return;
             }
+
+            $.post("@Url.Content("~/Geonames/PostalCode/")", { postalCode: val },
+                function (data) {
+                    if (data['error']) {
+                        console.log("Error querying postal code data: " + data['error'].description);
+                    }
+                    else {
+                        console.log("Postal code query result:" + JSON.stringify(data));
+                        if (data.postalcodes.length !== 1) {
+                            PopulateCityInput("Unbekannt");
+                            PopulateCountyInput("Unbekannt");
+                            PopulateStateComboBox("Unknown");
+                        }
+                        else {
+                            PopulateCityInput(data.postalcodes[0].placeName);
+                            PopulateCountyInput(data.postalcodes[0].adminName3);
+                            PopulateStateComboBox(data.postalcodes[0].adminCode1);
+                        }
+                    }
+
+                }
+            );
         });
     }
 
@@ -36,19 +48,24 @@
                 PopulateStateComboBox("Unknown");
             }
 
-            $.getJSON(
-                "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20json%20where%20url%3D%27http%3A%2F%2Fapi.geonames.org%2FpostalCodeSearchJSON%3Fpostalcode_startsWith%3D"
-				+ val + "%26country%3DDE%26username%3Dhweb%27&format=json"
+            $.post("@Url.Content("~/Geonames/PostalCodeStartsWith/")", { postalCodePrefix: val },
+                function (data) {
+                    if (data['error']) {
+                        console.log("Error querying postal code prefix: " + data['error'].description);
+                    } else {
+                        FillPostalCodeDataList(data);
+                    }
 
-            ).done(FillPostalCodeDataList);
+                }
+            );
         });
     }
 
     var knownPostalCodes = new Array();
 
     function FillPostalCodeDataList(data) {
-        var results = data.query.results.json.postalCodes;
-        if (results.length == 0) {
+        var results = data.postalCodes;
+        if (data.length == 0) {
             return;
         }
 
