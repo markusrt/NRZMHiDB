@@ -383,6 +383,10 @@
     <Compile Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.Designer.cs">
       <DependentUpon>201901122122392_Meningo_Isolate_3_Agglutination.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.cs" />
+    <Compile Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.Designer.cs">
+      <DependentUpon>201901122131264_Meningo_Isolate_4_Onpg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -1236,6 +1240,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.resx">
       <DependentUpon>201901122122392_Meningo_Isolate_3_Agglutination.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.resx">
+      <DependentUpon>201901122131264_Meningo_Isolate_4_Onpg.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

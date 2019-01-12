@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HaemophilusWeb.Models.Meningo
 {
@@ -8,5 +9,8 @@ namespace HaemophilusWeb.Models.Meningo
         public int MeningoIsolateId { get; set; }
 
         public MeningoSerotypeAgg Agglutination { get; set; }
+
+        [Display(Name = "ONPG")]
+        public TestResult Onpg { get; set; }
     }
 }
