@@ -6,5 +6,7 @@ namespace HaemophilusWeb.Models.Meningo
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MeningoIsolateId { get; set; }
+
+        public MeningoSerotypeAgg Agglutination { get; set; }
     }
 }

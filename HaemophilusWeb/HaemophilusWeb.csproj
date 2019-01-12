@@ -379,6 +379,10 @@
     <Compile Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.Designer.cs">
       <DependentUpon>201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.cs" />
+    <Compile Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.Designer.cs">
+      <DependentUpon>201901122122392_Meningo_Isolate_3_Agglutination.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -402,6 +406,7 @@
     <Compile Include="Models\Meningo\MeningoPatient.cs" />
     <Compile Include="Models\Meningo\MeningoSending.cs" />
     <Compile Include="Models\Meningo\MeningoSamplingLocation.cs" />
+    <Compile Include="Models\Meningo\MeningoSerotypeAgg.cs" />
     <Compile Include="Models\Meningo\RiskFactors.cs" />
     <Compile Include="Models\Meningo\UnderlyingDisease.cs" />
     <Compile Include="Models\PatientBase.cs" />
@@ -1228,6 +1233,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.resx">
       <DependentUpon>201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.resx">
+      <DependentUpon>201901122122392_Meningo_Isolate_3_Agglutination.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
