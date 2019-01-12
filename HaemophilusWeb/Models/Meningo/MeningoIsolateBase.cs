@@ -12,5 +12,8 @@ namespace HaemophilusWeb.Models.Meningo
 
         [Display(Name = "ONPG")]
         public TestResult Onpg { get; set; }
+
+        [Display(Name = "gamma-GT")]
+        public double? GammaGt { get; set; }
     }
 }

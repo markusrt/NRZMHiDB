@@ -387,6 +387,10 @@
     <Compile Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.Designer.cs">
       <DependentUpon>201901122131264_Meningo_Isolate_4_Onpg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.cs" />
+    <Compile Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.Designer.cs">
+      <DependentUpon>201901122155487_Meningo_Isolate_5_GammaGt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -1243,6 +1247,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.resx">
       <DependentUpon>201901122131264_Meningo_Isolate_4_Onpg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.resx">
+      <DependentUpon>201901122155487_Meningo_Isolate_5_GammaGt.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
