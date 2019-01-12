@@ -391,6 +391,10 @@
     <Compile Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.Designer.cs">
       <DependentUpon>201901122155487_Meningo_Isolate_5_GammaGt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.cs" />
+    <Compile Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.Designer.cs">
+      <DependentUpon>201901122211462_Meningo_Isolate_6_SerogroupPcr.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -414,7 +418,8 @@
     <Compile Include="Models\Meningo\MeningoPatient.cs" />
     <Compile Include="Models\Meningo\MeningoSending.cs" />
     <Compile Include="Models\Meningo\MeningoSamplingLocation.cs" />
-    <Compile Include="Models\Meningo\MeningoSerotypeAgg.cs" />
+    <Compile Include="Models\Meningo\MeningoSerogroupPcr.cs" />
+    <Compile Include="Models\Meningo\MeningoSerogroupAgg.cs" />
     <Compile Include="Models\Meningo\RiskFactors.cs" />
     <Compile Include="Models\Meningo\UnderlyingDisease.cs" />
     <Compile Include="Models\PatientBase.cs" />
@@ -1250,6 +1255,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.resx">
       <DependentUpon>201901122155487_Meningo_Isolate_5_GammaGt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.resx">
+      <DependentUpon>201901122211462_Meningo_Isolate_6_SerogroupPcr.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

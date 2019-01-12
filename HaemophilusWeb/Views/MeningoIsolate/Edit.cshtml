@@ -34,23 +34,13 @@
 
     @Html.TextEditorFor(model => model.GammaGt)
 
-    @*@Html.EnumRadioEditorFor(model => model.FactorTest)*@
-
     <div class="form-group">
         <label class="col-sm-2 control-label">E-Test Messwerte</label>
     </div>
 
     @Html.EditorFor(model => model.EpsilometerTestViewModels)
     
-    @*@Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP2)
-
-    @Html.EnumRadioEditorFor(model => model.BexA)
-
-    @Html.EnumRadioEditorFor(model => model.SerotypePcr)
-
-    @Html.EnumRadioEditorFor(model => model.FuculoKinase)
-
-    @Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP6, "col-sm-10")*@
+    @Html.EnumRadioEditorFor(model => model.SerogroupPcr)
 
     @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
     <div id="RibosomalRna16SMatchInPercentForm" class="form-group">

@@ -2,7 +2,7 @@
 
 namespace HaemophilusWeb.Models.Meningo
 {
-    public enum MeningoSerotypeAgg
+    public enum MeningoSerogroupPcr
     {
         [Description("n.d.")] NotDetermined = 0,
         [Description("A")] A = 1,
@@ -14,9 +14,6 @@ namespace HaemophilusWeb.Models.Meningo
         [Description("Y")] Y = 7,
         [Description("Z")] Z = 8,
         [Description("W/Y")] WY = 9,
-        [Description("negativ")] Negative = 10,
-        [Description("auto")] Auto = 11,
-        [Description("poly")] Poly = 12,
-        [Description("Nicht beurteilbar")] NotEvaluable = 13
+        [Description("negativ")] Negative = 10
     }
 }

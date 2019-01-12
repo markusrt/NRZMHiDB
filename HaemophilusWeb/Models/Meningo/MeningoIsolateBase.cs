@@ -8,12 +8,15 @@ namespace HaemophilusWeb.Models.Meningo
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MeningoIsolateId { get; set; }
 
-        public MeningoSerotypeAgg Agglutination { get; set; }
+        public MeningoSerogroupAgg Agglutination { get; set; }
 
         [Display(Name = "ONPG")]
         public TestResult Onpg { get; set; }
 
         [Display(Name = "gamma-GT")]
         public double? GammaGt { get; set; }
+
+        [Display(Name = "Serogruppen-PCR")]
+        public MeningoSerogroupPcr SerogroupPcr { get; set; }
     }
 }
