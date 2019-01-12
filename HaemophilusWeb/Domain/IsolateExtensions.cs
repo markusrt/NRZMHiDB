@@ -4,7 +4,9 @@ namespace HaemophilusWeb.Domain
 {
     public static class IsolateExtensions
     {
-        public static int PatientAge(this Isolate isolate)
+        public static int PatientAge<TSending, TPatient>(this ISendingReference<TSending, TPatient> isolate)
+            where TPatient : PatientBase
+            where TSending : SendingBase<TPatient>
         {
             var age = 0;
             if (isolate.Sending.Patient.BirthDate.HasValue)

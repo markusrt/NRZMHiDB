@@ -6,7 +6,7 @@ using HaemophilusWeb.Utils;
 
 namespace HaemophilusWeb.Models
 {
-    public class Isolate : IsolateBase
+    public class Isolate : IsolateBase, ISendingReference<Sending, Patient>
     {
         [Display(Name = "Einsendung")]
         [Key]

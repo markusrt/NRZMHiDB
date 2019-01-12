@@ -394,6 +394,7 @@
     <Compile Include="Models\IsolateCommon.cs" />
     <Compile Include="Models\Material.cs" />
     <Compile Include="Models\Meningo\Epidemiology.cs" />
+    <Compile Include="Models\ISendingReference.cs" />
     <Compile Include="Models\Meningo\MeningoIsolate.cs" />
     <Compile Include="Models\Meningo\MeningoIsolateBase.cs" />
     <Compile Include="Models\Meningo\MeningoMaterial.cs" />

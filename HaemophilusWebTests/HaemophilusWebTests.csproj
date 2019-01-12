@@ -116,6 +116,7 @@
     <Compile Include="Controllers\PatientSendingControllerTests.cs" />
     <Compile Include="Controllers\SendingControllerTests.cs" />
     <Compile Include="Controllers\HomeControllerTests.cs" />
+    <Compile Include="Domain\IsolateExtensionsTests.cs" />
     <Compile Include="Domain\IsolateInterpretationTests.cs" />
     <Compile Include="Mocks\ApplicationDbContextMock.cs" />
     <Compile Include="Mocks\FakeDbSet.cs" />

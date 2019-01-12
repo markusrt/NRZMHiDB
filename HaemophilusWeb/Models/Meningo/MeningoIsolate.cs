@@ -4,7 +4,7 @@ using System.Web.Script.Serialization;
 
 namespace HaemophilusWeb.Models.Meningo
 {
-    public class MeningoIsolate : MeningoIsolateBase
+    public class MeningoIsolate : MeningoIsolateBase, ISendingReference<MeningoSending, MeningoPatient>
     {
         [Key]
         [ForeignKey("Sending")]
