@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using FluentAssertions;
+using HaemophilusWeb.Automapper;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.TestUtils;
 using HaemophilusWeb.ViewModels;
@@ -65,6 +66,7 @@ namespace HaemophilusWeb.Controllers
         public void SetUp()
         {
             DbMock = new ApplicationDbContextMock();
+            IsolateViewModelMappingActionBase.DbForTest = DbMock;
             controller = new ReportController(DbMock);
             var context = new Mock<HttpContextBase>();
             var server = new Mock<HttpServerUtilityBase>(MockBehavior.Loose);

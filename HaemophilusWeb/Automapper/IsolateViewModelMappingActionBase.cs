@@ -10,7 +10,10 @@ namespace HaemophilusWeb.Automapper
 {
     public class IsolateViewModelMappingActionBase
     {
-        protected ApplicationDbContext db = new ApplicationDbContext();
+        //TODO Ugly quick fix: Make this use dependency injection
+        public static IApplicationDbContext DbForTest;
+
+        protected IApplicationDbContext db = DbForTest ?? new ApplicationDbContextWrapper(new ApplicationDbContext());
 
         //TODO Refactor copied code from IsolateControllerBase
         protected List<Antibiotic> AvailableAntibiotics
