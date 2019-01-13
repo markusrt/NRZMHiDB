@@ -121,7 +121,6 @@
       <HintPath>..\packages\Microsoft.Owin.Security.Twitter.2.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
@@ -223,6 +222,7 @@
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\EucastClinicalBreakpointsController.cs" />
+    <Compile Include="Controllers\PubMlstController.cs" />
     <Compile Include="Controllers\GeonamesController.cs" />
     <Compile Include="Controllers\HealthOfficesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -423,6 +423,7 @@
     <Compile Include="Models\Meningo\RiskFactors.cs" />
     <Compile Include="Models\Meningo\UnderlyingDisease.cs" />
     <Compile Include="Models\PatientBase.cs" />
+    <Compile Include="Models\PubMlstIsolate.cs" />
     <Compile Include="Models\ReportStatus.cs" />
     <Compile Include="Models\RkiMatchRecord.cs" />
     <Compile Include="Models\RkiStatus.cs" />
