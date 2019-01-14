@@ -18,7 +18,7 @@
         @Html.ValidationMessageFor(model => model.SenderId)
     </div>
 </div>
-@if (@Request.Path.Contains("MeningoSending/"))
+@if (@Request.Path.Contains("/MeningoSending/"))
 {
     <div class="form-group">
         @Html.LabelFor(model => model.MeningoPatientId, new {@class = "col-sm-2 control-label"})
