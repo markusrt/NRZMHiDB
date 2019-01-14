@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ServiceStack;
 
 namespace HaemophilusWeb.Models.Meningo
 {
@@ -30,6 +31,22 @@ namespace HaemophilusWeb.Models.Meningo
 
         [Display(Name = "Serogruppe Einsender")]
         public string SerogroupSender { get; set; }
+
+        [Display(Name = "Anderer Entnahmeort (invasiv)")]
+        public string OtherInvasiveSamplingLocation { get; set; }
+
+        [Display(Name = "Anderer Entnahmeort (nicht invasiv)")]
+        public string OtherNonInvasiveSamplingLocation { get; set; }
+
+        [Display(Name = "Invasiv")]
+        public YesNo? Invasive => IsInvasive(SamplingLocation)
+            ? YesNo.Yes
+            : YesNo.No;
+
+        public static bool IsInvasive(MeningoSamplingLocation samplingLocation)
+        {
+            return samplingLocation.GetType().GetField(Enum.GetName(samplingLocation.GetType(), samplingLocation)).GetCustomAttributes(typeof(InvasiveSamplingLocationAttribute), false).Length > 0;
+        }
 
         public virtual MeningoIsolate Isolate { get; set; }
 

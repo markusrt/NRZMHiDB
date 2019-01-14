@@ -34,6 +34,12 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Ergebnis Einsender")]
         public string SenderConclusion { get; set; }
 
+        [Display(Name = "Invasiv")]
+        public YesNo? Invasive { get; set; }
+
+        [Display(Name = "Anderer Entnahmeort")]
+        public string OtherSamplingLocation { get; set; }
+
         public virtual RkiMatchRecord RkiMatchRecord { get; set; }
         public virtual Isolate Isolate { get; set; }
 

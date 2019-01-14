@@ -28,12 +28,6 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Labnr. Einsender")]
         public string SenderLaboratoryNumber { get; set; }
 
-        [Display(Name = "Invasiv")]
-        public YesNo? Invasive { get; set; }
-
-        [Display(Name = "Anderer Entnahmeort")]
-        public string OtherSamplingLocation { get; set; }
-
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
 

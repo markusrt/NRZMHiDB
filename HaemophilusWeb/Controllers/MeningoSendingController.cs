@@ -2,6 +2,7 @@
 using System.Linq;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
@@ -30,6 +31,14 @@ namespace HaemophilusWeb.Controllers
                     .DefaultIfEmpty()
                     .Max(i => i == null ? 0 : i.YearlySequentialIsolateNumber);
             return lastSequentialIsolateNumber + 1;
+        }
+
+        protected override void AddAdditionalReferenceDataToViewBag(dynamic viewBag, MeningoSending sending)
+        {
+            viewBag.PossibleOtherInvasiveSamplingLocations = SendingDbSet().Where(
+                s => !string.IsNullOrEmpty(s.OtherInvasiveSamplingLocation)).Select(s => s.OtherInvasiveSamplingLocation).AsDataList();
+            viewBag.PossibleOtherNonInvasiveSamplingLocations = SendingDbSet().Where(
+                s => !string.IsNullOrEmpty(s.OtherNonInvasiveSamplingLocation)).Select(s => s.OtherNonInvasiveSamplingLocation).AsDataList();
         }
 
         protected override IDbSet<MeningoSending> SendingDbSet()

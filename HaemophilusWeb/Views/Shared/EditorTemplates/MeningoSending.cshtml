@@ -46,24 +46,36 @@
 
 @Html.EnumRadioEditorFor(m=>m.SamplingLocation, "col-sm-10")
 
-<div id="OtherSamplingLocationForm" class="form-group">
-    @Html.LabelFor(m => m.OtherSamplingLocation, new { @class = "col-sm-2 control-label" })
+<div id="OtherInvasiveSamplingLocationForm" class="form-group">
+    @Html.LabelFor(m => m.OtherInvasiveSamplingLocation, new { @class = "col-sm-2 control-label" })
     <div class="col-sm-5">
-        @Html.TextBoxFor(m => m.OtherSamplingLocation, new { @class = "form-control", @list = "otherSamplingLocationsAutocomplete", @autocomplete = "off" })
-        <datalist id="otherSamplingLocationsAutocomplete">
-            @foreach (var item in ViewBag.PossibleOtherSamplingLocations)
+        @Html.TextBoxFor(m => m.OtherInvasiveSamplingLocation, new { @class = "form-control", @list = "otherInvasiveSamplingLocationsAutocomplete", @autocomplete = "off" })
+        <datalist id="otherInvasiveSamplingLocationsAutocomplete">
+            @foreach (var item in ViewBag.PossibleOtherInvasiveSamplingLocations)
             {
                 <option value="@item.ToString()" />
             }
         </datalist>
 
-        @Html.ValidationMessageFor(model => model.OtherSamplingLocation)
+        @Html.ValidationMessageFor(model => model.OtherInvasiveSamplingLocation)
+    </div>
+</div>
+<div id="OtherNonInvasiveSamplingLocationForm" class="form-group">
+    @Html.LabelFor(m => m.OtherNonInvasiveSamplingLocation, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        @Html.TextBoxFor(m => m.OtherNonInvasiveSamplingLocation, new { @class = "form-control", @list = "otherNonInvasiveSamplingLocationsAutocomplete", @autocomplete = "off" })
+        <datalist id="otherNonInvasiveSamplingLocationsAutocomplete">
+            @foreach (var item in ViewBag.PossibleOtherNonInvasiveSamplingLocations)
+            {
+                <option value="@item.ToString()" />
+            }
+        </datalist>
+
+        @Html.ValidationMessageFor(model => model.OtherNonInvasiveSamplingLocation)
     </div>
 </div>
 
 @Html.EnumRadioEditorFor(m => m.Material, "col-sm-10")
-
-@Html.EnumRadioEditorFor(m => m.Invasive)
 
 @Html.TextEditorFor(m => m.SerogroupSender)
 
@@ -75,9 +87,14 @@
 
     function ShowOtherSamplingLocationIfOtherIsSelected() {
         ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#OtherSamplingLocationForm", "input:radio[name$='SamplingLocation']",
+            "#OtherInvasiveSamplingLocationForm", "input:radio[name$='SamplingLocation']",
             "input:radio[name$='SamplingLocation']:checked",
-            "Other", "[id$='OtherSamplingLocation']"
+            "OtherInvasive", "[id$='OtherInvasiveSamplingLocation']"
+        );
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#OtherNonInvasiveSamplingLocationForm", "input:radio[name$='SamplingLocation']",
+            "input:radio[name$='SamplingLocation']:checked",
+            "OtherNonInvasive", "[id$='OtherNonInvasiveSamplingLocation']"
         );
     }
 </script>

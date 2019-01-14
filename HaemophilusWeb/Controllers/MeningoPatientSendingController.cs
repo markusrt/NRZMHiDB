@@ -185,8 +185,8 @@ namespace HaemophilusWeb.Controllers
                 x.Isolate.StemNumber,
                 x.ReceivingDate,
                 x.SamplingLocation,
-                x.OtherSamplingLocation,
-                x.Invasive,
+                x.OtherInvasiveSamplingLocation,
+                x.OtherNonInvasiveSamplingLocation,
                 x.Isolate.YearlySequentialIsolateNumber,
                 x.Isolate.Year,
                 x.SenderLaboratoryNumber,
@@ -195,9 +195,11 @@ namespace HaemophilusWeb.Controllers
             });
             var queryRecords = query.ToList().Select(x =>
             {
-                var invasive = EnumEditor.GetEnumDescription(x.Invasive);
-                var samplingLocation = x.SamplingLocation == MeningoSamplingLocation.Other
-                    ? Server.HtmlEncode(x.OtherSamplingLocation)
+                var invasive = MeningoSending.IsInvasive(x.SamplingLocation) ? YesNo.Yes : YesNo.No;
+                var samplingLocation = x.SamplingLocation == MeningoSamplingLocation.OtherInvasive
+                    ? Server.HtmlEncode(x.OtherInvasiveSamplingLocation)
+                    : x.SamplingLocation == MeningoSamplingLocation.OtherNonInvasive
+                    ? Server.HtmlEncode(x.OtherNonInvasiveSamplingLocation)
                     : EnumEditor.GetEnumDescription(x.SamplingLocation);
                 var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year);
                 return new QueryRecord
@@ -209,7 +211,7 @@ namespace HaemophilusWeb.Controllers
                     StemNumber = x.StemNumber,
                     ReceivingDate = x.ReceivingDate,
                     SamplingLocation = samplingLocation,
-                    Invasive = invasive,
+                    Invasive = EnumEditor.GetEnumDescription(invasive),
                     LaboratoryNumber = x.Year * 10000 + x.YearlySequentialIsolateNumber,
                     LaboratoryNumberString = laboratoryNumber,
                     ReportGenerated = x.ReportDate.HasValue,

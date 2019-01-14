@@ -395,6 +395,10 @@
     <Compile Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.Designer.cs">
       <DependentUpon>201901122211462_Meningo_Isolate_6_SerogroupPcr.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.cs" />
+    <Compile Include="Migrations\201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.Designer.cs">
+      <DependentUpon>201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -411,6 +415,7 @@
     <Compile Include="Models\Material.cs" />
     <Compile Include="Models\Meningo\Epidemiology.cs" />
     <Compile Include="Models\ISendingReference.cs" />
+    <Compile Include="Models\InvasiveSamplingLocationAttribute.cs" />
     <Compile Include="Models\Meningo\MeningoIsolate.cs" />
     <Compile Include="Models\Meningo\MeningoIsolateBase.cs" />
     <Compile Include="Models\Meningo\MeningoMaterial.cs" />
@@ -1259,6 +1264,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.resx">
       <DependentUpon>201901122211462_Meningo_Isolate_6_SerogroupPcr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.resx">
+      <DependentUpon>201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

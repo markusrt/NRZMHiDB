@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 01, 14), "Invasive und nicht-invasive Entnahmeorte (Meningokokken)", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 13), "Integration der PubMLST Isolat API (Meningokokken)", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 12), "Eingabemaske für Isolate ohne E-Test und ST (Meningokokken)", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 08), "Entfernung der fehlerhaften Warnung bei Teilbefunden", ChangeType.Bug),

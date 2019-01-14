@@ -14,8 +14,10 @@ namespace HaemophilusWeb.Automapper
         public void Process(MeningoIsolate source, MeningoIsolateViewModel destination)
         {
             var sending = source.Sending;
-            destination.SamplingLocation = sending.SamplingLocation == MeningoSamplingLocation.Other
-                ? WebUtility.HtmlEncode(sending.OtherSamplingLocation)
+            destination.SamplingLocation = sending.SamplingLocation == MeningoSamplingLocation.OtherInvasive
+                ? WebUtility.HtmlEncode(sending.OtherInvasiveSamplingLocation)
+                : sending.SamplingLocation == MeningoSamplingLocation.OtherNonInvasive
+                ? WebUtility.HtmlEncode(sending.OtherNonInvasiveSamplingLocation)
                 : EnumEditor.GetEnumDescription(sending.SamplingLocation);
             destination.Material = EnumEditor.GetEnumDescription(sending.Material);
             destination.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);

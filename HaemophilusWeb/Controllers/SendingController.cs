@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using DocumentFormat.OpenXml.Wordprocessing;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.Views.Utils;
@@ -34,6 +35,12 @@ namespace HaemophilusWeb.Controllers
                     .DefaultIfEmpty()
                     .Max(i => i == null ? 0 : i.YearlySequentialIsolateNumber);
             return lastSequentialIsolateNumber + 1;
+        }
+
+        protected override void AddAdditionalReferenceDataToViewBag(dynamic viewBag, Sending sending)
+        {
+            viewBag.PossibleOtherSamplingLocations = SendingDbSet().Where(
+                s => !string.IsNullOrEmpty(s.OtherSamplingLocation)).Select(s => s.OtherSamplingLocation).AsDataList();
         }
 
         protected override IDbSet<Sending> SendingDbSet()
@@ -171,9 +178,10 @@ namespace HaemophilusWeb.Controllers
         {
             viewBag.PossibleSenders = db.Senders.Where(s => !s.Deleted || s.SenderId == sending.SenderId);
             viewBag.PossiblePatients = PatientDbSet();
-            viewBag.PossibleOtherSamplingLocations = SendingDbSet().Where(
-                s => !string.IsNullOrEmpty(s.OtherSamplingLocation)).Select(s => s.OtherSamplingLocation).AsDataList();
+            AddAdditionalReferenceDataToViewBag(viewBag, sending);
         }
+
+        protected abstract void AddAdditionalReferenceDataToViewBag(dynamic viewBag, TSending sending);
 
         protected abstract IDbSet<TSending> SendingDbSet();
 
