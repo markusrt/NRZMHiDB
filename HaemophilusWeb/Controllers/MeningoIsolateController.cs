@@ -102,7 +102,7 @@ namespace HaemophilusWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult PubMlstMatch(FromToQuery fromTo)
         {
-            var matcher = new PubMlstMatcher(db, new PubMlstService());
+            var matcher = new PubMlstMatcher(db, new NeisseriaPubMlstService(), new IrisPubMlstService(ConfigurationManager.AppSettings.GetIrisAuthentication()));
             var result = matcher.Match(fromTo);
             return View("PubMlstMatchResult", result);
         }
