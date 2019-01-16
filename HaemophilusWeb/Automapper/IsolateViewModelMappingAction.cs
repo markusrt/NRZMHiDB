@@ -14,7 +14,7 @@ namespace HaemophilusWeb.Automapper
         {
             var sending = source.Sending;
             destination.SamplingLocation = sending.SamplingLocation == SamplingLocation.Other
-                ? WebUtility.HtmlEncode(sending.OtherSamplingLocation)
+                ? sending.OtherSamplingLocation
                 : EnumEditor.GetEnumDescription(sending.SamplingLocation);
             destination.Material = EnumEditor.GetEnumDescription(sending.Material);
             destination.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
