@@ -11,8 +11,7 @@ namespace HaemophilusWeb.Models.Meningo
         [Description("Meningitis")] Meningitis = 2,
         [Description("Sepsis")] Sepsis = 4,
         [Description("WFS")] WaterhouseFriderichsenSyndrome = 8,
-        [Description("Letal")] Lethal = 16,
-        [Description("Keine Symptome")] NoSymptoms = 32,
+        [Description("Keine Symptome")] NoSymptoms = 16,
         [Description("Andere")] Other = 32768
     }
 }
