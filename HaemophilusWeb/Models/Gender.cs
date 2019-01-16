@@ -7,6 +7,8 @@ namespace HaemophilusWeb.Models
         [Description("männlich")]
         Male=0,
         [Description("weiblich")]
-        Female=1
+        Female=1,
+        [Description("divers")]
+        Intersex = 2
     }
 }
