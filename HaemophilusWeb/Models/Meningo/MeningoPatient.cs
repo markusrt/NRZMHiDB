@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FluentValidation.Attributes;
+using HaemophilusWeb.Validators;
 
 namespace HaemophilusWeb.Models.Meningo
 {
+    [Validator(typeof(MeningoPatientValidator))]
     public class MeningoPatient : PatientBase
     {
         [Display(Name = "Klinische Angaben")]

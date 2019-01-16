@@ -1,17 +1,19 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using ServiceStack;
+using FluentValidation.Attributes;
+using HaemophilusWeb.Validators;
 
 namespace HaemophilusWeb.Models.Meningo
 {
-    //TODO Validator
+    [Validator(typeof(MeningoSendingValidator))]
     public class MeningoSending : SendingBase<MeningoPatient>
     {
         public MeningoSending()
         {
             ReceivingDate = DateTime.Now;
             SamplingDate = DateTime.Now.Subtract(TimeSpan.FromDays(7));
+            SamplingLocation = MeningoSamplingLocation.Blood;
         }
 
         [Key]
@@ -48,7 +50,7 @@ namespace HaemophilusWeb.Models.Meningo
             return samplingLocation.GetType().GetField(Enum.GetName(samplingLocation.GetType(), samplingLocation)).GetCustomAttributes(typeof(InvasiveSamplingLocationAttribute), false).Length > 0;
         }
 
-        public virtual MeningoIsolate Isolate { get; set; }
+        public MeningoIsolate Isolate { get; set; }
 
         public override void SetPatientId(int patientId)
         {

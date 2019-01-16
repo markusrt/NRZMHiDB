@@ -45,9 +45,19 @@ namespace HaemophilusWeb.Controllers
         {
             AssignClinicalInformationFromCheckboxValues(patientSending);
 
-            // TODO Validation
-            //ValidateModel(patientSending.Sending, new SendingValidator());
-            //ValidateModel(patientSending.Patient, new PatientValidator());
+            ValidateModel(patientSending.Sending, new MeningoSendingValidator());
+            ValidateModel(patientSending.Patient, new MeningoPatientValidator());
+            ValidatePatientBirthdateGreaterOrEqualReceivingDate(patientSending);
+
+        }
+
+        private void ValidatePatientBirthdateGreaterOrEqualReceivingDate(PatientSendingViewModel<MeningoPatient, MeningoSending> patientSending)
+        {
+            var samplingDateBeforeBirthDate = (patientSending.Sending.SamplingDate ?? DateTime.MinValue).CompareTo(patientSending.Patient.BirthDate ?? DateTime.MinValue) < 0;
+            if (samplingDateBeforeBirthDate)
+            {
+                ModelState.AddModelError("Patient.BirthDate", "Das Entnahmedatum muss nach dem Geburtsdatum des Patienten liegen");
+            }
         }
 
         protected override string IsolateControllerName => "MeningoIsolate";

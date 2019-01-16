@@ -432,7 +432,6 @@ namespace HaemophilusWeb.Controllers
             return patient;
         }
 
-        
 
         private void ValidatePatientDoesNotAlreadyExist(TViewModel patientSending)
         {

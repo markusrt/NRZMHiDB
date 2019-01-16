@@ -32,13 +32,14 @@ namespace HaemophilusWeb.Validators
 
         protected static IEnumerable<Tuple<Patient, string[]>> CreateInvalidModels()
         {
-            var invalidPatient = new Patient()
+            var invalidPatient = new Patient
             {
-                PostalCode = "abc",
-                Initials = "Herbert"
+                PostalCode = "",
+                Initials = "Herbert",
+                State = State.ST
             };
 
-            yield return Tuple.Create(invalidPatient, new[] {"Initials", "Gender"});
+            yield return Tuple.Create(invalidPatient, new[] {"Initials", "Gender", "PostalCode" });
 
             yield return Tuple.Create(CreatePatientWithEmptyInitials(), new[] {"Initials"});
         }

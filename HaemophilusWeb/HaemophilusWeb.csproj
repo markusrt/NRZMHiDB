@@ -476,7 +476,9 @@
     <Compile Include="Validators\IsolateViewModelValidator.cs" />
     <Compile Include="Validators\EucastClinicalBreakpointValidator.cs" />
     <Compile Include="Validators\HealthOfficeValidator.cs" />
+    <Compile Include="Validators\MeningoPatientValidator.cs" />
     <Compile Include="Validators\PatientValidator.cs" />
+    <Compile Include="Validators\MeningoSendingValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
     <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
     <Compile Include="ViewModels\IsolateViewModel.cs" />

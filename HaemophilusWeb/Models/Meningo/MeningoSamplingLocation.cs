@@ -9,42 +9,42 @@ namespace HaemophilusWeb.Models.Meningo
     public enum MeningoSamplingLocation
     {
         [Description("Analabstrich")]
-        AnalSwab = 1,
+        AnalSwab = 0,
         [Description("Bindehautabstrich")]
-        ConjunctivalSwab = 2,
+        ConjunctivalSwab = 1,
         [InvasiveSamplingLocation]
         [Description("Blut")]
-        Blood = 3,
+        Blood = 2,
         [Description("Blut und Liquor")]
         [InvasiveSamplingLocation]
-        BloodAndLiquor = 4,
+        BloodAndLiquor = 3,
         [Description("Bronchiallavage")]
-        BronchoalveolarLavage = 5,
+        BronchoalveolarLavage = 4,
         [Description("Cervixabstrich")]
-        CervixSwab = 6,
+        CervixSwab = 5,
         [Description("Gelenkspunktat")]
         [InvasiveSamplingLocation]
-        JointAspiration = 7,
+        JointAspiration = 6,
         [Description("Liquor")]
         [InvasiveSamplingLocation]
-        Liquor = 8,
+        Liquor = 7,
         [Description("Nasenabstrich")]
-        NasalSwab = 9,
+        NasalSwab = 8,
         [Description("Ohrabstrich")]
-        EarSwab = 10,
+        EarSwab = 9,
         [Description("Petechien")]
         [InvasiveSamplingLocation]
-        Petechien = 11,
+        Petechien = 10,
         [Description("Pleurapunktat")]
         [InvasiveSamplingLocation]
-        PleuralAspiration = 12,
-        [Description("Rachenabstrich")] PharynxSwab = 13,
-        [Description("Sputum")] Sputum = 14,
-        [Description("Tonsillenabstrich")] TonsilSwab = 15,
-        [Description("Trachealsekret")] TrachealSecretion = 16,
-        [Description("Urethralabstrich")] UrethralSwab = 17,
-        [Description("Vaginalabstrich")] VaginalSwab = 18,
-        [Description("Serum")] Serum = 19,
+        PleuralAspiration = 11,
+        [Description("Rachenabstrich")] PharynxSwab = 12,
+        [Description("Sputum")] Sputum = 13,
+        [Description("Tonsillenabstrich")] TonsilSwab = 14,
+        [Description("Trachealsekret")] TrachealSecretion = 15,
+        [Description("Urethralabstrich")] UrethralSwab = 16,
+        [Description("Vaginalabstrich")] VaginalSwab = 17,
+        [Description("Serum")] Serum = 18,
         [Description("Anderer invasiv")]
         [InvasiveSamplingLocation]
         OtherInvasive = 32767,
