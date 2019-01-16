@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Web;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
@@ -23,11 +24,11 @@ namespace HaemophilusWeb.Controllers
             return db.Patients;
         }
         
-        protected override void PopulateEnumFlagProperties(Patient patient)
+        public override void PopulateEnumFlagProperties(Patient patient, HttpRequestBase request)
         {
             patient.ClinicalInformation =
                 EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<ClinicalInformation>(
-                    Request.Form["ClinicalInformation"]);
+                    request.Form["ClinicalInformation"]);
         }
 
         public override void AddReferenceDataToViewBag(dynamic viewBag)

@@ -40,15 +40,11 @@ namespace HaemophilusWeb.Controllers
             return db.MeningoPatients;
         }
 
-        protected override void CreateAndEditPreparations(PatientSendingViewModel<MeningoPatient, MeningoSending> patientSending)
-
+        protected override void CreateAndEditPreparationsExtensions(PatientSendingViewModel<MeningoPatient, MeningoSending> patientSending)
         {
-            AssignClinicalInformationFromCheckboxValues(patientSending);
-
             ValidateModel(patientSending.Sending, new MeningoSendingValidator());
             ValidateModel(patientSending.Patient, new MeningoPatientValidator());
             ValidatePatientBirthdateGreaterOrEqualReceivingDate(patientSending);
-
         }
 
         private void ValidatePatientBirthdateGreaterOrEqualReceivingDate(PatientSendingViewModel<MeningoPatient, MeningoSending> patientSending)
@@ -61,13 +57,6 @@ namespace HaemophilusWeb.Controllers
         }
 
         protected override string IsolateControllerName => "MeningoIsolate";
-
-        private void AssignClinicalInformationFromCheckboxValues(PatientSendingViewModel<MeningoPatient, MeningoSending> patientSending)
-        {
-            patientSending.Patient.ClinicalInformation =
-                EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<MeningoClinicalInformation>(
-                    Request.Form["ClinicalInformation"]);
-        }
 
         protected override IEnumerable<MeningoSending> SendingsMatchingExportQuery(ExportQuery query, List<SamplingLocation> samplingLocations)
         {

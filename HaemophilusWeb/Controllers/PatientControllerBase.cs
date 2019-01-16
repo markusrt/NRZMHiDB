@@ -1,8 +1,10 @@
 ﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 
 namespace HaemophilusWeb.Controllers
 {
@@ -35,7 +37,7 @@ namespace HaemophilusWeb.Controllers
             return DbSet().Find(id);
         }
         
-        protected abstract void PopulateEnumFlagProperties(TPatient patient);
+        public abstract void PopulateEnumFlagProperties(TPatient meningoPatient, HttpRequestBase request);
 
         public abstract void AddReferenceDataToViewBag(dynamic viewBag);
 
@@ -73,7 +75,7 @@ namespace HaemophilusWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(TPatient patient)
         {
-            PopulateEnumFlagProperties(patient);
+            PopulateEnumFlagProperties(patient, Request);
             if (ModelState.IsValid)
             {
                 CreatePatient(patient);
@@ -112,7 +114,7 @@ namespace HaemophilusWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(TPatient patient)
         {
-            PopulateEnumFlagProperties(patient);
+            PopulateEnumFlagProperties(patient, Request);
             if (ModelState.IsValid)
             {
                 EditPatient(patient);

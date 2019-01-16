@@ -42,23 +42,14 @@ namespace HaemophilusWeb.Controllers
             return db.Patients;
         }
 
-        protected override void CreateAndEditPreparations(PatientSendingViewModel<Patient, Sending> patientSending)
+        protected override void CreateAndEditPreparationsExtensions(PatientSendingViewModel<Patient, Sending> patientSending)
 
         {
-            AssignClinicalInformationFromCheckboxValues(patientSending);
-
             ValidateModel(patientSending.Sending, new SendingValidator());
             ValidateModel(patientSending.Patient, new PatientValidator());
         }
 
         protected override string IsolateControllerName => "Isolate";
-
-        private void AssignClinicalInformationFromCheckboxValues(PatientSendingViewModel<Patient, Sending> patientSending)
-        {
-            patientSending.Patient.ClinicalInformation =
-                EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<ClinicalInformation>(
-                    Request.Form["ClinicalInformation"]);
-        }
 
         protected override IEnumerable<Sending> SendingsMatchingExportQuery(ExportQuery query, List<SamplingLocation> samplingLocations)
         {
@@ -231,23 +222,6 @@ namespace HaemophilusWeb.Controllers
             return queryRecords;
         }
     }
-    
-    //public class MPatientSendingController : PatientSendingControllerBase<PatientSendingViewModel<MeningoPatient, MeningoSending>,
-    //    MeningoPatient, MeningoSending>
-    //{
-    //    public MPatientSendingController()
-    //        : this(
-    //            new ApplicationDbContextWrapper(new ApplicationDbContext()), new PatientController(),
-    //            new SendingController<Sending>())
-    //    {
-    //    }
-
-    //    public MPatientSendingController(IApplicationDbContext applicationDbContext, PatientController patientController,
-    //        SendingController sendingController) : base(applicationDbContext, patientController, sendingController)
-    //    {
-    //    }
-
-    //}
 
     public abstract class PatientSendingControllerBase<TViewModel, TPatient, TSending> : ControllerBase
         where TViewModel : PatientSendingViewModel<TPatient, TSending>, new()
@@ -295,9 +269,15 @@ namespace HaemophilusWeb.Controllers
 
         protected abstract IDbSet<TPatient> PatientDbSet();
 
-        protected abstract void CreateAndEditPreparations(TViewModel patientSending);
+        protected abstract void CreateAndEditPreparationsExtensions(TViewModel patientSending);
 
         protected abstract string IsolateControllerName { get; }
+
+        private void CreateAndEditPreparations(TViewModel patientSending)
+        {
+            patientController.PopulateEnumFlagProperties(patientSending.Patient, Request);
+            CreateAndEditPreparationsExtensions(patientSending);
+        }
 
         private TViewModel CreatePatientSending(TSending sending)
         {
@@ -359,7 +339,7 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(patientSending);
         }
 
-        
+
 
         [HttpPost]
         [ActionName("Delete")]
@@ -372,7 +352,7 @@ namespace HaemophilusWeb.Controllers
             return EditUnvalidated(sending);
         }
 
-        
+
 
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Undelete(int? id)
@@ -485,7 +465,7 @@ namespace HaemophilusWeb.Controllers
             return View(NotDeletedSendings().Take(0).Select(CreatePatientSending).ToList());
         }
 
-        
+
 
         [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
         public ActionResult RkiExport(ExportQuery query)
