@@ -28,7 +28,7 @@ namespace HaemophilusWeb.Controllers
             var controller = new PubMlstController(UrlReturnsIsolate35105);
 
             var json = new JavaScriptSerializer().Serialize((controller.NeisseriaIsolates(0) as JsonResult)?.Data);
-            var isolate = JsonConvert.DeserializeObject<PubMlstIsolate>(json);
+            var isolate = JsonConvert.DeserializeObject<NeisseriaPubMlstIsolate>(json);
 
             isolate.PorAVr1.Should().Be("5");
             isolate.PorAVr2.Should().Be("2");

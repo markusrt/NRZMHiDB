@@ -1,6 +1,8 @@
-﻿namespace HaemophilusWeb.Models
+﻿using HaemophilusWeb.Models.Meningo;
+
+namespace HaemophilusWeb.Models
 {
-    public class PubMlstIsolate
+    public class NeisseriaPubMlstIsolate : INeisseriaIsolateAlleleProperties
     {
         public string PorAVr1 { get; set; }
         public string PorAVr2 { get; set; }

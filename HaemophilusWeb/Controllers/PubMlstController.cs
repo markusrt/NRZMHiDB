@@ -32,7 +32,7 @@ namespace HaemophilusWeb.Controllers
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult NeisseriaIsolates(int isolateId)
         {
-            var isolate = new PubMlstIsolate();
+            var isolate = new NeisseriaPubMlstIsolate();
 
             try
             {

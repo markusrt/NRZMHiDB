@@ -32,9 +32,9 @@
             @Html.ReadonlyFor(m => m.Invasive)
             @Html.ReadonlyFor(m => m.PatientAgeAtSampling)
 
-            @Html.EnumRadioEditorFor(model => model.Growth)
+            @Html.EnumRadioEditorFor(model => model.GrowthOnBloodAgar)
 
-            @Html.EnumRadioEditorFor(model => model.TypeOfGrowth, "col-sm-10", "GrowthTypeForm")
+            @Html.EnumRadioEditorFor(model => model.GrowthOnMartinLewisAgar)
 
             @Html.TextEditorFor(m => m.StemNumber)
 
@@ -44,7 +44,7 @@
 
             @Html.EnumRadioEditorFor(model => model.Onpg)
 
-            @Html.TextEditorFor(model => model.GammaGt)
+            @Html.EnumRadioEditorFor(model => model.GammaGt)
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">E-Test Messwerte</label>
@@ -53,6 +53,14 @@
             @Html.EditorFor(model => model.EpsilometerTestViewModels)
 
             @Html.EnumRadioEditorFor(model => model.SerogroupPcr)
+
+            @Html.TextEditorFor(model => model.PorAVr1)
+
+            @Html.TextEditorFor(model => model.PorAVr2)
+
+            @Html.TextEditorFor(model => model.FetAVr)
+
+            @Html.TextEditorFor(model => model.RplF)
 
             @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
             <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
@@ -102,37 +110,6 @@
                 </div>
             </div>
 
-            @*@Html.EnumRadioEditorFor(model => model.Ftsi)
-            <div id="FtsiEvaluationForm" class="form-group">
-                @Html.LabelFor(m => m.FtsiEvaluation1, new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-4">
-                    @Html.TextBoxFor(m => m.FtsiEvaluation1, new { @class = "form-control" })
-                </div>
-                <div class="col-sm-3">
-                    @Html.TextBoxFor(m => m.FtsiEvaluation2, new { @class = "form-control" })
-                </div>
-                <div class="col-sm-3">
-                    @Html.TextBoxFor(m => m.FtsiEvaluation3, new { @class = "form-control" })
-                </div>
-            </div>*@
-
-                    @*@Html.EnumRadioEditorFor(model => model.Mlst)
-            <div id="MlstSequenceTypeForm" class="form-group">
-                @Html.LabelFor(m => m.MlstSequenceType, new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-4">
-                    @Html.TextBoxFor(m => m.MlstSequenceType, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.MlstSequenceType)
-                </div>
-            </div>*@
-
-                    @*<div class="form-group">
-                @Html.LabelFor(m => m.Evaluation, new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-5">
-                    @EnumEditor.EnumDropDownListFor(Html, model => model.Evaluation, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.Evaluation)
-                </div>
-            </div>*@
-
             @Html.DateEditorFor(model => model.ReportDate)
 
             <div class="form-group">
@@ -160,75 +137,75 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">ST</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="SequenceType" type="text" readonly>
+                    <input class="form-control" id="PM-SequenceType" type="text" readonly>
                 </div>
                 <label class="col-sm-2 control-label">cc</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="ClonalComplex" type="text" readonly>
+                    <input class="form-control" id="PM-ClonalComplex" type="text" readonly>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">PorA-VR1</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PorAVr1" type="text" readonly>
+                    <input class="form-control" id="PM-PorAVr1" type="text" readonly>
                 </div>
                 <label class="col-sm-2 control-label">PorA-VR2</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PorAVr2" type="text" readonly>
+                    <input class="form-control" id="PM-PorAVr2" type="text" readonly>
                 </div>
                 <label class="col-sm-2 control-label">FetA-VR</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="FetAVr" type="text" readonly>
+                    <input class="form-control" id="PM-FetAVr" type="text" readonly>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Por-B</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PorB" type="text" readonly>
+                    <input class="form-control" id="PM-PorB" type="text" readonly>
                 </div>
                 <label class="col-sm-2 control-label">fHbp</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="Fhbp" type="text" readonly>
+                    <input class="form-control" id="PM-Fhbp" type="text" readonly>
                 </div>
                 <label class="col-sm-2 control-label">NHBA</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="Nhba" type="text" readonly>
+                    <input class="form-control" id="PM-Nhba" type="text" readonly>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">nadA</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="NadA" type="text" readonly>
+                    <input class="form-control" id="PM-NadA" type="text" readonly>
                 </div>
                 <label class="col-sm-2 control-label">penA</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PenA" type="text" readonly>
+                    <input class="form-control" id="PM-PenA" type="text" readonly>
                 </div>
                 <label class="col-sm-2 control-label">NHBA</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="GyrA" type="text" readonly>
+                    <input class="form-control" id="PM-GyrA" type="text" readonly>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="col-sm-2 control-label">parC</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="ParC" type="text" readonly>
+                    <input class="form-control" id="PM-ParC" type="text" readonly>
                 </div>
                 <label class="col-sm-2 control-label">parE</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="ParE" type="text" readonly>
+                    <input class="form-control" id="PM-ParE" type="text" readonly>
                 </div>
                 <label class="col-sm-2 control-label">rpoB</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="RpoB" type="text" readonly>
+                    <input class="form-control" id="PM-RpoB" type="text" readonly>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">rplF</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="RplF" type="text" readonly>
+                    <input class="form-control" id="PM-RplF" type="text" readonly>
                 </div>
             </div>
 
@@ -249,12 +226,10 @@
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("select[id$=_Measurement]").change(ETestChange);
             $("select[id$=_Antibiotic]").change(ETestChange);
-            ShowGrowthTypeIfGrowthIsSelectedWithYes();
+            ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
             ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
             ShowApiNhMatchInPercentIfDeterminedIsSelected();
             ShowMaldiTofMatchConfidenceIfDeterminedIsSelected();
-            ShowFtsiEvaluationIfDeterminedIsSelected();
-            ShowMlstSequenceTypeIfDeterminedIsSelected();
 
             $("#PubMlstQuery").click(QueryPubMlstDatabase);
             $("#PubMlstIsolateId").keypress(QueryPubMlstDatabaseKeypress);
@@ -287,11 +262,11 @@
 
         $.ajax("@Url.Content("~/PubMlst/NeisseriaIsolates/")", {method:"POST",data:{ isolateId: $("#PubMlstIsolateId").val() }} )
         .done(function (data) {
-            fields.forEach(v => $('#' + v).val(data[v]));
+            fields.forEach(v => $('#PM-' + v).val(data[v]));
             $("#PubMlstIsolateFound").show();
         })
         .fail(function () {
-            fields.forEach(v => $('#' + v).val(""));
+            fields.forEach(v => $('#PM-' + v).val(""));
             $("#PubMlstIsolateNotFound").show();
         })
         .always(function() {
@@ -306,27 +281,6 @@
         }
         return "";
     }
-
-    function ShowGrowthTypeIfGrowthIsSelectedWithYes() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#GrowthTypeForm",
-            "input:radio[name$='Growth']",
-            "input:radio[name$='Growth']:checked",
-            "Yes",
-            "input:checkbox[name$='TypeOfGrowth']"
-        );
-        $("input:radio[name$='Growth']")
-            .change(function() {
-                if ($("input:radio[name$='Growth']:checked").val() == "Yes") {
-                    var checkedTypeOfGrowth = $("input:checkbox[name$='TypeOfGrowth']:checked");
-                    if (!checkedTypeOfGrowth.val()) {
-                        $("#TypeOfGrowth_TypicalGrowthOnKb").prop("checked", true);
-                        $("#TypeOfGrowth_TypicalGrowthOnKb").parent().addClass("active");
-                    }
-                }
-            });
-    }
-
 
     function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected() {
         ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
@@ -358,27 +312,6 @@
             "Determined",
             "[id$='MaldiTofBestMatch']",
             "[id$='MaldiTofMatchConfidence']"
-        );
-    }
-
-    function ShowFtsiEvaluationIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#FtsiEvaluationForm",
-            "input:radio[name$='Ftsi']",
-            "input:radio[name$='Ftsi']:checked",
-            "Determined",
-            "[id$='FtsiEvaluation1']",
-            "[id$='FtsiEvaluation2']"
-        );
-    }
-
-    function ShowMlstSequenceTypeIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#MlstSequenceTypeForm",
-            "input:radio[name$='Mlst']",
-            "input:radio[name$='Mlst']:checked",
-            "Determined",
-            "[id$='MlstSequenceType']"
         );
     }
 

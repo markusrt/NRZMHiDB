@@ -81,8 +81,6 @@ namespace HaemophilusWeb.Controllers
                         db.MeningoIsolates.Include(i => i.EpsilometerTests)
                             .Single(i => i.MeningoIsolateId == isolateViewModel.MeningoIsolateId);
                     Mapper.Map(isolateViewModel, isolate);
-                    isolate.TypeOfGrowth =
-                        EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<GrowthType>(Request.Form["TypeOfGrowth"]);
                     db.MarkAsModified(isolate);
                     db.SaveChanges();
                     if (Request == null || Request.Form["primary-submit"] != null)

@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 01, 18, 21, 0, 0), "Überarbeitung von Isolaten (Meningokokken)", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 16, 21, 0, 0), "Validierung von Patient und Einsendung (Meningokokken)", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 16, 18, 0, 0), "Überarbeitung von Patient und Einsendung (Meningokokken)", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 14), "Invasive und nicht-invasive Entnahmeorte (Meningokokken)", ChangeType.Feature),
