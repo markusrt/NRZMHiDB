@@ -10,6 +10,8 @@ namespace HaemophilusWeb.Automapper
 {
     public class IsolateViewModelMappingActionBase
     {
+        private readonly DatabaseType databaseType;
+
         //TODO Ugly quick fix: Make this use dependency injection
         public static IApplicationDbContext DbForTest;
 
@@ -20,7 +22,7 @@ namespace HaemophilusWeb.Automapper
         {
             get
             {
-                return db.EucastClinicalBreakpoints.Select(e => e.Antibiotic)
+                return db.EucastClinicalBreakpoints.Where(e => e.ValidFor == databaseType).Select(e => e.Antibiotic)
                     .Distinct()
                     .ToList();
             }
@@ -30,8 +32,9 @@ namespace HaemophilusWeb.Automapper
 
         private readonly AntibioticPriorityListComparer antibioticPriorityListComparer;
 
-        public IsolateViewModelMappingActionBase()
+        public IsolateViewModelMappingActionBase(DatabaseType databaseType)
         {
+            this.databaseType = databaseType;
             primaryAntibiotics = EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>(ConfigurationManager.AppSettings["PrimaryAntibiotics"]);
             antibioticPriorityListComparer = new AntibioticPriorityListComparer(ConfigurationManager.AppSettings["AntibioticsOrder"]);
         }

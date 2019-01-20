@@ -10,6 +10,11 @@ namespace HaemophilusWeb.Automapper
 {
     public class IsolateViewModelMappingAction : IsolateViewModelMappingActionBase, IMappingAction<Isolate, IsolateViewModel>, IMappingAction<IsolateViewModel, Isolate>
     {
+
+        public IsolateViewModelMappingAction() : base(DatabaseType.Haemophilus)
+        {
+        }
+
         public void Process(Isolate source, IsolateViewModel destination)
         {
             var sending = source.Sending;

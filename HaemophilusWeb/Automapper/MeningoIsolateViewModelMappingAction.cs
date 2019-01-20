@@ -11,6 +11,10 @@ namespace HaemophilusWeb.Automapper
 {
     public class MeningoIsolateViewModelMappingAction : IsolateViewModelMappingActionBase, IMappingAction<MeningoIsolate, MeningoIsolateViewModel>, IMappingAction<MeningoIsolateViewModel, MeningoIsolate>
     {
+        public MeningoIsolateViewModelMappingAction() : base(DatabaseType.Meningococci)
+        {
+        }
+
         public void Process(MeningoIsolate source, MeningoIsolateViewModel destination)
         {
             var sending = source.Sending;

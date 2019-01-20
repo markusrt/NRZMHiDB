@@ -26,7 +26,7 @@ namespace HaemophilusWeb.Controllers
         {
         }
 
-        public MeningoIsolateController(IApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        public MeningoIsolateController(IApplicationDbContext applicationDbContext) : base(applicationDbContext, DatabaseType.Meningococci)
         {
             db = applicationDbContext;
         }

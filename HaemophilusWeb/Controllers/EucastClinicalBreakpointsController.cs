@@ -47,7 +47,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "EucastClinicalBreakpointId,Antibiotic,AntibioticDetails,Version,ValidFrom,MicBreakpointSusceptible,MicBreakpointResistent")] EucastClinicalBreakpoint eucastClinicalBreakpoint)
+        public ActionResult Create([Bind(Include = "EucastClinicalBreakpointId,Antibiotic,AntibioticDetails,Version,ValidFor,ValidFrom,MicBreakpointSusceptible,MicBreakpointResistent")] EucastClinicalBreakpoint eucastClinicalBreakpoint)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace HaemophilusWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "EucastClinicalBreakpointId,Antibiotic,AntibioticDetails,Version,ValidFrom,MicBreakpointSusceptible,MicBreakpointResistent")] EucastClinicalBreakpoint eucastClinicalBreakpoint)
+        public ActionResult Edit([Bind(Include = "EucastClinicalBreakpointId,Antibiotic,AntibioticDetails,Version,ValidFor,ValidFrom,MicBreakpointSusceptible,MicBreakpointResistent")] EucastClinicalBreakpoint eucastClinicalBreakpoint)
         {
             if (ModelState.IsValid)
             {

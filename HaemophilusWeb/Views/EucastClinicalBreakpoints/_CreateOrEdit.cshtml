@@ -12,6 +12,7 @@
 @Html.TextEditorFor(m => m.AntibioticDetails, "Meropenem (meningitis)")
 @Html.TextEditorFor(m => m.Version, "1.0")
 
+@Html.EnumRadioEditorFor(m => m.ValidFor)
 @Html.DateEditorFor(m => m.ValidFrom)
 
 @Html.TextEditorFor(m => m.MicBreakpointSusceptible, "0,5")

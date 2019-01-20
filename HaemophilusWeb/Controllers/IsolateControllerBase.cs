@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -15,12 +16,14 @@ namespace HaemophilusWeb.Controllers
         where TISolateViewModel : IsolateCommon
     {
         private IApplicationDbContext db;
+        private readonly DatabaseType databaseType;
 
         private readonly AntibioticPriorityListComparer antibioticPriorityListComparer;
 
-        public IsolateControllerBase(IApplicationDbContext applicationDbContext)
+        public IsolateControllerBase(IApplicationDbContext applicationDbContext, DatabaseType databaseType)
         {
             db = applicationDbContext;
+            this.databaseType = databaseType;
             antibioticPriorityListComparer = new AntibioticPriorityListComparer(ConfigurationManager.AppSettings["AntibioticsOrder"]);
         }
 
@@ -52,7 +55,7 @@ namespace HaemophilusWeb.Controllers
 
         protected void AddBreakpointsAndAntibioticsToViewBag()
         {
-            ViewBag.ClinicalBreakpoints = db.EucastClinicalBreakpoints.OrderByDescending(b => b.ValidFrom);
+            ViewBag.ClinicalBreakpoints = db.EucastClinicalBreakpoints.Where(e => e.ValidFor==databaseType).OrderByDescending(b => b.ValidFrom);
             ViewBag.Antibiotics = AvailableAntibiotics.OrderBy(a => a, antibioticPriorityListComparer);
         }
 
@@ -69,7 +72,7 @@ namespace HaemophilusWeb.Controllers
         {
             get
             {
-                return db.EucastClinicalBreakpoints.Select(e => e.Antibiotic)
+                return db.EucastClinicalBreakpoints.Where(e => e.ValidFor == databaseType).Select(e => e.Antibiotic)
                     .Distinct()
                     .ToList();
             }

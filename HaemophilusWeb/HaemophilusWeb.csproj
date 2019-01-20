@@ -407,10 +407,19 @@
     <Compile Include="Migrations\201901182228325_Meningo_Isolate_8_AdditionalFields.Designer.cs">
       <DependentUpon>201901182228325_Meningo_Isolate_8_AdditionalFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901200043344_EucastClinicalBreakpoint_Add_ValidFor.cs" />
+    <Compile Include="Migrations\201901200043344_EucastClinicalBreakpoint_Add_ValidFor.Designer.cs">
+      <DependentUpon>201901200043344_EucastClinicalBreakpoint_Add_ValidFor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.cs" />
+    <Compile Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.Designer.cs">
+      <DependentUpon>201901200118468_EucastClinicalBreakpoint_Update_Index.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
     <Compile Include="Models\County.cs" />
+    <Compile Include="Models\DatabaseType.cs" />
     <Compile Include="Models\DefaultRoles.cs" />
     <Compile Include="Models\EpsilometerTest.cs" />
     <Compile Include="Models\EpsilometerTestResult.cs" />
@@ -1285,6 +1294,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901182228325_Meningo_Isolate_8_AdditionalFields.resx">
       <DependentUpon>201901182228325_Meningo_Isolate_8_AdditionalFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901200043344_EucastClinicalBreakpoint_Add_ValidFor.resx">
+      <DependentUpon>201901200043344_EucastClinicalBreakpoint_Add_ValidFor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.resx">
+      <DependentUpon>201901200118468_EucastClinicalBreakpoint_Update_Index.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -25,7 +25,7 @@ namespace HaemophilusWeb.Controllers
         {
         }
 
-        public IsolateController(IApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        public IsolateController(IApplicationDbContext applicationDbContext) : base(applicationDbContext, DatabaseType.Haemophilus)
         {
             db = applicationDbContext;
         }

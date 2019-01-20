@@ -23,8 +23,12 @@ namespace HaemophilusWeb.Models
         [MaxLength(64)]
         public string Version { get; set; }
 
+        [Display(Name = "Gültig für")]
+        public DatabaseType ValidFor { get; set; }
+
         [Display(Name = "Gültig ab")]
         public DateTime? ValidFrom { get; set; }
+
 
         [Display(Name = "Sensibel <=")]
         public float? MicBreakpointSusceptible { get; set; }

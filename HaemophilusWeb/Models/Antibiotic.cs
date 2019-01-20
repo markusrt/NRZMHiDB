@@ -20,6 +20,7 @@ namespace HaemophilusWeb.Models
         Aztreonam = 13,
         Bacitracin = 14,
         Bedaquiline = 15,
+        [Description("Penicillin")]
         Benzylpenicillin = 16,
         Capreomycin = 17,
         Carbadox = 18,
@@ -58,6 +59,7 @@ namespace HaemophilusWeb.Models
         [Description("Ceftobiprol")] Ceftobiprole = 50,
         [Description("Ceftolozan")] Ceftolozane = 51,
         [Description("Ceftolozan / Tazobactam")] CeftolozaneTazobactam = 52,
+        [Description("Ceftriaxon")]
         Ceftriaxone = 53,
         [Description("Cefuroxim")] Cefuroxime = 54,
         Chloramphenicol = 55,
