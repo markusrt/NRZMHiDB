@@ -53,7 +53,7 @@ function ShowDivOrClearInput(
     else {
         $(divToShow).addClass("hidden");
 
-        if($(inputToClearOnOtherValue).is(':checkbox'))
+        if ($(inputToClearOnOtherValue).is(':checkbox') || $(inputToClearOnOtherValue).is(':radio'))
         {
             $(inputToClearOnOtherValue).removeAttr('checked');
             $(inputToClearOnOtherValue).parent().removeClass('active');

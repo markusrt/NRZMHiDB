@@ -30,4 +30,12 @@ namespace HaemophilusWeb.Models
         [Description("H. haemolyticus")] HaemophilusHaemolyticus = 3,
         [Description("nicht auswertbar")] NotEvaluable = 4,
     }
+
+    public enum NativeMaterialTestResult
+    {
+        [Description("n.d.")] NotDetermined = 0,
+        [Description("negativ")] Negative = 1,
+        [Description("positiv")] Positive = 2,
+        [Description("inhibitorisch")] Inhibitory = 3
+    }
 }

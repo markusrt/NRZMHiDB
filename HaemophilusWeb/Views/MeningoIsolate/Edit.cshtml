@@ -10,31 +10,34 @@
 
 @section EditModel
 {
+
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.MeningoIsolateId)
+    @Html.TextEditorFor(m => m.LaboratoryNumber)
+    @Html.ReadonlyFor(m => m.SamplingLocation)
+    @Html.ReadonlyFor(m => m.Material)
+    @Html.ReadonlyFor(m => m.Invasive)
+    @Html.ReadonlyFor(m => m.PatientAgeAtSampling)
+
 <div id="exTab2" class="container">
     <ul class="nav nav-tabs">
         <li class="active">
             <a  href="#generalTab" data-toggle="tab">Allgemein</a>
         </li>
-        <li><a href="#pubMLSTTab" data-toggle="tab">PubMLST</a>
+        <li>
+            <a  href="#molecularTypingTab" data-toggle="tab">Molekulare Typisierung</a>
+        </li>
+        <li>
+            <a href="#pubMLSTTab" data-toggle="tab">PubMLST</a>
         </li>
     </ul>
-
     <div class="tab-content ">
         <div class="tab-pane active" id="generalTab">
             <p></p>
-            @Html.ValidationSummary(true)
-            @Html.HiddenFor(model => model.MeningoIsolateId)
 
-            @Html.TextEditorFor(m => m.LaboratoryNumber)
+            @Html.EnumRadioEditorFor(model => model.GrowthOnBloodAgar, "col-sm-7")
 
-            @Html.ReadonlyFor(m => m.SamplingLocation)
-            @Html.ReadonlyFor(m => m.Material)
-            @Html.ReadonlyFor(m => m.Invasive)
-            @Html.ReadonlyFor(m => m.PatientAgeAtSampling)
-
-            @Html.EnumRadioEditorFor(model => model.GrowthOnBloodAgar)
-
-            @Html.EnumRadioEditorFor(model => model.GrowthOnMartinLewisAgar)
+            @Html.EnumRadioEditorFor(model => model.GrowthOnMartinLewisAgar, "col-sm-7")
 
             @Html.TextEditorFor(m => m.StemNumber)
 
@@ -49,34 +52,11 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">E-Test Messwerte</label>
             </div>
-
             @Html.EditorFor(model => model.EpsilometerTestViewModels)
 
             @Html.EnumRadioEditorFor(model => model.SerogroupPcr)
 
-            @Html.TextEditorFor(model => model.PorAVr1)
-
-            @Html.TextEditorFor(model => model.PorAVr2)
-
-            @Html.TextEditorFor(model => model.FetAVr)
-
             @Html.TextEditorFor(model => model.RplF)
-
-            @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
-            <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
-                @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-4">
-                    @Html.TextBoxFor(m => m.RibosomalRna16SBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
-                    @Html.ValidationMessageFor(model => model.RibosomalRna16SBestMatch)
-                </div>
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "form-control", placeholder = "in Prozent" })
-                        <span class="input-group-addon">%</span>
-                    </div>
-                    @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
-                </div>
-            </div>
 
             @Html.EnumRadioEditorFor(model => model.ApiNh)
             <div id="ApiNhMatchInPercentForm" class="form-group">
@@ -116,6 +96,61 @@
                 @Html.LabelFor(m => m.Remark, new { @class = "col-sm-2 control-label" })
                 <div class="col-sm-5">
                     @Html.TextAreaFor(m => m.Remark, new { @class = "form-control", @rows = "5" })
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="molecularTypingTab">
+            <p></p>
+
+            @Html.EnumRadioEditorFor(model => model.RibosomalRna16S, "col-sm-6")
+            <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
+                @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.RibosomalRna16SBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+                    @Html.ValidationMessageFor(model => model.RibosomalRna16SBestMatch)
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "form-control", placeholder = "in Prozent" })
+                        <span class="input-group-addon">%</span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-12">Bestimmung der Serogenogruppe</label>
+            </div>
+            @Html.EnumRadioEditorFor(m => m.CsbPcr, "col-sm-6")
+            @Html.EnumRadioEditorFor(m => m.CscPcr, "col-sm-6")
+            @Html.EnumRadioEditorFor(m => m.CswyPcr, "col-sm-6")
+            @Html.EnumRadioEditorFor(m => m.CswyAllele, "col-sm-7", "CswyAlleleForm")
+
+            <div class="form-group">
+                <label class="col-sm-12">Bestimmung der variablen Regionen</label>
+            </div>
+            @Html.EnumRadioEditorFor(model => model.PorAPcr, "col-sm-6")
+            <div id="PorAPcrForm" class="form-group">
+                @Html.LabelFor(m => m.PorAVr1, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(m => m.PorAVr1, new { @class = "form-control", placeholder = "5-2" })
+                    @Html.ValidationMessageFor(model => model.PorAVr1)
+                </div>
+                @Html.LabelFor(m => m.PorAVr2, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-2">
+                    @Html.TextBoxFor(m => m.PorAVr2, new { @class = "form-control", placeholder = "10" })
+                    @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
+                </div>
+            </div>
+
+
+            @Html.EnumRadioEditorFor(model => model.FetAPcr, "col-sm-6")
+            @* TODO: Extend TextEditorFor with "input-group-addon" feature *@
+            <div id="FetAPcrForm" class="form-group">
+                <label class="col-sm-2 control-label" for="StemNumber">FetA-VR</label>
+                <div class="input-group col-sm-2">
+                    <span class="input-group-addon" id="basic-addon1">F</span>
+                    @Html.TextBoxFor(m => m.FetAVr, new { placeholder = "1-5", @class = "form-control" })
                 </div>
             </div>
         </div>
@@ -230,6 +265,9 @@
             ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
             ShowApiNhMatchInPercentIfDeterminedIsSelected();
             ShowMaldiTofMatchConfidenceIfDeterminedIsSelected();
+            ShowPorAPcrFormIfPositiveIsSelected();
+            ShowFetAPcrFormIfPositiveIsSelected();
+            ShowCswyAlleleFormIfPositiveIsSelected();
 
             $("#PubMlstQuery").click(QueryPubMlstDatabase);
             $("#PubMlstIsolateId").keypress(QueryPubMlstDatabaseKeypress);
@@ -287,7 +325,7 @@
             "#RibosomalRna16SMatchInPercentForm",
             "input:radio[name$='RibosomalRna16S']",
             "input:radio[name$='RibosomalRna16S']:checked",
-            "Determined",
+            "Positive",
             "[id$='RibosomalRna16SBestMatch']",
             "[id$='RibosomalRna16SMatchInPercent']"
         );
@@ -314,6 +352,46 @@
             "[id$='MaldiTofMatchConfidence']"
         );
     }
+
+    function ShowPorAPcrFormIfPositiveIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#PorAPcrForm",
+            "input:radio[name$='PorAPcr']",
+            "input:radio[name$='PorAPcr']:checked",
+            "Positive",
+            "[id$='PorAVr1']",
+            "[id$='PorAVr2']"
+        );
+    }
+
+    function ShowFetAPcrFormIfPositiveIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#FetAPcrForm",
+            "input:radio[name$='FetAPcr']",
+            "input:radio[name$='FetAPcr']:checked",
+            "Positive",
+            "[id$='FetAVr']"
+        );
+    }
+
+    function ShowCswyAlleleFormIfPositiveIsSelected() {
+        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+            "#CswyAlleleForm",
+            "input:radio[name$='CswyPcr']",
+            "input:radio[name$='CswyPcr']:checked",
+            "Positive",
+            "input:radio[name$='CswyAllele']"
+        );
+        //$("input:radio[name$='CswyPcr']")
+        //    .change(function() {
+        //        if ($("input:radio[name$='CswyPcr']:checked").val() != "Positive") {
+        //            $("#CswyAllele_NotDetermined").prop("checked", true);
+        //            //$("#CswyAllele_NotDetermined").parent().addClass("active");
+        //        }
+        //    });
+    }
+
+
 
     function ETestChange() {
         var id = $(this).attr('id');

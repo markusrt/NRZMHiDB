@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 01, 22), "Maske Molekulare Typisierung für Meningokokken", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 19, 21, 0, 0), "Erweiterung der EUCAST Werte um Meningokokken und Haemophilus zu verwalten", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 18, 21, 0, 0), "Überarbeitung von Isolaten (Meningokokken)", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 16, 21, 0, 0), "Validierung von Patient und Einsendung (Meningokokken)", ChangeType.Feature),

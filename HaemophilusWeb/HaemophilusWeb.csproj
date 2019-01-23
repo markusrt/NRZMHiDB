@@ -415,6 +415,10 @@
     <Compile Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.Designer.cs">
       <DependentUpon>201901200118468_EucastClinicalBreakpoint_Update_Index.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.cs" />
+    <Compile Include="Migrations\201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.Designer.cs">
+      <DependentUpon>201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -427,6 +431,7 @@
     <Compile Include="Models\Antibiotic.cs" />
     <Compile Include="Models\GrowthType.cs" />
     <Compile Include="Models\HealthOffice.cs" />
+    <Compile Include="Models\Meningo\CswyAllel.cs" />
     <Compile Include="Models\Meningo\INeisseriaIsolateAlleleProperties.cs" />
     <Compile Include="Models\IsolateBase.cs" />
     <Compile Include="Models\IsolateCommon.cs" />
@@ -444,6 +449,7 @@
     <Compile Include="Models\Meningo\MeningoSamplingLocation.cs" />
     <Compile Include="Models\Meningo\MeningoSerogroupPcr.cs" />
     <Compile Include="Models\Meningo\MeningoSerogroupAgg.cs" />
+    <Compile Include="Models\Meningo\NhsRealTimePcr.cs" />
     <Compile Include="Models\Meningo\RiskFactors.cs" />
     <Compile Include="Models\Meningo\UnderlyingDisease.cs" />
     <Compile Include="Models\PatientBase.cs" />
@@ -1300,6 +1306,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.resx">
       <DependentUpon>201901200118468_EucastClinicalBreakpoint_Update_Index.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.resx">
+      <DependentUpon>201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
