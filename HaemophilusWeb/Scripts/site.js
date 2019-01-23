@@ -1,4 +1,23 @@
-﻿function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+﻿function ShowOnSpecificRadioValue(idToShow, toggleRadio, toggleValue, inputToClearOnOtherValue, secondInputToClearOnOtherValue ) {
+    ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+        "#"+idToShow,
+        "input:radio[name$='" + toggleRadio + "']",
+        "input:radio[name$='" + toggleRadio + "']:checked",
+        toggleValue,
+        inputToClearOnOtherValue, secondInputToClearOnOtherValue
+    );
+}
+
+function RadioInput(name)
+{
+    return "input:radio[name$='" + name + "']";
+}
+
+function GeneralInput(id) {
+    return "[id$='" + id + "']";
+}
+
+function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
     divToShow, inputSelector, valueSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue)
 {
     var showDivCallback = function()

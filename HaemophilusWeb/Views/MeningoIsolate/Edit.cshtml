@@ -102,6 +102,9 @@
         <div class="tab-pane" id="molecularTypingTab">
             <p></p>
 
+            @Html.EnumRadioEditorFor(model => model.RealTimePcr, "col-sm-6")
+            @Html.EnumRadioEditorFor(m => m.RealTimePcrResult, "col-sm-7", "RealTimePcrForm")
+
             @Html.EnumRadioEditorFor(model => model.RibosomalRna16S, "col-sm-6")
             <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
                 @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 control-label" })
@@ -256,23 +259,28 @@
 
     var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
 
-    $(document)
-        .ready(function() {
+    $(document).ready(
+        function () {
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("select[id$=_Measurement]").change(ETestChange);
             $("select[id$=_Antibiotic]").change(ETestChange);
-            ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
-            ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
-            ShowApiNhMatchInPercentIfDeterminedIsSelected();
-            ShowMaldiTofMatchConfidenceIfDeterminedIsSelected();
-            ShowPorAPcrFormIfPositiveIsSelected();
-            ShowFetAPcrFormIfPositiveIsSelected();
-            ShowCswyAlleleFormIfPositiveIsSelected();
+
+            ConfigureConditionalFields();
 
             $("#PubMlstQuery").click(QueryPubMlstDatabase);
             $("#PubMlstIsolateId").keypress(QueryPubMlstDatabaseKeypress);
+        }
+    );
 
-        });
+    function ConfigureConditionalFields() {
+        ShowOnSpecificRadioValue("RibosomalRna16SMatchInPercentForm", "RibosomalRna16S", "Positive", GeneralInput("RibosomalRna16SBestMatch"), GeneralInput("RibosomalRna16SMatchInPercent"));
+        ShowOnSpecificRadioValue("ApiNhMatchInPercentForm", "ApiNh", "Determined", GeneralInput("ApiNhBestMatch"), GeneralInput("ApiNhMatchInPercent"));
+        ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTof", "Determined", GeneralInput("MaldiTofBestMatch"), GeneralInput("MaldiTofMatchConfidence"));
+        ShowOnSpecificRadioValue("PorAPcrForm", "PorAPcr", "Positive", GeneralInput("PorAVr1"), GeneralInput("PorAVr2"));
+        ShowOnSpecificRadioValue("FetAPcrForm", "FetAPcr", "Positive", GeneralInput("FetAVr"));
+        ShowOnSpecificRadioValue("CswyAlleleForm", "CswyPcr", "Positive", RadioInput("CswyAllele"));
+        ShowOnSpecificRadioValue("RealTimePcrForm", "RealTimePcr", "Positive", RadioInput("RealTimePcrResult"));
+    }
 
     function QueryPubMlstDatabaseKeypress(e) {
         if (e.keyCode == '13') {
@@ -320,79 +328,7 @@
         return "";
     }
 
-    function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#RibosomalRna16SMatchInPercentForm",
-            "input:radio[name$='RibosomalRna16S']",
-            "input:radio[name$='RibosomalRna16S']:checked",
-            "Positive",
-            "[id$='RibosomalRna16SBestMatch']",
-            "[id$='RibosomalRna16SMatchInPercent']"
-        );
-    }
-
-    function ShowApiNhMatchInPercentIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#ApiNhMatchInPercentForm",
-            "input:radio[name$='ApiNh']",
-            "input:radio[name$='ApiNh']:checked",
-            "Determined",
-            "[id$='ApiNhBestMatch']",
-            "[id$='ApiNhMatchInPercent']"
-        );
-    }
-
-    function ShowMaldiTofMatchConfidenceIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#MaldiTofMatchConfidenceForm",
-            "input:radio[name$='MaldiTof']",
-            "input:radio[name$='MaldiTof']:checked",
-            "Determined",
-            "[id$='MaldiTofBestMatch']",
-            "[id$='MaldiTofMatchConfidence']"
-        );
-    }
-
-    function ShowPorAPcrFormIfPositiveIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#PorAPcrForm",
-            "input:radio[name$='PorAPcr']",
-            "input:radio[name$='PorAPcr']:checked",
-            "Positive",
-            "[id$='PorAVr1']",
-            "[id$='PorAVr2']"
-        );
-    }
-
-    function ShowFetAPcrFormIfPositiveIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#FetAPcrForm",
-            "input:radio[name$='FetAPcr']",
-            "input:radio[name$='FetAPcr']:checked",
-            "Positive",
-            "[id$='FetAVr']"
-        );
-    }
-
-    function ShowCswyAlleleFormIfPositiveIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#CswyAlleleForm",
-            "input:radio[name$='CswyPcr']",
-            "input:radio[name$='CswyPcr']:checked",
-            "Positive",
-            "input:radio[name$='CswyAllele']"
-        );
-        //$("input:radio[name$='CswyPcr']")
-        //    .change(function() {
-        //        if ($("input:radio[name$='CswyPcr']:checked").val() != "Positive") {
-        //            $("#CswyAllele_NotDetermined").prop("checked", true);
-        //            //$("#CswyAllele_NotDetermined").parent().addClass("active");
-        //        }
-        //    });
-    }
-
-
-
+    //TODO Refactor this duplicate to etest.js (see also Isolate-Edit.cshtml)
     function ETestChange() {
         var id = $(this).attr('id');
         var indexOfSeparator = id.indexOf('__');

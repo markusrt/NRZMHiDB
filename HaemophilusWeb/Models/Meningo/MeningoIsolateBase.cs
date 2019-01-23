@@ -61,7 +61,10 @@ namespace HaemophilusWeb.Models.Meningo
         [Display(Name = "cswy-Allel")]
         public CswyAllel CswyAllele { get; set; }
 
-        [Display(Name = "NHS real-time PCR")]
-        public NhsRealTimePcr NhsRealTimePcr { get; set; }
+        [Display(Name = "16S rrn-PCR")]
+        public NativeMaterialTestResult RealTimePcr { get; set; }
+
+        [Display(Name = "16S rrn-Auswertung (RIDOM)")]
+        public RealTimePcrResult RealTimePcrResult { get; set; }
     }
 }
