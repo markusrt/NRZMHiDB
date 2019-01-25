@@ -150,6 +150,7 @@
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("select[id$=_Measurement]").change(ETestChange);
             $("select[id$=_Antibiotic]").change(ETestChange);
+            //TODO refactor all ShowXXXIfYYY methods to use ShowOnSpecificRadioValue
             ShowGrowthTypeIfGrowthIsSelectedWithYes();
             ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
             ShowApiNhMatchInPercentIfDeterminedIsSelected();

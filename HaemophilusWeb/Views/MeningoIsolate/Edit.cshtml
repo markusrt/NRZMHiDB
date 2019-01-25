@@ -56,8 +56,6 @@
 
             @Html.EnumRadioEditorFor(model => model.SerogroupPcr)
 
-            @Html.TextEditorFor(model => model.RplF)
-
             @Html.EnumRadioEditorFor(model => model.ApiNh)
             <div id="ApiNhMatchInPercentForm" class="form-group">
                 @Html.LabelFor(m => m.ApiNhMatchInPercent, new { @class = "col-sm-2 control-label" })
@@ -101,6 +99,8 @@
         </div>
         <div class="tab-pane" id="molecularTypingTab">
             <p></p>
+
+            @Html.TextEditorFor(model => model.RplF)
 
             @Html.EnumRadioEditorFor(model => model.RealTimePcr, "col-sm-6")
             @Html.EnumRadioEditorFor(m => m.RealTimePcrResult, "col-sm-7", "RealTimePcrForm")
@@ -197,7 +197,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-2 control-label">Por-B</label>
+                <label class="col-sm-2 control-label">'porB</label>
                 <div class="col-sm-2">
                     <input class="form-control" id="PM-PorB" type="text" readonly>
                 </div>
