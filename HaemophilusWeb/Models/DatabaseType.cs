@@ -2,8 +2,8 @@
 {
     public enum DatabaseType
     {
-        None = 0,
-        Haemophilus = 1,
-        Meningococci = 2
+        Haemophilus = 0,
+        Meningococci = 1,
+        None = 2
     }
 }
