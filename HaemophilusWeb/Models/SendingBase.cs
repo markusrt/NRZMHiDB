@@ -2,11 +2,20 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Utils;
 
 namespace HaemophilusWeb.Models
 {
     public abstract class SendingBase<TPatient>
     {
+        [NotMapped]
+        public DatabaseType DatabaseType { get; }
+
+        public SendingBase(DatabaseType databaseType)
+        {
+            DatabaseType = databaseType;
+        }
+
         [Display(Name = "Einsendernummer")]
         public int SenderId { get; set; }
 
@@ -21,6 +30,10 @@ namespace HaemophilusWeb.Models
         [NotMapped]
         [Display(Name = "Labornummer")]
         public string LaboratoryNumber { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Labornummer")]
+        public string LaboratoryNumberWithPrefix => LaboratoryNumber.ToLaboratoryNumberWithPrefix(DatabaseType);
 
         [Display(Name = "Gelöscht")]
         public bool Deleted { get; set; }

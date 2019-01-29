@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Reflection.Emit;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
@@ -21,26 +22,31 @@ namespace HaemophilusWeb.Views.Utils
         
         private const string RequiredTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-star\"></span></span></div>";
 
+        private const string PrefixTemplate =   "<div class=\"input-group\"><span class=\"input-group-addon\">{1}</span>{0}</div>";
+
         private const string DateTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-calendar\"></span></span></div>";
 
         public static MvcHtmlString TextEditorFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TProperty>> expression, string placeholder = null)
+            Expression<Func<TModel, TProperty>> expression, string placeholder = null, string prefix = null, string id = null, string smXClass = ColSm5)
         {
             var label = htmlHelper.LabelFor(expression);
-            var textBox = htmlHelper.TextBoxFor(expression, new {placeholder, @class = "form-control"}).ToHtmlString();
+            var textBox = htmlHelper.TextBoxFor(expression, new {placeholder, @class = $"form-control"}).ToHtmlString();
             var validationHtml = GetValidationHtml(htmlHelper, expression);
             
             //TODO: IsRequired does not work with fluent validations. I.e. implement FluentValidation based ModelMetadata if the view should render a required state 
             var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
-            var required = modelMetadata.IsRequired;
-            if (required)
+            if (modelMetadata.IsRequired)
             {
                 textBox = string.Format(RequiredTemplate, textBox);
             }
+            else if (!String.IsNullOrEmpty(prefix))
+            {
+                textBox = string.Format(PrefixTemplate, textBox, prefix);
+            }
 
-            var textBoxHtml = string.Format(DivSmFive, textBox, validationHtml);
+            var textBoxHtml = string.Format(DivSmX, smXClass, textBox, validationHtml);
 
-            return CreateFormGroup(label, textBoxHtml);
+            return CreateFormGroup(label, textBoxHtml, id);
         }
 
         public static MvcHtmlString DateEditorFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,

@@ -106,8 +106,8 @@ namespace HaemophilusWeb.Controllers
         {
             var export = new ExportDefinition<MeningoSending>();
 
-            //export.AddField(s => s.Isolate.LaboratoryNumber);
-            //export.AddField(s => s.Isolate.StemNumber);
+            export.AddField(s => s.Isolate.LaboratoryNumberWithPrefix);
+            export.AddField(s => s.Isolate.StemNumberWithPrefix);
             export.AddField(s => s.SenderId);
             export.AddField(s => s.ReceivingDate.ToReportFormat());
             export.AddField(s => s.SamplingDate.ToReportFormat());
@@ -200,14 +200,14 @@ namespace HaemophilusWeb.Controllers
                     : x.SamplingLocation == MeningoSamplingLocation.OtherNonInvasive
                     ? Server.HtmlEncode(x.OtherNonInvasiveSamplingLocation)
                     : EnumEditor.GetEnumDescription(x.SamplingLocation);
-                var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year);
+                var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year, DatabaseType.Meningococci);
                 return new QueryRecord
                 {
                     SendingId = x.MeningoSendingId,
                     IsolateId = x.MeningoIsolateId,
                     Initials = x.Initials,
                     BirthDate = x.BirthDate,
-                    StemNumber = x.StemNumber,
+                    StemNumber = x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Meningococci),
                     ReceivingDate = x.ReceivingDate,
                     SamplingLocation = samplingLocation,
                     Invasive = EnumEditor.GetEnumDescription(invasive),
@@ -219,7 +219,7 @@ namespace HaemophilusWeb.Controllers
                     SenderLaboratoryNumber = x.SenderLaboratoryNumber,
                     FullTextSearch = string.Join(" ",
                             x.Initials, x.BirthDate.ToReportFormat(),
-                            x.StemNumber,
+                            x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Meningococci),
                             x.ReceivingDate.ToReportFormat(),
                             invasive, samplingLocation, laboratoryNumber,
                             x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber)

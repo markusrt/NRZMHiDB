@@ -1,4 +1,5 @@
 ﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Utils
 @model IEnumerable<HaemophilusWeb.ViewModels.PatientSendingViewModel<Patient, Sending>>
 
 @{
@@ -36,7 +37,7 @@
                     @Html.DisplayFor(modelItem => item.Patient.BirthDate)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Sending.Isolate.StemNumber)
+                    @Html.DisplayFor(modelItem => item.Sending.Isolate.StemNumberWithPrefix)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Sending.Isolate.LaboratoryNumber)

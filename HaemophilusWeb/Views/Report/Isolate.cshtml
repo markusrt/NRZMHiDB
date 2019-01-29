@@ -1,4 +1,5 @@
-﻿@using HaemophilusWeb.Utils
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Utils
 @using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.ViewModels.IsolateViewModel
 
@@ -28,8 +29,8 @@
 <div class="col-md-6">
     <h3>Befund (Auszug)</h3>
     <dl class="dl-horizontal">
-        <dt>@Html.DisplayNameFor(model => model.LaboratoryNumber)</dt>
-        <dd>@Html.DisplayFor(model => model.LaboratoryNumber)</dd>
+        <dt>@Html.DisplayNameFor(model => model.LaboratoryNumberWithPrefix)</dt>
+        <dd>@Html.DisplayFor(model => model.LaboratoryNumberWithPrefix)</dd>
         <dt>@Html.DisplayNameFor(model => model.SamplingLocation)</dt>
         <dd>@Html.DisplayFor(model => model.SamplingLocation)</dd>
         <dt>@Html.DisplayNameFor(model => model.Patient)</dt>
@@ -120,7 +121,6 @@
     <script>
         var documentData = @(Html.Raw(Json.Encode(Model)));
 
-
         $("#TryCreateReport").click(function()
         {
             var templateFile = $("#ReportTemplate").val();
@@ -149,7 +149,10 @@
         $("#ForceCreateReport").click(function()
         {
             $("#discrepantResultsModal").modal("hide");
-            DoCreateReport();
+            var templateFile = $("#ReportTemplate").val();
+            var preliminary = templateFile.indexOf("@ViewBag.PreliminaryReportMarker") !== -1;
+            var signer = $("#ReportSigner").val();
+            DoCreateReport(templateFile, preliminary, signer);;
         });
 
         function DoCreateReport(templateFile, preliminary, signer)

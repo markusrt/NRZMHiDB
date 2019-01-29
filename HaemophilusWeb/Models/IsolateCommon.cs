@@ -9,10 +9,22 @@ namespace HaemophilusWeb.Models
 {
     public abstract class IsolateCommon
     {
+        [NotMapped]
+        public DatabaseType DatabaseType { get; }
+
+        public IsolateCommon(DatabaseType databaseType)
+        {
+            DatabaseType = databaseType;
+        }
+
         private string customLaboratoryNumber;
 
         [Display(Name = "Stammnummer")]
         public int? StemNumber { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Labornummer")]
+        public string StemNumberWithPrefix => StemNumber.ToStemNumberWithPrefix(DatabaseType);
 
         public TestResult Oxidase { get; set; }
 
@@ -56,6 +68,10 @@ namespace HaemophilusWeb.Models
             get => customLaboratoryNumber ?? ReportFormatter.ToLaboratoryNumber(YearlySequentialIsolateNumber, Year);
             set => customLaboratoryNumber = value;
         }
+
+        [NotMapped]
+        [Display(Name = "Labornummer")]
+        public string LaboratoryNumberWithPrefix => LaboratoryNumber.ToLaboratoryNumberWithPrefix(DatabaseType.Haemophilus);
 
         public int YearlySequentialIsolateNumber { get; set; }
 

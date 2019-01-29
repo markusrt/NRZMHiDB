@@ -1,9 +1,10 @@
 ﻿@using HaemophilusWeb.Models
 @using HaemophilusWeb.Models.Meningo
+@using HaemophilusWeb.Utils
 @using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.Models.Meningo.MeningoSending
 
-@Html.ReadonlyFor(model => model.LaboratoryNumber)
+@Html.ReadonlyFor(model => model.LaboratoryNumberWithPrefix)
 
 <div class="form-group">
     @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 control-label" })

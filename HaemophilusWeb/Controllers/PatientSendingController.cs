@@ -98,8 +98,8 @@ namespace HaemophilusWeb.Controllers
         {
             var export = new ExportDefinition<Sending>();
 
-            export.AddField(s => s.Isolate.LaboratoryNumber);
-            export.AddField(s => s.Isolate.StemNumber);
+            export.AddField(s => s.Isolate.LaboratoryNumberWithPrefix);
+            export.AddField(s => s.Isolate.StemNumberWithPrefix);
             export.AddField(s => s.SenderId);
             export.AddField(s => s.ReceivingDate.ToReportFormat());
             export.AddField(s => s.SamplingDate.ToReportFormat());
@@ -194,14 +194,14 @@ namespace HaemophilusWeb.Controllers
                 var samplingLocation = x.SamplingLocation == SamplingLocation.Other
                     ? Server.HtmlEncode(x.OtherSamplingLocation)
                     : EnumEditor.GetEnumDescription(x.SamplingLocation);
-                var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year);
+                var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year, DatabaseType.Haemophilus);
                 return new QueryRecord
                 {
                     SendingId = x.SendingId,
                     IsolateId = x.IsolateId,
                     Initials = x.Initials,
                     BirthDate = x.BirthDate,
-                    StemNumber = x.StemNumber,
+                    StemNumber = x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Haemophilus),
                     ReceivingDate = x.ReceivingDate,
                     SamplingLocation = samplingLocation,
                     Invasive = invasive,
@@ -213,7 +213,7 @@ namespace HaemophilusWeb.Controllers
                     SenderLaboratoryNumber = x.SenderLaboratoryNumber,
                     FullTextSearch = string.Join(" ",
                             x.Initials, x.BirthDate.ToReportFormat(),
-                            x.StemNumber, x.ReceivingDate.ToReportFormat(),
+                            x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Haemophilus), x.ReceivingDate.ToReportFormat(),
                             invasive, samplingLocation, laboratoryNumber,
                             x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber)
                         .ToLower()

@@ -6,6 +6,10 @@ namespace HaemophilusWeb.Models
 {
     public class IsolateBase : IsolateCommon
     {
+        public IsolateBase() : base(DatabaseType.Haemophilus)
+        {
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IsolateId { get; set; }
 

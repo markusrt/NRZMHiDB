@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Utils
@@ -23,12 +24,49 @@ namespace HaemophilusWeb.Utils
 
         public static string ToReportFormat(this PatientBase patient)
         {
-            return string.Format("{0} / {1}", patient.Initials, patient.PostalCode);
+            return $"{patient.Initials} / {patient.PostalCode}";
         }
 
-        public static string ToLaboratoryNumber(int yearlySequentialIsolateNumber, int year)
+        public static string ToStemNumberWithPrefix(this int? stemNumber, DatabaseType databaseType = DatabaseType.None)
         {
-            return string.Format("{0:000}/{1:00}", yearlySequentialIsolateNumber, year - 2000);
+            var stemNumberString = stemNumber.HasValue? stemNumber.ToString() : " -";
+            return $"{databaseType.StemNumberPrefix()}{stemNumberString}";
+        }
+
+        public static string StemNumberPrefix(this DatabaseType databaseType)
+        {
+            if (databaseType == DatabaseType.Haemophilus)
+            {
+                return "H";
+            }
+            if (databaseType == DatabaseType.Meningococci)
+            {
+                return "DE";
+            }
+            return "";
+        }
+
+        public static string ToLaboratoryNumber(int yearlySequentialIsolateNumber, int year, DatabaseType databaseType = DatabaseType.None)
+        {
+            return ToLaboratoryNumberWithPrefix($"{yearlySequentialIsolateNumber:000}/{year - 2000:00}", databaseType);
+        }
+
+        public static string ToLaboratoryNumberWithPrefix(this string laboratoryNumberWithoutPrefix, DatabaseType databaseType = DatabaseType.None)
+        {
+            return $"{databaseType.LaboratoryNumberPrefix()}{laboratoryNumberWithoutPrefix??" -"}";
+        }
+
+        public static string LaboratoryNumberPrefix(this DatabaseType databaseType)
+        {
+            if (databaseType == DatabaseType.Haemophilus)
+            {
+                return "KL";
+            }
+            if (databaseType == DatabaseType.Meningococci)
+            {
+                return "MZ";
+            }
+            return "";
         }
 
         private static readonly List<Evaluation> EvaluationHaemophilus = new List<Evaluation>

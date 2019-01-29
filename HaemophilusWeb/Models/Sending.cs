@@ -9,7 +9,7 @@ namespace HaemophilusWeb.Models
     [Validator(typeof (SendingValidator))]
     public class Sending : SendingBase<Patient>
     {
-        public Sending()
+        public Sending() : base(DatabaseType.Haemophilus)
         {
             ReceivingDate = DateTime.Now;
             SamplingDate = DateTime.Now.Subtract(TimeSpan.FromDays(7));

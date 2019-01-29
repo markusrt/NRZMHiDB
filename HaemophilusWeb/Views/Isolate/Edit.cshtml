@@ -1,4 +1,5 @@
 ﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Utils
 @using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.ViewModels.IsolateViewModel
 
@@ -13,7 +14,7 @@
     @Html.ValidationSummary(true)
     @Html.HiddenFor(model => model.IsolateId)
 
-    @Html.TextEditorFor(m => m.LaboratoryNumber)
+    @Html.TextEditorFor(m => m.LaboratoryNumber, prefix: DatabaseType.Haemophilus.LaboratoryNumberPrefix())
 
     @Html.ReadonlyFor(m => m.SamplingLocation)
     @Html.ReadonlyFor(m => m.Material)
@@ -23,8 +24,8 @@
     @Html.EnumRadioEditorFor(model => model.Growth)
     
     @Html.EnumRadioEditorFor(model => model.TypeOfGrowth, "col-sm-10", "GrowthTypeForm")
-    
-    @Html.TextEditorFor(m => m.StemNumber)
+
+    @Html.TextEditorFor(m => m.StemNumber, prefix: DatabaseType.Haemophilus.StemNumberPrefix())
 
     @Html.EnumRadioEditorFor(model => model.Oxidase)
 

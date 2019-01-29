@@ -9,7 +9,7 @@ namespace HaemophilusWeb.Models.Meningo
     [Validator(typeof(MeningoSendingValidator))]
     public class MeningoSending : SendingBase<MeningoPatient>
     {
-        public MeningoSending()
+        public MeningoSending() : base(DatabaseType.Meningococci)
         {
             ReceivingDate = DateTime.Now;
             SamplingDate = DateTime.Now.Subtract(TimeSpan.FromDays(7));

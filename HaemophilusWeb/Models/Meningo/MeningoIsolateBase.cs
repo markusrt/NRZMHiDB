@@ -5,6 +5,10 @@ namespace HaemophilusWeb.Models.Meningo
 {
     public class MeningoIsolateBase : IsolateCommon, INeisseriaIsolateAlleleProperties
     {
+        public MeningoIsolateBase() : base(DatabaseType.Meningococci)
+        {
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MeningoIsolateId { get; set; }
 

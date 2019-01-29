@@ -35,6 +35,17 @@ namespace HaemophilusWeb.Views.Utils
         }
 
         [Test]
+        public void TextEditorFor_SimplePropertyWithPrefix_ShouldAddPrefix()
+        {
+            var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(new SimpleModel()));
+            var textEditorHtml = helper.TextEditorFor(m => m.SimpleProperty, prefix: "PF");
+
+            textEditorHtml.ToHtmlString().Should().Match("*<span class*input-group-addon*>PF<*span>*");
+            textEditorHtml.ToHtmlString().Should().Match("*<label*for*SimpleProperty*");
+            textEditorHtml.ToHtmlString().Should().Match("*<input*form-control*id=\"SimpleProperty\" name=\"SimpleProperty\"*");
+        }
+
+        [Test]
         public void TextEditorFor_RequiredProperty_ShouldContainGlyphiconStar()
         {
             var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(new SimpleModel()));

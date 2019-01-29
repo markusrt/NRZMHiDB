@@ -8,7 +8,7 @@ namespace HaemophilusWeb.Controllers
     {
         public string Initials { get; set; }
         public DateTime? BirthDate { get; set; }
-        public int? StemNumber { get; set; }
+        public string StemNumber { get; set; }
         public DateTime ReceivingDate { get; set; }
         public string SamplingLocation { get; set; }
         public string Invasive { get; set; }
