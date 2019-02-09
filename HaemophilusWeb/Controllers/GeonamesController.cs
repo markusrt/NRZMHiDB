@@ -4,6 +4,7 @@ using System.Net;
 using System.Web.Mvc;
 using DataTables.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
@@ -25,12 +26,8 @@ namespace HaemophilusWeb.Controllers
         [Authorize(Roles = DefaultRoles.User)]
         public ContentResult PostalCode(string postalCode)
         {
-            using (var client = new WebClient())
-            using (var result = client.OpenRead(new Uri("http://api.geonames.org/postalCodeLookupJSON?country=DE&username=hweb&postalcode=" + postalCode)))
-            using (var reader = new StreamReader(result ?? new MemoryStream()))
-            {
-                return new ContentResult { Content = reader.ReadToEnd(), ContentType = "application/json" };
-            }
+            var json = Geonames.QueryGeonames(postalCode);
+            return new ContentResult { Content = json, ContentType = "application/json" };
         }
     }
 }

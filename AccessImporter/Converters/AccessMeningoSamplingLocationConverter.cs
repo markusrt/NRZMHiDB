@@ -32,9 +32,8 @@ internal class AccessMeningoSamplingLocationConverter : ITypeConverter<object, M
         //20	nicht-steriles Mat. bei IMD
     };
 
-    public MeningoSamplingLocation Convert(ResolutionContext context)
+    public MeningoSamplingLocation Convert(object accessSamplingLocationId, MeningoSamplingLocation destination, ResolutionContext context)
     {
-        var accessSamplingLocationId = context.SourceValue;
         try
         {
             var samplingLocation = LegacyIdToMeningoSamplingLocationMap[accessSamplingLocationId];

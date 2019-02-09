@@ -18,5 +18,10 @@ namespace HaemophilusWeb.Models.Meningo
 
         [Display(Name = "Anderer Risikofaktor")]
         public string OtherRiskFactor { get; set; }
+
+        public override string ToString()
+        {
+            return $"[{PatientId:00000}]: {Initials} - {Gender} - {BirthDate} - {PostalCode}";
+        }
     }
 }
