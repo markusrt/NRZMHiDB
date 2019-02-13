@@ -26,10 +26,9 @@ internal class AccessMeningoSamplingLocationConverter : ITypeConverter<object, M
         {17,MeningoSamplingLocation.VaginalSwab },
         {18,MeningoSamplingLocation.Serum },
         {19,MeningoSamplingLocation.OtherNonInvasive },
-        {20,MeningoSamplingLocation.OtherNonInvasive }, //TODO clarify
-        {21,MeningoSamplingLocation.UrethralSwab }, //TODO verify
+        {20,MeningoSamplingLocation.OtherNonInvasive },
+        {21,MeningoSamplingLocation.UrethralSwab },
         {22,MeningoSamplingLocation.AnalSwab }
-        //20	nicht-steriles Mat. bei IMD
     };
 
     public MeningoSamplingLocation Convert(object accessSamplingLocationId, MeningoSamplingLocation destination, ResolutionContext context)
