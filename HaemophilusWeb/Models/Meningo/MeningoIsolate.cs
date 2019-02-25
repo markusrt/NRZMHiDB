@@ -13,5 +13,11 @@ namespace HaemophilusWeb.Models.Meningo
 
         [ScriptIgnore]
         public MeningoSending Sending { get; set; }
+
+        public override string ToString()
+        {
+            return
+                $"{StemNumber}: {Agglutination} - {RibosomalRna16S} - {RibosomalRna16SBestMatch} - {RplF} - {Remark} - {PorAPcr} ({PorAVr1}/{PorAVr2})";
+        }
     }
 }

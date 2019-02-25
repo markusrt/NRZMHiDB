@@ -29,6 +29,8 @@ namespace AccessImporter
                     .ConvertUsing<AccessMeningoPatientConverter>();
                 cfg.CreateMap<Dictionary<string, object>, MeningoSending>()
                     .ConvertUsing<AccessMeningoSendingConverter>();
+                cfg.CreateMap<Dictionary<string, object>, MeningoIsolate>()
+                    .ConvertUsing<AccessMeningoIsolateConverter>();
             });
 
             var selectSamplingLocations = "SELECT * FROM tbl_isol_mat";
@@ -74,18 +76,35 @@ namespace AccessImporter
                 Console.WriteLine(sending);
             }
 
+            foreach (var isolate in LoadIsolates(connectionString))
+            {
+                Console.WriteLine(isolate);
+            }
+
             Console.ReadLine();
         }
 
         private static IEnumerable<MeningoSending> LoadSendings(string connectionString)
         {
-            var selectSendingIsolates = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr";
-            var sendingIsolateFields = new[]
+            var selectSending = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr";
+            var sendingFields = new[]
             {
                 "Patienten.patnr", "Patienten.notizen", "labornr", "art", "eing_dat", "nr_eins", "entn_dat", "isol_mat_nr", "erg_eins"
             };
             Func<MeningoSending, bool> ignoreCasesFromLuxemburg = s => !s.LaboratoryNumber.StartsWith("LX");
-            return LoadAndConvert<MeningoSending>(connectionString, selectSendingIsolates, sendingIsolateFields).Where(ignoreCasesFromLuxemburg);
+            return LoadAndConvert<MeningoSending>(connectionString, selectSending, sendingFields).Where(ignoreCasesFromLuxemburg);
+        }
+
+        private static IEnumerable<MeningoIsolate> LoadIsolates(string connectionString)
+        {
+            var selectIsolates = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr";
+            var isolateFields = new[]
+            {
+                "Patienten.patnr", "stammnr", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "rplF", "serogruppe",
+                "vr1", "vr2", "Serotyp", "univ_pcr", "sequenz", "Staemme.notizen", "st", "fet-a",
+                "cc", "pena", "fHbp"
+            };
+            return LoadAndConvert<MeningoIsolate>(connectionString, selectIsolates, isolateFields);
         }
 
         private static IEnumerable<T> LoadAndConvert<T>(string connectionString, string query, params string[] columns)

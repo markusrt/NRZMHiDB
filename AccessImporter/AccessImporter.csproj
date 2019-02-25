@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\AccessMeningoIsolateConverter.cs" />
     <Compile Include="Converters\AccessMeningoSendingConverter.cs" />
     <Compile Include="Converters\AccessMeningoPatientConverter.cs" />
     <Compile Include="Converters\AccessMeningoSamplingLocationConverter.cs" />
