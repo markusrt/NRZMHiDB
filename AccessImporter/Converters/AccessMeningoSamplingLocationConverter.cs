@@ -7,6 +7,7 @@ internal class AccessMeningoSamplingLocationConverter : ITypeConverter<object, M
 {
     private static readonly Dictionary<object, MeningoSamplingLocation> LegacyIdToMeningoSamplingLocationMap = new Dictionary<object, MeningoSamplingLocation>
     {
+        {0,MeningoSamplingLocation.OtherInvasive },
         {1,MeningoSamplingLocation.ConjunctivalSwab },
         {2,MeningoSamplingLocation.Blood },
         {3,MeningoSamplingLocation.BronchoalveolarLavage },
@@ -26,7 +27,7 @@ internal class AccessMeningoSamplingLocationConverter : ITypeConverter<object, M
         {17,MeningoSamplingLocation.VaginalSwab },
         {18,MeningoSamplingLocation.Serum },
         {19,MeningoSamplingLocation.OtherNonInvasive },
-        {20,MeningoSamplingLocation.OtherNonInvasive },
+        {20,MeningoSamplingLocation.OtherInvasive },
         {21,MeningoSamplingLocation.UrethralSwab },
         {22,MeningoSamplingLocation.AnalSwab }
     };
@@ -35,6 +36,10 @@ internal class AccessMeningoSamplingLocationConverter : ITypeConverter<object, M
     {
         try
         {
+            if (accessSamplingLocationId is DBNull)
+            {
+                return MeningoSamplingLocation.OtherInvasive;
+            }
             var samplingLocation = LegacyIdToMeningoSamplingLocationMap[accessSamplingLocationId];
             return samplingLocation;
         }

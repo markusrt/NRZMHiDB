@@ -71,5 +71,10 @@ namespace HaemophilusWeb.Models.Meningo
         {
             return Isolate = new MeningoIsolate();
         }
+
+        public override string ToString()
+        {
+            return $"{LaboratoryNumber}: {Material}, {SenderLaboratoryNumber}, {SamplingDate}, {ReceivingDate}, {SerogroupSender}, {SamplingLocation}, {Remark}";
+        }
     }
 }

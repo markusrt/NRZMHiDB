@@ -23,11 +23,12 @@ namespace AccessImporter
 
             Mapper.Initialize(cfg =>
             {
-
                 cfg.CreateMap<object, MeningoSamplingLocation>()
                     .ConvertUsing<AccessMeningoSamplingLocationConverter>();
                 cfg.CreateMap<Dictionary<string, object>, MeningoPatient>()
                     .ConvertUsing<AccessMeningoPatientConverter>();
+                cfg.CreateMap<Dictionary<string, object>, MeningoSending>()
+                    .ConvertUsing<AccessMeningoSendingConverter>();
             });
 
             var selectSamplingLocations = "SELECT * FROM tbl_isol_mat";
@@ -57,7 +58,34 @@ namespace AccessImporter
                 Console.WriteLine(patient);
             }
 
+
+            foreach (var sending in LoadSendings(connectionString))
+            {
+                var validator = new MeningoSendingValidator();
+                if (validator.Validate(sending).Errors.Any())
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine($"Validierung für Patient {sending.MeningoSendingId} fehlgeschlagen:");
+                    foreach (var error in validator.Validate(sending).Errors)
+                    {
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+                Console.WriteLine(sending);
+            }
+
             Console.ReadLine();
+        }
+
+        private static IEnumerable<MeningoSending> LoadSendings(string connectionString)
+        {
+            var selectSendingIsolates = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr";
+            var sendingIsolateFields = new[]
+            {
+                "Patienten.patnr", "Patienten.notizen", "labornr", "art", "eing_dat", "nr_eins", "entn_dat", "isol_mat_nr", "erg_eins"
+            };
+            Func<MeningoSending, bool> ignoreCasesFromLuxemburg = s => !s.LaboratoryNumber.StartsWith("LX");
+            return LoadAndConvert<MeningoSending>(connectionString, selectSendingIsolates, sendingIsolateFields).Where(ignoreCasesFromLuxemburg);
         }
 
         private static IEnumerable<T> LoadAndConvert<T>(string connectionString, string query, params string[] columns)

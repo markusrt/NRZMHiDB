@@ -139,7 +139,7 @@ namespace AccessImporter.Converters
 
         private static void InitializeOrAmendOtherClinicalInformation(MeningoPatient patient)
         {
-            if (!String.IsNullOrEmpty(patient.OtherClinicalInformation))
+            if (!string.IsNullOrEmpty(patient.OtherClinicalInformation))
             {
                 patient.OtherClinicalInformation += ", ";
             }
