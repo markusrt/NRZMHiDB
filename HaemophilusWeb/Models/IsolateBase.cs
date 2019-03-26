@@ -6,6 +6,11 @@ namespace HaemophilusWeb.Models
 {
     public class IsolateBase
     {
+        public IsolateBase()
+        {
+            Growth = YesNoOptional.NotStated;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IsolateId { get; set; }
 

@@ -147,5 +147,45 @@ namespace HaemophilusWeb.Domain
                 .Contain("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.");
 
         }
+
+        [Test]
+        public void Interpret_AgglutinationBexAAndSerotypAreNotDeterminedButGrowthIsYes_WithRespectiveSeroType_RequestForResend()
+        {
+            var isolate = new IsolateBase
+            {
+                SerotypePcr = SerotypePcr.NotDetermined,
+                Agglutination = SerotypeAgg.NotDetermined,
+                BexA = TestResult.NotDetermined,
+                Growth = YesNoOptional.Yes
+            };
+
+            var interpretation = IsolateInterpretation.Interpret(isolate);
+
+            interpretation.Interpretation.Should().Contain("Um Wiedereinsendung wird gebeten");
+            interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
+            interpretation.InterpretationDisclaimer.Should()
+                .Contain("Eine telefonische Vorabmitteilung ist erfolgt.");
+        }
+
+        [Test]
+        public void Interpret_AgglutinationBexAAndSerotypAreNotDetermined_ButGrowthIsNo_ReportEvaluation()
+        {
+            var isolate = new IsolateBase
+            {
+                SerotypePcr = SerotypePcr.NotDetermined,
+                Agglutination = SerotypeAgg.NotDetermined,
+                BexA = TestResult.NotDetermined,
+                Growth = YesNoOptional.No,
+                Evaluation = Evaluation.HaemophilusSpeciesNoHaemophilusInfluenzae
+            };
+
+            var interpretation = IsolateInterpretation.Interpret(isolate);
+
+            interpretation.Interpretation.Should().Contain("Kein Nachweis von Haemophilus influenzae.");
+            interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
+            interpretation.InterpretationDisclaimer.Should()
+                .Contain("Beim eingesendeten Isolat handelt es sich am ehesten um Haemophilus sp., nicht H. influenzae.");
+        }
+
     }
 }
