@@ -17,26 +17,63 @@ namespace AccessImporter.Converters
         {
             var isolate = CreateMeningoIsolate(source);
             FillPorAPcr(isolate, source);
+            FillFetAPcr(isolate, source);
             return isolate;
         }
         
         private static MeningoIsolate CreateMeningoIsolate(Dictionary<string, object> source)
         {
-            //"Patienten.patnr", "", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "rplF", "",
-            // "Serotyp", "", "", "", "st", "fet-a",
+            //"Patienten.patnr", "", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "", "",
+            // "Serotyp", "", "", "", "st", "",
             //"cc", "pena", "fHbp"
-            var stemNumber = int.TryParse(source["stammnr"].ToString(), out int stemNumberInt) ? stemNumberInt : (int?) null;
+
+            var stemNumber = int.TryParse(SanitizeStemnumber(source), out int stemNumberInt) ? stemNumberInt : (int?) null;
             object serogruppe = source["serogruppe"];
             var isolate = new MeningoIsolate
             {
                 StemNumber = stemNumber,
-                RplF = source["rplF"].ToString(),
+                RplF = StringOrNull(source, "rplF"),
                 Agglutination = AgglutinationMap[serogruppe.ToString()],
                 RibosomalRna16S = RibosomalRna16SMap[source["univ_pcr"].ToString()],
-                RibosomalRna16SBestMatch = string.IsNullOrEmpty(source["sequenz"].ToString()) ? null : source["sequenz"].ToString(),
-                Remark = string.IsNullOrEmpty(source["Staemme.notizen"].ToString()) ? null : source["Staemme.notizen"].ToString(),
+                RibosomalRna16SBestMatch = StringOrNull(source, "sequenz"),
+                Remark = StringOrNull(source, "Staemme.notizen")
             };
+            if ("h".Equals(source["art"]))
+            {
+                isolate.GrowthOnBloodAgar = Growth.No;
+                isolate.GrowthOnMartinLewisAgar = Growth.No;
+            }
             return isolate;
+        }
+
+        private static string SanitizeStemnumber(Dictionary<string, object> source)
+        {
+            var stemNumber = source["stammnr"].ToString();
+            if (stemNumber.Contains("MZ"))
+            {
+                stemNumber = string.Empty;
+            }
+            else if (stemNumber.Contains("/"))
+            {
+                stemNumber = stemNumber.Split('/').First();
+            }
+            else if("E6".Equals(stemNumber) || stemNumber.ToLower().StartsWith("epsilon"))
+            {
+                var remark = StringOrNull(source, "Staemme.notizen");
+                var newRemark = string.Empty;
+                if (remark != null)
+                {
+                    newRemark = remark + ", ";
+                }
+                newRemark += $"Stammnummer studie: {stemNumber}";
+                source["Staemme.notizen"] = newRemark;
+            }
+            return stemNumber;
+        }
+
+        private static string StringOrNull(Dictionary<string, object> source, string property)
+        {
+            return string.IsNullOrEmpty(source[property].ToString()) ? null : source[property].ToString();
         }
 
         private static void FillPorAPcr(MeningoIsolate isolate, Dictionary<string, object> source)
@@ -52,6 +89,26 @@ namespace AccessImporter.Converters
             {
                 isolate.PorAVr2 = vr2;
                 isolate.PorAPcr = NativeMaterialTestResult.Positive;
+            }
+        }
+
+        private static void FillFetAPcr(MeningoIsolate isolate, Dictionary<string, object> source)
+        {
+            var fetAVr = source["fet-a"].ToString();
+            switch (fetAVr)
+            {
+                case "del.":
+                case "-":
+                    //TODO
+                    break;
+                case "inhib.":
+                    //TODO verify
+                    isolate.FetAPcr = NativeMaterialTestResult.Inhibitory;
+                    break;
+                case var _ when !string.IsNullOrEmpty(fetAVr):
+                    isolate.FetAPcr =NativeMaterialTestResult.Positive;
+                    isolate.FetAVr = fetAVr;
+                    break;
             }
         }
 
@@ -77,11 +134,11 @@ namespace AccessImporter.Converters
             {"X", MeningoSerogroupAgg.X},
             {"Y", MeningoSerogroupAgg.Y},
             {"Z", MeningoSerogroupAgg.Z},
-            {"NG", MeningoSerogroupAgg.NotDetermined},
-            {"ng", MeningoSerogroupAgg.NotDetermined},
-            {"cnl", MeningoSerogroupAgg.NotDetermined},
-            {"Alle", MeningoSerogroupAgg.NotDetermined},
-            {"NSG", MeningoSerogroupAgg.NotDetermined},
+            {"NG", MeningoSerogroupAgg.Negative},
+            {"ng", MeningoSerogroupAgg.Negative},
+            {"cnl", MeningoSerogroupAgg.Cnl},
+            {"Alle", MeningoSerogroupAgg.Poly},
+            {"NSG", MeningoSerogroupAgg.Negative},
             {"inhibitorisch", MeningoSerogroupAgg.NotDetermined},
         };
     }

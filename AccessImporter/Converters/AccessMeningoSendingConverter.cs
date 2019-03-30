@@ -58,7 +58,6 @@ namespace AccessImporter.Converters
             }
             if ("h".Equals(material))
             {
-                //TODO return MeningoMaterial.HeatActivated ;
                 return MeningoMaterial.NoGrowth;
             }
             if ("d".Equals(material))

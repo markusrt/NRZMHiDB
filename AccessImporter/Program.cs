@@ -102,7 +102,7 @@ namespace AccessImporter
             {
                 "Patienten.patnr", "stammnr", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "rplF", "serogruppe",
                 "vr1", "vr2", "Serotyp", "univ_pcr", "sequenz", "Staemme.notizen", "st", "fet-a",
-                "cc", "pena", "fHbp"
+                "cc", "pena", "fHbp", "art"
             };
             return LoadAndConvert<MeningoIsolate>(connectionString, selectIsolates, isolateFields);
         }
