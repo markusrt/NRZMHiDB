@@ -40,6 +40,8 @@ namespace HaemophilusWeb.Models
 
         public IDbSet<MeningoIsolate> MeningoIsolates => wrappedContext.MeningoIsolates;
 
+        public IDbSet<NeisseriaPubMlstIsolate> NeisseriaPubMlstIsolates => wrappedContext.NeisseriaPubMlstIsolate;
+
         public void MarkAsModified<TEntity>(TEntity entity) where TEntity : class
         {
             wrappedContext.Entry(entity).State = EntityState.Modified;

@@ -18,9 +18,11 @@ namespace AccessImporter.Converters
             var isolate = CreateMeningoIsolate(source);
             FillPorAPcr(isolate, source);
             FillFetAPcr(isolate, source);
+            FillPubMlst(isolate, source);
             return isolate;
         }
-        
+
+
         private static MeningoIsolate CreateMeningoIsolate(Dictionary<string, object> source)
         {
             //"Patienten.patnr", "", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "", "",
@@ -109,6 +111,28 @@ namespace AccessImporter.Converters
                     isolate.FetAPcr =NativeMaterialTestResult.Positive;
                     isolate.FetAVr = fetAVr;
                     break;
+            }
+        }
+
+
+        private void FillPubMlst(MeningoIsolate isolate, Dictionary<string, object> source)
+        {
+            var porB = StringOrNull(source, "Serotyp");
+            var sequenceType = StringOrNull(source, "st");
+            var clonalComplex = StringOrNull(source, "cc");
+            var penA = StringOrNull(source, "pena");
+            var fhbp = StringOrNull(source, "fHbp");
+
+            if (!string.IsNullOrEmpty($"{porB}{sequenceType}{clonalComplex}{penA}{fhbp}"))
+            {
+                isolate.PubMlstIsolate = new NeisseriaPubMlstIsolate
+                {
+                    PorB = porB,
+                    SequenceType = sequenceType,
+                    ClonalComplex = clonalComplex,
+                    PenA = penA,
+                    Fhbp = fhbp
+                };
             }
         }
 

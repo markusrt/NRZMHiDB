@@ -423,6 +423,10 @@
     <Compile Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.Designer.cs">
       <DependentUpon>201901232227223_Meningo_Isolate_10_RealTimePcr.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.cs" />
+    <Compile Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.Designer.cs">
+      <DependentUpon>201904012024228_NeisseriaPubMlstIsolate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -1317,6 +1321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.resx">
       <DependentUpon>201901232227223_Meningo_Isolate_10_RealTimePcr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.resx">
+      <DependentUpon>201904012024228_NeisseriaPubMlstIsolate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

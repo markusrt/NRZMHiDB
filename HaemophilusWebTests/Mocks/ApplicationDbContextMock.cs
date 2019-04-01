@@ -23,6 +23,7 @@ namespace HaemophilusWeb.Models
         public readonly InMemoryDbSet<MeningoPatient> MeningoPatientsDbSet = new InMemoryDbSet<MeningoPatient>(true);
         public readonly InMemoryDbSet<MeningoSending> MeningoSendingsDbSet = new InMemoryDbSet<MeningoSending>(true);
         public readonly InMemoryDbSet<MeningoIsolate> MeningoIsolatesDbSet = new InMemoryDbSet<MeningoIsolate>(true);
+        public readonly InMemoryDbSet<NeisseriaPubMlstIsolate> NeisseriaPubMlstIsolatesDbSet = new InMemoryDbSet<NeisseriaPubMlstIsolate>(true);
         public readonly InMemoryDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpointsDbSet =
             new InMemoryDbSet<EucastClinicalBreakpoint>(true);
 
@@ -47,6 +48,8 @@ namespace HaemophilusWeb.Models
         public IDbSet<MeningoSending> MeningoSendings => MeningoSendingsDbSet;
 
         public IDbSet<MeningoIsolate> MeningoIsolates => MeningoIsolatesDbSet;
+
+        public IDbSet<NeisseriaPubMlstIsolate> NeisseriaPubMlstIsolates => NeisseriaPubMlstIsolatesDbSet;
 
         public void MarkAsModified<TEntity>(TEntity entity) where TEntity : class
         {

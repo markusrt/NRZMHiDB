@@ -1,9 +1,15 @@
-﻿using HaemophilusWeb.Models.Meningo;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using HaemophilusWeb.Models.Meningo;
 
 namespace HaemophilusWeb.Models
 {
     public class NeisseriaPubMlstIsolate : INeisseriaIsolateAlleleProperties
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [ForeignKey("MeningoIsolate")]
+        public int NeisseriaPubMlstIsolateId { get; set; }
+
         public string PorAVr1 { get; set; }
         public string PorAVr2 { get; set; }
         public string FetAVr { get; set; }
@@ -19,5 +25,7 @@ namespace HaemophilusWeb.Models
         public string RplF { get; set; }
         public string SequenceType { get; set; }
         public string ClonalComplex { get; set; }
+
+        public virtual MeningoIsolate MeningoIsolate { get; set; }
     }
 }

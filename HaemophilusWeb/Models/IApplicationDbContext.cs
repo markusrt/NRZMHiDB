@@ -28,6 +28,8 @@ namespace HaemophilusWeb.Models
 
         IDbSet<MeningoIsolate> MeningoIsolates { get; }
 
+        IDbSet<NeisseriaPubMlstIsolate> NeisseriaPubMlstIsolates { get; }
+
         void MarkAsModified<TEntity>(TEntity entity) where TEntity : class;
 
         int SaveChanges();

@@ -52,5 +52,7 @@ namespace HaemophilusWeb.Models
         public DbSet<MeningoSending> MeningoSendings { get; set; }
 
         public DbSet<MeningoIsolate> MeningoIsolates { get; set; }
+
+        public DbSet<NeisseriaPubMlstIsolate> NeisseriaPubMlstIsolate { get; set; }
     }
 }
