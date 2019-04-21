@@ -16,6 +16,8 @@ namespace AccessImporter
 {
     class Program
     {
+        public static ApplicationDbContext Context = new ApplicationDbContext();
+
         static void Main(string[] args)
         {
             var connectionString =
@@ -102,7 +104,7 @@ namespace AccessImporter
             {
                 "Patienten.patnr", "stammnr", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "rplF", "serogruppe",
                 "vr1", "vr2", "Serotyp", "univ_pcr", "sequenz", "Staemme.notizen", "st", "fet-a",
-                "cc", "pena", "fHbp", "art"
+                "cc", "pena", "fHbp", "art", "eing_dat"
             };
             return LoadAndConvert<MeningoIsolate>(connectionString, selectIsolates, isolateFields);
         }
