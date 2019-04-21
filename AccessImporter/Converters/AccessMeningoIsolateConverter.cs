@@ -101,10 +101,9 @@ namespace AccessImporter.Converters
             {
                 case "del.":
                 case "-":
-                    //TODO
+                    isolate.FetAPcr = NativeMaterialTestResult.Negative;
                     break;
                 case "inhib.":
-                    //TODO verify
                     isolate.FetAPcr = NativeMaterialTestResult.Inhibitory;
                     break;
                 case var _ when !string.IsNullOrEmpty(fetAVr):
