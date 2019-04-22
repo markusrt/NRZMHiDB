@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AccessImporter.Converters;
 using AutoMapper;
+using HaemophilusWeb.Automapper;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
@@ -69,7 +70,7 @@ namespace AccessImporter
                 if (validator.Validate(sending).Errors.Any())
                 {
                     Console.WriteLine("");
-                    Console.WriteLine($"Validierung für Patient {sending.MeningoSendingId} fehlgeschlagen:");
+                    Console.WriteLine($"Validierung für Einsendung {sending.MeningoSendingId} fehlgeschlagen:");
                     foreach (var error in validator.Validate(sending).Errors)
                     {
                         Console.WriteLine(error.ErrorMessage);
@@ -80,7 +81,26 @@ namespace AccessImporter
 
             foreach (var isolate in LoadIsolates(connectionString))
             {
-                Console.WriteLine(isolate);
+                var mapping = new MeningoIsolateViewModelMappingAction();
+                var viewModel = new MeningoIsolateViewModel();
+                //TODO add real sending and patient
+                viewModel.YearlySequentialIsolateNumber = 10;
+                viewModel.Year = 2010;
+                isolate.Sending = new MeningoSending();
+                isolate.Sending.Patient = new MeningoPatient();
+                mapping.Process(isolate, viewModel);
+                var validator = new MeningoIsolateViewModelValidator();
+
+                if (validator.Validate(viewModel).Errors.Any())
+                {
+                    Console.WriteLine("");
+                    Console.WriteLine($"Validierung für Isolat {isolate.LaboratoryNumber} fehlgeschlagen:");
+                    foreach (var error in validator.Validate(viewModel).Errors)
+                    {
+                        Console.WriteLine(error.ErrorMessage);
+                    }
+                }
+                //Console.WriteLine(isolate);
             }
 
             Console.ReadLine();

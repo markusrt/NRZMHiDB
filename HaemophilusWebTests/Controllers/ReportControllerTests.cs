@@ -62,6 +62,12 @@ namespace HaemophilusWeb.Controllers
             }
         }
 
+        [OneTimeSetUp]
+        public void InitializeAutomapper()
+        {
+            MvcApplication.InitializeAutomapper();
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -76,7 +82,6 @@ namespace HaemophilusWeb.Controllers
             controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
 
             ConfigurationManager.AppSettings["reportSigners"] = "signer1";
-            MvcApplication.InitializeAutomapper();
 
             CreateMockReportTemplates();
 

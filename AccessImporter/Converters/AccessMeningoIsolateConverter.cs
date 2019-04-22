@@ -30,7 +30,8 @@ namespace AccessImporter.Converters
                 Agglutination = AgglutinationMap[serogruppe.ToString()],
                 RibosomalRna16S = RibosomalRna16SMap[source["univ_pcr"].ToString()],
                 RibosomalRna16SBestMatch = StringOrNull(source, "sequenz"),
-                Remark = StringOrNull(source, "Staemme.notizen")
+                Remark = StringOrNull(source, "Staemme.notizen"),
+                EpsilometerTests = new List<EpsilometerTest>()
             };
             if ("h".Equals(source["art"]))
             {
@@ -124,16 +125,16 @@ namespace AccessImporter.Converters
             FillAntibiotic(isolate, DoubleOrNull(source, "rifampicin"), receivingDate, Antibiotic.Rifampicin);
         }
 
-        private static void FillAntibiotic(IsolateCommon isolate, double? penicillin, DateTime receivingDate, Antibiotic antibiotic)
+        private static void FillAntibiotic(IsolateCommon isolate, double? legacyMeasurement, DateTime receivingDate, Antibiotic antibiotic)
         {
             var db = Program.Context;
 
-            if (!penicillin.HasValue)
+            if (!legacyMeasurement.HasValue)
             {
                 return;
             }
 
-            var measurement = (float) penicillin.Value;
+            var measurement = (float) legacyMeasurement.Value;
             var minDate = db.EucastClinicalBreakpoints.OrderByDescending(e => e.ValidFrom).Where(e => e.Antibiotic == antibiotic)
                 .Min(e => e.ValidFrom);
             var eTestBreakPoint = db.EucastClinicalBreakpoints.OrderByDescending(e => e.ValidFrom)
@@ -158,10 +159,6 @@ namespace AccessImporter.Converters
                 Measurement = measurement,
                 Result = result
             };
-            if (isolate.EpsilometerTests == null)
-            {
-                isolate.EpsilometerTests = new List<EpsilometerTest>();
-            }
             isolate.EpsilometerTests.Add(eTest);
         }
 
