@@ -507,6 +507,8 @@
     <Compile Include="Utils\ServerUtils.cs" />
     <Compile Include="Utils\TypeUtils.cs" />
     <Compile Include="Validators\EpsilometerTestValidator.cs" />
+    <Compile Include="Validators\IsolateViewModelValidatorBase.cs" />
+    <Compile Include="Validators\MeningoIsolateViewModelValidator.cs" />
     <Compile Include="Validators\IsolateViewModelValidator.cs" />
     <Compile Include="Validators\EucastClinicalBreakpointValidator.cs" />
     <Compile Include="Validators\HealthOfficeValidator.cs" />

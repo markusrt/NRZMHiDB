@@ -149,6 +149,7 @@
     <Compile Include="Validators\AbstractValidatorTests.cs" />
     <Compile Include="Validators\EpsilometerTestValidatorTest.cs" />
     <Compile Include="Validators\PatientValidatorTests.cs" />
+    <Compile Include="Validators\MeningoIsolateViewModelValidatorTests.cs" />
     <Compile Include="Validators\SendingValidatorTests.cs" />
     <Compile Include="ViewModels\IsolateViewModelTests.cs" />
     <Compile Include="Views\Utils\EnumEditorTests.cs" />

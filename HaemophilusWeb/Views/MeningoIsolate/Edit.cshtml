@@ -263,6 +263,11 @@
 
             $("#PubMlstQuery").click(QueryPubMlstDatabase);
             $("#PubMlstIsolateId").keypress(QueryPubMlstDatabaseKeypress);
+
+            $(".tab-content").find("div.tab-pane:hidden:has(span.field-validation-error)").each(function (index, tab) {
+                var id = $(tab).attr("id");
+                $('a[href="#' + id + '"]').tab('show');
+            });
         }
     );
 

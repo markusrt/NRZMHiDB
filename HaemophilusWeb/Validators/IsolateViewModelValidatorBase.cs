@@ -1,0 +1,25 @@
+﻿using FluentValidation;
+using HaemophilusWeb.Models;
+
+namespace HaemophilusWeb.Validators
+{
+    public class IsolateViewModelValidatorBase<TViewModel> : AbstractValidator<TViewModel>
+    {
+        protected const string PropertyMustNotBeEmpty = "{PropertyName} darf nicht leer sein.";
+
+        protected static bool BeSetIfDetermined(double? value, UnspecificTestResult testResult)
+        {
+            return testResult == UnspecificTestResult.NotDetermined || value.HasValue;
+        }
+
+        protected static bool BeSetIfDetermined(string value, UnspecificTestResult testResult)
+        {
+            return testResult == UnspecificTestResult.NotDetermined || !string.IsNullOrWhiteSpace(value);
+        }
+
+        protected static bool BeSetIfDetermined(string value, UnspecificOrNoTestResult testResult)
+        {
+            return testResult != UnspecificOrNoTestResult.Determined || !string.IsNullOrWhiteSpace(value);
+        }
+    }
+}
