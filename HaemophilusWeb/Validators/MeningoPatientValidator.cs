@@ -9,10 +9,9 @@ namespace HaemophilusWeb.Validators
         public MeningoPatientValidator()
         {
             RuleFor(p => p.Initials).NotEmpty();
-            RuleFor(p => p.Initials).Matches(@"([a-zA-ZäöüÄÖÜ]\.)+").WithMessage(
+            RuleFor(p => p.Initials).Matches(@"([a-zA-ZäöüÄÖÜ\?]\.)+").WithMessage(
                 "Die Initialen müssen in der Form 'E.M.' eingegeben werden.");
             RuleFor(p => p.Gender).NotEmpty();
-            RuleFor(p => p.BirthDate).NotEmpty();
             RuleFor(p => p.PostalCode).Must(BeNotEmptyIfNotOverseas).WithMessage("{PropertyName} darf nicht leer sein.");
         }
 

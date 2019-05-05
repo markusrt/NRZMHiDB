@@ -40,7 +40,7 @@ namespace AccessImporter.Converters
             var accessGender = properties["geschlecht"];
             if (accessGender is DBNull || "m".Equals(accessGender) || "w".Equals(accessGender))
             {
-                return accessGender is DBNull ? (Gender?) null : "m".Equals(accessGender) ? Gender.Male : Gender.Female;
+                return accessGender is DBNull ? Gender.NotStated : "m".Equals(accessGender) ? Gender.Male : Gender.Female;
             }
 
             throw new Exception($"Unknown gender: '{accessGender}'");
@@ -134,6 +134,14 @@ namespace AccessImporter.Converters
                     ? State.Unknown
                     : AccessStateToState[source["bundeslandnr"]]
             };
+            if (string.IsNullOrEmpty(patient.PostalCode))
+            {
+                patient.PostalCode = "keine Angabe";
+            }
+            if (string.IsNullOrEmpty(patient.Initials))
+            {
+                patient.Initials = "?.?.";
+            }
             return patient;
         }
 

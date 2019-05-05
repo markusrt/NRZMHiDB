@@ -46,7 +46,10 @@ namespace AccessImporter.Converters
                 SerogroupSender = source["erg_eins"].ToString(),
                 Remark = source["Patienten.notizen"].ToString()
             };
-
+            if (string.IsNullOrEmpty(sending.SenderLaboratoryNumber))
+            {
+                sending.SenderLaboratoryNumber = "keine Angabe";
+            }
             return sending;
         }
 
