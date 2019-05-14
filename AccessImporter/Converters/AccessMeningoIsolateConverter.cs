@@ -25,6 +25,8 @@ namespace AccessImporter.Converters
             var serogruppe = source["serogruppe"];
             var isolate = new MeningoIsolate
             {
+                MeningoIsolateId = (int)source["dbnr"],
+                MeningoSendingId = (int)source["dbnr"],
                 StemNumber = stemNumber,
                 RplF = StringOrNull(source, "rplF"),
                 Agglutination = AgglutinationMap[serogruppe.ToString()],

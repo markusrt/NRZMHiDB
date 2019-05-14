@@ -35,6 +35,7 @@ namespace AccessImporter.Converters
         {
             var sending = new MeningoSending
             {
+                MeningoSendingId = (int) source["dbnr"],
                 MeningoPatientId = (int) source["Patienten.patnr"],
                 LaboratoryNumber = SanitizeLaboratoryNumber(source["labornr"].ToString()),
                 Material = ConvertToMaterial(source["art"]),

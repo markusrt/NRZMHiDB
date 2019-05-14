@@ -11,7 +11,7 @@ namespace AccessImporter.Converters
 {
     public class AccessMeningoPatientConverter : ITypeConverter<Dictionary<string, object>, MeningoPatient>
     {
-        public bool QueryCountyEnabled { get; set; } = false;
+        public bool QueryCountyEnabled { get; set; } = true;
 
         private static readonly Dictionary<object, State> AccessStateToState = new Dictionary<object, State>
         {
