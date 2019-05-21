@@ -236,7 +236,9 @@
     <Compile Include="Controllers\PatientControllerBase.cs" />
     <Compile Include="Controllers\PatientSendingController.cs" />
     <Compile Include="Controllers\QueryRecord.cs" />
+    <Compile Include="Controllers\MeningoReportController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\ReportControllerBase.cs" />
     <Compile Include="Controllers\RkiMatchController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SenderController.cs" />
@@ -1175,6 +1177,7 @@
     <Content Include="Views\MeningoPatientSending\Edit.cshtml" />
     <Content Include="Views\MeningoPatientSending\Create.cshtml" />
     <Content Include="Views\MeningoIsolate\Edit.cshtml" />
+    <Content Include="Views\MeningoReport\Isolate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

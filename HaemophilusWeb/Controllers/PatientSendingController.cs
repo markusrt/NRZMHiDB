@@ -694,11 +694,16 @@ namespace HaemophilusWeb.Controllers
 
             builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Bearbeiten</a>",
                 Url.Action("Edit", new { id = sendingId }));
-            //TODO check report for meningo isolates
+            //TODO make this cleaner
             if (this is PatientSendingController)
             {
                 builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
                     Url.Action("Isolate", "Report", new { id = isolateId }));
+            }
+            else if (this is MeningoPatientSendingController)
+            {
+                builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
+                    Url.Action("Isolate", "MeningoReport", new { id = isolateId }));
             }
             builder.Append("</div>");
             return builder.ToString();

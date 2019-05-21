@@ -1,0 +1,205 @@
+﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Utils
+@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.MeningoIsolateViewModel
+
+@{
+    ViewBag.Title = "Befund erstellen";
+}
+
+@Scripts.Render("~/bundles/docxgen")
+
+<div class="modal fade" id="discrepantResultsModal">
+    <div class="modal-dialog">
+        <div class="modal-content panel-warning">
+            <div class="modal-header  panel-heading">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Diskrepante Ergebnisse</h4>
+            </div>
+            <div class="modal-body">
+                <p>Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren. Soll dennoch ein Befundvorschlag ausgegeben werden?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Nein</button>
+                <button id="ForceCreateReport" type="button" class="btn btn-default">Ja</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <h3>Befund (Auszug)</h3>
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.LaboratoryNumberWithPrefix)</dt>
+        <dd>@Html.DisplayFor(model => model.LaboratoryNumberWithPrefix)</dd>
+        <dt>@Html.DisplayNameFor(model => model.SamplingLocation)</dt>
+        <dd>@Html.DisplayFor(model => model.SamplingLocation)</dd>
+        @*<dt>@Html.DisplayNameFor(model => model.Patient)</dt>
+        <dd>@Html.DisplayFor(model => model.Patient)</dd>*@
+    </dl>
+    <dl class="dl-horizontal">
+        @*<dt>@Html.DisplayNameFor(model => model.Evaluation)</dt>
+        <dd>@EnumEditor.GetEnumDescription(Model.Evaluation)</dd>*@
+        <dt>@Html.DisplayNameFor(model => model.Agglutination)</dt>
+        <dd>@EnumEditor.GetEnumDescription(Model.Agglutination)</dd>
+        @*<dt>@Html.DisplayNameFor(model => model.SerotypePcr)</dt>
+        <dd>@EnumEditor.GetEnumDescription(Model.SerotypePcr)</dd>
+        <dt>@Html.DisplayNameFor(model => model.BexA)</dt>
+        <dd>@EnumEditor.GetEnumDescription(Model.BexA)</dd>
+        <dt>@Html.DisplayNameFor(model => model.BetaLactamase)</dt>
+        <dd>@EnumEditor.GetEnumDescription(Model.BetaLactamase)</dd>*@
+    </dl>
+
+    @*@if (Model.ETests.Any())
+    {
+        <dl class="dl-horizontal">
+            @foreach (var etest in Model.ETests)
+            {
+                <dt>@etest.Antibiotic</dt>
+                <dd>@etest.Result</dd>
+            }
+        </dl>
+    }
+
+    <dl class="dl-horizontal">
+        <dt>@Html.DisplayNameFor(model => model.InterpretationPreliminary)</dt>
+        <dd>@Html.DisplayFor(model => model.InterpretationPreliminary)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Interpretation)</dt>
+        <dd>@Html.DisplayFor(model => model.Interpretation)</dd>
+    </dl>*@
+</div>
+<div class="col-md-6">
+    <h3>Zuständiges Gesundheitsamt</h3>
+    <dl class="dl-horizontal">
+        <dt>Adresse</dt>
+        <dd id="healthOfficeAddress"></dd>
+        <dt>Telefon</dt>
+        <dd id="healthOfficePhone"></dd>
+        <dt>Fax</dt>
+        <dd id="healthOfficeFax"></dd>
+        <dt>E-Mail</dt>
+        <dd id="healthOfficeEmail"></dd>
+        <dt></dt>
+       @* <dd><br/>@Html.ActionLink("Gesundheitsamt bearbeiten", "Edit", "HealthOffices", new { postalCode = Model.PatientPostalCode }, new { @class = "btn btn-sm btn-info disabled", id="editHealthOfficeButton" })</dd>*@
+    </dl>
+</div>
+<div class="clearfix"></div>
+<div class="col-md-12">
+    <hr />
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Befundsvorlage", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-5">
+                @Html.DropDownList("ReportTemplate", ((IEnumerable<FileInfo>)ViewBag.ReportTemplates).Select(option => new SelectListItem
+            {
+                Text = (option == null ? "Keine Vorlagen hinterlegt" : option.Name),
+                Value = Url.Content(option.FullName.ReverseMapPath())
+            }), "Auswählen...", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("Unterzeichner", new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-5">
+                @Html.DropDownList("ReportSigner", ((IEnumerable<string>)ViewBag.ReportSigners).Select(option => new SelectListItem
+            {
+                Text = option,
+                Value = option
+            }), "Auswählen...", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button id="TryCreateReport" class="btn btn-primary">Befund erstellen</button>
+                @Html.ActionLink("Isolat bearbeiten", "Edit", "MeningoIsolate", new { id = Model.MeningoIsolateId }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+        var documentData = @(Html.Raw(Json.Encode(Model)));
+
+        $("#TryCreateReport").click(function()
+        {
+            var templateFile = $("#ReportTemplate").val();
+            var preliminary = templateFile.indexOf("@ViewBag.PreliminaryReportMarker") !== -1;
+            var signer = $("#ReportSigner").val();
+            if(templateFile === "" || signer === "")
+            {
+                ShowError("Bitte wählen Sie eine Befundvorlage und einen Unterzeichner aus.");
+                return;
+            }
+
+            var interpretation = "Interpretation";
+            if (preliminary) {
+                interpretation = "InterpretationPreliminary";
+            }
+            if (false)//documentData[interpretation].indexOf("Diskrepant") > -1)
+            {
+                $("#discrepantResultsModal").modal("show");
+            }
+            else
+            {
+                DoCreateReport(templateFile, preliminary, signer);
+            }
+        });
+
+        $("#ForceCreateReport").click(function()
+        {
+            $("#discrepantResultsModal").modal("hide");
+            var templateFile = $("#ReportTemplate").val();
+            var preliminary = templateFile.indexOf("@ViewBag.PreliminaryReportMarker") !== -1;
+            var signer = $("#ReportSigner").val();
+            DoCreateReport(templateFile, preliminary, signer);;
+        });
+
+        function DoCreateReport(templateFile, preliminary, signer)
+        {
+            documentData["Signer"] = signer;
+
+            $(documentData.Typings).each(function(index, typing) {
+                documentData["Typing-"+typing.Attribute] = typing.Value;
+            });
+
+            new DocxGen().loadFromFile(templateFile, { async: true, intelligentTagging: true }).success(function(doc)
+            {
+                doc.setTags(documentData);
+                doc.applyTags();
+                doc.output({ name: "@("KL " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")", type:"blob" });
+                var url = "@Url.Content("~/Report/ReportGenerated/")";
+                $.post(url, { id: @Model.MeningoIsolateId, preliminary: preliminary } );
+            });
+        }
+
+        $(document).ready(function () {
+            var url = "@Url.Content("~/Report/QueryHealthOffice/")";
+            $.post(url, { postalCode: "91301" }, @*@Model.PatientPostalCode*@
+                function (data) {
+                    if (data['error']) {
+                        console.log("Error querying RKI-Tool: " + data['error'].description);
+                    } else {
+                        var address = data.Address;
+                        $("#healthOfficeAddress").append(address.replace(/(?:\r\n|\r|\n)/g, '<br />'));
+
+                        var phoneText = data.Phone;
+                        var phoneNumber = phoneText.replace(/(?:\s|-)/g, '');
+                        $("#healthOfficePhone").append("<a href='tel:" + phoneNumber + "'>" + phoneText + "</a>");
+
+                        var faxText = data.Fax;
+                        var faxNumber = faxText ? '0' + faxText.replace(/(?:\s|-)/g, '') : "-";
+                        $("#healthOfficeFax").append("<a href='mailto:" + faxNumber + "@@fax'>" + faxText + "</a>");
+
+                        var email = data.Email;
+                        $("#healthOfficeEmail").append("<a href='mailto:" + email + "'>" + email + "</a>");
+
+                        $("#editHealthOfficeButton").removeClass("disabled");
+                    }
+
+                }
+            );
+        });
+
+    </script>
+}
