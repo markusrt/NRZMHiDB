@@ -14,7 +14,14 @@
 
     @Html.ValidationSummary(true)
     @Html.HiddenFor(model => model.MeningoIsolateId)
-    @Html.TextEditorFor(m => m.LaboratoryNumber, prefix: DatabaseType.Meningococci.LaboratoryNumberPrefix())
+    @if (Model.LaboratoryNumber.StartsWith("-"))
+    {
+        @Html.ReadonlyFor(m => m.LaboratoryNumberWithPrefix)
+    }
+    else
+    {
+        @Html.TextEditorFor(m => m.LaboratoryNumber, prefix: DatabaseType.Meningococci.LaboratoryNumberPrefix())
+    }
     @Html.ReadonlyFor(m => m.SamplingLocation)
     @Html.ReadonlyFor(m => m.Material)
     @Html.ReadonlyFor(m => m.Invasive)
@@ -263,6 +270,11 @@
 
             $("#PubMlstQuery").click(QueryPubMlstDatabase);
             $("#PubMlstIsolateId").keypress(QueryPubMlstDatabaseKeypress);
+
+            $(".tab-content").find("div.tab-pane:hidden:has(span.field-validation-error)").each(function (index, tab) {
+                var id = $(tab).attr("id");
+                $('a[href="#' + id + '"]').tab('show');
+            });
         }
     );
 

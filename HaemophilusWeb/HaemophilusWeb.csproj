@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HaemophilusWeb</RootNamespace>
     <AssemblyName>HaemophilusWeb</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44300</IISExpressSSLPort>
@@ -24,6 +24,7 @@
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,11 +49,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper">
-      <HintPath>..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper.Net4">
-      <HintPath>..\packages\AutoMapper.3.1.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    <Reference Include="AutoMapper, Version=8.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="DataTables.Mvc">
       <HintPath>..\libraries\DataTables.Mvc.dll</HintPath>
@@ -134,17 +132,20 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.Helpers.dll</HintPath>
@@ -174,9 +175,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.1.2\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -191,6 +190,7 @@
     </Reference>
     <Reference Include="System.Net.Http.WebRequest">
     </Reference>
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -423,6 +423,10 @@
     <Compile Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.Designer.cs">
       <DependentUpon>201901232227223_Meningo_Isolate_10_RealTimePcr.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.cs" />
+    <Compile Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.Designer.cs">
+      <DependentUpon>201904012024228_NeisseriaPubMlstIsolate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
@@ -498,10 +502,13 @@
     <Compile Include="Utils\ExceptionUtils.cs" />
     <Compile Include="Utils\ExpressionUtils.cs" />
     <Compile Include="Utils\FileLister.cs" />
+    <Compile Include="Utils\Geonames.cs" />
     <Compile Include="Utils\ReportFormatter.cs" />
     <Compile Include="Utils\ServerUtils.cs" />
     <Compile Include="Utils\TypeUtils.cs" />
     <Compile Include="Validators\EpsilometerTestValidator.cs" />
+    <Compile Include="Validators\IsolateViewModelValidatorBase.cs" />
+    <Compile Include="Validators\MeningoIsolateViewModelValidator.cs" />
     <Compile Include="Validators\IsolateViewModelValidator.cs" />
     <Compile Include="Validators\EucastClinicalBreakpointValidator.cs" />
     <Compile Include="Validators\HealthOfficeValidator.cs" />
@@ -1316,6 +1323,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.resx">
       <DependentUpon>201901232227223_Meningo_Isolate_10_RealTimePcr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.resx">
+      <DependentUpon>201904012024228_NeisseriaPubMlstIsolate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

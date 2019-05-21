@@ -4,9 +4,8 @@ using HaemophilusWeb.ViewModels;
 
 namespace HaemophilusWeb.Validators
 {
-    public class IsolateViewModelValidator : AbstractValidator<IsolateViewModel>
+    public class IsolateViewModelValidator : IsolateViewModelValidatorBase<IsolateViewModel>
     {
-        private const string PropertyMustNotBeEmpty = "{PropertyName} darf nicht leer sein.";
 
         public IsolateViewModelValidator()
         {
@@ -32,21 +31,6 @@ namespace HaemophilusWeb.Validators
                     "Die Art des Wachstums muss angegeben werden.");
             RuleFor(p => p.LaboratoryNumber).Matches(@"\d+/\d\d").WithMessage(
                 "Die Labornummer muss in der Form '39/14' eingegeben werden.");
-        }
-
-        private static bool BeSetIfDetermined(double? value, UnspecificTestResult testResult)
-        {
-            return testResult == UnspecificTestResult.NotDetermined || value.HasValue;
-        }
-
-        private static bool BeSetIfDetermined(string value, UnspecificTestResult testResult)
-        {
-            return testResult == UnspecificTestResult.NotDetermined || !string.IsNullOrWhiteSpace(value);
-        }
-
-        private static bool BeSetIfDetermined(string value, UnspecificOrNoTestResult testResult)
-        {
-            return testResult != UnspecificOrNoTestResult.Determined || !string.IsNullOrWhiteSpace(value);
         }
     }
 }

@@ -53,6 +53,12 @@ namespace HaemophilusWeb.Utils
 
         public static string ToLaboratoryNumberWithPrefix(this string laboratoryNumberWithoutPrefix, DatabaseType databaseType = DatabaseType.None)
         {
+            if (databaseType == DatabaseType.Meningococci
+                && !string.IsNullOrEmpty(laboratoryNumberWithoutPrefix)
+                && laboratoryNumberWithoutPrefix.StartsWith("-"))
+            {
+                return "NR" + laboratoryNumberWithoutPrefix.TrimStart('-');
+            }
             return $"{databaseType.LaboratoryNumberPrefix()}{laboratoryNumberWithoutPrefix??" -"}";
         }
 

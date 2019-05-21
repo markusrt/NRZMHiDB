@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation.Attributes;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Validators;
 
 namespace HaemophilusWeb.ViewModels
 {
+    [Validator(typeof(MeningoIsolateViewModelValidator))]
     public class MeningoIsolateViewModel : MeningoIsolateBase
     {
         private List<EpsilometerTestViewModel> etests;

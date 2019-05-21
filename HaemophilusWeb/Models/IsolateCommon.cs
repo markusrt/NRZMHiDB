@@ -71,7 +71,7 @@ namespace HaemophilusWeb.Models
 
         [NotMapped]
         [Display(Name = "Labornummer")]
-        public string LaboratoryNumberWithPrefix => LaboratoryNumber.ToLaboratoryNumberWithPrefix(DatabaseType.Haemophilus);
+        public string LaboratoryNumberWithPrefix => LaboratoryNumber.ToLaboratoryNumberWithPrefix(DatabaseType);
 
         public int YearlySequentialIsolateNumber { get; set; }
 

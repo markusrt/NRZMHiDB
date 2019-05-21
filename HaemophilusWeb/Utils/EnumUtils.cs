@@ -4,7 +4,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using AutoMapper.Internal;
+using AutoMapper.Configuration.Internal;
+using ServiceStack;
 
 namespace HaemophilusWeb.Utils
 {
@@ -173,7 +174,7 @@ namespace HaemophilusWeb.Utils
             {
                 return enumValue.ToString();
             }
-            var field = (enumType.IsNullableType() ? enumType.GetTypeOfNullable() : enumType).GetField(value);
+            var field = (enumType.IsNullableType() ? PrimitiveHelper.GetTypeOfNullable(enumType) : enumType).GetField(value);
             if (field == null)
             {
                 return value;

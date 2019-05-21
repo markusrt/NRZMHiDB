@@ -50,7 +50,7 @@ namespace HaemophilusWeb.Models.Meningo
             return samplingLocation.GetType().GetField(Enum.GetName(samplingLocation.GetType(), samplingLocation)).GetCustomAttributes(typeof(InvasiveSamplingLocationAttribute), false).Length > 0;
         }
 
-        public MeningoIsolate Isolate { get; set; }
+        public virtual MeningoIsolate Isolate { get; set; }
 
         public override void SetPatientId(int patientId)
         {
@@ -70,6 +70,11 @@ namespace HaemophilusWeb.Models.Meningo
         public override IsolateCommon CreateIsolate()
         {
             return Isolate = new MeningoIsolate();
+        }
+
+        public override string ToString()
+        {
+            return $"{LaboratoryNumber}: {Material}, {SenderLaboratoryNumber}, {SamplingDate}, {ReceivingDate}, {SerogroupSender}, {SamplingLocation}, {Remark}";
         }
     }
 }
