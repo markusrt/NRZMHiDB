@@ -137,10 +137,10 @@ namespace AccessImporter.Converters
             }
 
             var measurement = (float) legacyMeasurement.Value;
-            var minDate = db.EucastClinicalBreakpoints.OrderByDescending(e => e.ValidFrom).Where(e => e.Antibiotic == antibiotic)
+            var minDate = db.EucastClinicalBreakpoints.OrderByDescending(e => e.ValidFrom).Where(e => e.Antibiotic == antibiotic && e.ValidFor == DatabaseType.Meningococci)
                 .Min(e => e.ValidFrom);
             var eTestBreakPoint = db.EucastClinicalBreakpoints.OrderByDescending(e => e.ValidFrom)
-                .First(e => (e.ValidFrom <= receivingDate || e.ValidFrom == minDate) && e.Antibiotic == antibiotic);
+                .First(e => (e.ValidFrom <= receivingDate || e.ValidFrom == minDate) && e.Antibiotic == antibiotic && e.ValidFor == DatabaseType.Meningococci);
             EpsilometerTestResult result;
             if (measurement > eTestBreakPoint.MicBreakpointResistent)
             {

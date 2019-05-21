@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 05, 19), "Import der Meningokokken Access Datenbank für 2019", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 29), "Präfix MZ/KL für Labornummern und DE/H für Stammnummern", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 23), "Überarbeitung Molekulare Typisierung für Meningokokken", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 22), "Maske Molekulare Typisierung für Meningokokken", ChangeType.Feature),

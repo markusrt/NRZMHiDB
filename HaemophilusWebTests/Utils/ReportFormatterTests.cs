@@ -27,6 +27,7 @@ namespace HaemophilusWeb.Utils
         [TestCase(null, DatabaseType.Meningococci, "MZ -")]
         [TestCase("01/2019", DatabaseType.Meningococci, "MZ01/2019")]
         [TestCase("01/2019", DatabaseType.Haemophilus, "KL01/2019")]
+        [TestCase("-01/2019", DatabaseType.Meningococci, "NR01/2019")]
         public void ToLaboratoryNumberWithPrefix_ValidInput_AddsPrefix(string input, DatabaseType databaseType, string expected)
         {
             input.ToLaboratoryNumberWithPrefix(databaseType).Should().Be(expected);

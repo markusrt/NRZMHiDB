@@ -48,7 +48,7 @@ namespace AccessImporter
                 Console.WriteLine(meningoSamplingLocation);
             }
 
-            var selectPatients = "SELECT * FROM Patienten";
+            var selectPatients = "SELECT Patienten.* FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr WHERE Year(eing_dat)=2019";
             var patientFields = new[]
             {
                 "initialen", "geb_dat", "geschlecht", "plz", "wohnort", "bundeslandnr", "meningitis", "sepsis", "wfs",
@@ -73,13 +73,13 @@ namespace AccessImporter
 
                 var oldId = patient.PatientId;
 
-                Console.WriteLine(patient);
-                Context.MeningoPatients.Add(patient);
-                new ApplicationDbContextWrapper(Context).SaveChanges();
-
-                patientIdLookup.Add(oldId, patient.PatientId);
-                break;
-                
+                if (!patientIdLookup.ContainsKey(oldId))
+                {
+                    Console.WriteLine(patient);
+                    Context.MeningoPatients.Add(patient);
+                    new ApplicationDbContextWrapper(Context).SaveChanges();
+                    patientIdLookup.Add(oldId, patient.PatientId);
+                }
             }
 
             Dictionary<int,MeningoSending> sendingLookup = new Dictionary<int, MeningoSending>();
@@ -101,8 +101,7 @@ namespace AccessImporter
 
                 sending.MeningoPatientId = patientIdLookup[sending.MeningoPatientId];
                 sendingLookup.Add(oldId, sending);
-                break;
-                Console.WriteLine(sending);
+                //Console.WriteLine(sending);
             }
 
             foreach (var isolate in LoadIsolates(connectionString))
@@ -110,7 +109,16 @@ namespace AccessImporter
                 var sending = sendingLookup[isolate.MeningoSendingId];
                 isolate.Sending = sending;
                 isolate.Sending.Patient = Context.MeningoPatients.Find(sending.MeningoPatientId);
-                if (Regex.Match(sending.LaboratoryNumber, "\\d+/\\d+").Success)
+                if (Regex.Match(sending.LaboratoryNumber, "NR\\d+/\\d+").Success)
+                {
+                    var noPrefix = sending.LaboratoryNumber.Replace("NR", "");
+                    var labNumberAndYear = noPrefix.Split('/');
+                    var remark = "Nativmaterial: " + sending.LaboratoryNumber;
+                    isolate.YearlySequentialIsolateNumber = (-1) * int.Parse(labNumberAndYear[0]);
+                    isolate.Year = 2000 + int.Parse(labNumberAndYear[1]);
+                    isolate.Remark = string.IsNullOrEmpty(isolate.Remark) ? remark : "\n" + remark;
+                }
+                else if (Regex.Match(sending.LaboratoryNumber, "\\d+/\\d+").Success)
                 {
                     var noPrefix = sending.LaboratoryNumber.Replace("MZ", "");
                     var labNumberAndYear = noPrefix.Split('/');
@@ -141,7 +149,6 @@ namespace AccessImporter
 
                 Context.MeningoIsolates.Add(isolate);
                 new ApplicationDbContextWrapper(Context).SaveChanges();
-                break;
                 //Console.WriteLine(isolate);
             }
 
@@ -150,7 +157,7 @@ namespace AccessImporter
 
         private static IEnumerable<MeningoSending> LoadSendings(string connectionString)
         {
-            var selectSending = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr";
+            var selectSending = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr WHERE Year(eing_dat)=2019";
             var sendingFields = new[]
             {
                 "Patienten.patnr", "Patienten.notizen", "dbnr", "labornr", "art", "eing_dat", "nr_eins", "entn_dat", "isol_mat_nr", "erg_eins"
@@ -161,7 +168,7 @@ namespace AccessImporter
 
         private static IEnumerable<MeningoIsolate> LoadIsolates(string connectionString)
         {
-            var selectIsolates = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr";
+            var selectIsolates = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr WHERE Year(eing_dat)=2019";
             var isolateFields = new[]
             {
                 "Patienten.patnr", "dbnr", "stammnr", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "rplF", "serogruppe",
