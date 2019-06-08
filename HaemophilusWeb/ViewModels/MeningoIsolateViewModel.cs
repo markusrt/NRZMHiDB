@@ -1,8 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
 using FluentValidation.Attributes;
+using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Utils;
 using HaemophilusWeb.Validators;
+using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.ViewModels
 {
@@ -29,5 +36,98 @@ namespace HaemophilusWeb.ViewModels
 
         [Display(Name = "Patientenalter bei Entnahme")]
         public int PatientAgeAtSampling { get; set; }
+
+        public IEnumerable<Typing> Typings
+        {
+            get
+            {
+                var properties = GetType().GetProperties();
+                foreach (
+                    var typingProperty in
+                        properties.Where(p => p.PropertyType == typeof(TestResult) && p.Name != "BetaLactamase"
+                                              && p.Name != "Oxidase"))
+                {
+                    var value = (TestResult)typingProperty.GetValue(this);
+                    var name = GetDisplayName(typingProperty);
+                    if (value != TestResult.NotDetermined)
+                    {
+                        yield return new Typing { Attribute = name, Value = EnumEditor.GetEnumDescription(value) };
+                    }
+                }
+                if (ApiNh == UnspecificTestResult.Determined)
+                {
+                    yield return
+                        new Typing
+                        {
+                            Attribute = "api NH",
+                            Value = string.Format("{0}, {1}%", ApiNhBestMatch, DoubleToString(ApiNhMatchInPercent))
+                        };
+                }
+                if (MaldiTof == UnspecificTestResult.Determined)
+                {
+                    yield return
+                        new Typing
+                        {
+                            Attribute = "MALDI-TOF",
+                            Value =
+                                string.Format("{0}, {1}", MaldiTofBestMatch,
+                                    DoubleToString(MaldiTofMatchConfidence))
+                        };
+                }
+            }
+        }
+
+        public string SenderName { get; set; }
+        public string SenderStreet { get; set; }
+        public string SenderCity { get; set; }
+
+        public string SamplingDate { get; set; }
+        public string ReceivingDate { get; set; }
+        public string Patient { get; set; }
+        public string PatientBirthDate { get; set; }
+        public string PatientPostalCode { get; set; }
+        public string SenderLaboratoryNumber { get; set; }
+
+        public string EvaluationString { get; set; }
+        public string SerogroupPcrString { get; set; }
+
+        [Display(Name = "Befund")]
+        public string Interpretation { get; set; }
+
+        [Display(Name = "Teilbefund")]
+        public string InterpretationPreliminary { get; set; }
+        public string InterpretationDisclaimer { get; set; }
+
+        public string Date
+        {
+            get { return DateTime.Now.ToReportFormat(); }
+        }
+
+        //TODO refactor duplication in IsolateViewModel
+        public IEnumerable<EpsilometerTestReportModel> ETests
+        {
+            get
+            {
+                return
+                    EpsilometerTestViewModels.Where(e => e.EucastClinicalBreakpointId != null && e.Measurement.HasValue)
+                        .Select(EpsilometerTestReportModel.CreateFromViewModel);
+            }
+        }
+
+        private static string GetDisplayName(MemberInfo member)
+        {
+            var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
+            return displayAttribute == null ? member.Name : displayAttribute.Name;
+        }
+
+        private static string DoubleToString(double? value)
+        {
+            return value.HasValue ? DoubleToString(value.Value) : string.Empty;
+        }
+
+        private static string DoubleToString(double value)
+        {
+            return Math.Round(value, 3).ToString(CultureInfo.CurrentCulture);
+        }
     }
 }

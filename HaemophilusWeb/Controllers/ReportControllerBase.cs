@@ -17,11 +17,13 @@ namespace HaemophilusWeb.Controllers
         private readonly IApplicationDbContext db;
         private readonly RkiTool rkiTool = new RkiTool();
         private readonly IsolateControllerBase<TIsolateModel, TISolateViewModel> isolateController;
+        private readonly string templatePath;
 
-        public ReportControllerBase(IApplicationDbContext applicationDbContext, IsolateControllerBase<TIsolateModel, TISolateViewModel> isolateController)
+        public ReportControllerBase(IApplicationDbContext applicationDbContext, IsolateControllerBase<TIsolateModel, TISolateViewModel> isolateController, string templatePath = ReportTemplatesPath)
         {
             db = applicationDbContext;
             this.isolateController = isolateController;
+            this.templatePath = templatePath;
         }
 
         public ActionResult Isolate(int? id)
@@ -93,8 +95,8 @@ namespace HaemophilusWeb.Controllers
 
         private void AddReportTemplatesToViewBag()
         {
-            var templatePath = Server.MapPath(ReportTemplatesPath);
-            var lister = new FileLister(templatePath, ".docx");
+            var mappedTemplatePath = Server.MapPath(templatePath);
+            var lister = new FileLister(mappedTemplatePath, ".docx");
             ViewBag.ReportTemplates = lister.Files;
             ViewBag.PreliminaryReportMarker = ConfigurationManager.AppSettings["PreliminaryReportMarker"];
         }

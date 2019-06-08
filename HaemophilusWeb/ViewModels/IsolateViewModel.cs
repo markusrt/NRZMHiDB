@@ -38,14 +38,14 @@ namespace HaemophilusWeb.ViewModels
         {
             get
             {
-                PropertyInfo[] properties = GetType().GetProperties();
+                var properties = GetType().GetProperties();
                 foreach (
-                    PropertyInfo typingProperty in
+                    var typingProperty in
                         properties.Where(p => p.PropertyType == typeof (TestResult) && p.Name != "BetaLactamase"
                                               && p.Name != "Oxidase"))
                 {
                     var value = (TestResult) typingProperty.GetValue(this);
-                    string name = GetDisplayName(typingProperty);
+                    var name = GetDisplayName(typingProperty);
                     if (value != TestResult.NotDetermined)
                     {
                         yield return new Typing {Attribute = name, Value = EnumEditor.GetEnumDescription(value)};
@@ -141,7 +141,7 @@ namespace HaemophilusWeb.ViewModels
             {
                 return
                     EpsilometerTestViewModels.Where(e => e.EucastClinicalBreakpointId != null && e.Measurement.HasValue)
-                        .Select(CreateEpsilometerTestReportModel);
+                        .Select(EpsilometerTestReportModel.CreateFromViewModel);
             }
         }
 
@@ -161,36 +161,6 @@ namespace HaemophilusWeb.ViewModels
             return displayAttribute == null ? member.Name : displayAttribute.Name;
         }
 
-        private EpsilometerTestReportModel CreateEpsilometerTestReportModel(
-            EpsilometerTestViewModel epsilometerTestViewModel)
-        {
-            var reportModel = new EpsilometerTestReportModel
-            {
-                Antibiotic = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Antibiotic),
-                Measurement = FloatToString(epsilometerTestViewModel.Measurement),
-                Result = EnumEditor.GetEnumDescription(epsilometerTestViewModel.Result),
-                MicBreakpointResistent = FloatToString(epsilometerTestViewModel.MicBreakpointResistent),
-                MicBreakpointSusceptible = FloatToString(epsilometerTestViewModel.MicBreakpointSusceptible),
-                ValidFromYear = epsilometerTestViewModel.ValidFromYear.ToString(),
-            };
-            if (epsilometerTestViewModel.Result == EpsilometerTestResult.NotDetermined)
-            {
-                reportModel.MicBreakpointResistent = "---";
-                reportModel.MicBreakpointSusceptible = "---";
-                reportModel.ValidFromYear = "---";
-            }
-            return reportModel;
-        }
-
-        private static string FloatToString(float? number)
-        {
-            if (!number.HasValue)
-            {
-                return string.Empty;
-            }
-            return Math.Round(number.Value, 3).ToString(CultureInfo.CurrentCulture);
-        }
-
         private static string DoubleToString(double? value)
         {
             return value.HasValue ? DoubleToString(value.Value) : string.Empty;
@@ -200,21 +170,5 @@ namespace HaemophilusWeb.ViewModels
         {
             return Math.Round(value, 3).ToString(CultureInfo.CurrentCulture);
         }
-    }
-
-    public class Typing
-    {
-        public string Attribute { get; set; }
-        public string Value { get; set; }
-    }
-
-    public class EpsilometerTestReportModel
-    {
-        public string Antibiotic { get; set; }
-        public string Result { get; set; }
-        public string MicBreakpointSusceptible { get; set; }
-        public string MicBreakpointResistent { get; set; }
-        public string Measurement { get; set; }
-        public string ValidFromYear { get; set; }
     }
 }

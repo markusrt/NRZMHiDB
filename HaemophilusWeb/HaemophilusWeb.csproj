@@ -518,11 +518,13 @@
     <Compile Include="Validators\PatientValidator.cs" />
     <Compile Include="Validators\MeningoSendingValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
+    <Compile Include="ViewModels\EpsilometerTestReportModel.cs" />
     <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
     <Compile Include="ViewModels\IsolateViewModel.cs" />
     <Compile Include="ViewModels\MeningoIsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
     <Compile Include="ViewModels\ExportQuery.cs" />
+    <Compile Include="ViewModels\Typing.cs" />
     <Compile Include="Views\Utils\AutoCompleteUtils.cs" />
     <Compile Include="Views\Utils\BootstrapEditor.cs" />
     <Compile Include="Views\Utils\EnumEditor.cs" />

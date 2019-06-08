@@ -33,23 +33,17 @@
         <dd>@Html.DisplayFor(model => model.LaboratoryNumberWithPrefix)</dd>
         <dt>@Html.DisplayNameFor(model => model.SamplingLocation)</dt>
         <dd>@Html.DisplayFor(model => model.SamplingLocation)</dd>
-        @*<dt>@Html.DisplayNameFor(model => model.Patient)</dt>
-        <dd>@Html.DisplayFor(model => model.Patient)</dd>*@
+        <dt>@Html.DisplayNameFor(model => model.Patient)</dt>
+        <dd>@Html.DisplayFor(model => model.Patient)</dd>
     </dl>
     <dl class="dl-horizontal">
-        @*<dt>@Html.DisplayNameFor(model => model.Evaluation)</dt>
-        <dd>@EnumEditor.GetEnumDescription(Model.Evaluation)</dd>*@
         <dt>@Html.DisplayNameFor(model => model.Agglutination)</dt>
         <dd>@EnumEditor.GetEnumDescription(Model.Agglutination)</dd>
-        @*<dt>@Html.DisplayNameFor(model => model.SerotypePcr)</dt>
-        <dd>@EnumEditor.GetEnumDescription(Model.SerotypePcr)</dd>
-        <dt>@Html.DisplayNameFor(model => model.BexA)</dt>
-        <dd>@EnumEditor.GetEnumDescription(Model.BexA)</dd>
-        <dt>@Html.DisplayNameFor(model => model.BetaLactamase)</dt>
-        <dd>@EnumEditor.GetEnumDescription(Model.BetaLactamase)</dd>*@
+        <dt>@Html.DisplayNameFor(model => model.SerogroupPcr)</dt>
+        <dd>@EnumEditor.GetEnumDescription(Model.SerogroupPcr)</dd>
     </dl>
 
-    @*@if (Model.ETests.Any())
+    @if (Model.ETests.Any())
     {
         <dl class="dl-horizontal">
             @foreach (var etest in Model.ETests)
@@ -60,7 +54,8 @@
         </dl>
     }
 
-    <dl class="dl-horizontal">
+    @* TODO *@
+    @*<dl class="dl-horizontal">
         <dt>@Html.DisplayNameFor(model => model.InterpretationPreliminary)</dt>
         <dd>@Html.DisplayFor(model => model.InterpretationPreliminary)</dd>
         <dt>@Html.DisplayNameFor(model => model.Interpretation)</dt>
@@ -79,7 +74,7 @@
         <dt>E-Mail</dt>
         <dd id="healthOfficeEmail"></dd>
         <dt></dt>
-       @* <dd><br/>@Html.ActionLink("Gesundheitsamt bearbeiten", "Edit", "HealthOffices", new { postalCode = Model.PatientPostalCode }, new { @class = "btn btn-sm btn-info disabled", id="editHealthOfficeButton" })</dd>*@
+        <dd><br/>@Html.ActionLink("Gesundheitsamt bearbeiten", "Edit", "HealthOffices", new { postalCode = Model.PatientPostalCode }, new { @class = "btn btn-sm btn-info disabled", id="editHealthOfficeButton" })</dd>
     </dl>
 </div>
 <div class="clearfix"></div>
@@ -136,7 +131,7 @@
             if (preliminary) {
                 interpretation = "InterpretationPreliminary";
             }
-            if (false)//documentData[interpretation].indexOf("Diskrepant") > -1)
+            if (false)//documentData[interpretation].indexOf("Diskrepant") > -1) TODO
             {
                 $("#discrepantResultsModal").modal("show");
             }
@@ -167,15 +162,16 @@
             {
                 doc.setTags(documentData);
                 doc.applyTags();
-                doc.output({ name: "@("KL " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")", type:"blob" });
-                var url = "@Url.Content("~/Report/ReportGenerated/")";
+                @* TODO Replace MZ and KL with Database Prefix *@
+                doc.output({ name: "@("MZ " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")", type:"blob" });
+                var url = "@Url.Content("~/MeningoReport/ReportGenerated/")";
                 $.post(url, { id: @Model.MeningoIsolateId, preliminary: preliminary } );
             });
         }
 
         $(document).ready(function () {
             var url = "@Url.Content("~/Report/QueryHealthOffice/")";
-            $.post(url, { postalCode: "91301" }, @*@Model.PatientPostalCode*@
+            $.post(url, { postalCode: "@Model.PatientPostalCode" },
                 function (data) {
                     if (data['error']) {
                         console.log("Error querying RKI-Tool: " + data['error'].description);

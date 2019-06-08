@@ -27,22 +27,31 @@ namespace HaemophilusWeb.Automapper
             destination.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
             destination.PatientAgeAtSampling = source.PatientAge();
             destination.EpsilometerTestViewModels = EpsilometerTestsModelToViewModel(source.EpsilometerTests);
-            //destination.SamplingDate = source.Sending.SamplingDate.ToReportFormat();
-            //destination.ReceivingDate = source.Sending.ReceivingDate.ToReportFormat();
-            //destination.Patient = source.Sending.Patient.ToReportFormat();
-            //destination.PatientBirthDate = source.Sending.Patient.BirthDate.ToReportFormat();
-            //destination.PatientPostalCode = source.Sending.Patient.PostalCode;
-            //destination.SenderLaboratoryNumber = source.Sending.SenderLaboratoryNumber;
+
+            //Report fields
+            destination.SamplingDate = source.Sending.SamplingDate.ToReportFormat();
+            destination.ReceivingDate = source.Sending.ReceivingDate.ToReportFormat();
+            destination.Patient = source.Sending.Patient.ToReportFormat();
+            destination.PatientBirthDate = source.Sending.Patient.BirthDate.ToReportFormat();
+            destination.PatientPostalCode = source.Sending.Patient.PostalCode;
+            destination.SenderLaboratoryNumber = source.Sending.SenderLaboratoryNumber;
+
             //destination.EvaluationString = source.Evaluation.ToReportFormat();
+            destination.SerogroupPcrString = EnumEditor.GetEnumDescription(source.SerogroupPcr);
+
             //var interpretationResult = IsolateInterpretation.Interpret(source);
             //destination.Interpretation = interpretationResult.Interpretation;
             //destination.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
             //destination.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
 
-            //var sender = db.Senders.Find(source.Sending.SenderId);
-            //destination.SenderName = sender.Name;
-            //destination.SenderStreet = sender.StreetWithNumber;
-            //destination.SenderCity = $"{sender.PostalCode} {sender.City}";
+            var sender = db.Senders.Find(source.Sending.SenderId);
+            if (sender != null) // special case for Meningo as old senders were not imported
+            {
+                destination.SenderName = sender.Name;
+                destination.SenderStreet = sender.StreetWithNumber;
+                destination.SenderCity = $"{sender.PostalCode} {sender.City}";
+            }
+
         }
 
         public void Process(MeningoIsolateViewModel source, MeningoIsolate destination)

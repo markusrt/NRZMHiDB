@@ -178,6 +178,7 @@ namespace HaemophilusWeb.Controllers
             {
                 x.MeningoSendingId,
                 x.Isolate.MeningoIsolateId,
+                x.Isolate.ReportStatus,
                 x.Isolate.ReportDate,
                 x.Patient.Initials,
                 x.Patient.BirthDate,
@@ -213,7 +214,7 @@ namespace HaemophilusWeb.Controllers
                     Invasive = EnumEditor.GetEnumDescription(invasive),
                     LaboratoryNumber = x.Year * 10000 + x.YearlySequentialIsolateNumber,
                     LaboratoryNumberString = laboratoryNumber,
-                    ReportGenerated = x.ReportDate.HasValue,
+                    ReportStatus = x.ReportStatus,
                     PatientPostalCode = x.PatientPostalCode,
                     SenderPostalCode = x.SenderPostalCode,
                     SenderLaboratoryNumber = x.SenderLaboratoryNumber,
