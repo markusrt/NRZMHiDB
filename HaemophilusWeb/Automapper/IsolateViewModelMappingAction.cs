@@ -10,6 +10,8 @@ namespace HaemophilusWeb.Automapper
 {
     public class IsolateViewModelMappingAction : IsolateViewModelMappingActionBase, IMappingAction<Isolate, IsolateViewModel>, IMappingAction<IsolateViewModel, Isolate>
     {
+        //TODO eventually refactor and move this to base class
+        private readonly IsolateInterpretation isolateInterpretation = new IsolateInterpretation();
 
         public IsolateViewModelMappingAction() : base(DatabaseType.Haemophilus)
         {
@@ -32,7 +34,7 @@ namespace HaemophilusWeb.Automapper
             destination.PatientPostalCode = source.Sending.Patient.PostalCode;
             destination.SenderLaboratoryNumber = source.Sending.SenderLaboratoryNumber;
             destination.EvaluationString = source.Evaluation.ToReportFormat();
-            var interpretationResult = IsolateInterpretation.Interpret(source);
+            var interpretationResult = isolateInterpretation.Interpret(source);
             destination.Interpretation = interpretationResult.Interpretation;
             destination.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
             destination.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;

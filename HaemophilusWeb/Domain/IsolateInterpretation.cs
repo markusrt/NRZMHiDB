@@ -4,7 +4,7 @@ using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Domain
 {
-    public static class IsolateInterpretation
+    public class IsolateInterpretation
     {
         private const string DisclaimerTemplate =
             "Der Nachweis von Haemophilus influenzae aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: {0}.";
@@ -28,7 +28,7 @@ namespace HaemophilusWeb.Domain
             SerotypeAgg.F
         };
 
-        public static InterpretationResult Interpret(IsolateBase isolate)
+        public InterpretationResult Interpret(IsolateBase isolate)
         {
             var serotypePcr = isolate.SerotypePcr;
             var serotypePcrDescription = EnumEditor.GetEnumDescription(serotypePcr);

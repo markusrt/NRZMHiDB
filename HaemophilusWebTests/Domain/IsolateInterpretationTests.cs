@@ -6,12 +6,14 @@ namespace HaemophilusWeb.Domain
 {
     public class IsolateInterpretationTests
     {
+        private readonly IsolateInterpretation isolateInterpretation = new IsolateInterpretation();
+
         [Test]
         public void Interpret_EmptyIsolate_IsUndetermined()
         {
             var isolate = new IsolateBase();
 
-            var interpretation = IsolateInterpretation.Interpret(isolate);
+            var interpretation = isolateInterpretation.Interpret(isolate);
 
             interpretation.Interpretation.Should().Contain("Diskrepante Ergebnisse");
             interpretation.InterpretationDisclaimer.Should().BeEmpty();
@@ -43,7 +45,7 @@ namespace HaemophilusWeb.Domain
                 BexA = TestResult.Positive
             };
 
-            var interpretation = IsolateInterpretation.Interpret(isolate);
+            var interpretation = isolateInterpretation.Interpret(isolate);
 
             var expectedInterpretation = string.Format("Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {0} (Hi{0}).",
                 serotypeString);
@@ -73,7 +75,7 @@ namespace HaemophilusWeb.Domain
                 BexA = TestResult.NotDetermined
             };
 
-            var interpretation = IsolateInterpretation.Interpret(isolate);
+            var interpretation = isolateInterpretation.Interpret(isolate);
 
             var expectedInterpretationPreliminary = string.Format("Das Ergebnis spricht für eine Infektion mit Haemophilus influenzae des Serotyp {0} (Hi{0}).",
                 serotypeString);
@@ -102,7 +104,7 @@ namespace HaemophilusWeb.Domain
                 BexA = TestResult.Negative
             };
 
-            var interpretation = IsolateInterpretation.Interpret(isolate);
+            var interpretation = isolateInterpretation.Interpret(isolate);
             var expectedInterpretation = $"Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren Haemophilus influenzae (NTHi). Ein vorhandener genetischer Kapsellocus für Polysaccharide des Serotyps {serotypeString} wird nicht exprimiert.";
             interpretation.Interpretation.Should().Be(expectedInterpretation);
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
@@ -120,7 +122,7 @@ namespace HaemophilusWeb.Domain
                 BexA = TestResult.NotDetermined
             };
 
-            var interpretation = IsolateInterpretation.Interpret(isolate);
+            var interpretation = isolateInterpretation.Interpret(isolate);
 
             var expectedInterpretation = "Das Ergebnis spricht für einen nicht-typisierbaren Haemophilus influenzae (NTHi).";
             interpretation.Interpretation.Should().Be(expectedInterpretation + " Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.");
@@ -139,7 +141,7 @@ namespace HaemophilusWeb.Domain
                 BexA = TestResult.Negative
             };
 
-            var interpretation = IsolateInterpretation.Interpret(isolate);
+            var interpretation = isolateInterpretation.Interpret(isolate);
 
             interpretation.Interpretation.Should().Contain("nicht-typisierbar");
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
