@@ -41,11 +41,6 @@ namespace HaemophilusWeb.ViewModels
         {
             get
             {
-                yield return new Typing
-                {
-                    Attribute = "Serogenogruppe",
-                    Value = EnumUtils.GetEnumDescription<MeningoSerogroupPcr>(SerogroupPcr)
-                };
                 if (SerogroupPcr != MeningoSerogroupPcr.NotDetermined && Agglutination == MeningoSerogroupAgg.NotDetermined)
                 {
                     yield return new Typing
