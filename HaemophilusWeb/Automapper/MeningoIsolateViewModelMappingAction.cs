@@ -37,7 +37,6 @@ namespace HaemophilusWeb.Automapper
             destination.SenderLaboratoryNumber = source.Sending.SenderLaboratoryNumber;
 
             //destination.EvaluationString = source.Evaluation.ToReportFormat();
-            destination.SerogroupPcrString = EnumEditor.GetEnumDescription(source.SerogroupPcr);
 
             //var interpretationResult = IsolateInterpretation.Interpret(source);
             //destination.Interpretation = interpretationResult.Interpretation;

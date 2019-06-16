@@ -41,38 +41,104 @@ namespace HaemophilusWeb.ViewModels
         {
             get
             {
-                var properties = GetType().GetProperties();
-                foreach (
-                    var typingProperty in
-                        properties.Where(p => p.PropertyType == typeof(TestResult) && p.Name != "BetaLactamase"
-                                              && p.Name != "Oxidase"))
+                yield return new Typing
                 {
-                    var value = (TestResult)typingProperty.GetValue(this);
-                    var name = GetDisplayName(typingProperty);
-                    if (value != TestResult.NotDetermined)
+                    Attribute = "Serogenogruppe",
+                    Value = EnumUtils.GetEnumDescription<MeningoSerogroupPcr>(SerogroupPcr)
+                };
+                if (SerogroupPcr != MeningoSerogroupPcr.NotDetermined && Agglutination == MeningoSerogroupAgg.NotDetermined)
+                {
+                    yield return new Typing
                     {
-                        yield return new Typing { Attribute = name, Value = EnumEditor.GetEnumDescription(value) };
+                        Attribute = "Serogenogruppe",
+                        Value = EnumUtils.GetEnumDescription<MeningoSerogroupPcr>(SerogroupPcr)
+                    };
+                }
+                if (Agglutination != MeningoSerogroupAgg.NotDetermined)
+                {
+                    var value = EnumUtils.GetEnumDescription<MeningoSerogroupAgg>(Agglutination);
+                    if (Agglutination == MeningoSerogroupAgg.Auto)
+                    {
+                        value = "Autoagglutination";
+                    }
+                    else if (Agglutination == MeningoSerogroupAgg.Poly)
+                    {
+                        value = "Polyagglutination";
+                    }
+                    yield return new Typing
+                    {
+                        Attribute = "Serogruppe",
+                        Value = value
+                    };
+                    if ((Agglutination == MeningoSerogroupAgg.Auto || Agglutination == MeningoSerogroupAgg.Poly) && SerogroupPcr != MeningoSerogroupPcr.NotDetermined)
+                    {
+                        yield return new Typing
+                        {
+                            Attribute = "Neisseria meningitidis",
+                            Value = $"Serogenogruppe {EnumUtils.GetEnumDescription<MeningoSerogroupPcr>(SerogroupPcr)}"
+                        };
                     }
                 }
-                if (ApiNh == UnspecificTestResult.Determined)
+                if (PorAPcr == NativeMaterialTestResult.Positive)
                 {
-                    yield return
-                        new Typing
-                        {
-                            Attribute = "api NH",
-                            Value = string.Format("{0}, {1}%", ApiNhBestMatch, DoubleToString(ApiNhMatchInPercent))
-                        };
+                    yield return new Typing
+                    {
+                        Attribute = "PorA-Sequenztyp",
+                        Value = $"{PorAVr1}, {PorAVr2}"
+                    };
                 }
-                if (MaldiTof == UnspecificTestResult.Determined)
+                if (FetAPcr == NativeMaterialTestResult.Positive)
                 {
-                    yield return
-                        new Typing
+                    yield return new Typing
+                    {
+                        Attribute = "FetA-Sequenztyp",
+                        Value = $"{FetAVr}"
+                    };
+                }
+                if (GrowthOnMartinLewisAgar == Growth.No && GrowthOnBloodAgar == Growth.ATypicalGrowth)
+                {
+                    yield return new Typing
+                    {
+                        Attribute = "Wachstum auf Martin-Lewis-Agar",
+                        Value = EnumUtils.GetEnumDescription<Growth>(GrowthOnMartinLewisAgar)
+                    };
+                    yield return new Typing
+                    {
+                        Attribute = "Wachstum auf Blutagar",
+                        Value = EnumUtils.GetEnumDescription<Growth>(GrowthOnBloodAgar)
+                    };
+                    if (Onpg != TestResult.NotDetermined)
+                    {
+                        yield return new Typing
                         {
-                            Attribute = "MALDI-TOF",
-                            Value =
-                                string.Format("{0}, {1}", MaldiTofBestMatch,
-                                    DoubleToString(MaldiTofMatchConfidence))
+                            Attribute = "β-Galaktosidase",
+                            Value = EnumUtils.GetEnumDescription<TestResult>(Onpg)
                         };
+                    }
+                    if (GammaGt != TestResult.NotDetermined)
+                    {
+                        yield return new Typing
+                        {
+                            Attribute = "γ-Glutamyltransferase",
+                            Value = EnumUtils.GetEnumDescription<TestResult>(GammaGt)
+                        };
+                    }
+                    if (MaldiTof != UnspecificTestResult.NotDetermined)
+                    {
+                        yield return new Typing
+                        {
+                            Attribute = "MALDI-TOF (VITEK MS)",
+                            Value = MaldiTofBestMatch
+                        };
+                    }
+                }
+                if (GrowthOnBloodAgar == Growth.No)
+                {
+                    yield return new Typing
+                    {
+                        Attribute = "Wachstum auf Martin-Lewis-Agar",
+                        Value = EnumUtils.GetEnumDescription<Growth>(GrowthOnMartinLewisAgar)
+                    };
                 }
             }
         }
@@ -89,7 +155,6 @@ namespace HaemophilusWeb.ViewModels
         public string SenderLaboratoryNumber { get; set; }
 
         public string EvaluationString { get; set; }
-        public string SerogroupPcrString { get; set; }
 
         [Display(Name = "Befund")]
         public string Interpretation { get; set; }
