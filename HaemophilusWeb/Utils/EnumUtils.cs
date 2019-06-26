@@ -160,27 +160,36 @@ namespace HaemophilusWeb.Utils
 
         public static string GetEnumDescription<TEnum>(object enumValue)
         {
-            var value = enumValue.ToString();
             var enumType = GetEnumType<TEnum>();
-            if (enumType == typeof (object))
+            return GetEnumDescription(enumType, enumValue);
+        }
+
+        public static string GetEnumDescription(Type enumType, object enumValue)
+        {
+            var value = enumValue.ToString();
+            if (enumType == typeof(object))
             {
                 enumType = GetEnumType(enumValue.GetType());
             }
+
             if (enumValue is int)
             {
                 value = Enum.GetName(enumType, enumValue);
             }
+
             if (value == null)
             {
                 return enumValue.ToString();
             }
+
             var field = (enumType.IsNullableType() ? PrimitiveHelper.GetTypeOfNullable(enumType) : enumType).GetField(value);
             if (field == null)
             {
                 return value;
             }
+
             var attributes =
-                (DescriptionAttribute[]) field.GetCustomAttributes(typeof (DescriptionAttribute), false);
+                (DescriptionAttribute[]) field.GetCustomAttributes(typeof(DescriptionAttribute), false);
             return (attributes.Length > 0) ? attributes[0].Description : value;
         }
 

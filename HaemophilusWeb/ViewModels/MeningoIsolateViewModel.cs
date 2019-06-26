@@ -37,106 +37,8 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Patientenalter bei Entnahme")]
         public int PatientAgeAtSampling { get; set; }
 
-        public IEnumerable<Typing> Typings
-        {
-            get
-            {
-                if (SerogroupPcr != MeningoSerogroupPcr.NotDetermined && Agglutination == MeningoSerogroupAgg.NotDetermined)
-                {
-                    yield return new Typing
-                    {
-                        Attribute = "Serogenogruppe",
-                        Value = EnumUtils.GetEnumDescription<MeningoSerogroupPcr>(SerogroupPcr)
-                    };
-                }
-                if (Agglutination != MeningoSerogroupAgg.NotDetermined)
-                {
-                    var value = EnumUtils.GetEnumDescription<MeningoSerogroupAgg>(Agglutination);
-                    if (Agglutination == MeningoSerogroupAgg.Auto)
-                    {
-                        value = "Autoagglutination";
-                    }
-                    else if (Agglutination == MeningoSerogroupAgg.Poly)
-                    {
-                        value = "Polyagglutination";
-                    }
-                    yield return new Typing
-                    {
-                        Attribute = "Serogruppe",
-                        Value = value
-                    };
-                    if ((Agglutination == MeningoSerogroupAgg.Auto || Agglutination == MeningoSerogroupAgg.Poly) && SerogroupPcr != MeningoSerogroupPcr.NotDetermined)
-                    {
-                        yield return new Typing
-                        {
-                            Attribute = "Neisseria meningitidis",
-                            Value = $"Serogenogruppe {EnumUtils.GetEnumDescription<MeningoSerogroupPcr>(SerogroupPcr)}"
-                        };
-                    }
-                }
-                if (PorAPcr == NativeMaterialTestResult.Positive)
-                {
-                    yield return new Typing
-                    {
-                        Attribute = "PorA-Sequenztyp",
-                        Value = $"{PorAVr1}, {PorAVr2}"
-                    };
-                }
-                if (FetAPcr == NativeMaterialTestResult.Positive)
-                {
-                    yield return new Typing
-                    {
-                        Attribute = "FetA-Sequenztyp",
-                        Value = $"{FetAVr}"
-                    };
-                }
-                if (GrowthOnMartinLewisAgar == Growth.No && GrowthOnBloodAgar == Growth.ATypicalGrowth)
-                {
-                    yield return new Typing
-                    {
-                        Attribute = "Wachstum auf Martin-Lewis-Agar",
-                        Value = EnumUtils.GetEnumDescription<Growth>(GrowthOnMartinLewisAgar)
-                    };
-                    yield return new Typing
-                    {
-                        Attribute = "Wachstum auf Blutagar",
-                        Value = EnumUtils.GetEnumDescription<Growth>(GrowthOnBloodAgar)
-                    };
-                    if (Onpg != TestResult.NotDetermined)
-                    {
-                        yield return new Typing
-                        {
-                            Attribute = "β-Galaktosidase",
-                            Value = EnumUtils.GetEnumDescription<TestResult>(Onpg)
-                        };
-                    }
-                    if (GammaGt != TestResult.NotDetermined)
-                    {
-                        yield return new Typing
-                        {
-                            Attribute = "γ-Glutamyltransferase",
-                            Value = EnumUtils.GetEnumDescription<TestResult>(GammaGt)
-                        };
-                    }
-                    if (MaldiTof != UnspecificTestResult.NotDetermined)
-                    {
-                        yield return new Typing
-                        {
-                            Attribute = "MALDI-TOF (VITEK MS)",
-                            Value = MaldiTofBestMatch
-                        };
-                    }
-                }
-                if (GrowthOnBloodAgar == Growth.No)
-                {
-                    yield return new Typing
-                    {
-                        Attribute = "Wachstum auf Martin-Lewis-Agar",
-                        Value = EnumUtils.GetEnumDescription<Growth>(GrowthOnMartinLewisAgar)
-                    };
-                }
-            }
-        }
+        public IEnumerable<Typing> Typings { get; set; }
+        
 
         public string SenderName { get; set; }
         public string SenderStreet { get; set; }
@@ -172,22 +74,6 @@ namespace HaemophilusWeb.ViewModels
                     EpsilometerTestViewModels.Where(e => e.EucastClinicalBreakpointId != null && e.Measurement.HasValue)
                         .Select(EpsilometerTestReportModel.CreateFromViewModel);
             }
-        }
-
-        private static string GetDisplayName(MemberInfo member)
-        {
-            var displayAttribute = member.GetCustomAttribute<DisplayAttribute>();
-            return displayAttribute == null ? member.Name : displayAttribute.Name;
-        }
-
-        private static string DoubleToString(double? value)
-        {
-            return value.HasValue ? DoubleToString(value.Value) : string.Empty;
-        }
-
-        private static string DoubleToString(double value)
-        {
-            return Math.Round(value, 3).ToString(CultureInfo.CurrentCulture);
         }
     }
 }

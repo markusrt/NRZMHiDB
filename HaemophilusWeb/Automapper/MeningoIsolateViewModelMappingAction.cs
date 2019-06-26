@@ -38,10 +38,10 @@ namespace HaemophilusWeb.Automapper
 
             //destination.EvaluationString = source.Evaluation.ToReportFormat();
 
-            //var interpretationResult = IsolateInterpretation.Interpret(source);
-            //destination.Interpretation = interpretationResult.Interpretation;
-            //destination.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
-            //destination.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            isolateInterpretation.Interpret(source);
+            destination.Interpretation = isolateInterpretation.Identification;
+            destination.Typings = isolateInterpretation.Typings;
 
             var sender = db.Senders.Find(source.Sending.SenderId);
             if (sender != null) // special case for Meningo as old senders were not imported

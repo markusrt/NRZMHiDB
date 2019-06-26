@@ -1,0 +1,49 @@
+{
+  "StemInterpretation_01": {
+    "SendingInvasive": 0,
+    "GrowthOnBloodAgar": 0,
+    "GrowthOnMartinLewisAgar": 0,
+    "Oxidase": 0,
+    "Agglutination": 0,
+    "Onpg": 0,
+    "GammaGt": 0,
+    "SerogroupPcr": 0,
+    "MaldiTof": 0,
+    "PorAPcr": 0,
+    "FetAPcr": 0
+  },
+  "StemInterpretation_02": {
+    "SendingInvasive": 1,
+    "GrowthOnBloodAgar": 0,
+    "GrowthOnMartinLewisAgar": 0,
+    "Oxidase": 0,
+    "Agglutination": 0,
+    "Onpg": 0,
+    "GammaGt": 0,
+    "MaldiTof": 0,
+    "PorAPcr": 2,
+    "FetAPcr": 2
+  },
+  "StemInterpretation_03": {
+    "SendingInvasive": 0,
+    "GrowthOnBloodAgar": 2,
+    "GrowthOnMartinLewisAgar": 0,
+    "Agglutination": 0,
+    "SerogroupPcr": 0,
+    "MaldiTof": 0,
+    "PorAPcr": 0,
+    "FetAPcr": 0
+  },
+  "StemInterpretation_04": {
+    "SendingInvasive": 1,
+    "GrowthOnBloodAgar": 2,
+    "GrowthOnMartinLewisAgar": 0,
+    "Agglutination": 0,
+    "Onpg": 1,
+    "GammaGt": 1,
+    "SerogroupPcr": 0,
+    "MaldiTof": 1,
+    "PorAPcr": 0,
+    "FetAPcr": 0
+  }
+}

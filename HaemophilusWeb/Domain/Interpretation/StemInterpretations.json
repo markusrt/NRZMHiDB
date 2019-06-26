@@ -1,0 +1,6 @@
+{
+  "StemInterpretation_01": "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten.",
+  "StemInterpretation_02": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr}.\nDer von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich. Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten.",
+  "StemInterpretation_03": "Kein Nachweis von Neisseria meningitidis.",
+  "StemInterpretation_04": "Kein Nachweis von Neisseria meningitidis."
+}
