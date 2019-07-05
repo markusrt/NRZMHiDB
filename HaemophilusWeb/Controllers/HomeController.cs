@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 07, 5), "Ergänzung des Hinweis auf Meldepflicht bei NTHi Teilbefunden.", ChangeType.Bug),
                 new Change(new DateTime(2019, 03, 26), "Erweiterung der Interpretationssätze um Einsendungen die kein Haemophilus influenzae sind", ChangeType.Feature),
                 new Change(new DateTime(2019, 01, 08), "Entfernung der fehlerhaften Warnung bei Teilbefunden", ChangeType.Bug),
                 new Change(new DateTime(2019, 01, 07), "Update der Postleitzahl Abfrage", ChangeType.Feature),

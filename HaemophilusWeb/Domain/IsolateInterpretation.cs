@@ -47,15 +47,11 @@ namespace HaemophilusWeb.Domain
                     if (serotypePcr == SerotypePcr.Negative || serotypePcr == SerotypePcr.NotDetermined)
                     {
                         interpretation = TypingNotPossiblePlural;
-                        interpretationDisclaimer = string.Format(DisclaimerTemplate,
-                            "Haemophilus influenzae, unbekapselt");
                     }
                     else if (serotypePcr != SerotypePcr.NotDetermined)
                     {
                         interpretation =
                             $"{TypingNotPossiblePlural2} Ein vorhandener genetischer Kapsellocus für Polysaccharide des Serotyps {serotypePcrDescription} wird nicht exprimiert.";
-                        interpretationDisclaimer = string.Format(DisclaimerTemplate,
-                            "Haemophilus influenzae, unbekapselt");
                     }
                 }
                 else if (bexA == TestResult.NotDetermined && serotypePcr == SerotypePcr.NotDetermined)
@@ -64,6 +60,7 @@ namespace HaemophilusWeb.Domain
                     interpretation =
                         $"{TypingNotPossibleSingular} Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.";
                 }
+                interpretationDisclaimer = string.Format(DisclaimerTemplate, "Haemophilus influenzae, unbekapselt");
             }
             if (SpecificAgglutination.Contains(agglutination) && (bexA == TestResult.Positive || bexA == TestResult.NotDetermined) &&
                 (agglutination.ToString() == serotypePcr.ToString() || serotypePcr == SerotypePcr.NotDetermined))
