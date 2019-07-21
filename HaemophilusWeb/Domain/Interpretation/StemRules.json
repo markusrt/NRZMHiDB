@@ -45,5 +45,28 @@
     "MaldiTof": 1,
     "PorAPcr": 0,
     "FetAPcr": 0
+  },
+  "StemInterpretation_05": {
+    "SendingInvasive": 1,
+    "GrowthOnBloodAgar": 2,
+    "GrowthOnMartinLewisAgar": 0,
+    "Agglutination": 0,
+    "Onpg": 1,
+    "GammaGt": 2,
+    "SerogroupPcr": 0,
+    "MaldiTof": 1,
+    "PorAPcr": 0,
+    "FetAPcr": 0
+  },
+  "StemInterpretation_06": {
+    "SendingInvasive": 0,
+    "GrowthOnBloodAgar": 1,
+    "GrowthOnMartinLewisAgar": 1,
+    "Onpg": 1,
+    "GammaGt": 2,
+    "SerogroupPcr": 0,
+    "MaldiTof": 0,
+    "PorAPcr": 0,
+    "FetAPcr": 0
   }
 }

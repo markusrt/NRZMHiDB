@@ -40,7 +40,7 @@ namespace HaemophilusWeb.Automapper
 
             var isolateInterpretation = new MeningoIsolateInterpretation();
             isolateInterpretation.Interpret(source);
-            destination.Interpretation = isolateInterpretation.Identification;
+            destination.Interpretation = isolateInterpretation.Result.Interpretation;
             destination.Typings = isolateInterpretation.Typings;
 
             var sender = db.Senders.Find(source.Sending.SenderId);

@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Utils;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Domain
@@ -71,9 +72,11 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Identification.Should().Be("Neisseria meningitidis");
-            isolateInterpretation.Result.Interpretation.Should().Contain(" Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C.");
+
+            isolateInterpretation.Result.Interpretation.Should().Contain("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C.");
             isolateInterpretation.Result.Interpretation.Should().Contain("konnte nicht angezüchtet werden");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Serogenogruppe" && t.Value == "C");
             isolateInterpretation.Typings.Should().Contain(t =>
@@ -103,16 +106,17 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Identification.Should().BeNull();
-            isolateInterpretation.Result.Interpretation.Should().Be("Kein Nachweis von Neisseria meningitidis.");
+            isolateInterpretation.Result.Interpretation.Should().Contain("Kein Nachweis von Neisseria meningitidis.");
+            isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Wachstum auf Blutagar" && t.Value == "atypisches Wachstum");
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Wachstum auf Martin-Lewis-Agar" && t.Value == "Nein");
         }
 
-        [Test]
-        public void IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation()
+        [TestCase(TestResult.Negative)]
+        [TestCase(TestResult.Positive)]
+        public void IsolateMatchingStemRule4And5_ReturnsCorrespondingInterpretation(TestResult gammaGtTestResult)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -123,7 +127,7 @@ namespace HaemophilusWeb.Domain
                 Oxidase = TestResult.Negative,
                 Agglutination = MeningoSerogroupAgg.NotDetermined,
                 Onpg = TestResult.Negative,
-                GammaGt = TestResult.Negative,
+                GammaGt = gammaGtTestResult,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
                 MaldiTof = UnspecificTestResult.Determined,
                 MaldiTofBestMatch = "N. gonorrhoeae",
@@ -133,14 +137,42 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Identification.Should().BeNull();
-            isolateInterpretation.Result.Interpretation.Should().Be("Kein Nachweis von Neisseria meningitidis.");
+            isolateInterpretation.Result.Interpretation.Should().Contain("Kein Nachweis von Neisseria meningitidis.");
+            isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "β-Galaktosidase" && t.Value == "negativ");
             isolateInterpretation.Typings.Should().Contain(t =>
-                t.Attribute == "γ-Glutamyltransferase" && t.Value == "negativ");
+                t.Attribute == "γ-Glutamyltransferase" && t.Value == EnumUtils.GetEnumDescription(typeof(TestResult), gammaGtTestResult));
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "MALDI-TOF (VITEK MS)" && t.Value == "N. gonorrhoeae");
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule6_ReturnsCorrespondingInterpretation()
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = MeningoSerogroupAgg.X,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Positive,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            isolateInterpretation.Interpret(isolate);
+
+            isolateInterpretation.Result.Interpretation.Should().BeEmpty();
+            isolateInterpretation.Typings.Should().Contain(
+                t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "Serogruppe" && t.Value == "X");
         }
     }
 }

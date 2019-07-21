@@ -32,6 +32,8 @@ namespace HaemophilusWeb.Domain
             {"StemInterpretation_02", new[] {"Serogenogroup", "PorA", "FetA"}},
             {"StemInterpretation_03", new[] { "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar"}},
             {"StemInterpretation_04", new[] { "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof"}},
+            {"StemInterpretation_05", new[] { "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof"}},
+            {"StemInterpretation_06", new[] { "Agglutination"}},
         };
 
         private Dictionary<string, Typing> TypingTemplates = new Dictionary<string, Typing>
@@ -92,6 +94,13 @@ namespace HaemophilusWeb.Domain
                     Value = "{MaldiTofBestMatch}"
                 }
             },
+            {
+                "Agglutination", new Typing
+                {
+                    Attribute = "Serogruppe",
+                    Value = "{Agglutination:enum()}"
+                }
+            },
         };
 
         private readonly List<Typing> typings = new List<Typing>();
@@ -99,17 +108,14 @@ namespace HaemophilusWeb.Domain
         public IEnumerable<Typing> Typings => typings;
 
         public InterpretationResult Result { get; private set; } = new InterpretationResult();
-        public string Identification { get; private set; }
 
         public void Interpret(MeningoIsolate isolate)
         {
             typings.Clear();
-            Identification = null;
-
 
             Result = new InterpretationResult
             {
-                Interpretation = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."
+                Interpretation = "Interpretation: Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."
             };
 
             var matchingRule = StemInterpretationRules.FirstOrDefault(r => CheckRule(r.Value, isolate));
@@ -118,8 +124,13 @@ namespace HaemophilusWeb.Domain
             {
                 Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
                 Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
-                Identification = StemIdentifications[matchingRule.Key];
-                Result.Interpretation = Smart.Format(StemInterpretations[matchingRule.Key], isolate);
+                if (!string.IsNullOrEmpty(StemIdentifications[matchingRule.Key]))
+                {
+                    typings.Add(new Typing {Attribute = "Identifikation", Value = StemIdentifications[matchingRule.Key] });
+                }
+
+                var interpretation = StemInterpretations[matchingRule.Key];
+                Result.Interpretation = !string.IsNullOrEmpty(interpretation) ? "Interpretation: " + Smart.Format(interpretation, isolate) : string.Empty;
 
                 if (StemTypings.ContainsKey(matchingRule.Key))
                 {
@@ -151,13 +162,13 @@ namespace HaemophilusWeb.Domain
                 && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
                 && rule.GrowthOnMartinLewisAgar == isolate.GrowthOnMartinLewisAgar
                 && (!rule.Oxidase.HasValue || rule.Oxidase == isolate.Oxidase)
-                && rule.Agglutination == isolate.Agglutination
+                && (!rule.Agglutination.HasValue || rule.Agglutination == isolate.Agglutination)
                 && (!rule.Onpg.HasValue || rule.Onpg == isolate.Onpg)
                 && (!rule.GammaGt.HasValue || rule.GammaGt == isolate.GammaGt)
                 && (!rule.SerogroupPcr.HasValue || rule.SerogroupPcr == isolate.SerogroupPcr)
                 && (!rule.MaldiTof.HasValue || rule.MaldiTof == isolate.MaldiTof)
-                && rule.PorAPcr == isolate.PorAPcr
-                && rule.FetAPcr == isolate.FetAPcr;
+                && (!rule.PorAPcr.HasValue || rule.PorAPcr == isolate.PorAPcr)
+                && (!rule.FetAPcr.HasValue || rule.FetAPcr == isolate.FetAPcr);
         }
     }
 
@@ -169,13 +180,13 @@ namespace HaemophilusWeb.Domain
         public Growth GrowthOnBloodAgar { get; set; }
         public Growth GrowthOnMartinLewisAgar { get; set; }
         public TestResult? Oxidase { get; set; }
-        public MeningoSerogroupAgg Agglutination { get; set; }
+        public MeningoSerogroupAgg? Agglutination { get; set; }
         public TestResult? Onpg { get; set; }
         public TestResult? GammaGt { get; set;  }
         public MeningoSerogroupPcr? SerogroupPcr { get; set; }
         public UnspecificTestResult? MaldiTof { get; set; }
-        public NativeMaterialTestResult PorAPcr { get; set; }
-        public NativeMaterialTestResult FetAPcr { get; set; }
+        public NativeMaterialTestResult? PorAPcr { get; set; }
+        public NativeMaterialTestResult? FetAPcr { get; set; }
     }
 
     public class EnumFormatter : IFormatter
