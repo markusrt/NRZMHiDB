@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using HaemophilusWeb.Migrations;
-using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
 using Newtonsoft.Json;
 using SmartFormat;
-using SmartFormat.Core.Extensions;
 using SmartFormat.Core.Settings;
 
 namespace HaemophilusWeb.Domain
@@ -22,86 +21,7 @@ namespace HaemophilusWeb.Domain
 
         private static readonly Dictionary<string, StemInterpretationRule> StemInterpretationRules = DeserializeFromResource<Dictionary<string, StemInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.StemRules.json");
         
-        private Dictionary<string, string> StemInterpretations = DeserializeFromResource<Dictionary<string, string>>("HaemophilusWeb.Domain.Interpretation.StemInterpretations.json");
-
-        private Dictionary<string, string> StemIdentifications = DeserializeFromResource<Dictionary<string, string>>("HaemophilusWeb.Domain.Interpretation.StemIdentifications.json");
-       
-
-        private Dictionary<string, string[]> StemTypings = new Dictionary<string, string[]>
-        {
-            {"StemInterpretation_02", new[] {"Serogenogroup", "PorA", "FetA"}},
-            {"StemInterpretation_03", new[] { "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar"}},
-            {"StemInterpretation_04", new[] { "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof"}},
-            {"StemInterpretation_05", new[] { "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof"}},
-            {"StemInterpretation_06", new[] { "Agglutination"}},
-        };
-
-        private Dictionary<string, Typing> TypingTemplates = new Dictionary<string, Typing>
-        {
-            {
-                "Serogenogroup", new Typing
-                {
-                    Attribute = "Serogenogruppe",
-                    Value = "{SerogroupPcr}"
-                }
-            },
-            {
-                "PorA", new Typing
-                {
-                    Attribute = "PorA - Sequenztyp",
-                    Value = "{PorAVr1}, {PorAVr2}"
-                }
-            },
-            {
-                "FetA", new Typing
-                {
-                    Attribute = "FetA - Sequenztyp",
-                    Value = "{FetAVr}"
-                }
-            },
-            {
-                "GrowthOnBloodAgar", new Typing
-                {
-                    Attribute = "Wachstum auf Blutagar",
-                    Value = "{GrowthOnBloodAgar:enum()}"
-                }
-            },
-            {
-                "GrowthOnMartinLewisAgar", new Typing
-                {
-                    Attribute = "Wachstum auf Martin-Lewis-Agar",
-                    Value = "{GrowthOnMartinLewisAgar:enum()}"
-                }
-            },
-            {
-                "Onpg", new Typing
-                {
-                    Attribute = "β-Galaktosidase",
-                    Value = "{Onpg:enum()}"
-                }
-            },
-            {
-                "GammaGt", new Typing
-                {
-                    Attribute = "γ-Glutamyltransferase",
-                    Value = "{GammaGt:enum()}"
-                }
-            },
-            {
-                "MaldiTof", new Typing
-                {
-                    Attribute = "MALDI-TOF (VITEK MS)",
-                    Value = "{MaldiTofBestMatch}"
-                }
-            },
-            {
-                "Agglutination", new Typing
-                {
-                    Attribute = "Serogruppe",
-                    Value = "{Agglutination:enum()}"
-                }
-            },
-        };
+        private static readonly Dictionary<string, Typing> TypingTemplates = DeserializeFromResource<Dictionary<string, Typing>>("HaemophilusWeb.Domain.Interpretation.TypingTemplates.json");
 
         private readonly List<Typing> typings = new List<Typing>();
 
@@ -122,27 +42,25 @@ namespace HaemophilusWeb.Domain
             
             if (matchingRule.Key != null)
             {
+                var rule = matchingRule.Value;
                 Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
                 Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
-                if (!string.IsNullOrEmpty(StemIdentifications[matchingRule.Key]))
+                if (!string.IsNullOrEmpty(rule.Identification))
                 {
-                    typings.Add(new Typing {Attribute = "Identifikation", Value = StemIdentifications[matchingRule.Key] });
+                    typings.Add(new Typing {Attribute = "Identifikation", Value = rule.Identification });
                 }
 
-                var interpretation = StemInterpretations[matchingRule.Key];
+                var interpretation = rule.Interpretation;
                 Result.Interpretation = !string.IsNullOrEmpty(interpretation) ? "Interpretation: " + Smart.Format(interpretation, isolate) : string.Empty;
 
-                if (StemTypings.ContainsKey(matchingRule.Key))
+                foreach (var typingTemplateKey in rule.Typings)
                 {
-                    foreach (var typingTemplateKey in StemTypings[matchingRule.Key])
+                    var template = TypingTemplates[typingTemplateKey];
+                    typings.Add(new Typing
                     {
-                        var template = TypingTemplates[typingTemplateKey];
-                        typings.Add(new Typing
-                        {
-                            Attribute = template.Attribute,
-                            Value = Smart.Format(template.Value, isolate)
-                        });
-                    }
+                        Attribute = template.Attribute,
+                        Value = Smart.Format(template.Value, isolate)
+                    });
                 }
             }
         }
@@ -169,41 +87,6 @@ namespace HaemophilusWeb.Domain
                 && (!rule.MaldiTof.HasValue || rule.MaldiTof == isolate.MaldiTof)
                 && (!rule.PorAPcr.HasValue || rule.PorAPcr == isolate.PorAPcr)
                 && (!rule.FetAPcr.HasValue || rule.FetAPcr == isolate.FetAPcr);
-        }
-    }
-
-    
-
-    class StemInterpretationRule
-    {
-        public YesNo? SendingInvasive { get; set; }
-        public Growth GrowthOnBloodAgar { get; set; }
-        public Growth GrowthOnMartinLewisAgar { get; set; }
-        public TestResult? Oxidase { get; set; }
-        public MeningoSerogroupAgg? Agglutination { get; set; }
-        public TestResult? Onpg { get; set; }
-        public TestResult? GammaGt { get; set;  }
-        public MeningoSerogroupPcr? SerogroupPcr { get; set; }
-        public UnspecificTestResult? MaldiTof { get; set; }
-        public NativeMaterialTestResult? PorAPcr { get; set; }
-        public NativeMaterialTestResult? FetAPcr { get; set; }
-    }
-
-    public class EnumFormatter : IFormatter
-    {
-        public string[] Names { get; set; } = { "enum" };
-
-        public bool TryEvaluateFormat(IFormattingInfo formattingInfo)
-        {
-            var currentValue = formattingInfo.CurrentValue;
-            var type = formattingInfo.CurrentValue.GetType();
-            var iCanHandleThisInput = type.IsEnum;
-            if (!iCanHandleThisInput)
-                return false;
-
-            formattingInfo.Write(EnumUtils.GetEnumDescription(type, currentValue));
-
-            return true;
         }
     }
 }

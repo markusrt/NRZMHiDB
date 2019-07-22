@@ -234,9 +234,11 @@
     <Compile Include="Controllers\SenderController.cs" />
     <Compile Include="Controllers\SendingController.cs" />
     <Compile Include="App_Start\ExceptionLogger.cs" />
+    <Compile Include="Utils\EnumFormatter.cs" />
     <Compile Include="Domain\IsolateExtensions.cs" />
     <Compile Include="Domain\MeningoIsolateInterpretation.cs" />
     <Compile Include="Domain\IsolateInterpretation.cs" />
+    <Compile Include="Domain\StemInterpretationRule.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -630,8 +632,7 @@
     <Content Include="Database\Readme.md" />
     <Content Include="Database\restore_to_test.bat" />
     <EmbeddedResource Include="Domain\Interpretation\StemRules.json" />
-    <EmbeddedResource Include="Domain\Interpretation\StemInterpretations.json" />
-    <EmbeddedResource Include="Domain\Interpretation\StemIdentifications.json" />
+    <EmbeddedResource Include="Domain\Interpretation\TypingTemplates.json" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -1,0 +1,46 @@
+{
+  "Serogenogroup": {
+    "Attribute": "Serogenogruppe",
+    "Value": "{SerogroupPcr}"
+  },
+  "PorA": {
+    "Attribute": "PorA - Sequenztyp",
+    "Value": "{PorAVr1}, {PorAVr2}"
+  },
+  "FetA": {
+    "Attribute": "FetA - Sequenztyp",
+    "Value": "{FetAVr}"
+  },
+  "GrowthOnBloodAgar": {
+    "Attribute": "Wachstum auf Blutagar",
+    "Value": "{GrowthOnBloodAgar:enum()}"
+  },
+  "GrowthOnMartinLewisAgar": {
+    "Attribute": "Wachstum auf Martin-Lewis-Agar",
+    "Value": "{GrowthOnMartinLewisAgar:enum()}"
+  },
+  "Onpg": {
+    "Attribute": "β-Galaktosidase",
+    "Value": "{Onpg:enum()}"
+  },
+  "GammaGt": {
+    "Attribute": "γ-Glutamyltransferase",
+    "Value": "{GammaGt:enum()}"
+  },
+  "MaldiTof": {
+    "Attribute": "MALDI-TOF (VITEK MS)",
+    "Value": "{MaldiTofBestMatch}"
+  },
+  "Agglutination": {
+    "Attribute": "Serogruppe",
+    "Value": "{Agglutination:enum()}"
+  },
+  "AgglutinationAuto": {
+    "Attribute": "Serogruppe",
+    "Value": "Autoagglutination (Autoagglutination deutet auf unbekapselte Meningokokken hin.)"
+  },
+  "AgglutinationPoly": {
+    "Attribute": "Serogruppe",
+    "Value": "Polyagglutination (Polyagglutination deutet auf unbekapselte Meningokokken hin.)"
+  }
+}

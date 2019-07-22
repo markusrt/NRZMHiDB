@@ -94,7 +94,6 @@ namespace HaemophilusWeb.Domain
                 GrowthOnBloodAgar = Growth.ATypicalGrowth,
                 GrowthOnMartinLewisAgar = Growth.No,
                 Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
-                Oxidase = TestResult.Positive,
                 Agglutination = MeningoSerogroupAgg.NotDetermined,
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
@@ -173,6 +172,70 @@ namespace HaemophilusWeb.Domain
                 t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Serogruppe" && t.Value == "X");
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule7_ReturnsCorrespondingInterpretation()
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = InvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = MeningoSerogroupAgg.E,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Positive,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            isolateInterpretation.Interpret(isolate);
+
+            isolateInterpretation.Result.Interpretation.Should().Contain("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe E.");
+            isolateInterpretation.Typings.Should().Contain(
+                t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "Serogruppe" && t.Value == "E");
+        }
+
+        [TestCase(MeningoSerogroupAgg.Auto)]
+        [TestCase(MeningoSerogroupAgg.Poly)]
+        public void IsolateMatchingStemRule8And9_ReturnsCorrespondingInterpretation(MeningoSerogroupAgg agglutination)
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = InvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = agglutination,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Positive,
+                SerogroupPcr = MeningoSerogroupPcr.WY,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.Positive,
+                FetAPcr = NativeMaterialTestResult.Positive,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z"
+            };
+
+            isolateInterpretation.Interpret(isolate);
+
+            isolateInterpretation.Result.Interpretation.Should().Contain("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y.");
+            isolateInterpretation.Typings.Should().Contain(
+                t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "Serogruppe" && t.Value.Contains(agglutination.ToString()));
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "PorA - Sequenztyp" && t.Value == "X, Y");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
         }
     }
 }
