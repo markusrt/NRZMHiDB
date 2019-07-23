@@ -1,7 +1,11 @@
 {
   "Serogenogroup": {
     "Attribute": "Serogenogruppe",
-    "Value": "{SerogroupPcr}"
+    "Value": "{SerogroupPcr:enum()}"
+  },
+  "SerogenogroupBiomolecular": {
+    "Attribute": "Serogenogruppe",
+    "Value": "{SerogroupPcr:enum()} (Die Serogruppe wurde molekularbiologisch bestimmt.)"
   },
   "PorA": {
     "Attribute": "PorA - Sequenztyp",
@@ -35,12 +39,20 @@
     "Attribute": "Serogruppe",
     "Value": "{Agglutination:enum()}"
   },
-  "AgglutinationAuto": {
+  "AgglutinationAutoInvasive": {
     "Attribute": "Serogruppe",
     "Value": "Autoagglutination (Autoagglutination deutet auf unbekapselte Meningokokken hin.)"
   },
-  "AgglutinationPoly": {
+  "AgglutinationPolyInvasive": {
     "Attribute": "Serogruppe",
     "Value": "Polyagglutination (Polyagglutination deutet auf unbekapselte Meningokokken hin.)"
+  },
+  "AgglutinationAutoNonInvasive": {
+    "Attribute": "Serogruppe",
+    "Value": "Autoagglutination (Nicht-invasive Meningokokken sind oft unbekapselt, was zu unspezifischem Agglutinationsverhalten führt.)"
+  },
+  "AgglutinationPolyNonInvasive": {
+    "Attribute": "Serogruppe",
+    "Value": "Polyagglutination (Nicht-invasive Meningokokken sind oft unbekapselt, was zu unspezifischem Agglutinationsverhalten führt.)"
   }
 }
