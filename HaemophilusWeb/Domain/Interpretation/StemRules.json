@@ -143,7 +143,7 @@
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
     "Interpretation": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
-    "Typings": [ "AgglutinationAutoInvasive", "PorA", "FetA" ]
+    "Typings": [ "AgglutinationAutoInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ]
   },
   "StemInterpretation_09": {
     "SendingInvasive": "Yes",
@@ -158,7 +158,7 @@
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
     "Interpretation": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
-    "Typings": [ "AgglutinationPolyInvasive", "PorA", "FetA" ]
+    "Typings": [ "AgglutinationPolyInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ]
   },
   "StemInterpretation_10": {
     "SendingInvasive": "No",

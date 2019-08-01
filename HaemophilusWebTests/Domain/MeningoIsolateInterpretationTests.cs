@@ -233,6 +233,8 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Serogruppe" && t.Value.Contains(agglutination.ToString()) && !t.Value.Contains("Nicht-invasiv"));
             isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "Serogenogruppe" && t.Value.Contains("W/Y") && t.Value.Contains("molekularbiologisch bestimmt"));
+            isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "PorA - Sequenztyp" && t.Value == "X, Y");
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
