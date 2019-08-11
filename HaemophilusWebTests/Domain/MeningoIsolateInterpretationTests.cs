@@ -342,5 +342,33 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
         }
+
+        [Test]
+        public void IsolateMatchingNativeMaterialRule1_ReturnsCorrespondingInterpretation()
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                CsbPcr = NativeMaterialTestResult.Positive,
+                CscPcr = NativeMaterialTestResult.Negative,
+                CswyPcr = NativeMaterialTestResult.Negative,
+                PorAPcr = NativeMaterialTestResult.Positive,
+                FetAPcr = NativeMaterialTestResult.Positive,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z"
+            };
+
+            isolateInterpretation.Interpret(isolate);
+
+            isolateInterpretation.Result.Interpretation.Should().Contain("Interpretation: Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe B.");
+            isolateInterpretation.Result.Interpretation.Should().Contain("Interpretation: Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe B.");
+            isolateInterpretation.Typings.Should().Contain(
+                t => t.Attribute == "Molekulare Typisierung" && t.Value == "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "PorA - Sequenztyp" && t.Value == "X, Y");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
+        }
     }
 }

@@ -1,0 +1,16 @@
+{
+  "NativeMaterialInterpretation_01": {
+    "CsbPcr": "Positive",
+    "CscPcr": "Negative",
+    "CswyPcr": "Negative",
+    "CswyAllele": 0,
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "RibosomalRna16S": "NotDetermined",
+    "RealTimePcr": "NotDetermined",
+    "RealTimePcrResult": 0,
+    "MolecularTyping": "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.",
+    "Interpretation": "Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe B.\nDer Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B.",
+    "Typings": [ "PorA", "FetA" ]
+  }
+}

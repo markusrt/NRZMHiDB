@@ -26,7 +26,7 @@
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Interpretation": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr}.\nDer von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich. Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten.",
+    "Interpretation": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.\nDer von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich. Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten.",
     "Typings": [ "Serogenogroup", "PorA", "FetA" ]
   },
   "StemInterpretation_03": {

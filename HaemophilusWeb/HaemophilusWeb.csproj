@@ -234,6 +234,7 @@
     <Compile Include="Controllers\SenderController.cs" />
     <Compile Include="Controllers\SendingController.cs" />
     <Compile Include="App_Start\ExceptionLogger.cs" />
+    <Compile Include="Domain\NativeMaterialInterpretationRule.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
     <Compile Include="Domain\IsolateExtensions.cs" />
     <Compile Include="Domain\MeningoIsolateInterpretation.cs" />
@@ -633,6 +634,7 @@
     <Content Include="Database\restore_to_test.bat" />
     <EmbeddedResource Include="Domain\Interpretation\StemRules.json" />
     <EmbeddedResource Include="Domain\Interpretation\TypingTemplates.json" />
+    <EmbeddedResource Include="Domain\Interpretation\NativeMaterialRules.json" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

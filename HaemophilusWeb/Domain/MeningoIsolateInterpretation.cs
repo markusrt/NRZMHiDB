@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using HaemophilusWeb.Migrations;
+using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
@@ -20,6 +21,7 @@ namespace HaemophilusWeb.Domain
         }
 
         private static readonly Dictionary<string, StemInterpretationRule> StemInterpretationRules = DeserializeFromResource<Dictionary<string, StemInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.StemRules.json");
+        private static readonly Dictionary<string, NativeMaterialInterpretationRule> NativeMaterialInterpretationRules = DeserializeFromResource<Dictionary<string, NativeMaterialInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.NativeMaterialRules.json");
         
         private static readonly Dictionary<string, Typing> TypingTemplates = DeserializeFromResource<Dictionary<string, Typing>>("HaemophilusWeb.Domain.Interpretation.TypingTemplates.json");
 
@@ -38,8 +40,51 @@ namespace HaemophilusWeb.Domain
                 Interpretation = "Interpretation: Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."
             };
 
-            var matchingRule = StemInterpretationRules.FirstOrDefault(r => CheckRule(r.Value, isolate));
-            
+            if (isolate.CsbPcr != NativeMaterialTestResult.NotDetermined && isolate.CscPcr != NativeMaterialTestResult.NotDetermined)
+            {
+                RunNativeMaterialInterpretation(isolate);
+            }
+            else
+            {
+                RunStemInterpretation(isolate);
+            }
+        }
+
+        private void RunNativeMaterialInterpretation(MeningoIsolate isolate)
+        {
+            var matchingRule = NativeMaterialInterpretationRules.FirstOrDefault(r => CheckNativeMaterialRule(r.Value, isolate));
+
+            if (matchingRule.Key != null)
+            {
+                var rule = matchingRule.Value;
+                Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
+                Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
+                if (!string.IsNullOrEmpty(rule.MolecularTyping))
+                {
+                    typings.Add(new Typing { Attribute = "Molekulare Typisierung", Value = rule.MolecularTyping });
+                }
+
+                var interpretation = rule.Interpretation;
+                Result.Interpretation = !string.IsNullOrEmpty(interpretation)
+                    ? "Interpretation: " + Smart.Format(interpretation, isolate)
+                    : string.Empty;
+
+                foreach (var typingTemplateKey in rule.Typings)
+                {
+                    var template = TypingTemplates[typingTemplateKey];
+                    typings.Add(new Typing
+                    {
+                        Attribute = template.Attribute,
+                        Value = Smart.Format(template.Value, isolate)
+                    });
+                }
+            }
+        }
+
+        private void RunStemInterpretation(MeningoIsolate isolate)
+        {
+            var matchingRule = StemInterpretationRules.FirstOrDefault(r => CheckStemRule(r.Value, isolate));
+
             if (matchingRule.Key != null)
             {
                 var rule = matchingRule.Value;
@@ -47,11 +92,13 @@ namespace HaemophilusWeb.Domain
                 Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
                 if (!string.IsNullOrEmpty(rule.Identification))
                 {
-                    typings.Add(new Typing {Attribute = "Identifikation", Value = rule.Identification });
+                    typings.Add(new Typing {Attribute = "Identifikation", Value = rule.Identification});
                 }
 
                 var interpretation = rule.Interpretation;
-                Result.Interpretation = !string.IsNullOrEmpty(interpretation) ? "Interpretation: " + Smart.Format(interpretation, isolate) : string.Empty;
+                Result.Interpretation = !string.IsNullOrEmpty(interpretation)
+                    ? "Interpretation: " + Smart.Format(interpretation, isolate)
+                    : string.Empty;
 
                 foreach (var typingTemplateKey in rule.Typings)
                 {
@@ -74,7 +121,21 @@ namespace HaemophilusWeb.Domain
             }
         }
 
-        private bool CheckRule(StemInterpretationRule rule, MeningoIsolate isolate)
+        private bool CheckNativeMaterialRule(NativeMaterialInterpretationRule rule, MeningoIsolate isolate)
+        {
+            return rule.CsbPcr == isolate.CsbPcr
+                   && rule.CscPcr == isolate.CscPcr
+                   && rule.CswyPcr == isolate.CswyPcr
+                   && rule.CswyAllele == isolate.CswyAllele
+                   && rule.PorAPcr == isolate.PorAPcr
+                   && rule.FetAPcr == isolate.FetAPcr
+                   && rule.RibosomalRna16S == isolate.RibosomalRna16S
+                   && rule.RibosomalRna16SBestMatch == isolate.RibosomalRna16SBestMatch
+                   && rule.RealTimePcr == isolate.RealTimePcr
+                   && rule.RealTimePcrResult == isolate.RealTimePcrResult;
+        }
+
+        private bool CheckStemRule(StemInterpretationRule rule, MeningoIsolate isolate)
         {
             return rule.SendingInvasive == isolate.Sending?.Invasive
                 && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
