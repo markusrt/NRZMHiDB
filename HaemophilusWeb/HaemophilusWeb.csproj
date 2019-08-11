@@ -664,10 +664,13 @@
     <Content Include="Scripts\DataTables\datetime-moment.js" />
     <Content Include="Scripts\DataTables\jquery.dataTables.js" />
     <Content Include="Scripts\DataTables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\docxtemplater.js" />
     <Content Include="Scripts\moment-with-locales.js" />
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\pizzip-utils.js" />
+    <Content Include="Scripts\pizzip.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.german.js" />
     <Content Include="ReportTemplates\BLNAR v8.docx" />

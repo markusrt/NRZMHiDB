@@ -150,6 +150,10 @@
             DoCreateReport(templateFile, preliminary, signer);;
         });
 
+        function loadFile(url, callback) {
+            PizZipUtils.getBinaryContent(url, callback);
+        }
+
         function DoCreateReport(templateFile, preliminary, signer)
         {
             documentData["Signer"] = signer;
@@ -158,12 +162,30 @@
                 documentData["Typing-"+typing.Attribute] = typing.Value;
             });
 
-            new DocxGen().loadFromFile(templateFile, { async: true, intelligentTagging: true }).success(function(doc)
-            {
-                doc.setTags(documentData);
-                doc.applyTags();
+            loadFile(templateFile,function(error,content){
+                if (error) { throw error };
+                var zip = new PizZip(content);
+                var doc = new window.Docxtemplater().loadZip(zip);
+                doc.setData(documentData);
+                try {
+                    doc.render();
+                }
+                catch (error) {
+                    var e = {
+                        message: error.message,
+                        name: error.name,
+                        stack: error.stack,
+                        properties: error.properties,
+                    }
+                    console.log(JSON.stringify({error: e}));
+                    throw error;
+                }
+                var out = doc.getZip().generate({
+                    type: "blob",
+                    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                }); //Output the document using Data-URI
                 @* TODO Replace MZ and KL with Database Prefix *@
-                doc.output({ name: "@("MZ " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")", type:"blob" });
+                saveAs(out, "@("MZ " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")");
                 var url = "@Url.Content("~/MeningoReport/ReportGenerated/")";
                 $.post(url, { id: @Model.MeningoIsolateId, preliminary: preliminary } );
             });

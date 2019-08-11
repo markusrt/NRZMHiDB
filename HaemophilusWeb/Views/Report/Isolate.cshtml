@@ -155,6 +155,10 @@
             DoCreateReport(templateFile, preliminary, signer);;
         });
 
+        function loadFile(url,callback){
+            PizZipUtils.getBinaryContent(url,callback);
+        }
+
         function DoCreateReport(templateFile, preliminary, signer)
         {
             documentData["Signer"] = signer;
@@ -163,14 +167,40 @@
                 documentData["Typing-"+typing.Attribute] = typing.Value;
             });
 
-            new DocxGen().loadFromFile(templateFile, { async: true, intelligentTagging: true }).success(function(doc)
+            loadFile(templateFile,function(error,content){
+                if (error) { throw error };
+                var zip = new PizZip(content);
+                var doc = new window.docxtemplater().loadZip(zip);
+                doc.setData(documentData);
+                try {
+                    doc.render();
+                }
+                catch (error) {
+                    var e = {
+                        message: error.message,
+                        name: error.name,
+                        stack: error.stack,
+                        properties: error.properties,
+                    }
+                    console.log(JSON.stringify({error: e}));
+                    throw error;
+                }
+                var out = doc.getZip().generate({
+                    type: "blob",
+                    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                }); //Output the document using Data-URI
+                saveAs(out, "@("KL " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")");
+                $.post(url, { id: @Model.IsolateId, preliminary: preliminary } );
+            });
+
+            @*new DocxGen().loadFromFile(templateFile, { async: true, intelligentTagging: true }).success(function(doc)
             {
                 doc.setTags(documentData);
                 doc.applyTags();
                 doc.output({ name: "@("KL " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")", type:"blob" });
                 var url = "@Url.Content("~/Report/ReportGenerated/")";
                 $.post(url, { id: @Model.IsolateId, preliminary: preliminary } );
-            });
+            });*@
         }
 
         $(document).ready(function () {

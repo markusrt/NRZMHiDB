@@ -43,9 +43,10 @@ namespace HaemophilusWeb
 
             bundles.Add(new ScriptBundle("~/bundles/docxgen")
                 .Include("~/Scripts/base64.js")
-                .Include("~/Scripts/jszip.js")
+                .Include("~/Scripts/pizzip.js")
+                .Include("~/Scripts/pizzip-utils.js")
                 .Include("~/Scripts/FileSaver.js")
-                .Include("~/Scripts/docxgen.js"));
+                .Include("~/Scripts/docxtemplater.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
