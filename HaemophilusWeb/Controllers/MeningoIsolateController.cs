@@ -89,8 +89,7 @@ namespace HaemophilusWeb.Controllers
                     }
                     if (Request.Form["secondary-submit"] != null)
                     {
-                        //TODO Fix Meningo Isolate Report
-                        return RedirectToAction("Isolate", "Report", new {id = isolateViewModel.MeningoIsolateId});
+                        return RedirectToAction("Isolate", "MeningoReport", new {id = isolateViewModel.MeningoIsolateId});
                     }
                 }
                 catch (DbUpdateException e)
