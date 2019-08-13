@@ -1,7 +1,12 @@
-﻿using FluentAssertions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
+using FluentAssertions.Collections;
+using FluentAssertions.Primitives;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
+using HaemophilusWeb.ViewModels;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Domain
@@ -343,14 +348,15 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
         }
 
-        [Test]
-        public void IsolateMatchingNativeMaterialRule1_ReturnsCorrespondingInterpretation()
+        [TestCase("B")]
+        [TestCase("C")]
+        public void IsolateMatchingNativeMaterialRule1Or2_ReturnsCorrespondingInterpretation(string serogroup)
         {
-            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
             {
-                CsbPcr = NativeMaterialTestResult.Positive,
-                CscPcr = NativeMaterialTestResult.Negative,
+                CsbPcr = "B" == serogroup ? NativeMaterialTestResult.Positive : NativeMaterialTestResult.Negative,
+                CscPcr = "C" == serogroup ? NativeMaterialTestResult.Positive : NativeMaterialTestResult.Negative,
                 CswyPcr = NativeMaterialTestResult.Negative,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
@@ -359,16 +365,87 @@ namespace HaemophilusWeb.Domain
                 FetAVr = "Z"
             };
 
-            isolateInterpretation.Interpret(isolate);
+            interpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Interpretation.Should().Contain("Interpretation: Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe B.");
-            isolateInterpretation.Result.Interpretation.Should().Contain("Interpretation: Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe B.");
-            isolateInterpretation.Typings.Should().Contain(
-                t => t.Attribute == "Molekulare Typisierung" && t.Value == "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.");
-            isolateInterpretation.Typings.Should().Contain(t =>
+            interpretation.Result.Interpretation.Should().Contain($"Interpretation: Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}.");
+            interpretation.Result.InterpretationDisclaimer.Should().NotBeEmpty();
+            interpretation.Result.InterpretationDisclaimer.Should().Contain($"Serogruppe {serogroup}");
+            interpretation.Typings.Should().Contain(
+                t => t.Attribute == "Molekulare Typisierung" && t.Value == $"Das Serogruppe-{serogroup}-spezifische cs{serogroup.ToLower()}-Gen wurde nachgewiesen.");
+            interpretation.Typings.Should().Contain(t =>
                 t.Attribute == "PorA - Sequenztyp" && t.Value == "X, Y");
-            isolateInterpretation.Typings.Should().Contain(t =>
+            interpretation.Typings.Should().Contain(t =>
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
+        }
+
+        [TestCase("W", "csw", "")]
+        [TestCase("Y", "csy", "")]
+        [TestCase("W/Y", "csw/csy", "n")]
+        public void IsolateMatchingNativeMaterialRule34Or5_ReturnsCorrespondingInterpretation(string serogroup, string gen, string plural)
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                CsbPcr = NativeMaterialTestResult.Negative,
+                CscPcr = NativeMaterialTestResult.Negative,
+                CswyPcr = NativeMaterialTestResult.Positive,
+                PorAPcr = NativeMaterialTestResult.Positive,
+                FetAPcr = NativeMaterialTestResult.Positive,
+                CswyAllele = "W".Equals(serogroup) ? CswyAllel.Allele1 : "Y".Equals(serogroup) ? CswyAllel.Allele2 : CswyAllel.Allele3,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z"
+            };
+
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Interpretation.Should().Contain($"Interpretation: Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}.");
+            interpretation.Result.InterpretationDisclaimer.Should().NotBeEmpty();
+            interpretation.Result.InterpretationDisclaimer.Should().Contain($"Serogruppe {serogroup}");
+            interpretation.TypingAttribute("Molekulare Typisierung")
+                .Should().Be($"Das Serogruppe{plural}-{serogroup}-spezifische {gen}-Gen wurde nachgewiesen.");
+            interpretation.TypingAttribute("PorA - Sequenztyp").Should().Be("X, Y");
+            interpretation.TypingAttribute("FetA - Sequenztyp").Should().Be("Z");
+        }
+
+        [TestCase(NativeMaterialTestResult.Negative, 0, "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.")]
+        [TestCase(NativeMaterialTestResult.Positive, RealTimePcrResult.NeisseriaMeningitidis, "Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.")]
+        public void IsolateMatchingNativeMaterialRule6Or2_ReturnsCorrespondingInterpretation(NativeMaterialTestResult realTimePcr, RealTimePcrResult realTimePcrResult, string realTimePcrInterpretation)
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                CsbPcr = NativeMaterialTestResult.Negative,
+                CscPcr = NativeMaterialTestResult.Negative,
+                CswyPcr = NativeMaterialTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.Negative,
+                FetAPcr = NativeMaterialTestResult.Negative,
+                RealTimePcr = realTimePcr,
+                RealTimePcrResult = realTimePcrResult
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Interpretation.Should().Contain("Kein Hinweis auf Neisseria meningitidis");
+            interpretation.Result.InterpretationDisclaimer.Should().BeEmpty();
+
+            interpretation.TypingAttribute("Molekulare Typisierung")
+                .Should().Be("Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.");
+            interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+                .Should().Be(realTimePcrInterpretation);
+            interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
+        }
+    }
+
+    static class AssertionExtensions {
+        public static string TypingAttribute(
+            this MeningoIsolateInterpretation interpretation, string attributeName)
+        {
+            var attribute = interpretation.Typings.FirstOrDefault(t => t.Attribute == attributeName);
+            attribute.Should().NotBeNull($"attribute '{attributeName}' should exist");
+            return attribute.Value;
         }
     }
 }

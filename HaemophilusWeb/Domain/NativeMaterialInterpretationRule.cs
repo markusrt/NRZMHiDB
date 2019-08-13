@@ -17,6 +17,7 @@ namespace HaemophilusWeb.Domain
         public RealTimePcrResult RealTimePcrResult { get; set; }
         public string MolecularTyping { get; set; }
         public string Interpretation { get; set; }
+        public string InterpretationDisclaimer { get; set; }
         public string[] Typings { get; set; }
     }
 }

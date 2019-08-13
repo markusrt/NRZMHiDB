@@ -58,7 +58,10 @@ namespace HaemophilusWeb.ViewModels
 
         [Display(Name = "Teilbefund")]
         public string InterpretationPreliminary { get; set; }
+
         public string InterpretationDisclaimer { get; set; }
+        public bool HasInterpretationDisclaimer => !string.IsNullOrEmpty(InterpretationDisclaimer);
+
 
         public string Date
         {

@@ -69,6 +69,10 @@ namespace HaemophilusWeb.Domain
                     ? "Interpretation: " + Smart.Format(interpretation, isolate)
                     : string.Empty;
 
+                Result.InterpretationDisclaimer = rule.InterpretationDisclaimer != null
+                    ? Smart.Format(rule.InterpretationDisclaimer, isolate)
+                    : string.Empty;
+
                 foreach (var typingTemplateKey in rule.Typings)
                 {
                     var template = TypingTemplates[typingTemplateKey];
@@ -96,6 +100,7 @@ namespace HaemophilusWeb.Domain
                 }
 
                 var interpretation = rule.Interpretation;
+                //TODO Add InterpretationDisclaimer
                 Result.Interpretation = !string.IsNullOrEmpty(interpretation)
                     ? "Interpretation: " + Smart.Format(interpretation, isolate)
                     : string.Empty;

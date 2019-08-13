@@ -15,6 +15,14 @@
     "Attribute": "FetA - Sequenztyp",
     "Value": "{FetAVr}"
   },
+  "NoPorA": {
+    "Attribute": "PorA - Sequenztyp",
+    "Value": "das porA-Gen konnte nicht amplifiziert werden"
+  },
+  "NoFetA": {
+    "Attribute": "FetA - Sequenztyp",
+    "Value": "das fetA-Gen konnte nicht amplifiziert werden"
+  },
   "GrowthOnBloodAgar": {
     "Attribute": "Wachstum auf Blutagar",
     "Value": "{GrowthOnBloodAgar:enum()}"
@@ -54,5 +62,13 @@
   "AgglutinationPolyNonInvasive": {
     "Attribute": "Serogruppe",
     "Value": "Polyagglutination (Nicht-invasive Meningokokken sind oft unbekapselt, was zu unspezifischem Agglutinationsverhalten führt.)"
+  },
+  "RealTimePCRNegative": {
+    "Attribute": "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)",
+    "Value": "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae."
+  },
+  "RealTimePCRNeisseriaMeningitidis": {
+    "Attribute": "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)",
+    "Value": "Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR."
   }
 }
