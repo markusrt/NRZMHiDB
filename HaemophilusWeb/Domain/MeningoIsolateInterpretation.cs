@@ -40,7 +40,7 @@ namespace HaemophilusWeb.Domain
                 Interpretation = "Interpretation: Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."
             };
 
-            if (isolate.CsbPcr != NativeMaterialTestResult.NotDetermined && isolate.CscPcr != NativeMaterialTestResult.NotDetermined)
+            if (isolate.Sending.Material == MeningoMaterial.NativeMaterial)
             {
                 RunNativeMaterialInterpretation(isolate);
             }

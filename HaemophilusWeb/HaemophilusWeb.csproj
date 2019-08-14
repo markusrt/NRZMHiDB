@@ -695,6 +695,7 @@
     <Content Include="ReportTemplates\Fax - Teilbefund - Serotyp v1.docx" />
     <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v1.docx" />
     <Content Include="ReportTemplates\Meningo\Untersuchungsbefund.docx" />
+    <Content Include="ReportTemplates\Meningo\Nativmaterial.docx" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />

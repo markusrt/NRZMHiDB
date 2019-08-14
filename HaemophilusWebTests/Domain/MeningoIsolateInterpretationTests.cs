@@ -20,7 +20,10 @@ namespace HaemophilusWeb.Domain
         public void EmptyIsolate_ReturnsEmptyInterpretation()
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
-            var isolate = new MeningoIsolate();
+            var isolate = new MeningoIsolate()
+            {
+                Sending = new MeningoSending()
+            };
 
             isolateInterpretation.Interpret(isolate);
 
@@ -355,6 +358,7 @@ namespace HaemophilusWeb.Domain
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
             {
+                Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
                 CsbPcr = "B" == serogroup ? NativeMaterialTestResult.Positive : NativeMaterialTestResult.Negative,
                 CscPcr = "C" == serogroup ? NativeMaterialTestResult.Positive : NativeMaterialTestResult.Negative,
                 CswyPcr = NativeMaterialTestResult.Negative,
@@ -386,6 +390,7 @@ namespace HaemophilusWeb.Domain
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
             {
+                Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
                 CsbPcr = NativeMaterialTestResult.Negative,
                 CscPcr = NativeMaterialTestResult.Negative,
                 CswyPcr = NativeMaterialTestResult.Positive,
@@ -418,6 +423,7 @@ namespace HaemophilusWeb.Domain
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
             {
+                Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
                 CsbPcr = NativeMaterialTestResult.Negative,
                 CscPcr = NativeMaterialTestResult.Negative,
                 CswyPcr = NativeMaterialTestResult.NotDetermined,
