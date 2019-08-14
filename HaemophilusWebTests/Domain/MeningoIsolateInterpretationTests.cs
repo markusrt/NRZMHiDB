@@ -411,7 +411,9 @@ namespace HaemophilusWeb.Domain
 
         [TestCase(NativeMaterialTestResult.Negative, 0, "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.")]
         [TestCase(NativeMaterialTestResult.Positive, RealTimePcrResult.NeisseriaMeningitidis, "Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.")]
-        public void IsolateMatchingNativeMaterialRule6Or2_ReturnsCorrespondingInterpretation(NativeMaterialTestResult realTimePcr, RealTimePcrResult realTimePcrResult, string realTimePcrInterpretation)
+        [TestCase(NativeMaterialTestResult.Positive, RealTimePcrResult.StreptococcusPneumoniae, "Positiv für Streptococcus pneumoniae. Der molekularbiologische Nachweis von Streptococcus pneumoniae beruht auf dem Nachweis des Pneumolysin-Gens ply mittels spezifischer Real-Time-PCR.")]
+        [TestCase(NativeMaterialTestResult.Positive, RealTimePcrResult.HaemophilusInfluenzae, "Positiv für bekapselte Haemophilus influenzae. Der molekularbiologische Nachweis von Haemophilus influenzae beruht auf dem Nachweis des Kapseltransportgens bexA mittels spezifischer Real-Time-PCR.")]
+        public void IsolateMatchingNativeMaterialRule678Or9_ReturnsCorrespondingInterpretation(NativeMaterialTestResult realTimePcr, RealTimePcrResult realTimePcrResult, string realTimePcrInterpretation)
         {
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -427,7 +429,10 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Interpretation.Should().Contain("Kein Hinweis auf Neisseria meningitidis");
+            interpretation.Result.Interpretation.Should().Contain(
+                realTimePcrResult == RealTimePcrResult.NeisseriaMeningitidis
+                    ? "Meningokokken-spezifische DNA konnte nachgewiesen werden."
+                    : "Kein Hinweis auf Neisseria meningitidis");
             interpretation.Result.InterpretationDisclaimer.Should().BeEmpty();
 
             interpretation.TypingAttribute("Molekulare Typisierung")

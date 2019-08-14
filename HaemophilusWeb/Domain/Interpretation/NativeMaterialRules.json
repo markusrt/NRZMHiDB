@@ -98,5 +98,31 @@
     "MolecularTyping": "Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.",
     "Interpretation": "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
     "Typings": [ "RealTimePCRNeisseriaMeningitidis", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_08": {
+    "CsbPcr": "Negative",
+    "CscPcr": "Negative",
+    "CswyPcr": "NotDetermined",
+    "PorAPcr": "Negative",
+    "FetAPcr": "Negative",
+    "RibosomalRna16S": "NotDetermined",
+    "RealTimePcr": "Positive",
+    "RealTimePcrResult": "StreptococcusPneumoniae",
+    "MolecularTyping": "Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
+    "Typings": [ "RealTimePCRStreptococcusPneumoniae", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_09": {
+    "CsbPcr": "Negative",
+    "CscPcr": "Negative",
+    "CswyPcr": "NotDetermined",
+    "PorAPcr": "Negative",
+    "FetAPcr": "Negative",
+    "RibosomalRna16S": "NotDetermined",
+    "RealTimePcr": "Positive",
+    "RealTimePcrResult": "HaemophilusInfluenzae",
+    "MolecularTyping": "Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
+    "Typings": [ "RealTimePCRHaemophilusInfluenzae", "NoPorA", "NoFetA" ]
   }
 }
