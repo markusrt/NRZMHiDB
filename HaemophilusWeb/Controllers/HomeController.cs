@@ -18,6 +18,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 08, 14), "Untersuchungsbefund für Meningokokken Nativmaterial, Regel 1-9", ChangeType.Feature),
                 new Change(new DateTime(2019, 08, 11), "Unterstützung von Befunden ohne Empfindlichkeitstestung", ChangeType.Feature),
                 new Change(new DateTime(2019, 07, 30), "Untersuchungsbefund für Meningokokken mit allen Interpretationen für Stämme", ChangeType.Feature),
                 new Change(new DateTime(2019, 06, 17), "Untersuchungsbefund für Meningokokken mit Teilinterpretation", ChangeType.Feature),
