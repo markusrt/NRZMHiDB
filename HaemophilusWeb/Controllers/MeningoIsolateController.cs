@@ -78,7 +78,7 @@ namespace HaemophilusWeb.Controllers
                 try
                 {
                     var isolate =
-                        db.MeningoIsolates.Include(i => i.EpsilometerTests)
+                        db.MeningoIsolates.Include(i => i.EpsilometerTests).Include(i => i.Sending)
                             .Single(i => i.MeningoIsolateId == isolateViewModel.MeningoIsolateId);
                     Mapper.Map(isolateViewModel, isolate);
                     db.MarkAsModified(isolate);

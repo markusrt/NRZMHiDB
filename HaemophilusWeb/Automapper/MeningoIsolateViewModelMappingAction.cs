@@ -51,15 +51,23 @@ namespace HaemophilusWeb.Automapper
                 destination.SenderStreet = sender.StreetWithNumber;
                 destination.SenderCity = $"{sender.PostalCode} {sender.City}";
             }
-
         }
 
         public void Process(MeningoIsolateViewModel source, MeningoIsolate destination)
         {
             ParseAndMapLaboratoryNumber(source, destination);
+            SetSendingNoGrowthAccordingToGrowthOnAgar(source, destination);
 
             destination.EpsilometerTests =
                 EpsilometerTestsViewModelToModel(source.EpsilometerTestViewModels);
+        }
+
+        private void SetSendingNoGrowthAccordingToGrowthOnAgar(MeningoIsolateViewModel source, MeningoIsolate destination)
+        {
+            if (source.GrowthOnBloodAgar == Growth.No && source.GrowthOnMartinLewisAgar == Growth.No)
+            {
+                destination.Sending.Material = MeningoMaterial.NoGrowth;
+            }
         }
     }
 }

@@ -107,6 +107,7 @@
     <Compile Include="..\HaemophilusWeb\Properties\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Automapper\MeningoIsolateViewModelMappingActionTests.cs" />
     <Compile Include="Controllers\PubMlstControllerTests.cs" />
     <Compile Include="Controllers\ReportControllerTests.cs" />
     <Compile Include="Controllers\SenderControllerTests.cs" />
