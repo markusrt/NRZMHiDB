@@ -8,6 +8,11 @@ namespace HaemophilusWeb.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult Index()
+        {
+            return View();
+        }
+
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
@@ -18,6 +23,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 08, 15, 22, 0, 0), "Meningokokken, Einsendung->Material: Kein Wachstum wird automatisch gesetzt wenn das Isolat nicht angewachsen ist", ChangeType.Feature),
+                new Change(new DateTime(2019, 08, 15, 21, 0, 0), "Untersuchungsbefund für Meningokokken Nativmaterial, Regel 10-12", ChangeType.Feature),
                 new Change(new DateTime(2019, 08, 14), "Untersuchungsbefund für Meningokokken Nativmaterial, Regel 1-9", ChangeType.Feature),
                 new Change(new DateTime(2019, 08, 11), "Unterstützung von Befunden ohne Empfindlichkeitstestung", ChangeType.Feature),
                 new Change(new DateTime(2019, 07, 30), "Untersuchungsbefund für Meningokokken mit allen Interpretationen für Stämme", ChangeType.Feature),
@@ -42,11 +49,11 @@ namespace HaemophilusWeb.Controllers
                 new Change(new DateTime(2018, 7, 25), "Anpassung des Sicherheitsprotokolles zur Kommunikation mit dem RKI Tool", ChangeType.Bug),
                 new Change(new DateTime(2018, 7, 22), "Update der Interpretationssätze für End- und Teilbefunde.", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 30), "<p>Einführung von Teilbefunden</p>" +
-                    "<p>Es gibt jetzt eine Befundvorlage mit dem Präfix \"Teilbefund -\" welche zur verwendet " +
-                    "werden kann um einem Einsender zeitnah den Serotyp mitzuteilen.</p>" +
-                    "<p>Einsendungen mit Teilbefunden werden in der Übersicht mit einem speziellen Symbol dargestellt:</p>" +
-                    "<img class='img-rounded img-responsive' src='~/Images/changes/20180703.png'/>" +
-                    "<p>Sobald einmal ein Endbefund erstellt wurde lässt sich der Zustand einer nicht mehr auf \"Teilbefund\" zurücksetzen.", ChangeType.Feature),
+                                                      "<p>Es gibt jetzt eine Befundvorlage mit dem Präfix \"Teilbefund -\" welche zur verwendet " +
+                                                      "werden kann um einem Einsender zeitnah den Serotyp mitzuteilen.</p>" +
+                                                      "<p>Einsendungen mit Teilbefunden werden in der Übersicht mit einem speziellen Symbol dargestellt:</p>" +
+                                                      "<img class='img-rounded img-responsive' src='~/Images/changes/20180703.png'/>" +
+                                                      "<p>Sobald einmal ein Endbefund erstellt wurde lässt sich der Zustand einer nicht mehr auf \"Teilbefund\" zurücksetzen.", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 26), "Bereinigung von Fehlerhaften Telefonnummern vom RKI Tool.", ChangeType.Bug),
                 new Change(new DateTime(2018, 6, 18, 22, 0, 0), "Kombinierte Eingabemaske für Patent und Einsendungen (Meningokokken).", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 16, 22, 0, 0), "Eingabemaske für Einsendungen (Meningokokken).", ChangeType.Feature),
@@ -124,13 +131,13 @@ namespace HaemophilusWeb.Controllers
                     "<p>Gelöschte Einsendern sind jedoch nur noch in der Bearbeitungsmaske von zughörigen Einsendungen sichtbar.</p>",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 10, 31), "<p>Automatische Bestimmung des zugehörigen Gesundheitsamtes</p>" +
-                    "<p>Anhand der Postleitzahl des Patienten wird über eine Hintergrundabfrage an das <a href='https://tools.rki.de/plztool/'>RKI PLZ Tool</a> " +
-                    "ermittelt, welches Gesundheitsamt zuständig ist.",
+                                                       "<p>Anhand der Postleitzahl des Patienten wird über eine Hintergrundabfrage an das <a href='https://tools.rki.de/plztool/'>RKI PLZ Tool</a> " +
+                                                       "ermittelt, welches Gesundheitsamt zuständig ist.",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 10, 21), "<p>Befundvorlagen für Fax-Versand</p>" +
-                    "<p>In der Liste der Befundvorlagen sind gibt es jetzt Einträge mit dem Prefix \"Fax\".</p>" +
-                    "<p>Die Fax-Vorlagen beinhalten neben der Empfangsbestätigung noch eine Zeile die darauf " +
-                    "hinweist, dass das Dokument ohne Unterschrift gültig ist.</p>",
+                                                       "<p>In der Liste der Befundvorlagen sind gibt es jetzt Einträge mit dem Prefix \"Fax\".</p>" +
+                                                       "<p>Die Fax-Vorlagen beinhalten neben der Empfangsbestätigung noch eine Zeile die darauf " +
+                                                       "hinweist, dass das Dokument ohne Unterschrift gültig ist.</p>",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 8, 31),
                     "<p>Unterstützung für doppelte Einsendungen eines Patienten</p>" +
@@ -247,11 +254,6 @@ namespace HaemophilusWeb.Controllers
                 new Change(new DateTime(2013, 11, 11), "Einführung des Changelogs", ChangeType.Feature),
                 new Change(new DateTime(2013, 11, 10), "Anpassung des Layouts und der Farben", ChangeType.Design),
             });
-
-        public ActionResult Index()
-        {
-            return View();
-        }
 
         public ActionResult About()
         {
