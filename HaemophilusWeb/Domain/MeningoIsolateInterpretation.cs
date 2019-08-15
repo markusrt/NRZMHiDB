@@ -135,7 +135,7 @@ namespace HaemophilusWeb.Domain
                    && rule.PorAPcr == isolate.PorAPcr
                    && rule.FetAPcr == isolate.FetAPcr
                    && rule.RibosomalRna16S == isolate.RibosomalRna16S
-                   && rule.RibosomalRna16SBestMatch == isolate.RibosomalRna16SBestMatch
+                   && (rule.RibosomalRna16SBestMatch == null || rule.RibosomalRna16SBestMatch == isolate.RibosomalRna16SBestMatch)
                    && rule.RealTimePcr == isolate.RealTimePcr
                    && rule.RealTimePcrResult == isolate.RealTimePcrResult;
         }

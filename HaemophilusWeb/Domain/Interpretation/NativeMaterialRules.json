@@ -97,6 +97,7 @@
     "RealTimePcrResult": "NeisseriaMeningitidis",
     "MolecularTyping": "Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.",
     "Interpretation": "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+    "InterpretationDisclaimer": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis.",
     "Typings": [ "RealTimePCRNeisseriaMeningitidis", "NoPorA", "NoFetA" ]
   },
   "NativeMaterialInterpretation_08": {
@@ -124,5 +125,42 @@
     "MolecularTyping": "Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.",
     "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
     "Typings": [ "RealTimePCRHaemophilusInfluenzae", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_10": {
+    "CsbPcr": "Negative",
+    "CscPcr": "Negative",
+    "CswyPcr": "NotDetermined",
+    "PorAPcr": "Negative",
+    "FetAPcr": "Negative",
+    "RibosomalRna16S": "Positive",
+    "RibosomalRna16SBestMatch": "Neisseria meningitidis",
+    "RealTimePcr": "NotDetermined",
+    "MolecularTyping": "Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+    "InterpretationDisclaimer": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis.",
+    "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_11": {
+    "CsbPcr": "Negative",
+    "CscPcr": "Negative",
+    "CswyPcr": "NotDetermined",
+    "PorAPcr": "Negative",
+    "FetAPcr": "Negative",
+    "RibosomalRna16S": "Positive",
+    "RealTimePcr": "NotDetermined",
+    "MolecularTyping": "Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
+    "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_12": {
+    "CsbPcr": "Negative",
+    "CscPcr": "Negative",
+    "CswyPcr": "NotDetermined",
+    "PorAPcr": "Negative",
+    "FetAPcr": "Negative",
+    "RibosomalRna16S": "Negative",
+    "RealTimePcr": "NotDetermined",
+    "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
+    "Typings": [ "RibosomalRna16S", "NoPorA", "NoFetA" ]
   }
 }

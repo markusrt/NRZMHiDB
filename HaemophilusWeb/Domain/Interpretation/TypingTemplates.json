@@ -78,5 +78,13 @@
   "RealTimePCRHaemophilusInfluenzae": {
     "Attribute": "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)",
     "Value": "Positiv für bekapselte Haemophilus influenzae. Der molekularbiologische Nachweis von Haemophilus influenzae beruht auf dem Nachweis des Kapseltransportgens bexA mittels spezifischer Real-Time-PCR."
+  },
+  "RibosomalRna16S": {
+    "Attribute": "16S-rDNA-Nachweis",
+    "Value": "{RibosomalRna16S:enum()}"
+  },
+  "RibosomalRna16SBestMatch": {
+    "Attribute": "Ergebnis der DNA-Sequenzierung",
+    "Value": "{RibosomalRna16SBestMatch}"
   }
 }

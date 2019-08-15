@@ -439,7 +439,15 @@ namespace HaemophilusWeb.Domain
                 realTimePcrResult == RealTimePcrResult.NeisseriaMeningitidis
                     ? "Meningokokken-spezifische DNA konnte nachgewiesen werden."
                     : "Kein Hinweis auf Neisseria meningitidis");
-            interpretation.Result.InterpretationDisclaimer.Should().BeEmpty();
+
+            if (realTimePcrResult == RealTimePcrResult.NeisseriaMeningitidis)
+            {
+                interpretation.Result.InterpretationDisclaimer.Should().NotBeEmpty();
+            }
+            else
+            {
+                interpretation.Result.InterpretationDisclaimer.Should().BeEmpty();
+            }
 
             interpretation.TypingAttribute("Molekulare Typisierung")
                 .Should().Be("Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.");
@@ -448,7 +456,72 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
         }
+
+        [TestCase(NativeMaterialTestResult.Positive, "Neisseria meningitidis", "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.")]
+        [TestCase(NativeMaterialTestResult.Positive, "Something else", "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.")]
+        public void IsolateMatchingNativeMaterialRule10or11_ReturnsCorrespondingInterpretation(NativeMaterialTestResult ribosomalRna16S, string ribosomalRna16SBestMatch, string expectedInterpretation)
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
+                CsbPcr = NativeMaterialTestResult.Negative,
+                CscPcr = NativeMaterialTestResult.Negative,
+                CswyPcr = NativeMaterialTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.Negative,
+                FetAPcr = NativeMaterialTestResult.Negative,
+                RibosomalRna16S = ribosomalRna16S,
+                RibosomalRna16SBestMatch = ribosomalRna16SBestMatch
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Interpretation.Should().Contain(expectedInterpretation);
+
+            if ("Neisseria meningitidis".Equals(ribosomalRna16SBestMatch))
+            {
+                interpretation.Result.InterpretationDisclaimer.Should().NotBeEmpty();
+            }
+            else
+            {
+                interpretation.Result.InterpretationDisclaimer.Should().BeEmpty();
+            }
+
+            interpretation.TypingAttribute("Molekulare Typisierung")
+                .Should().Be("Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.");
+            interpretation.TypingAttribute("16S-rDNA-Nachweis").Should().Be("positiv");
+            interpretation.TypingAttribute("Ergebnis der DNA-Sequenzierung").Should().Be(ribosomalRna16SBestMatch);
+            interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
+        }
+
+        [Test]
+        public void IsolateMatchingNativeMaterialRule12_ReturnsCorrespondingInterpretation()
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
+                CsbPcr = NativeMaterialTestResult.Negative,
+                CscPcr = NativeMaterialTestResult.Negative,
+                CswyPcr = NativeMaterialTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.Negative,
+                FetAPcr = NativeMaterialTestResult.Negative,
+                RibosomalRna16S = NativeMaterialTestResult.Negative
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Interpretation.Should().Contain("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.");
+            interpretation.Result.InterpretationDisclaimer.Should().BeEmpty();
+
+            interpretation.TypingAttribute("16S-rDNA-Nachweis").Should().Be("negativ");
+            interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
+        }
     }
+
+
 
     static class AssertionExtensions {
         public static string TypingAttribute(
