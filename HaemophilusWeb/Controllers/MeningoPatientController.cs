@@ -13,12 +13,16 @@ namespace HaemophilusWeb.Controllers
 {
     public class MeningoPatientController : PatientControllerBase<MeningoPatient>
     {
-        public MeningoPatientController() : this(new ApplicationDbContextWrapper(new ApplicationDbContext()))
+        private readonly GeonamesController geonamesController;
+
+        public MeningoPatientController() : this(new ApplicationDbContextWrapper(new ApplicationDbContext()), new GeonamesController())
         {
         }
 
-        public MeningoPatientController(IApplicationDbContext applicationDbContext) : base(applicationDbContext)
+        public MeningoPatientController(IApplicationDbContext applicationDbContext,
+            GeonamesController geonamesController) : base(applicationDbContext)
         {
+            this.geonamesController = geonamesController;
         }
 
         protected override IDbSet<MeningoPatient> DbSet()
@@ -44,6 +48,7 @@ namespace HaemophilusWeb.Controllers
             viewBag.PossibleOtherRiskFactors = DbSet().Where(
                     s => !string.IsNullOrEmpty(s.OtherRiskFactor)).
                 Select(s => s.OtherRiskFactor).AsDataList();
+            viewBag.Countries = geonamesController.LoadCountries();
         }
     }
 }

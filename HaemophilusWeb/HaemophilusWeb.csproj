@@ -235,6 +235,11 @@
     <Compile Include="Controllers\SendingController.cs" />
     <Compile Include="App_Start\ExceptionLogger.cs" />
     <Compile Include="Domain\NativeMaterialInterpretationRule.cs" />
+    <Compile Include="Migrations\201908152057267_Patient_Country.cs" />
+    <Compile Include="Migrations\201908152057267_Patient_Country.Designer.cs">
+      <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Country.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
     <Compile Include="Domain\IsolateExtensions.cs" />
     <Compile Include="Domain\MeningoIsolateInterpretation.cs" />
@@ -635,6 +640,10 @@
     <EmbeddedResource Include="Domain\Interpretation\StemRules.json" />
     <EmbeddedResource Include="Domain\Interpretation\TypingTemplates.json" />
     <EmbeddedResource Include="Domain\Interpretation\NativeMaterialRules.json" />
+    <Content Include="App_Data\countries.json" />
+    <EmbeddedResource Include="Migrations\201908152057267_Patient_Country.resx">
+      <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1183,9 +1192,7 @@
     <Content Include="Views\MeningoIsolate\Edit.cshtml" />
     <Content Include="Views\MeningoReport\Isolate.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config">
       <SubType>Designer</SubType>

@@ -48,5 +48,9 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Gelöscht")]
         public bool Deleted { get; set; }
+
+        //TODO Implement Country
+        //[Display(Name = "Land")]
+        //public string Country
     }
 }

@@ -13,6 +13,8 @@ namespace HaemophilusWeb.Validators
             RuleFor(p => p.Gender).NotEmpty();
             RuleFor(p => p.PostalCode).Must(BeNotEmptyIfNotOverseas)
                 .WithMessage("{PropertyName} darf nicht leer sein.");
+
+            //TODO implement Country -> MeningoPatientValidator
         }
 
         private static bool BeNotEmptyIfNotOverseas(Patient patient, string postalcode)

@@ -2,12 +2,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
+using HaemophilusWeb.Controllers;
 
 namespace HaemophilusWeb.Models
 {
     public class PatientBase
     {
         private string initials;
+        private string country;
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -42,6 +44,13 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Landkreis")]
         public string County { get; set; }
+
+        [Display(Name = "Land")]
+        public string Country
+        {
+            get => country;
+            set => country = value ?? GeonamesController.DefaultCountryIsoAlpha3;
+        }
 
         [Display(Name = "Bundesland")]
         public State State { get; set; }

@@ -1,4 +1,5 @@
-﻿@using HaemophilusWeb.Models
+﻿@using DocumentFormat.OpenXml.Office2010.ExcelAc
+@using HaemophilusWeb.Models
 @using HaemophilusWeb.Models.Meningo
 @using HaemophilusWeb.Utils
 @using HaemophilusWeb.Views.Utils
@@ -29,6 +30,15 @@
     <div class="col-sm-5">
         @EnumEditor.EnumDropDownListFor(Html, model => model.State, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.State)
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Country, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-5">
+        @Html.DropDownListFor(m => m.Country,
+            new SelectList(ViewBag.Countries, "IsoAlpha3", "CountryName"), new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Country)
     </div>
 </div>
 
