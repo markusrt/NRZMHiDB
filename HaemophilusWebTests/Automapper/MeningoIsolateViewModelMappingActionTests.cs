@@ -8,17 +8,19 @@ namespace HaemophilusWeb.Automapper
 {
     public class MeningoIsolateViewModelMappingActionTests
     {
-        [Test]
-        public void Process_NoGrowthAtAll_SetFieldMeningoMaterialToNoGrowth()
+        [TestCase(MeningoMaterial.IsolatedDna, MeningoMaterial.NoGrowth)]
+        [TestCase(MeningoMaterial.VitalStem, MeningoMaterial.NoGrowth)]
+        [TestCase(MeningoMaterial.NoGrowth, MeningoMaterial.NoGrowth)]
+        [TestCase(MeningoMaterial.NativeMaterial, MeningoMaterial.NativeMaterial)]
+        public void Process_NoGrowthAtAll_SetFieldMeningoMaterialToNoGrowthExceptForNativeMaterial(MeningoMaterial currentMaterial, MeningoMaterial expectedMaterial)
         {
             var sut = new MeningoIsolateViewModelMappingAction();
             var isolateViewModel = new MeningoIsolateViewModel();
-            var isolate = new MeningoIsolate();
-            isolate.Sending = new MeningoSending();
+            var isolate = new MeningoIsolate {Sending = new MeningoSending() {Material = currentMaterial}};
 
             sut.Process(isolateViewModel, isolate);
 
-            isolate.Sending.Material.Should().Be(MeningoMaterial.NoGrowth);
+            isolate.Sending.Material.Should().Be(expectedMaterial);
         }
     }
 }
