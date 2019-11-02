@@ -23,6 +23,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 10, 29), "Meningokokken, Berücksichtigung von \"inhibitorisch\" bei den Interpretationssätzen 6-12.", ChangeType.Bug),
                 new Change(new DateTime(2019, 09, 23, 22, 0, 0), "Meningokokken, Kein Wachstum auf Agar darf nicht den Wert Nativmaterial überschreiben", ChangeType.Bug),
                 new Change(new DateTime(2019, 09, 23, 20, 0, 0), "Meningokokken, Eingabefeld für das Land bei Einsendungen", ChangeType.Feature),
                 new Change(new DateTime(2019, 08, 15, 22, 0, 0), "Meningokokken, Einsendung->Material: Kein Wachstum wird automatisch gesetzt wenn das Isolat nicht angewachsen ist", ChangeType.Feature),

@@ -128,15 +128,15 @@ namespace HaemophilusWeb.Domain
 
         private bool CheckNativeMaterialRule(NativeMaterialInterpretationRule rule, MeningoIsolate isolate)
         {
-            return rule.CsbPcr == isolate.CsbPcr
-                   && rule.CscPcr == isolate.CscPcr
+            return rule.CsbPcr.Contains(isolate.CsbPcr)
+                   && rule.CscPcr.Contains(isolate.CscPcr)
                    && rule.CswyPcr == isolate.CswyPcr
                    && rule.CswyAllele == isolate.CswyAllele
-                   && rule.PorAPcr == isolate.PorAPcr
-                   && rule.FetAPcr == isolate.FetAPcr
-                   && rule.RibosomalRna16S == isolate.RibosomalRna16S
+                   && rule.PorAPcr.Contains(isolate.PorAPcr)
+                   && rule.FetAPcr.Contains(isolate.FetAPcr)
+                   && rule.RibosomalRna16S.Contains(isolate.RibosomalRna16S)
                    && (rule.RibosomalRna16SBestMatch == null || rule.RibosomalRna16SBestMatch == isolate.RibosomalRna16SBestMatch)
-                   && rule.RealTimePcr == isolate.RealTimePcr
+                   && rule.RealTimePcr.Contains(isolate.RealTimePcr)
                    && rule.RealTimePcrResult == isolate.RealTimePcrResult;
         }
 

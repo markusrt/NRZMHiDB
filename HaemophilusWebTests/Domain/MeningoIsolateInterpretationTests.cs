@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using FluentAssertions.Collections;
-using FluentAssertions.Primitives;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
-using HaemophilusWeb.ViewModels;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Domain
@@ -16,11 +14,13 @@ namespace HaemophilusWeb.Domain
         private const MeningoSamplingLocation NonInvasiveSamplingLocation = MeningoSamplingLocation.NasalSwab;
         private const MeningoSamplingLocation InvasiveSamplingLocation = MeningoSamplingLocation.Blood;
 
+        private Random _random = new Random();
+
         [Test]
         public void EmptyIsolate_ReturnsEmptyInterpretation()
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
-            var isolate = new MeningoIsolate()
+            var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending()
             };
@@ -424,12 +424,12 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = NativeMaterialTestResult.Negative,
-                CscPcr = NativeMaterialTestResult.Negative,
+                CsbPcr = GetRandomNegativeOrInhibitory(),
+                CscPcr = GetRandomNegativeOrInhibitory(),
                 CswyPcr = NativeMaterialTestResult.NotDetermined,
-                PorAPcr = NativeMaterialTestResult.Negative,
-                FetAPcr = NativeMaterialTestResult.Negative,
-                RealTimePcr = realTimePcr,
+                PorAPcr = GetRandomNegativeOrInhibitory(),
+                FetAPcr = GetRandomNegativeOrInhibitory(),
+                RealTimePcr = realTimePcr == NativeMaterialTestResult.Negative ? GetRandomNegativeOrInhibitory() : realTimePcr,
                 RealTimePcrResult = realTimePcrResult
             };
 
@@ -458,6 +458,8 @@ namespace HaemophilusWeb.Domain
         }
 
         [TestCase(NativeMaterialTestResult.Positive, "Neisseria meningitidis", "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.")]
+        [TestCase(NativeMaterialTestResult.Positive, "Neisseria meningitidis", "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.")]
+        [TestCase(NativeMaterialTestResult.Positive, "Something else", "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.")]
         [TestCase(NativeMaterialTestResult.Positive, "Something else", "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.")]
         public void IsolateMatchingNativeMaterialRule10or11_ReturnsCorrespondingInterpretation(NativeMaterialTestResult ribosomalRna16S, string ribosomalRna16SBestMatch, string expectedInterpretation)
         {
@@ -465,11 +467,11 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = NativeMaterialTestResult.Negative,
-                CscPcr = NativeMaterialTestResult.Negative,
+                CsbPcr = GetRandomNegativeOrInhibitory(),
+                CscPcr = GetRandomNegativeOrInhibitory(),
                 CswyPcr = NativeMaterialTestResult.NotDetermined,
-                PorAPcr = NativeMaterialTestResult.Negative,
-                FetAPcr = NativeMaterialTestResult.Negative,
+                PorAPcr = GetRandomNegativeOrInhibitory(),
+                FetAPcr = GetRandomNegativeOrInhibitory(),
                 RibosomalRna16S = ribosomalRna16S,
                 RibosomalRna16SBestMatch = ribosomalRna16SBestMatch
             };
@@ -495,6 +497,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
         }
 
+
         [Test]
         public void IsolateMatchingNativeMaterialRule12_ReturnsCorrespondingInterpretation()
         {
@@ -502,12 +505,12 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = NativeMaterialTestResult.Negative,
-                CscPcr = NativeMaterialTestResult.Negative,
+                CsbPcr = GetRandomNegativeOrInhibitory(),
+                CscPcr = GetRandomNegativeOrInhibitory(),
                 CswyPcr = NativeMaterialTestResult.NotDetermined,
-                PorAPcr = NativeMaterialTestResult.Negative,
-                FetAPcr = NativeMaterialTestResult.Negative,
-                RibosomalRna16S = NativeMaterialTestResult.Negative
+                PorAPcr = GetRandomNegativeOrInhibitory(),
+                FetAPcr = GetRandomNegativeOrInhibitory(),
+                RibosomalRna16S = GetRandomNegativeOrInhibitory()
             };
 
             interpretation.Interpret(isolate);
@@ -515,9 +518,14 @@ namespace HaemophilusWeb.Domain
             interpretation.Result.Interpretation.Should().Contain("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.");
             interpretation.Result.InterpretationDisclaimer.Should().BeEmpty();
 
-            interpretation.TypingAttribute("16S-rDNA-Nachweis").Should().Be("negativ");
+            interpretation.TypingAttribute("16S-rDNA-Nachweis").Should().Match(s => new List<string> {"negativ", "inhibitorisch" }.Contains(s));
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
+        }
+
+        private NativeMaterialTestResult GetRandomNegativeOrInhibitory()
+        {
+            return _random.Next(2) == 0 ? NativeMaterialTestResult.Negative : NativeMaterialTestResult.Inhibitory;
         }
     }
 
