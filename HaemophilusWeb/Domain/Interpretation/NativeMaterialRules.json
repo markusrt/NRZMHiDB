@@ -2,7 +2,7 @@
   "NativeMaterialInterpretation_01": {
     "CsbPcr": [ "Positive" ],
     "CscPcr": [ "Negative" ],
-    "CswyPcr": "Negative",
+    "CswyPcr": [ "Negative" ],
     "CswyAllele": 0,
     "PorAPcr": [ "Positive" ],
     "FetAPcr": [ "Positive" ],
@@ -17,7 +17,7 @@
   "NativeMaterialInterpretation_02": {
     "CsbPcr": [ "Negative" ],
     "CscPcr": [ "Positive" ],
-    "CswyPcr": "Negative",
+    "CswyPcr": [ "Negative" ],
     "CswyAllele": 0,
     "PorAPcr": [ "Positive" ],
     "FetAPcr": [ "Positive" ],
@@ -32,7 +32,7 @@
   "NativeMaterialInterpretation_03": {
     "CsbPcr": [ "Negative" ],
     "CscPcr": [ "Negative" ],
-    "CswyPcr": "Positive",
+    "CswyPcr": [ "Positive" ],
     "CswyAllele": "Allele1",
     "PorAPcr": [ "Positive" ],
     "FetAPcr": [ "Positive" ],
@@ -47,7 +47,7 @@
   "NativeMaterialInterpretation_04": {
     "CsbPcr": [ "Negative" ],
     "CscPcr": [ "Negative" ],
-    "CswyPcr": "Positive",
+    "CswyPcr": [ "Positive" ],
     "CswyAllele": "Allele2",
     "PorAPcr": [ "Positive" ],
     "FetAPcr": [ "Positive" ],
@@ -62,7 +62,7 @@
   "NativeMaterialInterpretation_05": {
     "CsbPcr": [ "Negative" ],
     "CscPcr": [ "Negative" ],
-    "CswyPcr": "Positive",
+    "CswyPcr": [ "Positive" ],
     "CswyAllele": "Allele3",
     "PorAPcr": [ "Positive" ],
     "FetAPcr": [ "Positive" ],
@@ -77,7 +77,7 @@
   "NativeMaterialInterpretation_06": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
     "CscPcr": [ "Negative", "Inhibitory" ],
-    "CswyPcr": "NotDetermined",
+    "CswyPcr": [ "NotDetermined" ],
     "PorAPcr": [ "Negative", "Inhibitory" ],
     "FetAPcr": [ "Negative", "Inhibitory" ],
     "RibosomalRna16S": [ "NotDetermined" ],
@@ -89,7 +89,7 @@
   "NativeMaterialInterpretation_07": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
     "CscPcr": [ "Negative", "Inhibitory" ],
-    "CswyPcr": "NotDetermined",
+    "CswyPcr": [ "NotDetermined" ],
     "PorAPcr": [ "Negative", "Inhibitory" ],
     "FetAPcr": [ "Negative", "Inhibitory" ],
     "RibosomalRna16S": [ "NotDetermined" ],
@@ -103,7 +103,7 @@
   "NativeMaterialInterpretation_08": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
     "CscPcr": [ "Negative", "Inhibitory" ],
-    "CswyPcr": "NotDetermined",
+    "CswyPcr": [ "NotDetermined" ],
     "PorAPcr": [ "Negative", "Inhibitory" ],
     "FetAPcr": [ "Negative", "Inhibitory" ],
     "RibosomalRna16S": [ "NotDetermined" ],
@@ -116,7 +116,7 @@
   "NativeMaterialInterpretation_09": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
     "CscPcr": [ "Negative", "Inhibitory" ],
-    "CswyPcr": "NotDetermined",
+    "CswyPcr": [ "NotDetermined" ],
     "PorAPcr": [ "Negative", "Inhibitory" ],
     "FetAPcr": [ "Negative", "Inhibitory" ],
     "RibosomalRna16S": [ "NotDetermined" ],
@@ -129,7 +129,7 @@
   "NativeMaterialInterpretation_10": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
     "CscPcr": [ "Negative", "Inhibitory" ],
-    "CswyPcr": "NotDetermined",
+    "CswyPcr": [ "NotDetermined" ],
     "PorAPcr": [ "Negative", "Inhibitory" ],
     "FetAPcr": [ "Negative", "Inhibitory" ],
     "RibosomalRna16S": [ "Positive" ],
@@ -143,7 +143,7 @@
   "NativeMaterialInterpretation_11": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
     "CscPcr": [ "Negative", "Inhibitory" ],
-    "CswyPcr": "NotDetermined",
+    "CswyPcr": [ "NotDetermined" ],
     "PorAPcr": [ "Negative", "Inhibitory" ],
     "FetAPcr": [ "Negative", "Inhibitory" ],
     "RibosomalRna16S": [ "Positive" ],
@@ -153,13 +153,103 @@
     "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ]
   },
   "NativeMaterialInterpretation_12": {
-    "CsbPcr": [ "Negative", "Inhibitory" ],
-    "CscPcr": [ "Negative", "Inhibitory" ],
-    "CswyPcr": "NotDetermined",
+    "CsbPcr": [ "NotDetermined" ],
+    "CscPcr": [ "NotDetermined" ],
+    "CswyPcr": [ "NotDetermined" ],
     "PorAPcr": [ "Negative", "Inhibitory" ],
     "FetAPcr": [ "Negative", "Inhibitory" ],
     "RibosomalRna16S": [ "Negative", "Inhibitory" ],
     "RealTimePcr": [ "NotDetermined" ],
+    "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
+    "Typings": [ "RibosomalRna16S", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_13": {
+    "CsbPcr": [ "Negative", "Inhibitory" ],
+    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CswyPcr": [ "Negative", "Inhibitory" ],
+    "PorAPcr": [ "Negative", "Inhibitory" ],
+    "FetAPcr": [ "Negative", "Inhibitory" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Negative", "Inhibitory" ],
+    "MolecularTyping": "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
+    "Typings": [ "RealTimePCRNegative", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_14": {
+    "CsbPcr": [ "Negative", "Inhibitory" ],
+    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CswyPcr": [ "Negative", "Inhibitory" ],
+    "PorAPcr": [ "Negative", "Inhibitory" ],
+    "FetAPcr": [ "Negative", "Inhibitory" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "NeisseriaMeningitidis",
+    "MolecularTyping": "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+    "InterpretationDisclaimer": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis.",
+    "Typings": [ "RealTimePCRNeisseriaMeningitidis", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_15": {
+    "CsbPcr": [ "Negative", "Inhibitory" ],
+    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CswyPcr": [ "Negative", "Inhibitory" ],
+    "PorAPcr": [ "Negative", "Inhibitory" ],
+    "FetAPcr": [ "Negative", "Inhibitory" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "StreptococcusPneumoniae",
+    "MolecularTyping": "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
+    "Typings": [ "RealTimePCRStreptococcusPneumoniae", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_16": {
+    "CsbPcr": [ "Negative", "Inhibitory" ],
+    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CswyPcr": [ "Negative", "Inhibitory" ],
+    "PorAPcr": [ "Negative", "Inhibitory" ],
+    "FetAPcr": [ "Negative", "Inhibitory" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "HaemophilusInfluenzae",
+    "MolecularTyping": "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
+    "Typings": [ "RealTimePCRHaemophilusInfluenzae", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_17": {
+    "CsbPcr": [ "Negative", "Inhibitory" ],
+    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CswyPcr": [ "Negative", "Inhibitory" ],
+    "PorAPcr": [ "Negative", "Inhibitory" ],
+    "FetAPcr": [ "Negative", "Inhibitory" ],
+    "RibosomalRna16S": [ "Positive" ],
+    "RibosomalRna16SBestMatch": "Neisseria meningitidis",
+    "RealTimePcr": [ "NotDetermined" ],
+    "MolecularTyping": "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+    "InterpretationDisclaimer": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis.",
+    "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_18": {
+    "CsbPcr": [ "Negative", "Inhibitory" ],
+    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CswyPcr": [ "Negative", "Inhibitory" ],
+    "PorAPcr": [ "Negative", "Inhibitory" ],
+    "FetAPcr": [ "Negative", "Inhibitory" ],
+    "RibosomalRna16S": [ "Positive" ],
+    "RealTimePcr": [ "NotDetermined" ],
+    "MolecularTyping": "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.",
+    "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
+    "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_19": {
+    "CsbPcr": [ "Negative", "Inhibitory" ],
+    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CswyPcr": [ "Negative", "Inhibitory" ],
+    "PorAPcr": [ "Negative", "Inhibitory" ],
+    "FetAPcr": [ "Negative", "Inhibitory" ],
+    "RibosomalRna16S": [ "Negative", "Inhibitory" ],
+    "RealTimePcr": [ "NotDetermined" ],
+    "MolecularTyping": "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.",
     "Interpretation": "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden. Kein Hinweis auf Neisseria meningitidis.",
     "Typings": [ "RibosomalRna16S", "NoPorA", "NoFetA" ]
   }

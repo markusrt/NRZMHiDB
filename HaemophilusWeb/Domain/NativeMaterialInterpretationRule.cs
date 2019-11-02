@@ -8,7 +8,7 @@ namespace HaemophilusWeb.Domain
     {
         public List<NativeMaterialTestResult> CsbPcr { get; set; }
         public List<NativeMaterialTestResult> CscPcr { get; set; }
-        public NativeMaterialTestResult CswyPcr { get; set; }
+        public List<NativeMaterialTestResult> CswyPcr { get; set; }
         public CswyAllel CswyAllele { get; set; }
         public List<NativeMaterialTestResult> PorAPcr { get; set; }
         public List<NativeMaterialTestResult> FetAPcr { get; set; }

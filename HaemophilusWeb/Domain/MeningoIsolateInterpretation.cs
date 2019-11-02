@@ -130,7 +130,7 @@ namespace HaemophilusWeb.Domain
         {
             return rule.CsbPcr.Contains(isolate.CsbPcr)
                    && rule.CscPcr.Contains(isolate.CscPcr)
-                   && rule.CswyPcr == isolate.CswyPcr
+                   && rule.CswyPcr.Contains(isolate.CswyPcr)
                    && rule.CswyAllele == isolate.CswyAllele
                    && rule.PorAPcr.Contains(isolate.PorAPcr)
                    && rule.FetAPcr.Contains(isolate.FetAPcr)
