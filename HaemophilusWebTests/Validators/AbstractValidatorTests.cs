@@ -52,10 +52,6 @@ namespace HaemophilusWeb.Validators
                 typeof (TModel), typeof (TValidator));
         }
 
-        private ValidationResult Validate(TModel instance)
-        {
-            return Validator.Validate(instance);
-        }
 
         [Test]
         public void Validate_WithAValidModel_IsValid()
@@ -63,7 +59,17 @@ namespace HaemophilusWeb.Validators
             var dto = CreateValidModel();
 
             var validationResult = Validate(dto);
-            validationResult.IsValid.Should().BeTrue("a valid {0} should be recognized as, this failed due to {1}", 
+            AssertIsValid(validationResult);
+        }
+
+        protected ValidationResult Validate(TModel instance)
+        {
+            return Validator.Validate(instance);
+        }
+
+        protected static void AssertIsValid(ValidationResult validationResult)
+        {
+            validationResult.IsValid.Should().BeTrue("a valid {0} should be recognized as, this failed due to {1}",
                 typeof(TModel), string.Join(",", validationResult.Errors));
         }
     }

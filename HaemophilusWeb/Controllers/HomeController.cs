@@ -23,6 +23,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 11, 07), "Die Angabe von Serogruppen-PCR ist auch bei nicht angewachsenen Stämmen möglich", ChangeType.Feature),
                 new Change(new DateTime(2019, 10, 29, 23, 0, 0), "Meningokokken, cswy-PCR ist optional für Interpretationssatz 1 und 2", ChangeType.Feature),
                 new Change(new DateTime(2019, 10, 29, 22, 0, 0), "Untersuchungsbefund für Meningokokken Nativmaterial, Interpretationssätze 13-19", ChangeType.Feature),
                 new Change(new DateTime(2019, 10, 29, 20, 0, 0), "Meningokokken, Berücksichtigung von \"inhibitorisch\" bei den Interpretationssätzen 6-12.", ChangeType.Feature),

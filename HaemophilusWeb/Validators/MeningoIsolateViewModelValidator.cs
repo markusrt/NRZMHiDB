@@ -8,7 +8,7 @@ namespace HaemophilusWeb.Validators
     public class MeningoIsolateViewModelValidator : IsolateViewModelValidatorBase<MeningoIsolateViewModel>
     {
         private const string OtherPropertiesShouldBeNotDeterminedOnNoGrowth =
-            "Wenn {PropertyName} den Wert \"Nein\" hat, dann müssen alle anderen Einträge unter \"Allgemein\" auf \"n.d.\" stehen.";
+            "Wenn {PropertyName} den Wert \"Nein\" hat, dann müssen alle Einträge unter \"Allgemein\" auf \"n.d.\" stehen (abgesehen von Serogruppen-PCR).";
         private const string MoreThenOneSerogenoIsPositive = "Es darf nur ein Serogenotyp positiv sein.";
 
         public MeningoIsolateViewModelValidator()
@@ -30,9 +30,9 @@ namespace HaemophilusWeb.Validators
             RuleFor(i => i.LaboratoryNumber).NotEmpty();
             RuleFor(i => i.LaboratoryNumber).Matches(@"\d+/\d\d").WithMessage(
                 "Die Labornummer muss in der Form '39/14' eingegeben werden.");
-            RuleFor(i => i.GrowthOnBloodAgar).Must(OtherTypingFieldsAreEmptyIfNoGrowth)
+            RuleFor(i => i.GrowthOnBloodAgar).Must(OtherTypingFieldsBesidesSerogroupPcrAreEmptyIfNoGrowth)
                 .WithMessage(OtherPropertiesShouldBeNotDeterminedOnNoGrowth);
-            RuleFor(i => i.GrowthOnMartinLewisAgar).Must(OtherTypingFieldsAreEmptyIfNoGrowth)
+            RuleFor(i => i.GrowthOnMartinLewisAgar).Must(OtherTypingFieldsBesidesSerogroupPcrAreEmptyIfNoGrowth)
                 .WithMessage(OtherPropertiesShouldBeNotDeterminedOnNoGrowth);
             RuleFor(i => i.CsbPcr).Must(OnlyOneSerogenoGroupShouldBePositive).WithMessage(MoreThenOneSerogenoIsPositive);
             RuleFor(i => i.CscPcr).Must(OnlyOneSerogenoGroupShouldBePositive).WithMessage(MoreThenOneSerogenoIsPositive);
@@ -49,14 +49,13 @@ namespace HaemophilusWeb.Validators
             return !modelIsInvalid;
         }
 
-        private static bool OtherTypingFieldsAreEmptyIfNoGrowth(MeningoIsolateViewModel model, Growth growth)
+        private static bool OtherTypingFieldsBesidesSerogroupPcrAreEmptyIfNoGrowth(MeningoIsolateViewModel model, Growth growth)
         {
             var modelIsInvalid =
                 model.GrowthOnBloodAgar == Growth.No && model.GrowthOnMartinLewisAgar == Growth.No
                  && (model.Oxidase != TestResult.NotDetermined || model.Agglutination != MeningoSerogroupAgg.NotDetermined
                  || model.Onpg != TestResult.NotDetermined || model.GammaGt != TestResult.NotDetermined
-                 || model.SerogroupPcr != MeningoSerogroupPcr.NotDetermined || model.ApiNh != UnspecificTestResult.NotDetermined 
-                 || model.MaldiTof != UnspecificTestResult.NotDetermined);
+                 || model.ApiNh != UnspecificTestResult.NotDetermined || model.MaldiTof != UnspecificTestResult.NotDetermined);
             return !modelIsInvalid;
         }
 

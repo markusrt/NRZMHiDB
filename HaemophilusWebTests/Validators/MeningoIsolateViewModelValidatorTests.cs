@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.ViewModels;
@@ -17,6 +18,22 @@ namespace HaemophilusWeb.Validators
             InvalidModels = CreateInvalidModels();
         }
 
+        [Test]
+        public void Validate_WithNoGrowthButOnlySerogroup_IsValid()
+        {
+            var dto = new MeningoIsolateViewModel
+            {
+                GrowthOnBloodAgar = Growth.No,
+                GrowthOnMartinLewisAgar = Growth.No,
+                LaboratoryNumber = "10/10",
+                SerogroupPcr = MeningoSerogroupPcr.A
+            };
+
+            var validationResult = Validate(dto);
+
+           AssertIsValid(validationResult);
+        }
+
         protected override MeningoIsolateViewModel CreateValidModel()
         {
             return CreateMeningoIsolateViewModel();
@@ -31,7 +48,7 @@ namespace HaemophilusWeb.Validators
                 LaboratoryNumber = "120/21",
                 CsbPcr = NativeMaterialTestResult.Positive,
                 CswyPcr = NativeMaterialTestResult.Negative,
-                CscPcr = NativeMaterialTestResult.Inhibitory
+                CscPcr = NativeMaterialTestResult.Inhibitory,
             };
         }
 
