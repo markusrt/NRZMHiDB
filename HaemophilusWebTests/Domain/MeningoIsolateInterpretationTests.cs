@@ -351,9 +351,11 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
         }
 
-        [TestCase("B")]
-        [TestCase("C")]
-        public void IsolateMatchingNativeMaterialRule1Or2_ReturnsCorrespondingInterpretation(string serogroup)
+        [TestCase("B", NativeMaterialTestResult.Negative)]
+        [TestCase("B", NativeMaterialTestResult.NotDetermined)]
+        [TestCase("C", NativeMaterialTestResult.Negative)]
+        [TestCase("C", NativeMaterialTestResult.NotDetermined)]
+        public void IsolateMatchingNativeMaterialRule1Or2_ReturnsCorrespondingInterpretation(string serogroup, NativeMaterialTestResult cswyPcr)
         {
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -361,7 +363,7 @@ namespace HaemophilusWeb.Domain
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
                 CsbPcr = "B" == serogroup ? NativeMaterialTestResult.Positive : NativeMaterialTestResult.Negative,
                 CscPcr = "C" == serogroup ? NativeMaterialTestResult.Positive : NativeMaterialTestResult.Negative,
-                CswyPcr = NativeMaterialTestResult.Negative,
+                CswyPcr = cswyPcr,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
                 PorAVr1 = "X",

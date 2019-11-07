@@ -2,7 +2,7 @@
   "NativeMaterialInterpretation_01": {
     "CsbPcr": [ "Positive" ],
     "CscPcr": [ "Negative" ],
-    "CswyPcr": [ "Negative" ],
+    "CswyPcr": [ "Negative", "NotDetermined" ],
     "CswyAllele": 0,
     "PorAPcr": [ "Positive" ],
     "FetAPcr": [ "Positive" ],
@@ -17,7 +17,7 @@
   "NativeMaterialInterpretation_02": {
     "CsbPcr": [ "Negative" ],
     "CscPcr": [ "Positive" ],
-    "CswyPcr": [ "Negative" ],
+    "CswyPcr": [ "Negative", "NotDetermined" ],
     "CswyAllele": 0,
     "PorAPcr": [ "Positive" ],
     "FetAPcr": [ "Positive" ],
