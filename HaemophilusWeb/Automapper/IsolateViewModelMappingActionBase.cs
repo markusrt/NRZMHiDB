@@ -32,10 +32,10 @@ namespace HaemophilusWeb.Automapper
 
         private readonly AntibioticPriorityListComparer antibioticPriorityListComparer;
 
-        public IsolateViewModelMappingActionBase(DatabaseType databaseType)
+        public IsolateViewModelMappingActionBase(DatabaseType databaseType, List<Antibiotic> primaryAntibiotics)
         {
             this.databaseType = databaseType;
-            primaryAntibiotics = EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>(ConfigurationManager.AppSettings["PrimaryAntibiotics"]);
+            this.primaryAntibiotics = primaryAntibiotics;
             antibioticPriorityListComparer = new AntibioticPriorityListComparer(ConfigurationManager.AppSettings["AntibioticsOrder"]);
         }
 

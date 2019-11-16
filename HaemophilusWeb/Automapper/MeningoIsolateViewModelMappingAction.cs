@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Configuration;
+using System.Net;
 using AutoMapper;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
@@ -11,7 +12,7 @@ namespace HaemophilusWeb.Automapper
 {
     public class MeningoIsolateViewModelMappingAction : IsolateViewModelMappingActionBase, IMappingAction<MeningoIsolate, MeningoIsolateViewModel>, IMappingAction<MeningoIsolateViewModel, MeningoIsolate>
     {
-        public MeningoIsolateViewModelMappingAction() : base(DatabaseType.Meningococci)
+        public MeningoIsolateViewModelMappingAction() : base(DatabaseType.Meningococci, EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>(ConfigurationManager.AppSettings["PrimaryAntibiotics_Meningococci"]))
         {
         }
 

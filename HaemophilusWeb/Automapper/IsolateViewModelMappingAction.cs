@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Configuration;
+using System.Net;
 using AutoMapper;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
@@ -13,7 +14,7 @@ namespace HaemophilusWeb.Automapper
         //TODO eventually refactor and move this to base class
         private readonly IsolateInterpretation isolateInterpretation = new IsolateInterpretation();
 
-        public IsolateViewModelMappingAction() : base(DatabaseType.Haemophilus)
+        public IsolateViewModelMappingAction() : base(DatabaseType.Haemophilus, EnumUtils.ParseCommaSeperatedListOfNames<Antibiotic>(ConfigurationManager.AppSettings["PrimaryAntibiotics_Haemophilus"]))
         {
         }
 
