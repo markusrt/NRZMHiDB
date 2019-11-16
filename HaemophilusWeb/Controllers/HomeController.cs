@@ -23,6 +23,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 11, 16, 23, 45, 0), "Entfernen des Feldes api NH", ChangeType.Feature),
                 new Change(new DateTime(2019, 11, 16, 23, 15, 0), "Cnl wird unter Serogruppen-PCR einsortiert", ChangeType.Feature),
                 new Change(new DateTime(2019, 11, 16, 23, 00, 0), "Reihenfolge von ONPG und gamma-GT vertauscht", ChangeType.Feature),
                 new Change(new DateTime(2019, 11, 16, 22, 30, 0), "Land steht bei neuen Einsendungen jetzt immer auf \"Deutschland\"", ChangeType.Bug),

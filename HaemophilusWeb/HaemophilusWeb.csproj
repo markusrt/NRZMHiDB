@@ -239,6 +239,10 @@
     <Compile Include="Migrations\201908152057267_Patient_Country.Designer.cs">
       <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs" />
+    <Compile Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.Designer.cs">
+      <DependentUpon>201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
     <Compile Include="Domain\IsolateExtensions.cs" />
@@ -643,6 +647,9 @@
     <Content Include="App_Data\countries.json" />
     <EmbeddedResource Include="Migrations\201908152057267_Patient_Country.resx">
       <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.resx">
+      <DependentUpon>201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

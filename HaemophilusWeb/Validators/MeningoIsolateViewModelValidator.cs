@@ -19,10 +19,6 @@ namespace HaemophilusWeb.Validators
                 => BeSetIfDetermined(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.RibosomalRna16SMatchInPercent).Must((model, value)
                 => BeSetIfDetermined(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
-            RuleFor(i => i.ApiNhBestMatch).Must((model, value)
-                => BeSetIfDetermined(value, model.ApiNh)).WithMessage(PropertyMustNotBeEmpty);
-            RuleFor(i => i.ApiNhMatchInPercent).Must((model, value)
-                => BeSetIfDetermined(value, model.ApiNh)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofBestMatch).Must((model, value)
                 => BeSetIfDetermined(value, model.MaldiTof)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofMatchConfidence).Must((model, value)
@@ -55,7 +51,7 @@ namespace HaemophilusWeb.Validators
                 model.GrowthOnBloodAgar == Growth.No && model.GrowthOnMartinLewisAgar == Growth.No
                  && (model.Oxidase != TestResult.NotDetermined || model.Agglutination != MeningoSerogroupAgg.NotDetermined
                  || model.Onpg != TestResult.NotDetermined || model.GammaGt != TestResult.NotDetermined
-                 || model.ApiNh != UnspecificTestResult.NotDetermined || model.MaldiTof != UnspecificTestResult.NotDetermined);
+                 || model.MaldiTof != UnspecificTestResult.NotDetermined);
             return !modelIsInvalid;
         }
 

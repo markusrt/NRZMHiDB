@@ -64,22 +64,6 @@
 
             @Html.EnumRadioEditorFor(model => model.SerogroupPcr, "col-sm-10")
 
-            @Html.EnumRadioEditorFor(model => model.ApiNh)
-            <div id="ApiNhMatchInPercentForm" class="form-group">
-                @Html.LabelFor(m => m.ApiNhMatchInPercent, new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-4">
-                    @Html.TextBoxFor(m => m.ApiNhBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
-                    @Html.ValidationMessageFor(model => model.ApiNhBestMatch)
-                </div>
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        @Html.TextBoxFor(m => m.ApiNhMatchInPercent, new { @class = "form-control", placeholder = "in Prozent" })
-                        <span class="input-group-addon">%</span>
-                    </div>
-                    @Html.ValidationMessageFor(model => model.ApiNhMatchInPercent)
-                </div>
-            </div>
-
             @Html.EnumRadioEditorFor(model => model.MaldiTof)
             <div id="MaldiTofMatchConfidenceForm" class="form-group">
                 @Html.LabelFor(m => m.MaldiTofMatchConfidence, new { @class = "col-sm-2 control-label" })
@@ -280,7 +264,6 @@
 
     function ConfigureConditionalFields() {
         ShowOnSpecificRadioValue("RibosomalRna16SMatchInPercentForm", "RibosomalRna16S", "Positive", GeneralInput("RibosomalRna16SBestMatch"), GeneralInput("RibosomalRna16SMatchInPercent"));
-        ShowOnSpecificRadioValue("ApiNhMatchInPercentForm", "ApiNh", "Determined", GeneralInput("ApiNhBestMatch"), GeneralInput("ApiNhMatchInPercent"));
         ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTof", "Determined", GeneralInput("MaldiTofBestMatch"), GeneralInput("MaldiTofMatchConfidence"));
         ShowOnSpecificRadioValue("PorAPcrForm", "PorAPcr", "Positive", GeneralInput("PorAVr1"), GeneralInput("PorAVr2"));
         ShowOnSpecificRadioValue("FetAPcrForm", "FetAPcr", "Positive", GeneralInput("FetAVr"));

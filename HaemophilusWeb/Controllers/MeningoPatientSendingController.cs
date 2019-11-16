@@ -150,9 +150,6 @@ namespace HaemophilusWeb.Controllers
             //export.AddField(s => ExportToString(s.Isolate.RibosomalRna16S));
             //export.AddField(s => ExportToString(s.Isolate.RibosomalRna16SBestMatch));
             //export.AddField(s => ExportToString(s.Isolate.RibosomalRna16SMatchInPercent));
-            //export.AddField(s => ExportToString(s.Isolate.ApiNh));
-            //export.AddField(s => s.Isolate.ApiNhBestMatch);
-            //export.AddField(s => s.Isolate.ApiNhMatchInPercent);
             //export.AddField(s => ExportToString(s.Isolate.MaldiTof));
             //export.AddField(s => s.Isolate.MaldiTofBestMatch);
             //export.AddField(s => s.Isolate.MaldiTofMatchConfidence);

@@ -31,15 +31,6 @@ namespace HaemophilusWeb.Models
         [Display(Name = "16S rRNA Übereinstimmung")]
         public double? RibosomalRna16SMatchInPercent { get; set; }
 
-        [Display(Name = "api NH")]
-        public UnspecificTestResult ApiNh { get; set; }
-
-        [Display(Name = "api NH beste Übereinstimmung")]
-        public string ApiNhBestMatch { get; set; }
-
-        [Display(Name = "api NH Übereinstimmung")]
-        public double? ApiNhMatchInPercent { get; set; }
-
         [Display(Name = "MALDI-TOF")]
         public UnspecificTestResult MaldiTof { get; set; }
 
