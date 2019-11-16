@@ -14,6 +14,7 @@ namespace HaemophilusWeb.Models.Meningo
         [Description("Y")] Y = 7,
         [Description("Z")] Z = 8,
         [Description("W/Y")] WY = 9,
-        [Description("negativ")] Negative = 10
+        [Description("negativ")] Negative = 10,
+        [Description("cnl")] Cnl = 11
     }
 }

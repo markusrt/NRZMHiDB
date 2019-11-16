@@ -210,7 +210,7 @@ namespace AccessImporter.Converters
             {"Z", MeningoSerogroupAgg.Z},
             {"NG", MeningoSerogroupAgg.Negative},
             {"ng", MeningoSerogroupAgg.Negative},
-            {"cnl", MeningoSerogroupAgg.Cnl},
+            //{"cnl", MeningoSerogroupAgg.Cnl}, TODO clarify how this should be handled after being moved to MeningoSerogroupPcr
             {"Alle", MeningoSerogroupAgg.Poly},
             {"NSG", MeningoSerogroupAgg.Negative},
             {"inhibitorisch", MeningoSerogroupAgg.NotDetermined},
