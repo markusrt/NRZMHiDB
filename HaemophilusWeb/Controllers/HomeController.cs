@@ -23,6 +23,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 11, 16, 23, 00, 0), "Reihenfolge von ONPG und gamma-GT vertauscht", ChangeType.Feature),
                 new Change(new DateTime(2019, 11, 16, 22, 30, 0), "Land steht bei neuen Einsendungen jetzt immer auf \"Deutschland\"", ChangeType.Bug),
                 new Change(new DateTime(2019, 11, 07), "Die Angabe von Serogruppen-PCR ist auch bei nicht angewachsenen Stämmen möglich", ChangeType.Feature),
                 new Change(new DateTime(2019, 10, 29, 23, 0, 0), "Meningokokken, cswy-PCR ist optional für Interpretationssatz 1 und 2", ChangeType.Feature),
