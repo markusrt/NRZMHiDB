@@ -48,7 +48,7 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Land")]
         public string Country
         {
-            get => country;
+            get => country ?? GeonamesController.DefaultCountryIsoAlpha3;
             set => country = value ?? GeonamesController.DefaultCountryIsoAlpha3;
         }
 
