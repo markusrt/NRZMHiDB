@@ -112,7 +112,7 @@ namespace HaemophilusWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                CreateSendingAndAssignStemnumber(sending);
+                CreateSendingAndAssignStemAndLaboratoryNumber(sending);
                 return RedirectToAction("Index");
             }
 
@@ -150,7 +150,7 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(sending);
         }
 
-        public void AssignStemNumber(int? id)
+        public void AssignStemAndLaboratoryNumber(int? id)
         {
             if (id == null)
             {
@@ -167,11 +167,11 @@ namespace HaemophilusWeb.Controllers
             }
         }
 
-        public void CreateSendingAndAssignStemnumber(TSending sending)
+        public void CreateSendingAndAssignStemAndLaboratoryNumber(TSending sending)
         {
             SendingDbSet().Add(sending);
             db.SaveChanges();
-            AssignStemNumber(sending.GetSendingId());
+            AssignStemAndLaboratoryNumber(sending.GetSendingId());
         }
 
         internal void AddReferenceDataToViewBag(dynamic viewBag, TSending sending)
@@ -197,7 +197,10 @@ namespace HaemophilusWeb.Controllers
 
             isolate.Year = CurrentYear;
             isolate.YearlySequentialIsolateNumber = GetNextSequentialIsolateNumber();
-            isolate.StemNumber = GetNextSequentialStemNumber();
+            if (sending.AutoAssignStemNumber)
+            {
+                isolate.StemNumber = GetNextSequentialStemNumber();
+            }
         }
 
         private ActionResult CreateEditView(TSending sending)

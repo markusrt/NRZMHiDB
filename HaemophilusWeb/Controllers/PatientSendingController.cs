@@ -383,7 +383,7 @@ namespace HaemophilusWeb.Controllers
                 var patient = CreateOrUpdatePatient(patientSending);
                 var sending = patientSending.Sending;
                 sending.SetPatientId(patient.PatientId);
-                sendingController.CreateSendingAndAssignStemnumber(sending);
+                sendingController.CreateSendingAndAssignStemAndLaboratoryNumber(sending);
                 if (sending.LaboratoryNumber != sending.IsolateLaboratoryNumber)
                 {
                     TempData["WarningMessage"] =

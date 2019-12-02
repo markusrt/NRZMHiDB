@@ -15,5 +15,17 @@ namespace HaemophilusWeb.Models.Meningo
             var meningoSending = new MeningoSending {SamplingLocation = samplingLocation};
             meningoSending.Invasive.Should().Be(expectedInvasive);
         }
+
+        [TestCase(MeningoMaterial.NativeMaterial, false)]
+        [TestCase(MeningoMaterial.IsolatedDna, true)]
+        [TestCase(MeningoMaterial.NoGrowth, true)]
+        [TestCase(MeningoMaterial.VitalStem, true)]
+        public void AutoAssignStemNumber_Material_IsSetAccordingToMaterial(MeningoMaterial material,
+            bool expectedAutoAssign)
+        {
+            var sending = new MeningoSending {Material = material};
+
+            sending.AutoAssignStemNumber.Should().Be(expectedAutoAssign);
+        }
     }
 }

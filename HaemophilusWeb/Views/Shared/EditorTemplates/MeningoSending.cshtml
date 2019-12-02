@@ -5,6 +5,7 @@
 @model HaemophilusWeb.Models.Meningo.MeningoSending
 
 @Html.ReadonlyFor(model => model.LaboratoryNumberWithPrefix)
+@Html.HiddenFor(model => model.LaboratoryNumber)
 
 <div class="form-group">
     @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 control-label" })
@@ -22,7 +23,7 @@
 @if (@Request.Path.Contains("/MeningoSending/"))
 {
     <div class="form-group">
-        @Html.LabelFor(model => model.MeningoPatientId, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(model => model.MeningoPatientId, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-5">
             <div class="input-group">
                 @Html.DropDownListFor(model => model.MeningoPatientId, ((IEnumerable<MeningoPatient>) ViewBag.PossiblePatients).Select(option => new SelectListItem
@@ -45,7 +46,7 @@
 
 @Html.TextEditorFor(m => m.SenderLaboratoryNumber)
 
-@Html.EnumRadioEditorFor(m=>m.SamplingLocation, "col-sm-10")
+@Html.EnumRadioEditorFor(m => m.SamplingLocation, "col-sm-10")
 
 <div id="OtherInvasiveSamplingLocationForm" class="form-group">
     @Html.LabelFor(m => m.OtherInvasiveSamplingLocation, new { @class = "col-sm-2 control-label" })

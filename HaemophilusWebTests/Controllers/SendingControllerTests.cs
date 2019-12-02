@@ -31,7 +31,7 @@ namespace HaemophilusWeb.Controllers
             sending.Isolate.Year = 2099;
             sending.Isolate.YearlySequentialIsolateNumber = 999;
 
-            controller.AssignStemNumber(MockData.SecondId);
+            controller.CreateSendingAndAssignStemAndLaboratoryNumber(sending);
 
             sending.Isolate.Year.Should().Be(2099);
             sending.Isolate.YearlySequentialIsolateNumber.Should().Be(999);
@@ -42,20 +42,41 @@ namespace HaemophilusWeb.Controllers
         {
             var controller = CreateMockSendingController();
 
-            Assert.Throws<ArgumentException>(() => controller.AssignStemNumber(null));
+            Assert.Throws<ArgumentException>(() => controller.AssignStemAndLaboratoryNumber(null));
         }
 
         [Test]
         public void AssignStemNumber_NoIsolate_AssignsCorrectLaboratoryNumber()
         {
-            var expectedLaboratoryNumber = string.Format("001/{0:yy}", DateTime.Now);
+            var expectedLaboratoryNumber = $"001/{DateTime.Now:yy}";
             var controller = CreateMockSendingController();
+            var sending = DbMock.Sendings.Single(s => s.SendingId == MockData.FirstId);
 
-            controller.AssignStemNumber(MockData.FirstId);
+            controller.CreateSendingAndAssignStemAndLaboratoryNumber(sending);
 
-            var isolate = DbMock.Sendings.Single(s => s.SendingId == MockData.FirstId).Isolate;
+            var isolate = sending.Isolate;
             isolate.Should().NotBeNull();
             isolate.LaboratoryNumber.Should().Be(expectedLaboratoryNumber);
+            isolate.StemNumber.Should().BeGreaterThan(0);
+        }
+
+        [Test]
+        public void AssignStemNumber_SendingWithoutAutoAssignStemNumber_AssignsCorrectLaboratoryNumberButNoStemNumber()
+        {
+            var expectedLaboratoryNumber = $"001/{DateTime.Now:yy}";
+            var controller = CreateMockSendingController();
+            var sending = MockData.CreateInstance<NoAutoAssignStemNumberSending>();
+            sending.SendingId = 123;
+            sending.SenderId = MockData.FirstId;
+            sending.PatientId = MockData.FirstId;
+            sending.Isolate = null;
+
+            controller.CreateSendingAndAssignStemAndLaboratoryNumber(sending);
+
+            var isolate = sending.Isolate;
+            isolate.Should().NotBeNull();
+            isolate.LaboratoryNumber.Should().Be(expectedLaboratoryNumber);
+            isolate.StemNumber.HasValue.Should().BeFalse();
         }
 
         [Test]
@@ -64,7 +85,7 @@ namespace HaemophilusWeb.Controllers
             const int unknownId = 12345;
             var controller = CreateMockSendingController();
 
-            Assert.Throws<ArgumentException>(() => controller.AssignStemNumber(unknownId));
+            Assert.Throws<ArgumentException>(() => controller.AssignStemAndLaboratoryNumber(unknownId));
         }
 
         [Test]
@@ -127,6 +148,11 @@ namespace HaemophilusWeb.Controllers
 
             result.Should().NotBeNull();
             CollectionAssert.AreEquivalent((IEnumerable)result.Model, DbMock.Sendings.Where(s => !s.Deleted));
+        }
+
+        class NoAutoAssignStemNumberSending : Sending
+        {
+            public override bool AutoAssignStemNumber => false;
         }
     }
 }

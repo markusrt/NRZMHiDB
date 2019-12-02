@@ -3,6 +3,7 @@
 @model HaemophilusWeb.Models.Sending
 
 @Html.ReadonlyFor(model => model.LaboratoryNumberWithPrefix)
+@Html.HiddenFor(model => model.LaboratoryNumber)
 
 <div class="form-group">
     @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 control-label" })
