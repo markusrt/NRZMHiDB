@@ -70,5 +70,15 @@ namespace HaemophilusWeb.Models.Meningo
 
         [Display(Name = "NHS Real-Time-PCR Auswertung (RIDOM)")]
         public RealTimePcrResult RealTimePcrResult { get; set; }
+
+        [Display(Name = "siaA")]
+        public TestResult SiaAGene { get; set; }
+
+        [Display(Name = "ctrA")]
+        public TestResult CapsularTransferGene { get; set; }
+
+        [Display(Name = "cnl")]
+        public TestResult CapsuleNullLocus { get; set; }
+
     }
 }

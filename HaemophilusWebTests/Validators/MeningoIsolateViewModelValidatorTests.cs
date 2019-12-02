@@ -58,7 +58,9 @@ namespace HaemophilusWeb.Validators
             {
                 GrowthOnBloodAgar = Growth.No,
                 GrowthOnMartinLewisAgar = Growth.No,
-                Oxidase = TestResult.Positive,
+                CapsuleNullLocus = TestResult.Positive,
+                CapsularTransferGene = TestResult.Positive,
+                SiaAGene = TestResult.Positive,
                 LaboratoryNumber = "10/10"
             };
             yield return Tuple.Create(growthIsNoButOtherFieldsAreFilled, new[] { "GrowthOnBloodAgar", "GrowthOnMartinLewisAgar" });

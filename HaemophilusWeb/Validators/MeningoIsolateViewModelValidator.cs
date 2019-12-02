@@ -51,7 +51,8 @@ namespace HaemophilusWeb.Validators
                 model.GrowthOnBloodAgar == Growth.No && model.GrowthOnMartinLewisAgar == Growth.No
                  && (model.Oxidase != TestResult.NotDetermined || model.Agglutination != MeningoSerogroupAgg.NotDetermined
                  || model.Onpg != TestResult.NotDetermined || model.GammaGt != TestResult.NotDetermined
-                 || model.MaldiTof != UnspecificTestResult.NotDetermined);
+                 || model.MaldiTof != UnspecificTestResult.NotDetermined || model.SiaAGene != TestResult.NotDetermined
+                 || model.CapsuleNullLocus != TestResult.NotDetermined || model.CapsularTransferGene != TestResult.NotDetermined);
             return !modelIsInvalid;
         }
 

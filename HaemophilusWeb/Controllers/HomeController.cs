@@ -23,6 +23,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2019, 12, 02, 0, 0, 0), "Eingabefelder für siaA, ctrA und cnl bei Meningokokken", ChangeType.Feature),
                 new Change(new DateTime(2019, 11, 17, 0, 0, 0), "Eingabefelder für Standard Antibiotika bei Meningokokken", ChangeType.Feature),
                 new Change(new DateTime(2019, 11, 16, 23, 45, 0), "Entfernen des Feldes api NH", ChangeType.Feature),
                 new Change(new DateTime(2019, 11, 16, 23, 15, 0), "Cnl wird unter Serogruppen-PCR einsortiert", ChangeType.Feature),

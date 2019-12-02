@@ -80,6 +80,12 @@
                 </div>
             </div>
 
+            @Html.EnumRadioEditorFor(model => model.SiaAGene)
+
+            @Html.EnumRadioEditorFor(model => model.CapsularTransferGene)
+
+            @Html.EnumRadioEditorFor(model => model.CapsuleNullLocus)
+
             @Html.DateEditorFor(model => model.ReportDate)
 
             <div class="form-group">

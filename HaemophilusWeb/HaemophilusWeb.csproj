@@ -243,6 +243,10 @@
     <Compile Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.Designer.cs">
       <DependentUpon>201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs" />
+    <Compile Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.Designer.cs">
+      <DependentUpon>201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
     <Compile Include="Domain\IsolateExtensions.cs" />
@@ -650,6 +654,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.resx">
       <DependentUpon>201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.resx">
+      <DependentUpon>201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
