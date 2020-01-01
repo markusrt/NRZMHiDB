@@ -34,50 +34,64 @@ namespace HaemophilusWeb.Domain
             var serotypePcrDescription = EnumEditor.GetEnumDescription(serotypePcr);
             var agglutination = isolate.Agglutination;
             var agglutinationDescription = EnumEditor.GetEnumDescription(agglutination);
+            var bexA = isolate.BexA;
+            var growth = isolate.Growth;
             var interpretation = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.";
             var interpretationPreliminary = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.";
             var interpretationDisclaimer = string.Empty;
 
             if (agglutination == SerotypeAgg.Negative)
             {
-                if (isolate.BexA == TestResult.Negative)
+                if (bexA == TestResult.Negative)
                 {
                     if (serotypePcr == SerotypePcr.Negative || serotypePcr == SerotypePcr.NotDetermined)
                     {
                         interpretation = TypingNotPossiblePlural;
-                        interpretationDisclaimer = string.Format(DisclaimerTemplate,
-                            "Haemophilus influenzae, unbekapselt");
                     }
                     else if (serotypePcr != SerotypePcr.NotDetermined)
                     {
                         interpretation =
                             $"{TypingNotPossiblePlural2} Ein vorhandener genetischer Kapsellocus für Polysaccharide des Serotyps {serotypePcrDescription} wird nicht exprimiert.";
-                        interpretationDisclaimer = string.Format(DisclaimerTemplate,
-                            "Haemophilus influenzae, unbekapselt");
                     }
                 }
-                else if (isolate.BexA == TestResult.NotDetermined && serotypePcr == SerotypePcr.NotDetermined)
+                else if (bexA == TestResult.NotDetermined && serotypePcr == SerotypePcr.NotDetermined)
                 {
                     interpretationPreliminary = TypingNotPossibleSingular;
                     interpretation =
                         $"{TypingNotPossibleSingular} Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.";
                 }
+                interpretationDisclaimer = string.Format(DisclaimerTemplate, "Haemophilus influenzae, unbekapselt");
             }
-            if (SpecificAgglutination.Contains(agglutination) && (isolate.BexA == TestResult.Positive || isolate.BexA == TestResult.NotDetermined) &&
+            if (SpecificAgglutination.Contains(agglutination) && (bexA == TestResult.Positive || bexA == TestResult.NotDetermined) &&
                 (agglutination.ToString() == serotypePcr.ToString() || serotypePcr == SerotypePcr.NotDetermined))
             {
-                if (serotypePcr == SerotypePcr.NotDetermined && isolate.BexA == TestResult.NotDetermined)
+                if (serotypePcr == SerotypePcr.NotDetermined && bexA == TestResult.NotDetermined)
                 {
                     interpretationPreliminary =
                         $"Das Ergebnis spricht für eine Infektion mit Haemophilus influenzae des Serotyp {agglutinationDescription} (Hi{agglutinationDescription}).";
                 }
-                if (isolate.BexA == TestResult.Positive)
+                if (bexA == TestResult.Positive)
                 {
                     interpretation =
                         $"Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {agglutinationDescription} (Hi{agglutinationDescription}).";
                 }
                 interpretationDisclaimer = string.Format(DisclaimerTemplate,
                     $"Haemophilus influenzae, Serotyp {agglutinationDescription}");
+            }
+
+            if (agglutination == SerotypeAgg.NotDetermined && serotypePcr == SerotypePcr.NotDetermined && bexA == TestResult.NotDetermined && growth != YesNoOptional.NotStated)
+            {
+                if (growth == YesNoOptional.Yes)
+                {
+                    interpretation = "Der eingesendete Stamm konnte nicht angezüchtet werden. Um Wiedereinsendung wird gebeten.";
+                    interpretationDisclaimer = "Eine telefonische Vorabmitteilung ist erfolgt.";
+                }
+                else if (growth == YesNoOptional.No)
+                {
+                    var evaluation = EnumEditor.GetEnumDescription(isolate.Evaluation);
+                    interpretation = "Kein Nachweis von Haemophilus influenzae.";
+                    interpretationDisclaimer = $"Beim eingesendeten Isolat handelt es sich am ehesten um {evaluation}.";
+                }
             }
             return new InterpretationResult
             {

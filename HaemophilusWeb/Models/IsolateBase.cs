@@ -8,6 +8,7 @@ namespace HaemophilusWeb.Models
     {
         public IsolateBase() : base(DatabaseType.Haemophilus)
         {
+            Growth = YesNoOptional.NotStated;
         }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
