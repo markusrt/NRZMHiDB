@@ -161,7 +161,7 @@ namespace HaemophilusWeb.Domain
                 Growth = YesNoOptional.Yes
             };
 
-            var interpretation = IsolateInterpretation.Interpret(isolate);
+            var interpretation = isolateInterpretation.Interpret(isolate);
 
             interpretation.Interpretation.Should().Contain("Um Wiedereinsendung wird gebeten");
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
@@ -181,7 +181,7 @@ namespace HaemophilusWeb.Domain
                 Evaluation = Evaluation.HaemophilusSpeciesNoHaemophilusInfluenzae
             };
 
-            var interpretation = IsolateInterpretation.Interpret(isolate);
+            var interpretation = isolateInterpretation.Interpret(isolate);
 
             interpretation.Interpretation.Should().Contain("Kein Nachweis von Haemophilus influenzae.");
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
