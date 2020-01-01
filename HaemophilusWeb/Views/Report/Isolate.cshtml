@@ -79,7 +79,7 @@
         <dt>E-Mail</dt>
         <dd id="healthOfficeEmail"></dd>
         <dt></dt>
-        <dd><br/>@Html.ActionLink("Gesundheitsamt bearbeiten", "Edit", "HealthOffices", new { postalCode = Model.PatientPostalCode }, new { @class = "btn btn-sm btn-info disabled", id="editHealthOfficeButton" })</dd>
+        <dd><br />@Html.ActionLink("Gesundheitsamt bearbeiten", "Edit", "HealthOffices", new { postalCode = Model.PatientPostalCode }, new { @class = "btn btn-sm btn-info disabled", id = "editHealthOfficeButton" })</dd>
     </dl>
 </div>
 <div class="clearfix"></div>
@@ -170,7 +170,7 @@
             loadFile(templateFile,function(error,content){
                 if (error) { throw error };
                 var zip = new PizZip(content);
-                var doc = new window.docxtemplater().loadZip(zip);
+                var doc = new window.Docxtemplater().loadZip(zip);
                 doc.setData(documentData);
                 try {
                     doc.render();
@@ -190,17 +190,9 @@
                     mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 }); //Output the document using Data-URI
                 saveAs(out, "@("KL " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")");
+		var url = "@Url.Content("~/Report/ReportGenerated/")";
                 $.post(url, { id: @Model.IsolateId, preliminary: preliminary } );
             });
-
-            @*new DocxGen().loadFromFile(templateFile, { async: true, intelligentTagging: true }).success(function(doc)
-            {
-                doc.setTags(documentData);
-                doc.applyTags();
-                doc.output({ name: "@("KL " + Model.LaboratoryNumber.Replace("/","_") + "-" + DateTime.Now.ToString("yyyy-MM-dd") + ".docx")", type:"blob" });
-                var url = "@Url.Content("~/Report/ReportGenerated/")";
-                $.post(url, { id: @Model.IsolateId, preliminary: preliminary } );
-            });*@
         }
 
         $(document).ready(function () {
