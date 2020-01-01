@@ -111,7 +111,7 @@ namespace HaemophilusWeb.Controllers
 
             export.AddField(s => s.Patient.Initials);
             export.AddField(s => s.Patient.BirthDate.ToReportFormat());
-            export.AddField(s => s.Isolate.PatientAge(), "Patientenalter bei Entnahme");
+            export.AddField(s => s.Isolate.PatientAgeAtSampling(), "Patientenalter bei Entnahme");
             export.AddField(s => ExportToString(s.Patient.Gender));
             export.AddField(s => s.Patient.PostalCode);
             export.AddField(s => s.Patient.City);

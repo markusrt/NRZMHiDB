@@ -4,23 +4,27 @@ namespace HaemophilusWeb.Domain
 {
     public static class IsolateExtensions
     {
-        public static int PatientAge<TSending, TPatient>(this ISendingReference<TSending, TPatient> isolate)
+        /// <summary>
+        ///     Calculates the patients age at sampling at sampling
+        /// </summary>
+        /// <returns>Age of patient at sampling if sampling date is known, age at receiving date otherwise</returns>
+        public static int PatientAgeAtSampling<TSending, TPatient>(this ISendingReference<TSending, TPatient> isolate)
             where TPatient : PatientBase
             where TSending : SendingBase<TPatient>
         {
-            var age = 0;
+            var ageAtSampling = 0;
             if (isolate.Sending.Patient.BirthDate.HasValue)
             {
                 var birthday = isolate.Sending.Patient.BirthDate.Value;
-                var samplingDate = isolate.Sending.SamplingDate ?? isolate.Sending.ReceivingDate;
-                var ageAtSampling = samplingDate.Year - birthday.Year;
-                if (birthday > samplingDate.AddYears(-ageAtSampling))
+                var samplingOrReceivingDate = isolate.Sending.SamplingDate ?? isolate.Sending.ReceivingDate;
+                ageAtSampling = samplingOrReceivingDate.Year - birthday.Year;
+                var birthdayIsAfterSamplingOrReceivingDate = birthday > samplingOrReceivingDate.AddYears(-ageAtSampling);
+                if (birthdayIsAfterSamplingOrReceivingDate)
                 {
                     ageAtSampling--;
                 }
-                age = ageAtSampling;
             }
-            return age;
+            return ageAtSampling;
         }
     }
 }

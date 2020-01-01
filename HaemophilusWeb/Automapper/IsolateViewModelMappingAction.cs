@@ -26,7 +26,7 @@ namespace HaemophilusWeb.Automapper
                 : EnumEditor.GetEnumDescription(sending.SamplingLocation);
             destination.Material = EnumEditor.GetEnumDescription(sending.Material);
             destination.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
-            destination.PatientAgeAtSampling = source.PatientAge();
+            destination.PatientAgeAtSampling = source.PatientAgeAtSampling();
             destination.EpsilometerTestViewModels = EpsilometerTestsModelToViewModel(source.EpsilometerTests);
             destination.SamplingDate = source.Sending.SamplingDate.ToReportFormat();
             destination.ReceivingDate = source.Sending.ReceivingDate.ToReportFormat();
