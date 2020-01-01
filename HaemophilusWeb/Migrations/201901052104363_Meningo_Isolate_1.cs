@@ -40,7 +40,6 @@ namespace HaemophilusWeb.Migrations
             AddForeignKey("dbo.EpsilometerTests", "MeningoIsolate_MeningoSendingId", "dbo.MeningoIsolates", "MeningoSendingId");
 
             Sql("Create Unique NonClustered Index [IX_StemNumber] On [MeningoIsolates] (StemNumber) Where [StemNumber] Is Not Null");
-            CreateIndex("dbo.MeningoIsolates", new[] { "StemNumber" }, true, "IX_StemNumber");
             CreateIndex("dbo.MeningoIsolates", new[] { "YearlySequentialIsolateNumber", "Year" }, true, "IX_LaboratoryNumber");
         }
         
