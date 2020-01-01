@@ -23,6 +23,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2020, 01, 01, 10, 0, 0), "Zusammenführung der Meningokokken und Haemophilus Version", ChangeType.Feature),
+                new Change(new DateTime(2020, 01, 01, 0, 0, 0), "Erweiterung Briefkopf für Meningokokken Befundvorlagen", ChangeType.Feature),
                 new Change(new DateTime(2019, 12, 02, 0, 0, 0), "Bei Meningokokken Nativmaterial wird keine Stamnummer vergeben", ChangeType.Feature),
                 new Change(new DateTime(2019, 12, 02, 0, 0, 0), "Eingabefelder für siaA, ctrA und cnl bei Meningokokken", ChangeType.Feature),
                 new Change(new DateTime(2019, 11, 17, 0, 0, 0), "Eingabefelder für Standard Antibiotika bei Meningokokken", ChangeType.Feature),
