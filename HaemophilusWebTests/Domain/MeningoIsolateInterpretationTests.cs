@@ -373,7 +373,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Interpretation.Should().Contain($"Interpretation: Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}.");
+            interpretation.Result.Interpretation.Should().Contain($"Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}.");
             interpretation.Result.InterpretationDisclaimer.Should().NotBeEmpty();
             interpretation.Result.InterpretationDisclaimer.Should().Contain($"Serogruppe {serogroup}");
             interpretation.Typings.Should().Contain(
@@ -407,7 +407,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Interpretation.Should().Contain($"Interpretation: Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}.");
+            interpretation.Result.Interpretation.Should().Contain($"Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}.");
             interpretation.Result.InterpretationDisclaimer.Should().NotBeEmpty();
             interpretation.Result.InterpretationDisclaimer.Should().Contain($"Serogruppe {serogroup}");
             interpretation.TypingAttribute("Molekulare Typisierung")

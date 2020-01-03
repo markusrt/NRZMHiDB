@@ -37,7 +37,7 @@ namespace HaemophilusWeb.Domain
 
             Result = new InterpretationResult
             {
-                Interpretation = "Interpretation: Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."
+                Interpretation = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."
             };
 
             if (isolate.Sending.Material == MeningoMaterial.NativeMaterial)
@@ -66,7 +66,7 @@ namespace HaemophilusWeb.Domain
 
                 var interpretation = rule.Interpretation;
                 Result.Interpretation = !string.IsNullOrEmpty(interpretation)
-                    ? "Interpretation: " + Smart.Format(interpretation, isolate)
+                    ? Smart.Format(interpretation, isolate)
                     : string.Empty;
 
                 Result.InterpretationDisclaimer = rule.InterpretationDisclaimer != null
@@ -102,7 +102,7 @@ namespace HaemophilusWeb.Domain
                 var interpretation = rule.Interpretation;
                 //TODO Add InterpretationDisclaimer
                 Result.Interpretation = !string.IsNullOrEmpty(interpretation)
-                    ? "Interpretation: " + Smart.Format(interpretation, isolate)
+                    ? Smart.Format(interpretation, isolate)
                     : string.Empty;
 
                 foreach (var typingTemplateKey in rule.Typings)
