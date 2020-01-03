@@ -719,6 +719,8 @@
     <Content Include="ReportTemplates\Meningo\Untersuchungsbefund.docx" />
     <Content Include="ReportTemplates\Meningo\Nativmaterial.docx" />
     <Content Include="ReportTemplates\Fax - Teilbefund - Serotyp v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Nativmaterial.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Untersuchungsbefund.docx" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
