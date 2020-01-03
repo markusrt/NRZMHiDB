@@ -68,6 +68,8 @@ namespace HaemophilusWeb.ViewModels
             get { return DateTime.Now.ToReportFormat(); }
         }
 
+        public bool HasETests => ETests.Any();
+
         //TODO refactor duplication in IsolateViewModel
         public IEnumerable<EpsilometerTestReportModel> ETests
         {
