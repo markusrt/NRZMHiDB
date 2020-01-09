@@ -16,9 +16,9 @@ namespace HaemophilusWeb.Validators
             RuleFor(i => i.EpsilometerTestViewModels).SetCollectionValidator(new EpsilometerTestValidator());
             
             RuleFor(i => i.RibosomalRna16SBestMatch).Must((model, value)
-                => BeSetIfDetermined(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
+                => BeSetIfPositive(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.RibosomalRna16SMatchInPercent).Must((model, value)
-                => BeSetIfDetermined(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
+                => BeSetIfPositive(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofBestMatch).Must((model, value)
                 => BeSetIfDetermined(value, model.MaldiTof)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofMatchConfidence).Must((model, value)
@@ -56,14 +56,14 @@ namespace HaemophilusWeb.Validators
             return !modelIsInvalid;
         }
 
-        private static bool BeSetIfDetermined(double? value, NativeMaterialTestResult testResult)
+        private static bool BeSetIfPositive(double? value, NativeMaterialTestResult testResult)
         {
-            return testResult == NativeMaterialTestResult.NotDetermined || value.HasValue;
+            return testResult != NativeMaterialTestResult.Positive || value.HasValue;
         }
 
-        private static bool BeSetIfDetermined(string value, NativeMaterialTestResult testResult)
+        private static bool BeSetIfPositive(string value, NativeMaterialTestResult testResult)
         {
-            return testResult == NativeMaterialTestResult.NotDetermined || !string.IsNullOrWhiteSpace(value);
+            return testResult != NativeMaterialTestResult.Positive || !string.IsNullOrWhiteSpace(value);
         }
     }
 }

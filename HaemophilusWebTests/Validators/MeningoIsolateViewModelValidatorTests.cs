@@ -34,6 +34,19 @@ namespace HaemophilusWeb.Validators
            AssertIsValid(validationResult);
         }
 
+        [TestCase(NativeMaterialTestResult.Negative)]
+        [TestCase(NativeMaterialTestResult.Inhibitory)]
+        [TestCase(NativeMaterialTestResult.NotDetermined)]
+        public void Validate_RibosomalRna16SNotPositive_IsValid(NativeMaterialTestResult ribosomalRna16S)
+        {
+            var dto = CreateMeningoIsolateViewModel();
+            dto.RibosomalRna16S = ribosomalRna16S;
+
+            var validationResult = Validate(dto);
+
+            AssertIsValid(validationResult);
+        }
+
         protected override MeningoIsolateViewModel CreateValidModel()
         {
             return CreateMeningoIsolateViewModel();
