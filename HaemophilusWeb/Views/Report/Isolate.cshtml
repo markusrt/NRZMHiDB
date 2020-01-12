@@ -172,6 +172,7 @@
                 var zip = new PizZip(content);
                 var doc = new window.Docxtemplater().loadZip(zip);
                 doc.setData(documentData);
+                doc.setOptions({ linebreaks: true });
                 try {
                     doc.render();
                 }
