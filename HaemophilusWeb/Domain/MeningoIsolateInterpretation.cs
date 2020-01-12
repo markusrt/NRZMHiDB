@@ -22,7 +22,7 @@ namespace HaemophilusWeb.Domain
 
         private static readonly Dictionary<string, StemInterpretationRule> StemInterpretationRules = DeserializeFromResource<Dictionary<string, StemInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.StemRules.json");
         private static readonly Dictionary<string, NativeMaterialInterpretationRule> NativeMaterialInterpretationRules = DeserializeFromResource<Dictionary<string, NativeMaterialInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.NativeMaterialRules.json");
-        
+
         private static readonly Dictionary<string, Typing> TypingTemplates = DeserializeFromResource<Dictionary<string, Typing>>("HaemophilusWeb.Domain.Interpretation.TypingTemplates.json");
 
         private readonly List<Typing> typings = new List<Typing>();
@@ -59,10 +59,6 @@ namespace HaemophilusWeb.Domain
                 var rule = matchingRule.Value;
                 Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
                 Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
-                if (!string.IsNullOrEmpty(rule.MolecularTyping))
-                {
-                    typings.Add(new Typing { Attribute = "Molekulare Typisierung", Value = rule.MolecularTyping });
-                }
 
                 var interpretation = rule.Interpretation;
                 Result.Interpretation = !string.IsNullOrEmpty(interpretation)
@@ -79,7 +75,7 @@ namespace HaemophilusWeb.Domain
                     typings.Add(new Typing
                     {
                         Attribute = template.Attribute,
-                        Value = Smart.Format(template.Value, isolate)
+                        Value = Smart.Format(template.Value, isolate, rule)
                     });
                 }
             }
