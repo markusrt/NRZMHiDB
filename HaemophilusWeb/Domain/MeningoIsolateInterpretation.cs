@@ -52,6 +52,8 @@ namespace HaemophilusWeb.Domain
 
         private void RunNativeMaterialInterpretation(MeningoIsolate isolate)
         {
+            Result.Interpretation = null;
+            Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
             var matchingRule = NativeMaterialInterpretationRules.FirstOrDefault(r => CheckNativeMaterialRule(r.Value, isolate));
 
             if (matchingRule.Key != null)
@@ -60,14 +62,7 @@ namespace HaemophilusWeb.Domain
                 Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
                 Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
 
-                var interpretation = rule.Interpretation;
-                Result.Interpretation = !string.IsNullOrEmpty(interpretation)
-                    ? Smart.Format(interpretation, isolate)
-                    : string.Empty;
-
-                Result.InterpretationDisclaimer = rule.InterpretationDisclaimer != null
-                    ? Smart.Format(rule.InterpretationDisclaimer, isolate)
-                    : string.Empty;
+                Result.Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray();
 
                 foreach (var typingTemplateKey in rule.Typings)
                 {

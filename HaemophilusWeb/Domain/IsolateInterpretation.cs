@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Views.Utils;
 
@@ -104,8 +105,11 @@ namespace HaemophilusWeb.Domain
 
     public class InterpretationResult
     {
+        [Obsolete("Use Result array instead")]
         public string Interpretation { get; set; }
+        public string[] Report { get; set; }
         public string InterpretationPreliminary { get; set; }
+        [Obsolete("Use Result array instead")]
         public string InterpretationDisclaimer { get; set; }
     }
 }

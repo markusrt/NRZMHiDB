@@ -1,4 +1,5 @@
-﻿@using HaemophilusWeb.Models
+﻿@using DocumentFormat.OpenXml.EMMA
+@using HaemophilusWeb.Models
 @using HaemophilusWeb.Utils
 @using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.ViewModels.MeningoIsolateViewModel
@@ -54,12 +55,28 @@
         </dl>
     }
 
-    <dl class="dl-horizontal">
-        @*<dt>@Html.DisplayNameFor(model => model.InterpretationPreliminary)</dt>
-        <dd>@Html.DisplayFor(model => model.InterpretationPreliminary)</dd>*@
-        <dt>@Html.DisplayNameFor(model => model.Interpretation)</dt>
-        <dd>@Html.DisplayFor(model => model.Interpretation)</dd>
-    </dl>
+    @if (!string.IsNullOrEmpty(Model.Interpretation))
+    {
+        //TODO remove soon
+        <dl class="dl-horizontal">
+            @*<dt>@Html.DisplayNameFor(model => model.InterpretationPreliminary)</dt>
+            <dd>@Html.DisplayFor(model => model.InterpretationPreliminary)</dd>*@
+            <dt>@Html.DisplayNameFor(model => model.Interpretation)</dt>
+            <dd>@Html.DisplayFor(model => model.Interpretation)</dd>
+        </dl>
+    }
+    else
+    {
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.Report)</dt>
+            <dd>
+                @foreach (var reportLine in Model.Report)
+                {
+                    <p>@reportLine</p>
+                }
+            </dd>
+        </dl>
+    }
 </div>
 <div class="col-md-6">
     <h3>Zuständiges Gesundheitsamt</h3>

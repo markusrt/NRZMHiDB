@@ -41,8 +41,15 @@ namespace HaemophilusWeb.Automapper
 
             var isolateInterpretation = new MeningoIsolateInterpretation();
             isolateInterpretation.Interpret(source);
-            destination.Interpretation = isolateInterpretation.Result.Interpretation;
-            destination.InterpretationDisclaimer = isolateInterpretation.Result.InterpretationDisclaimer;
+            if (!string.IsNullOrEmpty(isolateInterpretation.Result.Interpretation))
+            {
+                destination.Interpretation = isolateInterpretation.Result.Interpretation;
+                destination.InterpretationDisclaimer = isolateInterpretation.Result.InterpretationDisclaimer;
+            }
+            else
+            {
+                destination.Report = isolateInterpretation.Result.Report;
+            }
             destination.Typings = isolateInterpretation.Typings;
 
             var sender = db.Senders.Find(source.Sending.SenderId);

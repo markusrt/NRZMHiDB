@@ -21,6 +21,7 @@ namespace HaemophilusWeb.ViewModels
         public MeningoIsolateViewModel()
         {
             EpsilometerTestViewModels = new List<EpsilometerTestViewModel>();
+            Report = new string[0];
         }
 
         public ICollection<EpsilometerTestViewModel> EpsilometerTestViewModels { get; set; }
@@ -54,11 +55,16 @@ namespace HaemophilusWeb.ViewModels
         public string EvaluationString { get; set; }
 
         [Display(Name = "Befund")]
-        public string Interpretation { get; set; }
+        public string[] Report { get; set; }
 
         [Display(Name = "Teilbefund")]
         public string InterpretationPreliminary { get; set; }
 
+        [Obsolete("Use Result array instead")]
+        [Display(Name = "Befund")]
+        public string Interpretation { get; set; }
+
+        [Obsolete("Use Result array instead")]
         public string InterpretationDisclaimer { get; set; }
         public bool HasInterpretationDisclaimer => !string.IsNullOrEmpty(InterpretationDisclaimer);
 
