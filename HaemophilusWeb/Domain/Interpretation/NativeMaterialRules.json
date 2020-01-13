@@ -15,7 +15,8 @@
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
       "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B."
     ],
-    "Typings": [ "MolecularTyping", "PorA", "FetA" ]
+    "Typings": [ "MolecularTyping", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_02": {
     "CsbPcr": [ "Negative" ],
@@ -33,7 +34,8 @@
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
       "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C."
     ],
-    "Typings": [ "MolecularTyping", "PorA", "FetA" ]
+    "Typings": [ "MolecularTyping", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_03": {
     "CsbPcr": [ "Negative" ],
@@ -51,7 +53,8 @@
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
       "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W."
     ],
-    "Typings": [ "MolecularTyping", "PorA", "FetA" ]
+    "Typings": [ "MolecularTyping", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_04": {
     "CsbPcr": [ "Negative" ],
@@ -69,7 +72,8 @@
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
       "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe Y."
     ],
-    "Typings": [ "MolecularTyping", "PorA", "FetA" ]
+    "Typings": [ "MolecularTyping", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_05": {
     "CsbPcr": [ "Negative" ],
@@ -87,7 +91,8 @@
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
       "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y."
     ],
-    "Typings": [ "MolecularTyping", "PorA", "FetA" ]
+    "Typings": [ "MolecularTyping", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_06": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -168,7 +173,8 @@
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
       "Meldekategorie dieses Befundes: Neisseria meningitidis."
     ],
-    "Typings": [ "RibosomalRna16S", "MolecularTyping", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ]
+    "Typings": [ "RibosomalRna16S", "MolecularTyping", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_11": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -183,7 +189,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RibosomalRna16S", "MolecularTyping", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ]
+    "Typings": [ "RibosomalRna16S", "MolecularTyping", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_12": {
     "CsbPcr": [ "NotDetermined" ],
@@ -278,7 +285,8 @@
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
       "Meldekategorie dieses Befundes: Neisseria meningitidis."
     ],
-    "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_18": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -293,7 +301,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_19": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -339,6 +348,7 @@
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
       "Meldekategorie dieses Befundes: Neisseria meningitidis."
     ],
-    "Typings": [ "MolecularTyping", "PorA", "FetA" ]
+    "Typings": [ "MolecularTyping", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   }
 }

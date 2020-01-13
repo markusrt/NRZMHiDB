@@ -29,6 +29,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Typings.Should().BeEmpty();
             isolateInterpretation.Result.Interpretation.Should().Contain("Diskrepante Ergebnisse");
+            isolateInterpretation.Result.Comment.Should().BeNull();
         }
 
         [Test]
@@ -382,6 +383,7 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "PorA - Sequenztyp" && t.Value == "X, Y");
             interpretation.Typings.Should().Contain(t =>
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
+            interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
         }
 
         [TestCase("W", "csw", "")]
@@ -414,6 +416,7 @@ namespace HaemophilusWeb.Domain
                 .Should().Be($"Das Serogruppe{plural}-{serogroup}-spezifische {gen}-Gen wurde nachgewiesen.");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Be("X, Y");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Be("Z");
+            interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
         }
 
         [TestCase("Rule 06", NativeMaterialTestResult.Negative, false, 0, "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.")]
@@ -465,6 +468,7 @@ namespace HaemophilusWeb.Domain
                 .Should().Be(realTimePcrInterpretation);
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            interpretation.Result.Comment.Should().BeNull();
         }
 
         [TestCase("Rule 10", NativeMaterialTestResult.Positive, false, "Neisseria meningitidis", "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.")]
@@ -509,6 +513,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("Ergebnis der DNA-Sequenzierung").Should().Be(ribosomalRna16SBestMatch);
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
         }
 
 

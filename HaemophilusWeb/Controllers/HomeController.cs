@@ -23,6 +23,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2020, 01, 13, 22, 45, 0), "Update Befunde und Interpretation für Nativmaterialien", ChangeType.Feature),
                 new Change(new DateTime(2020, 01, 13, 22, 0, 0), "Meningokokken Einsendungen können ohne Postleitzahl und Entnahmedatum gespeichert werden", ChangeType.Feature),
                 new Change(new DateTime(2020, 01, 09, 22, 0, 0), "16S rDNA \"Negativ\" wird jetzt korrekt gespeichert", ChangeType.Bug),
                 new Change(new DateTime(2020, 01, 03), "Verbesserung bei Befunden: Faxvorlage, 4-fache Resistenztestung, keine Interpretation", ChangeType.Bug),

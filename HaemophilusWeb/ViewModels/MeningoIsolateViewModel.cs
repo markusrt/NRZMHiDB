@@ -69,6 +69,9 @@ namespace HaemophilusWeb.ViewModels
         public bool HasInterpretationDisclaimer => !string.IsNullOrEmpty(InterpretationDisclaimer);
 
 
+        public string Comment { get; set; }
+        public bool HasComment => !string.IsNullOrEmpty(Comment);
+
         public string Date
         {
             get { return DateTime.Now.ToReportFormat(); }

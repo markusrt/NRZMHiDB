@@ -62,6 +62,7 @@ namespace HaemophilusWeb.Domain
                 Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
                 Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
 
+                Result.Comment = rule.Comment;
                 Result.Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray();
 
                 foreach (var typingTemplateKey in rule.Typings)

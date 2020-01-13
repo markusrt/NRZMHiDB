@@ -51,6 +51,7 @@ namespace HaemophilusWeb.Automapper
                 destination.Report = isolateInterpretation.Result.Report;
             }
             destination.Typings = isolateInterpretation.Typings;
+            destination.Comment = isolateInterpretation.Result.Comment;
 
             var sender = db.Senders.Find(source.Sending.SenderId);
             if (sender != null) // special case for Meningo as old senders were not imported

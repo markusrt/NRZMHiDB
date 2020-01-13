@@ -107,9 +107,14 @@ namespace HaemophilusWeb.Domain
     {
         [Obsolete("Use Result array instead")]
         public string Interpretation { get; set; }
+
         public string[] Report { get; set; }
+
         public string InterpretationPreliminary { get; set; }
+
         [Obsolete("Use Result array instead")]
         public string InterpretationDisclaimer { get; set; }
+
+        public string Comment { get; set; }
     }
 }

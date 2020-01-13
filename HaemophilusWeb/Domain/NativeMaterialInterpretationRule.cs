@@ -19,5 +19,6 @@ namespace HaemophilusWeb.Domain
         public string MolecularTyping { get; set; }
         public string[] Report { get; set; }
         public string[] Typings { get; set; }
+        public string Comment { get; set; }
     }
 }
