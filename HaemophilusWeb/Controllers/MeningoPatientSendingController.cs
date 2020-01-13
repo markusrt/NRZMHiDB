@@ -49,10 +49,10 @@ namespace HaemophilusWeb.Controllers
 
         private void ValidatePatientBirthdateGreaterOrEqualReceivingDate(PatientSendingViewModel<MeningoPatient, MeningoSending> patientSending)
         {
-            var samplingDateBeforeBirthDate = (patientSending.Sending.SamplingDate ?? DateTime.MinValue).CompareTo(patientSending.Patient.BirthDate ?? DateTime.MinValue) < 0;
+            var samplingDateBeforeBirthDate = (patientSending.Sending.SamplingDate ?? DateTime.MaxValue).CompareTo(patientSending.Patient.BirthDate ?? DateTime.MinValue) < 0;
             if (samplingDateBeforeBirthDate)
             {
-                ModelState.AddModelError("Patient.BirthDate", "Das Entnahmedatum muss nach dem Geburtsdatum des Patienten liegen");
+                ModelState.AddModelError("Sending.SamplingDate", "Das Entnahmedatum muss nach dem Geburtsdatum des Patienten liegen");
             }
         }
 

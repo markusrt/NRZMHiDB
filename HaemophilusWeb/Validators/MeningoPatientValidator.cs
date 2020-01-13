@@ -13,16 +13,10 @@ namespace HaemophilusWeb.Validators
             RuleFor(p => p.Initials).Matches(@"([a-zA-ZäöüÄÖÜ\?]\.)+").WithMessage(
                 "Die Initialen müssen in der Form 'E.M.' eingegeben werden.");
             RuleFor(p => p.Gender).NotEmpty();
-            RuleFor(p => p.PostalCode).Must(BeNotEmptyIfNotOverseas).WithMessage("{PropertyName} darf nicht leer sein.");
             RuleFor(p => p.Country).Must(BeNotDefaultIfOverseas)
                 .WithMessage("{PropertyName} darf nicht auf Deutschland stehen, wenn das Bundesland den Wert \"Ausland\" hat.");
             RuleFor(p => p.Country).Must(BeNotOverseasIfDefaultCountry)
                 .WithMessage("{PropertyName} muss auf Deutschland stehen, wenn das Bundesland nicht den Wert \"Ausland\" hat.");
-        }
-
-        private static bool BeNotEmptyIfNotOverseas(MeningoPatient patient, string postalcode)
-        {
-            return patient.State == State.Overseas || !string.IsNullOrEmpty(postalcode);
         }
 
         private static bool BeNotDefaultIfOverseas(MeningoPatient patient, string country)
