@@ -35,10 +35,8 @@ namespace HaemophilusWeb.Domain
         {
             typings.Clear();
 
-            Result = new InterpretationResult
-            {
-                Interpretation = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."
-            };
+            Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
+
 
             if (isolate.Sending.Material == MeningoMaterial.NativeMaterial)
             {
@@ -52,8 +50,6 @@ namespace HaemophilusWeb.Domain
 
         private void RunNativeMaterialInterpretation(MeningoIsolate isolate)
         {
-            Result.Interpretation = null;
-            Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
             var matchingRule = NativeMaterialInterpretationRules.FirstOrDefault(r => CheckNativeMaterialRule(r.Value, isolate));
 
             if (matchingRule.Key != null)
@@ -86,17 +82,15 @@ namespace HaemophilusWeb.Domain
                 var rule = matchingRule.Value;
                 Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
                 Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
+                
                 if (!string.IsNullOrEmpty(rule.Identification))
                 {
                     typings.Add(new Typing {Attribute = "Identifikation", Value = rule.Identification});
                 }
 
-                var interpretation = rule.Interpretation;
-                //TODO Add InterpretationDisclaimer
-                Result.Interpretation = !string.IsNullOrEmpty(interpretation)
-                    ? Smart.Format(interpretation, isolate)
-                    : string.Empty;
-
+                Result.Comment = rule.Comment;
+                Result.Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray();
+                
                 foreach (var typingTemplateKey in rule.Typings)
                 {
                     var template = TypingTemplates[typingTemplateKey];
