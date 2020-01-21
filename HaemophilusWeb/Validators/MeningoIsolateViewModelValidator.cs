@@ -8,7 +8,7 @@ namespace HaemophilusWeb.Validators
     public class MeningoIsolateViewModelValidator : IsolateViewModelValidatorBase<MeningoIsolateViewModel>
     {
         private const string OtherPropertiesShouldBeNotDeterminedOnNoGrowth =
-            "Wenn {PropertyName} den Wert \"Nein\" hat, dann müssen alle Einträge unter \"Allgemein\" auf \"n.d.\" stehen (abgesehen von Serogruppen-PCR).";
+            "Wenn {PropertyName} den Wert \"Nein\" hat, dann müssen alle Einträge unter \"Allgemein\" auf \"n.d.\" stehen (abgesehen von Serogruppen-PCR, siaA, ctrA und cnl).";
         private const string MoreThenOneSerogenoIsPositive = "Es darf nur ein Serogenotyp positiv sein.";
 
         public MeningoIsolateViewModelValidator()
@@ -51,8 +51,7 @@ namespace HaemophilusWeb.Validators
                 model.GrowthOnBloodAgar == Growth.No && model.GrowthOnMartinLewisAgar == Growth.No
                  && (model.Oxidase != TestResult.NotDetermined || model.Agglutination != MeningoSerogroupAgg.NotDetermined
                  || model.Onpg != TestResult.NotDetermined || model.GammaGt != TestResult.NotDetermined
-                 || model.MaldiTof != UnspecificTestResult.NotDetermined || model.SiaAGene != TestResult.NotDetermined
-                 || model.CapsuleNullLocus != TestResult.NotDetermined || model.CapsularTransferGene != TestResult.NotDetermined);
+                 || model.MaldiTof != UnspecificTestResult.NotDetermined);
             return !modelIsInvalid;
         }
 

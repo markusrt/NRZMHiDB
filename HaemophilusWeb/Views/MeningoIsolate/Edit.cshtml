@@ -14,6 +14,7 @@
 
     @Html.ValidationSummary(true)
     @Html.HiddenFor(model => model.MeningoIsolateId)
+    @Html.HiddenFor(model => model.LaboratoryNumber)
     @if (Model.LaboratoryNumber.StartsWith("-"))
     {
         @Html.ReadonlyFor(m => m.LaboratoryNumberWithPrefix)

@@ -23,6 +23,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2020, 01, 21, 23, 15, 0), "Eingaben für siaA, ctrA und cnl dürfen auch dann gemacht werden, wenn kein Wachstum auf Agar erfolgt ist.", ChangeType.Feature),
                 new Change(new DateTime(2020, 01, 13, 23, 15, 0), "Hinweis auf Genomsequenzierung für Befunde vitaler Stämme", ChangeType.Feature),
                 new Change(new DateTime(2020, 01, 13, 22, 45, 0), "Update Befunde und Interpretation für Nativmaterialien", ChangeType.Feature),
                 new Change(new DateTime(2020, 01, 13, 22, 0, 0), "Meningokokken Einsendungen können ohne Postleitzahl und Entnahmedatum gespeichert werden", ChangeType.Feature),

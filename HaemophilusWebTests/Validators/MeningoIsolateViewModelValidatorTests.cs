@@ -52,6 +52,24 @@ namespace HaemophilusWeb.Validators
             return CreateMeningoIsolateViewModel();
         }
 
+        [Test]
+        public void Validate_WithNoGrowthButSiaACtrAAndCnl_IsValid()
+        {
+            var dto = new MeningoIsolateViewModel
+            {
+                GrowthOnBloodAgar = Growth.No,
+                GrowthOnMartinLewisAgar = Growth.No,
+                LaboratoryNumber = "10/10",
+                SiaAGene = TestResult.Negative,
+                CapsularTransferGene = TestResult.Positive,
+                CapsuleNullLocus = TestResult.Negative
+            };
+
+            var validationResult = Validate(dto);
+
+            AssertIsValid(validationResult);
+        }
+
         private static MeningoIsolateViewModel CreateMeningoIsolateViewModel()
         {
             return new MeningoIsolateViewModel
@@ -71,9 +89,7 @@ namespace HaemophilusWeb.Validators
             {
                 GrowthOnBloodAgar = Growth.No,
                 GrowthOnMartinLewisAgar = Growth.No,
-                CapsuleNullLocus = TestResult.Positive,
-                CapsularTransferGene = TestResult.Positive,
-                SiaAGene = TestResult.Positive,
+                GammaGt = TestResult.Positive,
                 LaboratoryNumber = "10/10"
             };
             yield return Tuple.Create(growthIsNoButOtherFieldsAreFilled, new[] { "GrowthOnBloodAgar", "GrowthOnMartinLewisAgar" });
