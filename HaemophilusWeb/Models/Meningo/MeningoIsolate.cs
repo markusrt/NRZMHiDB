@@ -14,7 +14,7 @@ namespace HaemophilusWeb.Models.Meningo
         [ScriptIgnore]
         public MeningoSending Sending { get; set; }
 
-        public virtual NeisseriaPubMlstIsolate PubMlstIsolate { get; set; }
+        public NeisseriaPubMlstIsolate NeisseriaPubMlstIsolate { get; set; }
 
         public override string ToString()
         {

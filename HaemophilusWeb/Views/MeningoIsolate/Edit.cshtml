@@ -151,94 +151,101 @@
         </div>
         <div class="tab-pane" id="pubMLSTTab">
             <p></p>
+            @Html.ReadonlyFor(model => model.StemNumberWithPrefix)
             <div class="form-group">
-                <label class="col-sm-2 control-label" for="PubMlstIsolateId">Isolat Nummer</label>
-                <div class="col-sm-5">
-                    <input class="form-control" id="PubMlstIsolateId" placeholder="35105" type="text">
-                </div>
-                <div class="col-sm-2">
+                <div class="offset-md-2 col-md-offset-2 col-sm-2">
                     <button class="btn btn-info" type="button" id="PubMlstQuery" data-loading-text="Abfrage läuft <i class='glyphicon glyphicon-time'></i>">Abfragen</button>
                 </div>
                 <div class="col-sm-2">
                     <span class="label label-warning" id="PubMlstIsolateNotFound" style="display: none;">Isolat wurde nicht gefunden</span>
                     <span class="label label-success" id="PubMlstIsolateFound" style="display: none;">Isolat wurde geladen</span>
                 </div>
+                <div class="col-sm-2">
+                    @if (Model.NeisseriaPubMlstIsolate.PubMlstId == 0)
+                    {
+                        <a id="PubMlstIsolateLink" class="btn disabled" role="button" target="_blank" href="#">PubMLST Eintrag anzeigen</a>
+                    }
+                    else
+                    {
+                        <a id="PubMlstIsolateLink" class="btn" role="button" target="_blank" href="https://pubmlst.org/bigsdb?page=info&db=pubmlst_neisseria_isolates&id=@Model.NeisseriaPubMlstIsolate.PubMlstId">PubMLST Eintrag</a>
+                    }
+                </div>
             </div>
+            @Html.HiddenFor(m => m.NeisseriaPubMlstIsolate.NeisseriaPubMlstIsolateId)
+            @Html.HiddenFor(m => m.NeisseriaPubMlstIsolate.PubMlstId)
             <div class="form-group">
                 <label class="col-sm-2 control-label">ST</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-SequenceType" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.SequenceType, new { @class = "form-control", @readonly = "readonly" })
                 </div>
                 <label class="col-sm-2 control-label">cc</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-ClonalComplex" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.ClonalComplex, new { @class = "form-control", @readonly = "readonly" })
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">PorA-VR1</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-PorAVr1" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.PorAVr1, new { @class = "form-control", @readonly = "readonly" })
                 </div>
                 <label class="col-sm-2 control-label">PorA-VR2</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-PorAVr2" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.PorAVr2, new { @class = "form-control", @readonly = "readonly" })
                 </div>
                 <label class="col-sm-2 control-label">FetA-VR</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-FetAVr" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.FetAVr, new { @class = "form-control", @readonly = "readonly" })
                 </div>
             </div>
+
             <div class="form-group">
                 <label class="col-sm-2 control-label">'porB</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-PorB" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.PorB, new { @class = "form-control", @readonly = "readonly" })
                 </div>
                 <label class="col-sm-2 control-label">fHbp</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-Fhbp" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.Fhbp, new { @class = "form-control", @readonly = "readonly" })
                 </div>
                 <label class="col-sm-2 control-label">NHBA</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-Nhba" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.Nhba, new { @class = "form-control", @readonly = "readonly" })
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-2 control-label">nadA</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-NadA" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.NadA, new { @class = "form-control", @readonly = "readonly" })
                 </div>
                 <label class="col-sm-2 control-label">penA</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-PenA" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.PenA, new { @class = "form-control", @readonly = "readonly" })
                 </div>
-                <label class="col-sm-2 control-label">NHBA</label>
+                <label class="col-sm-2 control-label">GyrA</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-GyrA" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.GyrA, new { @class = "form-control", @readonly = "readonly" })
                 </div>
             </div>
-
             <div class="form-group">
                 <label class="col-sm-2 control-label">parC</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-ParC" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.ParC, new { @class = "form-control", @readonly = "readonly" })
                 </div>
                 <label class="col-sm-2 control-label">parE</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-ParE" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.ParE, new { @class = "form-control", @readonly = "readonly" })
                 </div>
                 <label class="col-sm-2 control-label">rpoB</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-RpoB" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.RpoB, new { @class = "form-control", @readonly = "readonly" })
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">rplF</label>
                 <div class="col-sm-2">
-                    <input class="form-control" id="PM-RplF" type="text" readonly>
+                    @Html.TextBoxFor(m => m.NeisseriaPubMlstIsolate.RplF, new { @class = "form-control", @readonly = "readonly" })
                 </div>
             </div>
-
         </div>
 </div></div>
 
@@ -260,7 +267,6 @@
             ConfigureConditionalFields();
 
             $("#PubMlstQuery").click(QueryPubMlstDatabase);
-            $("#PubMlstIsolateId").keypress(QueryPubMlstDatabaseKeypress);
 
             $(".tab-content").find("div.tab-pane:hidden:has(span.field-validation-error)").each(function (index, tab) {
                 var id = $(tab).attr("id");
@@ -272,43 +278,38 @@
     function ConfigureConditionalFields() {
         ShowOnSpecificRadioValue("RibosomalRna16SMatchInPercentForm", "RibosomalRna16S", "Positive", GeneralInput("RibosomalRna16SBestMatch"), GeneralInput("RibosomalRna16SMatchInPercent"));
         ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTof", "Determined", GeneralInput("MaldiTofBestMatch"), GeneralInput("MaldiTofMatchConfidence"));
-        ShowOnSpecificRadioValue("PorAPcrForm", "PorAPcr", "Positive", GeneralInput("PorAVr1"), GeneralInput("PorAVr2"));
-        ShowOnSpecificRadioValue("FetAPcrForm", "FetAPcr", "Positive", GeneralInput("FetAVr"));
+        ShowOnSpecificRadioValue("PorAPcrForm", "PorAPcr", "Positive", ExactInput("PorAVr1"), ExactInput("PorAVr2"));
+        ShowOnSpecificRadioValue("FetAPcrForm", "FetAPcr", "Positive", ExactInput("FetAVr"));
         ShowOnSpecificRadioValue("CswyAlleleForm", "CswyPcr", "Positive", RadioInput("CswyAllele"));
         ShowOnSpecificRadioValue("RealTimePcrForm", "RealTimePcr", "Positive", RadioInput("RealTimePcrResult"));
-    }
-
-    function QueryPubMlstDatabaseKeypress(e) {
-        if (e.keyCode == '13') {
-            e.preventDefault();
-            QueryPubMlstDatabase();
-        }
     }
 
     function QueryPubMlstDatabase() {
         var fields = [
             "PorAVr1", "PorAVr2", "FetAVr", "PorB", "Fhbp", "Nhba", "NadA", "PenA", "GyrA", "ParC", "ParE", "RpoB",
-            "RplF", "SequenceType", "ClonalComplex"
+            "RplF", "SequenceType", "ClonalComplex", "PubMlstId"
         ];
-        var id = $("#PubMlstIsolateId").val();
+        var isolateReference = $("#StemNumberWithPrefix").val();
 
         $("#PubMlstIsolateNotFound").hide();
         $("#PubMlstIsolateFound").hide();
 
-        if (!id) {
+        if (!isolateReference) {
             $("#PubMlstIsolateNotFound").show();
             return;
         }
 
         $("#PubMlstQuery").button("loading");
 
-        $.ajax("@Url.Content("~/PubMlst/NeisseriaIsolates/")", {method:"POST",data:{ isolateId: $("#PubMlstIsolateId").val() }} )
+        $.ajax("@Url.Content("~/PubMlst/NeisseriaIsolates/")", { method: "POST", data: { isolateReference: isolateReference }} )
         .done(function (data) {
-            fields.forEach(v => $('#PM-' + v).val(data[v]));
+            fields.forEach(v => $('#NeisseriaPubMlstIsolate_' + v).val(data[v]));
+            $("#PubMlstIsolateLink").attr("href",
+                "https://pubmlst.org/bigsdb?page=info&db=pubmlst_neisseria_isolates&id=" + data["PubMlstId"]).removeClass("disabled");
             $("#PubMlstIsolateFound").show();
         })
         .fail(function () {
-            fields.forEach(v => $('#PM-' + v).val(""));
+            //fields.forEach(v => $('#PM-' + v).val(""));
             $("#PubMlstIsolateNotFound").show();
         })
         .always(function() {

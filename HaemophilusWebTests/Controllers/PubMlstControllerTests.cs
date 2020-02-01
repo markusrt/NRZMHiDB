@@ -3,8 +3,10 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Controllers
@@ -13,40 +15,31 @@ namespace HaemophilusWeb.Controllers
     public class PubMlstControllerTests
     {
         [Test]
-        public void NeisseriaIsolates_InexisingIsolate_ReturnsEmptyResult()
+        public void NeisseriaIsolates_InexisingIsolate_ReturnsNotFound()
         {
-            var controller = new PubMlstController(UrlReturns404);
+            var service = Substitute.For<PubMlstService>();
+            var controller = new PubMlstController(service);
 
-            var isolate = controller.NeisseriaIsolates(0);
+            var isolate = controller.NeisseriaIsolates("ABC");
 
-            isolate.Should().NotBeNull();
+            isolate.Should().BeOfType<HttpNotFoundResult>();
         }
 
         [Test]
-        public void NeisseriaIsolates_ExisingIsolate_AllFieldsAreSet()
+        public void NeisseriaIsolates_ExisingIsolate_FieldsAreSet()
         {
-            var controller = new PubMlstController(UrlReturnsIsolate35105);
+            const string isolateReference = "DE1234";
+            var service = Substitute.For<PubMlstService>();
+            service.GetIsolateByReference(isolateReference).Returns(new NeisseriaPubMlstIsolate { SequenceType = "22" });
 
-            var json = new JavaScriptSerializer().Serialize((controller.NeisseriaIsolates(0) as JsonResult)?.Data);
+            var controller = new PubMlstController(service);
+
+            var json = new JavaScriptSerializer().Serialize((controller.NeisseriaIsolates(isolateReference) as JsonResult)?.Data);
             var isolate = JsonConvert.DeserializeObject<NeisseriaPubMlstIsolate>(json);
-
-            isolate.PorAVr1.Should().Be("5");
-            isolate.PorAVr2.Should().Be("2");
-            isolate.FetAVr.Should().Be("F3-6");
-            isolate.PorB.Should().Be("2-2");
-            isolate.Fhbp.Should().Be("1511");
-            isolate.Nhba.Should().Be("20");
-            isolate.NadA.Should().Be("");
-            isolate.PenA.Should().Be("1");
-            isolate.GyrA.Should().Be("4");
-            isolate.ParC.Should().Be("1");
-            isolate.ParE.Should().Be("1");
-            isolate.RpoB.Should().Be("4");
-            isolate.RplF.Should().Be("1");
-            isolate.SequenceType.Should().Be("TBD");
-            isolate.ClonalComplex.Should().Be("TBD");
-
+            isolate.SequenceType.Should().Be("22");
+           
         }
+
 
         private static string UrlReturns404(string arg)
         {

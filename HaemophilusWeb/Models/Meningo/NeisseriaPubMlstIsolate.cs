@@ -6,10 +6,10 @@ namespace HaemophilusWeb.Models
 {
     public class NeisseriaPubMlstIsolate : INeisseriaIsolateAlleleProperties
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [ForeignKey("MeningoIsolate")]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int NeisseriaPubMlstIsolateId { get; set; }
 
+        public int PubMlstId { get; set; }
         public string PorAVr1 { get; set; }
         public string PorAVr2 { get; set; }
         public string FetAVr { get; set; }
@@ -25,7 +25,5 @@ namespace HaemophilusWeb.Models
         public string RplF { get; set; }
         public string SequenceType { get; set; }
         public string ClonalComplex { get; set; }
-
-        public virtual MeningoIsolate MeningoIsolate { get; set; }
     }
 }

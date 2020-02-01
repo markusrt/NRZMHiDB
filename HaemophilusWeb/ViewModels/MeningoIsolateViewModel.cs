@@ -21,6 +21,7 @@ namespace HaemophilusWeb.ViewModels
         public MeningoIsolateViewModel()
         {
             EpsilometerTestViewModels = new List<EpsilometerTestViewModel>();
+            NeisseriaPubMlstIsolate = new NeisseriaPubMlstIsolate();
             Report = new string[0];
         }
 
@@ -89,5 +90,7 @@ namespace HaemophilusWeb.ViewModels
                         .Select(EpsilometerTestReportModel.CreateFromViewModel);
             }
         }
+
+        public NeisseriaPubMlstIsolate NeisseriaPubMlstIsolate { get; set; }
     }
 }

@@ -177,7 +177,7 @@ namespace AccessImporter.Converters
             {
                 Console.WriteLine($"Prefilled PubMLST data for Isolate '{isolate.MeningoSendingId}' was not imported: Serotyp(PorB)={porB};st={sequenceType};cc={clonalComplex};pena={penA};fHbp={fhbp}");
                 return;
-                isolate.PubMlstIsolate = new NeisseriaPubMlstIsolate
+                isolate.NeisseriaPubMlstIsolate = new NeisseriaPubMlstIsolate
                 {
                     PorB = porB,
                     SequenceType = sequenceType,

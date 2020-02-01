@@ -247,7 +247,12 @@
     <Compile Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.Designer.cs">
       <DependentUpon>201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs" />
+    <Compile Include="Migrations\202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.Designer.cs">
+      <DependentUpon>202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
+    <Compile Include="Services\PubMlstService.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
     <Compile Include="Domain\IsolateExtensions.cs" />
     <Compile Include="Domain\MeningoIsolateInterpretation.cs" />
@@ -657,6 +662,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.resx">
       <DependentUpon>201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.resx">
+      <DependentUpon>202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

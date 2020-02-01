@@ -33,7 +33,8 @@ namespace HaemophilusWeb.Controllers
 
         public override MeningoIsolate LoadIsolateById(int? id)
         {
-            var isolate = db.MeningoIsolates.Include(i => i.Sending).SingleOrDefault(i => i.MeningoIsolateId == id);
+            var isolate = db.MeningoIsolates
+                .Include(i => i.Sending).Include(i => i.NeisseriaPubMlstIsolate).SingleOrDefault(i => i.MeningoIsolateId == id);
             return isolate;
         }
 
@@ -46,6 +47,10 @@ namespace HaemophilusWeb.Controllers
             //    : EnumEditor.GetEnumDescription(sending.SamplingLocation);
             isolateViewModel.Material = EnumEditor.GetEnumDescription(sending.Material);
             isolateViewModel.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
+            if (isolateViewModel.NeisseriaPubMlstIsolate == null)
+            {
+                isolateViewModel.NeisseriaPubMlstIsolate = new NeisseriaPubMlstIsolate();
+            }
             //isolateViewModel.PatientAgeAtSampling = isolate.PatientAge();
            // isolateViewModel.EpsilometerTestViewModels = EpsilometerTestsModelToViewModel(isolate.EpsilometerTests);
             //isolateViewModel.SamplingDate = isolate.Sending.SamplingDate.ToReportFormat();
@@ -81,6 +86,9 @@ namespace HaemophilusWeb.Controllers
                         db.MeningoIsolates.Include(i => i.EpsilometerTests).Include(i => i.Sending)
                             .Single(i => i.MeningoIsolateId == isolateViewModel.MeningoIsolateId);
                     Mapper.Map(isolateViewModel, isolate);
+                    MapPubMlstData(isolateViewModel, isolate);
+
+
                     db.MarkAsModified(isolate);
                     db.SaveChanges();
                     if (Request == null || Request.Form["primary-submit"] != null)
@@ -109,6 +117,41 @@ namespace HaemophilusWeb.Controllers
                 }
             }
             return CreateEditView(isolateViewModel);
+        }
+
+        private void MapPubMlstData(MeningoIsolateViewModel isolateViewModel, MeningoIsolate isolate)
+        {
+            var pubMlstViewModel = isolateViewModel.NeisseriaPubMlstIsolate;
+            if (pubMlstViewModel.PubMlstId != 0)
+            {
+                var neisseriaPubMlstIsolate =
+                    db.NeisseriaPubMlstIsolates.SingleOrDefault(n =>
+                        n.PubMlstId == pubMlstViewModel.PubMlstId);
+                if (neisseriaPubMlstIsolate == null)
+                {
+                    neisseriaPubMlstIsolate = pubMlstViewModel;
+                    db.NeisseriaPubMlstIsolates.Add(neisseriaPubMlstIsolate);
+                }
+                else
+                {
+                    neisseriaPubMlstIsolate.PorAVr1 = pubMlstViewModel.PorAVr1;
+                    neisseriaPubMlstIsolate.PorAVr2 = pubMlstViewModel.PorAVr2;
+                    neisseriaPubMlstIsolate.FetAVr = pubMlstViewModel.FetAVr;
+                    neisseriaPubMlstIsolate.PorB = pubMlstViewModel.PorB;
+                    neisseriaPubMlstIsolate.Fhbp = pubMlstViewModel.Fhbp;
+                    neisseriaPubMlstIsolate.Nhba = pubMlstViewModel.Nhba;
+                    neisseriaPubMlstIsolate.NadA = pubMlstViewModel.NadA;
+                    neisseriaPubMlstIsolate.PenA = pubMlstViewModel.PenA;
+                    neisseriaPubMlstIsolate.GyrA = pubMlstViewModel.GyrA;
+                    neisseriaPubMlstIsolate.ParC = pubMlstViewModel.ParC;
+                    neisseriaPubMlstIsolate.ParE = pubMlstViewModel.ParE;
+                    neisseriaPubMlstIsolate.RpoB = pubMlstViewModel.RpoB;
+                    neisseriaPubMlstIsolate.RplF = pubMlstViewModel.RplF;
+                    neisseriaPubMlstIsolate.SequenceType = pubMlstViewModel.SequenceType;
+                    neisseriaPubMlstIsolate.ClonalComplex = pubMlstViewModel.ClonalComplex;
+                    isolate.NeisseriaPubMlstIsolate = neisseriaPubMlstIsolate;
+                }
+            }
         }
     }
 }

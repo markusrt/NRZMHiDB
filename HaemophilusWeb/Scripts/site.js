@@ -13,6 +13,10 @@ function RadioInput(name)
     return "input:radio[name$='" + name + "']";
 }
 
+function ExactInput(id) {
+    return "[id='" + id + "']";
+}
+
 function GeneralInput(id) {
     return "[id$='" + id + "']";
 }
