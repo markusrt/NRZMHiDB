@@ -53,7 +53,7 @@
     <div class="col-sm-4 col-xs-2 etest-labels">
         @foreach (var eTestResult in EnumUtils.AllEnumValues<EpsilometerTestResult>())
         {
-            <span class="label label-etest-@(eTestResult.ToString())" style="@(Model.Result == eTestResult ? "" : "display:none")">
+            <span class="badge badge-etest-@(eTestResult.ToString())" style="@(Model.Result == eTestResult ? "" : "display:none")">
                 @EnumEditor.GetEnumDescription(eTestResult)
             </span>
         }

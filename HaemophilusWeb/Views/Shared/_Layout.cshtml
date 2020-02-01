@@ -19,158 +19,156 @@
         
         @Scripts.Render("~/bundles/site")
     </head>
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Haemophilus", "Index", "Home", null, new {@class = "navbar-brand"})
-                </div>
-                <div class="navbar-collapse collapse">
-                    @if (Request.IsAuthenticated)
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+            <img src="/Images/logo4.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            NRZMHi
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            @if (Request.IsAuthenticated)
+            {
+                <ul class="navbar-nav mr-auto">
+                    @if (User.IsInRole(DefaultRoles.User) || User.IsInRole(DefaultRoles.Administrator))
                     {
-                    <ul class="nav navbar-nav">
-                        @if (User.IsInRole(DefaultRoles.User) || User.IsInRole(DefaultRoles.Administrator))
-                        {
-                            <li>@Html.ActionLink("Einsender", "Index", "Sender")</li>
-                            <li>@Html.ActionLink("Haemophilus", "Index", "PatientSending")</li>
-                            <li>@Html.ActionLink("Meningokokken", "Index", "MeningoPatientSending")</li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Export <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>@Html.ActionLink("RKI Export (Haemophilus)", "RkiExport", "PatientSending")</li>
-                                    <li>@Html.ActionLink("Labor Export (Haemophilus)", "LaboratoryExport", "PatientSending")</li>
-                                    <li>@Html.ActionLink("Labor Export (Meningokokken)", "LaboratoryExport", "MeningoPatientSending")</li>
-                                    <li>@Html.ActionLink("Einsender Export", "Export", "Sender")</li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">PubMLST <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>@Html.ActionLink("Matching (Meningokokken)", "PubMlstMatch", "MeningoIsolate")</li>
-                                </ul>
-                            </li>
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Administration <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>@Html.ActionLink("Gelöschte Einsender", "Deleted", "Sender")</li>
-                                    <li>@Html.ActionLink("Gelöschte Einsendungen (Haemophilus)", "Deleted", "PatientSending")</li>
-                                    <li>@Html.ActionLink("EUCAST Grenzwerte", "Index", "EucastClinicalBreakpoints")</li>
-                                    <li>@Html.ActionLink("Gesundheitsämter", "Index", "HealthOffices")</li>
-                                </ul>
-                            </li>
-                        }
-                        else if (User.IsInRole(DefaultRoles.PublicHealth))
-                        {
-                            <li>@Html.ActionLink("RKI Export", "RkiExport", "PatientSending")</li>
-                        }
-                    </ul>
+                        <li class="nav-item">@Html.ActionLink("Einsender", "Index", "Sender", null, new {@class = "nav-link"})</li>
+                        <li class="nav-item">@Html.ActionLink("Haemophilus", "Index", "PatientSending", null, new {@class = "nav-link"})</li>
+                        <li class="nav-item">@Html.ActionLink("Meningokokken", "Index", "MeningoPatientSending", null, new {@class = "nav-link"})</li>
+
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownExport" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Export <span class="caret"></span></a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownExport">
+                                @Html.ActionLink("RKI Export (Haemophilus)", "RkiExport", "PatientSending", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Labor Export (Haemophilus)", "LaboratoryExport", "PatientSending", null, new { @class = "dropdown-item" })
+				@Html.ActionLink("Labor Export (Meningokokken)", "LaboratoryExport", "MeningoPatientSending", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Einsender Export", "Export", "Sender", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+			<li class="nav-item dropdown">
+			    <a href="#"  class="nav-link dropdown-toggle" id="navbarDropdownPubMLST" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PubMLST <span class="caret"></span></a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
+                                @Html.ActionLink("Matching (Meningokokken)", "PubMlstMatch", "MeningoIsolate", null, new { @class = "dropdown-item" })
+			    </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#"  class="nav-link dropdown-toggle" id="navbarDropdownAdmin" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration <span class="caret"></span></a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownAdmin">
+                                @Html.ActionLink("Gelöschte Einsender", "Deleted", "Sender", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Gelöschte Einsendungen (Haemophilus)", "Deleted", "PatientSending", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("EUCAST Grenzwerte", "Index", "EucastClinicalBreakpoints", null, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Gesundheitsämter", "Index", "HealthOffices", null, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
                     }
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
+                    else if (User.IsInRole(DefaultRoles.PublicHealth))
+                    {
+                        <li class="nav-item">@Html.ActionLink("RKI Export", "RkiExport", "PatientSending", null, new { @class = "nav-link" })</li>
+                    }
+                </ul>
+            }
+            @Html.Partial("_LoginPartial")
         </div>
-        <div class="container body-content">
-            <div class="page-header">
-                <h1>@ViewBag.Title 
+    </nav>
+
+    <main role="main" class="container">
+        <div class="pb-2 mt-4 mb-2 border-bottom">
+            <h1>
+                @ViewBag.Title
                     @if (!String.IsNullOrEmpty(ViewBag.Subtitle))
                     {
                         <small>@Html.Raw(ViewBag.Subtitle)</small>
                     }
                 </h1>
-            </div>
-            <div id="errorMessages">
-                @if ("true".Equals(ConfigurationManager.AppSettings["Beta"]))
-                {
-                    <div class="alert alert-danger">
-                        <strong>Achtung: Änderungen werden nicht zentral gespeichert!</strong>
-                        Diese Software-Version ist nur eine Demonstrations künftiger Funktionen.
-                        Bitte nutzen Sie die <a href="http://db.hygiene.uni-wuerzburg.de/Haemophilus">reguläre Version</a> für den produktiven Einsatz!
-                    </div>
-                }
-            </div>
-
-            @if (IsSectionDefined("CreateModel") || IsSectionDefined("EditModel") || IsSectionDefined("DeleteModel"))
+        </div>
+        <div id="errorMessages">
+            @if ("true".Equals(ConfigurationManager.AppSettings["Beta"]))
             {
-                using (Html.BeginForm())
-                {
-                    @Html.AntiForgeryToken()
-
-                    <div class="form-horizontal">
-                        
-                        @Html.ValidationSummary(true)
-                     
-                        @if (IsSectionDefined("CreateModel"))
-                        {
-                            @RenderSection("CreateModel")
-                            @Html.Partial("_CreateButton")
-                        }
-                        @if (IsSectionDefined("EditModel"))
-                        {
-                            @RenderSection("EditModel")
-                            @Html.Partial("_EditButton")
-                        }
-                        @if (IsSectionDefined("DeleteModel"))
-                        {
-                            @RenderSection("DeleteModel")
-                            @Html.Partial("_DeleteButton")
-                        }
-                    </div>
-                }
+                <div class="alert alert-danger">
+                    <strong>Achtung: Änderungen werden nicht zentral gespeichert!</strong>
+                    Diese Software-Version ist nur eine Demonstrations künftiger Funktionen.
+                    Bitte nutzen Sie die <a href="http://db.hygiene.uni-wuerzburg.de/Haemophilus">reguläre Version</a> für den produktiven Einsatz!
+                </div>
             }
-
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>
-                    &copy; @DateTime.Now.Year 
-                    - Referenzzentrum für Meningokokken und <i>H. influenzae</i> (NRZMHi), Inst. für Hygiene und Mikrobiologie, Würzburg, Deutschland
-                    - Version: @Assembly.GetAssembly(typeof (HomeController)).GetName().Version
-                </p>
-            </footer>
         </div>
 
-        
-        <script>
-            $(document).ready(function()
+        @if (IsSectionDefined("CreateModel") || IsSectionDefined("EditModel") || IsSectionDefined("DeleteModel"))
+        {
+            using (Html.BeginForm())
             {
-                $(".datepicker").datetimepicker(
-                    {
-                        format: "DD.MM.YYYY",
-                        pickTime: false,
-                        language: "de",
-                    });
-                $(".datetimepicker").datetimepicker(
-                    {
-                        format: "DD.MM.YYYY HH:mm",
-                        language: "de",
-                    });
-                Globalize.culture("de-DE");
+                @Html.AntiForgeryToken()
 
-                var errorMessage ='@TempData["ErrorMessage"]';
-                if (errorMessage.length > 0) {
-                    ShowError(errorMessage);
-                }
+                <div class="form-horizontal">
 
-                var warningMessage = '@TempData["WarningMessage"]';
-                if (warningMessage.length > 0)
+                    @Html.ValidationSummary(true)
+
+                    @if (IsSectionDefined("CreateModel"))
+                    {
+                        @RenderSection("CreateModel")
+                        @Html.Partial("_CreateButton")
+                    }
+                    @if (IsSectionDefined("EditModel"))
+                    {
+                        @RenderSection("EditModel")
+                        @Html.Partial("_EditButton")
+                    }
+                    @if (IsSectionDefined("DeleteModel"))
+                    {
+                        @RenderSection("DeleteModel")
+                        @Html.Partial("_DeleteButton")
+                    }
+                </div>
+            }
+        }
+
+        @RenderBody()
+        <hr/>
+        <footer>
+            <p>
+                &copy; @DateTime.Now.Year
+                - Referenzzentrum für Meningokokken und <i>H. influenzae</i> (NRZMHi), Inst. für Hygiene und Mikrobiologie, Würzburg, Deutschland
+                - Version: @Assembly.GetAssembly(typeof(HomeController)).GetName().Version
+            </p>
+        </footer>
+    </main>
+
+
+    <script>
+        $(document).ready(function() {
+            $(".datepicker").datetimepicker(
                 {
-                    ShowWarning(warningMessage);
-                }
+                    format: "DD.MM.YYYY",
+                    pickTime: false,
+                    language: "de",
+                });
+            $(".datetimepicker").datetimepicker(
+                {
+                    format: "DD.MM.YYYY HH:mm",
+                    language: "de",
+                });
+            Globalize.culture("de-DE");
 
-                // Support for formatted date sorting in datatables
-                $.fn.dataTable.moment('DD.MM.YYYY');
-            });
-        </script>
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (errorMessage.length > 0) {
+                ShowError(errorMessage);
+            }
 
-        @RenderSection("scripts", false)
+            var warningMessage = '@TempData["WarningMessage"]';
+            if (warningMessage.length > 0) {
+                ShowWarning(warningMessage);
+            }
 
-        @Scripts.Render("~/bundles/jqueryval")
-        @Scripts.Render("~/bundles/globalize-de-DE")
-        @Scripts.Render("~/bundles/globalized-validation")
-    </body>
+            // Support for formatted date sorting in datatables
+            $.fn.dataTable.moment('DD.MM.YYYY');
+        });
+    </script>
+
+    @RenderSection("scripts", false)
+
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/globalize-de-DE")
+    @Scripts.Render("~/bundles/globalized-validation")
+</body>
 </html>

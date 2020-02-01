@@ -108,7 +108,7 @@ namespace HaemophilusWeb.Views.Utils
                     $"<input type=\"checkbox\" id=\"{id}\" name=\"{modelMetadata.PropertyName}\" value=\"{value}\" {(isActive ? "checked" : string.Empty)}/>"
                     : htmlHelper.RadioButtonFor(expression, name, new { id }).ToHtmlString();
 
-                sb.AppendFormat("<label class=\"btn btn-default {2}\">{0} {1}</label>", selectHtml, description,
+                sb.AppendFormat("<label class=\"btn btn-secondary {2}\">{0} {1}</label>", selectHtml, description,
                     isActive ? "active" : "");
             }
             sb.Append("</div></div>");
