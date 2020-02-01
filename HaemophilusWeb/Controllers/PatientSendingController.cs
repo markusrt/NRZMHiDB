@@ -513,17 +513,17 @@ namespace HaemophilusWeb.Controllers
             var builder = new StringBuilder();
             builder.Append("<div class=\"btn-group btn-group-sm\">");
 
-            builder.AppendFormat("<a class=\"btn btn-secondary\" href=\"{0}\" role=\"button\">Bearbeiten</a>",
+            builder.AppendFormat("<a class=\"btn btn-secondary border-right\" href=\"{0}\" role=\"button\">Bearbeiten</a>",
                 Url.Action("Edit", new { id = sendingId }));
             //TODO make this cleaner
             if (this is PatientSendingController)
             {
-                builder.AppendFormat("<a class=\"btn btn-secondary\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
+                builder.AppendFormat("<a class=\"btn btn-secondary border-left\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
                     Url.Action("Isolate", "Report", new { id = isolateId }));
             }
             else if (this is MeningoPatientSendingController)
             {
-                builder.AppendFormat("<a class=\"btn btn-secondary\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
+                builder.AppendFormat("<a class=\"btn btn-secondary border-left\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
                     Url.Action("Isolate", "MeningoReport", new { id = isolateId }));
             }
             builder.Append("</div>");
