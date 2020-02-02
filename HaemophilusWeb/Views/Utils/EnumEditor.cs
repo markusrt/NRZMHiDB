@@ -86,7 +86,7 @@ namespace HaemophilusWeb.Views.Utils
             var isFlagsEnum = enumType.GetCustomAttributes<FlagsAttribute>().Any();
 
             var sb = new StringBuilder();
-            sb.Append("<div><div class=\"btn-group\" data-toggle=\"buttons\">");
+            sb.Append("<div><div class=\"btn-group btn-group-toggle\" data-toggle=\"buttons\">");
             foreach (var value in GetEnumValues<TEnum>(modelMetadata))
             {
                 var intValue = Convert.ToInt32(value);

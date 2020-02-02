@@ -11,14 +11,14 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
+    <div>
         @Html.ValidationSummary(true)
 
         @Html.DateEditorFor(m => m.From)
         @Html.DateEditorFor(m => m.To)
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+        <div class="form-group row">
+            <div class="offset-md-2 col-md-10">
                 <input type="submit" name="primary-submit" value="Exportieren nach Excel" class="btn btn-primary" />
             </div>
         </div>

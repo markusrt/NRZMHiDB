@@ -11,8 +11,8 @@
 
 @Html.EnumRadioEditorFor(m => m.Gender)
 
-<div class="form-group">
-    @Html.LabelFor(m => m.PostalCode, new { @class = "col-sm-2 control-label" })
+<div class="form-group row">
+    @Html.LabelFor(m => m.PostalCode, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         @Html.TextBoxFor(m => m.PostalCode, new { @placeholder = "97080", @class = "form-control", @list = "postalCodeSearchresults", @autocomplete = "off" })
         <datalist id="postalCodeSearchresults"></datalist>
@@ -23,8 +23,8 @@
 @Html.TextEditorFor(m => m.City, "Würzburg")
 @Html.TextEditorFor(m => m.County, "Würzburg")
 
-<div class="form-group">
-    @Html.LabelFor(m => m.State, new { @class = "col-sm-2 control-label" })
+<div class="form-group row">
+    @Html.LabelFor(m => m.State, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         @EnumEditor.EnumDropDownListFor(Html, model => model.State, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.State)
@@ -34,8 +34,8 @@
 @* TODO implement Country *@
 
 @Html.EnumRadioEditorFor(m => m.ClinicalInformation, "col-sm-10")
-<div id="OtherClinicalInformationForm" class="form-group">
-    @Html.LabelFor(m => m.OtherClinicalInformation, new { @class = "col-sm-2 control-label" })
+<div id="OtherClinicalInformationForm" class="form-group row">
+    @Html.LabelFor(m => m.OtherClinicalInformation, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         @Html.TextBoxFor(m => m.OtherClinicalInformation, new { @class = "form-control", @list = "otherClinicalInformationAutocomplete", @autocomplete = "off" })
         <datalist id="otherClinicalInformationAutocomplete">
@@ -51,11 +51,11 @@
 
 @Html.EnumRadioEditorFor(m => m.HibVaccination)
 
-@Html.DateEditorFor(m => m.HibVaccinationDate, "no-focus", "HibVaccinationDateForm");
+@Html.DateEditorFor(m => m.HibVaccinationDate, "no-focus", "HibVaccinationDateForm")
 
 @Html.EnumRadioEditorFor(m => m.Therapy)
-<div id="TherapyDetailsForm" class="form-group">
-    @Html.LabelFor(m => m.TherapyDetails, new { @class = "col-sm-2 control-label" })
+<div id="TherapyDetailsForm" class="form-group row">
+    @Html.LabelFor(m => m.TherapyDetails, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         @Html.TextBoxFor(m => m.TherapyDetails, new { @class = "form-control", @list = "therapyDetailsAutocomplete", @autocomplete = "off" })
         <datalist id="therapyDetailsAutocomplete">

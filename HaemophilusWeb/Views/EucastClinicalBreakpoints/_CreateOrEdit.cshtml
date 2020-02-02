@@ -1,8 +1,8 @@
 ﻿@using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.Models.EucastClinicalBreakpoint
 
-<div class="form-group">
-    @Html.LabelFor(model => model.Antibiotic, htmlAttributes: new { @class = "control-label col-sm-2" })
+<div class="form-group row">
+    @Html.LabelFor(model => model.Antibiotic, htmlAttributes: new { @class = "col-form-label col-sm-2" })
     <div class="col-sm-5">
         @EnumEditor.EnumDropDownListFor(Html, model => model.Antibiotic, new { @class = "form-control" })
         @Html.ValidationMessageFor(model => model.Antibiotic, "", new { @class = "text-danger" })

@@ -35,8 +35,8 @@
 
     @Html.EnumRadioEditorFor(model => model.FactorTest)
 
-    <div class="form-group">
-        <label class="col-sm-2 control-label">E-Test Messwerte</label>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">E-Test Messwerte</label>
     </div>
 
     @Html.EditorFor(model => model.EpsilometerTestViewModels)
@@ -52,8 +52,8 @@
     @Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP6, "col-sm-10")
 
     @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
-    <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
-        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "col-sm-2 control-label"})
+    <div id="RibosomalRna16SMatchInPercentForm" class="form-group row">
+        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "col-sm-2 col-form-label"})
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.RibosomalRna16SBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
             @Html.ValidationMessageFor(model => model.RibosomalRna16SBestMatch)
@@ -61,15 +61,15 @@
         <div class="col-sm-3">
             <div class="input-group">
                 @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "form-control", placeholder="in Prozent"})
-                <span class="input-group-addon">%</span>
+                <div class="input-group-append"><div class="input-group-text">%</div></div>
             </div>
             @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
         </div>
     </div>
 
     @Html.EnumRadioEditorFor(model => model.ApiNh)
-    <div id="ApiNhMatchInPercentForm" class="form-group">
-        @Html.LabelFor(m => m.ApiNhMatchInPercent, new {@class = "col-sm-2 control-label"})
+    <div id="ApiNhMatchInPercentForm" class="form-group row">
+        @Html.LabelFor(m => m.ApiNhMatchInPercent, new {@class = "col-sm-2 col-form-label"})
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.ApiNhBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
             @Html.ValidationMessageFor(model => model.ApiNhBestMatch)
@@ -77,15 +77,15 @@
         <div class="col-sm-3">
             <div class="input-group">
                 @Html.TextBoxFor(m => m.ApiNhMatchInPercent, new {@class = "form-control", placeholder = "in Prozent"})
-                <span class="input-group-addon">%</span>
+                <div class="input-group-append"><div class="input-group-text">%</div></div>
             </div>
             @Html.ValidationMessageFor(model => model.ApiNhMatchInPercent)
         </div>
     </div>
     
     @Html.EnumRadioEditorFor(model => model.MaldiTof)
-    <div id="MaldiTofMatchConfidenceForm" class="form-group">
-        @Html.LabelFor(m => m.MaldiTofMatchConfidence, new {@class = "col-sm-2 control-label"})
+    <div id="MaldiTofMatchConfidenceForm" class="form-group row">
+        @Html.LabelFor(m => m.MaldiTofMatchConfidence, new {@class = "col-sm-2 col-form-label"})
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.MaldiTofBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
             @Html.ValidationMessageFor(model => model.MaldiTofBestMatch)
@@ -93,15 +93,15 @@
         <div class="col-sm-3">
             <div class="input-group">
                 @Html.TextBoxFor(m => m.MaldiTofMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
-                <span class="input-group-addon">00,0</span>
+                <div class="input-group-append"><div class="input-group-text">0,00</div></div>
             </div>
             @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
         </div>
     </div>
 
     @Html.EnumRadioEditorFor(model => model.Ftsi)
-    <div id="FtsiEvaluationForm" class="form-group">
-        @Html.LabelFor(m => m.FtsiEvaluation1, new { @class = "col-sm-2 control-label" })
+    <div id="FtsiEvaluationForm" class="form-group row">
+        @Html.LabelFor(m => m.FtsiEvaluation1, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.FtsiEvaluation1, new { @class = "form-control" })
         </div>
@@ -114,16 +114,16 @@
     </div>
  
     @Html.EnumRadioEditorFor(model => model.Mlst)
-    <div id="MlstSequenceTypeForm" class="form-group">
-        @Html.LabelFor(m => m.MlstSequenceType, new { @class = "col-sm-2 control-label" })
+    <div id="MlstSequenceTypeForm" class="form-group row">
+        @Html.LabelFor(m => m.MlstSequenceType, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.MlstSequenceType, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.MlstSequenceType)
         </div>
     </div>
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.Evaluation, new { @class = "col-sm-2 control-label" })
+    <div class="form-group row">
+        @Html.LabelFor(m => m.Evaluation, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-5">
             @EnumEditor.EnumDropDownListFor(Html, model => model.Evaluation, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Evaluation)
@@ -132,8 +132,8 @@
 
     @Html.DateEditorFor(model => model.ReportDate)
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.Remark, new { @class = "col-sm-2 control-label" })
+    <div class="form-group row">
+        @Html.LabelFor(m => m.Remark, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-5">
             @Html.TextAreaFor(m => m.Remark, new { @class = "form-control", @rows = "5" })
         </div>

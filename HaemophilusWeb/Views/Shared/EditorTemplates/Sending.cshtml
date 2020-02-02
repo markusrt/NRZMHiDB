@@ -5,8 +5,8 @@
 @Html.ReadonlyFor(model => model.LaboratoryNumberWithPrefix)
 @Html.HiddenFor(model => model.LaboratoryNumber)
 
-<div class="form-group">
-    @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 control-label" })
+<div class="form-group row">
+    @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         @Html.DropDownListFor(model => model.SenderId, ((IEnumerable<Sender>)ViewBag.PossibleSenders).Select(option => new SelectListItem
         {
@@ -21,8 +21,8 @@
 
 @if (@Request.Path.Contains("/Sending/"))
 {
-    <div class="form-group">
-        @Html.LabelFor(model => model.PatientId, new {@class = "col-sm-2 control-label"})
+    <div class="form-group row">
+        @Html.LabelFor(model => model.PatientId, new {@class = "col-sm-2 col-form-label"})
         <div class="col-sm-5">
             <div class="input-group">
                 @Html.DropDownListFor(model => model.PatientId, ((IEnumerable<Patient>) ViewBag.PossiblePatients).Select(option => new SelectListItem
@@ -31,8 +31,6 @@
                     Value = option.PatientId.ToString(),
                     Selected = (Model != null) && (option.PatientId == Model.PatientId)
                 }), "Auswählen...", new {@class = "form-control"})
-
-                <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
             </div>
             @Html.ValidationMessageFor(model => model.PatientId)
         </div>
@@ -47,8 +45,8 @@
 
 @Html.EnumRadioEditorFor(m=>m.SamplingLocation)
 
-<div id="OtherSamplingLocationForm" class="form-group">
-    @Html.LabelFor(m => m.OtherSamplingLocation, new { @class = "col-sm-2 control-label" })
+<div id="OtherSamplingLocationForm" class="form-group row">
+    @Html.LabelFor(m => m.OtherSamplingLocation, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         <div class="input-group">
             @Html.TextBoxFor(m => m.OtherSamplingLocation, new { @class = "form-control", @list = "otherSamplingLocationsAutocomplete", @autocomplete = "off" })
@@ -58,8 +56,6 @@
                     <option value="@item.ToString()" />
                 }
             </datalist>
-
-            <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
         </div>
         @Html.ValidationMessageFor(model => model.OtherSamplingLocation)
     </div>

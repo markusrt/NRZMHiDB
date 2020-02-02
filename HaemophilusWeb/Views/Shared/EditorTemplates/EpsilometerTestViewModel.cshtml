@@ -10,10 +10,10 @@
     var measurements = EpsilometerTestValidator.GetETestScale(Model.Antibiotic);
 }
 
-<div class="form-group">
+<div class="form-group row">
         @if (Model.ReadonlyAntibiotic)
         {
-            <label title="@EnumEditor.GetEnumDescription(Model.Antibiotic)" class="col-sm-2 control-label nowrap-ellipsis">@EnumEditor.GetEnumDescription(Model.Antibiotic)</label>
+            <label title="@EnumEditor.GetEnumDescription(Model.Antibiotic)" class="col-sm-2 col-form-label nowrap-ellipsis">@EnumEditor.GetEnumDescription(Model.Antibiotic)</label>
             @Html.HiddenFor(model => model.Antibiotic);
             @Html.HiddenFor(model => model.ReadonlyAntibiotic);
         }

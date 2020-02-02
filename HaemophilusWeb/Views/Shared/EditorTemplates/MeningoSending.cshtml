@@ -7,8 +7,8 @@
 @Html.ReadonlyFor(model => model.LaboratoryNumberWithPrefix)
 @Html.HiddenFor(model => model.LaboratoryNumber)
 
-<div class="form-group">
-    @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 control-label" })
+<div class="form-group row">
+    @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         @Html.DropDownListFor(model => model.SenderId, ((IEnumerable<Sender>)ViewBag.PossibleSenders).Select(option => new SelectListItem
         {
@@ -22,8 +22,8 @@
 </div>
 @if (@Request.Path.Contains("/MeningoSending/"))
 {
-    <div class="form-group">
-        @Html.LabelFor(model => model.MeningoPatientId, new { @class = "col-sm-2 control-label" })
+    <div class="form-group row">
+        @Html.LabelFor(model => model.MeningoPatientId, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-5">
             <div class="input-group">
                 @Html.DropDownListFor(model => model.MeningoPatientId, ((IEnumerable<MeningoPatient>) ViewBag.PossiblePatients).Select(option => new SelectListItem
@@ -48,8 +48,8 @@
 
 @Html.EnumRadioEditorFor(m => m.SamplingLocation, "col-sm-10")
 
-<div id="OtherInvasiveSamplingLocationForm" class="form-group">
-    @Html.LabelFor(m => m.OtherInvasiveSamplingLocation, new { @class = "col-sm-2 control-label" })
+<div id="OtherInvasiveSamplingLocationForm" class="form-group row">
+    @Html.LabelFor(m => m.OtherInvasiveSamplingLocation, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         @Html.TextBoxFor(m => m.OtherInvasiveSamplingLocation, new { @class = "form-control", @list = "otherInvasiveSamplingLocationsAutocomplete", @autocomplete = "off" })
         <datalist id="otherInvasiveSamplingLocationsAutocomplete">
@@ -62,8 +62,8 @@
         @Html.ValidationMessageFor(model => model.OtherInvasiveSamplingLocation)
     </div>
 </div>
-<div id="OtherNonInvasiveSamplingLocationForm" class="form-group">
-    @Html.LabelFor(m => m.OtherNonInvasiveSamplingLocation, new { @class = "col-sm-2 control-label" })
+<div id="OtherNonInvasiveSamplingLocationForm" class="form-group row">
+    @Html.LabelFor(m => m.OtherNonInvasiveSamplingLocation, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         @Html.TextBoxFor(m => m.OtherNonInvasiveSamplingLocation, new { @class = "form-control", @list = "otherNonInvasiveSamplingLocationsAutocomplete", @autocomplete = "off" })
         <datalist id="otherNonInvasiveSamplingLocationsAutocomplete">
