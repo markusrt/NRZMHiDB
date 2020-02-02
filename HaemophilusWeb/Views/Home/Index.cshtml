@@ -6,39 +6,39 @@
 <div class="row">
     @if (User.IsInRole(DefaultRoles.User) || User.IsInRole(DefaultRoles.Administrator))
     {
-        <div class="col-md-3 col-sm-6 col-12">
-            <h3>Einsender</h3>
-            <p>
+        <div class="col-md-4 col-sm-6 col-12 pb-5">
+            <h3 style="height: 15%">Einsender</h3>
+            <p style="height: 35%">
                 Suchen, anlegen und bearbeiten von Einsendern.
             </p>
-            <p>
+            <p style="height: 15%">
                 @Html.ActionLink("Alle Einsender anzeigen", "Index", "Sender", null, new { @class = "btn btn-secondary btn-block" })
             </p>
-            <p>
+            <p style="height: 15%">
                 @Html.ActionLink("Neuen Einsender anlegen", "Create", "Sender", null, new { @class = "btn btn-primary btn-block" })
             </p>
         </div>
-        <div class="col-md-3 col-sm-6 col-12">
-            <h3>Haemophilus Einsendungen</h3>
-            <p>
+        <div class="col-md-4 col-sm-6 col-12 pb-5">
+            <h3 style="height: 15%">Haemophilus Einsendungen</h3>
+            <p style="height: 35%">
                 Suchen, anlegen und bearbeiten von Haemophilus Einsendungen.
             </p>
-            <p>
+            <p style="height: 15%">
                 @Html.ActionLink("Haemophilus anzeigen", "Index", "PatientSending", null, new { @class = "btn btn-secondary btn-block" })
             </p>
-            <p>
+            <p style="height: 15%">
                 @Html.ActionLink("Haemophilus anlegen", "Create", "PatientSending", null, new { @class = "btn btn-primary btn-block" })
             </p>
         </div>
-        <div class="col-md-3 col-sm-6 col-12">
-            <h3>Meningokokken Einsendungen</h3>
-            <p>
+        <div class="col-md-4 col-sm-6 col-12 pb-5">
+            <h3 style="height: 15%">Meningokokken Einsendungen</h3>
+            <p style="height: 35%">
                 Suchen, anlegen und bearbeiten von Meningokokken Einsendungen.
             </p>
-            <p>
+            <p style="height: 15%">
                 @Html.ActionLink("Meningokokken anzeigen", "Index", "MeningoPatientSending", null, new { @class = "btn btn-secondary btn-block" })
             </p>
-            <p>
+            <p style="height: 15%">
                 @Html.ActionLink("Meningokokken anlegen", "Create", "MeningoPatientSending", null, new { @class = "btn btn-primary btn-block" })
             </p>
         </div>

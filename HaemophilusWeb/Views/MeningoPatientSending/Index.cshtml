@@ -5,30 +5,31 @@
     ViewBag.Title = "Einsendungen";
 }
 
+
 <div class="btn-toolbar" role="toolbar">
-    <div class="btn-group" role="group">
+    <div class="btn-group m-2" role="group">
         @Html.ActionLink("Neue Einsendung erfassen", "Create", "MeningoPatientSending", null, new { @class = "btn btn-primary" })
     </div>
-    <div class="btn-group" role="group">
+    <div class="btn-group m-2" role="group">
         <button id="extendedSearchToggleButton" class="btn btn-secondary" onclick="toggleExtendedSearch()">Erweiterte Suche</button>
     </div>
 </div>
 <div class="row topmargin" id="extendedSearch" style="display:none">
-    <div class="col-md-12">Erweiterte Suche:</div>
-    <div class="col-md-2 col-sm-4 col-xs-12">
-        <input id="searchInitials" data-search-col="0" class="form-control col-sm-2" type="text" placeholder="Initialen" />
+    <div class="col-12">Erweiterte Suche:</div>
+    <div class="col-md-2 col-sm-4 col-12">
+        <input id="searchInitials" data-search-col="0" class="form-control" type="text" placeholder="Initialen" />
     </div>
-    <div class="col-md-2 col-sm-4 col-xs-12">
-        <input id="searchBirthDate" data-search-col="1" class="form-control col-sm-2" type="text" placeholder="Geburtsdatum" />
+    <div class="col-md-2 col-sm-4 col-12">
+        <input id="searchBirthDate" data-search-col="1" class="form-control" type="text" placeholder="Geburtsdatum" />
     </div>
-    <div class="col-md-2 col-sm-4 col-xs-12">
-        <input id="searchPatientPostalCode" data-search-col="7" class="form-control col-sm-2" type="text" placeholder="Patient PLZ" />
+    <div class="col-md-2 col-sm-4 col-12">
+        <input id="searchPatientPostalCode" data-search-col="7" class="form-control" type="text" placeholder="Patient PLZ" />
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-12">
-        <input id="searchSenderLaboratoryNumber" data-search-col="9" class="form-control col-sm-2" type="text" placeholder="Einsender Labornummer" />
+    <div class="col-md-3 col-sm-4 col-12">
+        <input id="searchSenderLaboratoryNumber" data-search-col="9" class="form-control" type="text" placeholder="Einsender Labornummer" />
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-12">
-        <input id="searchSenderPostalCode" data-search-col="8" class="form-control col-sm-2" type="text" placeholder="Einsender PLZ" />
+    <div class="col-md-3 col-sm-4 col-12">
+        <input id="searchSenderPostalCode" data-search-col="8" class="form-control" type="text" placeholder="Einsender PLZ" />
     </div>
 </div>
 <div class="topmargin">
@@ -54,7 +55,7 @@
                     @Html.DisplayNameFor(model => model.Sending.Invasive)
                 </th>
                 <th>
-                    Labor-Nr
+                    Lab-Nr
                 </th>
                 <th>
                     PatientPostalCode

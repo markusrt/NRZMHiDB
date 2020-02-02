@@ -7,18 +7,22 @@
 @using HaemophilusWeb.Models
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Haemophilus Web - @ViewBag.Title</title>
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jquerydatatable")
-        @Scripts.Render("~/bundles/bootstrap")
-        
-        @Scripts.Render("~/bundles/site")
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haemophilus Web - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquerydatatable")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @Scripts.Render("~/bundles/site")
+    @*<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/sketchy/bootstrap.min.css" media="screen" />*@
+    @*<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/spacelab/bootstrap.min.css" media="screen" />*@
+    @*<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/materia/bootstrap.min.css" media="screen" />*@
+    @*<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/cerulean/bootstrap.min.css" media="screen" />*@
+</head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
         <a class="navbar-brand" href="@Url.Action("Index", "Home")">
@@ -74,7 +78,7 @@
     </nav>
 
     <main role="main" class="container">
-        <div class="pb-2 mt-4 mb-2 border-bottom">
+        <div class="mb-5 mt-4 mb-2 border-bottom">
             <h1>
                 @ViewBag.Title
                     @if (!String.IsNullOrEmpty(ViewBag.Subtitle))
