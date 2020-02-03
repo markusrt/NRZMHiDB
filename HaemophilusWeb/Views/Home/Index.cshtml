@@ -42,6 +42,8 @@
                 @Html.ActionLink("Meningokokken anlegen", "Create", "MeningoPatientSending", null, new { @class = "btn btn-primary btn-block" })
             </p>
         </div>
+        <input class="datepicker" width="276" />
+        
     }
     else if (User.IsInRole(DefaultRoles.PublicHealth))
     {

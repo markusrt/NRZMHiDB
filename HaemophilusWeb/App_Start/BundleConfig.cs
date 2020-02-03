@@ -34,7 +34,8 @@ namespace HaemophilusWeb
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/moment-with-locales.js",
-                "~/Scripts/bootstrap-datetimepicker.js",
+                "~/Scripts/gijgo/modular/core.min.js",
+                "~/Scripts/gijgo/modular/datepicker.min.js",
                 "~/Scripts/select2.js",
                 "~/Scripts/respond.js"));
 
@@ -50,7 +51,8 @@ namespace HaemophilusWeb
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
-                "~/Content/bootstrap-datetimepicker.css",
+                "~/Content/gijgo/modular/core.min.css",
+                "~/Content/gijgo/modular/datepicker.min.css",
                 "~/Content/select2.css",
                 "~/Content/bootstrap-select2.css",
                 "~/Content/DataTables/css/dataTables.bootstrap4.css",

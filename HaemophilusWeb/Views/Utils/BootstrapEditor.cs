@@ -22,8 +22,6 @@ namespace HaemophilusWeb.Views.Utils
         
         private const string PrefixTemplate = "<div class=\"input-group\"><div class=\"input-group-prepend\"><div class=\"input-group-text\">{1}</div></div>{0}</div>";
 
-        private const string DateTemplate = "<div class=\"input-group\">{0}<div class=\"input-group-append\"><div class=\"input-group-text\">📅</div></div></div>";
-
         public static MvcHtmlString TextEditorFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression, string placeholder = null, string prefix = null, string id = null, string smXClass = ColSm5)
         {
@@ -47,12 +45,12 @@ namespace HaemophilusWeb.Views.Utils
             var label = htmlHelper.LabelFor(expression);
             var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             var model = modelMetadata.Model;
-            htmlHelper.EnableClientValidation(false);
-            var textBox = htmlHelper.TextBoxFor(expression, new { @class = "form-control datepicker " + additionalClass, type = "datetime", Value = model == null ? "" : $"{model:dd.MM.yyyy}"}).ToHtmlString();
-            htmlHelper.EnableClientValidation(true);
+            //htmlHelper.EnableClientValidation(false);
+            var textBox = htmlHelper.TextBoxFor(expression, new { @class = "datepicker " + additionalClass, type = "datetime", Value = model == null ? "" : $"{model:dd.MM.yyyy}"}).ToHtmlString();
+            //htmlHelper.EnableClientValidation(true);
             var validationHtml = GetValidationHtml(htmlHelper, expression);
 
-            var textBoxHtml = string.Format(DivSmFive, string.Format(DateTemplate, textBox), validationHtml);
+            var textBoxHtml = string.Format(DivSmFive, textBox, validationHtml);
 
             return CreateFormGroup(label, textBoxHtml, id);
         }

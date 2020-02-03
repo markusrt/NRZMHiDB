@@ -140,18 +140,23 @@
 
 
     <script>
-        $(document).ready(function() {
-            $(".datepicker").datetimepicker(
-                {
-                    format: "DD.MM.YYYY",
-                    pickTime: false,
-                    language: "de",
-                });
-            $(".datetimepicker").datetimepicker(
-                {
-                    format: "DD.MM.YYYY HH:mm",
-                    language: "de",
-                });
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                uiLibrary: 'bootstrap4',
+                format: "mm.dd.yyyy"
+            });
+
+            //$(".datepicker").datetimepicker(
+            //    {
+            //        format: "DD.MM.YYYY",
+            //        pickTime: false,
+            //        language: "de",
+            //    });
+            //$(".datetimepicker").datetimepicker(
+            //    {
+            //        format: "DD.MM.YYYY HH:mm",
+            //        language: "de",
+            //    });
             Globalize.culture("de-DE");
 
             var errorMessage = '@TempData["ErrorMessage"]';
