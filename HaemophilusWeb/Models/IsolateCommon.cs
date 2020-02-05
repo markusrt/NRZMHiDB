@@ -23,7 +23,7 @@ namespace HaemophilusWeb.Models
         public int? StemNumber { get; set; }
 
         [NotMapped]
-        [Display(Name = "Labornummer")]
+        [Display(Name = "Stammnummer")]
         public string StemNumberWithPrefix => StemNumber.ToStemNumberWithPrefix(DatabaseType);
 
         public TestResult Oxidase { get; set; }
