@@ -34,12 +34,11 @@ namespace HaemophilusWeb.Validators
         {
             var invalidPatient = new Patient
             {
-                PostalCode = "",
                 Initials = "Herbert",
                 State = State.ST
             };
 
-            yield return Tuple.Create(invalidPatient, new[] {"Initials", "Gender", "PostalCode" });
+            yield return Tuple.Create(invalidPatient, new[] {"Initials", "Gender" });
 
             yield return Tuple.Create(CreatePatientWithEmptyInitials(), new[] {"Initials"});
         }
