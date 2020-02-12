@@ -65,7 +65,7 @@
             <dd>@Html.DisplayFor(model => model.Interpretation)</dd>
         </dl>
     }
-    else
+    else if (Model.Report != null)
     {
         <dl class="dl-horizontal">
             <dt>@Html.DisplayNameFor(model => model.Report)</dt>
