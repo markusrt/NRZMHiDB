@@ -23,7 +23,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2020, 02, 12), "Fehlermeldung bei Meningokokken Report Erstellung", ChangeType.Bug),
+                new Change(new DateTime(2020, 02, 12, 21, 00, 0), "Passende Interpretation wenn eine PCR positiv und eine andere inhibitorisch ist", ChangeType.Bug),
+                new Change(new DateTime(2020, 02, 12, 20, 00, 0), "Fehlermeldung bei Meningokokken Report Erstellung", ChangeType.Bug),
                 new Change(new DateTime(2020, 02, 05), "Haemophilus Einsendungen können ohne Postleitzahl gespeichert werden", ChangeType.Feature),
                 new Change(new DateTime(2020, 02, 03), "Fehler bei Labor Export (Haemophilus)", ChangeType.Bug),
                 new Change(new DateTime(2020, 01, 21, 23, 15, 0), "Eingaben für siaA, ctrA und cnl dürfen auch dann gemacht werden, wenn kein Wachstum auf Agar erfolgt ist.", ChangeType.Feature),

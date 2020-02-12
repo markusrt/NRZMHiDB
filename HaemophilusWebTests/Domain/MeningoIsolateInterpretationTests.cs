@@ -354,16 +354,18 @@ namespace HaemophilusWeb.Domain
 
         [TestCase("B", NativeMaterialTestResult.Negative)]
         [TestCase("B", NativeMaterialTestResult.NotDetermined)]
+        [TestCase("B", NativeMaterialTestResult.Inhibitory)]
         [TestCase("C", NativeMaterialTestResult.Negative)]
         [TestCase("C", NativeMaterialTestResult.NotDetermined)]
+        [TestCase("C", NativeMaterialTestResult.Inhibitory)]
         public void IsolateMatchingNativeMaterialRule1Or2_ReturnsCorrespondingInterpretation(string serogroup, NativeMaterialTestResult cswyPcr)
         {
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = "B" == serogroup ? NativeMaterialTestResult.Positive : NativeMaterialTestResult.Negative,
-                CscPcr = "C" == serogroup ? NativeMaterialTestResult.Positive : NativeMaterialTestResult.Negative,
+                CsbPcr = "B" == serogroup ? NativeMaterialTestResult.Positive : GetRandomNegativeOrInhibitory(),
+                CscPcr = "C" == serogroup ? NativeMaterialTestResult.Positive : GetRandomNegativeOrInhibitory(),
                 CswyPcr = cswyPcr,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
@@ -395,8 +397,8 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = NativeMaterialTestResult.Negative,
-                CscPcr = NativeMaterialTestResult.Negative,
+                CsbPcr = GetRandomNegativeOrInhibitory(),
+                CscPcr = GetRandomNegativeOrInhibitory(),
                 CswyPcr = NativeMaterialTestResult.Positive,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
@@ -419,7 +421,9 @@ namespace HaemophilusWeb.Domain
             interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
         }
 
+        [TestCase("Rule 06", NativeMaterialTestResult.Inhibitory, false, 0, "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.")]
         [TestCase("Rule 06", NativeMaterialTestResult.Negative, false, 0, "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.")]
+        [TestCase("Rule 13", NativeMaterialTestResult.Inhibitory, true,  0, "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.")]
         [TestCase("Rule 13", NativeMaterialTestResult.Negative, true,  0, "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.")]
         [TestCase("Rule 07", NativeMaterialTestResult.Positive, false, RealTimePcrResult.NeisseriaMeningitidis, "Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.")]
         [TestCase("Rule 14", NativeMaterialTestResult.Positive, true,  RealTimePcrResult.NeisseriaMeningitidis, "Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.")]
