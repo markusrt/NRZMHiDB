@@ -19,6 +19,7 @@ namespace HaemophilusWeb.Automapper
         public void Process(MeningoIsolate source, MeningoIsolateViewModel destination)
         {
             var sending = source.Sending;
+            ParseAndMapLaboratoryNumber(source, destination);
             destination.SamplingLocation = sending.SamplingLocation == MeningoSamplingLocation.OtherInvasive
                 ? sending.OtherInvasiveSamplingLocation
                 : sending.SamplingLocation == MeningoSamplingLocation.OtherNonInvasive

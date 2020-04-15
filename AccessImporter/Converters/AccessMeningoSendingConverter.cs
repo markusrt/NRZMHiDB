@@ -36,7 +36,7 @@ namespace AccessImporter.Converters
             var sending = new MeningoSending
             {
                 MeningoSendingId = (int) source["dbnr"],
-                MeningoPatientId = (int) source["Patienten.patnr"],
+                MeningoPatientId = (int) source[$"{Program.PatientAccessTable}.patnr"],
                 LaboratoryNumber = SanitizeLaboratoryNumber(source["labornr"].ToString()),
                 Material = ConvertToMaterial(source["art"]),
                 SenderLaboratoryNumber = source["nr_eins"].ToString(),
@@ -45,7 +45,7 @@ namespace AccessImporter.Converters
                 SamplingDate = source["entn_dat"] is DBNull
                     ? (DateTime?)null : DateTime.Parse(source["entn_dat"].ToString()),
                 SerogroupSender = source["erg_eins"].ToString(),
-                Remark = source["Patienten.notizen"].ToString()
+                Remark = source[$"{Program.PatientAccessTable}.notizen"].ToString()
             };
             if (string.IsNullOrEmpty(sending.SenderLaboratoryNumber))
             {

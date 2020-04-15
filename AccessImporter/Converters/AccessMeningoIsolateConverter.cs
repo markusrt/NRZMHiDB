@@ -32,7 +32,7 @@ namespace AccessImporter.Converters
                 Agglutination = AgglutinationMap[serogruppe.ToString()],
                 RibosomalRna16S = RibosomalRna16SMap[source["univ_pcr"].ToString()],
                 RibosomalRna16SBestMatch = StringOrNull(source, "sequenz"),
-                Remark = StringOrNull(source, "Staemme.notizen"),
+                Remark = StringOrNull(source, $"{Program.StemAccessTable}.notizen"),
                 EpsilometerTests = new List<EpsilometerTest>()
             };
             if ("h".Equals(source["art"]))
@@ -56,14 +56,14 @@ namespace AccessImporter.Converters
             }
             else if("E6".Equals(stemNumber) || stemNumber.ToLower().StartsWith("epsilon"))
             {
-                var remark = StringOrNull(source, "Staemme.notizen");
+                var remark = StringOrNull(source, $"{Program.StemAccessTable}.notizen");
                 var newRemark = string.Empty;
                 if (remark != null)
                 {
                     newRemark = remark + ", ";
                 }
                 newRemark += $"Stammnummer studie: {stemNumber}";
-                source["Staemme.notizen"] = newRemark;
+                source[$"{Program.StemAccessTable}.notizen"] = newRemark;
             }
             return stemNumber;
         }
@@ -175,6 +175,8 @@ namespace AccessImporter.Converters
 
             if (!string.IsNullOrEmpty($"{porB}{sequenceType}{clonalComplex}{penA}{fhbp}"))
             {
+                Console.WriteLine($"Prefilled PubMLST data for Isolate '{isolate.MeningoSendingId}' was not imported: Serotyp(PorB)={porB};st={sequenceType};cc={clonalComplex};pena={penA};fHbp={fhbp}");
+                return;
                 isolate.PubMlstIsolate = new NeisseriaPubMlstIsolate
                 {
                     PorB = porB,
@@ -205,6 +207,7 @@ namespace AccessImporter.Converters
             {"neagtiv", MeningoSerogroupAgg.Negative},
             {"poly", MeningoSerogroupAgg.Poly},
             {"W", MeningoSerogroupAgg.W},
+            {"WY", MeningoSerogroupAgg.WY},
             {"X", MeningoSerogroupAgg.X},
             {"Y", MeningoSerogroupAgg.Y},
             {"Z", MeningoSerogroupAgg.Z},

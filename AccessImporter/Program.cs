@@ -23,6 +23,9 @@ namespace AccessImporter
     {
         public static ApplicationDbContext Context = new ApplicationDbContext();
 
+        public static string StemAccessTable = "Staemme_2019";
+        public static string PatientAccessTable = "Patienten_2019";
+
         static void Main(string[] args)
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
@@ -48,7 +51,8 @@ namespace AccessImporter
                 Console.WriteLine(meningoSamplingLocation);
             }
 
-            var selectPatients = "SELECT Patienten.* FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr WHERE Year(eing_dat)=2019";
+            var selectPatients =
+                $"SELECT {PatientAccessTable}.* FROM {PatientAccessTable} INNER JOIN {StemAccessTable} ON {PatientAccessTable}.patnr = {StemAccessTable}.patnr"; // "WHERE Year(eing_dat)=2019";
             var patientFields = new[]
             {
                 "initialen", "geb_dat", "geschlecht", "plz", "wohnort", "bundeslandnr", "meningitis", "sepsis", "wfs",
@@ -59,7 +63,9 @@ namespace AccessImporter
             Dictionary<int, int> patientIdLookup = new Dictionary<int, int>();
 
 
-            foreach (var patient in LoadAndConvert<MeningoPatient>(connectionString, selectPatients, patientFields))
+            var patients = LoadAndConvert<MeningoPatient>(connectionString, selectPatients, patientFields).ToList();
+            var validationFailed = false;
+            foreach (var patient in patients)
             {
                 var validator = new MeningoPatientValidator();
                 if (validator.Validate(patient).Errors.Any())
@@ -68,23 +74,13 @@ namespace AccessImporter
                     foreach (var error in validator.Validate(patient).Errors)
                     {
                         Console.WriteLine(error.ErrorMessage);
+                        validationFailed = true;
                     }
-                }
-
-                var oldId = patient.PatientId;
-
-                if (!patientIdLookup.ContainsKey(oldId))
-                {
-                    Console.WriteLine(patient);
-                    Context.MeningoPatients.Add(patient);
-                    new ApplicationDbContextWrapper(Context).SaveChanges();
-                    patientIdLookup.Add(oldId, patient.PatientId);
                 }
             }
 
-            Dictionary<int,MeningoSending> sendingLookup = new Dictionary<int, MeningoSending>();
-
-            foreach (var sending in LoadSendings(connectionString))
+            var sendings = LoadSendings(connectionString).ToList();
+            foreach (var sending in sendings)
             {
                 var validator = new MeningoSendingValidator();
                 if (validator.Validate(sending).Errors.Any())
@@ -94,15 +90,57 @@ namespace AccessImporter
                     foreach (var error in validator.Validate(sending).Errors)
                     {
                         Console.WriteLine(error.ErrorMessage);
+                        if (error.ErrorMessage.Contains("Anderer Entnahmeort") && error.ErrorMessage.Contains("darf nicht leer sein"))
+                        {
+                            continue;
+                        }
+                        validationFailed = true;
                     }
                 }
+            }
 
+            if (validationFailed)
+            {
+                return;
+            }
+
+            var currentSeed = Context.MeningoPatients.Max(p => p.PatientId);
+
+            foreach (var patient in patients)
+            {
+                var oldId = patient.PatientId;
+
+                if (!patientIdLookup.ContainsKey(oldId))
+                {
+
+                    Context.Database.ExecuteSqlCommand(String.Format("DBCC CHECKIDENT ([MeningoPatients], RESEED, {0})", patient.PatientId - 1));
+
+                    Console.WriteLine(patient);
+                    Context.MeningoPatients.Add(patient);
+                    new ApplicationDbContextWrapper(Context).SaveChanges();
+                    if (patient.PatientId != oldId)
+                    {
+                        Console.WriteLine($"ERROR: Patient ID mismatch old: {oldId}, new: {patient.PatientId}");
+                        return;
+                    }
+                    patientIdLookup.Add(oldId, patient.PatientId);
+                }
+            }
+
+            Context.Database.ExecuteSqlCommand(String.Format("DBCC CHECKIDENT ([MeningoPatients], RESEED, {0})", currentSeed));
+
+            var sendingLookup = new Dictionary<int, MeningoSending>();
+
+            foreach (var sending in sendings)
+            {
                 var oldId = sending.MeningoSendingId;
 
-                sending.MeningoPatientId = patientIdLookup[sending.MeningoPatientId];
                 sendingLookup.Add(oldId, sending);
                 //Console.WriteLine(sending);
             }
+
+            var currentIsolateSeed = Context.MeningoIsolates.Max(i => i.MeningoIsolateId);
+            var currentSendingSeed = Context.MeningoSendings.Max(s => s.MeningoSendingId);
 
             foreach (var isolate in LoadIsolates(connectionString))
             {
@@ -146,21 +184,27 @@ namespace AccessImporter
                     isolate.GrowthOnMartinLewisAgar = Growth.TypicalGrowth;
                 }
 
+                Context.Database.ExecuteSqlCommand(String.Format("DBCC CHECKIDENT ([MeningoIsolates], RESEED, {0})", isolate.MeningoSendingId - 1));
+                Context.Database.ExecuteSqlCommand(String.Format("DBCC CHECKIDENT ([MeningoSendings], RESEED, {0})", isolate.MeningoSendingId - 1));
 
                 Context.MeningoIsolates.Add(isolate);
                 new ApplicationDbContextWrapper(Context).SaveChanges();
                 //Console.WriteLine(isolate);
             }
 
+            Context.Database.ExecuteSqlCommand(String.Format("DBCC CHECKIDENT ([MeningoIsolates], RESEED, {0})", currentIsolateSeed));
+            Context.Database.ExecuteSqlCommand(String.Format("DBCC CHECKIDENT ([MeningoSendings], RESEED, {0})", currentSendingSeed));
+
             Console.ReadLine();
         }
 
         private static IEnumerable<MeningoSending> LoadSendings(string connectionString)
         {
-            var selectSending = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr WHERE Year(eing_dat)=2019";
+            var selectSending =
+                $"SELECT * FROM {PatientAccessTable} INNER JOIN {StemAccessTable} ON {PatientAccessTable}.patnr = {StemAccessTable}.patnr"; //" WHERE Year(eing_dat)=2019";
             var sendingFields = new[]
             {
-                "Patienten.patnr", "Patienten.notizen", "dbnr", "labornr", "art", "eing_dat", "nr_eins", "entn_dat", "isol_mat_nr", "erg_eins"
+                $"{PatientAccessTable}.patnr", $"{PatientAccessTable}.notizen", "dbnr", "labornr", "art", "eing_dat", "nr_eins", "entn_dat", "isol_mat_nr", "erg_eins"
             };
             Func<MeningoSending, bool> ignoreCasesFromLuxemburg = s => !s.LaboratoryNumber.StartsWith("LX");
             return LoadAndConvert<MeningoSending>(connectionString, selectSending, sendingFields).Where(ignoreCasesFromLuxemburg);
@@ -168,11 +212,12 @@ namespace AccessImporter
 
         private static IEnumerable<MeningoIsolate> LoadIsolates(string connectionString)
         {
-            var selectIsolates = "SELECT * FROM Patienten INNER JOIN Staemme ON Patienten.patnr = Staemme.patnr WHERE Year(eing_dat)=2019";
+            var selectIsolates =
+                $"SELECT * FROM {PatientAccessTable} INNER JOIN {StemAccessTable} ON {PatientAccessTable}.patnr = {StemAccessTable}.patnr"; //" WHERE Year(eing_dat)=2019";
             var isolateFields = new[]
             {
-                "Patienten.patnr", "dbnr", "stammnr", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "rplF", "serogruppe",
-                "vr1", "vr2", "Serotyp", "univ_pcr", "sequenz", "Staemme.notizen", "st", "fet-a",
+                $"{PatientAccessTable}.patnr", "dbnr", "stammnr", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "rplF", "serogruppe",
+                "vr1", "vr2", "Serotyp", "univ_pcr", "sequenz", $"{StemAccessTable}.notizen", "st", "fet-a",
                 "cc", "pena", "fHbp", "art", "eing_dat"
             };
             return LoadAndConvert<MeningoIsolate>(connectionString, selectIsolates, isolateFields);
