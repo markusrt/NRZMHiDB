@@ -7,7 +7,6 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
-using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
@@ -42,34 +41,12 @@ namespace HaemophilusWeb.Controllers
         {
             var isolateViewModel = Mapper.Map<MeningoIsolateViewModel>(isolate);
             var sending = isolate.Sending;
-            //isolateViewModel.SamplingLocation = sending.SamplingLocation == SamplingLocation.Other
-            //    ? WebUtility.HtmlEncode(sending.OtherSamplingLocation)
-            //    : EnumEditor.GetEnumDescription(sending.SamplingLocation);
             isolateViewModel.Material = EnumEditor.GetEnumDescription(sending.Material);
             isolateViewModel.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
             if (isolateViewModel.NeisseriaPubMlstIsolate == null)
             {
                 isolateViewModel.NeisseriaPubMlstIsolate = new NeisseriaPubMlstIsolate();
             }
-            //isolateViewModel.PatientAgeAtSampling = isolate.PatientAge();
-           // isolateViewModel.EpsilometerTestViewModels = EpsilometerTestsModelToViewModel(isolate.EpsilometerTests);
-            //isolateViewModel.SamplingDate = isolate.Sending.SamplingDate.ToReportFormat();
-            //isolateViewModel.ReceivingDate = isolate.Sending.ReceivingDate.ToReportFormat();
-            //isolateViewModel.Patient = isolate.Sending.Patient.ToReportFormat();
-            //isolateViewModel.PatientBirthDate = isolate.Sending.Patient.BirthDate.ToReportFormat();
-            //isolateViewModel.PatientPostalCode = isolate.Sending.Patient.PostalCode;
-            //isolateViewModel.SenderLaboratoryNumber = isolate.Sending.SenderLaboratoryNumber;
-            //isolateViewModel.EvaluationString = isolate.Evaluation.ToReportFormat();
-            //var interpretationResult = IsolateInterpretation.Interpret(isolate);
-            //isolateViewModel.Interpretation = interpretationResult.Interpretation;
-            //isolateViewModel.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
-            //isolateViewModel.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
-
-            //var sender = db.Senders.Find(isolate.Sending.SenderId);
-            //isolateViewModel.SenderName = sender.Name;
-            //isolateViewModel.SenderStreet = sender.StreetWithNumber;
-            //isolateViewModel.SenderCity = $"{sender.PostalCode} {sender.City}";
-
             return isolateViewModel;
         }
 
@@ -85,9 +62,10 @@ namespace HaemophilusWeb.Controllers
                     var isolate =
                         db.MeningoIsolates.Include(i => i.EpsilometerTests).Include(i => i.Sending)
                             .Single(i => i.MeningoIsolateId == isolateViewModel.MeningoIsolateId);
+
+                    //TODO replace AutoMapper by https://github.com/Dotnet-Boxed/Framework and pass db context to mapper
                     Mapper.Map(isolateViewModel, isolate);
                     MapPubMlstData(isolateViewModel, isolate);
-
 
                     db.MarkAsModified(isolate);
                     db.SaveChanges();
