@@ -55,7 +55,6 @@ namespace HaemophilusWeb.Services
             try
             {
                 var isolateJson = JObject.Parse(callGetUrl($"{BaseUrl}/{id}"));
-                var fields = isolateJson.GetValue("schemes").First["fields"];
 
                 var allelesJson = JObject.Parse(callGetUrl($"{BaseUrl}/{id}/allele_ids?return_all=1"));
                 var alleles = ConvertToDictionary(allelesJson.GetValue("allele_ids"));
@@ -75,9 +74,14 @@ namespace HaemophilusWeb.Services
                     ParE = alleles.Get("NEIS1600", ""),
                     RpoB = alleles.Get("rpoB", ""),
                     RplF = alleles.Get("'rplF", ""),
-                    SequenceType = fields["ST"]?.Value<string>(),
-                    ClonalComplex = fields["clonal_complex"]?.Value<string>()
                 };
+
+                var fields = isolateJson.GetValue("schemes").First["fields"];
+                if (fields != null)
+                {
+                    isolate.SequenceType = fields["ST"]?.Value<string>();
+                    isolate.ClonalComplex = fields["clonal_complex"]?.Value<string>();
+                }
                 return isolate;
             }
             catch (WebException e)
