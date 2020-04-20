@@ -67,20 +67,9 @@ namespace HaemophilusWeb.Controllers
                         return RedirectToAction("Isolate", "Report", new {id = isolateViewModel.IsolateId});
                     }
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException exception)
                 {
-                    if (e.AnyMessageMentions("IX_StemNumber"))
-                    {
-                        ModelState.AddModelError("StemNumber", "Diese Stammnummer ist bereits vergeben");
-                    }
-                    else if (e.AnyMessageMentions("IX_LaboratoryNumber"))
-                    {
-                        ModelState.AddModelError("LaboratoryNumber", "Diese Labornummer ist bereits vergeben");
-                    }
-                    else
-                    {
-                        throw e;
-                    }
+                    HandleDbUpdateException(exception);
                 }
             }
             return CreateEditView(isolateViewModel);

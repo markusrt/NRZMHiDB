@@ -59,9 +59,10 @@ namespace HaemophilusWeb.Controllers
             {
                 try
                 {
+                    var meningoIsolateId = isolateViewModel.MeningoIsolateId;
                     var isolate =
                         db.MeningoIsolates.Include(i => i.EpsilometerTests).Include(i => i.Sending)
-                            .Single(i => i.MeningoIsolateId == isolateViewModel.MeningoIsolateId);
+                            .Single(i => i.MeningoIsolateId == meningoIsolateId);
 
                     //TODO replace AutoMapper by https://github.com/Dotnet-Boxed/Framework and pass db context to mapper
                     Mapper.Map(isolateViewModel, isolate);
@@ -75,23 +76,12 @@ namespace HaemophilusWeb.Controllers
                     }
                     if (Request.Form["secondary-submit"] != null)
                     {
-                        return RedirectToAction("Isolate", "MeningoReport", new {id = isolateViewModel.MeningoIsolateId});
+                        return RedirectToAction("Isolate", "MeningoReport", new {id = meningoIsolateId});
                     }
                 }
-                catch (DbUpdateException e)
+                catch (DbUpdateException exception)
                 {
-                    if (e.AnyMessageMentions("IX_StemNumber"))
-                    {
-                        ModelState.AddModelError("StemNumber", "Diese Stammnummer ist bereits vergeben");
-                    }
-                    else if (e.AnyMessageMentions("IX_LaboratoryNumber"))
-                    {
-                        ModelState.AddModelError("LaboratoryNumber", "Diese Labornummer ist bereits vergeben");
-                    }
-                    else
-                    {
-                        throw e;
-                    }
+                    HandleDbUpdateException(exception);
                 }
             }
             return CreateEditView(isolateViewModel);

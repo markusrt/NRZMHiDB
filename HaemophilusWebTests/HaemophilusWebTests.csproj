@@ -155,6 +155,7 @@
     <Compile Include="Utils\ReportFormatterTests.cs" />
     <Compile Include="Validators\AbstractValidatorTests.cs" />
     <Compile Include="Validators\EpsilometerTestValidatorTest.cs" />
+    <Compile Include="Validators\IsolateViewModelValidatorTests.cs" />
     <Compile Include="Validators\PatientValidatorTests.cs" />
     <Compile Include="Validators\MeningoIsolateViewModelValidatorTests.cs" />
     <Compile Include="Validators\SendingValidatorTests.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -20,7 +21,7 @@ namespace HaemophilusWeb.Controllers
 
         private readonly AntibioticPriorityListComparer antibioticPriorityListComparer;
 
-        public IsolateControllerBase(IApplicationDbContext applicationDbContext, DatabaseType databaseType)
+        protected IsolateControllerBase(IApplicationDbContext applicationDbContext, DatabaseType databaseType)
         {
             db = applicationDbContext;
             this.databaseType = databaseType;
@@ -53,7 +54,7 @@ namespace HaemophilusWeb.Controllers
 
         public abstract TISolateViewModel ModelToViewModel(TIsolateModel isolate);
 
-        protected void AddBreakpointsAndAntibioticsToViewBag()
+        private void AddBreakpointsAndAntibioticsToViewBag()
         {
             ViewBag.ClinicalBreakpoints = db.EucastClinicalBreakpoints.Where(e => e.ValidFor==databaseType).OrderByDescending(b => b.ValidFrom);
             ViewBag.Antibiotics = AvailableAntibiotics.OrderBy(a => a, antibioticPriorityListComparer);
@@ -66,6 +67,22 @@ namespace HaemophilusWeb.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        protected void HandleDbUpdateException(DbUpdateException exception)
+        {
+            if (exception.AnyMessageMentions("IX_StemNumber"))
+            {
+                ModelState.AddModelError("StemNumber", "Diese Stammnummer ist bereits vergeben");
+            }
+            else if (exception.AnyMessageMentions("IX_LaboratoryNumber"))
+            {
+                ModelState.AddModelError("LaboratoryNumber", "Diese Labornummer ist bereits vergeben");
+            }
+            else
+            {
+                throw exception;
+            }
         }
 
         private List<Antibiotic> AvailableAntibiotics
