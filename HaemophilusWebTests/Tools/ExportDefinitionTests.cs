@@ -1,87 +1,109 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using FluentAssertions;
-using HaemophilusWeb.Models;
-using HaemophilusWeb.Views.Utils;
 using NUnit.Framework;
-using Isolate = HaemophilusWeb.TestDoubles.Isolate;
-using Patient = HaemophilusWeb.TestDoubles.Patient;
 
 namespace HaemophilusWeb.Tools
 {
     public class ExportDefinitionTests
     {
-        private readonly List<Isolate> testData = new List<Isolate>
-        {
-            new Isolate
-            {
-                SamplingLocation = "Blood",
-                Invasive = "Yes",
-                Patient = new Patient
-                {
-                    Initials = "J.D."
-                }
-            },
-            new Isolate
-            {
-                SamplingLocation = "Liquor",
-                Invasive = "No",
-                Patient = new Patient
-                {
-                    Initials = "A.B."
-                }
-            }
-        };
-
         [Test]
         public void Ctor_DoesNotThrow()
         {
-            CreateExportDefinition();
+            var sut = CreateExportDefinition();
+
+            sut.Should().NotBeNull();
         }
 
         [Test]
-        public void ToDataTable_NoFields_CreatesEmptyTable()
+        public void ToDataTable_IncludesSingleEntryAndField()
         {
-            var exportDefinition = CreateExportDefinition();
+            var persons = new List<Person>
+            {
+                new Person
+                {
+                    HeightInCentimeters = 185, 
+                    BirthDate = new DateTime(1980, 10, 10),
+                    Name = "Test"
+                }
+            };
+            var sut = CreateExportDefinition();
+            sut.AddField(person => person.HeightInCentimeters);
 
-            var table = exportDefinition.ToDataTable(new List<Isolate>());
+            var dataTable = sut.ToDataTable(persons);
 
-            table.Columns.Count.Should().Be(0);
-            table.Rows.Count.Should().Be(0);
+            dataTable.Rows.Count.Should().Be(1);
+            dataTable.Columns.Count.Should().Be(1);
+            dataTable.Rows[0][0].ToString().Should().Be("185");
         }
 
         [Test]
-        public void ToDataTable_SomeFieldsAndSomeRecord_CreatesTable()
+        public void ToDataTable_IncludesMultipleEntriesAndFields()
         {
-            var exportDefinition = CreateExportDefinition();
-            exportDefinition.AddField(p => p.SamplingLocation);
-            exportDefinition.AddField(p => p.Patient.Initials.ToLower());
+            var persons = new List<Person>
+            {
+                new Person
+                {
+                    HeightInCentimeters = 185,
+                    BirthDate = new DateTime(1980, 10, 10),
+                    Name = "Test 1"
+                },
+                new Person
+                {
+                    HeightInCentimeters = 175,
+                    BirthDate = new DateTime(1982, 11, 23),
+                    Name = "Test 2"
+                }
+            };
+            var sut = CreateExportDefinition();
+            sut.AddField(person => person.HeightInCentimeters);
+            sut.AddField(person => person.BirthDate);
+            sut.AddField(person => person.Name);
 
-            var table = exportDefinition.ToDataTable(testData);
+            var dataTable = sut.ToDataTable(persons);
 
-            table.Columns.Count.Should().Be(2);
-            table.Rows.Count.Should().Be(2);
+            dataTable.Rows.Count.Should().Be(2);
+            dataTable.Columns.Count.Should().Be(3);
 
-            var firstRow = table.Rows[0];
-            firstRow["Entnahmeort"].Should().Be("Blood");
-            firstRow["Initials"].Should().Be("j.d.");
+            dataTable.Rows[1][0].ToString().Should().Be("175");
+            dataTable.Rows[1][1].Should().Be(new DateTime(1982, 11, 23));
+            dataTable.Rows[1][2].ToString().Should().Be("Test 2");
         }
+
 
         [Test]
-        public void ToDataTable_FieldsWithCustomTitle_CreatesTable()
+        public void ToDataTable_EnumsAreConvertedToStrings()
         {
-            var exportDefinition = CreateExportDefinition();
-            var customHeader = "Invasivität";
-            exportDefinition.AddField(p => p.Invasive=="Yes" ? "Invasiv" : "Nicht invasiv" , customHeader);
+            var persons = new List<Person>
+            {
+                new Person
+                {
+                    AccessLevel = FileAccess.Read
+                }
+            };
+            var sut = CreateExportDefinition();
+            sut.AddField(person => person.AccessLevel);
 
-            var table = exportDefinition.ToDataTable(testData);
+            var dataTable = sut.ToDataTable(persons);
 
-            var firstRow = table.Rows[0];
-            firstRow[customHeader].Should().Be("Invasiv");
+            dataTable.Rows.Count.Should().Be(1);
+            dataTable.Columns.Count.Should().Be(1);
+
+            dataTable.Rows[0][0].Should().Be("Read");
         }
 
-        private static ExportDefinition<Isolate> CreateExportDefinition()
+        private ExportDefinition<Person> CreateExportDefinition()
         {
-            return new ExportDefinition<Isolate>();
+            return new ExportDefinition<Person>();
         }
+    }
+
+    internal class Person
+    {
+        public string Name { get; set; }
+        public DateTime BirthDate { get; set; }
+        public int HeightInCentimeters { get; set; }
+        public FileAccess AccessLevel { get; set; }
     }
 }

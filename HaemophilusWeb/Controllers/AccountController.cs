@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -22,6 +23,13 @@ namespace HaemophilusWeb.Controllers
         public AccountController(UserManager<ApplicationUser> userManager)
         {
             UserManager = userManager;
+            GetAuthenticationManager = () => HttpContext.GetOwinContext().Authentication;
+        }
+
+        public AccountController(UserManager<ApplicationUser> userManager, IAuthenticationManager authenticationManager)
+        {
+            UserManager = userManager;
+            GetAuthenticationManager = () => authenticationManager;
         }
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
@@ -139,7 +147,7 @@ namespace HaemophilusWeb.Controllers
             ViewBag.HasLocalPassword = HasPassword();
             ViewBag.ReturnUrl = Url.Action("Manage");
             return View();
-        
+
         }
 
         //
@@ -207,7 +215,7 @@ namespace HaemophilusWeb.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            var loginInfo = await GetAuthenticationManager().GetExternalLoginInfoAsync();
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
@@ -241,7 +249,7 @@ namespace HaemophilusWeb.Controllers
         // GET: /Account/LinkLoginCallback
         public async Task<ActionResult> LinkLoginCallback()
         {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync(XsrfKey, User.Identity.GetUserId());
+            var loginInfo = await GetAuthenticationManager().GetExternalLoginInfoAsync(XsrfKey, User.Identity.GetUserId());
             if (loginInfo == null)
             {
                 return RedirectToAction("Manage", new {Message = ManageMessageId.Error});
@@ -270,7 +278,7 @@ namespace HaemophilusWeb.Controllers
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
+                var info = await GetAuthenticationManager().GetExternalLoginInfoAsync();
                 if (info == null)
                 {
                     return View("ExternalLoginFailure");
@@ -299,7 +307,7 @@ namespace HaemophilusWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            AuthenticationManager.SignOut();
+            GetAuthenticationManager().SignOut();
             return RedirectToAction("Index", "Home");
         }
 
@@ -334,16 +342,13 @@ namespace HaemophilusWeb.Controllers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";
 
-        private IAuthenticationManager AuthenticationManager
-        {
-            get { return HttpContext.GetOwinContext().Authentication; }
-        }
+        private readonly Func<IAuthenticationManager> GetAuthenticationManager;
 
         private async Task SignInAsync(ApplicationUser user, bool isPersistent)
         {
-            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ExternalCookie);
+            GetAuthenticationManager().SignOut(DefaultAuthenticationTypes.ExternalCookie);
             var identity = await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = isPersistent}, identity);
+            GetAuthenticationManager().SignIn(new AuthenticationProperties {IsPersistent = isPersistent}, identity);
         }
 
         private void AddErrors(IdentityResult result)

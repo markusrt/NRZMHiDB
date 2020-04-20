@@ -57,6 +57,13 @@ namespace HaemophilusWeb.Validators
             var noMlstDetails = CreateIsolateViewModel();
             noMlstDetails.Mlst = UnspecificOrNoTestResult.Determined;
             yield return Tuple.Create(noMlstDetails, new[] { "MlstSequenceType" });
+
+            var invalidEpsilometerTests = CreateIsolateViewModel();
+            invalidEpsilometerTests.EpsilometerTestViewModels = new List<EpsilometerTestViewModel>
+            {
+                new EpsilometerTestViewModel(Antibiotic.Amikacin) {Measurement = 123, EucastClinicalBreakpointId = 1}
+            };
+            yield return Tuple.Create(invalidEpsilometerTests, new[] { "EpsilometerTestViewModels[0].Measurement" });
         }
     }
 }
