@@ -155,6 +155,36 @@ namespace AccessImporter
                     isolate.YearlySequentialIsolateNumber = (-1) * int.Parse(labNumberAndYear[0]);
                     isolate.Year = 2000 + int.Parse(labNumberAndYear[1]);
                     isolate.Remark = string.IsNullOrEmpty(isolate.Remark) ? remark : "\n" + remark;
+
+                    // Special handling for SerogroupPCR on native material
+                    var serogroupPcr = isolate.SerogroupPcr;
+                    if (serogroupPcr != MeningoSerogroupPcr.NotDetermined)
+                    {
+                        switch (serogroupPcr)
+                        {
+                            case MeningoSerogroupPcr.B:
+                                isolate.CsbPcr = NativeMaterialTestResult.Positive;
+                                break;
+                            case MeningoSerogroupPcr.C:
+                                isolate.CscPcr = NativeMaterialTestResult.Positive;
+                                break;
+                            case MeningoSerogroupPcr.W:
+                                isolate.CswyPcr = NativeMaterialTestResult.Positive;
+                                isolate.CswyAllele = CswyAllel.Allele1;
+                                break;
+                            case MeningoSerogroupPcr.Y:
+                                isolate.CswyPcr = NativeMaterialTestResult.Positive;
+                                isolate.CswyAllele = CswyAllel.Allele2;
+                                break;
+                            case MeningoSerogroupPcr.WY:
+                                isolate.CswyPcr = NativeMaterialTestResult.Positive;
+                                isolate.CswyAllele = CswyAllel.Allele3;
+                                break;
+                            default:
+                                throw new Exception("Unexpected Serogroup PCR for native material");
+                        }
+                        isolate.SerogroupPcr = MeningoSerogroupPcr.NotDetermined;
+                    }
                 }
                 else if (Regex.Match(sending.LaboratoryNumber, "\\d+/\\d+").Success)
                 {
@@ -216,7 +246,7 @@ namespace AccessImporter
                 $"SELECT * FROM {PatientAccessTable} INNER JOIN {StemAccessTable} ON {PatientAccessTable}.patnr = {StemAccessTable}.patnr"; //" WHERE Year(eing_dat)=2019";
             var isolateFields = new[]
             {
-                $"{PatientAccessTable}.patnr", "dbnr", "stammnr", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "rplF", "serogruppe",
+                $"{PatientAccessTable}.patnr", "dbnr", "stammnr", "penicillin", "cefotaxim", "ciprofloxacin", "rifampicin", "rplF", "serogruppe", "serogruppe_PCR", "NHS",
                 "vr1", "vr2", "Serotyp", "univ_pcr", "sequenz", $"{StemAccessTable}.notizen", "st", "fet-a",
                 "cc", "pena", "fHbp", "art", "eing_dat"
             };

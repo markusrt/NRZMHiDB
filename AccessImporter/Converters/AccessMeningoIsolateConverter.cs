@@ -23,6 +23,7 @@ namespace AccessImporter.Converters
         {
             var stemNumber = int.TryParse(SanitizeStemnumber(source), out int stemNumberInt) ? stemNumberInt : (int?) null;
             var serogruppe = source["serogruppe"];
+            var serogruppePcr = StringOrNull(source, "serogruppe_PCR") ?? string.Empty;
             var isolate = new MeningoIsolate
             {
                 MeningoIsolateId = (int)source["dbnr"],
@@ -30,15 +31,31 @@ namespace AccessImporter.Converters
                 StemNumber = stemNumber,
                 RplF = StringOrNull(source, "rplF"),
                 Agglutination = AgglutinationMap[serogruppe.ToString()],
+                SerogroupPcr = SerogroupPcrMap[serogruppePcr],
                 RibosomalRna16S = RibosomalRna16SMap[source["univ_pcr"].ToString()],
                 RibosomalRna16SBestMatch = StringOrNull(source, "sequenz"),
                 Remark = StringOrNull(source, $"{Program.StemAccessTable}.notizen"),
-                EpsilometerTests = new List<EpsilometerTest>()
+                EpsilometerTests = new List<EpsilometerTest>(),
             };
             if ("h".Equals(source["art"]))
             {
                 isolate.GrowthOnBloodAgar = Growth.No;
                 isolate.GrowthOnMartinLewisAgar = Growth.No;
+            }
+
+            var nhsRealTimePCR = StringOrNull(source, "NHS");
+            isolate.RealTimePcr = NativeMaterialTestResult.NotDetermined;
+            if (!string.IsNullOrEmpty(nhsRealTimePCR))
+            {
+                if ("negativ".Equals(nhsRealTimePCR))
+                {
+                    isolate.RealTimePcr = NativeMaterialTestResult.Negative;
+                }
+                else
+                {
+                    isolate.RealTimePcr = NativeMaterialTestResult.Positive;
+                    isolate.RealTimePcrResult = RealTimePcrMap[nhsRealTimePCR];
+                }
             }
             return isolate;
         }
@@ -217,6 +234,30 @@ namespace AccessImporter.Converters
             {"Alle", MeningoSerogroupAgg.Poly},
             {"NSG", MeningoSerogroupAgg.Negative},
             {"inhibitorisch", MeningoSerogroupAgg.NotDetermined},
+        };
+
+        private static Dictionary<object, MeningoSerogroupPcr> SerogroupPcrMap = new Dictionary<object, MeningoSerogroupPcr>
+        {
+            {string.Empty, MeningoSerogroupPcr.NotDetermined},
+            {"A", MeningoSerogroupPcr.A},
+            {"B", MeningoSerogroupPcr.B},
+            {"C", MeningoSerogroupPcr.C},
+            {"E", MeningoSerogroupPcr.E},
+            {"W", MeningoSerogroupPcr.W},
+            {"WY", MeningoSerogroupPcr.WY},
+            {"X", MeningoSerogroupPcr.X},
+            {"Y", MeningoSerogroupPcr.Y},
+            {"Z", MeningoSerogroupPcr.Z},
+            {"NG", MeningoSerogroupPcr.Negative},
+            {"ng", MeningoSerogroupPcr.Negative},
+            {"cnl", MeningoSerogroupPcr.Cnl},
+            {"NSG", MeningoSerogroupPcr.Negative}
+        };
+
+        private static Dictionary<object, RealTimePcrResult> RealTimePcrMap = new Dictionary<object, RealTimePcrResult>
+        {
+            {"N. meningitidis", RealTimePcrResult.NeisseriaMeningitidis},
+            {"S. pneumoniae", RealTimePcrResult.StreptococcusPneumoniae},
         };
     }
 }
