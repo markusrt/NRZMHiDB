@@ -123,16 +123,6 @@ function CreateAlertHtml(alertStyle, title, message) {
 }
 
 function preventSiteNavigationWithPendingChanges() {
-    var installBeforeUnloadListener = function () {
-        if (window.installedBeforeUnloadListenerOnPendingChanges) {
-            return;
-        }
-        $(window).on("beforeunload", function () {
-            return "Sie besitzen ungespeicherte Änderungen!";
-        });
-        window.installedBeforeUnloadListenerOnPendingChanges = true;
-    };
-
     $(document).ready(function () {
         $('input').on("change keydown", installBeforeUnloadListener);
         $('select').on("change", installBeforeUnloadListener);
@@ -147,3 +137,13 @@ function preventSiteNavigationWithPendingChanges() {
         });
     });
 }
+
+function installBeforeUnloadListener() {
+    if (window.installedBeforeUnloadListenerOnPendingChanges) {
+        return;
+    }
+    $(window).on("beforeunload", function () {
+        return "Sie besitzen ungespeicherte Änderungen!";
+    });
+    window.installedBeforeUnloadListenerOnPendingChanges = true;
+};

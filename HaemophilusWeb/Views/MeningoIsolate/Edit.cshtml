@@ -309,11 +309,13 @@
             $("#PubMlstIsolateFound").show();
         })
         .fail(function () {
-            //fields.forEach(v => $('#PM-' + v).val(""));
+            fields.forEach(v => $('#NeisseriaPubMlstIsolate_' + v).val(""));
+            $("#NeisseriaPubMlstIsolate_PubMlstId").val(0);
             $("#PubMlstIsolateNotFound").show();
         })
         .always(function() {
             $("#PubMlstQuery").button("reset");
+            installBeforeUnloadListener();
         });
      }
 
