@@ -16,13 +16,14 @@ namespace HaemophilusWeb.Controllers
         private readonly ChangeLog changeLog = new ChangeLog(
             new List<Change>
             {
-                new Change(DateTime.MinValue, "Umstrukturierungen für Meningokokken", ChangeType.Feature),
                 new Change(DateTime.MinValue, "Entwickler Dokumentation", ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Auditierung von Zugriffen</del>", ChangeType.Feature),
                 new Change(DateTime.MinValue, "<del>Abfrage über Isolate</del>", ChangeType.Feature)
             },
             new List<Change>
             {
+                new Change(new DateTime(2020, 04, 28, 07, 00, 0), "Import der Daten von 2019", ChangeType.Feature),
+                new Change(new DateTime(2020, 04, 27, 21, 00, 0), "Manuelle PubMLST Abfrage", ChangeType.Feature),
                 new Change(new DateTime(2020, 02, 12, 21, 00, 0), "Passende Interpretation wenn eine PCR positiv und eine andere inhibitorisch ist", ChangeType.Bug),
                 new Change(new DateTime(2020, 02, 12, 20, 00, 0), "Fehlermeldung bei Meningokokken Report Erstellung", ChangeType.Bug),
                 new Change(new DateTime(2020, 02, 05), "Haemophilus Einsendungen können ohne Postleitzahl gespeichert werden", ChangeType.Feature),
