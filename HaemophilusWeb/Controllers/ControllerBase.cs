@@ -10,7 +10,7 @@ namespace HaemophilusWeb.Controllers
 {
     public class ControllerBase : Controller
     {
-        protected ActionResult ExportToExcel<T>(ExportQuery query, List<T> list, ExportDefinition<T> exportDefinition,
+        protected ActionResult ExportToExcel<T>(FromToQuery query, List<T> list, ExportDefinition<T> exportDefinition,
             string prefix)
         {
             var tempFile = Path.GetTempFileName();

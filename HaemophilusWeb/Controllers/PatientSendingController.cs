@@ -51,7 +51,7 @@ namespace HaemophilusWeb.Controllers
 
         protected override string IsolateControllerName => "Isolate";
 
-        protected override IEnumerable<Sending> SendingsMatchingExportQuery(ExportQuery query, List<SamplingLocation> samplingLocations)
+        protected override IEnumerable<Sending> SendingsMatchingExportQuery(FromToQuery query, List<SamplingLocation> samplingLocations)
         {
             return NotDeletedSendings()
                 .Include(s => s.Patient)
@@ -293,7 +293,7 @@ namespace HaemophilusWeb.Controllers
             return SendingDbSet().Where(s => !s.Deleted);
         }
 
-        protected abstract IEnumerable<TSending> SendingsMatchingExportQuery(ExportQuery query,
+        protected abstract IEnumerable<TSending> SendingsMatchingExportQuery(FromToQuery query,
             List<SamplingLocation> samplingLocations);
 
         protected abstract ExportDefinition<TSending> CreateRkiExportDefinition();
@@ -468,12 +468,12 @@ namespace HaemophilusWeb.Controllers
 
 
         [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
-        public ActionResult RkiExport(ExportQuery query)
+        public ActionResult RkiExport(FromToQuery query)
         {
             if (query.From == DateTime.MinValue)
             {
                 var lastYear = DateTime.Now.Year - 1;
-                var exportQuery = new ExportQuery
+                var exportQuery = new FromToQuery
                 {
                     From = new DateTime(lastYear, 1, 1),
                     To = new DateTime(lastYear, 12, 31)
@@ -488,12 +488,12 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult LaboratoryExport(ExportQuery query)
+        public ActionResult LaboratoryExport(FromToQuery query)
         {
             if (query.From == DateTime.MinValue)
             {
                 var lastYear = DateTime.Now.Year - 1;
-                var exportQuery = new ExportQuery
+                var exportQuery = new FromToQuery
                 {
                     From = new DateTime(lastYear, 1, 1),
                     To = new DateTime(lastYear, 12, 31)

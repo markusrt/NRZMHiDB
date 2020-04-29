@@ -158,12 +158,12 @@ namespace HaemophilusWeb.Controllers
             return EditUnvalidated(sender);
         }
 
-        public ActionResult Export(ExportQuery query)
+        public ActionResult Export(FromToQuery query)
         {
             if (query.From == DateTime.MinValue)
             {
                 var lastYear = DateTime.Now.Year - 1;
-                var exportQuery = new ExportQuery
+                var exportQuery = new FromToQuery
                 {
                     From = new DateTime(lastYear, 1, 1),
                     To = new DateTime(lastYear, 12, 31)
@@ -176,7 +176,7 @@ namespace HaemophilusWeb.Controllers
             return ExportToExcel(query, sendings, CreateExportDefinition(query), "Einsender");
         }
 
-        private ExportDefinition<Sender> CreateExportDefinition(ExportQuery query)
+        private ExportDefinition<Sender> CreateExportDefinition(FromToQuery query)
         {
             var export = new ExportDefinition<Sender>();
             var sendings = db.Sendings.Include(s => s.Isolate).Where
@@ -207,7 +207,7 @@ namespace HaemophilusWeb.Controllers
             return export;
         }
 
-        private List<Sender> SendersMatchingExportQuery(ExportQuery query)
+        private List<Sender> SendersMatchingExportQuery(FromToQuery query)
         {
             var senderIds = db.Sendings.Where(s => !s.Deleted)
                 .Include(s => s.Patient)

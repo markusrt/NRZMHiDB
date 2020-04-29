@@ -535,7 +535,7 @@
     <Compile Include="ViewModels\IsolateViewModel.cs" />
     <Compile Include="ViewModels\MeningoIsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
-    <Compile Include="ViewModels\ExportQuery.cs" />
+    <Compile Include="ViewModels\FromToQuery.cs" />
     <Compile Include="ViewModels\Typing.cs" />
     <Compile Include="Views\Utils\AutoCompleteUtils.cs" />
     <Compile Include="Views\Utils\BootstrapEditor.cs" />
