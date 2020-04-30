@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Services;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
 using HaemophilusWeb.Views.Utils;
@@ -85,6 +86,25 @@ namespace HaemophilusWeb.Controllers
                 }
             }
             return CreateEditView(isolateViewModel);
+        }
+
+        public ActionResult PubMlstMatch()
+        {
+            var lastYear = DateTime.Now.Year;
+            return View(new FromToQuery
+            {
+                From = new DateTime(lastYear, 1, 1),
+                To = new DateTime(lastYear, 12, 31)
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PubMlstMatch(FromToQuery fromTo)
+        {
+            var matcher = new PubMlstMatcher(db, new PubMlstService());
+            var result = matcher.Match(fromTo);
+            return View("PubMlstMatchResult", result);
         }
 
         private void MapPubMlstData(MeningoIsolateViewModel isolateViewModel, MeningoIsolate isolate)

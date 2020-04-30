@@ -1,0 +1,45 @@
+﻿@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.FromToQuery
+
+@{
+    ViewBag.Title = "PubMLST Matching";
+}
+
+<h3>Entnahmedatum</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        @Html.DateEditorFor(m => m.From)
+        @Html.DateEditorFor(m => m.To)
+        
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <p>
+                    Hinweis: Die Abfrage nimmt einige Zeit in Anspruch. 
+                    Die Seite lädt automatisch neu sobald alle Daten von PubMLST geladen sind.
+                </p>
+
+                <input id="loadPubMlst" type="submit" name="primary-submit" value="Abfrage der PubMLST Daten" class="btn btn-primary"
+                       data-loading-text="Abfrage läuft ..."/>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            $('.btn').on('click', function() {
+                var $this = $(this);
+                $this.button('loading');
+            });
+        });
+    </script>
+}
+

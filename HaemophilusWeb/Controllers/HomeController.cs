@@ -21,7 +21,14 @@ namespace HaemophilusWeb.Controllers
                 new Change(DateTime.MinValue, "<del>Abfrage über Isolate</del>", ChangeType.Feature)
             },
             new List<Change>
-            {
+            {new Change(new DateTime(2020, 4, 30), "<p>PubMLST Matching</p>" +
+                                                   "<p>Im Menü gibt es für Meninkokokken jetzt einen PubMLST Match Eintrag:</p>" +
+                                                   "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_1.png'/>" +
+                                                   "<p>Über die Seite kann man einen bestimmten Zeitraum von Isolaten mit der BigsDB Datenbank abgleichen.</p>" +
+                                                   "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_2.png'/>" +
+                                                   "<p>Je nach Datenmenge kann die Abfrage mehrere Minuten in Anspruch nehmen. Die Seite lädt am Ende automatisch neu.</p>" +
+                                                   "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_3.png'/>" +
+                                                   "<p>Die Abfrage speichert automatisch alle PubMLST Daten zu dem jeweiligen Isolat. Sie kann für einen Zeitraum auch wiederholt werden.</p>" , ChangeType.Feature),
                 new Change(new DateTime(2020, 04, 28, 07, 00, 0), "Import der Daten von 2019", ChangeType.Feature),
                 new Change(new DateTime(2020, 04, 27, 21, 00, 0), "Manuelle PubMLST Abfrage", ChangeType.Feature),
                 new Change(new DateTime(2020, 02, 12, 21, 00, 0), "Passende Interpretation wenn eine PCR positiv und eine andere inhibitorisch ist", ChangeType.Bug),

@@ -23,7 +23,12 @@ namespace HaemophilusWeb.Models
         public readonly InMemoryDbSet<MeningoPatient> MeningoPatientsDbSet = new InMemoryDbSet<MeningoPatient>(true);
         public readonly InMemoryDbSet<MeningoSending> MeningoSendingsDbSet = new InMemoryDbSet<MeningoSending>(true);
         public readonly InMemoryDbSet<MeningoIsolate> MeningoIsolatesDbSet = new InMemoryDbSet<MeningoIsolate>(true);
-        public readonly InMemoryDbSet<NeisseriaPubMlstIsolate> NeisseriaPubMlstIsolatesDbSet = new InMemoryDbSet<NeisseriaPubMlstIsolate>(true);
+
+        public readonly InMemoryDbSet<NeisseriaPubMlstIsolate> NeisseriaPubMlstIsolatesDbSet = new InMemoryDbSet<NeisseriaPubMlstIsolate>(true)
+        {
+            FindFunction = (pubmlstIsolates, objects) => pubmlstIsolates.Single(s => s.NeisseriaPubMlstIsolateId == (int) objects[0])
+        };
+
         public readonly InMemoryDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpointsDbSet =
             new InMemoryDbSet<EucastClinicalBreakpoint>(true);
 

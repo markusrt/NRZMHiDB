@@ -33,7 +33,7 @@
                 <div class="navbar-collapse collapse">
                     @if (Request.IsAuthenticated)
                     {
-                        <ul class="nav navbar-nav">
+                    <ul class="nav navbar-nav">
                         @if (User.IsInRole(DefaultRoles.User) || User.IsInRole(DefaultRoles.Administrator))
                         {
                             <li>@Html.ActionLink("Einsender", "Index", "Sender")</li>
@@ -45,6 +45,12 @@
                                     <li>@Html.ActionLink("RKI Export (Haemophilus)", "RkiExport", "PatientSending")</li>
                                     <li>@Html.ActionLink("Labor Export (Haemophilus)", "LaboratoryExport", "PatientSending")</li>
                                     <li>@Html.ActionLink("Einsender Export", "Export", "Sender")</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">PubMLST <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("Matching (Meningokokken)", "PubMlstMatch", "MeningoIsolate")</li>
                                 </ul>
                             </li>
                             <li class="dropdown">
@@ -61,7 +67,7 @@
                         {
                             <li>@Html.ActionLink("RKI Export", "RkiExport", "PatientSending")</li>
                         }
-                        </ul>
+                    </ul>
                     }
                     @Html.Partial("_LoginPartial")
                 </div>

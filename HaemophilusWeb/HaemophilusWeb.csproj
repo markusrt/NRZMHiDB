@@ -252,6 +252,8 @@
       <DependentUpon>202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\PubMlstMatchInfo.cs" />
+    <Compile Include="Services\PubMlstMatcher.cs" />
     <Compile Include="Services\PubMlstService.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
     <Compile Include="Domain\IsolateExtensions.cs" />
@@ -636,6 +638,9 @@
     <Content Include="Images\changes\20170420_1.png" />
     <Content Include="Images\changes\20170420_2.png" />
     <Content Include="Images\changes\20180703.png" />
+    <Content Include="Images\changes\20200430_1.png" />
+    <Content Include="Images\changes\20200430_2.png" />
+    <Content Include="Images\changes\20200430_3.png" />
     <Content Include="Images\logo4.png" />
     <Content Include="Images\sort_asc.png" />
     <Content Include="Images\sort_both.png" />
@@ -1215,6 +1220,8 @@
     <Content Include="Views\MeningoPatientSending\Create.cshtml" />
     <Content Include="Views\MeningoIsolate\Edit.cshtml" />
     <Content Include="Views\MeningoReport\Isolate.cshtml" />
+    <Content Include="Views\MeningoIsolate\PubMlstMatch.cshtml" />
+    <Content Include="Views\MeningoIsolate\PubMlstMatchResult.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
