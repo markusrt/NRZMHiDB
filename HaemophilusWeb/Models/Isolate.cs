@@ -15,7 +15,5 @@ namespace HaemophilusWeb.Models
 
         [ScriptIgnore]
         public Sending Sending { get; set; }
-
-        public virtual ICollection<EpsilometerTest> EpsilometerTests { get; set; }
     }
 }

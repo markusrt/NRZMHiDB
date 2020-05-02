@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.UI.WebControls;
 using DataTables.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Models;
@@ -16,7 +18,7 @@ using NUnit.Framework;
 
 namespace HaemophilusWeb.Controllers
 {
-    public class PatientSendingControllerTests
+    public class PatientSendingControllerTests : ITempDirectoryTest
     {
         private SendingController sendingController;
         private PatientController patientController;
@@ -33,6 +35,8 @@ namespace HaemophilusWeb.Controllers
             foreach (var sending in DbMock.Sendings)
             {
                 sending.Isolate = MockData.CreateInstance<Isolate>();
+                sending.Isolate.EpsilometerTests.Clear();
+                sending.Isolate.EpsilometerTests.Add(MockData.CreateInstance<EpsilometerTest>());
             }
         }
 
@@ -90,6 +94,68 @@ namespace HaemophilusWeb.Controllers
             ((string)firstRow.ReportGenerated).Should().Contain(expectedIcon);
         }
 
+        [Test]
+        public void LaboratoryExport_EmptyQuery_ForwardToViewWithQueryForLastYear()
+        {
+            var controller = CreateController();
+
+            var result = controller.LaboratoryExport(new FromToQuery());
+
+            var viewResult= result.Should().BeOfType<ViewResult>().And.Subject.As<ViewResult>();
+            var query = viewResult.Model.Should().BeOfType<FromToQuery>().And.Subject.As<FromToQuery>();
+            query.From.Month.Should().Be(1);
+            query.From.Year.Should().Be(DateTime.Now.Year - 1);
+            query.To.Month.Should().Be(12);
+            query.To.Year.Should().Be(DateTime.Now.Year - 1);
+        }
+
+        [Test]
+        public void LaboratoryExport_ValidQuery_CreatesExcel()
+        {
+            var tempExcel = new FileInfo(Path.Combine(TemporaryDirectoryToStoreTestData, "LaboratoryExport.xlsx"));
+            var controller = CreateController();
+
+            var result = controller.LaboratoryExport(new FromToQuery {From = DateTime.Now.AddYears(-100), To = DateTime.Now});
+
+            var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
+            fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
+            File.WriteAllBytes(tempExcel.FullName, fileResult.FileContents);
+
+            using var fastExcel = new FastExcel.FastExcel(tempExcel);
+            fastExcel.Worksheets.Length.Should().Be(1);
+        }
+
+        [Test]
+        public void RkiExport_EmptyQuery_ForwardToViewWithQueryForLastYear()
+        {
+            var controller = CreateController();
+
+            var result = controller.RkiExport(new FromToQuery());
+
+            var viewResult = result.Should().BeOfType<ViewResult>().And.Subject.As<ViewResult>();
+            var query = viewResult.Model.Should().BeOfType<FromToQuery>().And.Subject.As<FromToQuery>();
+            query.From.Month.Should().Be(1);
+            query.From.Year.Should().Be(DateTime.Now.Year - 1);
+            query.To.Month.Should().Be(12);
+            query.To.Year.Should().Be(DateTime.Now.Year - 1);
+        }
+
+        [Test]
+        public void RkiExport_ValidQuery_CreatesExcel()
+        {
+            var tempExcel = new FileInfo(Path.Combine(TemporaryDirectoryToStoreTestData, "LaboratoryExport.xlsx"));
+            var controller = CreateController();
+
+            var result = controller.RkiExport(new FromToQuery { From = DateTime.Now.AddYears(-100), To = DateTime.Now });
+
+            var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
+            fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
+            File.WriteAllBytes(tempExcel.FullName, fileResult.FileContents);
+
+            using var fastExcel = new FastExcel.FastExcel(tempExcel);
+            fastExcel.Worksheets.Length.Should().Be(1);
+        }
+
         private PatientSendingController CreateController()
         {
             var request = new Mock<HttpRequestBase>();
@@ -109,5 +175,7 @@ namespace HaemophilusWeb.Controllers
             controller.Url = urlHelper.Object;
             return controller;
         }
+
+        public string TemporaryDirectoryToStoreTestData { get; set; }
     }
 }

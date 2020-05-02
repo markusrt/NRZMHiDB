@@ -16,9 +16,16 @@ using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
-    public class PatientSendingController : PatientSendingControllerBase<PatientSendingViewModel<Patient, Sending>,
-        Patient, Sending>
+    public enum ExportType
     {
+        Laboratory,
+        Rki
+    }
+
+    public class PatientSendingController : PatientSendingControllerBase<PatientSendingViewModel<Patient, Sending>, Patient, Sending>
+    {
+
+
         public PatientSendingController()
             : this(
                 new ApplicationDbContextWrapper(new ApplicationDbContext()), new PatientController(),
@@ -51,8 +58,12 @@ namespace HaemophilusWeb.Controllers
 
         protected override string IsolateControllerName => "Isolate";
 
-        protected override IEnumerable<Sending> SendingsMatchingExportQuery(FromToQuery query, List<SamplingLocation> samplingLocations)
+        protected override IEnumerable<Sending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
+            var samplingLocations = exportType == ExportType.Rki
+                ? new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor }
+                : new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor, SamplingLocation.Other };
+
             return NotDeletedSendings()
                 .Include(s => s.Patient)
                 .Where
@@ -117,7 +128,8 @@ namespace HaemophilusWeb.Controllers
             export.AddField(s => s.Patient.City);
             export.AddField(s => ExportToString(s.Patient.County));
             export.AddField(s => ExportToString(s.Patient.State));
-            export.AddField(s => ExportClinicalInformation(s.Patient.ClinicalInformation, s));
+            export.AddField(s => ExportClinicalInformation(
+                s.Patient.ClinicalInformation, () => s.Patient.OtherClinicalInformation, _ => _.HasFlag(ClinicalInformation.Other)));
             export.AddField(s => ExportToString(s.Patient.HibVaccination));
             export.AddField(s => s.Patient.HibVaccinationDate.ToReportFormat());
             export.AddField(s => ExportToString(s.Patient.Therapy));
@@ -159,9 +171,9 @@ namespace HaemophilusWeb.Controllers
             export.AddField(s => ExportToString(s.Isolate.Evaluation));
             export.AddField(s => s.Isolate.ReportDate);
             export.AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
-            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceId.ToString()), "RKI InterneRef");
-            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceNumber), "RKI Aktenzeichen");
-            export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiStatus, ExportToString(RkiStatus.None)), "RKI Status");
+            export.AddField(s => ExportChildProperty(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceId.ToString()), "RKI InterneRef");
+            export.AddField(s => ExportChildProperty(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceNumber), "RKI Aktenzeichen");
+            export.AddField(s => ExportChildProperty(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiStatus, ExportToString(RkiStatus.None)), "RKI Status");
 
             return export;
         }
@@ -211,7 +223,7 @@ namespace HaemophilusWeb.Controllers
                     PatientPostalCode = x.PatientPostalCode,
                     SenderPostalCode = x.SenderPostalCode,
                     SenderLaboratoryNumber = x.SenderLaboratoryNumber,
-                    FullTextSearch = string.Join(" ",
+                    FullTextSearch = String.Join(" ",
                             x.Initials, x.BirthDate.ToReportFormat(),
                             x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Haemophilus), x.ReceivingDate.ToReportFormat(),
                             invasive, samplingLocation, laboratoryNumber,
@@ -220,6 +232,15 @@ namespace HaemophilusWeb.Controllers
                 };
             }).ToList();
             return queryRecords;
+        }
+
+        private static string ExportSamplingLocation(SamplingLocation location, Sending sending)
+        {
+            if (location == SamplingLocation.Other)
+            {
+                return sending.OtherSamplingLocation;
+            }
+            return ExportToString(location);
         }
     }
 
@@ -293,8 +314,7 @@ namespace HaemophilusWeb.Controllers
             return SendingDbSet().Where(s => !s.Deleted);
         }
 
-        protected abstract IEnumerable<TSending> SendingsMatchingExportQuery(FromToQuery query,
-            List<SamplingLocation> samplingLocations);
+        protected abstract IEnumerable<TSending> SendingsMatchingExportQuery(FromToQuery query, ExportType additionalFilters);
 
         protected abstract ExportDefinition<TSending> CreateRkiExportDefinition();
 
@@ -481,8 +501,7 @@ namespace HaemophilusWeb.Controllers
                 return View(exportQuery);
             }
 
-            var sendings = SendingsMatchingExportQuery(query,
-                new List<SamplingLocation> {SamplingLocation.Blood, SamplingLocation.Liquor}).ToList();
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Rki).ToList();
 
             return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI");
         }
@@ -501,40 +520,34 @@ namespace HaemophilusWeb.Controllers
                 return View(exportQuery);
             }
 
-            var sendings = SendingsMatchingExportQuery(query,
-                new List<SamplingLocation>
-                {
-                    SamplingLocation.Blood,
-                    SamplingLocation.Liquor,
-                    SamplingLocation.Other
-                }).ToList();
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Laboratory).ToList();
             return ExportToExcel(query, sendings, CreateLaboratoryExportDefinition(), "Labor");
         }
 
-        protected string ExportRkiMatchRecord(RkiMatchRecord rkiMatchRecord, Func<RkiMatchRecord, object> accessValue)
+        //TODO move partly to ExportDefinition class (tell don't ask), i.e. AddChildField
+        protected string ExportChildProperty<T>(T property, Func<T, object> accessValue)
         {
-            return ExportRkiMatchRecord(rkiMatchRecord, accessValue, string.Empty);
+            return ExportChildProperty(property, accessValue, string.Empty);
         }
 
-        protected string ExportRkiMatchRecord(RkiMatchRecord rkiMatchRecord, Func<RkiMatchRecord, object> accessValue, string nullValue)
+        protected string ExportChildProperty<T>(T property, Func<T, object> accessValue, string nullValue)
         {
-            return rkiMatchRecord != null ? ExportToString(accessValue(rkiMatchRecord)) : nullValue;
+            return property != null ? ExportToString(accessValue(property)) : nullValue;
         }
 
-        protected string ExportClinicalInformation(ClinicalInformation clinicalInformation, Sending sending)
+        protected string ExportClinicalInformation<T>(T clinicalInformation, Func<string> otherClinicalInformation, Func<T, bool> isOther)
         {
             var clinicalInformationAsString = EnumEditor.GetEnumDescription(clinicalInformation);
-            if (sending.Patient.ClinicalInformation.HasFlag(ClinicalInformation.Other))
+            if (isOther(clinicalInformation))
             {
-                clinicalInformationAsString =
-                    clinicalInformationAsString.Replace(EnumEditor.GetEnumDescription(ClinicalInformation.Other),
-                        sending.Patient.OtherClinicalInformation);
+                clinicalInformationAsString = clinicalInformationAsString.Replace(
+                    EnumEditor.GetEnumDescription(ClinicalInformation.Other), otherClinicalInformation());
             }
             return clinicalInformationAsString;
         }
 
 
-        protected static void AddEpsilometerTestFields(ExportDefinition<Sending> export, Antibiotic antibiotic, string measurementHeaderParameter = null, string evaluationHeaderParameter = null)
+        protected void AddEpsilometerTestFields(ExportDefinition<TSending> export, Antibiotic antibiotic, string measurementHeaderParameter = null, string evaluationHeaderParameter = null)
         {
             var antibioticName = ExportToString(antibiotic);
             var measurementHeader = measurementHeaderParameter ?? string.Format("{0} MHK", antibioticName);
@@ -551,15 +564,6 @@ namespace HaemophilusWeb.Controllers
                 : EnumEditor.GetEnumDescription(gender).Substring(0, 1);
         }
 
-        protected static string ExportSamplingLocation(SamplingLocation location, Sending sending)
-        {
-            if (location == SamplingLocation.Other)
-            {
-                return sending.OtherSamplingLocation;
-            }
-            return ExportToString(location);
-        }
-
         protected static string ExportToString<T>(T value)
         {
             if (value == null)
@@ -574,14 +578,14 @@ namespace HaemophilusWeb.Controllers
             return value.ToString();
         }
 
-        private static EpsilometerTest FindEpsilometerTestResult(Sending sending, Antibiotic antibiotic)
+        private EpsilometerTest FindEpsilometerTestResult(TSending sending, Antibiotic antibiotic)
         {
-            var eTestResult = sending.Isolate.EpsilometerTests.SingleOrDefault(
+            var eTestResult = sending.GetIsolate().EpsilometerTests.SingleOrDefault(
                 e => e.EucastClinicalBreakpoint.Antibiotic == antibiotic);
             return eTestResult;
         }
 
-        private static double? FindEpsilometerTestMeasurement(Sending sending, Antibiotic antibiotic)
+        private double? FindEpsilometerTestMeasurement(TSending sending, Antibiotic antibiotic)
         {
             var eTestResult = FindEpsilometerTestResult(sending, antibiotic);
             if (eTestResult == null)
@@ -591,7 +595,7 @@ namespace HaemophilusWeb.Controllers
             return Math.Round(eTestResult.Measurement, 3);
         }
 
-        private static EpsilometerTestResult? FindEpsilometerTestEvaluation(Sending sending, Antibiotic antibiotic)
+        private EpsilometerTestResult? FindEpsilometerTestEvaluation(TSending sending, Antibiotic antibiotic)
         {
             var eTestResult = FindEpsilometerTestResult(sending, antibiotic);
             if (eTestResult == null)

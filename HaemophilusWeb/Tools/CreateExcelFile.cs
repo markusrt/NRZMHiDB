@@ -1,18 +1,13 @@
-﻿//#define INCLUDE_WEB_FUNCTIONS
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
-using System.Reflection;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using HaemophilusWeb.Tools;
-using HaemophilusWeb.Utils;
 
-namespace ExportToExcel
+namespace HaemophilusWeb.Tools
 {
     //
     //  November 2013
@@ -35,14 +30,6 @@ namespace ExportToExcel
 
     public class CreateExcelFile
     {
-        public static bool CreateExcelDocument<T>(List<T> list, string xlsxFilePath)
-        {
-            var ds = new DataSet();
-            ds.Tables.Add(ListToDataTable(list));
-
-            return CreateExcelDocument(ds, xlsxFilePath);
-        }
-
         public static bool CreateExcelDocument<T>(List<T> list, ExportDefinition<T> exportDefinition,
             string xlsxFilePath)
         {
@@ -51,156 +38,6 @@ namespace ExportToExcel
 
             return CreateExcelDocument(ds, xlsxFilePath);
         }
-
-        #region HELPER_FUNCTIONS
-
-        //  This function is adapated from: http://www.codeguru.com/forum/showthread.php?t=450171
-        //  My thanks to Carl Quirion, for making it "nullable-friendly".
-        public static DataTable ListToDataTable<T>(List<T> list)
-        {
-            var dt = new DataTable();
-
-            foreach (var info in typeof (T).GetProperties())
-            {
-                dt.Columns.Add(new DataColumn(GetColumnName(info), GetNullableType(info.PropertyType)));
-            }
-            foreach (var t in list)
-            {
-                var row = dt.NewRow();
-                foreach (var info in typeof (T).GetProperties())
-                {
-                    var columnName = GetColumnName(info);
-                    if (!IsNullableType(info.PropertyType))
-                        row[columnName] = info.GetValue(t, null);
-                    else
-                        row[columnName] = (info.GetValue(t, null) ?? DBNull.Value);
-                }
-                dt.Rows.Add(row);
-            }
-            return dt;
-        }
-
-        private static string GetColumnName(MemberInfo member)
-        {
-            return member.GetDisplayName();
-        }
-
-        private static Type GetNullableType(Type t)
-        {
-            var returnType = t;
-            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof (Nullable<>)))
-            {
-                returnType = Nullable.GetUnderlyingType(t);
-            }
-            return returnType;
-        }
-
-        private static bool IsNullableType(Type type)
-        {
-            return (type == typeof (string) ||
-                    type.IsArray ||
-                    (type.IsGenericType &&
-                     type.GetGenericTypeDefinition().Equals(typeof (Nullable<>))));
-        }
-
-        public static bool CreateExcelDocument(DataTable dt, string xlsxFilePath)
-        {
-            var ds = new DataSet();
-            ds.Tables.Add(dt);
-            var result = CreateExcelDocument(ds, xlsxFilePath);
-            ds.Tables.Remove(dt);
-            return result;
-        }
-
-        #endregion
-
-#if INCLUDE_WEB_FUNCTIONS
-    /// <summary>
-    /// Create an Excel file, and write it out to a MemoryStream (rather than directly to a file)
-    /// </summary>
-    /// <param name="dt">DataTable containing the data to be written to the Excel.</param>
-    /// <param name="filename">The filename (without a path) to call the new Excel file.</param>
-    /// <param name="Response">HttpResponse of the current page.</param>
-    /// <returns>True if it was created succesfully, otherwise false.</returns>
-        public static bool CreateExcelDocument(DataTable dt, string filename, System.Web.HttpResponse Response)
-        {
-            try
-            {
-                DataSet ds = new DataSet();
-                ds.Tables.Add(dt);
-                CreateExcelDocumentAsStream(ds, filename, Response);
-                ds.Tables.Remove(dt);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine("Failed, exception thrown: " + ex.Message);
-                return false;
-            }
-        }
-
-        public static bool CreateExcelDocument<T>(List<T> list, string filename, System.Web.HttpResponse Response)
-        {
-            try
-            {
-                DataSet ds = new DataSet();
-                ds.Tables.Add(ListToDataTable(list));
-                CreateExcelDocumentAsStream(ds, filename, Response);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine("Failed, exception thrown: " + ex.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Create an Excel file, and write it out to a MemoryStream (rather than directly to a file)
-        /// </summary>
-        /// <param name="ds">DataSet containing the data to be written to the Excel.</param>
-        /// <param name="filename">The filename (without a path) to call the new Excel file.</param>
-        /// <param name="Response">HttpResponse of the current page.</param>
-        /// <returns>Either a MemoryStream, or NULL if something goes wrong.</returns>
-        public static bool CreateExcelDocumentAsStream(DataSet ds, string filename, System.Web.HttpResponse Response)
-        {
-            try
-            {
-                System.IO.MemoryStream stream = new System.IO.MemoryStream();
-                using (SpreadsheetDocument document = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook, true))
-                {
-                    WriteExcelFile(ds, document);
-                }
-                stream.Flush();
-                stream.Position = 0;
-
-                Response.ClearContent();
-                Response.Clear();
-                Response.Buffer = true;
-                Response.Charset = "";
-
-                //  NOTE: If you get an "HttpCacheability does not exist" error on the following line, make sure you have
-                //  manually added System.Web to this project's References.
-
-                Response.Cache.SetCacheability(System.Web.HttpCacheability.NoCache);
-                Response.AddHeader("content-disposition", "attachment; filename=" + filename);
-                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                byte[] data1 = new byte[stream.Length];
-                stream.Read(data1, 0, data1.Length);
-                stream.Close();
-                Response.BinaryWrite(data1);
-                Response.Flush();
-                Response.End();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Trace.WriteLine("Failed, exception thrown: " + ex.Message);
-                return false;
-            }
-        }
-#endif //  End of "INCLUDE_WEB_FUNCTIONS" section
 
         /// <summary>
         /// Create an Excel file, and write it to a file.

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Web.Mvc;
-using ExportToExcel;
 using HaemophilusWeb.Tools;
 using HaemophilusWeb.ViewModels;
 

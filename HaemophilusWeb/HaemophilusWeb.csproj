@@ -255,6 +255,8 @@
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Services\PubMlstMatcher.cs" />
     <Compile Include="Services\PubMlstService.cs" />
+    <Compile Include="Tools\SendingExportDefinition.cs" />
+    <Compile Include="Tools\MeningoSendingLaboratoryExport.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
     <Compile Include="Domain\IsolateExtensions.cs" />
     <Compile Include="Domain\MeningoIsolateInterpretation.cs" />
@@ -1180,7 +1182,7 @@
     <Content Include="Views\County\Index.cshtml" />
     <Content Include="Views\County\Upload.cshtml" />
     <Content Include="Views\PatientSending\RkiExport.cshtml" />
-    <Content Include="Views\PatientSending\LaboratoryExport.cshtml" />
+    <Content Include="Views\MeningoPatientSending\LaboratoryExport.cshtml" />
     <Content Include="Views\Shared\_DeleteButton.cshtml" />
     <Content Include="Views\Sender\Deleted.cshtml" />
     <Content Include="Views\Home\Change.cshtml" />
@@ -1222,6 +1224,7 @@
     <Content Include="Views\MeningoReport\Isolate.cshtml" />
     <Content Include="Views\MeningoIsolate\PubMlstMatch.cshtml" />
     <Content Include="Views\MeningoIsolate\PubMlstMatchResult.cshtml" />
+    <Content Include="Views\PatientSending\LaboratoryExport.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

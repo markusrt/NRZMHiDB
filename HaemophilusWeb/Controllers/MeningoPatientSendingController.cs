@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web.Mvc;
-using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Tools;
@@ -58,17 +56,21 @@ namespace HaemophilusWeb.Controllers
 
         protected override string IsolateControllerName => "MeningoIsolate";
 
-        protected override IEnumerable<MeningoSending> SendingsMatchingExportQuery(FromToQuery query, List<SamplingLocation> samplingLocations)
+        protected override IEnumerable<MeningoSending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
+            if (exportType == ExportType.Rki)
+            {
+                throw new NotImplementedException("RKI export is not finished for Meningococci");
+            }
             return NotDeletedSendings()
                 .Include(s => s.Patient)
-                //TODO fix sampling location
-                //.Where
-                //(s => samplingLocations.Contains(s.SamplingLocation)
-                //      && ((s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
-                //          || (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
-                //)
-                //.OrderBy(s => s.Isolate.StemNumber)
+                .Include(s => s.Isolate)
+                .Include(s => s.Isolate.NeisseriaPubMlstIsolate)
+                .Where
+                (s => (s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
+                      || (s.SamplingDate >= query.From && s.SamplingDate <= query.To)
+                )
+                .OrderBy(s => s.Isolate.StemNumber)
                 .ToList();
         }
 
@@ -104,69 +106,7 @@ namespace HaemophilusWeb.Controllers
 
         protected override ExportDefinition<MeningoSending> CreateLaboratoryExportDefinition()
         {
-            var export = new ExportDefinition<MeningoSending>();
-
-            export.AddField(s => s.Isolate.LaboratoryNumberWithPrefix);
-            export.AddField(s => s.Isolate.StemNumberWithPrefix);
-            export.AddField(s => s.SenderId);
-            export.AddField(s => s.ReceivingDate.ToReportFormat());
-            export.AddField(s => s.SamplingDate.ToReportFormat());
-            export.AddField(s => s.SenderLaboratoryNumber);
-            //export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s));
-            export.AddField(s => ExportToString(s.Material));
-            export.AddField(s => ExportToString(s.Invasive));
-            export.AddField(s => s.SerogroupSender);
-
-            export.AddField(s => s.Patient.Initials);
-            export.AddField(s => s.Patient.BirthDate.ToReportFormat());
-            //export.AddField(s => s.Isolate.PatientAge(), "Patientenalter bei Entnahme");
-            export.AddField(s => ExportToString(s.Patient.Gender));
-            export.AddField(s => s.Patient.PostalCode);
-            export.AddField(s => s.Patient.City);
-            export.AddField(s => ExportToString(s.Patient.County));
-            export.AddField(s => ExportToString(s.Patient.State));
-            //export.AddField(s => ExportClinicalInformation(s.Patient.ClinicalInformation, s));
-            //export.AddField(s => ExportToString(s.Patient.HibVaccination));
-            //export.AddField(s => s.Patient.HibVaccinationDate.ToReportFormat());
-            //export.AddField(s => s.Remark, "Bemerkung (Einsendung)");
-
-            //export.AddField(s => ExportToString(s.Isolate.Growth));
-            //export.AddField(s => ExportToString(s.Isolate.TypeOfGrowth));
-            //export.AddField(s => ExportToString(s.Isolate.Oxidase));
-            //export.AddField(s => ExportToString(s.Isolate.BetaLactamase));
-            //export.AddField(s => ExportToString(s.Isolate.Agglutination));
-            //export.AddField(s => ExportToString(s.Isolate.FactorTest));
-            //AddEpsilometerTestFields(export, Antibiotic.Ampicillin);
-            //AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate);
-            //AddEpsilometerTestFields(export, Antibiotic.Meropenem);
-            //AddEpsilometerTestFields(export, Antibiotic.Cefotaxime);
-            //AddEpsilometerTestFields(export, Antibiotic.Imipenem);
-            //AddEpsilometerTestFields(export, Antibiotic.Ciprofloxacin);
-            //export.AddField(s => ExportToString(s.Isolate.OuterMembraneProteinP2));
-            //export.AddField(s => ExportToString(s.Isolate.BexA));
-            //export.AddField(s => ExportToString(s.Isolate.SerogroupPcr));
-            //export.AddField(s => ExportToString(s.Isolate.FuculoKinase));
-            //export.AddField(s => ExportToString(s.Isolate.OuterMembraneProteinP6));
-            //export.AddField(s => ExportToString(s.Isolate.RibosomalRna16S));
-            //export.AddField(s => ExportToString(s.Isolate.RibosomalRna16SBestMatch));
-            //export.AddField(s => ExportToString(s.Isolate.RibosomalRna16SMatchInPercent));
-            //export.AddField(s => ExportToString(s.Isolate.MaldiTof));
-            //export.AddField(s => s.Isolate.MaldiTofBestMatch);
-            //export.AddField(s => s.Isolate.MaldiTofMatchConfidence);
-            //export.AddField(s => ExportToString(s.Isolate.Ftsi));
-            //export.AddField(s => s.Isolate.FtsiEvaluation1);
-            //export.AddField(s => s.Isolate.FtsiEvaluation2);
-            //export.AddField(s => s.Isolate.FtsiEvaluation3);
-            //export.AddField(s => ExportToString(s.Isolate.Mlst));
-            //export.AddField(s => s.Isolate.MlstSequenceType);
-            //export.AddField(s => ExportToString(s.Isolate.Evaluation));
-            //export.AddField(s => s.Isolate.ReportDate);
-            //export.AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
-            //export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceId.ToString()), "RKI InterneRef");
-            //export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceNumber), "RKI Aktenzeichen");
-            //export.AddField(s => ExportRkiMatchRecord(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiStatus, ExportToString(RkiStatus.None)), "RKI Status");
-
-            return export;
+            return new MeningoSendingLaboratoryExport();
         }
 
         protected override List<QueryRecord> QueryRecords()

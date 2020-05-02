@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
 using HaemophilusWeb.Utils;
+using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Tools
 {
@@ -30,6 +31,30 @@ namespace HaemophilusWeb.Tools
             AddRows(entries, dataTable);
 
             return dataTable;
+        }
+
+        protected string ExportChildProperty<T>(T property, Func<T, object> accessValue)
+        {
+            return ExportChildProperty(property, accessValue, string.Empty);
+        }
+
+        protected string ExportChildProperty<T>(T property, Func<T, object> accessValue, string nullValue)
+        {
+            return property != null ? ExportToString(accessValue(property)) : nullValue;
+        }
+
+        protected static string ExportToString<T>(T value)
+        {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+            var type = value.GetTypeOrNullableType();
+            if (type.IsEnum)
+            {
+                return EnumEditor.GetEnumDescription(value);
+            }
+            return value.ToString();
         }
 
         private void AddColumnDefinitions(DataTable dataTable)

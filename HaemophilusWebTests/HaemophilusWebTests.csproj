@@ -57,6 +57,9 @@
     <Reference Include="Faker">
       <HintPath>..\packages\Faker.1.2\lib\Faker.dll</HintPath>
     </Reference>
+    <Reference Include="FastExcel, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastExcel.3.0.6\lib\netstandard2.0\FastExcel.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.1.0.0\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
@@ -161,6 +164,7 @@
     <Compile Include="TestUtils\JsonUtils.cs" />
     <Compile Include="TestUtils\MockData.cs" />
     <Compile Include="Tools\ExportDefinitionTests.cs" />
+    <Compile Include="Tools\MeningoSendingLaboratoryExportTests.cs" />
     <Compile Include="Tools\RkiMatchImporterTests.cs" />
     <Compile Include="Tools\CountyImporterTests.cs" />
     <Compile Include="Tools\RkiToolTests.cs" />
