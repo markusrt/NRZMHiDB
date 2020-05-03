@@ -121,8 +121,10 @@ namespace HaemophilusWeb.Controllers
             fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
             File.WriteAllBytes(tempExcel.FullName, fileResult.FileContents);
 
-            using var fastExcel = new FastExcel.FastExcel(tempExcel);
-            fastExcel.Worksheets.Length.Should().Be(1);
+            using (var fastExcel = new FastExcel.FastExcel(tempExcel))
+            {
+                fastExcel.Worksheets.Length.Should().Be(1);
+            }
         }
 
         [Test]
@@ -152,8 +154,10 @@ namespace HaemophilusWeb.Controllers
             fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
             File.WriteAllBytes(tempExcel.FullName, fileResult.FileContents);
 
-            using var fastExcel = new FastExcel.FastExcel(tempExcel);
-            fastExcel.Worksheets.Length.Should().Be(1);
+            using (var fastExcel = new FastExcel.FastExcel(tempExcel))
+            {
+                fastExcel.Worksheets.Length.Should().Be(1);
+            }
         }
 
         private PatientSendingController CreateController()
