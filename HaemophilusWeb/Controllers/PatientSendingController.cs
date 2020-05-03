@@ -6,7 +6,6 @@ using System.Text;
 using System.Web.Mvc;
 using DataTables.Mvc;
 using FluentValidation;
-using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Tools;
 using HaemophilusWeb.Utils;
@@ -77,105 +76,13 @@ namespace HaemophilusWeb.Controllers
 
         protected override ExportDefinition<Sending> CreateRkiExportDefinition()
         {
-            var export = new ExportDefinition<Sending>();
             var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
-
-            var emptyCounty = new County { CountyNumber = "" };
-            Func<Sending, County> findCounty =
-                s => counties.FirstOrDefault(c => c.IsEqualTo(s.Patient.County)) ?? emptyCounty;
-
-            export.AddField(s => s.Isolate.StemNumber, "klhi_nr");
-            export.AddField(s => s.ReceivingDate.ToReportFormat(), "eing");
-            export.AddField(s => s.SamplingDate.ToReportFormat(), "ent");
-            export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s), "mat");
-            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "geb_monat");
-            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "geb_jahr");
-            export.AddField(s => ExportGender(s.Patient.Gender), "geschlecht");
-            export.AddField(s => ExportToString(s.Patient.HibVaccination), "hib_impf");
-            export.AddField(s => ExportToString(s.Isolate.Evaluation), "styp");
-            export.AddField(s => ExportToString(s.Isolate.BetaLactamase), "b_lac");
-            export.AddField(s => findCounty(s).CountyNumber, "kreis_nr");
-            export.AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "bundesland");
-            export.AddField(s => s.SenderId, "einsender");
-            export.AddField(s => ExportToString(s.Patient.County), "landkreis");
-            export.AddField(s => ExportToString(s.Patient.State), "bundeslandName");
-            AddEpsilometerTestFields(export, Antibiotic.Ampicillin, "ampicillinMHK", "ampicillinBewertung");
-            AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate, "amoxicillinClavulansaeureMHK", "bewertungAmoxicillinClavulansaeure");
-
-            return export;
+            return new HaemophilusSendingRkiExport(counties);
         }
 
         protected override ExportDefinition<Sending> CreateLaboratoryExportDefinition()
         {
-            var export = new ExportDefinition<Sending>();
-
-            export.AddField(s => s.Isolate.LaboratoryNumberWithPrefix);
-            export.AddField(s => s.Isolate.StemNumberWithPrefix);
-            export.AddField(s => s.SenderId);
-            export.AddField(s => s.ReceivingDate.ToReportFormat());
-            export.AddField(s => s.SamplingDate.ToReportFormat());
-            export.AddField(s => s.SenderLaboratoryNumber);
-            export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s));
-            export.AddField(s => ExportToString(s.Material));
-            export.AddField(s => ExportToString(s.Invasive));
-            export.AddField(s => s.SenderConclusion);
-
-            export.AddField(s => s.Patient.Initials);
-            export.AddField(s => s.Patient.BirthDate.ToReportFormat());
-            export.AddField(s => s.Isolate.PatientAgeAtSampling(), "Patientenalter bei Entnahme");
-            export.AddField(s => ExportToString(s.Patient.Gender));
-            export.AddField(s => s.Patient.PostalCode);
-            export.AddField(s => s.Patient.City);
-            export.AddField(s => ExportToString(s.Patient.County));
-            export.AddField(s => ExportToString(s.Patient.State));
-            export.AddField(s => ExportClinicalInformation(
-                s.Patient.ClinicalInformation, () => s.Patient.OtherClinicalInformation, _ => _.HasFlag(ClinicalInformation.Other)));
-            export.AddField(s => ExportToString(s.Patient.HibVaccination));
-            export.AddField(s => s.Patient.HibVaccinationDate.ToReportFormat());
-            export.AddField(s => ExportToString(s.Patient.Therapy));
-            export.AddField(s => s.Patient.TherapyDetails);
-            export.AddField(s => s.Remark, "Bemerkung (Einsendung)");
-
-            export.AddField(s => ExportToString(s.Isolate.Growth));
-            export.AddField(s => ExportToString(s.Isolate.TypeOfGrowth));
-            export.AddField(s => ExportToString(s.Isolate.Oxidase));
-            export.AddField(s => ExportToString(s.Isolate.BetaLactamase));
-            export.AddField(s => ExportToString(s.Isolate.Agglutination));
-            export.AddField(s => ExportToString(s.Isolate.FactorTest));
-            AddEpsilometerTestFields(export, Antibiotic.Ampicillin);
-            AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate);
-            AddEpsilometerTestFields(export, Antibiotic.Meropenem);
-            AddEpsilometerTestFields(export, Antibiotic.Cefotaxime);
-            AddEpsilometerTestFields(export, Antibiotic.Imipenem);
-            AddEpsilometerTestFields(export, Antibiotic.Ciprofloxacin);
-            export.AddField(s => ExportToString(s.Isolate.OuterMembraneProteinP2));
-            export.AddField(s => ExportToString(s.Isolate.BexA));
-            export.AddField(s => ExportToString(s.Isolate.SerotypePcr));
-            export.AddField(s => ExportToString(s.Isolate.FuculoKinase));
-            export.AddField(s => ExportToString(s.Isolate.OuterMembraneProteinP6));
-            export.AddField(s => ExportToString(s.Isolate.RibosomalRna16S));
-            export.AddField(s => ExportToString(s.Isolate.RibosomalRna16SBestMatch));
-            export.AddField(s => ExportToString(s.Isolate.RibosomalRna16SMatchInPercent));
-            export.AddField(s => ExportToString(s.Isolate.ApiNh));
-            export.AddField(s => s.Isolate.ApiNhBestMatch);
-            export.AddField(s => s.Isolate.ApiNhMatchInPercent);
-            export.AddField(s => ExportToString(s.Isolate.MaldiTof));
-            export.AddField(s => s.Isolate.MaldiTofBestMatch);
-            export.AddField(s => s.Isolate.MaldiTofMatchConfidence);
-            export.AddField(s => ExportToString(s.Isolate.Ftsi));
-            export.AddField(s => s.Isolate.FtsiEvaluation1);
-            export.AddField(s => s.Isolate.FtsiEvaluation2);
-            export.AddField(s => s.Isolate.FtsiEvaluation3);
-            export.AddField(s => ExportToString(s.Isolate.Mlst));
-            export.AddField(s => s.Isolate.MlstSequenceType);
-            export.AddField(s => ExportToString(s.Isolate.Evaluation));
-            export.AddField(s => s.Isolate.ReportDate);
-            export.AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
-            export.AddField(s => ExportChildProperty(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceId.ToString()), "RKI InterneRef");
-            export.AddField(s => ExportChildProperty(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiReferenceNumber), "RKI Aktenzeichen");
-            export.AddField(s => ExportChildProperty(s.RkiMatchRecord, rkiMatchRecord => rkiMatchRecord.RkiStatus, ExportToString(RkiStatus.None)), "RKI Status");
-
-            return export;
+            return new HaemophilusSendingLaboratoryExport();
         }
 
         protected override List<QueryRecord> QueryRecords()
@@ -232,15 +139,6 @@ namespace HaemophilusWeb.Controllers
                 };
             }).ToList();
             return queryRecords;
-        }
-
-        private static string ExportSamplingLocation(SamplingLocation location, Sending sending)
-        {
-            if (location == SamplingLocation.Other)
-            {
-                return sending.OtherSamplingLocation;
-            }
-            return ExportToString(location);
         }
     }
 
@@ -522,87 +420,6 @@ namespace HaemophilusWeb.Controllers
 
             var sendings = SendingsMatchingExportQuery(query, ExportType.Laboratory).ToList();
             return ExportToExcel(query, sendings, CreateLaboratoryExportDefinition(), "Labor");
-        }
-
-        //TODO move partly to ExportDefinition class (tell don't ask), i.e. AddChildField
-        protected string ExportChildProperty<T>(T property, Func<T, object> accessValue)
-        {
-            return ExportChildProperty(property, accessValue, string.Empty);
-        }
-
-        protected string ExportChildProperty<T>(T property, Func<T, object> accessValue, string nullValue)
-        {
-            return property != null ? ExportToString(accessValue(property)) : nullValue;
-        }
-
-        protected string ExportClinicalInformation<T>(T clinicalInformation, Func<string> otherClinicalInformation, Func<T, bool> isOther)
-        {
-            var clinicalInformationAsString = EnumEditor.GetEnumDescription(clinicalInformation);
-            if (isOther(clinicalInformation))
-            {
-                clinicalInformationAsString = clinicalInformationAsString.Replace(
-                    EnumEditor.GetEnumDescription(ClinicalInformation.Other), otherClinicalInformation());
-            }
-            return clinicalInformationAsString;
-        }
-
-
-        protected void AddEpsilometerTestFields(ExportDefinition<TSending> export, Antibiotic antibiotic, string measurementHeaderParameter = null, string evaluationHeaderParameter = null)
-        {
-            var antibioticName = ExportToString(antibiotic);
-            var measurementHeader = measurementHeaderParameter ?? string.Format("{0} MHK", antibioticName);
-            var evaluationHeader = evaluationHeaderParameter ?? string.Format("{0} Bewertung", antibioticName);
-
-            export.AddField(s => FindEpsilometerTestMeasurement(s, antibiotic), measurementHeader);
-            export.AddField(s => ExportToString(FindEpsilometerTestEvaluation(s, antibiotic)), evaluationHeader);
-        }
-
-        protected static string ExportGender(Gender? gender)
-        {
-            return gender == null
-                ? "?"
-                : EnumEditor.GetEnumDescription(gender).Substring(0, 1);
-        }
-
-        protected static string ExportToString<T>(T value)
-        {
-            if (value == null)
-            {
-                return string.Empty;
-            }
-            var type = value.GetTypeOrNullableType();
-            if (type.IsEnum)
-            {
-                return EnumEditor.GetEnumDescription(value);
-            }
-            return value.ToString();
-        }
-
-        private EpsilometerTest FindEpsilometerTestResult(TSending sending, Antibiotic antibiotic)
-        {
-            var eTestResult = sending.GetIsolate().EpsilometerTests.SingleOrDefault(
-                e => e.EucastClinicalBreakpoint.Antibiotic == antibiotic);
-            return eTestResult;
-        }
-
-        private double? FindEpsilometerTestMeasurement(TSending sending, Antibiotic antibiotic)
-        {
-            var eTestResult = FindEpsilometerTestResult(sending, antibiotic);
-            if (eTestResult == null)
-            {
-                return null;
-            }
-            return Math.Round(eTestResult.Measurement, 3);
-        }
-
-        private EpsilometerTestResult? FindEpsilometerTestEvaluation(TSending sending, Antibiotic antibiotic)
-        {
-            var eTestResult = FindEpsilometerTestResult(sending, antibiotic);
-            if (eTestResult == null)
-            {
-                return null;
-            }
-            return eTestResult.Result;
         }
 
         [HttpPost]

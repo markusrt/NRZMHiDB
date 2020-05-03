@@ -33,7 +33,12 @@ namespace HaemophilusWeb.Tools
             return dataTable;
         }
 
-        protected object ExportChildProperty<T>(T property, Func<T, object> accessValue, string nullValue = null)
+        protected object ExportChildProperty<T>(T property, Func<T, object> accessValue)
+        {
+            return ExportChildProperty(property, accessValue, null);
+        }
+
+        protected object ExportChildProperty<T>(T property, Func<T, object> accessValue, string nullValue)
         {
             return property != null
                 ? ExportToStringIfEnum(accessValue(property))

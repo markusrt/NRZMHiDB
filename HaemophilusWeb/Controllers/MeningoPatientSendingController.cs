@@ -77,30 +77,6 @@ namespace HaemophilusWeb.Controllers
         protected override ExportDefinition<MeningoSending> CreateRkiExportDefinition()
         {
             var export = new ExportDefinition<MeningoSending>();
-            var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
-
-            var emptyCounty = new County { CountyNumber = "" };
-            Func<MeningoSending, County> findCounty =
-                s => counties.FirstOrDefault(c => c.IsEqualTo(s.Patient.County)) ?? emptyCounty;
-
-            //export.AddField(s => s.Isolate.StemNumber, "klhi_nr");
-            export.AddField(s => s.ReceivingDate.ToReportFormat(), "eing");
-            export.AddField(s => s.SamplingDate.ToReportFormat(), "ent");
-            //export.AddField(s => ExportSamplingLocation(s.SamplingLocation, s), "mat");
-            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "geb_monat");
-            export.AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "geb_jahr");
-            export.AddField(s => ExportGender(s.Patient.Gender), "geschlecht");
-            //export.AddField(s => ExportToString(s.Patient.HibVaccination), "hib_impf");
-            //export.AddField(s => ExportToString(s.Isolate.Evaluation), "styp");
-            //export.AddField(s => ExportToString(s.Isolate.BetaLactamase), "b_lac");
-            export.AddField(s => findCounty(s).CountyNumber, "kreis_nr");
-            export.AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "bundesland");
-            export.AddField(s => s.SenderId, "einsender");
-            export.AddField(s => ExportToString(s.Patient.County), "landkreis");
-            export.AddField(s => ExportToString(s.Patient.State), "bundeslandName");
-            //AddEpsilometerTestFields(export, Antibiotic.Ampicillin, "ampicillinMHK", "ampicillinBewertung");
-            //AddEpsilometerTestFields(export, Antibiotic.AmoxicillinClavulanate, "amoxicillinClavulansaeureMHK", "bewertungAmoxicillinClavulansaeure");
-
             return export;
         }
 

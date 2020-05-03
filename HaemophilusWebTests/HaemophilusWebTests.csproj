@@ -164,6 +164,8 @@
     <Compile Include="TestUtils\JsonUtils.cs" />
     <Compile Include="TestUtils\MockData.cs" />
     <Compile Include="Tools\ExportDefinitionTests.cs" />
+    <Compile Include="Tools\HaemophilusSendingRkiExportTests.cs" />
+    <Compile Include="Tools\HaemophilusSendingLaboratoryExportTests.cs" />
     <Compile Include="Tools\MeningoSendingLaboratoryExportTests.cs" />
     <Compile Include="Tools\RkiMatchImporterTests.cs" />
     <Compile Include="Tools\CountyImporterTests.cs" />

@@ -31,6 +31,13 @@ namespace HaemophilusWeb.Tools
             export.AddField(s => ExportToString(FindEpsilometerTestEvaluation(s, antibiotic)), evaluationHeader);
         }
 
+        protected static string ExportGender(Gender? gender)
+        {
+            return gender == null
+                ? "?"
+                : EnumEditor.GetEnumDescription(gender).Substring(0, 1);
+        }
+
 
         private double? FindEpsilometerTestMeasurement(TSending sending, Antibiotic antibiotic)
         {
