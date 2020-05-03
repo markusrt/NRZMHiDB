@@ -20,6 +20,21 @@ namespace HaemophilusWeb.Services
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         private const string BaseUrl = "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates";
+        public const string PorAVr1 = "PorA_VR1";
+        public const string PorAVr2 = "PorA_VR2";
+        public const string FetAVr = "FetA_VR";
+        public const string PorB = "'porB";
+        public const string NhbaPeptide = "NHBA_peptide";
+        public const string NadaPeptide = "NadA_peptide";
+        public const string PenA = "penA";
+        public const string GyrA = "gyrA";
+        public const string Neis1525 = "NEIS1525";
+        public const string RpoB = "rpoB";
+        public const string RplF = "'rplF";
+        public const string Fhbp = "'fHbp";
+        public const string Neis1600 = "NEIS1600";
+        public const string SequenceType = "ST";
+        public const string ClonalComplex = "clonal_complex";
 
         private readonly Func<string, string> callGetUrl;
 
@@ -61,26 +76,26 @@ namespace HaemophilusWeb.Services
                 var isolate = new NeisseriaPubMlstIsolate
                 {
                     PubMlstId = id,
-                    PorAVr1 = alleles.Get("PorA_VR1", ""),
-                    PorAVr2 = alleles.Get("PorA_VR2", ""),
-                    FetAVr = alleles.Get("FetA_VR", ""),
-                    PorB = alleles.Get("'porB", ""),
-                    Fhbp = alleles.Get("'fHbp", ""),
-                    Nhba = alleles.Get("NHBA_peptide", ""),
-                    NadA = alleles.Get("NadA_peptide", ""),
-                    PenA = alleles.Get("penA", ""),
-                    GyrA = alleles.Get("gyrA", ""),
-                    ParC = alleles.Get("NEIS1525", ""),
-                    ParE = alleles.Get("NEIS1600", ""),
-                    RpoB = alleles.Get("rpoB", ""),
-                    RplF = alleles.Get("'rplF", ""),
+                    PorAVr1 = alleles.Get(PorAVr1, ""),
+                    PorAVr2 = alleles.Get(PorAVr2, ""),
+                    FetAVr = alleles.Get(FetAVr, ""),
+                    PorB = alleles.Get(PorB, ""),
+                    Fhbp = alleles.Get(Fhbp, ""),
+                    Nhba = alleles.Get(NhbaPeptide, ""),
+                    NadA = alleles.Get(NadaPeptide, ""),
+                    PenA = alleles.Get(PenA, ""),
+                    GyrA = alleles.Get(GyrA, ""),
+                    ParC = alleles.Get(Neis1525, ""),
+                    ParE = alleles.Get(Neis1600, ""),
+                    RpoB = alleles.Get(RpoB, ""),
+                    RplF = alleles.Get(RplF, ""),
                 };
 
                 var fields = isolateJson.GetValue("schemes").First["fields"];
                 if (fields != null)
                 {
-                    isolate.SequenceType = fields["ST"]?.Value<string>();
-                    isolate.ClonalComplex = fields["clonal_complex"]?.Value<string>();
+                    isolate.SequenceType = fields[SequenceType]?.Value<string>();
+                    isolate.ClonalComplex = fields[ClonalComplex]?.Value<string>();
                 }
                 return isolate;
             }

@@ -1,7 +1,9 @@
-﻿using HaemophilusWeb.Domain;
+﻿using System;
+using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
+using static HaemophilusWeb.Services.PubMlstService;
 
 namespace HaemophilusWeb.Tools
 {
@@ -26,7 +28,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Patient.Gender));
             AddField(s => s.Patient.PostalCode);
             AddField(s => s.Patient.City);
-            AddField(s => ExportToString(s.Patient.County));
+            AddField(s => s.Patient.County);
             AddField(s => ExportToString(s.Patient.State));
             AddField(s => ExportClinicalInformation(s.Patient.ClinicalInformation, () => s.Patient.OtherClinicalInformation, _ => _.HasFlag(MeningoClinicalInformation.Other)));
             AddField(s => s.Remark, "Bemerkung (Einsendung)");
@@ -50,10 +52,28 @@ namespace HaemophilusWeb.Tools
             AddField(s => s.Isolate.ReportDate);
             AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
 
-            AddField(s => ExportChildProperty(
-                s.Isolate.NeisseriaPubMlstIsolate, _ => _.PubMlstId, "-"), "PubMLST ID");
+            AddPubMsltProperty("PubMLST ID", _ => _.PubMlstId, "-");
+            AddPubMsltProperty(SequenceType, _ => _.SequenceType);
+            AddPubMsltProperty(ClonalComplex, _ => _.ClonalComplex);
+            AddPubMsltProperty(PorAVr1, _ => _.PorAVr1);
+            AddPubMsltProperty(PorAVr2, _ => _.PorAVr2);
+            AddPubMsltProperty(FetAVr, _ => _.FetAVr);
+            AddPubMsltProperty(PorB, _ => _.PorB);
+            AddPubMsltProperty(NhbaPeptide, _ => _.Nhba);
+            AddPubMsltProperty(PenA, _ => _.PenA);
+            AddPubMsltProperty(GyrA, _ => _.GyrA);
+            AddPubMsltProperty("parC", _ => _.ParC);
+            AddPubMsltProperty(RpoB, _ => _.RpoB);
+            AddPubMsltProperty(RplF, _ => _.RplF);
+            AddPubMsltProperty(Fhbp, _ => _.Fhbp);
+            AddPubMsltProperty("parE", _ => _.ParE);
         }
 
+        private void AddPubMsltProperty(string header, Func<NeisseriaPubMlstIsolate, object> property, string nullValue=null)
+        {
+            AddField(s => ExportChildProperty(
+                s.Isolate.NeisseriaPubMlstIsolate, property, nullValue), header);
+        }
 
 
         private static string ExportSamplingLocation(MeningoSamplingLocation samplingLocation, MeningoSending sending)

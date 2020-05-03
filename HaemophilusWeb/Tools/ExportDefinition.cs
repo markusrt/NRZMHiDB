@@ -33,14 +33,20 @@ namespace HaemophilusWeb.Tools
             return dataTable;
         }
 
-        protected string ExportChildProperty<T>(T property, Func<T, object> accessValue)
+        protected object ExportChildProperty<T>(T property, Func<T, object> accessValue, string nullValue = null)
         {
-            return ExportChildProperty(property, accessValue, string.Empty);
+            return property != null
+                ? ExportToStringIfEnum(accessValue(property))
+                : nullValue;
         }
 
-        protected string ExportChildProperty<T>(T property, Func<T, object> accessValue, string nullValue)
+        protected static object ExportToStringIfEnum<T>(T value)
         {
-            return property != null ? ExportToString(accessValue(property)) : nullValue;
+            if (value != null && value.GetTypeOrNullableType().IsEnum)
+            {
+                return EnumEditor.GetEnumDescription(value);
+            }
+            return value;
         }
 
         protected static string ExportToString<T>(T value)
