@@ -140,12 +140,13 @@ namespace HaemophilusWeb.Controllers
         {
             controller.ReportGenerated(IsolateId);
             var isolate = DbMock.Isolates.Single(i => i.IsolateId == IsolateId);
-            var firstReportDate = isolate.ReportDate;
+            var firstReportDate = DateTime.Now.Subtract(TimeSpan.FromMinutes(1));
+            isolate.ReportDate = firstReportDate;
 
             controller.ReportGenerated(IsolateId);
 
             isolate = DbMock.Isolates.Single(i => i.IsolateId == IsolateId);
-            isolate.ReportDate.Should().BeAfter(firstReportDate.Value);
+            isolate.ReportDate.Should().BeAfter(firstReportDate);
         }
 
         [Test]
