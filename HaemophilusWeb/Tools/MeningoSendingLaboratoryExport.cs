@@ -3,6 +3,7 @@ using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
+using HaemophilusWeb.Views.Utils;
 using static HaemophilusWeb.Services.PubMlstService;
 
 namespace HaemophilusWeb.Tools
@@ -31,18 +32,27 @@ namespace HaemophilusWeb.Tools
             AddField(s => s.Patient.County);
             AddField(s => ExportToString(s.Patient.State));
             AddField(s => ExportClinicalInformation(s.Patient.ClinicalInformation, () => s.Patient.OtherClinicalInformation, _ => _.HasFlag(MeningoClinicalInformation.Other)));
+            AddField(s => ExportRiskFactors(s.Patient.RiskFactors, () => s.Patient.OtherRiskFactor, _ => _.HasFlag(RiskFactors.Other)));
             AddField(s => s.Remark, "Bemerkung (Einsendung)");
 
             AddField(s => ExportToString(s.Isolate.GrowthOnBloodAgar));
             AddField(s => ExportToString(s.Isolate.GrowthOnMartinLewisAgar));
             AddField(s => ExportToString(s.Isolate.Oxidase));
+            AddField(s => ExportToString(s.Isolate.Onpg));
+            AddField(s => ExportToString(s.Isolate.GammaGt));
+            AddField(s => ExportToString(s.Isolate.SiaAGene));
+            AddField(s => ExportToString(s.Isolate.CapsularTransferGene));
+            AddField(s => ExportToString(s.Isolate.CapsuleNullLocus));
             AddField(s => ExportToString(s.Isolate.Agglutination));
             AddField(s => ExportToString(s.Isolate.SerogroupPcr));
-
-            AddEpsilometerTestFields(this, Antibiotic.Benzylpenicillin);
-            AddEpsilometerTestFields(this, Antibiotic.Ciprofloxacin);
-            AddEpsilometerTestFields(this, Antibiotic.Rifampicin);
-            AddEpsilometerTestFields(this, Antibiotic.Cefotaxime);
+            AddField(s => ExportToString(s.Isolate.PorAVr1));
+            AddField(s => ExportToString(s.Isolate.PorAVr2));
+            AddField(s => ExportToString(s.Isolate.FetAVr));
+            AddField(s => ExportToString(s.Isolate.CsbPcr));
+            AddField(s => ExportToString(s.Isolate.CscPcr));
+            AddField(s => ExportToString(s.Isolate.CswyPcr));
+            AddField(s => ExportToString(s.Isolate.CswyAllele));
+            AddField(s => ExportToString(s.Isolate.RealTimePcr));
             AddField(s => ExportToString(s.Isolate.RibosomalRna16S));
             AddField(s => ExportToString(s.Isolate.RibosomalRna16SBestMatch));
             AddField(s => ExportToString(s.Isolate.RibosomalRna16SMatchInPercent));
@@ -51,6 +61,11 @@ namespace HaemophilusWeb.Tools
             AddField(s => s.Isolate.MaldiTofMatchConfidence);
             AddField(s => s.Isolate.ReportDate);
             AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
+
+            AddEpsilometerTestFields(this, Antibiotic.Benzylpenicillin);
+            AddEpsilometerTestFields(this, Antibiotic.Ciprofloxacin);
+            AddEpsilometerTestFields(this, Antibiotic.Rifampicin);
+            AddEpsilometerTestFields(this, Antibiotic.Cefotaxime);
 
             AddPubMsltProperty("PubMLST ID", _ => _.PubMlstId, "-");
             AddPubMsltProperty(SequenceType, _ => _.SequenceType);
@@ -67,6 +82,17 @@ namespace HaemophilusWeb.Tools
             AddPubMsltProperty(RplF, _ => _.RplF);
             AddPubMsltProperty(Fhbp, _ => _.Fhbp);
             AddPubMsltProperty("parE", _ => _.ParE);
+        }
+
+        private string ExportRiskFactors<T>(T clinicalInformation, Func<string> otherClinicalInformation, Func<T, bool> isOther)
+        {
+            var riskFactors = EnumEditor.GetEnumDescription(clinicalInformation);
+            if (isOther(clinicalInformation))
+            {
+                riskFactors = riskFactors.Replace(
+                    EnumEditor.GetEnumDescription(RiskFactors.Other), otherClinicalInformation());
+            }
+            return riskFactors;
         }
 
         private void AddPubMsltProperty(string header, Func<NeisseriaPubMlstIsolate, object> property, string nullValue=null)

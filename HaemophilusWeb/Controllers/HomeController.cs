@@ -21,7 +21,9 @@ namespace HaemophilusWeb.Controllers
                 new Change(DateTime.MinValue, "<del>Abfrage über Isolate</del>", ChangeType.Feature)
             },
             new List<Change>
-            {new Change(new DateTime(2020, 4, 30), "<p>PubMLST Matching</p>" +
+            {
+                new Change(new DateTime(2020, 05, 6), "Labor Export (Menigokokken)", ChangeType.Feature),
+                new Change(new DateTime(2020, 4, 30), "<p>PubMLST Matching</p>" +
                                                    "<p>Im Menü gibt es für Meninkokokken jetzt einen PubMLST Match Eintrag:</p>" +
                                                    "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_1.png'/>" +
                                                    "<p>Über die Seite kann man einen bestimmten Zeitraum von Isolaten mit der BigsDB Datenbank abgleichen.</p>" +

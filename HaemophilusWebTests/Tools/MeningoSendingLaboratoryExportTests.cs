@@ -38,7 +38,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(56);
+            export.Columns.Count.Should().Be(70);
         }
 
         [Test]
@@ -131,6 +131,30 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["parE"].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.ParE);
             export.Rows[0][SequenceType].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.SequenceType);
             export.Rows[0][ClonalComplex].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.ClonalComplex);
+        }
+
+        [Test]
+        public void DataTable_OtherRiskFactors()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Patient.RiskFactors = RiskFactors.Asplenia | RiskFactors.Other;
+            Sending.Patient.OtherRiskFactor = "Cardiac Insufficiency";
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Risikofaktoren"].Should().Be("Asplenie, Cardiac Insufficiency");
+        }
+
+        [Test]
+        public void DataTable_OtherClinicalInformation()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Patient.ClinicalInformation = MeningoClinicalInformation.Meningitis | MeningoClinicalInformation.Other;
+            Sending.Patient.OtherClinicalInformation = "Craniocerebral Injury";
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Klinische Angaben"].Should().Be("Meningitis, Craniocerebral Injury");
         }
 
         private static MeningoSendingLaboratoryExport CreateExportDefinition()
