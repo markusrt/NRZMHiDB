@@ -17,7 +17,7 @@ namespace HaemophilusWeb.Models.Meningo
         }
 
         [TestCase(MeningoMaterial.NativeMaterial, false)]
-        [TestCase(MeningoMaterial.IsolatedDna, true)]
+        [TestCase(MeningoMaterial.IsolatedDna, false)]
         [TestCase(MeningoMaterial.NoGrowth, true)]
         [TestCase(MeningoMaterial.VitalStem, true)]
         public void AutoAssignStemNumber_Material_IsSetAccordingToMaterial(MeningoMaterial material,

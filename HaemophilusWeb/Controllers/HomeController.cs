@@ -22,7 +22,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2020, 05, 6), "Labor Export (Menigokokken)", ChangeType.Feature),
+                new Change(new DateTime(2020, 05, 6, 23, 30, 0), "Keine Stammnummer für isolierte DNA", ChangeType.Bug),
+                new Change(new DateTime(2020, 05, 6, 8, 0, 0), "Labor Export (Menigokokken)", ChangeType.Feature),
                 new Change(new DateTime(2020, 4, 30), "<p>PubMLST Matching</p>" +
                                                    "<p>Im Menü gibt es für Meninkokokken jetzt einen PubMLST Match Eintrag:</p>" +
                                                    "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_1.png'/>" +

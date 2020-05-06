@@ -45,7 +45,7 @@ namespace HaemophilusWeb.Models.Meningo
             ? YesNo.Yes
             : YesNo.No;
 
-        public override bool AutoAssignStemNumber => Material != MeningoMaterial.NativeMaterial;
+        public override bool AutoAssignStemNumber => Material != MeningoMaterial.NativeMaterial && Material != MeningoMaterial.IsolatedDna;
 
         public static bool IsInvasive(MeningoSamplingLocation samplingLocation)
         {
