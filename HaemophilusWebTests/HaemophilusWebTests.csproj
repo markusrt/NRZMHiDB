@@ -152,6 +152,7 @@
     <Compile Include="Models\CountyTests.cs" />
     <Compile Include="Models\Meningo\MeningoSendingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\GeonamesServiceTest.cs" />
     <Compile Include="Services\PubMlstMatcherTests.cs" />
     <Compile Include="Services\PubMlstServiceTests.cs" />
     <Compile Include="TestDoubles\Isolate.cs" />

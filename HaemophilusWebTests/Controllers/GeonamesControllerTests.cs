@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FluentAssertions;
+using HaemophilusWeb.Utils;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Controllers
@@ -9,7 +10,7 @@ namespace HaemophilusWeb.Controllers
         [Test]
         public void LoadCountries_DeserializesJson()
         {
-            var sut = new GeonamesController(LoadMockCountries);
+            var sut = new GeonamesController(new GeonamesService(), LoadMockCountries);
 
             var countries = sut.LoadCountries();
 

@@ -106,7 +106,7 @@ namespace AccessImporter.Converters
         private void QueryCounty(Dictionary<string, object> source, MeningoPatient patient)
         {
             if (!QueryCountyEnabled) return;
-            var json = Geonames.QueryGeonames(source["plz"].ToString());
+            var json = new GeonamesService().QueryByPostalCode(source["plz"].ToString());
             var jObject = JObject.Parse(json);
             var postalCodes = jObject["postalcodes"];
             if (postalCodes.Any())

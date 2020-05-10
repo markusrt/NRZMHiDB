@@ -17,15 +17,16 @@ namespace HaemophilusWeb.Controllers
     public class GeonamesController : Controller
     {
         public const string DefaultCountryIsoAlpha3 = "DEU";
+        private readonly GeonamesService _geonamesService;
         private readonly Func<string, string> readServerFile;
 
-        public GeonamesController()
+        public GeonamesController() : this(new GeonamesService(), s => System.IO.File.ReadAllText(HostingEnvironment.MapPath(s)))
         {
-            readServerFile = s => System.IO.File.ReadAllText(HostingEnvironment.MapPath(s));
         }
 
-        public GeonamesController(Func<string,string> readServerFile)
+        public GeonamesController(GeonamesService geonamesService, Func<string,string> readServerFile)
         {
+            _geonamesService = geonamesService;
             this.readServerFile = readServerFile;
         }
 
@@ -33,25 +34,21 @@ namespace HaemophilusWeb.Controllers
         [Authorize(Roles = DefaultRoles.User)]
         public ContentResult PostalCodeStartsWith(string postalCodePrefix)
         {
-            using (var client = new WebClient())
-            using (var result = client.OpenRead(new Uri("http://api.geonames.org/postalCodeSearchJSON?postalcode_startsWith=" + postalCodePrefix + "&country=DE&username=hweb&format=json")))
-            using (var reader = new StreamReader(result ?? new MemoryStream()))
-            {
-                return new ContentResult { Content = reader.ReadToEnd(), ContentType = "application/json" };
-            }
+            var json = _geonamesService.QueryByPostalCodePrefix(postalCodePrefix);
+            return new ContentResult { Content = json, ContentType = "application/json" };
         }
 
         [HttpPost]
         [Authorize(Roles = DefaultRoles.User)]
-        public ContentResult PostalCode(string postalCode)
+        public ContentResult PostalCode(string postalCode, string placeName = "")
         {
-            var json = Geonames.QueryGeonames(postalCode);
+            var json = _geonamesService.QueryByPostalCode(postalCode, placeName);
             return new ContentResult { Content = json, ContentType = "application/json" };
         }
 
         public List<Country> LoadCountries()
         {
-            //TODO Update JSON file by querying http://api.geonames.org/countryInfoJSON?username=hweb&lang=de from time to time
+            //TODO Update JSON file by querying http://api.geonames.org/countryInfoJSON from time to time
             var countryList = readServerFile("~/App_Data/countries.json");
             var countries = JsonConvert.DeserializeObject<GeonameCountries>(countryList).Geonames;
             return countries.OrderBy(c => c.CountryName).ToList();

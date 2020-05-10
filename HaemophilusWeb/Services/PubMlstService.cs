@@ -12,6 +12,7 @@ using NLog;
 using NLog.Fluent;
 using ServiceStack.Text;
 using JsonSerializer = ServiceStack.Text.JsonSerializer;
+using static HaemophilusWeb.Utils.HttpClientWrapper;
 
 namespace HaemophilusWeb.Services
 {
@@ -37,6 +38,7 @@ namespace HaemophilusWeb.Services
         public const string ClonalComplex = "clonal_complex";
 
         private readonly Func<string, string> callGetUrl;
+        private readonly Func<string, Dictionary<string, string>, string> callPostUrl;
 
         public PubMlstService() : this(CallUrlViaGet, CallUrlViaPost)
         {
@@ -45,12 +47,13 @@ namespace HaemophilusWeb.Services
         public PubMlstService(Func<string, string> callGetUrl, Func<string, Dictionary<string,string>, string> callPostUrl)
         {
             this.callGetUrl = callGetUrl;
+            this.callPostUrl = callPostUrl;
         }
 
 
         public virtual NeisseriaPubMlstIsolate GetIsolateByReference(string isolateReference)
         {
-            var isolateRecord = JObject.Parse(CallUrlViaPost($"{BaseUrl}/search",
+            var isolateRecord = JObject.Parse(callPostUrl($"{BaseUrl}/search",
                     new Dictionary<string, string> {{"field.isolate", isolateReference}}));
 
             if (isolateRecord["records"].Value<string>() != "1")
@@ -119,33 +122,6 @@ namespace HaemophilusWeb.Services
                 } while ((current = current.Next) != null);
             }
             return dictionary;
-        }
-
-        private static string CallUrlViaGet(string url)
-        {
-            using (var client = new HttpClient())
-            using (var result = client.GetAsync(new Uri(url)).Result)
-            {
-                if (result.StatusCode == HttpStatusCode.NotFound)
-                {
-                    throw new WebException();
-                }
-                return result.Content.ReadAsStringAsync().Result;
-            }
-        }
-
-        private static string CallUrlViaPost(string url, Dictionary<string,string> parameters)
-        {
-            var content = new StringContent(JsonSerializer.SerializeToString(parameters));
-            using (var client = new HttpClient())
-            using (var result = client.PostAsync(new Uri(url), content).Result)
-            {
-                if (result.StatusCode == HttpStatusCode.NotFound)
-                {
-                    throw new WebException();
-                }
-                return result.Content.ReadAsStringAsync().Result;
-            }
         }
     }
 }
