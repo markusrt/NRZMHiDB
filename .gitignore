@@ -152,5 +152,3 @@ $RECYCLE.BIN/
 HaemophilusWeb/logs/
 /.vs
 HaemophilusWeb/Web.config
-HaemophilusWeb/Web.Debug.config
-HaemophilusWeb/Web.Release.config

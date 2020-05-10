@@ -25,7 +25,7 @@ namespace HaemophilusWeb.Utils
 
         public GeonamesService(Func<string, string> callGetUrl)
         {
-            this.geonamesAccount = ConfigurationManager.AppSettings["geonamesAccount"];
+            this.geonamesAccount = ConfigurationManager.AppSettings["GeonamesAccount"];
             this.callGetUrl = callGetUrl;
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -70,7 +71,7 @@ namespace HaemophilusWeb.Controllers
         [AllowAnonymous]
         public ActionResult Register(string token)
         {
-            if (token != "m8abkoidnc")
+            if (token != ConfigurationManager.AppSettings["RegistrationToken"])
             {
                 return View("Login");
             }
