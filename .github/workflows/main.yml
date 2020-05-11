@@ -27,10 +27,7 @@ jobs:
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
       
-    - name: echo MSBuild
-      run: msbuild -version
-    
-    - name: REstore NuGet packages
+    - name: Restore NuGet packages
       run: nuget restore HaemophilusWeb.sln 
         
     - name: Build solution
