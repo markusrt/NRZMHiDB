@@ -8,3 +8,7 @@
 *.vbproj merge=union
 *.fsproj merge=union
 *.dbproj merge=union
+
+*.eps linguist-generated
+
+HaemophilusWeb/Scripts/**/*.js linguist-generated
