@@ -34,5 +34,4 @@ jobs:
       run: msbuild HaemophilusWeb.sln 
       
     - name: Run unit tests
-      run: VSTest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll
-   
+      run: VSTest.console.exe /Enablecodecoverage HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll 
