@@ -5,13 +5,6 @@ VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaemophilusWeb", "HaemophilusWeb\HaemophilusWeb.csproj", "{D561F029-A7C8-4275-8480-ABC121D4F91F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{92693DC0-8A7A-4545-B09F-42177E23A729}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HaemophilusWebTests", "HaemophilusWebTests\HaemophilusWebTests.csproj", "{ECAF0583-B3D9-40B1-87D4-9D6CC9EEACAA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvImporter", "CsvImporter\CsvImporter.csproj", "{A1DC05CE-399F-4C67-885C-11BFC02CF51E}"
