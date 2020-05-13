@@ -55,6 +55,8 @@ namespace HaemophilusWeb.Services
 
         private NeisseriaPubMlstIsolate CreateOrUpdatePubMlstIsolate(MeningoIsolate isolate, NeisseriaPubMlstIsolate pubMlstIsolate)
         {
+            //TODO fix this duplication from MeningoIsolateController and try to find a
+            //mapping framework which does not mess with EntityFramework context as automapper
             var pubMlstIsolateFromDatabase =
                 _db.NeisseriaPubMlstIsolates.SingleOrDefault(n =>
                     n.PubMlstId == pubMlstIsolate.PubMlstId);
@@ -80,6 +82,8 @@ namespace HaemophilusWeb.Services
                 pubMlstIsolateFromDatabase.RplF = pubMlstIsolate.RplF;
                 pubMlstIsolateFromDatabase.SequenceType = pubMlstIsolate.SequenceType;
                 pubMlstIsolateFromDatabase.ClonalComplex = pubMlstIsolate.ClonalComplex;
+                pubMlstIsolateFromDatabase.BexseroReactivity = pubMlstIsolate.BexseroReactivity;
+                pubMlstIsolateFromDatabase.TrumenbaReactivity = pubMlstIsolate.TrumenbaReactivity;
             }
             
             isolate.NeisseriaPubMlstIsolate = pubMlstIsolateFromDatabase;

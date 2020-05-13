@@ -82,6 +82,8 @@ namespace HaemophilusWeb.Tools
             AddPubMsltProperty(RplF, _ => _.RplF);
             AddPubMsltProperty(Fhbp, _ => _.Fhbp);
             AddPubMsltProperty("parE", _ => _.ParE);
+            AddPubMsltProperty(BexseroReactivity, _ => _.BexseroReactivity);
+            AddPubMsltProperty(TrumenbaReactivity, _ => _.TrumenbaReactivity);
         }
 
         private string ExportRiskFactors<T>(T clinicalInformation, Func<string> otherClinicalInformation, Func<T, bool> isOther)
