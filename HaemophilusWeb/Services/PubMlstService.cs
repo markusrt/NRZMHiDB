@@ -100,6 +100,13 @@ namespace HaemophilusWeb.Services
                     isolate.SequenceType = fields[SequenceType]?.Value<string>();
                     isolate.ClonalComplex = fields[ClonalComplex]?.Value<string>();
                 }
+
+                var phenotypic = isolateJson["phenotypic"];
+                if (phenotypic != null)
+                {
+                    isolate.BexseroReactivity = phenotypic.Value<string>("Bexsero_reactivity");
+                    isolate.TrumenbaReactivity = phenotypic.Value<string>("Trumenba_reactivity");
+                }
                 return isolate;
             }
             catch (WebException e)
