@@ -293,9 +293,10 @@
     }
 
     function QueryPubMlstDatabase() {
+        // TODO detect fields automatically based on incoming data
         var fields = [
             "PorAVr1", "PorAVr2", "FetAVr", "PorB", "Fhbp", "Nhba", "NadA", "PenA", "GyrA", "ParC", "ParE", "RpoB",
-            "RplF", "SequenceType", "ClonalComplex", "PubMlstId"
+            "RplF", "SequenceType", "ClonalComplex", "BexseroReactivity", "TrumenbaReactivity", "PubMlstId"
         ];
         var isolateReference = $("#StemNumberWithPrefix").val();
 
