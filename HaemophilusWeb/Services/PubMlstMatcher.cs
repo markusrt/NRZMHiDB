@@ -23,7 +23,8 @@ namespace HaemophilusWeb.Services
             var matches = new List<PubMlstMatchInfo>();
 
             var matchingIsolates = _db.MeningoIsolates.Include(i => i.Sending).Where(i =>
-                i.Sending.SamplingDate >= fromTo.From && i.Sending.SamplingDate <= fromTo.To).ToList();
+                i.Sending.SamplingDate == null && i.Sending.ReceivingDate >= fromTo.From && i.Sending.ReceivingDate <= fromTo.To
+                || i.Sending.SamplingDate >= fromTo.From && i.Sending.SamplingDate <= fromTo.To).ToList();
 
             foreach (var isolate in matchingIsolates)
             {
@@ -85,7 +86,7 @@ namespace HaemophilusWeb.Services
                 pubMlstIsolateFromDatabase.BexseroReactivity = pubMlstIsolate.BexseroReactivity;
                 pubMlstIsolateFromDatabase.TrumenbaReactivity = pubMlstIsolate.TrumenbaReactivity;
             }
-            
+
             isolate.NeisseriaPubMlstIsolate = pubMlstIsolateFromDatabase;
             return pubMlstIsolateFromDatabase;
         }
