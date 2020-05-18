@@ -36,6 +36,8 @@ namespace HaemophilusWeb.Services
         public const string Neis1600 = "NEIS1600";
         public const string SequenceType = "ST";
         public const string ClonalComplex = "clonal_complex";
+        public const string BexseroReactivity = "Bexsero_reactivity";
+        public const string TrumenbaReactivity = "Trumenba_reactivity";
 
         private readonly Func<string, string> callGetUrl;
         private readonly Func<string, Dictionary<string, string>, string> callPostUrl;
@@ -99,6 +101,13 @@ namespace HaemophilusWeb.Services
                 {
                     isolate.SequenceType = fields[SequenceType]?.Value<string>();
                     isolate.ClonalComplex = fields[ClonalComplex]?.Value<string>();
+                }
+
+                var phenotypic = isolateJson["phenotypic"];
+                if (phenotypic != null)
+                {
+                    isolate.BexseroReactivity = phenotypic.Value<string>(BexseroReactivity);
+                    isolate.TrumenbaReactivity = phenotypic.Value<string>(TrumenbaReactivity);
                 }
                 return isolate;
             }

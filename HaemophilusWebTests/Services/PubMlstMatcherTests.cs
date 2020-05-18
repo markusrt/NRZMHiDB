@@ -28,6 +28,7 @@ namespace HaemophilusWeb.Services
                 var isolate = MockData.CreateInstance<MeningoIsolate>();
                 var sending = MockData.CreateInstance<MeningoSending>();
                 sending.SamplingDate = i == 3 ? null : (DateTime?)_firstDayMorning.AddDays(i).AddHours(8);
+                sending.ReceivingDate = _firstDayMorning.AddDays(i).AddHours(8);
                 isolate.Sending = sending;
                 isolate.StemNumber = i == 4 ? null : (int?) i+1;
                 isolate.NeisseriaPubMlstIsolate = null;
@@ -47,7 +48,7 @@ namespace HaemophilusWeb.Services
 
         [TestCase(0, 0)]
         [TestCase(1, 1)]
-        [TestCase(5, 4)]
+        [TestCase(5, 5)]
         public void Match_FromToMatchingXDaysRecord_ReturnsListWithXEntries(int days, int count)
         {
             var sut = CreatePubMlstMatcher();
@@ -95,7 +96,7 @@ namespace HaemophilusWeb.Services
             match.StemNumber.Should().Be("DE -");
             match.LaboratoryNumber.Should().Be(_database.MeningoIsolates.Last().LaboratoryNumberWithPrefix);
 
-            _pubMlstService.Received(3).GetIsolateByReference(Arg.Any<string>());
+            _pubMlstService.Received(4).GetIsolateByReference(Arg.Any<string>());
         }
 
         [Test]

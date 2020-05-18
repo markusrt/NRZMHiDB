@@ -23,7 +23,8 @@ namespace HaemophilusWeb.Services
             var matches = new List<PubMlstMatchInfo>();
 
             var matchingIsolates = _db.MeningoIsolates.Include(i => i.Sending).Where(i =>
-                i.Sending.SamplingDate >= fromTo.From && i.Sending.SamplingDate <= fromTo.To).ToList();
+                i.Sending.SamplingDate == null && i.Sending.ReceivingDate >= fromTo.From && i.Sending.ReceivingDate <= fromTo.To
+                || i.Sending.SamplingDate >= fromTo.From && i.Sending.SamplingDate <= fromTo.To).ToList();
 
             foreach (var isolate in matchingIsolates)
             {
@@ -55,6 +56,8 @@ namespace HaemophilusWeb.Services
 
         private NeisseriaPubMlstIsolate CreateOrUpdatePubMlstIsolate(MeningoIsolate isolate, NeisseriaPubMlstIsolate pubMlstIsolate)
         {
+            //TODO fix this duplication from MeningoIsolateController and try to find a
+            //mapping framework which does not mess with EntityFramework context as automapper
             var pubMlstIsolateFromDatabase =
                 _db.NeisseriaPubMlstIsolates.SingleOrDefault(n =>
                     n.PubMlstId == pubMlstIsolate.PubMlstId);
@@ -80,8 +83,10 @@ namespace HaemophilusWeb.Services
                 pubMlstIsolateFromDatabase.RplF = pubMlstIsolate.RplF;
                 pubMlstIsolateFromDatabase.SequenceType = pubMlstIsolate.SequenceType;
                 pubMlstIsolateFromDatabase.ClonalComplex = pubMlstIsolate.ClonalComplex;
+                pubMlstIsolateFromDatabase.BexseroReactivity = pubMlstIsolate.BexseroReactivity;
+                pubMlstIsolateFromDatabase.TrumenbaReactivity = pubMlstIsolate.TrumenbaReactivity;
             }
-            
+
             isolate.NeisseriaPubMlstIsolate = pubMlstIsolateFromDatabase;
             return pubMlstIsolateFromDatabase;
         }

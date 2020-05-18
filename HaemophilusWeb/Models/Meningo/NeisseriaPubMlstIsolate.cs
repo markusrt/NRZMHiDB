@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using HaemophilusWeb.Models.Meningo;
 
 namespace HaemophilusWeb.Models
@@ -25,5 +24,7 @@ namespace HaemophilusWeb.Models
         public string RplF { get; set; }
         public string SequenceType { get; set; }
         public string ClonalComplex { get; set; }
+        public string BexseroReactivity { get; set; }
+        public string TrumenbaReactivity { get; set; }
     }
 }

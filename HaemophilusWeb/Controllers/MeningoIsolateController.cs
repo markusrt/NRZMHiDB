@@ -137,6 +137,8 @@ namespace HaemophilusWeb.Controllers
                     neisseriaPubMlstIsolate.RplF = pubMlstViewModel.RplF;
                     neisseriaPubMlstIsolate.SequenceType = pubMlstViewModel.SequenceType;
                     neisseriaPubMlstIsolate.ClonalComplex = pubMlstViewModel.ClonalComplex;
+                    neisseriaPubMlstIsolate.BexseroReactivity = pubMlstViewModel.BexseroReactivity;
+                    neisseriaPubMlstIsolate.TrumenbaReactivity = pubMlstViewModel.TrumenbaReactivity;
                     isolate.NeisseriaPubMlstIsolate = neisseriaPubMlstIsolate;
                 }
             }

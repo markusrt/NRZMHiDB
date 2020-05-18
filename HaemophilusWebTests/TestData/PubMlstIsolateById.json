@@ -1,0 +1,615 @@
+{
+  "provenance": {
+    "capsule_group": "discrepancy",
+    "genogroup_notes": "Unclear backbone: Capsule genes present shared across multiple SGs. Prediction code: https://github.com/ntopaz/characterize_neisseria_capsule.",
+    "sender": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/users/52",
+    "year": 2019,
+    "sex": "male",
+    "region": [ "Berlin" ],
+    "genogroup": "NG",
+    "isolate": "DE14447",
+    "curator": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/users/-1",
+    "continent": "Europe",
+    "source": "urethral swab",
+    "country": "Germany",
+    "id": 75036,
+    "datestamp": "2020-05-05",
+    "date_entered": "2020-05-05",
+    "serogroup": "Y",
+    "species": "Neisseria meningitidis",
+    "age_yr": 19
+  },
+  "history": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/history",
+  "phenotypic": {
+    "Bexsero_reactivity": "none",
+    "Trumenba_reactivity": "cross-reactive"
+  },
+  "sequence_bin": {
+    "contigs": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/contigs",
+    "contigs_fasta": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/contigs_fasta",
+    "total_length": 1956243,
+    "contig_count": 252
+  },
+  "schemes": [
+    {
+      "description": "MLST",
+      "loci_designated_count": 7,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/1/allele_ids",
+      "fields": {
+        "clonal_complex": "ST-23 complex",
+        "ST": 23
+      },
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/1/allele_designations"
+    },
+    {
+      "description": "Finetyping antigens",
+      "loci_designated_count": 4,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/2/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/2/allele_designations"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/56/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/56/allele_designations",
+      "description": "3' processing factors",
+      "loci_designated_count": 2
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/4/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/4/allele_ids",
+      "loci_designated_count": 5,
+      "description": "ADP-heptose biosynthesis"
+    },
+    {
+      "description": "Antibiotic resistance",
+      "loci_designated_count": 11,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/5/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/5/allele_designations"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/3/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/3/allele_designations",
+      "description": "Antigen genes",
+      "loci_designated_count": 7
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/52/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/52/allele_designations",
+      "description": "beta lactamase plasmid",
+      "loci_designated_count": 3
+    },
+    {
+      "loci_designated_count": 5,
+      "description": "Bexsero Antigen Sequence Typing (BAST)",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/100/allele_designations",
+      "fields": { "BAST": 228 },
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/100/allele_ids"
+    },
+    {
+      "loci_designated_count": 1,
+      "description": "Capsule Region B",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/42/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/42/allele_ids"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/40/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/40/allele_designations",
+      "description": "Capsule Region C",
+      "loci_designated_count": 4
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/47/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/47/allele_ids",
+      "loci_designated_count": 5,
+      "description": "Capsule Region D and D'"
+    },
+    {
+      "loci_designated_count": 1,
+      "description": "CCA adding factor",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/58/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/58/allele_ids"
+    },
+    {
+      "loci_designated_count": 4,
+      "description": "Class I",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/83/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/83/allele_ids"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/84/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/84/allele_designations",
+      "description": "Class II",
+      "loci_designated_count": 1
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/85/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/85/allele_designations",
+      "description": "Class III",
+      "loci_designated_count": 3
+    },
+    {
+      "loci_designated_count": 2,
+      "description": "Class IV",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/86/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/86/allele_ids"
+    },
+    {
+      "loci_designated_count": 1,
+      "description": "Class V",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/87/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/87/allele_ids"
+    },
+    {
+      "description": "Conjugative Plasmid",
+      "loci_designated_count": 5,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/49/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/49/allele_designations"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/23/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/23/allele_ids",
+      "loci_designated_count": 4,
+      "description": "Core subunits"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/61/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/61/allele_ids",
+      "loci_designated_count": 1,
+      "description": "Deaminase"
+    },
+    {
+      "description": "DeoR family",
+      "loci_designated_count": 1,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/59/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/59/allele_designations"
+    },
+    {
+      "loci_designated_count": 3,
+      "description": "Dihydorouridine synthases",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/62/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/62/allele_ids"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/89/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/89/allele_ids",
+      "loci_designated_count": 7,
+      "description": "DNA polymerase III holoenzyme"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/26/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/26/allele_designations",
+      "description": "eMLST (20 locus partial genes)",
+      "loci_designated_count": 20
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/27/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/27/allele_ids",
+      "loci_designated_count": 19,
+      "description": "eMLST (20 locus whole genes)"
+    },
+    {
+      "loci_designated_count": 5,
+      "description": "Factor H-binding protein",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/41/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/41/allele_ids"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/71/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/71/allele_designations",
+      "description": "Fur family",
+      "loci_designated_count": 1
+    },
+    {
+      "loci_designated_count": 15,
+      "description": "GC OMV peptide typing",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/118/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/118/allele_ids"
+    },
+    {
+      "loci_designated_count": 11,
+      "description": "Glycolysis",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/11/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/11/allele_ids"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/68/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/68/allele_designations",
+      "description": "GntR family",
+      "loci_designated_count": 1
+    },
+    {
+      "description": "Human-restricted Neisseria cgMLST v1.0",
+      "loci_designated_count": 1341,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/117/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/117/allele_designations"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/93/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/93/allele_ids",
+      "loci_designated_count": 7,
+      "description": "Initiation factors"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/18/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/18/allele_designations",
+      "description": "Iron acquisition",
+      "loci_designated_count": 6
+    },
+    {
+      "loci_designated_count": 5,
+      "description": "Kdo addition",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/15/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/15/allele_ids"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/80/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/80/allele_ids",
+      "loci_designated_count": 1554,
+      "description": "L23 cgMLST"
+    },
+    {
+      "description": "L23 pgMLST",
+      "loci_designated_count": 1565,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/101/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/101/allele_designations"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/81/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/81/allele_designations",
+      "description": "L3 cgMLST",
+      "loci_designated_count": 1511
+    },
+    {
+      "loci_designated_count": 1515,
+      "description": "L4821 cgMLST",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/114/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/114/allele_ids"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/113/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/113/allele_designations",
+      "description": "L4821 pgMLST",
+      "loci_designated_count": 1574
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/53/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/53/allele_ids",
+      "loci_designated_count": 1505,
+      "description": "L5 cgMLST"
+    },
+    {
+      "loci_designated_count": 1511,
+      "description": "L5 pgMLST",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/54/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/54/allele_ids"
+    },
+    {
+      "description": "Lipid A biosynthesis: acyltransferases",
+      "loci_designated_count": 4,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/13/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/13/allele_designations"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/14/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/14/allele_designations",
+      "description": "Lipid A biosynthesis: other",
+      "loci_designated_count": 4
+    },
+    {
+      "description": "LOS alpha chain transferases",
+      "loci_designated_count": 6,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/7/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/7/allele_designations"
+    },
+    {
+      "description": "LOS inner core transferases",
+      "loci_designated_count": 4,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/6/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/6/allele_designations"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/16/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/16/allele_ids",
+      "loci_designated_count": 5,
+      "description": "LOS transport/export"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/70/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/70/allele_ids",
+      "loci_designated_count": 1,
+      "description": "Lrp/AsnC family"
+    },
+    {
+      "loci_designated_count": 3,
+      "description": "LysR family",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/21/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/21/allele_ids"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/63/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/63/allele_designations",
+      "description": "Methylthiotransferase",
+      "loci_designated_count": 1
+    },
+    {
+      "description": "MGI-1",
+      "loci_designated_count": 5,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/97/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/97/allele_designations"
+    },
+    {
+      "loci_designated_count": 8,
+      "description": "MGI-2",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/98/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/98/allele_ids"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/99/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/99/allele_ids",
+      "loci_designated_count": 3,
+      "description": "MGI-3"
+    },
+    {
+      "loci_designated_count": 4,
+      "description": "Multi-aminoacyl-tRNA synthetase complex (MSC)",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/57/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/57/allele_ids"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/45/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/45/allele_designations",
+      "description": "Neisseria genus core genes",
+      "loci_designated_count": 216
+    },
+    {
+      "loci_designated_count": 4,
+      "description": "N. gonorrhoeae Beta-lactam AMR",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/102/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/102/allele_ids"
+    },
+    {
+      "description": "N. gonorrhoeae cgMLST v1.0",
+      "loci_designated_count": 1352,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/107/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/107/allele_designations"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/106/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/106/allele_designations",
+      "description": "N. gonorrhoeae Efflux Pumps AMR",
+      "loci_designated_count": 7
+    },
+    {
+      "loci_designated_count": 4,
+      "description": "N. gonorrhoeae Fluoroquinolone AMR",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/103/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/103/allele_ids"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/104/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/104/allele_ids",
+      "loci_designated_count": 1,
+      "description": "N. gonorrhoeae Macrolides AMR"
+    },
+    {
+      "loci_designated_count": 1,
+      "description": "N. gonorrhoeae plasmid mediated AMR",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/105/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/105/allele_ids"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/112/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/112/allele_designations",
+      "description": "NG STAR",
+      "loci_designated_count": 2
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/46/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/46/allele_designations",
+      "description": "N. meningitidis cgMLST v1.0",
+      "loci_designated_count": 1465
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/24/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/24/allele_ids",
+      "loci_designated_count": 8,
+      "description": "Nucleotide excision repair"
+    },
+    {
+      "loci_designated_count": 39,
+      "description": "OMV peptide",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/109/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/109/allele_ids"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/110/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/110/allele_ids",
+      "loci_designated_count": 23,
+      "description": "OMV peptide typing"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/60/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/60/allele_designations",
+      "description": "Other AARSs",
+      "loci_designated_count": 16
+    },
+    {
+      "loci_designated_count": 2,
+      "description": "Other elongation factors",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/82/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/82/allele_ids"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/74/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/74/allele_ids",
+      "loci_designated_count": 1,
+      "description": "Other families"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/75/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/75/allele_ids",
+      "loci_designated_count": 5,
+      "description": "Others"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/66/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/66/allele_ids",
+      "loci_designated_count": 13,
+      "description": "Other tRNA modification factors"
+    },
+    {
+      "description": "Pilus genes",
+      "loci_designated_count": 20,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/17/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/17/allele_designations"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/90/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/90/allele_ids",
+      "loci_designated_count": 1,
+      "description": "Prevention of re-replication factors"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/28/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/28/allele_designations",
+      "description": "Protein glycosylation",
+      "loci_designated_count": 6
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/64/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/64/allele_designations",
+      "description": "Psudouridine synthases",
+      "loci_designated_count": 4
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/20/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/20/allele_designations",
+      "description": "Purine metabolism",
+      "loci_designated_count": 39
+    },
+    {
+      "description": "Pyrimidine metabolism",
+      "loci_designated_count": 31,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/19/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/19/allele_designations"
+    },
+    {
+      "loci_designated_count": 3,
+      "description": "Pyruvate dehydrogenase complex",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/10/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/10/allele_ids"
+    },
+    {
+      "description": "Ribonuclease P",
+      "loci_designated_count": 1,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/55/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/55/allele_designations"
+    },
+    {
+      "description": "Ribosomal MLST",
+      "loci_designated_count": 28,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/25/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/25/allele_designations"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/95/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/95/allele_ids",
+      "loci_designated_count": 28,
+      "description": "Ribosomal protein genes"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/77/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/77/allele_ids",
+      "loci_designated_count": 3,
+      "description": "RNA polymerase-associated proteins"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/88/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/88/allele_designations",
+      "description": "RNase H",
+      "loci_designated_count": 2
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/73/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/73/allele_ids",
+      "loci_designated_count": 2,
+      "description": "Rrf2 family"
+    },
+    {
+      "loci_designated_count": 4,
+      "description": "Sigma factors",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/76/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/76/allele_ids"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/34/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/34/allele_ids",
+      "loci_designated_count": 3,
+      "description": "Small regulatory RNAs"
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/12/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/12/allele_designations",
+      "description": "TCA cycle",
+      "loci_designated_count": 16
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/69/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/69/allele_designations",
+      "description": "TetR/AcrR family",
+      "loci_designated_count": 1
+    },
+    {
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/65/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/65/allele_designations",
+      "description": "Thiolation factors",
+      "loci_designated_count": 4
+    },
+    {
+      "loci_designated_count": 1,
+      "description": "Topoisomerases",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/94/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/94/allele_ids"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/96/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/96/allele_ids",
+      "loci_designated_count": 4,
+      "description": "Topoisomerase subunits"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/78/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/78/allele_ids",
+      "loci_designated_count": 3,
+      "description": "Transcription elongation factors"
+    },
+    {
+      "loci_designated_count": 1,
+      "description": "Transcription termination factor",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/79/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/79/allele_ids"
+    },
+    {
+      "description": "tRNA degradation factors",
+      "loci_designated_count": 2,
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/67/allele_ids",
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/67/allele_designations"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/115/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/115/allele_ids",
+      "loci_designated_count": 21,
+      "description": "tRNA molecules"
+    },
+    {
+      "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/9/allele_designations",
+      "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/schemes/9/allele_ids",
+      "loci_designated_count": 1,
+      "description": "UDP-GlcNAc synthesis"
+    }
+  ],
+  "allele_designations": {
+    "designation_count": 1952,
+    "full_designations": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/allele_designations",
+    "allele_ids": "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/75036/allele_ids"
+  }
+}
