@@ -17,7 +17,7 @@ namespace HaemophilusWeb.Domain
         private Random _random = new Random();
 
         [Test]
-        public void EmptyIsolate_ReturnsEmptyInterpretation()
+        public void EmptyIsolate_ReturnsNoGrowth()
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -28,19 +28,19 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Interpret(isolate);
 
             isolateInterpretation.Typings.Should().BeEmpty();
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Diskrepante Ergebnisse"));
-            isolateInterpretation.Result.Comment.Should().BeNull();
+            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
         }
 
-        [Test]
-        public void IsolateMatchingStemRule1_ReturnsCorrespondingInterpretation()
+        [TestCase(false, TestName = "IsolateMatchingStemRule1_ReturnsCorrespondingInterpretation")]
+        [TestCase(true, TestName = "IsolateMatchingStemRule27_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingStemRule1or27_ReturnsCorrespondingInterpretation(bool invasive)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
             {
                 GrowthOnBloodAgar = Growth.No,
                 GrowthOnMartinLewisAgar = Growth.No,
-                Sending = new MeningoSending {SamplingLocation = NonInvasiveSamplingLocation},
+                Sending = new MeningoSending {SamplingLocation = invasive ? InvasiveSamplingLocation : NonInvasiveSamplingLocation},
                 Oxidase = TestResult.NotDetermined,
                 Agglutination = MeningoSerogroupAgg.NotDetermined,
                 Onpg = TestResult.NotDetermined,

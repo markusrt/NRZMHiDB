@@ -454,5 +454,21 @@
     "Report": [],
     "Typings": [ "AutoAgglutination", "SerogenogroupCnl" ]
   },
+  "StemInterpretation_27": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": "No",
+    "Oxidase": "NotDetermined",
+    "Agglutination": "NotDetermined",
+    "Onpg": "NotDetermined",
+    "GammaGt": "NotDetermined",
+    "SerogroupPcr": "NotDetermined",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Report": [
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": []
   }
 }
