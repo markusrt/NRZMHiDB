@@ -470,5 +470,47 @@
       "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
     ],
     "Typings": []
+  },
+  "StemInterpretation_28": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": "No",
+    "Oxidase": "NotDetermined",
+    "Agglutination": "NotDetermined",
+    "Onpg": "NotDetermined",
+    "GammaGt": "NotDetermined",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Negative",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
+      "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": [ "Serogenogroup", "PorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_29": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": "No",
+    "Oxidase": "NotDetermined",
+    "Agglutination": "NotDetermined",
+    "Onpg": "NotDetermined",
+    "GammaGt": "NotDetermined",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Negative",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
+      "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": [ "Serogenogroup", "NoPorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   }
 }

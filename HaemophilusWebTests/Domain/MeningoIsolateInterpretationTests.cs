@@ -57,8 +57,10 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
         }
 
-        [Test]
-        public void IsolateMatchingStemRule2_ReturnsCorrespondingInterpretation()
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule2_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, TestName = "IsolateMatchingStemRule28_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule29_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingStemRule2_28_29_ReturnsCorrespondingInterpretation(NativeMaterialTestResult porAPcr, NativeMaterialTestResult fetAPcr)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -72,8 +74,8 @@ namespace HaemophilusWeb.Domain
                 GammaGt = TestResult.NotDetermined,
                 SerogroupPcr = MeningoSerogroupPcr.C,
                 MaldiTof = UnspecificTestResult.NotDetermined,
-                PorAPcr = NativeMaterialTestResult.Positive,
-                FetAPcr = NativeMaterialTestResult.Positive,
+                PorAPcr = porAPcr,
+                FetAPcr = fetAPcr,
                 PorAVr1 = "X",
                 PorAVr2 = "Y",
                 FetAVr = "Z"
@@ -88,9 +90,12 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Serogenogruppe" && t.Value == "C");
             isolateInterpretation.Typings.Should().Contain(t =>
-                t.Attribute == "PorA - Sequenztyp" && t.Value == "X, Y");
+                t.Attribute == "PorA - Sequenztyp"
+                && t.Value == (porAPcr == NativeMaterialTestResult.Positive ? "X, Y" : "das porA-Gen konnte nicht amplifiziert werden"));
             isolateInterpretation.Typings.Should().Contain(t =>
-                t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
+                t.Attribute == "FetA - Sequenztyp"
+                && t.Value == (fetAPcr == NativeMaterialTestResult.Positive ? "Z" : "das fetA-Gen konnte nicht amplifiziert werden"));
+            isolateInterpretation.Result.Comment.Should().NotBeEmpty();
         }
 
         [Test]
@@ -387,7 +392,7 @@ namespace HaemophilusWeb.Domain
             {
                 interpretation.Result.Report.Should().BeEmpty();
             }
-            
+
             interpretation.Typings.Should().Contain(
                 t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             interpretation.Typings.Should().Contain(t =>
@@ -404,7 +409,7 @@ namespace HaemophilusWeb.Domain
             }
         }
 
-        
+
         [TestCase(true, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule19_ReturnsCorrespondingInterpretation")]
         [TestCase(true, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule20_ReturnsCorrespondingInterpretation")]
         [TestCase(false, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule21_ReturnsCorrespondingInterpretation")]
@@ -440,7 +445,7 @@ namespace HaemophilusWeb.Domain
             {
                 interpretation.Result.Report.Should().BeEmpty();
             }
-            
+
             interpretation.Typings.Should().Contain(
                 t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             interpretation.Typings.Should().Contain(t =>
@@ -492,7 +497,7 @@ namespace HaemophilusWeb.Domain
             {
                 interpretation.Result.Report.Should().BeEmpty();
             }
-            
+
             interpretation.Typings.Should().Contain(
                 t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             interpretation.Typings.Should().Contain(t =>
