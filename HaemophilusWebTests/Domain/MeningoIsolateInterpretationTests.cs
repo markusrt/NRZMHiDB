@@ -121,8 +121,8 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "Wachstum auf Martin-Lewis-Agar" && t.Value == "Nein");
         }
 
-        [TestCase(TestResult.Negative)]
-        [TestCase(TestResult.Positive)]
+        [TestCase(TestResult.Negative, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
+        [TestCase(TestResult.Positive, TestName = "IsolateMatchingStemRule5_ReturnsCorrespondingInterpretation")]
         public void IsolateMatchingStemRule4And5_ReturnsCorrespondingInterpretation(TestResult gammaGtTestResult)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
@@ -211,8 +211,8 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "Serogruppe" && t.Value == "E");
         }
 
-        [TestCase(MeningoSerogroupAgg.Auto)]
-        [TestCase(MeningoSerogroupAgg.Poly)]
+        [TestCase(MeningoSerogroupAgg.Auto, TestName = "IsolateMatchingStemRule8_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupAgg.Poly, TestName = "IsolateMatchingStemRule9_ReturnsCorrespondingInterpretation")]
         public void IsolateMatchingStemRule8And9_ReturnsCorrespondingInterpretation(MeningoSerogroupAgg agglutination)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
@@ -249,8 +249,8 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
         }
 
-        [TestCase(MeningoSerogroupAgg.Auto)]
-        [TestCase(MeningoSerogroupAgg.Poly)]
+        [TestCase(MeningoSerogroupAgg.Auto, TestName = "IsolateMatchingStemRule10_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupAgg.Poly, TestName = "IsolateMatchingStemRule11_ReturnsCorrespondingInterpretation")]
         public void IsolateMatchingStemRule10And11_ReturnsCorrespondingInterpretation(MeningoSerogroupAgg agglutination)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
@@ -287,8 +287,8 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
         }
 
-        [TestCase(MeningoSerogroupAgg.Auto)]
-        [TestCase(MeningoSerogroupAgg.Poly)]
+        [TestCase(MeningoSerogroupAgg.Auto, TestName = "IsolateMatchingStemRule12_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupAgg.Poly, TestName = "IsolateMatchingStemRule13_ReturnsCorrespondingInterpretation")]
         public void IsolateMatchingStemRule12And13_ReturnsCorrespondingInterpretation(MeningoSerogroupAgg agglutination)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
@@ -352,11 +352,11 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
         }
 
-        [TestCase(true, NativeMaterialTestResult.NotDetermined, Description = "Rule 15")]
-        [TestCase(true, NativeMaterialTestResult.Positive, Description = "Rule 16")]
-        [TestCase(false, NativeMaterialTestResult.NotDetermined, Description = "Rule 17")]
-        [TestCase(false, NativeMaterialTestResult.Positive, Description = "Rule 18")]
-        public void IsolateMatchingStemRule151617Or18_ReturnsCorrespondingInterpretation(bool invasive, NativeMaterialTestResult poraAndFeta)
+        [TestCase(true, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule15_ReturnsCorrespondingInterpretation")]
+        [TestCase(true, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule16_ReturnsCorrespondingInterpretation")]
+        [TestCase(false, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule17_ReturnsCorrespondingInterpretation")]
+        [TestCase(false, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule18_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingStemRule15to18_ReturnsCorrespondingInterpretation(bool invasive, NativeMaterialTestResult poraAndFeta)
         {
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -405,11 +405,11 @@ namespace HaemophilusWeb.Domain
         }
 
         
-        [TestCase(true, NativeMaterialTestResult.NotDetermined, Description = "Rule 19")]
-        [TestCase(true, NativeMaterialTestResult.Positive, Description = "Rule 20")]
-        [TestCase(false, NativeMaterialTestResult.NotDetermined, Description = "Rule 21")]
-        [TestCase(false, NativeMaterialTestResult.Positive, Description = "Rule 22")]
-        public void IsolateMatchingStemRule192021Or22_ReturnsCorrespondingInterpretation(bool invasive, NativeMaterialTestResult poraAndFeta)
+        [TestCase(true, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule19_ReturnsCorrespondingInterpretation")]
+        [TestCase(true, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule20_ReturnsCorrespondingInterpretation")]
+        [TestCase(false, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule21_ReturnsCorrespondingInterpretation")]
+        [TestCase(false, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule22_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingStemRule19to22_ReturnsCorrespondingInterpretation(bool invasive, NativeMaterialTestResult poraAndFeta)
         {
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -457,11 +457,11 @@ namespace HaemophilusWeb.Domain
             }
         }
 
-        [TestCase(true, NativeMaterialTestResult.NotDetermined, Description = "Rule 23")]
-        [TestCase(true, NativeMaterialTestResult.Positive, Description = "Rule 24")]
-        [TestCase(false, NativeMaterialTestResult.NotDetermined, Description = "Rule 25")]
-        [TestCase(false, NativeMaterialTestResult.Positive, Description = "Rule 26")]
-        public void IsolateMatchingStemRule232425Or26_ReturnsCorrespondingInterpretation(bool invasive, NativeMaterialTestResult poraAndFeta)
+        [TestCase(true, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule23_ReturnsCorrespondingInterpretation")]
+        [TestCase(true, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule24_ReturnsCorrespondingInterpretation")]
+        [TestCase(false, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule25_ReturnsCorrespondingInterpretation")]
+        [TestCase(false, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule26_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingStemRule23to26_ReturnsCorrespondingInterpretation(bool invasive, NativeMaterialTestResult poraAndFeta)
         {
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
