@@ -11,6 +11,10 @@
     "Attribute": "Serogenogruppe",
     "Value": "cnl (capsule null locus Meningokokken) - Bei cnl Meningokokken handelt es sich um bei gesunden Trägern häufig vorkommende, zumeist apathogene, unbekapselte Isolate, denen der Kapsellokus fehlt (Claus et al., Microbiology 2002; Claus et al. J Infect Dis 2005; Schoen et al., PNAS 2008). Invasive Infektionen durch cnl Meningokokken sind ausgesprochen selten (Vogel et al. J Clin Microbiol 2004, Findlow et al. J Infect Dis 2007). Es ist daher im Zusammenhang mit diesem Patienten eher von einem Zufallsbefund ohne pathologische Relevanz auszugehen."
   },
+  "SerogenogroupNegative": {
+    "Attribute": "Serogenogruppe",
+    "Value": "Negativ für die Serogruppen B, C, W und Y"
+  },
   "PorA": {
     "Attribute": "PorA - Sequenztyp",
     "Value": "{PorAVr1}, {PorAVr2}"

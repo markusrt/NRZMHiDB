@@ -57,10 +57,13 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
         }
 
-        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule2_ReturnsCorrespondingInterpretation")]
-        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, TestName = "IsolateMatchingStemRule28_ReturnsCorrespondingInterpretation")]
-        [TestCase(NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule29_ReturnsCorrespondingInterpretation")]
-        public void IsolateMatchingStemRule2_28_29_ReturnsCorrespondingInterpretation(NativeMaterialTestResult porAPcr, NativeMaterialTestResult fetAPcr)
+        [TestCase(MeningoSerogroupPcr.C, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule2_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupPcr.C, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, TestName = "IsolateMatchingStemRule28_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupPcr.C, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule29_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupPcr.Negative, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule30_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupPcr.Negative, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, TestName = "IsolateMatchingStemRule31_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupPcr.Negative, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule32_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingStemRule2_28to32_ReturnsCorrespondingInterpretation(MeningoSerogroupPcr serogroupPcr, NativeMaterialTestResult porAPcr, NativeMaterialTestResult fetAPcr)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -72,7 +75,7 @@ namespace HaemophilusWeb.Domain
                 Agglutination = MeningoSerogroupAgg.NotDetermined,
                 Onpg = TestResult.NotDetermined,
                 GammaGt = TestResult.NotDetermined,
-                SerogroupPcr = MeningoSerogroupPcr.C,
+                SerogroupPcr = serogroupPcr,
                 MaldiTof = UnspecificTestResult.NotDetermined,
                 PorAPcr = porAPcr,
                 FetAPcr = fetAPcr,
@@ -83,12 +86,17 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C."));
+            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains(
+                serogroupPcr != MeningoSerogroupPcr.Negative 
+                    ? "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C."
+                    : "Meldekategorie dieses Befundes: Neisseria meningitidis, keine Serogruppe bestimmbar."));
+
             isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             isolateInterpretation.Typings.Should().Contain(t =>
-                t.Attribute == "Serogenogruppe" && t.Value == "C");
+                t.Attribute == "Serogenogruppe" && t.Value == 
+                (serogroupPcr != MeningoSerogroupPcr.Negative ? "C" : "Negativ für die Serogruppen B, C, W und Y"));
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "PorA - Sequenztyp"
                 && t.Value == (porAPcr == NativeMaterialTestResult.Positive ? "X, Y" : "das porA-Gen konnte nicht amplifiziert werden"));
