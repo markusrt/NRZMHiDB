@@ -1,4 +1,89 @@
 {
+  // 30-32 put to to due to Serogroup "ABC" ambiguity
+  "StemInterpretation_30": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": "No",
+    "Oxidase": "NotDetermined",
+    "Agglutination": "NotDetermined",
+    "Onpg": "NotDetermined",
+    "GammaGt": "NotDetermined",
+    "SerogroupPcr": "Negative",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, keine Serogruppe bestimmbar.",
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
+      "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": [ "SerogenogroupNegative", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_31": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": "No",
+    "Oxidase": "NotDetermined",
+    "Agglutination": "NotDetermined",
+    "Onpg": "NotDetermined",
+    "GammaGt": "NotDetermined",
+    "SerogroupPcr": "Negative",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Negative",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, keine Serogruppe bestimmbar.",
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
+      "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": [ "SerogenogroupNegative", "PorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_32": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": "No",
+    "Oxidase": "NotDetermined",
+    "Agglutination": "NotDetermined",
+    "Onpg": "NotDetermined",
+    "GammaGt": "NotDetermined",
+    "SerogroupPcr": "Negative",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Negative",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, keine Serogruppe bestimmbar.",
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
+      "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": [ "SerogenogroupNegative", "NoPorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_33": {
+    "SendingInvasive": "No",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Agglutination":  "Negative",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "SerogroupPcr": "NotDetermined",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
+    "Typings": [ "NoAgglutinationNonInvasive" ]
+  },
   "StemInterpretation_01": {
     "SendingInvasive": "No",
     "GrowthOnBloodAgar": "No",
@@ -11,7 +96,9 @@
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
-    "Interpretation": "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten.",
+    "Report": [
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
+    ],
     "Typings": []
   },
   "StemInterpretation_02": {
@@ -26,8 +113,14 @@
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Interpretation": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.\nDer von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich. Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten.",
-    "Typings": [ "Serogenogroup", "PorA", "FetA" ]
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
+      "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": [ "Serogenogroup", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_03": {
     "SendingInvasive": "No",
@@ -38,7 +131,9 @@
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
-    "Interpretation": "Kein Nachweis von Neisseria meningitidis.",
+    "Report": [
+      "Kein Nachweis von Neisseria meningitidis."
+    ],
     "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar" ]
   },
   "StemInterpretation_04": {
@@ -52,7 +147,9 @@
     "MaldiTof": "Determined",
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
-    "Interpretation": "Kein Nachweis von Neisseria meningitidis.",
+    "Report": [
+      "Kein Nachweis von Neisseria meningitidis."
+    ],
     "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ]
   },
   "StemInterpretation_05": {
@@ -66,8 +163,85 @@
     "MaldiTof": "Determined",
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
-    "Interpretation": "Kein Nachweis von Neisseria meningitidis.",
+    "Report": [
+      "Kein Nachweis von Neisseria meningitidis."
+    ],
     "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ]
+  },
+  "StemInterpretation_20": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Agglutination": "Poly",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+    ],
+    "Typings": [ "PolyAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  // Rule 20, 22, 24, and 26 are more specific then 10 and 12 hence they must be placed further up
+  "StemInterpretation_22": {
+    "SendingInvasive": "No",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Agglutination": "Poly",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [],
+    "Typings": [ "PolyAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_24": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Agglutination": "Auto",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+    ],
+    "Typings": [ "AutoAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_26": {
+    "SendingInvasive": "No",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Agglutination": "Auto",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [],
+    "Typings": [ "AutoAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_12": {
     // Rule 12 and 13 are more specific than 6 hence they must be placed before
@@ -83,6 +257,7 @@
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
     "Identification": "Neisseria meningitidis",
+    "Report": [],
     "Typings": [ "AgglutinationAutoNonInvasive" ]
   },
   "StemInterpretation_13": {
@@ -99,6 +274,7 @@
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
     "Identification": "Neisseria meningitidis",
+    "Report": [],
     "Typings": [ "AgglutinationPolyNonInvasive" ]
   },
   "StemInterpretation_06": {
@@ -113,6 +289,7 @@
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
     "Identification": "Neisseria meningitidis",
+    "Report": [],
     "Typings": [ "Agglutination" ]
   },
   "StemInterpretation_07": {
@@ -127,14 +304,16 @@
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
     "Identification": "Neisseria meningitidis",
-    "Interpretation": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}.",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+    ],
     "Typings": [ "Agglutination" ]
   },
   "StemInterpretation_08": {
     "SendingInvasive": "Yes",
     "GrowthOnBloodAgar": "TypicalGrowth",
     "GrowthOnMartinLewisAgar": "TypicalGrowth",
-    "PorAPcr": "Positive",
     "Agglutination": "Auto",
     "Onpg": "Negative",
     "GammaGt": "Positive",
@@ -142,8 +321,12 @@
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Interpretation": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
-    "Typings": [ "AgglutinationAutoInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ]
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}."
+    ],
+    "Typings": [ "AgglutinationAutoInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_09": {
     "SendingInvasive": "Yes",
@@ -157,14 +340,17 @@
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Interpretation": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
-    "Typings": [ "AgglutinationPolyInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ]
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}."
+    ],
+    "Typings": [ "AgglutinationPolyInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_10": {
     "SendingInvasive": "No",
     "GrowthOnBloodAgar": "TypicalGrowth",
     "GrowthOnMartinLewisAgar": "TypicalGrowth",
-    "PorAPcr": "Positive",
     "Agglutination": "Auto",
     "Onpg": "Negative",
     "GammaGt": "Positive",
@@ -172,13 +358,14 @@
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Typings": [ "AgglutinationAutoNonInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ]
+    "Report": [],
+    "Typings": [ "AgglutinationAutoNonInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_11": {
     "SendingInvasive": "No",
     "GrowthOnBloodAgar": "TypicalGrowth",
     "GrowthOnMartinLewisAgar": "TypicalGrowth",
-    "PorAPcr": "Positive",
     "Agglutination": "Poly",
     "Onpg": "Negative",
     "GammaGt": "Positive",
@@ -186,6 +373,7 @@
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
+    "Report": [],
     "Typings": [ "AgglutinationPolyNonInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ]
   },
   "StemInterpretation_14": {
@@ -200,7 +388,214 @@
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Interpretation": "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}.",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+    ],
     "Typings": [ "Agglutination", "PorA", "FetA" ]
+  },
+  "StemInterpretation_15": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "Agglutination": "Negative",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+    ],
+    "Typings": [ "NoAgglutination", "SerogenogroupCnl" ]
+  },
+  "StemInterpretation_16": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Agglutination": "Negative",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+    ],
+    "Typings": [ "NoAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_17": {
+    "SendingInvasive": "No",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "Agglutination": "Negative",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [],
+    "Typings": [ "NoAgglutination", "SerogenogroupCnl" ]
+  },
+  "StemInterpretation_18": {
+    "SendingInvasive": "No",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Agglutination": "Negative",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [],
+    "Typings": [ "NoAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+
+  "StemInterpretation_19": {
+    // Rule 19-26 are more specific hence they must be placed before
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "Agglutination": "Poly",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+    ],
+    "Typings": [ "PolyAgglutination", "SerogenogroupCnl" ]
+  },
+
+  "StemInterpretation_21": {
+    "SendingInvasive": "No",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "Agglutination": "Poly",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [],
+    "Typings": [ "PolyAgglutination", "SerogenogroupCnl" ]
+  },
+  "StemInterpretation_23": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "Agglutination": "Auto",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+    ],
+    "Typings": [ "AutoAgglutination", "SerogenogroupCnl" ]
+  },
+  "StemInterpretation_25": {
+    "SendingInvasive": "No",
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "Oxidase": "Positive",
+    "Onpg": "Negative",
+    "GammaGt": "Positive",
+    "Agglutination": "Auto",
+    "SerogroupPcr": "cnl",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [],
+    "Typings": [ "AutoAgglutination", "SerogenogroupCnl" ]
+  },
+  "StemInterpretation_27": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": "No",
+    "Oxidase": "NotDetermined",
+    "Agglutination": "NotDetermined",
+    "Onpg": "NotDetermined",
+    "GammaGt": "NotDetermined",
+    "SerogroupPcr": "NotDetermined",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Report": [
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": []
+  },
+  "StemInterpretation_28": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": "No",
+    "Oxidase": "NotDetermined",
+    "Agglutination": "NotDetermined",
+    "Onpg": "NotDetermined",
+    "GammaGt": "NotDetermined",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Negative",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
+      "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": [ "Serogenogroup", "PorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_29": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": "No",
+    "Oxidase": "NotDetermined",
+    "Agglutination": "NotDetermined",
+    "Onpg": "NotDetermined",
+    "GammaGt": "NotDetermined",
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Negative",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
+      "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
+    ],
+    "Typings": [ "Serogenogroup", "NoPorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   }
 }

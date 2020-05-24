@@ -17,7 +17,8 @@ namespace HaemophilusWeb.Domain
         public NativeMaterialTestResult? PorAPcr { get; set; }
         public NativeMaterialTestResult? FetAPcr { get; set; }
         public string Identification { get; set; }
-        public string Interpretation { get; set; }
+        public string[] Report { get; set; }
         public string[] Typings { get; set; }
+        public string Comment { get; set; }
     }
 }
