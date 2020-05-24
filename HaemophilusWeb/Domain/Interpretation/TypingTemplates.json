@@ -75,6 +75,10 @@
     "Attribute": "Agglutination",
     "Value": "keine Agglutination mit Antikörpern gegen die Serogruppen A, B, C, E, W, X und Y"
   },
+  "NoAgglutinationNonInvasive": {
+    "Attribute": "Agglutination",
+    "Value": "keine Agglutination mit Antikörpern gegen die Serogruppen A, B, C, E, W, X und Y (Nicht-invasive Meningokokken sind oft unbekapselt.)"
+  },
   "PolyAgglutination": {
     "Attribute": "Agglutination",
     "Value": "Poly-Agglutination mit Antikörpern gegen die Serogruppen B, C, W und Y"

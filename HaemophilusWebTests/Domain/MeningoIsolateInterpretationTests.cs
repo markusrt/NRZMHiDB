@@ -772,6 +772,34 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
         }
 
+        [Test]
+        public void IsolateMatchingStemRule33_ReturnsCorrespondingInterpretation()
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = MeningoSerogroupAgg.Negative,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Positive,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined,
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+            interpretation.Typings.Should().Contain(
+                t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
+            interpretation.Typings.Should().Contain(t =>
+                t.Attribute == "Agglutination" && t.Value == "keine Agglutination mit Antikörpern gegen die Serogruppen A, B, C, E, W, X und Y (Nicht-invasive Meningokokken sind oft unbekapselt.)");
+        }
+
         private NativeMaterialTestResult GetRandomNegativeOrInhibitory()
         {
             return _random.Next(2) == 0 ? NativeMaterialTestResult.Negative : NativeMaterialTestResult.Inhibitory;
