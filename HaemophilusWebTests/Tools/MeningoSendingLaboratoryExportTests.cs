@@ -38,7 +38,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(72);
+            export.Columns.Count.Should().Be(73);
         }
 
         [Test]
@@ -63,6 +63,19 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["Entnahmeort"].Should().Be("Invasive Location");
+        }
+
+        [Test]
+        public void DataTable_ContainsRealTimePcrFields()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.RealTimePcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.RealTimePcrResult = RealTimePcrResult.StreptococcusPneumoniae;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["NHS Real-Time-PCR"].Should().Be("positiv");
+            export.Rows[0]["NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Streptococcus pneumoniae");
         }
 
         [Test]
