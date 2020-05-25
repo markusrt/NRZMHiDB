@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using DocumentFormat.OpenXml.Bibliography;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.Views.Utils;
@@ -21,14 +22,14 @@ namespace HaemophilusWeb.Tools
             return clinicalInformationAsString;
         }
 
-        protected void AddEpsilometerTestFields(ExportDefinition<TSending> export, Antibiotic antibiotic, string measurementHeaderParameter = null, string evaluationHeaderParameter = null)
+        protected void AddEpsilometerTestFields(ExportDefinition<TSending> export, Antibiotic antibiotic, bool skipEvaluation = false, string measurementHeaderParameter = null, string evaluationHeaderParameter = null)
         {
             var antibioticName = ExportToString(antibiotic);
             var measurementHeader = measurementHeaderParameter ?? string.Format("{0} MHK", antibioticName);
             var evaluationHeader = evaluationHeaderParameter ?? string.Format("{0} Bewertung", antibioticName);
 
             export.AddField(s => FindEpsilometerTestMeasurement(s, antibiotic), measurementHeader);
-            export.AddField(s => ExportToString(FindEpsilometerTestEvaluation(s, antibiotic)), evaluationHeader);
+            if(!skipEvaluation) export.AddField(s => ExportToString(FindEpsilometerTestEvaluation(s, antibiotic)), evaluationHeader);
         }
 
         protected static string ExportGender(Gender? gender)

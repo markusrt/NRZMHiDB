@@ -263,6 +263,7 @@
     <Compile Include="Services\PubMlstService.cs" />
     <Compile Include="Tools\HaemophilusSendingRkiExport.cs" />
     <Compile Include="Tools\HaemophilusSendingLaboratoryExport.cs" />
+    <Compile Include="Tools\MeningoSendingIrisExport.cs" />
     <Compile Include="Tools\SendingExportDefinition.cs" />
     <Compile Include="Tools\MeningoSendingLaboratoryExport.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
