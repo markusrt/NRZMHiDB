@@ -15,7 +15,7 @@
     "Identification": "Neisseria meningitidis",
     "Report": [
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Neisseria meningitidis, keine Serogruppe bestimmbar.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, NG (keine Serogruppe bestimmbar).",
       "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
       "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
     ],
@@ -37,7 +37,7 @@
     "Identification": "Neisseria meningitidis",
     "Report": [
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Neisseria meningitidis, keine Serogruppe bestimmbar.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, NG (keine Serogruppe bestimmbar).",
       "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
       "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
     ],
@@ -59,7 +59,7 @@
     "Identification": "Neisseria meningitidis",
     "Report": [
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Neisseria meningitidis, keine Serogruppe bestimmbar.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, NG (keine Serogruppe bestimmbar).",
       "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich.",
       "Der Typisierungsbefund wurde mit molekularbiologischen Methoden erhoben. Um Neueinsendung wird gebeten."
     ],
@@ -183,7 +183,7 @@
     "Identification": "Neisseria meningitidis",
     "Report": [
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."
     ],
     "Typings": [ "PolyAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
@@ -221,7 +221,7 @@
     "Identification": "Neisseria meningitidis",
     "Report": [
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."
     ],
     "Typings": [ "AutoAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
@@ -409,7 +409,7 @@
     "Identification": "Neisseria meningitidis",
     "Report": [
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."
     ],
     "Typings": [ "NoAgglutination", "SerogenogroupCnl" ]
   },
@@ -428,7 +428,7 @@
     "Identification": "Neisseria meningitidis",
     "Report": [
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."
     ],
     "Typings": [ "NoAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
@@ -483,7 +483,7 @@
     "Identification": "Neisseria meningitidis",
     "Report": [
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."
     ],
     "Typings": [ "PolyAgglutination", "SerogenogroupCnl" ]
   },
@@ -519,7 +519,7 @@
     "Identification": "Neisseria meningitidis",
     "Report": [
       "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."
     ],
     "Typings": [ "AutoAgglutination", "SerogenogroupCnl" ]
   },

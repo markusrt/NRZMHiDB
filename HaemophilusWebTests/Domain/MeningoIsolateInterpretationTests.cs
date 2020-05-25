@@ -89,14 +89,14 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Result.Report.Should().Contain(s => s.Contains(
                 serogroupPcr != MeningoSerogroupPcr.Negative 
                     ? "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C."
-                    : "Meldekategorie dieses Befundes: Neisseria meningitidis, keine Serogruppe bestimmbar."));
+                    : "Meldekategorie dieses Befundes: Neisseria meningitidis, NG (keine Serogruppe bestimmbar)."));
 
             isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Serogenogruppe" && t.Value == 
-                (serogroupPcr != MeningoSerogroupPcr.Negative ? "C" : "Negativ für die Serogruppen B, C, W und Y"));
+                (serogroupPcr != MeningoSerogroupPcr.Negative ? "C" : "nicht gruppierbar"));
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "PorA - Sequenztyp"
                 && t.Value == (porAPcr == NativeMaterialTestResult.Positive ? "X, Y" : "das porA-Gen konnte nicht amplifiziert werden"));
@@ -394,7 +394,7 @@ namespace HaemophilusWeb.Domain
 
             if (invasive)
             {
-                interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe negativ"));
+                interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."));
             }
             else
             {
@@ -447,7 +447,7 @@ namespace HaemophilusWeb.Domain
 
             if (invasive)
             {
-                interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe poly"));
+                interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."));
             }
             else
             {
@@ -499,7 +499,7 @@ namespace HaemophilusWeb.Domain
 
             if (invasive)
             {
-                interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe auto"));
+                interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."));
             }
             else
             {

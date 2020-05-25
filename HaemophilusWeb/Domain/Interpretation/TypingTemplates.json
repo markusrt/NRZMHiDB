@@ -13,7 +13,7 @@
   },
   "SerogenogroupNegative": {
     "Attribute": "Serogenogruppe",
-    "Value": "Negativ für die Serogruppen B, C, W und Y"
+    "Value": "nicht gruppierbar"
   },
   "PorA": {
     "Attribute": "PorA - Sequenztyp",
