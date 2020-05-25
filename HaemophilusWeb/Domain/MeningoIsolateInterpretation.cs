@@ -132,7 +132,7 @@ namespace HaemophilusWeb.Domain
                 && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
                 && rule.GrowthOnMartinLewisAgar == isolate.GrowthOnMartinLewisAgar
                 && (!rule.Oxidase.HasValue || rule.Oxidase == isolate.Oxidase)
-                && (!rule.Agglutination.HasValue || rule.Agglutination == isolate.Agglutination)
+                && (rule.Agglutination == null || rule.Agglutination.Contains(isolate.Agglutination))
                 && (!rule.Onpg.HasValue || rule.Onpg == isolate.Onpg)
                 && (!rule.GammaGt.HasValue || rule.GammaGt == isolate.GammaGt)
                 && (!rule.SerogroupPcr.HasValue || rule.SerogroupPcr == isolate.SerogroupPcr)
