@@ -13,7 +13,7 @@ namespace HaemophilusWeb.Domain
         public List<MeningoSerogroupAgg> Agglutination { get; set; }
         public TestResult? Onpg { get; set; }
         public TestResult? GammaGt { get; set;  }
-        public MeningoSerogroupPcr? SerogroupPcr { get; set; }
+        public List<MeningoSerogroupPcr> SerogroupPcr { get; set; }
         public UnspecificTestResult? MaldiTof { get; set; }
         public NativeMaterialTestResult? PorAPcr { get; set; }
         public NativeMaterialTestResult? FetAPcr { get; set; }

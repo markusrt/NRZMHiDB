@@ -135,7 +135,7 @@ namespace HaemophilusWeb.Domain
                 && (rule.Agglutination == null || rule.Agglutination.Contains(isolate.Agglutination))
                 && (!rule.Onpg.HasValue || rule.Onpg == isolate.Onpg)
                 && (!rule.GammaGt.HasValue || rule.GammaGt == isolate.GammaGt)
-                && (!rule.SerogroupPcr.HasValue || rule.SerogroupPcr == isolate.SerogroupPcr)
+                && (rule.SerogroupPcr == null || rule.SerogroupPcr.Contains(isolate.SerogroupPcr))
                 && (!rule.MaldiTof.HasValue || rule.MaldiTof == isolate.MaldiTof)
                 && (!rule.PorAPcr.HasValue || rule.PorAPcr == isolate.PorAPcr)
                 && (!rule.FetAPcr.HasValue || rule.FetAPcr == isolate.FetAPcr);
