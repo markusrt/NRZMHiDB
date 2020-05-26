@@ -33,8 +33,8 @@ namespace HaemophilusWeb.Tools
             AddField(s => s.SenderId, "einsender");
             AddField(s => ExportToString(s.Patient.County), "landkreis");
             AddField(s => ExportToString(s.Patient.State), "bundeslandName");
-            AddEpsilometerTestFields(this, Antibiotic.Ampicillin, "ampicillinMHK", "ampicillinBewertung");
-            AddEpsilometerTestFields(this, Antibiotic.AmoxicillinClavulanate, "amoxicillinClavulansaeureMHK", "bewertungAmoxicillinClavulansaeure");
+            AddEpsilometerTestFields(this, Antibiotic.Ampicillin, false, "ampicillinMHK", "ampicillinBewertung");
+            AddEpsilometerTestFields(this, Antibiotic.AmoxicillinClavulanate, false, "amoxicillinClavulansaeureMHK", "bewertungAmoxicillinClavulansaeure");
 
         }
 

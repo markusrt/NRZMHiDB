@@ -127,6 +127,9 @@
     <Reference Include="NLog.Extended, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.Extended.4.0.0.1\lib\net45-full\NLog.Extended.dll</HintPath>
     </Reference>
+    <Reference Include="NodaTime, Version=3.0.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
+      <HintPath>..\packages\NodaTime.3.0.0\lib\netstandard2.0\NodaTime.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text, Version=4.5.14.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.4.5.14\lib\net45\ServiceStack.Text.dll</HintPath>
     </Reference>
@@ -138,6 +141,9 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.1\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Transactions" />
@@ -263,6 +269,7 @@
     <Compile Include="Services\PubMlstService.cs" />
     <Compile Include="Tools\HaemophilusSendingRkiExport.cs" />
     <Compile Include="Tools\HaemophilusSendingLaboratoryExport.cs" />
+    <Compile Include="Tools\MeningoSendingIrisExport.cs" />
     <Compile Include="Tools\SendingExportDefinition.cs" />
     <Compile Include="Tools\MeningoSendingLaboratoryExport.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
@@ -1134,6 +1141,7 @@
     <Content Include="Scripts\site.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
+    <Content Include="Views\MeningoPatientSending\IrisExport.cshtml" />
     <None Include="Web.template.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>

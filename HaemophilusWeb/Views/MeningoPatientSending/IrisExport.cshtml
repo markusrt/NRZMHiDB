@@ -1,0 +1,27 @@
+﻿@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.FromToQuery
+
+@{
+    ViewBag.Title = "IRIS Export";
+}
+
+<h3>Entnahmedatum</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        @Html.DateEditorFor(m => m.From)
+        @Html.DateEditorFor(m => m.To)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" name="primary-submit" value="Exportieren nach Excel" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Web.Mvc;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Tools;
@@ -25,6 +26,25 @@ namespace HaemophilusWeb.Controllers
         public MeningoPatientSendingController(IApplicationDbContext applicationDbContext, MeningoPatientController patientController,
             MeningoSendingController sendingController) : base(applicationDbContext, patientController, sendingController)
         {
+        }
+
+
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult IrisExport(FromToQuery query)
+        {
+            if (query.From == DateTime.MinValue)
+            {
+                var lastYear = DateTime.Now.Year - 1;
+                var exportQuery = new FromToQuery
+                {
+                    From = new DateTime(lastYear, 1, 1),
+                    To = new DateTime(lastYear, 12, 31)
+                };
+                return View(exportQuery);
+            }
+
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Iris).ToList();
+            return ExportToExcel(query, sendings, new MeningoSendingIrisExport(), "Iris");
         }
 
 
@@ -62,16 +82,21 @@ namespace HaemophilusWeb.Controllers
             {
                 throw new NotImplementedException("RKI export is not finished for Meningococci");
             }
-            return NotDeletedSendings()
+            var queryResult = NotDeletedSendings()
                 .Include(s => s.Patient)
                 .Include(s => s.Isolate)
                 .Include(s => s.Isolate.NeisseriaPubMlstIsolate)
                 .Where
                 (s => (s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
                       || (s.SamplingDate >= query.From && s.SamplingDate <= query.To)
-                )
-                .OrderBy(s => s.Isolate.StemNumber)
-                .ToList();
+                ).OrderBy(s => s.Isolate.StemNumber).ToList();
+
+            if (exportType == ExportType.Iris)
+            {
+                queryResult = queryResult.Where(s => s.Invasive == YesNo.Yes).ToList();
+            }
+
+            return queryResult;
         }
 
         protected override ExportDefinition<MeningoSending> CreateRkiExportDefinition()
