@@ -22,7 +22,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2020, 05, 13), "Zusätzliche Felder \"BexseroReactivity\" und \"TrumenbaReactivity\" bei PubMLST Matching", ChangeType.Feature),
+                new Change(new DateTime(2020, 05, 26), "IRIS Export", ChangeType.Feature),
+                new Change(new DateTime(2020, 05, 25), "Zusätzliches Export Feld „NHS-Real-Time-PCR Auswertung“", ChangeType.Feature),
+                new Change(new DateTime(2020, 05, 24), "Interpretation Stämme, Regeln 15 bis 33 plus Zeilenumbrüche im Befund", ChangeType.Feature),
                 new Change(new DateTime(2020, 05, 10), "Beheben des \"Ubekannt\" Fehlers bei Postleitzahlen mit mehreren Orten", ChangeType.Bug),
                 new Change(new DateTime(2020, 05, 6, 23, 30, 0), "Keine Stammnummer für isolierte DNA", ChangeType.Bug),
                 new Change(new DateTime(2020, 05, 6, 8, 0, 0), "Labor Export (Menigokokken)", ChangeType.Feature),
