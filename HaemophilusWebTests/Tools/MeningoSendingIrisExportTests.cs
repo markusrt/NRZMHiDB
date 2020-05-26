@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -50,6 +51,22 @@ namespace HaemophilusWeb.Tools
 
             export.Rows[0]["Eingangsdatum"].ToString().Should().Match("??.??.????");
             export.Rows[0]["Entnahmedatum"].ToString().Should().Match("??.??.????");
+        }
+
+        [TestCase(8, 0, 8)]
+        [TestCase(25, 2, null)]
+        public void DataTable_PatientAgeIsCalculated(int monthOld, int expectedYearsOld, object expectedMonthsOld)
+        {
+            expectedMonthsOld ??= DBNull.Value;
+            var sut = CreateExportDefinition();
+            var now = DateTime.Now;
+            Sending.Isolate.Sending.SamplingDate = now;
+            Sending.Isolate.Sending.Patient.BirthDate = now.AddMonths(-monthOld);
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Patientenalter bei Entnahme"].Should().Be(expectedYearsOld);
+            export.Rows[0]["Patientenalter bei Entnahme (Monate)"].Should().Be(expectedMonthsOld);
         }
 
         [Test]

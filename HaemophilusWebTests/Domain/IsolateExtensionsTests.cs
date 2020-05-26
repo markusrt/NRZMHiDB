@@ -11,7 +11,8 @@ namespace HaemophilusWeb.Domain
         [TestCase("2010-04-22", "2010-04-22", null, 0, Description = "Sampled newborn has age of 0")]
         [TestCase("2010-04-22", "2013-04-22", null, 3, Description = "Sampled at third birthday")]
         [TestCase("2010-04-22", "2013-04-21", null, 2, Description = "Sampled one day before third birthday")]
-        [TestCase("2020-02-29", "2022-02-28", null, 1, Description = "Born in leap year and sampled one day before second birthday")]
+        [TestCase("2020-02-29", "2022-02-28", null, 2, Description = "Born in leap year and sampled one day 'before' second birthday")]
+        [TestCase("2020-02-29", "2022-02-27", null, 1, Description = "Born in leap year and sampled one days before second birthday")]
         [TestCase("2007-12-13", null, "2019-01-12", 11, Description = "Sample date is empty but receiving date not")]
         [TestCase("2007-12-13", null, "2019-12-12", 11, Description = "Sample date is empty and receiving date is before birthday")]
         [TestCase("2007-12-13", null, "2019-12-13", 12, Description = "Sample date is empty and receiving date is at birthday")]
@@ -33,6 +34,30 @@ namespace HaemophilusWeb.Domain
 
 
             isolate.PatientAgeAtSampling().Should().Be(expectedAge);
+        }
+
+        [TestCase("2010-04-22", "2010-06-23", null, 2, Description = "Sampled newborn has age of 2 month")]
+        [TestCase("2010-04-22", "2013-04-22", null, 36, Description = "Three year old no month returned")]
+        [TestCase("2020-02-29", "2021-02-28", null, 12, Description = "Born in leap year and sampled one day 'before' first birthday")]
+        [TestCase("2020-02-29", "2021-02-27", null, 11, Description = "Born in leap year and sampled two days before first birthday")]
+        public void PatientMonthAgeAtSampling_ReturnsMonth(string birthDate, string samplingDate, string receivingDate, int? expectedAgeInMonth )
+        {
+            var isolate = new Isolate
+            {
+                Sending = new Sending
+                {
+                    Patient = new Patient
+                    {
+                        BirthDate = DateTime.Parse(birthDate)
+                    },
+                    SamplingDate = null,
+                }
+            };
+            if (!samplingDate.IsEmpty()) isolate.Sending.SamplingDate = DateTime.Parse(samplingDate);
+            if (!receivingDate.IsEmpty()) isolate.Sending.ReceivingDate = DateTime.Parse(receivingDate);
+
+
+            isolate.PatientMonthAgeAtSampling().Should().Be(expectedAgeInMonth);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Invasive));
             
             AddField(s => s.Isolate.PatientAgeAtSampling(), "Patientenalter bei Entnahme");
-            AddField(s => s.Isolate.PatientAgeAtSampling(), "Patientenalter bei Entnahme (Monate)");
+            AddField(s => GetMonthAge(s), "Patientenalter bei Entnahme (Monate)");
             
             AddField(s => ExportToString(s.Patient.Gender));
             AddField(s => ExportClinicalInformation(s.Patient.ClinicalInformation, () => s.Patient.OtherClinicalInformation, _ => _.HasFlag(MeningoClinicalInformation.Other)));
@@ -44,6 +44,12 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.CscPcr));
             AddField(s => ExportToString(s.Isolate.CswyPcr));
             AddField(s => ExportToString(s.Isolate.CswyAllele));
+        }
+
+        private int? GetMonthAge(MeningoSending sending)
+        {
+            var monthAge = sending.Isolate.PatientMonthAgeAtSampling();
+            return monthAge >=12 ? (int?) null : monthAge;
         }
 
         private static string ExportSamplingLocation(MeningoSamplingLocation samplingLocation, MeningoSending sending)
