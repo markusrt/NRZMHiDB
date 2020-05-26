@@ -18,7 +18,8 @@ namespace HaemophilusWeb.Controllers
     public enum ExportType
     {
         Laboratory,
-        Rki
+        Rki,
+        Iris
     }
 
     public class PatientSendingController : PatientSendingControllerBase<PatientSendingViewModel<Patient, Sending>, Patient, Sending>
