@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using HaemophilusWeb.Models;
 using NUnit.Framework;
 
@@ -41,5 +42,24 @@ namespace HaemophilusWeb.Utils
         {
             input.ToStemNumberWithPrefix(databaseType).Should().Be(expected);
         }
+
+        [Test]
+        public void ToReportFormat_NullDate_ReturnsNonEmptyString()
+        {
+            DateTime? date = null;
+
+            date.ToReportFormat().Should().NotBeEmpty();
+            date.ToReportFormatPubMlst().Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void ToReportFormat_NonNullDate_ReturnsFormattedString()
+        {
+            DateTime date = new DateTime(2010, 10, 21);
+
+            date.ToReportFormat().Should().Be("21.10.2010");
+            date.ToReportFormatPubMlst().Should().Be("2010-10-21");
+        }
+
     }
 }

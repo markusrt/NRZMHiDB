@@ -22,6 +22,20 @@ namespace HaemophilusWeb.Utils
             return dateTime.ToString("dd.MM.yyyy");
         }
 
+        public static string ToReportFormatPubMlst(this DateTime? dateTime)
+        {
+            if (!dateTime.HasValue)
+            {
+                return "n.a.";
+            }
+            return dateTime.Value.ToReportFormatPubMlst();
+        }
+
+        public static string ToReportFormatPubMlst(this DateTime dateTime)
+        {
+            return dateTime.ToString("yyyy-MM-dd");
+        }
+
         public static string ToReportFormat(this PatientBase patient)
         {
             return $"{patient.Initials} / {patient.PostalCode}";
