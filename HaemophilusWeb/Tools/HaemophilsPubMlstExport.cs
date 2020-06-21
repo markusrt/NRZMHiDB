@@ -33,7 +33,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => s.Isolate.PatientAgeAtSampling(), "age_yr");
             AddField(s => GetMonthAge(s), "age_mth");
 
-            AddField(s => ExportSex(s.Patient.Gender), "sex"); //TODO check question on #45
+            AddField(s => ExportSex(s.Patient.Gender), "sex");
             AddNullColumn("source"); //TODO
 
             AddNullColumn("disease");
