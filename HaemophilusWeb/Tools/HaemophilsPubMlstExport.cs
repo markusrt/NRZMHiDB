@@ -41,7 +41,7 @@ namespace HaemophilusWeb.Tools
             AddNullColumn("MLEE_lineage");
             AddNullColumn("MLEE_ET");
 
-            AddNullColumn("beta_lactamase"); //TODO
+            AddField(s => ExportBetaLactamase(s.Isolate.BetaLactamase, s), "beta_lactamase");
 
             AddNullColumn("AMX_MIC"); //TODO check question on #45
             AddNullColumn("AMX_SIR"); //TODO
@@ -64,6 +64,7 @@ namespace HaemophilusWeb.Tools
 
             AddNullColumn("ftsI"); //TODO
         }
+
 
         private static Dictionary<Evaluation, string> _evaluationToString = new Dictionary<Evaluation, string>()
         {
@@ -130,26 +131,33 @@ namespace HaemophilusWeb.Tools
 
         private string ExportSex(Gender? gender)
         {
-            switch (gender)
+            return gender switch
             {
-                case Gender.Female:
-                    return "f";
-                case Gender.Male:
-                    return "m";
-                default:
-                    return string.Empty;
-            }
+                Gender.Female => "f",
+                Gender.Male => "m",
+                _ => string.Empty
+            };
         }
 
         private static string ExportSamplingLocation(SamplingLocation location, Sending sending)
         {
-            switch (location)
+            return location switch
             {
-                case SamplingLocation.Blood: return "blood";
-                case SamplingLocation.Liquor: return "CSF";
-                case SamplingLocation.Other: return sending.OtherSamplingLocation;
-                default: return "other";
-            }
+                SamplingLocation.Blood => "blood",
+                SamplingLocation.Liquor => "CSF",
+                SamplingLocation.Other => sending.OtherSamplingLocation,
+                _ => "other"
+            };
+        }
+        
+        private string ExportBetaLactamase(TestResult betalactamase, Sending sending)
+        {
+            return betalactamase switch
+            {
+                TestResult.Positive => "positive",
+                TestResult.Negative => "negative",
+                _ => string.Empty
+            };
         }
 
         private int? GetMonthAge(Sending sending)

@@ -186,6 +186,20 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["source"].Should().Be(expectedValue);
         }
 
+        [TestCase(TestResult.Positive, "positive")]
+        [TestCase(TestResult.Negative, "negative")]
+        [TestCase(TestResult.NotDetermined, "")]
+        [TestCase((TestResult)23456, "")]
+        public void DataTable_ContainsBetaLactamase(TestResult betaLactamase, string expectedValue)
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.BetaLactamase = betaLactamase;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["beta_lactamase"].Should().Be(expectedValue);
+        }
+
 
         [Test]
         public void DataTable_ContainsOtherInvasiveSamplingLocation()
