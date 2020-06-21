@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -47,8 +48,8 @@ namespace HaemophilusWeb.Tools
             AddNullColumn("AMX_SIR"); //TODO
             AddNullColumn("AMC_MIC"); //TODO check question on #45
             AddNullColumn("AMC_SIR"); //TODO
-            AddNullColumn("CTX_MIC"); //TODO
-            AddNullColumn("CTX_SIR"); //TODO
+            AddField(s => FindEpsilometerTestMeasurement(s, Antibiotic.Cefotaxime), "CTX_MIC");
+            AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.Cefotaxime)), "CTX_SIR");
 
             AddNullColumn("CRO_MIC");
             AddNullColumn("CRO_SIR");
@@ -63,6 +64,13 @@ namespace HaemophilusWeb.Tools
             AddNullColumn("recA");
 
             AddNullColumn("ftsI"); //TODO
+        }
+
+        private string ExportEpsilometerTestResult(EpsilometerTestResult? testResult)
+        {
+            return testResult.HasValue
+                ? Enum.GetName(typeof(EpsilometerTestResult), testResult.Value)?.Substring(0, 1)
+                : null;
         }
 
 
@@ -149,7 +157,7 @@ namespace HaemophilusWeb.Tools
                 _ => "other"
             };
         }
-        
+
         private string ExportBetaLactamase(TestResult betalactamase, Sending sending)
         {
             return betalactamase switch

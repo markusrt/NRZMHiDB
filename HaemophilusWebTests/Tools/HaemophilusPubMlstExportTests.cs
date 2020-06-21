@@ -225,6 +225,24 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["region"].Should().Be("Bayern");
         }
 
+        [TestCase("CTX", Antibiotic.Cefotaxime, EpsilometerTestResult.Susceptible, 1.234f, "S", 1.234d)]
+        [TestCase("CTX", Antibiotic.Cefotaxime, EpsilometerTestResult.Intermediate, 1f, "I", 1d)]
+        public void DataTable_ContainsAntibioticMeasurements(string prefix, Antibiotic antibiotic, EpsilometerTestResult testResult, float measurement, string expectedTestResult, double expectedMeasurement)
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.EpsilometerTests.Add(new EpsilometerTest
+            {
+                Result = testResult,
+                Measurement = measurement,
+                EucastClinicalBreakpoint = new EucastClinicalBreakpoint {Antibiotic = antibiotic}
+            });
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0][$"{prefix}_SIR"].Should().Be(expectedTestResult);
+            export.Rows[0][$"{prefix}_MIC"].Should().Be(expectedMeasurement);
+        }
+
         [TestCase(Gender.Female, "f")]
         [TestCase(Gender.Male, "m")]
         [TestCase(Gender.Intersex, "")]
