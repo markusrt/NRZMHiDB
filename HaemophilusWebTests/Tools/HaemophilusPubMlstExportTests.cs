@@ -227,6 +227,8 @@ namespace HaemophilusWeb.Tools
 
         [TestCase("CTX", Antibiotic.Cefotaxime, EpsilometerTestResult.Susceptible, 1.234f, "S", 1.234d)]
         [TestCase("CTX", Antibiotic.Cefotaxime, EpsilometerTestResult.Intermediate, 1f, "I", 1d)]
+        [TestCase("AMC", Antibiotic.AmoxicillinClavulanate, EpsilometerTestResult.Resistant, 0.25f, "R", 0.25d)]
+        [TestCase("AMC", Antibiotic.AmoxicillinClavulanate, EpsilometerTestResult.Intermediate, 1f, "I", 1d)]
         public void DataTable_ContainsAntibioticMeasurements(string prefix, Antibiotic antibiotic, EpsilometerTestResult testResult, float measurement, string expectedTestResult, double expectedMeasurement)
         {
             var sut = CreateExportDefinition();
@@ -241,6 +243,44 @@ namespace HaemophilusWeb.Tools
 
             export.Rows[0][$"{prefix}_SIR"].Should().Be(expectedTestResult);
             export.Rows[0][$"{prefix}_MIC"].Should().Be(expectedMeasurement);
+        }
+
+        [Test]
+        public void DataTable_ContainsNoAntibiotics()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.EpsilometerTests.Add(new EpsilometerTest
+            {
+                Result = EpsilometerTestResult.Resistant,
+                Measurement = 1.23f,
+                EucastClinicalBreakpoint = new EucastClinicalBreakpoint {Antibiotic = Antibiotic.Amikacin}
+            });
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["AMX_SIR"].Should().Be(DBNull.Value);
+            export.Rows[0]["AMX_MIC"].Should().Be(DBNull.Value);
+            export.Rows[0]["AMC_SIR"].Should().Be(DBNull.Value);
+            export.Rows[0]["AMC_MIC"].Should().Be(DBNull.Value);
+            export.Rows[0]["CTX_SIR"].Should().Be(DBNull.Value);
+            export.Rows[0]["CTX_MIC"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
+        public void DataTable_ContainsAmxAntibioticSusceptibilityInferredFromAmpicillin()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.EpsilometerTests.Add(new EpsilometerTest
+            {
+                Result = EpsilometerTestResult.Resistant,
+                Measurement = 1.23f,
+                EucastClinicalBreakpoint = new EucastClinicalBreakpoint {Antibiotic = Antibiotic.Ampicillin}
+            });
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["AMX_SIR"].Should().Be("R");
+            export.Rows[0]["AMX_MIC"].Should().Be(DBNull.Value);
         }
 
         [TestCase(Gender.Female, "f")]

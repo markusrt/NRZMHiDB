@@ -44,10 +44,10 @@ namespace HaemophilusWeb.Tools
 
             AddField(s => ExportBetaLactamase(s.Isolate.BetaLactamase, s), "beta_lactamase");
 
-            AddNullColumn("AMX_MIC"); //TODO check question on #45
-            AddNullColumn("AMX_SIR"); //TODO
-            AddNullColumn("AMC_MIC"); //TODO check question on #45
-            AddNullColumn("AMC_SIR"); //TODO
+            AddNullColumn("AMX_MIC");
+            AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.Ampicillin)), "AMX_SIR");
+            AddField(s => FindEpsilometerTestMeasurement(s, Antibiotic.AmoxicillinClavulanate), "AMC_MIC");
+            AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.AmoxicillinClavulanate)), "AMC_SIR");
             AddField(s => FindEpsilometerTestMeasurement(s, Antibiotic.Cefotaxime), "CTX_MIC");
             AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.Cefotaxime)), "CTX_SIR");
 
