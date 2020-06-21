@@ -131,6 +131,48 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["country"].Should().Be("Germany");
         }
 
+        [TestCase(Evaluation.HaemophilusTypeA, "a")]
+        [TestCase(Evaluation.HaemophilusTypeF, "f")]
+        [TestCase(Evaluation.NoHaemophilusSpecies, "ND")]
+        [TestCase(Evaluation.HaemophilusNonEncapsulated, "NT")]
+        public void DataTable_ContainsEvaluationProperties(Evaluation evaluation, string expectedValue)
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.Evaluation = evaluation;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["serotype"].Should().Be(expectedValue);
+        }
+
+        [TestCase(SerotypeAgg.A, "a")]
+        [TestCase(SerotypeAgg.F, "f")]
+        [TestCase(SerotypeAgg.NotDetermined, "")]
+        [TestCase(SerotypeAgg.Negative, "NT")]
+        public void DataTable_ContainsAgglutinationProperties(SerotypeAgg agglutination, string expectedValue)
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.Agglutination = agglutination;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["serotype_by_serology"].Should().Be(expectedValue);
+        }
+
+        [TestCase(SerotypePcr.A, "a")]
+        [TestCase(SerotypePcr.D, "d")]
+        [TestCase(SerotypePcr.NotDetermined, "")]
+        [TestCase(SerotypePcr.Negative, "NT")]
+        public void DataTable_ContainsSerotypePcrProperties(SerotypePcr serotypePcr, string expectedValue)
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.SerotypePcr = serotypePcr;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["serotype_by_PCR"].Should().Be(expectedValue);
+        }
+
         [Test]
         public void DataTable_ContainsEnumStringProperties()
         {
