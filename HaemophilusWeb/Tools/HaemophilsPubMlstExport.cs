@@ -34,7 +34,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => GetMonthAge(s), "age_mth");
 
             AddField(s => ExportSex(s.Patient.Gender), "sex");
-            AddNullColumn("source"); //TODO
+            AddField(s => ExportSamplingLocation(s.SamplingLocation, s), "source");
 
             AddNullColumn("disease");
             AddNullColumn("epidemiology");
@@ -138,6 +138,17 @@ namespace HaemophilusWeb.Tools
                     return "m";
                 default:
                     return string.Empty;
+            }
+        }
+
+        private static string ExportSamplingLocation(SamplingLocation location, Sending sending)
+        {
+            switch (location)
+            {
+                case SamplingLocation.Blood: return "blood";
+                case SamplingLocation.Liquor: return "CSF";
+                case SamplingLocation.Other: return sending.OtherSamplingLocation;
+                default: return "other";
             }
         }
 

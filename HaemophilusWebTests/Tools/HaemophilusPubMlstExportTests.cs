@@ -173,6 +173,32 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["serotype_by_PCR"].Should().Be(expectedValue);
         }
 
+        [TestCase(SamplingLocation.Blood, "blood")]
+        [TestCase(SamplingLocation.Liquor, "CSF")]
+        [TestCase((SamplingLocation)23456, "other")]
+        public void DataTable_ContainsSamplingLocation(SamplingLocation location, string expectedValue)
+        {
+            var sut = CreateExportDefinition();
+            Sending.SamplingLocation = location;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["source"].Should().Be(expectedValue);
+        }
+
+
+        [Test]
+        public void DataTable_ContainsOtherInvasiveSamplingLocation()
+        {
+            var sut = CreateExportDefinition();
+            Sending.SamplingLocation = SamplingLocation.Other;
+            Sending.OtherSamplingLocation = "Anderer Entnahmeort";
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["source"].Should().Be("Anderer Entnahmeort");
+        }
+
         [Test]
         public void DataTable_ContainsEnumStringProperties()
         {
