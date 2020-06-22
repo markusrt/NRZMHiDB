@@ -131,9 +131,21 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["country"].Should().Be("Germany");
         }
 
+        [Test]
+        public void DataTable_ContainsFtsi()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.FtsiEvaluation1 = "123";
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["ftsI"].Should().Be("123");
+        }
+
         [TestCase(Evaluation.HaemophilusTypeA, "a")]
         [TestCase(Evaluation.HaemophilusTypeF, "f")]
-        [TestCase(Evaluation.NoHaemophilusSpecies, "ND")]
+        [TestCase(Evaluation.HaemophilusInfluenzae, "ND")]
+        [TestCase(Evaluation.NoHaemophilusSpecies, "No Haemophilus Species")]
         [TestCase(Evaluation.HaemophilusNonEncapsulated, "NT")]
         public void DataTable_ContainsEvaluationProperties(Evaluation evaluation, string expectedValue)
         {
@@ -148,6 +160,9 @@ namespace HaemophilusWeb.Tools
         [TestCase(SerotypeAgg.A, "a")]
         [TestCase(SerotypeAgg.F, "f")]
         [TestCase(SerotypeAgg.NotDetermined, "")]
+        [TestCase(SerotypeAgg.NotEvaluable, "")]
+        [TestCase(SerotypeAgg.Poly, "NT")]
+        [TestCase(SerotypeAgg.Auto, "NT")]
         [TestCase(SerotypeAgg.Negative, "NT")]
         public void DataTable_ContainsAgglutinationProperties(SerotypeAgg agglutination, string expectedValue)
         {

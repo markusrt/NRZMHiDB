@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
-using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 
 namespace HaemophilusWeb.Tools
@@ -63,7 +61,7 @@ namespace HaemophilusWeb.Tools
             AddNullColumn("pgi");
             AddNullColumn("recA");
 
-            AddNullColumn("ftsI"); //TODO
+            AddField(s => s.Isolate.FtsiEvaluation1, "ftsI");
         }
 
         private string ExportEpsilometerTestResult(EpsilometerTestResult? testResult)
@@ -83,14 +81,15 @@ namespace HaemophilusWeb.Tools
             {Evaluation.HaemophilusTypeD, "d"},
             {Evaluation.HaemophilusTypeE, "e"},
             {Evaluation.HaemophilusTypeF, "f"},
-            // TODO check question on #45
-            {Evaluation.HaemophilusHemolyticus, "ND"},
-            {Evaluation.HaemophilusParainfluenzae, "ND"},
-            {Evaluation.NoGrowth, "ND"},
-            {Evaluation.NoHaemophilusSpecies, "ND"},
             {Evaluation.HaemophilusInfluenzae, "ND"},
-            {Evaluation.HaemophilusSpeciesNoHaemophilusInfluenzae, "ND"},
-            {Evaluation.NoHaemophilusInfluenzae, "ND"}
+            // these are actually not to be exported but in case it happens
+            // the evaluation should at least be visible
+            {Evaluation.HaemophilusHemolyticus, "Haemophilus Hemolyticus"},
+            {Evaluation.HaemophilusParainfluenzae, "Haemophilus Parainfluenzae"},
+            {Evaluation.NoGrowth, "No Growth"},
+            {Evaluation.NoHaemophilusSpecies, "No Haemophilus Species"},
+            {Evaluation.HaemophilusSpeciesNoHaemophilusInfluenzae, "Haemophilus Species but no Haemophilus Influenzae"},
+            {Evaluation.NoHaemophilusInfluenzae, "No Haemophilus Influenzae"}
         };
 
         private string ExportEvaluation(Evaluation evaluation)
@@ -107,11 +106,10 @@ namespace HaemophilusWeb.Tools
             {SerotypeAgg.D, "d"},
             {SerotypeAgg.E, "e"},
             {SerotypeAgg.F, "f"},
-            //TODO check question on #45
             {SerotypeAgg.Negative, "NT"},
             {SerotypeAgg.Auto, "NT"},
             {SerotypeAgg.Poly, "NT"},
-            {SerotypeAgg.NotEvaluable, "NT"}
+            {SerotypeAgg.NotEvaluable, ""}
         };
 
         private string ExportAgglutination(SerotypeAgg agglutination)
@@ -128,7 +126,6 @@ namespace HaemophilusWeb.Tools
             {SerotypePcr.D, "d"},
             {SerotypePcr.E, "e"},
             {SerotypePcr.F, "f"},
-            //TODO check question on #45
             {SerotypePcr.Negative, "NT"},
         };
 
