@@ -38,6 +38,25 @@ namespace HaemophilusWeb.Controllers
         {
         }
 
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult PubMlstExport(FromToQuery query)
+        {
+            if (query.From == DateTime.MinValue)
+            {
+                var lastYear = DateTime.Now.Year - 1;
+                var exportQuery = new FromToQuery
+                {
+                    From = new DateTime(lastYear, 1, 1),
+                    To = new DateTime(lastYear, 12, 31)
+                };
+                return View(exportQuery);
+            }
+
+            //TODO clarify and merge method with Iris-Export should actually be the same
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Iris).ToList();
+
+            return ExportToExcel(query, sendings, new HaemophilusPubMlstExport(), "PubMLST");
+        }
 
         protected override IDbSet<Sending> SendingDbSet()
         {
@@ -60,19 +79,23 @@ namespace HaemophilusWeb.Controllers
 
         protected override IEnumerable<Sending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
-            var samplingLocations = exportType == ExportType.Rki
+            var samplingLocations = exportType == ExportType.Rki || exportType == ExportType.Iris
                 ? new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor }
                 : new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor, SamplingLocation.Other };
 
-            return NotDeletedSendings()
+            var filteredSendings = NotDeletedSendings()
                 .Include(s => s.Patient)
                 .Where
                 (s => samplingLocations.Contains(s.SamplingLocation)
                       && ((s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
                           || (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
-                )
-                .OrderBy(s => s.Isolate.StemNumber)
-                .ToList();
+                );
+            if (exportType == ExportType.Iris)
+            {
+                var overseas = EnumEditor.GetEnumDescription(State.Overseas);
+                filteredSendings = filteredSendings.Where(s => !s.Patient.County.Equals(overseas));
+            }
+            return filteredSendings.OrderBy(s => s.Isolate.StemNumber).ToList();
         }
 
         protected override ExportDefinition<Sending> CreateRkiExportDefinition()
@@ -258,8 +281,6 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(patientSending);
         }
 
-
-
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -270,8 +291,6 @@ namespace HaemophilusWeb.Controllers
             sending.Deleted = true;
             return EditUnvalidated(sending);
         }
-
-
 
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Undelete(int? id)
@@ -383,7 +402,6 @@ namespace HaemophilusWeb.Controllers
         {
             return View(NotDeletedSendings().Take(0).Select(CreatePatientSending).ToList());
         }
-
 
 
         [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
