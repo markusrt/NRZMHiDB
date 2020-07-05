@@ -148,7 +148,7 @@ namespace HaemophilusWeb.Controllers
             var tempExcel = new FileInfo(Path.Combine(TemporaryDirectoryToStoreTestData, "PubMLSTExport.xlsx"));
             var controller = CreateController();
 
-            var result = controller.PubMlstExport(new FromToQuery {From = DateTime.Now.AddYears(-100), To = DateTime.Now});
+            var result = controller.PubMlstExport(new PubMlstQuery {From = DateTime.Now.AddYears(-100), To = DateTime.Now});
 
             var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
             fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);

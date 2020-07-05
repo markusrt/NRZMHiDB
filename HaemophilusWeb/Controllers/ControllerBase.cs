@@ -16,7 +16,7 @@ namespace HaemophilusWeb.Controllers
             CreateExcelFile.CreateExcelDocument(list, exportDefinition, tempFile);
             return File(System.IO.File.ReadAllBytes(tempFile),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                String.Format("{0}-Export_{1:yyyyMMdd}-{2:yyyyMMdd}.xlsx", prefix, query.From, query.To));
+                $"{prefix}-Export_{query.From:yyyyMMdd}-{query.To:yyyyMMdd}.xlsx");
         }
     }
 }

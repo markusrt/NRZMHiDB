@@ -1,5 +1,5 @@
 ﻿@using HaemophilusWeb.Views.Utils
-@model HaemophilusWeb.ViewModels.FromToQuery
+@model HaemophilusWeb.ViewModels.PubMlstQuery
 
 @{
     ViewBag.Title = "Export der PubMLST Daten (Haemophilus)";
@@ -11,18 +11,26 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true)
+<div class="form-horizontal">
+    @Html.ValidationSummary(true)
 
+
+
+
+    <div class="form-group">
         @Html.DateEditorFor(m => m.From)
         @Html.DateEditorFor(m => m.To)
-        
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" name="primary-submit" value="Exportieren nach Excel" class="btn btn-primary" />
-                <b>Bereinigte Daten aus Deutschland, nur Blut oder Liquor, kein Duplikate</b>
-            </div>
+    </div>
+    <div class="form-group">
+        @Html.EnumRadioEditorFor(m => m.Unadjusted)
+        <small class="form-text text-muted col-sm-offset-2">Unbreinigt: Auch Daten aus dem Ausland, alle Entnahmeorte, doppelte Einsendungen enthalten.</small>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" name="primary-submit" value="Exportieren nach Excel" class="btn btn-primary" />
+
         </div>
     </div>
+</div>
 }
 

@@ -39,12 +39,12 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult PubMlstExport(FromToQuery query)
+        public ActionResult PubMlstExport(PubMlstQuery query)
         {
             if (query.From == DateTime.MinValue)
             {
                 var lastYear = DateTime.Now.Year - 1;
-                var exportQuery = new FromToQuery
+                var exportQuery = new PubMlstQuery
                 {
                     From = new DateTime(lastYear, 1, 1),
                     To = new DateTime(lastYear, 12, 31)
@@ -54,6 +54,11 @@ namespace HaemophilusWeb.Controllers
 
             //TODO clarify and merge method with Iris-Export should actually be the same
             var sendings = SendingsMatchingExportQuery(query, ExportType.Iris).ToList();
+
+            if (query.Unadjusted == YesNo.No)
+            {
+                sendings.RemoveAll(s => s.SamplingLocation != SamplingLocation.Other);
+            }
 
             return ExportToExcel(query, sendings, new HaemophilusPubMlstExport(), "PubMLST");
         }
@@ -94,6 +99,16 @@ namespace HaemophilusWeb.Controllers
             {
                 var overseas = EnumEditor.GetEnumDescription(State.Overseas);
                 filteredSendings = filteredSendings.Where(s => !s.Patient.County.Equals(overseas));
+
+                var nonHaemophilus = new List<Evaluation>
+                {
+                    Evaluation.HaemophilusParainfluenzae,
+                    Evaluation.NoGrowth,
+                    Evaluation.NoHaemophilusSpecies,
+                    Evaluation.HaemophilusSpeciesNoHaemophilusInfluenzae,
+                    Evaluation.NoHaemophilusInfluenzae
+                };
+                filteredSendings = filteredSendings.Where(s => !nonHaemophilus.Contains(s.Isolate.Evaluation));
             }
             return filteredSendings.OrderBy(s => s.Isolate.StemNumber).ToList();
         }

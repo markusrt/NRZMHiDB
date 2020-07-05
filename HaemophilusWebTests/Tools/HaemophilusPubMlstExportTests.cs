@@ -36,38 +36,38 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(42);
+            export.Columns.Count.Should().Be(45);
         }
 
-        [TestCase(1, "aliases")]
-        [TestCase(2, "references")]
-        [TestCase(8, "non_culture")]
-        [TestCase(12, "genotype")]
-        [TestCase(13, "biotype")]
-        [TestCase(14, "ribotype")]
-        [TestCase(19, "disease")]
-        [TestCase(20, "epidemiology")]
-        [TestCase(21, "MLEE_lineage")]
-        [TestCase(22, "MLEE_ET")]
-        [TestCase(24, "AMX_MIC")]
-        [TestCase(30, "CRO_MIC")]
-        [TestCase(31, "CRO_SIR")]
-        [TestCase(32, "ENA_accession")]
-        [TestCase(33, "comments")]
-        [TestCase(34, "adk")]
-        [TestCase(35, "atpG")]
-        [TestCase(36, "frdB")]
-        [TestCase(37, "fucK")]
-        [TestCase(38, "mdh")]
-        [TestCase(39, "pgi")]
-        [TestCase(40, "recA")]
-        public void DataTable_ContainsEmptyColumnsAtIndex(int index, string caption)
+        [TestCase("aliases")]
+        [TestCase("references")]
+        [TestCase("non_culture")]
+        [TestCase("genotype")]
+        [TestCase("biotype")]
+        [TestCase("ribotype")]
+        [TestCase("disease")]
+        [TestCase("epidemiology")]
+        [TestCase("MLEE_lineage")]
+        [TestCase("MLEE_ET")]
+        [TestCase("AMX_MIC")]
+        [TestCase("CRO_MIC")]
+        [TestCase("CRO_SIR")]
+        [TestCase("ENA_accession")]
+        [TestCase("comments")]
+        [TestCase("adk")]
+        [TestCase("atpG")]
+        [TestCase("frdB")]
+        [TestCase("fucK")]
+        [TestCase("mdh")]
+        [TestCase("pgi")]
+        [TestCase("recA")]
+        public void DataTable_ContainsEmptyColumnsAtIndex(string caption)
         {
             var sut = CreateExportDefinition();
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns[index].Caption.Should().Be(caption);
+            export.Columns[caption].Caption.Should().Be(caption);
             export.Rows[0][caption].Should().Be(DBNull.Value);
         }
 

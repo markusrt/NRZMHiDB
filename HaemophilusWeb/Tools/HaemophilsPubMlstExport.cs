@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
+using static HaemophilusWeb.Tools.PubMlstColumns;
 
 namespace HaemophilusWeb.Tools
 {
@@ -11,43 +12,46 @@ namespace HaemophilusWeb.Tools
         public HaemophilusPubMlstExport()
         {
 
+            AddField(s => s.Patient.Initials, ColInitials);
+            AddField(s => s.Patient.BirthDate, ColDateOfBirth);
+            AddField(s => s.Patient.PostalCode, ColPostalCode);
             AddField(s => s.Isolate.StemNumberWithPrefix, "isolate");
             AddNullColumn("aliases");
             AddNullColumn("references");
-            AddField(s => "Germany", "country");
-            AddField(s => ExportState(s.Patient.State), "region");
+            AddField(s => "Germany", ColCountry);
+            AddField(s => ExportState(s.Patient.State), ColRegion);
 
-            AddField(s => s.SamplingDate.HasValue ? (int?) s.SamplingDate.Value.Year : null, "year");
-            AddField(s => s.ReceivingDate.ToReportFormatPubMlst(), "date_sampled");
-            AddField(s => s.SamplingDate.ToReportFormatPubMlst(), "date_received");
+            AddField(s => s.SamplingDate.HasValue ? (int?) s.SamplingDate.Value.Year : null, ColYear);
+            AddField(s => s.ReceivingDate.ToReportFormatPubMlst(), ColSampleDate);
+            AddField(s => s.SamplingDate.ToReportFormatPubMlst(), ColReceivedDate);
 
             AddNullColumn("non_culture");
-            AddField(s => ExportEvaluation(s.Isolate.Evaluation), "serotype");
-            AddField(s => ExportAgglutination(s.Isolate.Agglutination), "serotype_by_serology");
-            AddField(s => ExportSerotypePcr(s.Isolate.SerotypePcr), "serotype_by_PCR");
+            AddField(s => ExportEvaluation(s.Isolate.Evaluation), ColSerotype);
+            AddField(s => ExportAgglutination(s.Isolate.Agglutination), ColSerotypeBySerology);
+            AddField(s => ExportSerotypePcr(s.Isolate.SerotypePcr), ColSerotypeByPcr);
             AddNullColumn("genotype");
             AddNullColumn("biotype");
             AddNullColumn("ribotype");
 
-            AddField(s => s.Isolate.PatientAgeAtSampling(), "age_yr");
-            AddField(s => GetMonthAge(s), "age_mth");
+            AddField(s => s.Isolate.PatientAgeAtSampling(), ColAgeInYears);
+            AddField(s => GetMonthAge(s), ColAgeInMonths);
 
-            AddField(s => ExportSex(s.Patient.Gender), "sex");
-            AddField(s => ExportSamplingLocation(s.SamplingLocation, s), "source");
+            AddField(s => ExportSex(s.Patient.Gender), ColSex);
+            AddField(s => ExportSamplingLocation(s.SamplingLocation, s), ColSource);
 
             AddNullColumn("disease");
             AddNullColumn("epidemiology");
             AddNullColumn("MLEE_lineage");
             AddNullColumn("MLEE_ET");
 
-            AddField(s => ExportBetaLactamase(s.Isolate.BetaLactamase, s), "beta_lactamase");
+            AddField(s => ExportBetaLactamase(s.Isolate.BetaLactamase, s), ColBetaLactamase);
 
-            AddNullColumn("AMX_MIC");
-            AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.Ampicillin)), "AMX_SIR");
-            AddField(s => FindEpsilometerTestMeasurement(s, Antibiotic.AmoxicillinClavulanate), "AMC_MIC");
-            AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.AmoxicillinClavulanate)), "AMC_SIR");
-            AddField(s => FindEpsilometerTestMeasurement(s, Antibiotic.Cefotaxime), "CTX_MIC");
-            AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.Cefotaxime)), "CTX_SIR");
+            AddNullColumn(ColAmxMic);
+            AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.Ampicillin)), ColAmxSir);
+            AddField(s => FindEpsilometerTestMeasurement(s, Antibiotic.AmoxicillinClavulanate), ColAmcMic);
+            AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.AmoxicillinClavulanate)), ColAmcSir);
+            AddField(s => FindEpsilometerTestMeasurement(s, Antibiotic.Cefotaxime), ColCtxMic);
+            AddField(s => ExportEpsilometerTestResult(FindEpsilometerTestEvaluation(s, Antibiotic.Cefotaxime)), ColCtxSir);
 
             AddNullColumn("CRO_MIC");
             AddNullColumn("CRO_SIR");
@@ -61,10 +65,10 @@ namespace HaemophilusWeb.Tools
             AddNullColumn("pgi");
             AddNullColumn("recA");
 
-            AddField(s => s.Isolate.FtsiEvaluation3, "ftsI");
+            AddField(s => s.Isolate.FtsiEvaluation3, ColFtsI);
         }
 
-        private string ExportState(State state)
+        private static string ExportState(State state)
         {
             return state switch
             {
@@ -153,6 +157,8 @@ namespace HaemophilusWeb.Tools
             {SerotypePcr.F, "f"},
             {SerotypePcr.Negative, "NT"},
         };
+
+        
 
         private string ExportSerotypePcr(SerotypePcr agglutination)
         {
