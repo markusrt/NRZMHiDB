@@ -61,7 +61,7 @@ namespace HaemophilusWeb.Tools
             AddNullColumn("pgi");
             AddNullColumn("recA");
 
-            AddField(s => s.Isolate.FtsiEvaluation1, "ftsI");
+            AddField(s => s.Isolate.FtsiEvaluation3, "ftsI");
         }
 
         private string ExportState(State state)

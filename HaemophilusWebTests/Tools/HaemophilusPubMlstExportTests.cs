@@ -135,11 +135,13 @@ namespace HaemophilusWeb.Tools
         public void DataTable_ContainsFtsi()
         {
             var sut = CreateExportDefinition();
-            Sending.Isolate.FtsiEvaluation1 = "123";
+            Sending.Isolate.FtsiEvaluation1 = "1";
+            Sending.Isolate.FtsiEvaluation2 = "2";
+            Sending.Isolate.FtsiEvaluation3 = "3";
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Rows[0]["ftsI"].Should().Be("123");
+            export.Rows[0]["ftsI"].Should().Be("3");
         }
 
         [TestCase(Evaluation.HaemophilusTypeA, "a")]
