@@ -15,7 +15,7 @@ namespace HaemophilusWeb.Tools
             AddNullColumn("aliases");
             AddNullColumn("references");
             AddField(s => "Germany", "country");
-            AddField(s => ExportToString(s.Patient.State), "region");
+            AddField(s => ExportState(s.Patient.State), "region");
 
             AddField(s => s.SamplingDate.HasValue ? (int?) s.SamplingDate.Value.Year : null, "year");
             AddField(s => s.ReceivingDate.ToReportFormatPubMlst(), "date_sampled");
@@ -62,6 +62,31 @@ namespace HaemophilusWeb.Tools
             AddNullColumn("recA");
 
             AddField(s => s.Isolate.FtsiEvaluation1, "ftsI");
+        }
+
+        private string ExportState(State state)
+        {
+            return state switch
+            {
+                State.SH => "Schleswig-Holstein",
+                State.HH => "Hamburg",
+                State.NI => "Lower Saxony",
+                State.HB => "Bremen",
+                State.NW => "North Rhine-Westphalia",
+                State.HE => "Hesse",
+                State.RP => "Rhineland-Palatinate",
+                State.BW => "Baden-Württemberg",
+                State.BY => "Bavaria",
+                State.SL => "Saarland",
+                State.BE => "Berlin",
+                State.BB => "Brandenburg",
+                State.MV => "Mecklenburg-Vorpommern",
+                State.SN => "Saxony",
+                State.ST => "Saxony-Anhalt",
+                State.TH => "Thuringia",
+                State.Overseas => "blood",
+                _ => "n.a."
+            };
         }
 
         private string ExportEpsilometerTestResult(EpsilometerTestResult? testResult)

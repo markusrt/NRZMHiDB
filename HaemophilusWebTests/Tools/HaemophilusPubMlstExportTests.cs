@@ -237,7 +237,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Rows[0]["region"].Should().Be("Bayern");
+            export.Rows[0]["region"].Should().Be("Bavaria");
         }
 
         [TestCase("CTX", Antibiotic.Cefotaxime, EpsilometerTestResult.Susceptible, 1.234f, "S", 1.234d)]
