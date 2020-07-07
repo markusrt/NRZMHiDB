@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -54,13 +55,15 @@ namespace HaemophilusWeb.Controllers
 
             //TODO clarify and merge method with Iris-Export should actually be the same
             var sendings = SendingsMatchingExportQuery(query, ExportType.Iris).ToList();
+            Action<DataTable> cleanDuplicates = PubMlstDuplicateResolver.RemovePatientData;
 
             if (query.Unadjusted == YesNo.No)
             {
-                sendings.RemoveAll(s => s.SamplingLocation != SamplingLocation.Other);
+                sendings.RemoveAll(s => s.SamplingLocation == SamplingLocation.Other);
+                cleanDuplicates = PubMlstDuplicateResolver.CleanOrMarkDuplicates;
             }
 
-            return ExportToExcel(query, sendings, new HaemophilusPubMlstExport(), "PubMLST");
+            return ExportToExcel(query, sendings, new HaemophilusPubMlstExport(), "PubMLST", cleanDuplicates);
         }
 
         protected override IDbSet<Sending> SendingDbSet()

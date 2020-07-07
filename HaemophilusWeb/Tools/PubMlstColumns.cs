@@ -26,5 +26,6 @@
         public const string ColCtxMic = "CTX_MIC";
         public const string ColCtxSir =  "CTX_SIR";
         public const string ColFtsI = "ftsI";
+        public const string ColDuplicateGroup = "duplicate_group";
     }
 }

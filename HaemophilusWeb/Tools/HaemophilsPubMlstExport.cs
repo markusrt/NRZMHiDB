@@ -22,8 +22,8 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportState(s.Patient.State), ColRegion);
 
             AddField(s => s.SamplingDate.HasValue ? (int?) s.SamplingDate.Value.Year : null, ColYear);
-            AddField(s => s.ReceivingDate.ToReportFormatPubMlst(), ColSampleDate);
-            AddField(s => s.SamplingDate.ToReportFormatPubMlst(), ColReceivedDate);
+            AddField(s => s.ReceivingDate.ToReportFormatPubMlst(), ColReceivedDate);
+            AddField(s => s.SamplingDate.ToReportFormatPubMlst(), ColSampleDate);
 
             AddNullColumn("non_culture");
             AddField(s => ExportEvaluation(s.Isolate.Evaluation), ColSerotype);
