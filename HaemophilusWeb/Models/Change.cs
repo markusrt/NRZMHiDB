@@ -5,12 +5,13 @@ namespace HaemophilusWeb.Models
 {
     public class Change
     {
-        public Change(DateTime date, string details, ChangeType type, int priority = 0)
+        public Change(DateTime date, string details, ChangeType type, int priority = 0, DatabaseType database = DatabaseType.Haemophilus)
         {
             Date = date;
             Details = details;
             Type = type;
             Priority = priority;
+            Database = database;
         }
 
         [Display(Name = "Priorität")]
@@ -24,5 +25,7 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Typ")]
         public ChangeType Type { get; set; }
+
+        public DatabaseType Database { get; }
     }
 }

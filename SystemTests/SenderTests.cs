@@ -9,6 +9,7 @@ using OpenQA.Selenium.Remote;
 namespace SystemTests
 {
     [TestFixture]
+    [Explicit]
     public class SenderTests : IHaemophilusWebTest
     {
         private readonly string nameOfSenderToCreate = Guid.NewGuid().ToString();

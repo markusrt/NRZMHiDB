@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using HaemophilusWeb.Models;
 
 namespace HaemophilusWeb.ViewModels
 {
@@ -12,5 +13,11 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Ende-Datum")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime To { get; set; }
+    }
+
+    public class PubMlstQuery : FromToQuery
+    {
+        [Display(Name = "Unbereinigte Daten")]
+        public YesNo Unadjusted { get; set; }
     }
 }

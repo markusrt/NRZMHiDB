@@ -31,10 +31,12 @@ namespace HaemophilusWeb.Tools
     public class CreateExcelFile
     {
         public static bool CreateExcelDocument<T>(List<T> list, ExportDefinition<T> exportDefinition,
-            string xlsxFilePath)
+            string xlsxFilePath, Action<DataTable> postProcessDataTable = null)
         {
             var ds = new DataSet();
-            ds.Tables.Add(exportDefinition.ToDataTable(list));
+            var dataTable = exportDefinition.ToDataTable(list);
+            postProcessDataTable?.Invoke(dataTable);
+            ds.Tables.Add(dataTable);
 
             return CreateExcelDocument(ds, xlsxFilePath);
         }
