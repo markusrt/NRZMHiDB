@@ -115,6 +115,10 @@ namespace HaemophilusWeb.ViewModels
 
         public string SamplingDate { get; set; }
         public string ReceivingDate { get; set; }
+
+        [Display(Name = "Patienten-Nr.")]
+        public int PatientId { get; set; }
+
         public string Patient { get; set; }
         public string PatientBirthDate { get; set; }
         public string PatientPostalCode { get; set; }

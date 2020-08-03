@@ -33,6 +33,7 @@ namespace HaemophilusWeb.Automapper
             //Report fields
             destination.SamplingDate = source.Sending.SamplingDate.ToReportFormat();
             destination.ReceivingDate = source.Sending.ReceivingDate.ToReportFormat();
+            destination.PatientId = source.Sending.Patient.PatientId;
             destination.Patient = source.Sending.Patient.ToReportFormat();
             destination.PatientBirthDate = source.Sending.Patient.BirthDate.ToReportFormat();
             destination.PatientPostalCode = source.Sending.Patient.PostalCode;

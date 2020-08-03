@@ -19,10 +19,11 @@
     @Html.ReadonlyFor(m => m.SamplingLocation)
     @Html.ReadonlyFor(m => m.Material)
     @Html.ReadonlyFor(m => m.Invasive)
+    @Html.ReadonlyFor(m => m.PatientId)
     @Html.ReadonlyFor(m => m.PatientAgeAtSampling)
-    
+
     @Html.EnumRadioEditorFor(model => model.Growth)
-    
+
     @Html.EnumRadioEditorFor(model => model.TypeOfGrowth, "col-sm-10", "GrowthTypeForm")
 
     @Html.TextEditorFor(m => m.StemNumber, prefix: DatabaseType.Haemophilus.StemNumberPrefix())
@@ -40,7 +41,7 @@
     </div>
 
     @Html.EditorFor(model => model.EpsilometerTestViewModels)
-    
+
     @Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP2)
 
     @Html.EnumRadioEditorFor(model => model.BexA)
@@ -53,14 +54,14 @@
 
     @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
     <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
-        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.RibosomalRna16SBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
             @Html.ValidationMessageFor(model => model.RibosomalRna16SBestMatch)
         </div>
         <div class="col-sm-3">
             <div class="input-group">
-                @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new {@class = "form-control", placeholder="in Prozent"})
+                @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "form-control", placeholder = "in Prozent" })
                 <span class="input-group-addon">%</span>
             </div>
             @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
@@ -69,23 +70,23 @@
 
     @Html.EnumRadioEditorFor(model => model.ApiNh)
     <div id="ApiNhMatchInPercentForm" class="form-group">
-        @Html.LabelFor(m => m.ApiNhMatchInPercent, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(m => m.ApiNhMatchInPercent, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.ApiNhBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
             @Html.ValidationMessageFor(model => model.ApiNhBestMatch)
         </div>
         <div class="col-sm-3">
             <div class="input-group">
-                @Html.TextBoxFor(m => m.ApiNhMatchInPercent, new {@class = "form-control", placeholder = "in Prozent"})
+                @Html.TextBoxFor(m => m.ApiNhMatchInPercent, new { @class = "form-control", placeholder = "in Prozent" })
                 <span class="input-group-addon">%</span>
             </div>
             @Html.ValidationMessageFor(model => model.ApiNhMatchInPercent)
         </div>
     </div>
-    
+
     @Html.EnumRadioEditorFor(model => model.MaldiTof)
     <div id="MaldiTofMatchConfidenceForm" class="form-group">
-        @Html.LabelFor(m => m.MaldiTofMatchConfidence, new {@class = "col-sm-2 control-label"})
+        @Html.LabelFor(m => m.MaldiTofMatchConfidence, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.MaldiTofBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
             @Html.ValidationMessageFor(model => model.MaldiTofBestMatch)
@@ -112,7 +113,7 @@
             @Html.TextBoxFor(m => m.FtsiEvaluation3, new { @class = "form-control" })
         </div>
     </div>
- 
+
     @Html.EnumRadioEditorFor(model => model.Mlst)
     <div id="MlstSequenceTypeForm" class="form-group">
         @Html.LabelFor(m => m.MlstSequenceType, new { @class = "col-sm-2 control-label" })
