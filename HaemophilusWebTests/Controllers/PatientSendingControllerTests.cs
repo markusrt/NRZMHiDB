@@ -168,7 +168,7 @@ namespace HaemophilusWeb.Controllers
             var result = controller.RkiExport(new FromToQueryWithAdjustment());
 
             var viewResult = result.Should().BeOfType<ViewResult>().And.Subject.As<ViewResult>();
-            var query = viewResult.Model.Should().BeOfType<FromToQuery>().And.Subject.As<FromToQuery>();
+            var query = viewResult.Model.Should().BeOfType<FromToQueryWithAdjustment>().And.Subject.As<FromToQuery>();
             query.From.Month.Should().Be(1);
             query.From.Year.Should().Be(DateTime.Now.Year - 1);
             query.To.Month.Should().Be(12);
