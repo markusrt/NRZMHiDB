@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Security.Principal;
 using FluentAssertions;
 using HaemophilusWeb.TestUtils;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using static HaemophilusWeb.Tools.PubMlstColumns;
 
 namespace HaemophilusWeb.Tools
 {
@@ -42,8 +39,17 @@ namespace HaemophilusWeb.Tools
         }
     }
 
-    public class PubMlstDuplicateResolverTests
+    public class DuplicatePatientResolverTests
     {
+        private static readonly PubMlstColumns Col = new PubMlstColumns();
+        private DuplicatePatientResolver _sut;
+
+        [SetUp]
+        public void Setup()
+        {
+            _sut = new DuplicatePatientResolver(Col);
+        }
+
         [Test]
         public void WhenDuplicatePatients_ThenIdenticalOlderEntriesStrainsAreRemoved()
         {
@@ -57,12 +63,12 @@ namespace HaemophilusWeb.Tools
             record3.serotype += "different";
             var table = new DataTableRecordExportDefinition().ToDataTable(new List<DataTableRecord> {record1, record2, record3});
 
-            PubMlstDuplicateResolver.CleanOrMarkDuplicates(table);
+            _sut.CleanOrMarkDuplicates(table);
 
             table.Rows.Should().HaveCount(2);
 
-            table.Rows[0][ColIsolate].Should().Be("H123");
-            table.Rows[1][ColIsolate].Should().Be("H137");
+            table.Rows[0][Col.StemNumber].Should().Be("H123");
+            table.Rows[1][Col.StemNumber].Should().Be("H137");
         }
 
         [Test]
@@ -79,14 +85,14 @@ namespace HaemophilusWeb.Tools
             record4.serotype += "different";
             var table = new DataTableRecordExportDefinition().ToDataTable(new List<DataTableRecord> {record1, record2, record3, record4});
 
-            PubMlstDuplicateResolver.CleanOrMarkDuplicates(table);
+            _sut.CleanOrMarkDuplicates(table);
 
             table.Rows.Should().HaveCount(4);
 
-            table.Rows[0][ColDuplicateGroup].Should().Be("Group 1");
-            table.Rows[2][ColDuplicateGroup].Should().Be("Group 1");
-            table.Rows[1][ColDuplicateGroup].Should().Be("Group 2");
-            table.Rows[3][ColDuplicateGroup].Should().Be("Group 2");
+            table.Rows[0][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 1");
+            table.Rows[2][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 1");
+            table.Rows[1][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 2");
+            table.Rows[3][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 2");
         }
 
         [Test]
@@ -103,13 +109,13 @@ namespace HaemophilusWeb.Tools
             record3.serotype += "different";
             var table = new DataTableRecordExportDefinition().ToDataTable(new List<DataTableRecord> {record1, record2, record3});
 
-            PubMlstDuplicateResolver.CleanOrMarkDuplicates(table);
+            _sut.CleanOrMarkDuplicates(table);
 
             table.Rows.Should().HaveCount(3);
 
-            table.Rows[0][ColIsolate].Should().Be("H123");
-            table.Rows[1][ColIsolate].Should().Be("H135");
-            table.Rows[2][ColIsolate].Should().Be("H137");
+            table.Rows[0][Col.StemNumber].Should().Be("H123");
+            table.Rows[1][Col.StemNumber].Should().Be("H135");
+            table.Rows[2][Col.StemNumber].Should().Be("H137");
         }
 
         [Test]
@@ -129,10 +135,10 @@ namespace HaemophilusWeb.Tools
             record4.date_of_birth = null;
             var table = new DataTableRecordExportDefinition().ToDataTable(new List<DataTableRecord> {record1, record2, record3, record4});
 
-            PubMlstDuplicateResolver.CleanOrMarkDuplicates(table);
+            _sut.CleanOrMarkDuplicates(table);
 
             table.Rows.Should().HaveCount(4);
-            table.Columns.Contains(ColDuplicateGroup).Should().BeFalse();
+            table.Columns.Contains(DuplicatePatientResolver.ColDuplicateGroup).Should().BeFalse();
         }
 
         private DataTableRecord CreateRecord()
@@ -150,12 +156,12 @@ namespace HaemophilusWeb.Tools
             var record2 = CreateRecord();
             var table = new DataTableRecordExportDefinition().ToDataTable(new List<DataTableRecord> {record1, record2});
 
-            PubMlstDuplicateResolver.CleanOrMarkDuplicates(table);
+            _sut.CleanOrMarkDuplicates(table);
 
             table.Rows.Should().HaveCount(2);
-            table.Columns.Contains(ColInitials).Should().BeFalse();
-            table.Columns.Contains(ColDateOfBirth).Should().BeFalse();
-            table.Columns.Contains(ColPostalCode).Should().BeFalse();
+            table.Columns.Contains(Col.Initials).Should().BeFalse();
+            table.Columns.Contains(Col.DateOfBirth).Should().BeFalse();
+            table.Columns.Contains(Col.PostalCode).Should().BeFalse();
         }
 
 
@@ -177,11 +183,11 @@ namespace HaemophilusWeb.Tools
 
             var table = new DataTableRecordExportDefinition().ToDataTable(new List<DataTableRecord> {record1, record2, record3});
 
-            PubMlstDuplicateResolver.CleanOrMarkDuplicates(table);
+            _sut.CleanOrMarkDuplicates(table);
 
             table.Rows.Should().HaveCount(1);
 
-            table.Rows[0][ColIsolate].Should().Be("H123");
+            table.Rows[0][Col.StemNumber].Should().Be("H123");
         }
     }
 }

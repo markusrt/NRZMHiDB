@@ -3,14 +3,21 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using NodaTime;
-using static HaemophilusWeb.Tools.PubMlstColumns;
-
 
 namespace HaemophilusWeb.Tools
 {
-    public static class PubMlstDuplicateResolver
+    public class DuplicatePatientResolver
     {
-        public static void CleanOrMarkDuplicates(DataTable table)
+        public const string ColDuplicateGroup = "duplicate_group";
+
+        private readonly IDuplicatePatientDetectionColumns _col;
+
+        public DuplicatePatientResolver(IDuplicatePatientDetectionColumns duplicatePatientDetectionColumns)
+        {
+            _col = duplicatePatientDetectionColumns;
+        }
+
+        public void CleanOrMarkDuplicates(DataTable table)
         {
             ClearEntriesWithEmptyStrainParameters(table);
             CleanDuplicateIdenticalStrainsNotTooFarApart(table);
@@ -31,7 +38,7 @@ namespace HaemophilusWeb.Tools
         /// </p>
         /// </summary>
         /// <param name="table"></param>
-        private static void ClearEntriesWithEmptyStrainParameters(DataTable table)
+        private void ClearEntriesWithEmptyStrainParameters(DataTable table)
         {
             var groupDuplicatePatients = GroupDuplicatePatients(table);
             foreach (var duplicatePatients in groupDuplicatePatients)
@@ -48,16 +55,16 @@ namespace HaemophilusWeb.Tools
         /// then indicate both submissions. If all patient parameters are identical, but at
         /// least one of the strain parameters differs, then indicate both submissions
         /// </summary>
-        private static void CleanDuplicateIdenticalStrainsNotTooFarApart(DataTable table)
+        private void CleanDuplicateIdenticalStrainsNotTooFarApart(DataTable table)
         {
             foreach (var duplicatePatients in GroupDuplicatePatients(table))
             {
                 var knownStrainIds = new Dictionary<string, DateTime>();
-                foreach (var row in duplicatePatients.OrderBy(r => r[ColIsolate]))
+                foreach (var row in duplicatePatients.OrderBy(r => r[_col.StemNumber]))
                 {
                     var strainId = GetStrainId(row, true);
                     var containsKey = knownStrainIds.TryGetValue(strainId, out var previousReceivingDate);
-                    var currentReceivingDate = DateTime.Parse(row.Field<string>(ColReceivedDate));
+                    var currentReceivingDate = DateTime.Parse(row.Field<string>(_col.ReceivedDate));
                     var period1 = Period.Between(
                         LocalDate.FromDateTime(currentReceivingDate),
                         LocalDate.FromDateTime(previousReceivingDate));
@@ -78,7 +85,7 @@ namespace HaemophilusWeb.Tools
         }
 
        
-        private static void MarkDuplicateGroups(DataTable table)
+        private void MarkDuplicateGroups(DataTable table)
         {
             var duplicateGroupId = 1;
             foreach (var duplicatePatients in GroupDuplicatePatients(table))
@@ -102,22 +109,22 @@ namespace HaemophilusWeb.Tools
             }
         }
         
-        public static void RemovePatientData(DataTable table)
+        public void RemovePatientData(DataTable table)
         {
-            table.Columns.Remove(ColInitials);
-            table.Columns.Remove(ColDateOfBirth);
-            table.Columns.Remove(ColPostalCode);
+            table.Columns.Remove(_col.Initials);
+            table.Columns.Remove(_col.DateOfBirth);
+            table.Columns.Remove(_col.PostalCode);
         }
 
-        private static string GetStrainId(DataRow row, bool withSource = false)
+        private string GetStrainId(DataRow row, bool withSource = false)
         {
-            var source = withSource ? row[ColSource] : "";
-            return $"{row[ColBetaLactamase]}{row[ColAmxSir]}{row[ColSerotype]}{source}";
+            var source = withSource ? row[_col.Source] : "";
+            return $"{row[_col.BetaLactamase]}{row[_col.AmxSir]}{row[_col.Serotype]}{source}";
         }
 
-        private static IEnumerable<IGrouping<string, DataRow>> GroupDuplicatePatients(DataTable table)
+        private IEnumerable<IGrouping<string, DataRow>> GroupDuplicatePatients(DataTable table)
         {
-            return table.AsEnumerable().GroupBy(t => $"{t[ColInitials]}{t[ColDateOfBirth]}{t[ColPostalCode]}{t[ColSex]}");
+            return table.AsEnumerable().GroupBy(t => $"{t[_col.Initials]}{t[_col.DateOfBirth]}{t[_col.PostalCode]}{t[_col.Sex]}");
         }
     }
 }

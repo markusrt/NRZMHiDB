@@ -22,6 +22,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2020, 08, 03), "<p>Markierung von doppelten Einsendungen für den RKI Export</p>" +
+                                                       "<p><a class=\"btn btn-default btn-xs\" href=\"https://github.com/markusrt/NRZMHiDB/issues/59\"><span class=\"glyphicon glyphicon-link\" aria-hidden=\"true\"></span> GitHub Issue 59</a></p>",
+                                                        ChangeType.Feature),
                 new Change(new DateTime(2020, 07, 07), "PubMLST Export", ChangeType.Feature),
                 new Change(new DateTime(2020, 05, 26), "IRIS Export", ChangeType.Feature, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2020, 05, 25), "Zusätzliches Export Feld „NHS-Real-Time-PCR Auswertung“", ChangeType.Feature, database:DatabaseType.Meningococci),

@@ -148,7 +148,7 @@ namespace HaemophilusWeb.Controllers
             var tempExcel = new FileInfo(Path.Combine(TemporaryDirectoryToStoreTestData, "PubMLSTExport.xlsx"));
             var controller = CreateController();
 
-            var result = controller.PubMlstExport(new PubMlstQuery {From = DateTime.Now.AddYears(-100), To = DateTime.Now});
+            var result = controller.PubMlstExport(new FromToQueryWithAdjustment {From = DateTime.Now.AddYears(-100), To = DateTime.Now});
 
             var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
             fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
@@ -165,7 +165,7 @@ namespace HaemophilusWeb.Controllers
         {
             var controller = CreateController();
 
-            var result = controller.RkiExport(new FromToQuery());
+            var result = controller.RkiExport(new FromToQueryWithAdjustment());
 
             var viewResult = result.Should().BeOfType<ViewResult>().And.Subject.As<ViewResult>();
             var query = viewResult.Model.Should().BeOfType<FromToQuery>().And.Subject.As<FromToQuery>();
@@ -181,7 +181,7 @@ namespace HaemophilusWeb.Controllers
             var tempExcel = new FileInfo(Path.Combine(TemporaryDirectoryToStoreTestData, "LaboratoryExport.xlsx"));
             var controller = CreateController();
 
-            var result = controller.RkiExport(new FromToQuery { From = DateTime.Now.AddYears(-100), To = DateTime.Now });
+            var result = controller.RkiExport(new FromToQueryWithAdjustment { From = DateTime.Now.AddYears(-100), To = DateTime.Now });
 
             var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
             fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
