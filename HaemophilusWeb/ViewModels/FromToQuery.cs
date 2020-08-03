@@ -15,7 +15,7 @@ namespace HaemophilusWeb.ViewModels
         public DateTime To { get; set; }
     }
 
-    public class PubMlstQuery : FromToQuery
+    public class FromToQueryWithAdjustment : FromToQuery
     {
         [Display(Name = "Unbereinigte Daten")]
         public YesNo Unadjusted { get; set; }

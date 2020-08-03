@@ -40,12 +40,12 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult PubMlstExport(PubMlstQuery query)
+        public ActionResult PubMlstExport(FromToQueryWithAdjustment queryWithAdjustment)
         {
-            if (query.From == DateTime.MinValue)
+            if (queryWithAdjustment.From == DateTime.MinValue)
             {
                 var lastYear = DateTime.Now.Year - 1;
-                var exportQuery = new PubMlstQuery
+                var exportQuery = new FromToQueryWithAdjustment
                 {
                     From = new DateTime(lastYear, 1, 1),
                     To = new DateTime(lastYear, 12, 31)
@@ -54,16 +54,17 @@ namespace HaemophilusWeb.Controllers
             }
 
             //TODO clarify and merge method with Iris-Export should actually be the same
-            var sendings = SendingsMatchingExportQuery(query, ExportType.Iris).ToList();
-            Action<DataTable> cleanDuplicates = PubMlstDuplicateResolver.RemovePatientData;
+            var sendings = SendingsMatchingExportQuery(queryWithAdjustment, ExportType.Iris).ToList();
+            var duplicateResolver = new DuplicatePatientResolver(new PubMlstColumns());
+            Action<DataTable> cleanDuplicates = duplicateResolver.RemovePatientData;
 
-            if (query.Unadjusted == YesNo.No)
+            if (queryWithAdjustment.Unadjusted == YesNo.No)
             {
                 sendings.RemoveAll(s => s.SamplingLocation == SamplingLocation.Other);
-                cleanDuplicates = PubMlstDuplicateResolver.CleanOrMarkDuplicates;
+                cleanDuplicates = duplicateResolver.CleanOrMarkDuplicates;
             }
 
-            return ExportToExcel(query, sendings, new HaemophilusPubMlstExport(), "PubMLST", cleanDuplicates);
+            return ExportToExcel(queryWithAdjustment, sendings, new HaemophilusPubMlstExport(), "PubMLST", cleanDuplicates);
         }
 
         protected override IDbSet<Sending> SendingDbSet()
@@ -423,12 +424,12 @@ namespace HaemophilusWeb.Controllers
 
 
         [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
-        public ActionResult RkiExport(FromToQuery query)
+        public ActionResult RkiExport(FromToQueryWithAdjustment query)
         {
             if (query.From == DateTime.MinValue)
             {
                 var lastYear = DateTime.Now.Year - 1;
-                var exportQuery = new FromToQuery
+                var exportQuery = new FromToQueryWithAdjustment
                 {
                     From = new DateTime(lastYear, 1, 1),
                     To = new DateTime(lastYear, 12, 31)
@@ -436,9 +437,17 @@ namespace HaemophilusWeb.Controllers
                 return View(exportQuery);
             }
 
+            var duplicateResolver = new DuplicatePatientResolver(new RkiExportColumns());
+            Action<DataTable> cleanDuplicates = duplicateResolver.RemovePatientData;
+
+            if (query.Unadjusted == YesNo.No)
+            {
+                cleanDuplicates = duplicateResolver.CleanOrMarkDuplicates;
+            }
+
             var sendings = SendingsMatchingExportQuery(query, ExportType.Rki).ToList();
 
-            return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI");
+            return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI", cleanDuplicates);
         }
 
         [Authorize(Roles = DefaultRoles.User)]
