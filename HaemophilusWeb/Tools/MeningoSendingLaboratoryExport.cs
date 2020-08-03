@@ -12,6 +12,7 @@ namespace HaemophilusWeb.Tools
     {
         public MeningoSendingLaboratoryExport()
         {
+            AddField(s => s.MeningoPatientId, "Patienten-Nr.");
             AddField(s => s.Isolate.LaboratoryNumberWithPrefix);
             AddField(s => s.Isolate.StemNumberWithPrefix);
             AddField(s => s.SenderId);

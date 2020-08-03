@@ -40,7 +40,6 @@ namespace HaemophilusWeb.ViewModels
         public int PatientAgeAtSampling { get; set; }
 
         public IEnumerable<Typing> Typings { get; set; }
-        
 
         public string SenderName { get; set; }
         public string SenderStreet { get; set; }
@@ -48,6 +47,10 @@ namespace HaemophilusWeb.ViewModels
 
         public string SamplingDate { get; set; }
         public string ReceivingDate { get; set; }
+
+        [Display(Name = "Patienten-Nr.")]
+        public int PatientId { get; set; }
+
         public string Patient { get; set; }
         public string PatientBirthDate { get; set; }
         public string PatientPostalCode { get; set; }

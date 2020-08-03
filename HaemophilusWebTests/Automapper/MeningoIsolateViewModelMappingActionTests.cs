@@ -86,6 +86,19 @@ namespace HaemophilusWeb.Automapper
         }
 
         [Test]
+        public void ProcessModelToViewModel_SetsPatientId()
+        {
+            var sut = new MeningoIsolateViewModelMappingAction();
+            var isolateViewModel = new MeningoIsolateViewModel();
+            var isolate = CreateEmptyIsolate();
+            isolate.Sending.Patient.PatientId = 123;
+
+            sut.Process(isolate, isolateViewModel);
+
+            isolateViewModel.PatientId.Should().Be(123);
+        }
+
+        [Test]
         public void ProcessModelToViewModel_PopulatesSenderData()
         {
             var sut = new MeningoIsolateViewModelMappingAction();

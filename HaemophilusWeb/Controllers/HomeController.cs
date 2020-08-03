@@ -22,9 +22,14 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2020, 08, 03), "<p>Markierung von doppelten Einsendungen für den RKI Export</p>" +
-                                                       "<p><a class=\"btn btn-default btn-xs\" href=\"https://github.com/markusrt/NRZMHiDB/issues/59\"><span class=\"glyphicon glyphicon-link\" aria-hidden=\"true\"></span> GitHub Issue 59</a></p>",
-                                                        ChangeType.Feature),
+                new Change(new DateTime(2020, 08, 03, 19, 00, 00),
+                    "<p>Anzeige der Patienten Nummer</p>" +
+                    "<p><a class=\"btn btn-default btn-xs\" href=\"https://github.com/markusrt/NRZMHiDB/issues/59\"><span class=\"glyphicon glyphicon-link\" aria-hidden=\"true\"></span> GitHub Issue 58</a></p>",
+                    ChangeType.Feature),
+                new Change(new DateTime(2020, 08, 03),
+                    "<p>Markierung von doppelten Einsendungen für den RKI Export</p>" +
+                    "<p><a class=\"btn btn-default btn-xs\" href=\"https://github.com/markusrt/NRZMHiDB/issues/59\"><span class=\"glyphicon glyphicon-link\" aria-hidden=\"true\"></span> GitHub Issue 59</a></p>",
+                    ChangeType.Feature),
                 new Change(new DateTime(2020, 07, 07), "PubMLST Export", ChangeType.Feature),
                 new Change(new DateTime(2020, 05, 26), "IRIS Export", ChangeType.Feature, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2020, 05, 25), "Zusätzliches Export Feld „NHS-Real-Time-PCR Auswertung“", ChangeType.Feature, database:DatabaseType.Meningococci),
@@ -33,13 +38,13 @@ namespace HaemophilusWeb.Controllers
                 new Change(new DateTime(2020, 05, 6, 23, 30, 0), "Keine Stammnummer für isolierte DNA", ChangeType.Bug, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2020, 05, 6, 8, 0, 0), "Labor Export", ChangeType.Feature, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2020, 4, 30), "<p>PubMLST Matching</p>" +
-                                                   "<p>Im Menü gibt es für Meninkokokken jetzt einen PubMLST Match Eintrag:</p>" +
-                                                   "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_1.png'/>" +
-                                                   "<p>Über die Seite kann man einen bestimmten Zeitraum von Isolaten mit der BigsDB Datenbank abgleichen.</p>" +
-                                                   "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_2.png'/>" +
-                                                   "<p>Je nach Datenmenge kann die Abfrage mehrere Minuten in Anspruch nehmen. Die Seite lädt am Ende automatisch neu.</p>" +
-                                                   "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_3.png'/>" +
-                                                   "<p>Die Abfrage speichert automatisch alle PubMLST Daten zu dem jeweiligen Isolat. Sie kann für einen Zeitraum auch wiederholt werden.</p>" , ChangeType.Feature, database:DatabaseType.Meningococci),
+                   "<p>Im Menü gibt es für Meninkokokken jetzt einen PubMLST Match Eintrag:</p>" +
+                   "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_1.png'/>" +
+                   "<p>Über die Seite kann man einen bestimmten Zeitraum von Isolaten mit der BigsDB Datenbank abgleichen.</p>" +
+                   "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_2.png'/>" +
+                   "<p>Je nach Datenmenge kann die Abfrage mehrere Minuten in Anspruch nehmen. Die Seite lädt am Ende automatisch neu.</p>" +
+                   "<img class='img-rounded img-responsive' src='~/Images/changes/20200430_3.png'/>" +
+                   "<p>Die Abfrage speichert automatisch alle PubMLST Daten zu dem jeweiligen Isolat. Sie kann für einen Zeitraum auch wiederholt werden.</p>" , ChangeType.Feature, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2020, 04, 28, 07, 00, 0), "Import der Daten von 2019", ChangeType.Feature, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2020, 04, 27, 21, 00, 0), "Manuelle PubMLST Abfrage", ChangeType.Feature, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2020, 02, 12, 21, 00, 0), "Passende Interpretation wenn eine PCR positiv und eine andere inhibitorisch ist", ChangeType.Bug, database:DatabaseType.Meningococci),
@@ -95,11 +100,11 @@ namespace HaemophilusWeb.Controllers
                 new Change(new DateTime(2018, 7, 25), "Anpassung des Sicherheitsprotokolles zur Kommunikation mit dem RKI Tool", ChangeType.Bug),
                 new Change(new DateTime(2018, 7, 22), "Update der Interpretationssätze für End- und Teilbefunde.", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 30), "<p>Einführung von Teilbefunden</p>" +
-                                                      "<p>Es gibt jetzt eine Befundvorlage mit dem Präfix \"Teilbefund -\" welche zur verwendet " +
-                                                      "werden kann um einem Einsender zeitnah den Serotyp mitzuteilen.</p>" +
-                                                      "<p>Einsendungen mit Teilbefunden werden in der Übersicht mit einem speziellen Symbol dargestellt:</p>" +
-                                                      "<img class='img-rounded img-responsive' src='~/Images/changes/20180703.png'/>" +
-                                                      "<p>Sobald einmal ein Endbefund erstellt wurde lässt sich der Zustand einer nicht mehr auf \"Teilbefund\" zurücksetzen.", ChangeType.Feature),
+                  "<p>Es gibt jetzt eine Befundvorlage mit dem Präfix \"Teilbefund -\" welche zur verwendet " +
+                  "werden kann um einem Einsender zeitnah den Serotyp mitzuteilen.</p>" +
+                  "<p>Einsendungen mit Teilbefunden werden in der Übersicht mit einem speziellen Symbol dargestellt:</p>" +
+                  "<img class='img-rounded img-responsive' src='~/Images/changes/20180703.png'/>" +
+                  "<p>Sobald einmal ein Endbefund erstellt wurde lässt sich der Zustand einer nicht mehr auf \"Teilbefund\" zurücksetzen.", ChangeType.Feature),
                 new Change(new DateTime(2018, 6, 26), "Bereinigung von Fehlerhaften Telefonnummern vom RKI Tool.", ChangeType.Bug),
                 new Change(new DateTime(2018, 6, 18, 22, 0, 0), "Kombinierte Eingabemaske für Patent und Einsendungen (Meningokokken).", ChangeType.Feature, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2018, 6, 16, 22, 0, 0), "Eingabemaske für Einsendungen", ChangeType.Feature, database:DatabaseType.Meningococci),
@@ -177,13 +182,13 @@ namespace HaemophilusWeb.Controllers
                     "<p>Gelöschte Einsendern sind jedoch nur noch in der Bearbeitungsmaske von zughörigen Einsendungen sichtbar.</p>",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 10, 31), "<p>Automatische Bestimmung des zugehörigen Gesundheitsamtes</p>" +
-                                                       "<p>Anhand der Postleitzahl des Patienten wird über eine Hintergrundabfrage an das <a href='https://tools.rki.de/plztool/'>RKI PLZ Tool</a> " +
-                                                       "ermittelt, welches Gesundheitsamt zuständig ist.",
+                   "<p>Anhand der Postleitzahl des Patienten wird über eine Hintergrundabfrage an das <a href='https://tools.rki.de/plztool/'>RKI PLZ Tool</a> " +
+                   "ermittelt, welches Gesundheitsamt zuständig ist.",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 10, 21), "<p>Befundvorlagen für Fax-Versand</p>" +
-                                                       "<p>In der Liste der Befundvorlagen sind gibt es jetzt Einträge mit dem Prefix \"Fax\".</p>" +
-                                                       "<p>Die Fax-Vorlagen beinhalten neben der Empfangsbestätigung noch eine Zeile die darauf " +
-                                                       "hinweist, dass das Dokument ohne Unterschrift gültig ist.</p>",
+                   "<p>In der Liste der Befundvorlagen sind gibt es jetzt Einträge mit dem Prefix \"Fax\".</p>" +
+                   "<p>Die Fax-Vorlagen beinhalten neben der Empfangsbestätigung noch eine Zeile die darauf " +
+                   "hinweist, dass das Dokument ohne Unterschrift gültig ist.</p>",
                     ChangeType.Feature),
                 new Change(new DateTime(2015, 8, 31),
                     "<p>Unterstützung für doppelte Einsendungen eines Patienten</p>" +
@@ -193,11 +198,11 @@ namespace HaemophilusWeb.Controllers
                     "<p>Je nach Auswahl des Anwenders wird entweder ein zweiter Patient angelegt oder der " +
                     "bestehende Patient wird erweitert.</p>",
                     ChangeType.Feature),
-                new Change(new DateTime(2015, 8, 22), 
+                new Change(new DateTime(2015, 8, 22),
                     "<p>Sortierung von gelöschten Einsendungen und Einsendern</p>" +
-                    "<p>Die Listen der gelöschten Einsendungen und Einsender sind nach allen Feldern sortierbar.</p>", 
+                    "<p>Die Listen der gelöschten Einsendungen und Einsender sind nach allen Feldern sortierbar.</p>",
                     ChangeType.Feature),
-                new Change(new DateTime(2015, 7, 28), 
+                new Change(new DateTime(2015, 7, 28),
                     "<p>Löschen von Isolaten und Einsendungen</p>" +
                     "<p>Analog zum Löschen von Einsendern ist es jetzt möglich Einsendungen als gelöscht zu markieren. " +
                     "In der Bearbeitungsmaske für Einsendungen gibt es einen neuen Knopf zum Löschen</p>" +
