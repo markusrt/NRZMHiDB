@@ -1,5 +1,6 @@
 ﻿@using HaemophilusWeb.Models
 @using HaemophilusWeb.Utils
+@using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.Models.Change
 
 @{
@@ -19,6 +20,7 @@
         {
             <span class="label label-success">Design</span>
         }
+        <span class="label label-primary">@EnumEditor.GetEnumDescription(Model.Database)</span>
     </h2>
 </p>
 <p>

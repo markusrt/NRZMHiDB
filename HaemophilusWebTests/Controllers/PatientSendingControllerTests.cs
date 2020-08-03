@@ -128,14 +128,47 @@ namespace HaemophilusWeb.Controllers
         }
 
         [Test]
+        public void PubMlstExport_EmptyQuery_ForwardToViewWithQueryForLastYear()
+        {
+            var controller = CreateController();
+
+            var result = controller.LaboratoryExport(new FromToQuery());
+
+            var viewResult= result.Should().BeOfType<ViewResult>().And.Subject.As<ViewResult>();
+            var query = viewResult.Model.Should().BeOfType<FromToQuery>().And.Subject.As<FromToQuery>();
+            query.From.Month.Should().Be(1);
+            query.From.Year.Should().Be(DateTime.Now.Year - 1);
+            query.To.Month.Should().Be(12);
+            query.To.Year.Should().Be(DateTime.Now.Year - 1);
+        }
+
+        [Test]
+        public void PubMlstExport_ValidQuery_CreatesExcel()
+        {
+            var tempExcel = new FileInfo(Path.Combine(TemporaryDirectoryToStoreTestData, "PubMLSTExport.xlsx"));
+            var controller = CreateController();
+
+            var result = controller.PubMlstExport(new FromToQueryWithAdjustment {From = DateTime.Now.AddYears(-100), To = DateTime.Now});
+
+            var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
+            fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
+            File.WriteAllBytes(tempExcel.FullName, fileResult.FileContents);
+
+            using (var fastExcel = new FastExcel.FastExcel(tempExcel))
+            {
+                fastExcel.Worksheets.Length.Should().Be(1);
+            }
+        }
+
+        [Test]
         public void RkiExport_EmptyQuery_ForwardToViewWithQueryForLastYear()
         {
             var controller = CreateController();
 
-            var result = controller.RkiExport(new FromToQuery());
+            var result = controller.RkiExport(new FromToQueryWithAdjustment());
 
             var viewResult = result.Should().BeOfType<ViewResult>().And.Subject.As<ViewResult>();
-            var query = viewResult.Model.Should().BeOfType<FromToQuery>().And.Subject.As<FromToQuery>();
+            var query = viewResult.Model.Should().BeOfType<FromToQueryWithAdjustment>().And.Subject.As<FromToQuery>();
             query.From.Month.Should().Be(1);
             query.From.Year.Should().Be(DateTime.Now.Year - 1);
             query.To.Month.Should().Be(12);
@@ -148,7 +181,7 @@ namespace HaemophilusWeb.Controllers
             var tempExcel = new FileInfo(Path.Combine(TemporaryDirectoryToStoreTestData, "LaboratoryExport.xlsx"));
             var controller = CreateController();
 
-            var result = controller.RkiExport(new FromToQuery { From = DateTime.Now.AddYears(-100), To = DateTime.Now });
+            var result = controller.RkiExport(new FromToQueryWithAdjustment { From = DateTime.Now.AddYears(-100), To = DateTime.Now });
 
             var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
             fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);

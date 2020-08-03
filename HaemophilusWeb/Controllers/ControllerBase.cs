@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Web.Mvc;
 using HaemophilusWeb.Tools;
@@ -10,13 +11,13 @@ namespace HaemophilusWeb.Controllers
     public class ControllerBase : Controller
     {
         protected ActionResult ExportToExcel<T>(FromToQuery query, List<T> list, ExportDefinition<T> exportDefinition,
-            string prefix)
+            string prefix, Action<DataTable> postProcessDataTable = null)
         {
             var tempFile = Path.GetTempFileName();
-            CreateExcelFile.CreateExcelDocument(list, exportDefinition, tempFile);
+            CreateExcelFile.CreateExcelDocument(list, exportDefinition, tempFile, postProcessDataTable);
             return File(System.IO.File.ReadAllBytes(tempFile),
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                String.Format("{0}-Export_{1:yyyyMMdd}-{2:yyyyMMdd}.xlsx", prefix, query.From, query.To));
+                $"{prefix}-Export_{query.From:yyyyMMdd}-{query.To:yyyyMMdd}.xlsx");
         }
     }
 }

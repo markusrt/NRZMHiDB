@@ -1,6 +1,8 @@
 ﻿@using System.Reflection
 @using HaemophilusWeb.Controllers
 @using HaemophilusWeb.Models
+@using HaemophilusWeb.Utils
+@using HaemophilusWeb.Views.Utils
 @using Microsoft.Ajax.Utilities
 @model HaemophilusWeb.Models.ChangeLog
 @{
@@ -32,24 +34,27 @@
         <tbody>
             @foreach (var item in Model.NextChanges)
             {
-                <tr>
-                    <td>@item.Priority</td>
-                    <td>@Html.Raw(item.Details.Replace("~/", Url.Content("~/")))</td>
-                    <td>
-                        @if (item.Type == ChangeType.Bug)
-                        {
-                            <span class="label label-danger">Fehlerbehebung</span>
-                        }
-                        else if (item.Type == ChangeType.Feature)
-                        {
-                            <span class="label label-info">Neue Funktion</span>
-                        }
-                        else if (item.Type == ChangeType.Design)
-                        {
-                            <span class="label label-success">Design</span>
-                        }
-                    </td>
-                </tr>
+            <tr>
+                <td>@item.Priority</td>
+                <td>@Html.Raw(item.Details.Replace("~/", Url.Content("~/")))</td>
+                <td>
+                    @if (item.Type == ChangeType.Bug)
+                    {
+                        <span class="label label-danger">Fehlerbehebung</span>
+                    }
+                    else if (item.Type == ChangeType.Feature)
+                    {
+                        <span class="label label-info">Neue Funktion</span>
+                    }
+                    else if (item.Type == ChangeType.Design)
+                    {
+                        <span class="label label-success">Design</span>
+                    }
+                </td>
+                <td>
+                    <span class="label label-primary">@EnumEditor.GetEnumDescription(item.Database)</span>
+                </td>
+            </tr>
             }
         </tbody>
     </table>
@@ -86,6 +91,9 @@
                         {
                             <span class="label label-success">Design</span>
                         }
+                    </td>
+                    <td>
+                        <span class="label label-primary">@EnumEditor.GetEnumDescription(item.Database)</span>
                     </td>
                 </tr>
             }

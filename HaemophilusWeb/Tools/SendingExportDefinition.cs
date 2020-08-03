@@ -40,7 +40,7 @@ namespace HaemophilusWeb.Tools
         }
 
 
-        private double? FindEpsilometerTestMeasurement(TSending sending, Antibiotic antibiotic)
+        protected double? FindEpsilometerTestMeasurement(TSending sending, Antibiotic antibiotic)
         {
             var eTestResult = FindEpsilometerTestResult(sending, antibiotic);
             if (eTestResult == null)
@@ -50,7 +50,7 @@ namespace HaemophilusWeb.Tools
             return Math.Round(eTestResult.Measurement, 3);
         }
 
-        private EpsilometerTestResult? FindEpsilometerTestEvaluation(TSending sending, Antibiotic antibiotic)
+        protected EpsilometerTestResult? FindEpsilometerTestEvaluation(TSending sending, Antibiotic antibiotic)
         {
             var eTestResult = FindEpsilometerTestResult(sending, antibiotic);
             if (eTestResult == null)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -38,6 +39,33 @@ namespace HaemophilusWeb.Controllers
         {
         }
 
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult PubMlstExport(FromToQueryWithAdjustment queryWithAdjustment)
+        {
+            if (queryWithAdjustment.From == DateTime.MinValue)
+            {
+                var lastYear = DateTime.Now.Year - 1;
+                var exportQuery = new FromToQueryWithAdjustment
+                {
+                    From = new DateTime(lastYear, 1, 1),
+                    To = new DateTime(lastYear, 12, 31)
+                };
+                return View(exportQuery);
+            }
+
+            //TODO clarify and merge method with Iris-Export should actually be the same
+            var sendings = SendingsMatchingExportQuery(queryWithAdjustment, ExportType.Iris).ToList();
+            var duplicateResolver = new DuplicatePatientResolver(new PubMlstColumns());
+            Action<DataTable> cleanDuplicates = duplicateResolver.RemovePatientData;
+
+            if (queryWithAdjustment.Unadjusted == YesNo.No)
+            {
+                sendings.RemoveAll(s => s.SamplingLocation == SamplingLocation.Other);
+                cleanDuplicates = duplicateResolver.CleanOrMarkDuplicates;
+            }
+
+            return ExportToExcel(queryWithAdjustment, sendings, new HaemophilusPubMlstExport(), "PubMLST", cleanDuplicates);
+        }
 
         protected override IDbSet<Sending> SendingDbSet()
         {
@@ -60,19 +88,33 @@ namespace HaemophilusWeb.Controllers
 
         protected override IEnumerable<Sending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
-            var samplingLocations = exportType == ExportType.Rki
+            var samplingLocations = exportType == ExportType.Rki || exportType == ExportType.Iris
                 ? new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor }
                 : new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor, SamplingLocation.Other };
 
-            return NotDeletedSendings()
+            var filteredSendings = NotDeletedSendings()
                 .Include(s => s.Patient)
                 .Where
                 (s => samplingLocations.Contains(s.SamplingLocation)
                       && ((s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
                           || (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
-                )
-                .OrderBy(s => s.Isolate.StemNumber)
-                .ToList();
+                );
+            if (exportType == ExportType.Iris)
+            {
+                var overseas = EnumEditor.GetEnumDescription(State.Overseas);
+                filteredSendings = filteredSendings.Where(s => !s.Patient.County.Equals(overseas));
+
+                var nonHaemophilus = new List<Evaluation>
+                {
+                    Evaluation.HaemophilusParainfluenzae,
+                    Evaluation.NoGrowth,
+                    Evaluation.NoHaemophilusSpecies,
+                    Evaluation.HaemophilusSpeciesNoHaemophilusInfluenzae,
+                    Evaluation.NoHaemophilusInfluenzae
+                };
+                filteredSendings = filteredSendings.Where(s => !nonHaemophilus.Contains(s.Isolate.Evaluation));
+            }
+            return filteredSendings.OrderBy(s => s.Isolate.StemNumber).ToList();
         }
 
         protected override ExportDefinition<Sending> CreateRkiExportDefinition()
@@ -258,8 +300,6 @@ namespace HaemophilusWeb.Controllers
             return CreateEditView(patientSending);
         }
 
-
-
         [HttpPost]
         [ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -270,8 +310,6 @@ namespace HaemophilusWeb.Controllers
             sending.Deleted = true;
             return EditUnvalidated(sending);
         }
-
-
 
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult Undelete(int? id)
@@ -385,14 +423,13 @@ namespace HaemophilusWeb.Controllers
         }
 
 
-
         [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
-        public ActionResult RkiExport(FromToQuery query)
+        public ActionResult RkiExport(FromToQueryWithAdjustment query)
         {
             if (query.From == DateTime.MinValue)
             {
                 var lastYear = DateTime.Now.Year - 1;
-                var exportQuery = new FromToQuery
+                var exportQuery = new FromToQueryWithAdjustment
                 {
                     From = new DateTime(lastYear, 1, 1),
                     To = new DateTime(lastYear, 12, 31)
@@ -400,9 +437,17 @@ namespace HaemophilusWeb.Controllers
                 return View(exportQuery);
             }
 
+            var duplicateResolver = new DuplicatePatientResolver(new RkiExportColumns());
+            Action<DataTable> cleanDuplicates = duplicateResolver.RemovePatientData;
+
+            if (query.Unadjusted == YesNo.No)
+            {
+                cleanDuplicates = duplicateResolver.CleanOrMarkDuplicates;
+            }
+
             var sendings = SendingsMatchingExportQuery(query, ExportType.Rki).ToList();
 
-            return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI");
+            return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI", cleanDuplicates);
         }
 
         [Authorize(Roles = DefaultRoles.User)]

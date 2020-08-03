@@ -52,13 +52,26 @@ namespace HaemophilusWeb.Tools
             sut.Should().NotBeNull();
         }
 
+        
         [Test]
         public void DataTable_ContainsAllColumns()
         {
             var sut = CreateExportDefinition();
 
             var export = sut.ToDataTable(Sendings);
+            
+            export.Columns.Count.Should().Be(22);
+        }
 
+        [Test]
+        public void DataTable_ContainsOnlyPayloadColumnsAfterCleanup()
+        {
+            var duplicatePatientResolver = new DuplicatePatientResolver(new RkiExportColumns());
+            var sut = CreateExportDefinition();
+
+            var export = sut.ToDataTable(Sendings);
+            
+            duplicatePatientResolver.RemovePatientData(export);
             export.Columns.Count.Should().Be(19);
         }
 
