@@ -130,8 +130,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TestDataGenerator">
-      <HintPath>..\packages\TestDataGenerator.0.0.7\lib\net40\TestDataGenerator.dll</HintPath>
+    <Reference Include="TestDataGenerator, Version=0.0.0.8, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\TestDataGenerator.0.0.8\lib\net45\TestDataGenerator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
