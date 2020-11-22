@@ -50,15 +50,17 @@ namespace HaemophilusWeb.Utils
 
             date.ToReportFormat().Should().NotBeEmpty();
             date.ToReportFormatPubMlst().Should().NotBeEmpty();
+            date.ToReportFormatMonthYear().Should().BeEmpty();
         }
 
         [Test]
         public void ToReportFormat_NonNullDate_ReturnsFormattedString()
         {
-            DateTime date = new DateTime(2010, 10, 21);
+            DateTime? date = new DateTime(2010, 10, 21);
 
             date.ToReportFormat().Should().Be("21.10.2010");
             date.ToReportFormatPubMlst().Should().Be("2010-10-21");
+            date.ToReportFormatMonthYear().Should().Be("10 / 2010");
         }
 
     }

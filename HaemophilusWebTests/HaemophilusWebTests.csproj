@@ -173,6 +173,7 @@
     <Compile Include="Tools\HaemophilusSendingLaboratoryExportTests.cs" />
     <Compile Include="Tools\HaemophilusPubMlstExportTests.cs" />
     <Compile Include="Tools\MeningoSendingIrisExportTests.cs" />
+    <Compile Include="Tools\MeningoStateAuthorityExportTests.cs" />
     <Compile Include="Tools\MeningoSendingLaboratoryExportTests.cs" />
     <Compile Include="Tools\DuplicatePatientResolverTests.cs" />
     <Compile Include="Tools\RkiMatchImporterTests.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -45,6 +46,25 @@ namespace HaemophilusWeb.Controllers
 
             var sendings = SendingsMatchingExportQuery(query, ExportType.Iris).ToList();
             return ExportToExcel(query, sendings, new MeningoSendingIrisExport(), "Iris");
+        }
+
+        [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
+        public ActionResult StateAuthorityExport(FromToQuery query)
+        {
+            if (query.From == DateTime.MinValue)
+            {
+                var lastYear = DateTime.Now.Year - 1;
+                var exportQuery = new FromToQueryWithAdjustment
+                {
+                    From = new DateTime(lastYear, 1, 1),
+                    To = new DateTime(lastYear, 12, 31)
+                };
+                return View(exportQuery);
+            }
+
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Laboratory).ToList();
+
+            return ExportToExcel(query, sendings, new MeningoStateAuthorityExport(), "LGA");
         }
 
 

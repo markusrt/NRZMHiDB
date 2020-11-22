@@ -272,6 +272,7 @@
     <Compile Include="Tools\HaemophilusSendingLaboratoryExport.cs" />
     <Compile Include="Tools\IDuplicatePatientDetectionColumns.cs" />
     <Compile Include="Tools\MeningoSendingIrisExport.cs" />
+    <Compile Include="Tools\MeningoStateAuthorityExport.cs" />
     <Compile Include="Tools\PubMlstColumns.cs" />
     <Compile Include="Tools\DuplicatePatientResolver.cs" />
     <Compile Include="Tools\RkiExportColumns.cs" />
@@ -1148,6 +1149,7 @@
     <Content Include="Web.config" />
     <Content Include="Views\MeningoPatientSending\IrisExport.cshtml" />
     <Content Include="Views\PatientSending\PubMlstExport.cshtml" />
+    <Content Include="Views\MeningoPatientSending\StateAuthorityExport.cshtml" />
     <None Include="Web.template.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>
