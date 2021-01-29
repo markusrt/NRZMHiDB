@@ -220,6 +220,7 @@
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\EucastClinicalBreakpointsController.cs" />
+    <Compile Include="Controllers\PatientSendingControllerBase.cs" />
     <Compile Include="Controllers\PubMlstController.cs" />
     <Compile Include="Controllers\GeonamesController.cs" />
     <Compile Include="Controllers\HealthOfficesController.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Services\PubMlstMatcher.cs" />
     <Compile Include="Services\PubMlstService.cs" />
     <Compile Include="Tools\HaemophilsPubMlstExport.cs" />
+    <Compile Include="Tools\MeningoSendingRkiExport.cs" />
     <Compile Include="Tools\HaemophilusSendingRkiExport.cs" />
     <Compile Include="Tools\HaemophilusSendingLaboratoryExport.cs" />
     <Compile Include="Tools\IDuplicatePatientDetectionColumns.cs" />
@@ -1148,6 +1150,7 @@
     <Content Include="Web.config" />
     <Content Include="Views\MeningoPatientSending\IrisExport.cshtml" />
     <Content Include="Views\PatientSending\PubMlstExport.cshtml" />
+    <Content Include="Views\MeningoPatientSending\RkiExport.cshtml" />
     <None Include="Web.template.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>

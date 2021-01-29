@@ -1,7 +1,12 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Web.Mvc;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Tools;
+using HaemophilusWeb.ViewModels;
 using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
