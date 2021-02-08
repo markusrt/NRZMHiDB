@@ -63,7 +63,13 @@ namespace HaemophilusWeb.Tools
             var type = value.GetTypeOrNullableType();
             if (type.IsEnum)
             {
-                return EnumEditor.GetEnumDescription(value);
+                var enumDescription = EnumEditor.GetEnumDescription(value);
+                if ((int)(object)value == 0 && enumDescription.Equals("0"))
+                {
+                    return null;
+                }
+
+                return enumDescription;
             }
             return value.ToString();
         }

@@ -103,6 +103,19 @@ namespace HaemophilusWeb.Tools
         }
 
         [Test]
+        public void DataTable_ContainsNullForUndefinedEnumValues()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.CswyAllele = 0;
+            Sending.Isolate.RealTimePcrResult = 0;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["cswy-Allel"].Should().Be(DBNull.Value);
+            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
         public void DataTable_ContainsPubMlstProperties()
         {
             var sut = CreateExportDefinition();
