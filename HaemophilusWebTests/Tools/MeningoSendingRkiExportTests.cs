@@ -50,7 +50,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(27);
+            export.Columns.Count.Should().Be(29);
         }
 
         [Test]
@@ -68,13 +68,13 @@ namespace HaemophilusWeb.Tools
         public void DataTable_ContainsSimpleProperties()
         {
             var sut = CreateExportDefinition();
+            
 
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["PatNr NRZM"].Should().Be(Sending.Patient.PatientId);
-            export.Rows[0]["PorA VR1"].Should().Be(Sending.Isolate.PorAVr1);
-            export.Rows[0]["PorA VR2"].Should().Be(Sending.Isolate.PorAVr2);
-            export.Rows[0]["FetA VR"].Should().Be(Sending.Isolate.FetAVr);
+            export.Rows[0]["PatNr NRZM"].Should().Be(Sending.Patient.PatientId);
+            export.Rows[0]["PatNr NRZM"].Should().Be(Sending.Patient.PatientId);
         }
 
         [Test]
@@ -87,6 +87,8 @@ namespace HaemophilusWeb.Tools
             Sending.Isolate.CswyPcr = NativeMaterialTestResult.Positive;
             Sending.Isolate.CswyAllele = CswyAllel.Allele3;
             Sending.Patient.Gender = Gender.Intersex;
+            Sending.Isolate.RealTimePcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis;
 
             var export = sut.ToDataTable(Sendings);
 
@@ -96,6 +98,8 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["csc-PCR"].Should().Be("negativ");
             export.Rows[0]["cswy-PCR"].Should().Be("positiv");
             export.Rows[0]["cswy-Allel"].Should().Be("Allel 3 WY");
+            export.Rows[0]["NHS Real-Time-PCR"].Should().Be("positiv");
+            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Neisseria meningitidis");
         }
 
         [Test]
@@ -105,11 +109,15 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Rows[0][PenA].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PenA);
-            export.Rows[0][GyrA].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.GyrA);
-            export.Rows[0][RpoB].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.RpoB);
-            export.Rows[0][SequenceType].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.SequenceType);
-            export.Rows[0][ClonalComplex].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.ClonalComplex);
+            var pubMlst = Sending.Isolate.NeisseriaPubMlstIsolate;
+            export.Rows[0][PenA].Should().Be(pubMlst.PenA);
+            export.Rows[0][GyrA].Should().Be(pubMlst.GyrA);
+            export.Rows[0][RpoB].Should().Be(pubMlst.RpoB);
+            export.Rows[0][SequenceType].Should().Be(pubMlst.SequenceType);
+            export.Rows[0][ClonalComplex].Should().Be(pubMlst.ClonalComplex);
+            export.Rows[0][PorAVr1].Should().Be(pubMlst.PorAVr1);
+            export.Rows[0][PorAVr2].Should().Be(pubMlst.PorAVr2);
+            export.Rows[0][FetAVr].Should().Be(pubMlst.FetAVr);
         }
 
         [Test]
@@ -125,6 +133,9 @@ namespace HaemophilusWeb.Tools
             export.Rows[0][RpoB].Should().Be(DBNull.Value);
             export.Rows[0][SequenceType].Should().Be(DBNull.Value);
             export.Rows[0][ClonalComplex].Should().Be(DBNull.Value);
+            export.Rows[0][PorAVr1].Should().Be(DBNull.Value);
+            export.Rows[0][PorAVr2].Should().Be(DBNull.Value);
+            export.Rows[0][FetAVr].Should().Be(DBNull.Value);
         }
 
         [Test]
