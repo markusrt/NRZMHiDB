@@ -62,8 +62,10 @@ namespace HaemophilusWeb.Tools
 
         private EpsilometerTest FindEpsilometerTestResult(TSending sending, Antibiotic antibiotic)
         {
-            var eTestResult = sending.GetIsolate().EpsilometerTests.SingleOrDefault(
-                e => e.EucastClinicalBreakpoint.Antibiotic == antibiotic);
+            var eTestResult = sending.GetIsolate().EpsilometerTests
+                .Where(e => e.EucastClinicalBreakpoint.Antibiotic == antibiotic)
+                .OrderByDescending(e => e.Measurement)
+                .FirstOrDefault();
             return eTestResult;
         }
     }

@@ -16,16 +16,16 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1
-      with:
-        vs-version: "[16.5]"
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
         
     - name: Setup VSTest.console.exe
       uses: darenm/Setup-VSTest@v1
 
     - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-version: 'latest'
       
     - name: Restore NuGet packages
       run: nuget restore HaemophilusWeb.sln 

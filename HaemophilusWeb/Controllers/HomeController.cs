@@ -22,6 +22,10 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2021, 01, 29, 07, 00, 0),
+                    "<p>RKI Export</p>" +
+                    "<p><a class=\"btn btn-default btn-xs\" href=\"https://github.com/markusrt/NRZMHiDB/issues/25\"><span class=\"glyphicon glyphicon-link\" aria-hidden=\"true\"></span> GitHub Issue 25</a></p>",
+                    ChangeType.Feature, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 01, 28, 07, 00, 0), "Auflisten der Einsendungen nach Eingangsdatum", ChangeType.Bug, database:DatabaseType.Haemophilus),
                 new Change(new DateTime(2021, 01, 28, 07, 10, 0), "Auflisten der Einsendungen nach Eingangsdatum", ChangeType.Bug, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2020, 08, 03, 19, 00, 00),
