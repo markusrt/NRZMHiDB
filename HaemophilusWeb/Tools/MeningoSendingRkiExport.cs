@@ -37,6 +37,13 @@ namespace HaemophilusWeb.Tools
             AddEpsilometerTestFields(this, Antibiotic.Cefotaxime, true, "Cefotaxim MHK Etest");
             AddEpsilometerTestFields(this, Antibiotic.Rifampicin, true, "Rifampicin MHK Etest");
 
+            AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "Geburtsmonat");
+            AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "Geburtsjahr");
+            AddField(s => ExportGender(s.Patient.Gender), "Geschlecht");
+
+            AddField(s => findCounty(s).CountyNumber, "Landkreis");
+            AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "Bundesland");
+
             AddPubMsltProperty("PubMLST ID", _ => _.PubMlstId, "-");
             AddPubMsltProperty(PorAVr1, _ => _.PorAVr1);
             AddPubMsltProperty(PorAVr2, _ => _.PorAVr2);
@@ -46,13 +53,6 @@ namespace HaemophilusWeb.Tools
             AddPubMsltProperty(RpoB, _ => _.RpoB);
             AddPubMsltProperty(SequenceType, _ => _.SequenceType);
             AddPubMsltProperty(ClonalComplex, _ => _.ClonalComplex);
-            
-            AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "Geburtsmonat");
-            AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "Geburtsjahr");
-            AddField(s => ExportGender(s.Patient.Gender), "Geschlecht");
-
-            AddField(s => findCounty(s).CountyNumber, "Landkreis");
-            AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "Bundesland");
         }
 
         private void AddPubMsltProperty(string header, Func<NeisseriaPubMlstIsolate, object> property, string nullValue=null)
