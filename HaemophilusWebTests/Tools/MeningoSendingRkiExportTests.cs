@@ -50,7 +50,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(29);
+            export.Columns.Count.Should().Be(33);
         }
 
         [Test]
@@ -73,8 +73,9 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["PatNr NRZM"].Should().Be(Sending.Patient.PatientId);
-            export.Rows[0]["PatNr NRZM"].Should().Be(Sending.Patient.PatientId);
-            export.Rows[0]["PatNr NRZM"].Should().Be(Sending.Patient.PatientId);
+            export.Rows[0]["PorA VR1"].Should().Be(Sending.Isolate.PorAVr1);
+            export.Rows[0]["PorA VR2"].Should().Be(Sending.Isolate.PorAVr2);
+            export.Rows[0]["FetA VR"].Should().Be(Sending.Isolate.FetAVr);
         }
 
         [Test]
@@ -123,6 +124,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             var pubMlst = Sending.Isolate.NeisseriaPubMlstIsolate;
+            export.Rows[0]["PubMLST ID"].Should().Be(pubMlst.PubMlstId);
             export.Rows[0][PenA].Should().Be(pubMlst.PenA);
             export.Rows[0][GyrA].Should().Be(pubMlst.GyrA);
             export.Rows[0][RpoB].Should().Be(pubMlst.RpoB);
@@ -141,6 +143,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
+            export.Rows[0]["PubMLST ID"].Should().Be("-");
             export.Rows[0][PenA].Should().Be(DBNull.Value);
             export.Rows[0][GyrA].Should().Be(DBNull.Value);
             export.Rows[0][RpoB].Should().Be(DBNull.Value);

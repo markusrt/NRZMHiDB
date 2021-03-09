@@ -10,7 +10,7 @@ namespace HaemophilusWeb.Tools
 {
     public class MeningoSendingRkiExport : SendingExportDefinition<MeningoSending, MeningoPatient>
     {
-        public MeningoSendingRkiExport(List<County> counties)
+        public MeningoSendingRkiExport(IReadOnlyCollection<County> counties)
         {
             var emptyCounty = new County { CountyNumber = "" };
             Func<MeningoSending, County> findCounty =
@@ -28,20 +28,14 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.CswyAllele), "cswy-Allel");
             AddField(s => ExportToString(s.Isolate.RealTimePcr));
             AddField(s => ExportToString(s.Isolate.RealTimePcrResult));
-            AddPubMsltProperty(PorAVr1, _ => _.PorAVr1);
-            AddPubMsltProperty(PorAVr2, _ => _.PorAVr2);
-            AddPubMsltProperty(FetAVr, _ => _.FetAVr);
-
+            AddField(s => ExportToString(s.Isolate.PorAVr1), "PorA VR1");
+            AddField(s => ExportToString(s.Isolate.PorAVr2), "PorA VR2");
+            AddField(s => ExportToString(s.Isolate.FetAVr), "FetA VR");
+            
             AddEpsilometerTestFields(this, Antibiotic.Benzylpenicillin, true, "Penicillin MHK Etest");
             AddEpsilometerTestFields(this, Antibiotic.Ciprofloxacin, true, "Ciprofloxacin MHK Etest");
             AddEpsilometerTestFields(this, Antibiotic.Cefotaxime, true, "Cefotaxim MHK Etest");
             AddEpsilometerTestFields(this, Antibiotic.Rifampicin, true, "Rifampicin MHK Etest");
-
-            AddPubMsltProperty(PenA, _ => _.PenA);
-            AddPubMsltProperty(GyrA, _ => _.GyrA);
-            AddPubMsltProperty(RpoB, _ => _.RpoB);
-            AddPubMsltProperty(SequenceType, _ => _.SequenceType);
-            AddPubMsltProperty(ClonalComplex, _ => _.ClonalComplex);
 
             AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Month : 0, "Geburtsmonat");
             AddField(s => s.Patient.BirthDate.HasValue ? s.Patient.BirthDate.Value.Year : 0, "Geburtsjahr");
@@ -49,6 +43,16 @@ namespace HaemophilusWeb.Tools
 
             AddField(s => findCounty(s).CountyNumber, "Landkreis");
             AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "Bundesland");
+
+            AddPubMsltProperty("PubMLST ID", _ => _.PubMlstId, "-");
+            AddPubMsltProperty(PorAVr1, _ => _.PorAVr1);
+            AddPubMsltProperty(PorAVr2, _ => _.PorAVr2);
+            AddPubMsltProperty(FetAVr, _ => _.FetAVr);
+            AddPubMsltProperty(PenA, _ => _.PenA);
+            AddPubMsltProperty(GyrA, _ => _.GyrA);
+            AddPubMsltProperty(RpoB, _ => _.RpoB);
+            AddPubMsltProperty(SequenceType, _ => _.SequenceType);
+            AddPubMsltProperty(ClonalComplex, _ => _.ClonalComplex);
         }
 
         private void AddPubMsltProperty(string header, Func<NeisseriaPubMlstIsolate, object> property, string nullValue=null)
