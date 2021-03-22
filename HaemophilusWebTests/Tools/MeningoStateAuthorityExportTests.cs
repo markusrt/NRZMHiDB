@@ -39,7 +39,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(10);
+            export.Columns.Count.Should().Be(12);
         }
 
         [Test]
@@ -77,6 +77,57 @@ namespace HaemophilusWeb.Tools
         }
 
         [Test]
+        public void DataTable_ContainsNoSpecies()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.MaldiTofBestMatch = null;
+            Sending.Isolate.RibosomalRna16SBestMatch = null;
+            Sending.Isolate.RealTimePcr = NativeMaterialTestResult.NotDetermined;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Spezies"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
+        public void DataTable_ContainsSpeciesForMaldiTof()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.RibosomalRna16SBestMatch = null;
+            Sending.Isolate.MaldiTofBestMatch = "Spezies 1";
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Spezies"].Should().Be("Spezies 1");
+        }
+
+        [Test]
+        public void DataTable_ContainsSpeciesFor16S()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.MaldiTofBestMatch = null;
+            Sending.Isolate.RibosomalRna16SBestMatch = "Spezies 2";
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Spezies"].Should().Be("Spezies 2");
+        }
+
+        [Test]
+        public void DataTable_ContainsSpeciesForRealTimePCR()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.MaldiTofBestMatch = null;
+            Sending.Isolate.RibosomalRna16SBestMatch = null;
+            Sending.Isolate.RealTimePcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.RealTimePcrResult = RealTimePcrResult.HaemophilusInfluenzae;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Spezies"].Should().Be("Haemophilus influenzae");
+        }
+
+        [Test]
         public void DataTable_ContainsSimpleProperties()
         {
             var sut = CreateExportDefinition();
@@ -91,12 +142,17 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["PorA VR1"].Should().Be("5-2");
             export.Rows[0]["PorA VR2"].Should().Be("10-1");
             export.Rows[0]["FetA VR"].Should().Be("4-1");
-            export.Rows[0]["Kreis"].Should().Be("Berlin, Stadt");
+            export.Rows[0]["Landkreis"].Should().Be("11000");
+            export.Rows[0]["Bundesland"].Should().Be("11");
         }
 
         private static MeningoStateAuthorityExport CreateExportDefinition()
         {
-            return new MeningoStateAuthorityExport();
+            return new MeningoStateAuthorityExport(new List<County> {new County()
+            {
+                CountyNumber = "11000",
+                Name = "Berlin, Stadt"
+            }});
         }
     }
 }

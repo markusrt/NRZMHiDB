@@ -64,7 +64,8 @@ namespace HaemophilusWeb.Controllers
 
             var sendings = SendingsMatchingExportQuery(query, ExportType.Laboratory).ToList();
 
-            return ExportToExcel(query, sendings, new MeningoStateAuthorityExport(), "LGA");
+            var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
+            return ExportToExcel(query, sendings, new MeningoStateAuthorityExport(counties), "LGA");
         }
 
 

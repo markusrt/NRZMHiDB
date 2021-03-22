@@ -13,6 +13,8 @@ namespace HaemophilusWeb.Models
             "Städteregion",
             "Kreisfreie Stadt",
             "Region",
+            "Landkreis",
+            "Kreis"
         };
 
         [Key]

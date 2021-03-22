@@ -4,17 +4,28 @@ using System.Linq;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
+using NLog;
 using static HaemophilusWeb.Services.PubMlstService;
 
 namespace HaemophilusWeb.Tools
 {
     public class MeningoSendingRkiExport : SendingExportDefinition<MeningoSending, MeningoPatient>
     {
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
         public MeningoSendingRkiExport(IReadOnlyCollection<County> counties)
         {
             var emptyCounty = new County { CountyNumber = "" };
             Func<MeningoSending, County> findCounty =
-                s => counties.FirstOrDefault(c => c.IsEqualTo(s.Patient.County)) ?? emptyCounty;
+                s =>
+                {
+                    var county = counties.FirstOrDefault(c => c.IsEqualTo(s.Patient.County)) ?? emptyCounty;
+                    if (!string.IsNullOrEmpty(s.Patient.County) && county == emptyCounty)
+                    {
+                        Log.Warn($"County {s.Patient.County} not found for sending {s.MeningoSendingId}.");
+                    }
+                    return county;
+                };
 
             AddField(s => s.Patient.PatientId, "PatNr NRZM");
             AddField(s => s.ReceivingDate.ToReportFormat(), "Eingang NRZM");
