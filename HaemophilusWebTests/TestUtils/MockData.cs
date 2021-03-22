@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using TestDataGenerator;
 
 namespace HaemophilusWeb.TestUtils
@@ -16,7 +18,7 @@ namespace HaemophilusWeb.TestUtils
         static MockData()
         {
             Catalog.RegisterPostCreationHandler(new PatientPostCreationHandler());
-            Catalog.RegisterPostCreationHandler(new SendingPostCreationHandler());
+            Catalog.RegisterPostCreationHandler(new FixDatePostCreationHandler());
         }
 
         private static readonly Catalog Catalog = new Catalog();
@@ -47,6 +49,15 @@ namespace HaemophilusWeb.TestUtils
             return Catalog.CreateInstance<T>();
         }
 
+        public static void Add(this ICollection<EpsilometerTest> epsilometerTests, Antibiotic antibiotic, float measurement = 0.25f, EpsilometerTestResult result = EpsilometerTestResult.Resistant)
+        {
+            var eTestAmpicillin = MockData.CreateInstance<EpsilometerTest>();
+            eTestAmpicillin.EucastClinicalBreakpoint.Antibiotic = antibiotic;
+            eTestAmpicillin.Measurement = measurement;
+            eTestAmpicillin.Result = result;
+            epsilometerTests.Add(eTestAmpicillin);
+        }
+
         private class PatientPostCreationHandler : IPostCreationHandler
         {
             public void ApplyPostCreationRule(object instance)
@@ -58,7 +69,7 @@ namespace HaemophilusWeb.TestUtils
             }
         }
 
-        private class SendingPostCreationHandler : IPostCreationHandler
+        private class FixDatePostCreationHandler : IPostCreationHandler
         {
             public void ApplyPostCreationRule(object instance)
             {
@@ -70,6 +81,14 @@ namespace HaemophilusWeb.TestUtils
                         sending.ReceivingDate = sending.SamplingDate.Value;
                         sending.SamplingDate = recievingDate;
 
+                    }
+                }
+                if (instance is MeningoSending meningoSending)
+                {
+                    meningoSending.ReceivingDate = meningoSending.ReceivingDate.AddYears(10);
+                    if (meningoSending.SamplingDate.HasValue)
+                    {
+                        meningoSending.SamplingDate = meningoSending.SamplingDate.Value.AddYears(10).AddMonths(-2);
                     }
                 }
             }

@@ -98,10 +98,6 @@ namespace HaemophilusWeb.Controllers
 
         protected override IEnumerable<MeningoSending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
-            if (exportType == ExportType.Rki)
-            {
-                throw new NotImplementedException("RKI export is not finished for Meningococci");
-            }
             var queryResult = NotDeletedSendings()
                 .Include(s => s.Patient)
                 .Include(s => s.Isolate)
@@ -111,7 +107,7 @@ namespace HaemophilusWeb.Controllers
                       || (s.SamplingDate >= query.From && s.SamplingDate <= query.To)
                 ).OrderBy(s => s.Isolate.StemNumber).ToList();
 
-            if (exportType == ExportType.Iris)
+            if (exportType == ExportType.Iris || exportType == ExportType.Rki)
             {
                 queryResult = queryResult.Where(s => s.Invasive == YesNo.Yes).ToList();
             }
@@ -121,8 +117,8 @@ namespace HaemophilusWeb.Controllers
 
         protected override ExportDefinition<MeningoSending> CreateRkiExportDefinition()
         {
-            var export = new ExportDefinition<MeningoSending>();
-            return export;
+            var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
+            return new MeningoSendingRkiExport(counties);
         }
 
         protected override ExportDefinition<MeningoSending> CreateLaboratoryExportDefinition()
@@ -186,6 +182,12 @@ namespace HaemophilusWeb.Controllers
                 };
             }).ToList();
             return queryRecords;
+        }
+        
+        protected override ActionResult RkiExportWithPotentialAdjustments(FromToQueryWithAdjustment query)
+        {
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Rki).ToList();
+            return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI");
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using NodaTime;
 
@@ -64,7 +65,7 @@ namespace HaemophilusWeb.Tools
                 {
                     var strainId = GetStrainId(row, true);
                     var containsKey = knownStrainIds.TryGetValue(strainId, out var previousReceivingDate);
-                    var currentReceivingDate = DateTime.Parse(row.Field<string>(_col.ReceivedDate));
+                    var currentReceivingDate = DateTime.Parse(row.Field<string>(_col.ReceivedDate), new CultureInfo("de"));
                     var period1 = Period.Between(
                         LocalDate.FromDateTime(currentReceivingDate),
                         LocalDate.FromDateTime(previousReceivingDate));
