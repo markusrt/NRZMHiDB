@@ -61,7 +61,7 @@ namespace HaemophilusWeb.Services
         }
 
         [Test]
-        public void QueryPostalCodeAndPlaceName_MultipleMatches_ReturnsAllEntries()
+        public void QueryPostalCodeAndPlaceName_MultipleMatches_ReturnsBestMatch()
         {
             var service = new GeonamesService(GetUrlReturningMultipleResults);
 
@@ -69,8 +69,49 @@ namespace HaemophilusWeb.Services
 
             queryResult.Should().NotBeEmpty();
             var jsonObject = JObject.Parse(queryResult);
-            jsonObject["postalcodes"].As<JArray>().Should().HaveCount(1);
+            var jArray = jsonObject["postalcodes"].As<JArray>();
+            jArray.Should().HaveCount(1);
+            jArray.First.Value<string>("placeName").Should().Be("Gossa");
         }
+
+        [TestCase(null)]
+        [TestCase("")]
+        [TestCase("Forchheim")]
+        public void QueryCoordinate_SingleMatch_ReturnsOneEntry(string placeName)
+        {
+            var service = new GeonamesService(GetUrlReturningSingleResult);
+
+            var queryResult = service.QueryCoordinateByPostalCode("91301", placeName);
+
+            queryResult.Should().NotBeNull();
+            queryResult?.Latitude.Should().Be(49.717542888321425);
+            queryResult?.Longitude.Should().Be(11.058769226074219);
+        }
+
+        [Test]
+        public void QueryCoordinate_MultipleMatches_ReturnsBestMatch()
+        {
+            var service = new GeonamesService(GetUrlReturningMultipleResults);
+
+            var queryResult = service.QueryCoordinateByPostalCode("06773", "Gossa");
+
+            queryResult.Should().NotBeNull();
+            queryResult?.Latitude.Should().Be(51.669489);
+            queryResult?.Longitude.Should().Be(12.444217);
+        }
+
+
+        [Test]
+        public void QueryCoordinate_NoMatch_ReturnsNull()
+        {
+            var service = new GeonamesService(GetUrlReturns404);
+
+            var queryResult = service.QueryCoordinateByPostalCode("90");
+
+            queryResult.Should().BeNull();
+        }
+
+
 
         private static string GetUrlReturns404(string arg)
         {
