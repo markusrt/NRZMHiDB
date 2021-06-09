@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -29,6 +30,8 @@ namespace HaemophilusWeb.Domain
 
         public IEnumerable<Typing> Typings => typings;
 
+        public string Serogroup { get; set; }
+
         public InterpretationResult Result { get; private set; } = new InterpretationResult();
 
         public void Interpret(MeningoIsolate isolate)
@@ -45,6 +48,57 @@ namespace HaemophilusWeb.Domain
             else
             {
                 RunStemInterpretation(isolate);
+            }
+
+            DetectSerogroup();
+        }
+
+        private void DetectSerogroup()
+        {
+            var serogroup = Typings.SingleOrDefault(t => t.Attribute == "Serogruppe")?.Value;
+            var serogenogroup = Typings.SingleOrDefault(t => t.Attribute == "Serogenogruppe")?.Value;
+            
+            if (serogroup != null && serogenogroup == null)
+            {
+                Serogroup = serogroup;
+            }
+            if (serogenogroup != null && serogroup == null)
+            {
+                Serogroup = serogenogroup;
+            }
+            if (serogenogroup != null && serogroup != null)
+            {
+                if (serogenogroup == serogroup)
+                {
+                    Serogroup = serogenogroup;
+                }
+                else if(serogroup.Contains("deutet auf unbekapselte Meningokokken hin") || serogroup.Contains("Nicht-invasiv"))
+                {
+                    Serogroup = serogenogroup;
+                }
+            }
+
+            var molecularTyping = Typings.SingleOrDefault(t => t.Attribute == "Molekulare Typisierung")?.Value;
+            if (molecularTyping != null)
+            {
+                var match = Regex.Match(molecularTyping, "Das Serogruppe.?-(.*)-spezifische .*-Gen wurde nachgewiesen.");
+                if (match.Success)
+                {
+                    Serogroup = match.Groups[1].Value;
+                }
+            }
+            
+            if (Serogroup != null)
+            {
+                if (Serogroup == "nicht gruppierbar" || Serogroup.Contains("Poly") || Serogroup.Contains("Auto"))
+                {
+                    Serogroup = "NG";
+                }
+                else if (Serogroup.Contains("cnl"))
+                {
+                    Serogroup = "cnl";
+                }
+                Serogroup = Regex.Replace(Serogroup, ".\\(.*\\)", "");
             }
         }
 
