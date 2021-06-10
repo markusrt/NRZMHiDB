@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2021, 06, 10), "csc-PCR und csb-PCR können für NM-Interpretation 1-5 auch den Wert n.d. haben", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 03, 22), "LGA Export", 70, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 03, 9), "PubMLST Matching Fehler", 79, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 01, 29, 07, 00, 0), "RKI Export", 25, ChangeType.Feature, DatabaseType.Meningococci),
