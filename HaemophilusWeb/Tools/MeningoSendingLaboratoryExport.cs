@@ -10,6 +10,8 @@ namespace HaemophilusWeb.Tools
 {
     public class MeningoSendingLaboratoryExport : SendingExportDefinition<MeningoSending, MeningoPatient>
     {
+        private MeningoIsolateInterpretation _isolateInterpretation = new MeningoIsolateInterpretation();
+
         public MeningoSendingLaboratoryExport()
         {
             AddField(s => s.MeningoPatientId, "Patienten-Nr.");
@@ -36,6 +38,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportRiskFactors(s.Patient.RiskFactors, () => s.Patient.OtherRiskFactor, _ => _.HasFlag(RiskFactors.Other)));
             AddField(s => s.Remark, "Bemerkung (Einsendung)");
 
+            AddField(s => DetectSerogroup(s.Isolate), "Serogruppe");
             AddField(s => ExportToString(s.Isolate.GrowthOnBloodAgar));
             AddField(s => ExportToString(s.Isolate.GrowthOnMartinLewisAgar));
             AddField(s => ExportToString(s.Isolate.Oxidase));
@@ -86,6 +89,12 @@ namespace HaemophilusWeb.Tools
             AddPubMsltProperty("parE", _ => _.ParE);
             AddPubMsltProperty(BexseroReactivity, _ => _.BexseroReactivity);
             AddPubMsltProperty(TrumenbaReactivity, _ => _.TrumenbaReactivity);
+        }
+
+        private string DetectSerogroup(MeningoIsolate isolate)
+        {
+            _isolateInterpretation.Interpret(isolate);
+            return _isolateInterpretation.Serogroup;
         }
 
         private string ExportRiskFactors<T>(T clinicalInformation, Func<string> otherClinicalInformation, Func<T, bool> isOther)

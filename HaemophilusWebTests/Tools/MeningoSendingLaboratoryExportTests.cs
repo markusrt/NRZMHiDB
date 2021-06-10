@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -38,7 +39,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(74);
+            export.Columns.Count.Should().Be(75);
         }
 
         [Test]
@@ -171,6 +172,37 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["Klinische Angaben"].Should().Be("Meningitis, Craniocerebral Injury");
+        }
+
+        [Test]
+        public void DataTable_ContainsEmptySerogroup()
+        {
+            var sut = CreateExportDefinition();
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Serogruppe"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
+        public void DataTable_ContainsInterpretedSerogroup()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.GrowthOnBloodAgar = Growth.TypicalGrowth;
+            Sending.Isolate.Sending.Isolate.GrowthOnMartinLewisAgar = Growth.TypicalGrowth;
+            Sending.Isolate.Sending.SamplingLocation = MeningoSamplingLocation.Blood;
+            Sending.Isolate.Oxidase = TestResult.Positive;
+            Sending.Isolate.Agglutination = MeningoSerogroupAgg.E;
+            Sending.Isolate.Onpg = TestResult.Negative;
+            Sending.Isolate.GammaGt = TestResult.Positive;
+            Sending.Isolate.SerogroupPcr = MeningoSerogroupPcr.NotDetermined;
+            Sending.Isolate.MaldiTof = UnspecificTestResult.NotDetermined;
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.NotDetermined;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.NotDetermined;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Serogruppe"].Should().Be("E");
         }
 
         private static MeningoSendingLaboratoryExport CreateExportDefinition()
