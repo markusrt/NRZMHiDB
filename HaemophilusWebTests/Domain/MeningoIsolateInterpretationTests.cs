@@ -556,8 +556,8 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = "B" == serogroup ? NativeMaterialTestResult.Positive : GetRandomNegativeOrInhibitory(),
-                CscPcr = "C" == serogroup ? NativeMaterialTestResult.Positive : GetRandomNegativeOrInhibitory(),
+                CsbPcr = "B" == serogroup ? NativeMaterialTestResult.Positive : GetRandomNegativeInhibitoryOrNotDetermined(),
+                CscPcr = "C" == serogroup ? NativeMaterialTestResult.Positive : GetRandomNegativeInhibitoryOrNotDetermined(),
                 CswyPcr = cswyPcr,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
@@ -590,8 +590,8 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = GetRandomNegativeOrInhibitory(),
-                CscPcr = GetRandomNegativeOrInhibitory(),
+                CsbPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
+                CscPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
                 CswyPcr = NativeMaterialTestResult.Positive,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
@@ -865,6 +865,16 @@ namespace HaemophilusWeb.Domain
         private NativeMaterialTestResult GetRandomNegativeOrInhibitory()
         {
             return _random.Next(2) == 0 ? NativeMaterialTestResult.Negative : NativeMaterialTestResult.Inhibitory;
+        }
+
+        private NativeMaterialTestResult GetRandomNegativeInhibitoryOrNotDetermined()
+        {
+            switch (_random.Next(3))
+            {
+                case 0: return NativeMaterialTestResult.Negative;
+                case 1: return NativeMaterialTestResult.Inhibitory;
+                default: return NativeMaterialTestResult.NotDetermined;
+            }
         }
     }
 

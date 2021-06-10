@@ -188,21 +188,27 @@ namespace HaemophilusWeb.Tools
         public void DataTable_ContainsInterpretedSerogroup()
         {
             var sut = CreateExportDefinition();
-            Sending.Isolate.GrowthOnBloodAgar = Growth.TypicalGrowth;
-            Sending.Isolate.Sending.Isolate.GrowthOnMartinLewisAgar = Growth.TypicalGrowth;
-            Sending.Isolate.Sending.SamplingLocation = MeningoSamplingLocation.Blood;
-            Sending.Isolate.Oxidase = TestResult.Positive;
-            Sending.Isolate.Agglutination = MeningoSerogroupAgg.E;
-            Sending.Isolate.Onpg = TestResult.Negative;
-            Sending.Isolate.GammaGt = TestResult.Positive;
-            Sending.Isolate.SerogroupPcr = MeningoSerogroupPcr.NotDetermined;
-            Sending.Isolate.MaldiTof = UnspecificTestResult.NotDetermined;
-            Sending.Isolate.PorAPcr = NativeMaterialTestResult.NotDetermined;
-            Sending.Isolate.FetAPcr = NativeMaterialTestResult.NotDetermined;
+            var isolate = new MeningoIsolate
+            {
+                CsbPcr = NativeMaterialTestResult.Positive,
+                CscPcr = NativeMaterialTestResult.Negative,
+                CswyPcr =  NativeMaterialTestResult.Negative,
+                PorAPcr = NativeMaterialTestResult.Positive,
+                FetAPcr = NativeMaterialTestResult.Positive,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z",
+                Sending = Sending,
+                EpsilometerTests = new List<EpsilometerTest>()
+            };
+            isolate.Sending.Isolate.GrowthOnMartinLewisAgar = Growth.TypicalGrowth;
+            isolate.Sending.Material = MeningoMaterial.NativeMaterial;
+
+            Sending.Isolate = isolate;
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Rows[0]["Serogruppe"].Should().Be("E");
+            export.Rows[0]["Serogruppe"].Should().Be("B");
         }
 
         private static MeningoSendingLaboratoryExport CreateExportDefinition()
