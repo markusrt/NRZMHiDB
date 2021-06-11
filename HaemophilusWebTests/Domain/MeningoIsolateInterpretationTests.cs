@@ -143,6 +143,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Wachstum auf Martin-Lewis-Agar" && t.Value == "Nein");
             isolateInterpretation.Serogroup.Should().BeNull();
+            isolateInterpretation.Rule.Should().Be("StemInterpretation_03");
         }
 
         [TestCase(TestResult.Negative, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
@@ -771,6 +772,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.Serogroup.Should().BeNull();
+            interpretation.Rule.Should().Be("NativeMaterialInterpretation_19");
         }
 
         [Test]

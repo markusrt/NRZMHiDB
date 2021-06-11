@@ -168,10 +168,10 @@ namespace HaemophilusWeb.Services
 
             var isolate = controller.GetIsolateByReference("DE14692");
 
-            isolate.PorAVr1.Should().Be("5-1");
-            isolate.PorAVr2.Should().Be("10-1");
-            isolate.SequenceType.Should().Be("11");
-            isolate.ClonalComplex.Should().Be("ST-11 complex");
+            isolate.PorAVr1.Should().Be("7-1");
+            isolate.PorAVr2.Should().Be("1");
+            isolate.SequenceType.Should().BeNull();
+            isolate.ClonalComplex.Should().BeNull();
         }
 
 

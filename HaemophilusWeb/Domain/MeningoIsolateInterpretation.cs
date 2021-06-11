@@ -33,13 +33,15 @@ namespace HaemophilusWeb.Domain
         public string Serogroup { get; set; }
 
         public InterpretationResult Result { get; private set; } = new InterpretationResult();
+        public string Rule { get; set; }
 
         public void Interpret(MeningoIsolate isolate)
         {
             typings.Clear();
 
             Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
-
+            Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
+            Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
 
             if (isolate.Sending.Material == MeningoMaterial.NativeMaterial)
             {
@@ -109,8 +111,7 @@ namespace HaemophilusWeb.Domain
             if (matchingRule.Key != null)
             {
                 var rule = matchingRule.Value;
-                Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
-                Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
+                Rule = matchingRule.Key;
 
                 Result.Comment = rule.Comment;
                 Result.Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray();
@@ -134,9 +135,8 @@ namespace HaemophilusWeb.Domain
             if (matchingRule.Key != null)
             {
                 var rule = matchingRule.Value;
-                Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
-                Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
-                
+                Rule = matchingRule.Key;
+
                 if (!string.IsNullOrEmpty(rule.Identification))
                 {
                     typings.Add(new Typing {Attribute = "Identifikation", Value = rule.Identification});

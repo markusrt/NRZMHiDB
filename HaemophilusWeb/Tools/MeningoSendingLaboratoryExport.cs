@@ -38,6 +38,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportRiskFactors(s.Patient.RiskFactors, () => s.Patient.OtherRiskFactor, _ => _.HasFlag(RiskFactors.Other)));
             AddField(s => s.Remark, "Bemerkung (Einsendung)");
 
+            AddField(s => DetectInterpretationRule(s.Isolate), "Regel");
             AddField(s => DetectSerogroup(s.Isolate), "Serogruppe");
             AddField(s => ExportToString(s.Isolate.GrowthOnBloodAgar));
             AddField(s => ExportToString(s.Isolate.GrowthOnMartinLewisAgar));
@@ -96,6 +97,14 @@ namespace HaemophilusWeb.Tools
             _isolateInterpretation.Interpret(isolate);
             return _isolateInterpretation.Serogroup;
         }
+        
+        private string DetectInterpretationRule(MeningoIsolate isolate)
+        {
+            _isolateInterpretation.Interpret(isolate);
+            return _isolateInterpretation.Rule;
+        }
+
+
 
         private string ExportRiskFactors<T>(T clinicalInformation, Func<string> otherClinicalInformation, Func<T, bool> isOther)
         {
