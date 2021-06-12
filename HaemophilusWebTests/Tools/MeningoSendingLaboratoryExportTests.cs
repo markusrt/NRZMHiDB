@@ -39,7 +39,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(75);
+            export.Columns.Count.Should().Be(76);
         }
 
         [Test]
@@ -182,6 +182,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["Serogruppe"].Should().Be(DBNull.Value);
+            export.Rows[0]["Regel"].Should().Be(DBNull.Value);
         }
 
         [Test]
@@ -209,6 +210,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["Serogruppe"].Should().Be("B");
+            export.Rows[0]["Regel"].Should().Be("NativeMaterialInterpretation_01");
         }
 
         private static MeningoSendingLaboratoryExport CreateExportDefinition()

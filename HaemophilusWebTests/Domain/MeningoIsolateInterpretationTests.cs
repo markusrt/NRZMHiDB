@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -30,6 +30,39 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().BeEmpty();
             isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
             isolateInterpretation.Serogroup.Should().BeNull();
+        }
+
+        [Test]
+        public void FirstNonEmptyThenEmptyIsolate_ClearsSerogroup()
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.No,
+                GrowthOnMartinLewisAgar = Growth.No,
+                Sending = new MeningoSending { SamplingLocation = InvasiveSamplingLocation },
+                Oxidase = TestResult.NotDetermined,
+                Agglutination = MeningoSerogroupAgg.NotDetermined,
+                Onpg = TestResult.NotDetermined,
+                GammaGt = TestResult.NotDetermined,
+                SerogroupPcr = MeningoSerogroupPcr.C,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.Negative,
+                FetAPcr = NativeMaterialTestResult.Positive,
+            };
+            var emptyIsolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                PorAPcr = NativeMaterialTestResult.Positive,
+            };
+
+            isolateInterpretation.Interpret(isolate);
+            isolateInterpretation.Serogroup.Should().Be("C");
+            isolateInterpretation.Rule.Should().Be("StemInterpretation_29");
+
+            isolateInterpretation.Interpret(emptyIsolate);
+            isolateInterpretation.Serogroup.Should().BeNull();
+            isolateInterpretation.Rule.Should().BeNull();
         }
 
         [TestCase(false, TestName = "IsolateMatchingStemRule1_ReturnsCorrespondingInterpretation")]

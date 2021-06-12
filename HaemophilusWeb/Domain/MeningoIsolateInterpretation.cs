@@ -37,7 +37,11 @@ namespace HaemophilusWeb.Domain
 
         public void Interpret(MeningoIsolate isolate)
         {
+            //TODO fix mix of model and business logic in that class it  could just return
+            //     an interpretation here whereas this class would be more the interpreter.
             typings.Clear();
+            Serogroup = null;
+            Rule = null;
 
             Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
             Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
