@@ -1,7 +1,7 @@
 {
   "NativeMaterialInterpretation_01": {
     "CsbPcr": [ "Positive" ],
-    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyAllele": 0,
     "PorAPcr": [ "Positive" ],
@@ -19,7 +19,7 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_02": {
-    "CsbPcr": [ "Negative", "Inhibitory" ],
+    "CsbPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CscPcr": [ "Positive" ],
     "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyAllele": 0,
@@ -38,8 +38,8 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_03": {
-    "CsbPcr": [ "Negative", "Inhibitory" ],
-    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CsbPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Positive" ],
     "CswyAllele": "Allele1",
     "PorAPcr": [ "Positive" ],
@@ -57,8 +57,8 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_04": {
-    "CsbPcr": [ "Negative", "Inhibitory" ],
-    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CsbPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Positive" ],
     "CswyAllele": "Allele2",
     "PorAPcr": [ "Positive" ],
@@ -76,8 +76,8 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_05": {
-    "CsbPcr": [ "Negative", "Inhibitory" ],
-    "CscPcr": [ "Negative", "Inhibitory" ],
+    "CsbPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Positive" ],
     "CswyAllele": "Allele3",
     "PorAPcr": [ "Positive" ],
