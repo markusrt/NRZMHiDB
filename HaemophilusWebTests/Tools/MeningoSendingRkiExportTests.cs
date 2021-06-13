@@ -68,7 +68,8 @@ namespace HaemophilusWeb.Tools
         public void DataTable_ContainsSimpleProperties()
         {
             var sut = CreateExportDefinition();
-            
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Positive;
 
             var export = sut.ToDataTable(Sendings);
 
@@ -76,6 +77,20 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["PorA VR1"].Should().Be(Sending.Isolate.PorAVr1);
             export.Rows[0]["PorA VR2"].Should().Be(Sending.Isolate.PorAVr2);
             export.Rows[0]["FetA VR"].Should().Be(Sending.Isolate.FetAVr);
+        }
+
+        [Test]
+        public void DataTable_ContainsNegativePorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Negative;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Negative;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA VR1"].Should().Be("negativ");
+            export.Rows[0]["PorA VR2"].Should().Be("negativ");
+            export.Rows[0]["FetA VR"].Should().Be("negativ");
         }
 
         [Test]

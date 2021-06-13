@@ -39,9 +39,10 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.CswyAllele), "cswy-Allel");
             AddField(s => ExportToString(s.Isolate.RealTimePcr));
             AddField(s => ExportToString(s.Isolate.RealTimePcrResult));
-            AddField(s => ExportToString(s.Isolate.PorAVr1), "PorA VR1");
-            AddField(s => ExportToString(s.Isolate.PorAVr2), "PorA VR2");
-            AddField(s => ExportToString(s.Isolate.FetAVr), "FetA VR");
+
+            AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr1, "PorA VR1");
+            AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr2, "PorA VR2");
+            AddFieldOnPositiveTestResult(s => s.Isolate.FetAPcr, s => s.Isolate.FetAVr, "FetA VR");
             
             AddEpsilometerTestFields(this, Antibiotic.Benzylpenicillin, true, "Penicillin MHK Etest");
             AddEpsilometerTestFields(this, Antibiotic.Ciprofloxacin, true, "Ciprofloxacin MHK Etest");
