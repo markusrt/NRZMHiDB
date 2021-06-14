@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using Geolocation;
 using HaemophilusWeb.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -72,6 +73,17 @@ namespace HaemophilusWeb.Utils
                 Log.Error(e, "$Failed to call Geonames PostalCodeSearchJSON REST API.");
                 return "{\"postalcodes\":[]}";
             }
+        }
+
+        public Coordinate? QueryCoordinateByPostalCode(string postalCode, string placeName = "")
+        {
+            var queryResult = JObject.Parse(QueryByPostalCode(postalCode, placeName))["postalcodes"] as JArray;
+            if (queryResult.Count > 0)
+            {
+                return new Coordinate(queryResult.First.Value<double>("lat"), queryResult.First.Value<double>("lng"));
+            }
+
+            return null;
         }
     }
 }
