@@ -33,9 +33,11 @@ namespace HaemophilusWeb.Tools
             AddField(s => s.ReceivingDate.ToReportFormat());
             AddField(s => s.SamplingDate.ToReportFormat());
             AddField(s => ExportToString(s.Isolate.Agglutination), "Serogruppe");
-            AddField(s => ExportToString(s.Isolate.PorAVr1), "PorA VR1");
-            AddField(s => ExportToString(s.Isolate.PorAVr2), "PorA VR2");
-            AddField(s => ExportToString(s.Isolate.FetAVr), "FetA VR");
+            
+            AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr1, "PorA VR1");
+            AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr2, "PorA VR2");
+            AddFieldOnPositiveTestResult(s => s.Isolate.FetAPcr, s => s.Isolate.FetAVr, "FetA VR");
+
             AddField(s => FindSpecies(s.Isolate), "Spezies");
             AddField(s => findCounty(s).CountyNumber, "Landkreis");
             AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "Bundesland");

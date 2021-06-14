@@ -124,6 +124,52 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Oxidase"].Should().Be("positiv");
         }
 
+        
+        [Test]
+        public void DataTable_ContainsPorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.PorAVr1 = "17";
+            Sending.Isolate.PorAVr2 = "16-3";
+            Sending.Isolate.FetAVr = "1-20";
+            
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA-VR1"].Should().Be("17");
+            export.Rows[0]["PorA-VR2"].Should().Be("16-3");
+            export.Rows[0]["FetA-VR"].Should().Be("1-20");
+        }
+
+        [Test]
+        public void DataTable_DoesNotContainsEmptyPorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.NotDetermined;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.NotDetermined;
+            
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA-VR1"].Should().Be(DBNull.Value);
+            export.Rows[0]["PorA-VR2"].Should().Be(DBNull.Value);
+            export.Rows[0]["FetA-VR"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
+        public void DataTable_DoesContainsNegativePorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Negative;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Negative;
+            
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA-VR1"].Should().Be("negativ");
+            export.Rows[0]["PorA-VR2"].Should().Be("negativ");
+            export.Rows[0]["FetA-VR"].Should().Be("negativ");
+        }
+
         [Test]
         public void DataTable_ContainsPubMlstProperties()
         {

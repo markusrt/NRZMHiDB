@@ -121,31 +121,50 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Bundesland"].Should().Be("Bayern");
         }
 
-        //[Test]
-        //public void DataTable_ContainsPubMlstProperties()
-        //{
-        //    var sut = CreateExportDefinition();
+        [Test]
+        public void DataTable_ContainsPorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.PorAVr1 = "17";
+            Sending.Isolate.PorAVr2 = "16-3";
+            Sending.Isolate.FetAVr = "1-20";
+            
+            var export = sut.ToDataTable(Sendings);
 
-        //    var export = sut.ToDataTable(Sendings);
+            export.Rows[0]["PorA-VR1"].Should().Be("17");
+            export.Rows[0]["PorA-VR2"].Should().Be("16-3");
+            export.Rows[0]["FetA-VR"].Should().Be("1-20");
+        }
 
-        //    export.Rows[0]["PubMLST ID"].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PubMlstId);
-        //    export.Rows[0][PorAVr1].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PorAVr1);
-        //    export.Rows[0][PorAVr2].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PorAVr2);
-        //    export.Rows[0][FetAVr].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.FetAVr);
-        //    export.Rows[0][PorB].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PorB);
-        //    export.Rows[0][NhbaPeptide].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.Nhba);
-        //    export.Rows[0][PenA].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PenA);
-        //    export.Rows[0][GyrA].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.GyrA);
-        //    export.Rows[0]["parC"].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.ParC);
-        //    export.Rows[0][RpoB].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.RpoB);
-        //    export.Rows[0][RplF].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.RplF);
-        //    export.Rows[0][Fhbp].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.Fhbp);
-        //    export.Rows[0]["parE"].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.ParE);
-        //    export.Rows[0][SequenceType].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.SequenceType);
-        //    export.Rows[0][ClonalComplex].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.ClonalComplex);
-        //    export.Rows[0][BexseroReactivity].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.BexseroReactivity);
-        //    export.Rows[0][TrumenbaReactivity].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.TrumenbaReactivity);
-        //}
+        [Test]
+        public void DataTable_DoesNotContainsEmptyPorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.NotDetermined;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.NotDetermined;
+            
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA-VR1"].Should().Be(DBNull.Value);
+            export.Rows[0]["PorA-VR2"].Should().Be(DBNull.Value);
+            export.Rows[0]["FetA-VR"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
+        public void DataTable_DoesContainsNegativePorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Negative;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Negative;
+            
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA-VR1"].Should().Be("negativ");
+            export.Rows[0]["PorA-VR2"].Should().Be("negativ");
+            export.Rows[0]["FetA-VR"].Should().Be("negativ");
+        }
 
         [Test]
         public void DataTable_OtherClinicalInformation()
