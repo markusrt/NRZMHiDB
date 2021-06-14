@@ -341,6 +341,7 @@ namespace HaemophilusWeb.Controllers
                     x.PatientPostalCode,
                     x.SenderPostalCode,
                     x.SenderLaboratoryNumber,
+                    x.PatientId,
                     Link = CreateEditControls(x.SendingId, x.IsolateId)
                 });
 

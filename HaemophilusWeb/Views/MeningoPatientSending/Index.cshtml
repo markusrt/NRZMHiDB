@@ -24,11 +24,14 @@
     <div class="col-md-2 col-sm-4 col-xs-12">
         <input id="searchPatientPostalCode" data-search-col="7" class="form-control col-sm-2" type="text" placeholder="Patient PLZ" />
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-12">
+    <div class="col-md-2 col-sm-4 col-xs-12">
         <input id="searchSenderLaboratoryNumber" data-search-col="9" class="form-control col-sm-2" type="text" placeholder="Einsender Labornummer" />
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-12">
+    <div class="col-md-2 col-sm-4 col-xs-12">
         <input id="searchSenderPostalCode" data-search-col="8" class="form-control col-sm-2" type="text" placeholder="Einsender PLZ" />
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-12">
+        <input id="searchPatientId" data-search-col="10" class="form-control col-sm-2" type="text" placeholder="Patienten-Nr." />
     </div>
 </div>
 <div class="topmargin">
@@ -64,6 +67,9 @@
                 </th>
                 <th>
                     SenderLaboratoryNumber
+                </th>
+                <th>
+                    PatientId
                 </th>
                 <th></th>
                 <th>
@@ -135,6 +141,9 @@
                             "data": "SenderLaboratoryNumber",
                         },
                         {
+                            "data": "PatientId",
+                        },
+                        {
                             "data": "Link",
                             "sortable": false,
                         },
@@ -152,6 +161,7 @@
                 table.columns(7).visible(false);
                 table.columns(8).visible(false);
                 table.columns(9).visible(false);
+                table.columns(10).visible(false);
             });
 
             function toggleExtendedSearch()

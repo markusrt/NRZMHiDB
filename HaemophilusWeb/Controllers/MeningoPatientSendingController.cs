@@ -145,6 +145,7 @@ namespace HaemophilusWeb.Controllers
                 x.Isolate.YearlySequentialIsolateNumber,
                 x.Isolate.Year,
                 x.SenderLaboratoryNumber,
+                x.MeningoPatientId,
                 PatientPostalCode = x.Patient.PostalCode,
                 SenderPostalCode = db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode,
             });
@@ -161,6 +162,7 @@ namespace HaemophilusWeb.Controllers
                 {
                     SendingId = x.MeningoSendingId,
                     IsolateId = x.MeningoIsolateId,
+                    PatientId = x.MeningoPatientId,
                     Initials = x.Initials,
                     BirthDate = x.BirthDate,
                     StemNumber = x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Meningococci),
@@ -178,7 +180,7 @@ namespace HaemophilusWeb.Controllers
                             x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Meningococci),
                             x.ReceivingDate.ToReportFormat(),
                             invasive, samplingLocation, laboratoryNumber,
-                            x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber)
+                            x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber, x.MeningoPatientId)
                         .ToLower()
                 };
             }).ToList();

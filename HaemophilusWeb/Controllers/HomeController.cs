@@ -22,7 +22,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2021, 06, 14), "Export von negativen porA- und fetA-PCR", 83, ChangeType.Bug, DatabaseType.Meningococci),
+                new Change(new DateTime(2021, 06, 14, 7, 0, 0), "Erweiterte Suche nach Patienten-Nr.", 82, ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2021, 06, 14, 6, 0, 0), "Export von negativen porA- und fetA-PCR", 83, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 06, 10), "csc-PCR und csb-PCR können für NM-Interpretation 1-5 auch den Wert n.d. haben", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 03, 22), "LGA Export", 70, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 03, 9), "PubMLST Matching Fehler", 79, ChangeType.Bug, DatabaseType.Meningococci),
