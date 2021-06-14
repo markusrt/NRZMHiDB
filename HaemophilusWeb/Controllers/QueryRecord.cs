@@ -17,6 +17,7 @@ namespace HaemophilusWeb.Controllers
         public string FullTextSearch { get; set; }
         public int IsolateId { get; set; }
         public int SendingId { get; set; }
+        public int PatientId { get; set; }
         public bool ReportGenerated { get; set; }
         public string PatientPostalCode { get; set; }
         public string SenderPostalCode { get; set; }
