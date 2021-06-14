@@ -10,6 +10,8 @@ namespace HaemophilusWeb.Tools
 {
     public class MeningoSendingLaboratoryExport : SendingExportDefinition<MeningoSending, MeningoPatient>
     {
+        private MeningoIsolateInterpretation _isolateInterpretation = new MeningoIsolateInterpretation();
+
         public MeningoSendingLaboratoryExport()
         {
             AddField(s => s.MeningoPatientId, "Patienten-Nr.");
@@ -36,6 +38,8 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportRiskFactors(s.Patient.RiskFactors, () => s.Patient.OtherRiskFactor, _ => _.HasFlag(RiskFactors.Other)));
             AddField(s => s.Remark, "Bemerkung (Einsendung)");
 
+            AddField(s => DetectInterpretationRule(s.Isolate), "Regel");
+            AddField(s => DetectSerogroup(s.Isolate), "Serogruppe");
             AddField(s => ExportToString(s.Isolate.GrowthOnBloodAgar));
             AddField(s => ExportToString(s.Isolate.GrowthOnMartinLewisAgar));
             AddField(s => ExportToString(s.Isolate.Oxidase));
@@ -46,9 +50,11 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.CapsuleNullLocus));
             AddField(s => ExportToString(s.Isolate.Agglutination));
             AddField(s => ExportToString(s.Isolate.SerogroupPcr));
-            AddField(s => ExportToString(s.Isolate.PorAVr1));
-            AddField(s => ExportToString(s.Isolate.PorAVr2));
-            AddField(s => ExportToString(s.Isolate.FetAVr));
+            
+            AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr1, "PorA-VR1");
+            AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr2, "PorA-VR2");
+            AddFieldOnPositiveTestResult(s => s.Isolate.FetAPcr, s => s.Isolate.FetAVr, "FetA-VR");
+
             AddField(s => ExportToString(s.Isolate.CsbPcr));
             AddField(s => ExportToString(s.Isolate.CscPcr));
             AddField(s => ExportToString(s.Isolate.CswyPcr));
@@ -87,6 +93,20 @@ namespace HaemophilusWeb.Tools
             AddPubMsltProperty(BexseroReactivity, _ => _.BexseroReactivity);
             AddPubMsltProperty(TrumenbaReactivity, _ => _.TrumenbaReactivity);
         }
+
+        private string DetectSerogroup(MeningoIsolate isolate)
+        {
+            _isolateInterpretation.Interpret(isolate);
+            return _isolateInterpretation.Serogroup;
+        }
+        
+        private string DetectInterpretationRule(MeningoIsolate isolate)
+        {
+            _isolateInterpretation.Interpret(isolate);
+            return _isolateInterpretation.Rule;
+        }
+
+
 
         private string ExportRiskFactors<T>(T clinicalInformation, Func<string> otherClinicalInformation, Func<T, bool> isOther)
         {

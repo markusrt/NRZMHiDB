@@ -131,6 +131,8 @@ namespace HaemophilusWeb.Tools
         public void DataTable_ContainsSimpleProperties()
         {
             var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Positive;
             Sending.Isolate.PorAVr1 = "5-2";
             Sending.Isolate.PorAVr2 = "10-1";
             Sending.Isolate.FetAVr = "4-1";
@@ -145,6 +147,21 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Landkreis"].Should().Be("11000");
             export.Rows[0]["Bundesland"].Should().Be("11");
         }
+
+        [Test]
+        public void DataTable_ContainsNegativePorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Negative;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Negative;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA VR1"].Should().Be("negativ");
+            export.Rows[0]["PorA VR2"].Should().Be("negativ");
+            export.Rows[0]["FetA VR"].Should().Be("negativ");
+        }
+
 
         private static MeningoStateAuthorityExport CreateExportDefinition()
         {

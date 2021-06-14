@@ -2,6 +2,7 @@
 using System.Linq;
 using DocumentFormat.OpenXml.Bibliography;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.Views.Utils;
 
@@ -31,6 +32,20 @@ namespace HaemophilusWeb.Tools
             export.AddField(s => FindEpsilometerTestMeasurement(s, antibiotic), measurementHeader);
             if(!skipEvaluation) export.AddField(s => ExportToString(FindEpsilometerTestEvaluation(s, antibiotic)), evaluationHeader);
         }
+
+        //protected void AddPorAAndFetAFields(ExportDefinition<MeningoSending> export, string porAVr1Header = null, string evaluationHeaderParameter = null)
+        //{
+        //    export.AddField(s => ExportToString(s.Isolate.PorAVr1));
+        //    AddField(s => s.GetIsolate().FetAVr == ExportToString(s.Isolate.PorAVr2));
+        //    AddField(s => ExportToString(s.Isolate.FetAVr));
+        //    var antibioticName = ExportToString(antibiotic);
+        //    var measurementHeader = measurementHeaderParameter ?? string.Format("{0} MHK", antibioticName);
+        //    var evaluationHeader = evaluationHeaderParameter ?? string.Format("{0} Bewertung", antibioticName);
+
+        //    export.AddField(s => FindEpsilometerTestMeasurement(s, antibiotic), measurementHeader);
+        //    if(!skipEvaluation) export.AddField(s => ExportToString(FindEpsilometerTestEvaluation(s, antibiotic)), evaluationHeader);
+        //}
+
 
         protected static string ExportGender(Gender? gender)
         {

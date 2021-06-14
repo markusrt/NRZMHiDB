@@ -34,9 +34,10 @@ namespace HaemophilusWeb.Tools
             AddEpsilometerTestFields(this, Antibiotic.Rifampicin, true);
             AddEpsilometerTestFields(this, Antibiotic.Ciprofloxacin, true);
 
-            AddField(s => ExportToString(s.Isolate.PorAVr1));
-            AddField(s => ExportToString(s.Isolate.PorAVr2));
-            AddField(s => ExportToString(s.Isolate.FetAVr));
+            AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr1, "PorA-VR1");
+            AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr2, "PorA-VR2");
+            AddFieldOnPositiveTestResult(s => s.Isolate.FetAPcr, s => s.Isolate.FetAVr, "FetA-VR");
+
             AddField(s => ExportToString(s.Isolate.SerogroupPcr));
             AddField(s => ExportToString(s.Isolate.RealTimePcr));
 

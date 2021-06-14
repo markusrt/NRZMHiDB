@@ -143,6 +143,7 @@ namespace HaemophilusWeb.Controllers
                 x.Isolate.YearlySequentialIsolateNumber,
                 x.Isolate.Year,
                 x.SenderLaboratoryNumber,
+                x.PatientId,
                 PatientPostalCode = x.Patient.PostalCode,
                 SenderPostalCode = db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode,
             });
@@ -158,6 +159,7 @@ namespace HaemophilusWeb.Controllers
                 {
                     SendingId = x.SendingId,
                     IsolateId = x.IsolateId,
+                    PatientId = x.PatientId,
                     Initials = x.Initials,
                     BirthDate = x.BirthDate,
                     StemNumber = x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Haemophilus),

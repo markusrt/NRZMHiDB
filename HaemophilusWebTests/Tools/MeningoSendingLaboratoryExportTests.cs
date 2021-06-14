@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -38,7 +39,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(74);
+            export.Columns.Count.Should().Be(76);
         }
 
         [Test]
@@ -123,6 +124,52 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Oxidase"].Should().Be("positiv");
         }
 
+        
+        [Test]
+        public void DataTable_ContainsPorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.PorAVr1 = "17";
+            Sending.Isolate.PorAVr2 = "16-3";
+            Sending.Isolate.FetAVr = "1-20";
+            
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA-VR1"].Should().Be("17");
+            export.Rows[0]["PorA-VR2"].Should().Be("16-3");
+            export.Rows[0]["FetA-VR"].Should().Be("1-20");
+        }
+
+        [Test]
+        public void DataTable_DoesNotContainsEmptyPorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.NotDetermined;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.NotDetermined;
+            
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA-VR1"].Should().Be(DBNull.Value);
+            export.Rows[0]["PorA-VR2"].Should().Be(DBNull.Value);
+            export.Rows[0]["FetA-VR"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
+        public void DataTable_DoesContainsNegativePorAAndFetA()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Negative;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Negative;
+            
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA-VR1"].Should().Be("negativ");
+            export.Rows[0]["PorA-VR2"].Should().Be("negativ");
+            export.Rows[0]["FetA-VR"].Should().Be("negativ");
+        }
+
         [Test]
         public void DataTable_ContainsPubMlstProperties()
         {
@@ -171,6 +218,45 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["Klinische Angaben"].Should().Be("Meningitis, Craniocerebral Injury");
+        }
+
+        [Test]
+        public void DataTable_ContainsEmptySerogroup()
+        {
+            var sut = CreateExportDefinition();
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Serogruppe"].Should().Be(DBNull.Value);
+            export.Rows[0]["Regel"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
+        public void DataTable_ContainsInterpretedSerogroup()
+        {
+            var sut = CreateExportDefinition();
+            var isolate = new MeningoIsolate
+            {
+                CsbPcr = NativeMaterialTestResult.Positive,
+                CscPcr = NativeMaterialTestResult.Negative,
+                CswyPcr =  NativeMaterialTestResult.Negative,
+                PorAPcr = NativeMaterialTestResult.Positive,
+                FetAPcr = NativeMaterialTestResult.Positive,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z",
+                Sending = Sending,
+                EpsilometerTests = new List<EpsilometerTest>()
+            };
+            isolate.Sending.Isolate.GrowthOnMartinLewisAgar = Growth.TypicalGrowth;
+            isolate.Sending.Material = MeningoMaterial.NativeMaterial;
+
+            Sending.Isolate = isolate;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Serogruppe"].Should().Be("B");
+            export.Rows[0]["Regel"].Should().Be("NativeMaterialInterpretation_01");
         }
 
         private static MeningoSendingLaboratoryExport CreateExportDefinition()
