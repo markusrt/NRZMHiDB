@@ -52,7 +52,7 @@ namespace HaemophilusWeb.Tools
 
             var healthOffice = rkiTool.QueryHealthOffice("91301");
 
-            healthOffice.ShouldBeEquivalentTo(expectedHealthOffice);
+            healthOffice.Should().BeEquivalentTo(expectedHealthOffice);
         }
 
         [Test]
@@ -80,7 +80,7 @@ namespace HaemophilusWeb.Tools
 
             var healthOffice = rkiTool.QueryHealthOffice("91301");
 
-            healthOffice.ShouldBeEquivalentTo(expectedHealthOffice);
+            healthOffice.Should().BeEquivalentTo(expectedHealthOffice);
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace HaemophilusWeb.Tools
 
             var healthOffice = rkiTool.QueryHealthOffice("91301");
 
-            healthOffice.ShouldBeEquivalentTo(expectedHealthOffice);
+            healthOffice.Should().BeEquivalentTo(expectedHealthOffice);
         }
     }
 }

@@ -131,7 +131,7 @@ namespace HaemophilusWeb.Controllers
             controller.ReportGenerated(IsolateId);
 
             var isolate = DbMock.Isolates.Single(i => i.IsolateId == IsolateId);
-            isolate.ReportDate.Should().BeCloseTo(DateTime.Now);
+            isolate.ReportDate.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMilliseconds(100));
             isolate.ReportStatus.Should().Be(ReportStatus.Final);
         }
 
@@ -179,7 +179,7 @@ namespace HaemophilusWeb.Controllers
         [TestCase(-1)]
         public void ReportGenerated_InvalidIsolateId_DoesNotThrow(int? isolateId)
         {
-            controller.Invoking(c => c.ReportGenerated(isolateId)).ShouldNotThrow();
+            controller.Invoking(c => c.ReportGenerated(isolateId)).Should().NotThrow();
         }
 
     }
