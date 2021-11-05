@@ -3,8 +3,13 @@
 namespace HaemophilusWeb.Models.Meningo
 {
     /// <summary>
-    /// Invasive locations (ttlam, 2019-01-14):
-    //  Blut, Blut und Liquor, Gelenkspunktat, Liquor, Petechien, Pleurapunktat, Anderer invasiv
+    ///  <p>
+    ///    Additional invasive location (@hclaus24, 2021-11-05): Serum
+    ///  </p>
+    ///  <p>
+    ///    Initial invasive locations (@thien-tri, 2019-01-14):
+    ///    Blut, Blut und Liquor, Gelenkspunktat, Liquor, Petechien, Pleurapunktat, Anderer invasiv
+    ///  </p>
     /// </summary>
     public enum MeningoSamplingLocation
     {
@@ -44,7 +49,9 @@ namespace HaemophilusWeb.Models.Meningo
         [Description("Trachealsekret")] TrachealSecretion = 15,
         [Description("Urethralabstrich")] UrethralSwab = 16,
         [Description("Vaginalabstrich")] VaginalSwab = 17,
-        [Description("Serum")] Serum = 18,
+        [InvasiveSamplingLocation]
+        [Description("Serum")]
+        Serum = 18,
         [Description("Anderer invasiv")]
         [InvasiveSamplingLocation]
         OtherInvasive = 32767,
