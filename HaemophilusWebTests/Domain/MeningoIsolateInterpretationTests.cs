@@ -607,6 +607,39 @@ namespace HaemophilusWeb.Domain
             interpretation.Serogroup.Should().BeNull(); //TODO check
         }
 
+        [Test]
+        public void IsolateMatchingStemRule34_ReturnsCorrespondingInterpretation()
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.ATypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.ATypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = InvasiveSamplingLocation },
+                Oxidase = TestResult.Negative,
+                Agglutination = MeningoSerogroupAgg.NotDetermined,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Negative,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTof = UnspecificTestResult.Determined,
+                MaldiTofBestMatch = "N. gonorrhoeae",
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            isolateInterpretation.Interpret(isolate);
+
+            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "β-Galaktosidase" && t.Value == "negativ");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "γ-Glutamyltransferase" && t.Value == "negativ");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "MALDI-TOF (VITEK MS)" && t.Value == "N. gonorrhoeae");
+            isolateInterpretation.Serogroup.Should().BeNull();
+        }
+
         [TestCase("B", NativeMaterialTestResult.Negative)]
         [TestCase("B", NativeMaterialTestResult.NotDetermined)]
         [TestCase("B", NativeMaterialTestResult.Inhibitory)]

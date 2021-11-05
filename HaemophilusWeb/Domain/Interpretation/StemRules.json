@@ -601,5 +601,21 @@
       "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
     ],
     "Typings": [ "NoAgglutinationNonInvasive" ]
+  },
+  "StemInterpretation_34": {
+    "SendingInvasive": "Yes",
+    "GrowthOnBloodAgar": "ATypicalGrowth",
+    "GrowthOnMartinLewisAgar": "ATypicalGrowth",
+    "Agglutination": [ "NotDetermined" ],
+    "Onpg": "Negative",
+    "GammaGt": "Negative",
+    "SerogroupPcr": [ "NotDetermined" ],
+    "MaldiTof": "Determined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Report": [
+      "Kein Nachweis von Neisseria meningitidis."
+    ],
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ]
   }
 }
