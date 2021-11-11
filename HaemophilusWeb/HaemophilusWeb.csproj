@@ -264,6 +264,10 @@
     <Compile Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.Designer.cs">
       <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.cs" />
+    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.Designer.cs">
+      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Services\PubMlstMatcher.cs" />
@@ -704,6 +708,9 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <EmbeddedResource Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.resx">
       <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.resx">
+      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
