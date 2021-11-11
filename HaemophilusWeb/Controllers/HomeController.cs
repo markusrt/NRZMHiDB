@@ -22,6 +22,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2021, 11, 11, 7, 0, 0), "Zusatzfeld Genomsequenzierung", 95, ChangeType.Feature),
+                new Change(new DateTime(2021, 11, 11, 7, 0, 0), "Interpretation Nativmaterial, Regeln 22 bis 24 und Stämme Regel 33", 77, ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2021, 11, 5, 7, 0, 0), "Serum wird als invasiv eingestuft", 92, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 06, 14, 7, 0, 0), "Erweiterte Suche nach Patienten-Nr.", 82, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 06, 14, 6, 0, 0), "Export von negativen porA- und fetA-PCR", 83, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 06, 10), "csc-PCR und csb-PCR können für NM-Interpretation 1-5 auch den Wert n.d. haben", ChangeType.Feature, DatabaseType.Meningococci),
