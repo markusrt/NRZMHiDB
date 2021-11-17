@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2021, 11, 17, 8, 30, 0), "Die Durchführung von Oxidase ist bei positivem Wachstum verpflichtend", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 11, 17, 7, 50, 0), "Standard-Sortierung der Übersicht nach Labornummer (absteigend)", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2021, 11, 11, 7, 0, 0), "Zusatzfeld Genomsequenzierung", 95, ChangeType.Feature),
                 new Change(new DateTime(2021, 11, 11, 7, 0, 0), "Interpretation Nativmaterial, Regeln 22 bis 24 und Stämme Regel 33", 77, ChangeType.Feature, DatabaseType.Meningococci),
