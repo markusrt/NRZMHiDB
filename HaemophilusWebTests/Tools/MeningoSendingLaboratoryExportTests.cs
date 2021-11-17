@@ -123,7 +123,6 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Wachstum auf Martin-Lewis-Agar"].Should().Be("atypisches Wachstum");
             export.Rows[0]["Oxidase"].Should().Be("positiv");
         }
-
         
         [Test]
         public void DataTable_ContainsPorAAndFetA()

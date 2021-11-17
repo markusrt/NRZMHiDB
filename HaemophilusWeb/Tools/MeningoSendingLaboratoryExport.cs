@@ -10,7 +10,7 @@ namespace HaemophilusWeb.Tools
 {
     public class MeningoSendingLaboratoryExport : SendingExportDefinition<MeningoSending, MeningoPatient>
     {
-        private MeningoIsolateInterpretation _isolateInterpretation = new MeningoIsolateInterpretation();
+        private readonly MeningoIsolateInterpretation _isolateInterpretation = new MeningoIsolateInterpretation();
 
         public MeningoSendingLaboratoryExport()
         {
@@ -112,8 +112,6 @@ namespace HaemophilusWeb.Tools
             _isolateInterpretation.Interpret(isolate);
             return _isolateInterpretation.Rule;
         }
-
-
 
         private string ExportRiskFactors<T>(T clinicalInformation, Func<string> otherClinicalInformation, Func<T, bool> isOther)
         {

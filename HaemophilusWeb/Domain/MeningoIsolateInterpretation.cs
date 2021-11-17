@@ -44,6 +44,7 @@ namespace HaemophilusWeb.Domain
             typings.Clear();
             Serogroup = null;
             Rule = null;
+            NoMeningococci = false;
 
             Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
             Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;

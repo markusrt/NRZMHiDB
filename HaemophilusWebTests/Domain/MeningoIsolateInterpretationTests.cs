@@ -45,7 +45,7 @@ namespace HaemophilusWeb.Domain
 
 
         [Test]
-        public void FirstNonEmptyThenEmptyIsolate_ClearsSerogroupAndMeningococciFound()
+        public void FirstNonEmptyThenEmptyIsolate_ClearsSerogroup()
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -75,6 +75,31 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Interpret(emptyIsolate);
             isolateInterpretation.Serogroup.Should().BeNull();
             isolateInterpretation.Rule.Should().BeNull();
+        }
+
+        [Test]
+        public void FirstMatchThenNoMatch_ClearsNoMeningococci()
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var emptyIsolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                PorAPcr = NativeMaterialTestResult.Positive,
+            };
+            var noMeningococciIsolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending()
+            };
+
+            isolateInterpretation.Interpret(noMeningococciIsolate);
+            isolateInterpretation.Serogroup.Should().BeNull();
+            isolateInterpretation.Rule.Should().Be("StemInterpretation_27");
+            isolateInterpretation.NoMeningococci.Should().BeTrue();
+
+            isolateInterpretation.Interpret(emptyIsolate);
+            isolateInterpretation.Serogroup.Should().BeNull();
+            isolateInterpretation.Rule.Should().BeNull();
+            isolateInterpretation.NoMeningococci.Should().BeFalse();
         }
 
         [TestCase(false, TestName = "IsolateMatchingStemRule1_ReturnsCorrespondingInterpretation")]
