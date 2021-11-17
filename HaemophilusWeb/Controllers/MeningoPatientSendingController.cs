@@ -63,8 +63,7 @@ namespace HaemophilusWeb.Controllers
                 return View(exportQuery);
             }
 
-            var sendings = SendingsMatchingExportQuery(query, ExportType.Laboratory).ToList();
-
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Laboratory).Where(MeningococciFound).ToList();
             var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
             return ExportToExcel(query, sendings, new MeningoStateAuthorityExport(counties), "LGA");
         }
