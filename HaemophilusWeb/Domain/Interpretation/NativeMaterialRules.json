@@ -107,7 +107,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RealTimePCRNegative", "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "RealTimePCRNegative", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_07": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -140,7 +141,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RealTimePCRStreptococcusPneumoniae", "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "RealTimePCRStreptococcusPneumoniae", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_09": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -156,7 +158,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RealTimePCRHaemophilusInfluenzae", "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "RealTimePCRHaemophilusInfluenzae", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_10": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -190,7 +193,8 @@
       "Kein Hinweis auf Neisseria meningitidis."
     ],
     "Typings": [ "RibosomalRna16S", "MolecularTyping", "RibosomalRna16SBestMatch", "NoPorA", "NoFetA" ],
-    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab.",
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_12": {
     "CsbPcr": [ "NotDetermined" ],
@@ -204,7 +208,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RibosomalRna16S", "NoPorA", "NoFetA" ]
+    "Typings": [ "RibosomalRna16S", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_13": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -219,7 +224,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RealTimePCRNegative", "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "RealTimePCRNegative", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_14": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -252,7 +258,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RealTimePCRStreptococcusPneumoniae", "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "RealTimePCRStreptococcusPneumoniae", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_16": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -268,7 +275,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RealTimePCRHaemophilusInfluenzae", "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "RealTimePCRHaemophilusInfluenzae", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_17": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -302,7 +310,8 @@
       "Kein Hinweis auf Neisseria meningitidis."
     ],
     "Typings": [ "RibosomalRna16S", "RibosomalRna16SBestMatch", "MolecularTyping", "NoPorA", "NoFetA" ],
-    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab.",
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_19": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -317,7 +326,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RibosomalRna16S", "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "RibosomalRna16S", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_20": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -332,7 +342,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "MolecularTyping", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_21": {
     "CsbPcr": [ "Negative", "Inhibitory" ],
@@ -380,7 +391,8 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "RealTimePCRNegative", "NoPorA", "NoFetA" ]
+    "Typings": [ "RealTimePCRNegative", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   },
   "NativeMaterialInterpretation_24": {
     "CsbPcr": [ "Negative" ],
@@ -395,6 +407,7 @@
       "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
       "Kein Hinweis auf Neisseria meningitidis."
     ],
-    "Typings": [ "MolecularTyping", "NoPorA", "NoFetA" ]
+    "Typings": [ "MolecularTyping", "NoPorA", "NoFetA" ],
+    "NoMeningococci": true
   }
 }

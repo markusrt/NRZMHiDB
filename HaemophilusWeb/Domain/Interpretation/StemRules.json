@@ -89,7 +89,8 @@
     "Report": [
       "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
     ],
-    "Typings": []
+    "Typings": [],
+    "NoMeningococci": true
   },
   "StemInterpretation_02": {
     "SendingInvasive": "Yes",
@@ -125,7 +126,8 @@
     "Report": [
       "Kein Nachweis von Neisseria meningitidis."
     ],
-    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar" ]
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar" ],
+    "NoMeningococci": true
   },
   "StemInterpretation_04": {
     "SendingInvasive": "Yes",
@@ -141,7 +143,8 @@
     "Report": [
       "Kein Nachweis von Neisseria meningitidis."
     ],
-    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ]
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ],
+    "NoMeningococci": true
   },
   "StemInterpretation_05": {
     "SendingInvasive": "Yes",
@@ -157,7 +160,8 @@
     "Report": [
       "Kein Nachweis von Neisseria meningitidis."
     ],
-    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ]
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ],
+    "NoMeningococci": true
   },
   "StemInterpretation_06": {
     "SendingInvasive": "No",
@@ -472,7 +476,8 @@
     "Report": [
       "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
     ],
-    "Typings": []
+    "Typings": [],
+    "NoMeningococci": true
   },
   "StemInterpretation_28": {
     "SendingInvasive": "Yes",
@@ -616,6 +621,7 @@
     "Report": [
       "Kein Nachweis von Neisseria meningitidis."
     ],
-    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ]
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ],
+    "NoMeningococci": true
   }
 }

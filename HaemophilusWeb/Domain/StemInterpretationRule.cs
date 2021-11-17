@@ -21,5 +21,6 @@ namespace HaemophilusWeb.Domain
         public string[] Report { get; set; }
         public string[] Typings { get; set; }
         public string Comment { get; set; }
+        public bool NoMeningococci { get; set; }
     }
 }

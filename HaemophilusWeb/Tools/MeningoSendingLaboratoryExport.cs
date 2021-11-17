@@ -40,6 +40,7 @@ namespace HaemophilusWeb.Tools
 
             AddField(s => DetectInterpretationRule(s.Isolate), "Regel");
             AddField(s => DetectSerogroup(s.Isolate), "Serogruppe");
+            AddField(s => DetectMeningococci(s.Isolate), "Meningokokken");
             AddField(s => ExportToString(s.Isolate.GrowthOnBloodAgar));
             AddField(s => ExportToString(s.Isolate.GrowthOnMartinLewisAgar));
             AddField(s => ExportToString(s.Isolate.Oxidase));
@@ -99,7 +100,13 @@ namespace HaemophilusWeb.Tools
             _isolateInterpretation.Interpret(isolate);
             return _isolateInterpretation.Serogroup;
         }
-        
+
+        private string DetectMeningococci(MeningoIsolate isolate)
+        {
+            _isolateInterpretation.Interpret(isolate);
+            return _isolateInterpretation.NoMeningococci ? "kein Nachweis" : null;
+        }
+
         private string DetectInterpretationRule(MeningoIsolate isolate)
         {
             _isolateInterpretation.Interpret(isolate);
