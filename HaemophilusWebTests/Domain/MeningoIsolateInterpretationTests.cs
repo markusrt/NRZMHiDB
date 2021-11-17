@@ -14,7 +14,16 @@ namespace HaemophilusWeb.Domain
         private const MeningoSamplingLocation NonInvasiveSamplingLocation = MeningoSamplingLocation.NasalSwab;
         private const MeningoSamplingLocation InvasiveSamplingLocation = MeningoSamplingLocation.Blood;
 
-        private Random _random = new Random();
+        private List<string> RulesWithNoMeningococci = new List<string>()
+        {
+            "StemInterpretation_01", "StemInterpretation_03", "StemInterpretation_04", "StemInterpretation_05", "StemInterpretation_27", "StemInterpretation_34",
+            "NativeMaterialInterpretation_06", "NativeMaterialInterpretation_08", "NativeMaterialInterpretation_09", "NativeMaterialInterpretation_11", 
+            "NativeMaterialInterpretation_12", "NativeMaterialInterpretation_13", "NativeMaterialInterpretation_15", "NativeMaterialInterpretation_16", 
+            "NativeMaterialInterpretation_18", "NativeMaterialInterpretation_19", "NativeMaterialInterpretation_20", "NativeMaterialInterpretation_23",
+            "NativeMaterialInterpretation_24"
+        };
+        
+        private readonly Random _random = new Random();
 
         [Test]
         public void EmptyIsolate_ReturnsNoGrowth()
@@ -30,7 +39,10 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().BeEmpty();
             isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
             isolateInterpretation.Serogroup.Should().BeNull();
+            isolateInterpretation.Rule.Should().Be("StemInterpretation_27");
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
+
 
         [Test]
         public void FirstNonEmptyThenEmptyIsolate_ClearsSerogroup()
@@ -65,6 +77,31 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Rule.Should().BeNull();
         }
 
+        [Test]
+        public void FirstMatchThenNoMatch_ClearsNoMeningococci()
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var emptyIsolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                PorAPcr = NativeMaterialTestResult.Positive,
+            };
+            var noMeningococciIsolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending()
+            };
+
+            isolateInterpretation.Interpret(noMeningococciIsolate);
+            isolateInterpretation.Serogroup.Should().BeNull();
+            isolateInterpretation.Rule.Should().Be("StemInterpretation_27");
+            isolateInterpretation.NoMeningococci.Should().BeTrue();
+
+            isolateInterpretation.Interpret(emptyIsolate);
+            isolateInterpretation.Serogroup.Should().BeNull();
+            isolateInterpretation.Rule.Should().BeNull();
+            isolateInterpretation.NoMeningococci.Should().BeFalse();
+        }
+
         [TestCase(false, TestName = "IsolateMatchingStemRule1_ReturnsCorrespondingInterpretation")]
         [TestCase(true, TestName = "IsolateMatchingStemRule27_ReturnsCorrespondingInterpretation")]
         public void IsolateMatchingStemRule1or27_ReturnsCorrespondingInterpretation(bool invasive)
@@ -90,6 +127,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().BeEmpty();
             isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
             isolateInterpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [TestCase(MeningoSerogroupPcr.C, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingStemRule2_ReturnsCorrespondingInterpretation")]
@@ -147,6 +185,7 @@ namespace HaemophilusWeb.Domain
                     "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C."));
                 isolateInterpretation.Serogroup.Should().Be("C");
             }
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [Test]
@@ -177,6 +216,7 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "Wachstum auf Martin-Lewis-Agar" && t.Value == "Nein");
             isolateInterpretation.Serogroup.Should().BeNull();
             isolateInterpretation.Rule.Should().Be("StemInterpretation_03");
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [TestCase(TestResult.Negative, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
@@ -211,6 +251,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "MALDI-TOF (VITEK MS)" && t.Value == "N. gonorrhoeae");
             isolateInterpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [Test]
@@ -241,6 +282,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Serogruppe" && t.Value == "X");
             isolateInterpretation.Serogroup.Should().Be("X");
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [Test]
@@ -270,6 +312,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Serogruppe" && t.Value == "E");
             isolateInterpretation.Serogroup.Should().Be("E");
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [TestCase(MeningoSerogroupAgg.Auto, TestName = "IsolateMatchingStemRule8_ReturnsCorrespondingInterpretation")]
@@ -309,6 +352,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
             isolateInterpretation.Serogroup.Should().Be("W/Y");
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [TestCase(MeningoSerogroupAgg.Auto, TestName = "IsolateMatchingStemRule10_ReturnsCorrespondingInterpretation")]
@@ -348,6 +392,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
             isolateInterpretation.Serogroup.Should().Be("W/Y");
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [TestCase(MeningoSerogroupAgg.Auto, TestName = "IsolateMatchingStemRule12_ReturnsCorrespondingInterpretation")]
@@ -379,6 +424,7 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "Serogruppe" && t.Value.Contains(agglutination.ToString()) && t.Value.Contains("Nicht-invasiv"));
             isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Serogenogruppe");
             isolateInterpretation.Serogroup.Should().Be("NG");
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [Test]
@@ -415,6 +461,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
             isolateInterpretation.Serogroup.Should().Be("W/Y");
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [TestCase(true, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule15_ReturnsCorrespondingInterpretation")]
@@ -468,6 +515,7 @@ namespace HaemophilusWeb.Domain
                     .Contain("Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer");
             }
             interpretation.Serogroup.Should().Be("cnl");
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
 
@@ -522,6 +570,7 @@ namespace HaemophilusWeb.Domain
                     .Contain("Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer");
             }
             interpretation.Serogroup.Should().Be("cnl");
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [TestCase(true, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingStemRule23_ReturnsCorrespondingInterpretation")]
@@ -576,6 +625,7 @@ namespace HaemophilusWeb.Domain
             }
 
             interpretation.Serogroup.Should().Be("cnl");
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [Test]
@@ -604,7 +654,8 @@ namespace HaemophilusWeb.Domain
                 t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             interpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Agglutination" && t.Value == "keine Agglutination mit Antikörpern gegen die Serogruppen A, B, C, E, W, X und Y (Nicht-invasive Meningokokken sind oft unbekapselt.)");
-            interpretation.Serogroup.Should().BeNull(); //TODO check
+            interpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [Test]
@@ -638,6 +689,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "MALDI-TOF (VITEK MS)" && t.Value == "N. gonorrhoeae");
             isolateInterpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
         [TestCase("B", NativeMaterialTestResult.Negative)]
@@ -675,6 +727,7 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
             interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
             interpretation.Serogroup.Should().Be(serogroup);
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [TestCase("W", "csw", "")]
@@ -709,6 +762,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Be("Z");
             interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
             interpretation.Serogroup.Should().Be(serogroup);
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [TestCase("Rule 06", NativeMaterialTestResult.Inhibitory, false, 0, "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.")]
@@ -763,7 +817,8 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.Result.Comment.Should().BeNull();
-            interpretation.Serogroup.Should().BeNull(); //TODO check
+            interpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [TestCase("Rule 10", NativeMaterialTestResult.Positive, false, "Neisseria meningitidis", "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.")]
@@ -809,7 +864,8 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
-            interpretation.Serogroup.Should().BeNull(); //TODO check
+            interpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
 
@@ -840,6 +896,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [Test]
@@ -870,6 +927,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.Serogroup.Should().BeNull();
             interpretation.Rule.Should().Be("NativeMaterialInterpretation_19");
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [Test]
@@ -898,6 +956,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [Test]
@@ -929,7 +988,8 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Be("X, Y");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Be("Z");
             interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
-            interpretation.Serogroup.Should().BeNull(); //TODO check
+            interpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [Test]
@@ -960,6 +1020,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
                 .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.");
             interpretation.Serogroup.Should().Be("B");
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [Test]
@@ -990,6 +1051,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
                 .Should().Be("Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.");
             interpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [Test]
@@ -1020,6 +1082,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.Serogroup.Should().BeNull();
+             AssertNoMeningococciFlagIsValid(interpretation);
         }
 
 
@@ -1045,6 +1108,13 @@ namespace HaemophilusWeb.Domain
                 case 1: return NativeMaterialTestResult.Inhibitory;
                 default: return NativeMaterialTestResult.NotDetermined;
             }
+        }
+        
+        private void AssertNoMeningococciFlagIsValid(MeningoIsolateInterpretation isolateInterpretation)
+        {
+            var rule = isolateInterpretation.Rule;
+            var expectedToReportNoMeningococci = RulesWithNoMeningococci.Contains(rule);
+            isolateInterpretation.NoMeningococci.Should().Be(expectedToReportNoMeningococci);
         }
     }
 

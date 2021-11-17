@@ -34,6 +34,8 @@ namespace HaemophilusWeb.Domain
 
         public InterpretationResult Result { get; private set; } = new InterpretationResult();
         public string Rule { get; set; }
+        
+        public bool NoMeningococci { get; set; }
 
         public void Interpret(MeningoIsolate isolate)
         {
@@ -42,6 +44,7 @@ namespace HaemophilusWeb.Domain
             typings.Clear();
             Serogroup = null;
             Rule = null;
+            NoMeningococci = false;
 
             Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
             Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
@@ -116,6 +119,7 @@ namespace HaemophilusWeb.Domain
             {
                 var rule = matchingRule.Value;
                 Rule = matchingRule.Key;
+                NoMeningococci = rule.NoMeningococci;
 
                 Result.Comment = rule.Comment;
                 Result.Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray();
@@ -140,6 +144,7 @@ namespace HaemophilusWeb.Domain
             {
                 var rule = matchingRule.Value;
                 Rule = matchingRule.Key;
+                NoMeningococci = rule.NoMeningococci;
 
                 if (!string.IsNullOrEmpty(rule.Identification))
                 {

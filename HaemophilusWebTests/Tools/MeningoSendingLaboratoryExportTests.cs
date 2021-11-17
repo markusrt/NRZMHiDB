@@ -39,7 +39,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(76);
+            export.Columns.Count.Should().Be(77);
         }
 
         [Test]
@@ -123,7 +123,6 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Wachstum auf Martin-Lewis-Agar"].Should().Be("atypisches Wachstum");
             export.Rows[0]["Oxidase"].Should().Be("positiv");
         }
-
         
         [Test]
         public void DataTable_ContainsPorAAndFetA()
@@ -257,6 +256,28 @@ namespace HaemophilusWeb.Tools
 
             export.Rows[0]["Serogruppe"].Should().Be("B");
             export.Rows[0]["Regel"].Should().Be("NativeMaterialInterpretation_01");
+            export.Rows[0]["Meningokokken"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
+        public void DataTable_ContainsNoMeningococci()
+        {
+            var sut = CreateExportDefinition();
+            var isolate = new MeningoIsolate
+            {
+                Sending = Sending,
+                EpsilometerTests = new List<EpsilometerTest>()
+            };
+            isolate.Sending.SamplingLocation = MeningoSamplingLocation.Liquor;
+            isolate.Sending.Material = MeningoMaterial.VitalStem;
+
+            Sending.Isolate = isolate;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Serogruppe"].Should().Be(DBNull.Value);
+            export.Rows[0]["Regel"].Should().Be("StemInterpretation_27");
+            export.Rows[0]["Meningokokken"].Should().Be("kein Nachweis");
         }
 
         private static MeningoSendingLaboratoryExport CreateExportDefinition()
