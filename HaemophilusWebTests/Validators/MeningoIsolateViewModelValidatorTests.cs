@@ -34,6 +34,35 @@ namespace HaemophilusWeb.Validators
            AssertIsValid(validationResult);
         }
 
+        [Test]
+        public void Validate_WithOxidaseNotSet_IsInvalid()
+        {
+            var dto = CreateValidModel();
+            dto.Oxidase = TestResult.NotDetermined;
+
+            var validationResult = Validate(dto);
+
+            AssertIsInvalid(validationResult);
+        }
+
+        [TestCase(Growth.ATypicalGrowth, Growth.No, TestResult.Negative)]
+        [TestCase(Growth.TypicalGrowth, Growth.No, TestResult.Positive)]
+        [TestCase(Growth.No, Growth.ATypicalGrowth, TestResult.Negative)]
+        [TestCase(Growth.No, Growth.TypicalGrowth, TestResult.Positive)]
+        [TestCase(Growth.ATypicalGrowth, Growth.TypicalGrowth, TestResult.Positive)]
+        [TestCase(Growth.TypicalGrowth, Growth.ATypicalGrowth, TestResult.Negative)]
+        public void Validate_WithOxidaseAndGrowthSet_IsValid(Growth growthGrowthOnBloodAgar, Growth growthOnMartinLewisAgar, TestResult oxidaseTestResult)
+        {
+            var dto = CreateValidModel();
+            dto.GrowthOnBloodAgar = growthGrowthOnBloodAgar;
+            dto.GrowthOnMartinLewisAgar = growthOnMartinLewisAgar;
+            dto.Oxidase = oxidaseTestResult;
+
+            var validationResult = Validate(dto);
+
+            AssertIsValid(validationResult);
+        }
+
         [TestCase(NativeMaterialTestResult.Negative)]
         [TestCase(NativeMaterialTestResult.Inhibitory)]
         [TestCase(NativeMaterialTestResult.NotDetermined)]
@@ -74,12 +103,13 @@ namespace HaemophilusWeb.Validators
         {
             return new MeningoIsolateViewModel
             {
-                GrowthOnBloodAgar = Growth.No,
-                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                GrowthOnBloodAgar = Growth.ATypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.No,
                 LaboratoryNumber = "120/21",
                 CsbPcr = NativeMaterialTestResult.Positive,
                 CswyPcr = NativeMaterialTestResult.Negative,
                 CscPcr = NativeMaterialTestResult.Inhibitory,
+                Oxidase = TestResult.Positive
             };
         }
 
