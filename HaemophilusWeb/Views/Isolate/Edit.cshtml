@@ -13,6 +13,7 @@
 {
     @Html.ValidationSummary(true)
     @Html.HiddenFor(model => model.IsolateId)
+    @Html.HiddenFor(model => model.ReportStatus)
 
     @Html.TextEditorFor(m => m.LaboratoryNumber, prefix: DatabaseType.Haemophilus.LaboratoryNumberPrefix())
 
