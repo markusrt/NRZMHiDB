@@ -22,7 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2021, 11, 20, 15, 0, 0), "Befundampel wird bei Änderungen nicht mehr zurückgesetzt", 101, ChangeType.Bug),
+                new Change(new DateTime(2021, 11, 20, 15, 0, 0), "Befundampel wird bei Änderungen nicht mehr zurückgesetzt", 101, ChangeType.Bug, DatabaseType.None),
                 new Change(new DateTime(2021, 11, 20, 14, 0, 0), "Interpretation Nativmaterial, Regeln 25 bis 28 und Stämme Regel 35", 77, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 11, 17, 17, 00, 0), "Neues Feld in Regeln+Labor Export: Kein Nachweis", 77, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 11, 17, 8, 30, 0), "Die Durchführung von Oxidase ist bei positivem Wachstum verpflichtend", ChangeType.Feature, DatabaseType.Meningococci),
