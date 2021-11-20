@@ -22,10 +22,13 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2021, 11, 20, 15, 0, 0), "Befundampel wird bei Änderungen nicht mehr zurückgesetzt", 101, ChangeType.Bug, DatabaseType.None),
+                new Change(new DateTime(2021, 11, 20, 14, 0, 0), "Interpretation Nativmaterial, Regeln 25 bis 28 und Stämme Regel 35", 77, ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2021, 11, 17, 17, 00, 0), "Neues Feld in Regeln+Labor Export: Kein Nachweis", 77, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 11, 17, 8, 30, 0), "Die Durchführung von Oxidase ist bei positivem Wachstum verpflichtend", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 11, 17, 7, 50, 0), "Standard-Sortierung der Übersicht nach Labornummer (absteigend)", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2021, 11, 11, 7, 0, 0), "Zusatzfeld Genomsequenzierung", 95, ChangeType.Feature),
-                new Change(new DateTime(2021, 11, 11, 7, 0, 0), "Interpretation Nativmaterial, Regeln 22 bis 24 und Stämme Regel 33", 77, ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2021, 11, 11, 7, 0, 0), "Interpretation Nativmaterial, Regeln 22 bis 24 und Stämme Regel 34", 77, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 11, 5, 7, 0, 0), "Serum wird als invasiv eingestuft", 92, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 06, 14, 7, 0, 0), "Erweiterte Suche nach Patienten-Nr.", 82, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 06, 14, 6, 0, 0), "Export von negativen porA- und fetA-PCR", 83, ChangeType.Bug, DatabaseType.Meningococci),
