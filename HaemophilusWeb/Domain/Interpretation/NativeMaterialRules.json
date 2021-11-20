@@ -363,8 +363,8 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_22": {
-    "CsbPcr": [ "Negative", "NotDetermined" ],
-    "CscPcr": [ "Positive" ],
+    "CsbPcr": [ "Positive" ],
+    "CscPcr": [ "Negative", "NotDetermined" ],
     "CswyPcr": [ "Negative", "NotDetermined" ],
     "PorAPcr": [ "Negative" ],
     "FetAPcr": [ "Negative" ],
@@ -409,5 +409,76 @@
     ],
     "Typings": [ "MolecularTyping", "NoPorA", "NoFetA" ],
     "NoMeningococci": true
+  },
+  "NativeMaterialInterpretation_25": {
+    "CsbPcr": [ "Negative", "NotDetermined" ],
+    "CscPcr": [ "Positive" ],
+    "CswyPcr": [ "Negative", "NotDetermined" ],
+    "PorAPcr": [ "Negative" ],
+    "FetAPcr": [ "Negative" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "NeisseriaMeningitidis",
+    "MolecularTyping": "Das Serogruppe-C-spezifische csc-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C."
+    ],
+    "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_26": {
+    "CsbPcr": [ "Negative", "NotDetermined" ],
+    "CscPcr": [ "Negative", "NotDetermined" ],
+    "CswyPcr": [ "Positive" ],
+    "CswyAllele": "Allele1",
+    "PorAPcr": [ "Negative" ],
+    "FetAPcr": [ "Negative" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "NeisseriaMeningitidis",
+    "MolecularTyping": "Das Serogruppe-W-spezifische csw-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W."
+    ],
+    "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_27": {
+    "CsbPcr": [ "Negative", "NotDetermined" ],
+    "CscPcr": [ "Negative", "NotDetermined" ],
+    "CswyPcr": [ "Positive" ],
+    "CswyAllele": "Allele2",
+    "PorAPcr": [ "Negative" ],
+    "FetAPcr": [ "Negative" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "NeisseriaMeningitidis",
+    "MolecularTyping": "Das Serogruppe-Y-spezifische csy-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe Y."
+    ],
+    "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_28": {
+    "CsbPcr": [ "Negative", "NotDetermined" ],
+    "CscPcr": [ "Negative", "NotDetermined" ],
+    "CswyPcr": [ "Positive" ],
+    "CswyAllele": "Allele3",
+    "PorAPcr": [ "Negative" ],
+    "FetAPcr": [ "Negative" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "NeisseriaMeningitidis",
+    "MolecularTyping": "Das Serogruppen-W/Y-spezifische csw/csy-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y."
+    ],
+    "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "NoPorA", "NoFetA" ]
   }
 }
