@@ -1085,6 +1085,33 @@ namespace HaemophilusWeb.Domain
              AssertNoMeningococciFlagIsValid(interpretation);
         }
 
+        [Test]
+        public void IsolateMatchingNativeMaterialRule01_ReturnsCorrespondingRule()
+        {
+            //Case MZ043/21
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { Material = MeningoMaterial.IsolatedDna, SamplingLocation = MeningoSamplingLocation.Liquor},
+                                
+                CsbPcr = NativeMaterialTestResult.Positive,
+                CscPcr = NativeMaterialTestResult.NotDetermined,
+                CswyPcr = NativeMaterialTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.Positive,
+                PorAVr1 = "19",
+                PorAVr2 = "15-1",
+                FetAPcr = NativeMaterialTestResult.Positive,
+                FetAVr = "5-1",
+                RibosomalRna16S = NativeMaterialTestResult.NotDetermined,
+                RealTimePcr = NativeMaterialTestResult.NotDetermined,
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Serogroup.Should().Be("B");
+            interpretation.Rule.Should().Be("NativeMaterialInterpretation_01");
+            AssertNoMeningococciFlagIsValid(interpretation);
+        }
 
         private NativeMaterialTestResult GetRandomNegativeOrInhibitory()
         {
