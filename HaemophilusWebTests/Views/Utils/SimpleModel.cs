@@ -13,7 +13,7 @@ namespace HaemophilusWeb.Views.Utils
         public GrowthType? GrowthType { get; set; }
 
         [Display(Name = "Hib-Impfung")]
-        public YesNoUnknown HibVaccination { get; set; }
+        public VaccinationStatus HibVaccination { get; set; }
 
         [Display(Name = "Klinische Angaben")]
         public ClinicalInformation ClinicalInformation { get; set; }

@@ -81,7 +81,7 @@ namespace HaemophilusWeb.Tools
             Sending.Patient.County = county.Name;
             Sending.Patient.State = State.BB;
             Sending.Patient.Gender = Gender.Female;
-            Sending.Patient.HibVaccination = YesNoUnknown.Yes;
+            Sending.Patient.HibVaccination = VaccinationStatus.Yes;
             Sending.Isolate.Evaluation = Evaluation.HaemophilusTypeA;
             Sending.Isolate.BetaLactamase = TestResult.Negative;
 

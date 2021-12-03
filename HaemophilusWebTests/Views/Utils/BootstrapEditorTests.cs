@@ -58,11 +58,11 @@ namespace HaemophilusWeb.Views.Utils
         [Test]
         public void EnumRadioEditorFor_Enum_CreatesBootstrapRadioEditor()
         {
-            var simpleModel = new SimpleModel {HibVaccination = YesNoUnknown.NotStated};
+            var simpleModel = new SimpleModel {HibVaccination = VaccinationStatus.NotStated};
             var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(simpleModel));
             var enumRadioEditorHtml = helper.EnumRadioEditorFor(m => m.HibVaccination);
 
-            enumRadioEditorHtml.ToHtmlString().Should().Be("<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"HibVaccination\">Hib-Impfung</label><div class=\"col-sm-5\"><div><div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"btn btn-default \"><input id=\"HibVaccination_No\" name=\"HibVaccination\" type=\"radio\" value=\"No\" /> Nein</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Yes\" name=\"HibVaccination\" type=\"radio\" value=\"Yes\" /> Ja</label><label class=\"btn btn-default active\"><input checked=\"checked\" id=\"HibVaccination_NotStated\" name=\"HibVaccination\" type=\"radio\" value=\"NotStated\" /> keine Angabe</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Unknown\" name=\"HibVaccination\" type=\"radio\" value=\"Unknown\" /> Unbekannt</label></div></div></div></div>");
+            enumRadioEditorHtml.ToHtmlString().Should().Be("<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"HibVaccination\">Hib-Impfung</label><div class=\"col-sm-5\"><div><div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"btn btn-default \"><input id=\"HibVaccination_No\" name=\"HibVaccination\" type=\"radio\" value=\"No\" /> Nein</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Yes\" name=\"HibVaccination\" type=\"radio\" value=\"Yes\" /> Ja</label><label class=\"btn btn-default active\"><input checked=\"checked\" id=\"HibVaccination_NotStated\" name=\"HibVaccination\" type=\"radio\" value=\"NotStated\" /> keine Angabe</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Unknown\" name=\"HibVaccination\" type=\"radio\" value=\"Unknown\" /> Unbekannt</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Incomplete\" name=\"HibVaccination\" type=\"radio\" value=\"Incomplete\" /> nicht vollständig</label></div></div></div></div>");
         }
 
         [Test]
