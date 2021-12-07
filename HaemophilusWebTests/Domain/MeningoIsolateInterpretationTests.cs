@@ -219,16 +219,17 @@ namespace HaemophilusWeb.Domain
             AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
-        [TestCase(TestResult.Negative, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
-        [TestCase(TestResult.Positive, TestName = "IsolateMatchingStemRule5_ReturnsCorrespondingInterpretation")]
-        public void IsolateMatchingStemRule4And5_ReturnsCorrespondingInterpretation(TestResult gammaGtTestResult)
+        [TestCase(TestResult.Negative, true, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
+        [TestCase(TestResult.Negative, false, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
+        [TestCase(TestResult.Positive, true, TestName = "IsolateMatchingStemRule5_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingStemRule4And5_ReturnsCorrespondingInterpretation(TestResult gammaGtTestResult, bool invasive)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
             {
                 GrowthOnBloodAgar = Growth.ATypicalGrowth,
                 GrowthOnMartinLewisAgar = Growth.No,
-                Sending = new MeningoSending { SamplingLocation = InvasiveSamplingLocation },
+                Sending = new MeningoSending { SamplingLocation = invasive ? InvasiveSamplingLocation : NonInvasiveSamplingLocation },
                 Oxidase = TestResult.Negative,
                 Agglutination = MeningoSerogroupAgg.NotDetermined,
                 Onpg = TestResult.Negative,
@@ -275,7 +276,8 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().BeEmpty();
+            isolateInterpretation.Result.Report.Should().Contain(
+                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
 
             isolateInterpretation.Typings.Should().Contain(
                 t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
@@ -380,7 +382,9 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().BeEmpty();
+            isolateInterpretation.Result.Report.Should().Contain(
+                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+
             isolateInterpretation.Typings.Should().Contain(
                 t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             isolateInterpretation.Typings.Should().Contain(t =>
@@ -427,19 +431,24 @@ namespace HaemophilusWeb.Domain
             AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
 
-        [Test]
-        public void IsolateMatchingStemRule14_ReturnsCorrespondingInterpretation()
+        [TestCase(Growth.TypicalGrowth, TestResult.Positive)]
+        [TestCase(Growth.ATypicalGrowth, TestResult.Positive)]
+        [TestCase(Growth.ATypicalGrowth, TestResult.Negative)]
+        [TestCase(Growth.TypicalGrowth, TestResult.Negative)]
+        public void IsolateMatchingStemRule14_ReturnsCorrespondingInterpretation(
+            Growth growthOnMartinLewisAgar,
+            TestResult gammaGt)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
             {
                 GrowthOnBloodAgar = Growth.TypicalGrowth,
-                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = growthOnMartinLewisAgar,
                 Sending = new MeningoSending { SamplingLocation = InvasiveSamplingLocation },
                 Oxidase = TestResult.Positive,
                 Agglutination = MeningoSerogroupAgg.WY,
                 Onpg = TestResult.Negative,
-                GammaGt = TestResult.Positive,
+                GammaGt = gammaGt,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
                 MaldiTof = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.Positive,
@@ -497,7 +506,8 @@ namespace HaemophilusWeb.Domain
             }
             else
             {
-                interpretation.Result.Report.Should().BeEmpty();
+                interpretation.Result.Report.Should().Contain(
+                    s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
             }
 
             interpretation.Typings.Should().Contain(
@@ -552,7 +562,8 @@ namespace HaemophilusWeb.Domain
             }
             else
             {
-                interpretation.Result.Report.Should().BeEmpty();
+                interpretation.Result.Report.Should().Contain(
+                    s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
             }
 
             interpretation.Typings.Should().Contain(
@@ -690,6 +701,227 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "MALDI-TOF (VITEK MS)" && t.Value == "N. gonorrhoeae");
             isolateInterpretation.Serogroup.Should().BeNull();
             AssertNoMeningococciFlagIsValid(isolateInterpretation);
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule35_ReturnsCorrespondingInterpretation()
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.No,
+                GrowthOnMartinLewisAgar = Growth.No,
+                Sending = new MeningoSending { SamplingLocation = InvasiveSamplingLocation },
+                Oxidase = TestResult.NotDetermined,
+                Agglutination = MeningoSerogroupAgg.NotDetermined,
+                Onpg = TestResult.NotDetermined,
+                GammaGt = TestResult.NotDetermined,
+                SerogroupPcr = MeningoSerogroupPcr.WY,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.Negative,
+                FetAPcr = NativeMaterialTestResult.Negative,
+            };
+
+            interpretation.Interpret(isolate);
+           
+            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y"));
+            interpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
+            interpretation.TypingAttribute("Serogenogruppe").Should().Be("W/Y");
+            interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            interpretation.Serogroup.Should().Be("W/Y");
+            AssertNoMeningococciFlagIsValid(interpretation);
+        }
+
+        [TestCase(MeningoSerogroupAgg.C, MeningoSerogroupPcr.NotDetermined, TestName = "IsolateMatchingStemRule36_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupAgg.Poly, MeningoSerogroupPcr.Negative, TestName = "IsolateMatchingStemRule37_ReturnsCorrespondingInterpretation")]
+        [TestCase(MeningoSerogroupAgg.Auto, MeningoSerogroupPcr.NotDetermined, TestName = "IsolateMatchingStemRule38_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingStemRule36To38_ReturnsCorrespondingInterpretation(
+            MeningoSerogroupAgg agglutination,
+            MeningoSerogroupPcr serogroupPcr )
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = agglutination,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Positive,
+                SerogroupPcr = serogroupPcr,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.Positive,
+                FetAPcr = NativeMaterialTestResult.Positive,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z"
+            };
+
+            interpretation.Interpret(isolate);
+
+            var agglutinationText = agglutination.ToString();
+            interpretation.Result.Report.Should().Contain(
+                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+
+            interpretation.TypingAttribute("Identifikation").Should().Be("Neisseria meningitidis");
+            interpretation.TypingAttribute("PorA - Sequenztyp").Should().Be("X, Y");
+            interpretation.TypingAttribute("FetA - Sequenztyp").Should().Be("Z");
+            interpretation.TypingAttribute("Serogruppe").Should().Contain(agglutinationText);
+            interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
+            
+            if (agglutination == MeningoSerogroupAgg.Poly || agglutination == MeningoSerogroupAgg.Auto)
+            {
+                interpretation.TypingAttribute("Serogruppe").Should().Contain("Nicht-invasiv");
+                interpretation.Serogroup.Should().Be("NG");
+            }
+            else
+            {
+                interpretation.Serogroup.Should().Be(agglutinationText);
+            }
+           
+            AssertNoMeningococciFlagIsValid(interpretation);
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule39_ReturnsCorrespondingInterpretation()
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = MeningoSerogroupAgg.C,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Positive,
+                SerogroupPcr = MeningoSerogroupPcr.C,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(
+                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+
+            interpretation.TypingAttribute("Identifikation").Should().Be("Neisseria meningitidis");
+            interpretation.TypingAttribute("Serogruppe").Should().Be("C");
+            interpretation.Serogroup.Should().Be("C");
+            
+            AssertNoMeningococciFlagIsValid(interpretation);
+            interpretation.Rule.Should().Be("StemInterpretation_39");
+        }
+
+        [TestCase(MeningoSerogroupAgg.Negative, MeningoSerogroupPcr.B)]
+        [TestCase(MeningoSerogroupAgg.Poly, MeningoSerogroupPcr.X)]
+        public void IsolateMatchingStemRule40_ReturnsCorrespondingInterpretation(
+            MeningoSerogroupAgg agglutination,
+            MeningoSerogroupPcr serogroupPcr )
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var expectedSerogroup = serogroupPcr.ToString();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = agglutination,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Positive,
+                SerogroupPcr = serogroupPcr,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(
+                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+
+            interpretation.TypingAttribute("Identifikation").Should().Be("Neisseria meningitidis");
+            interpretation.TypingAttribute("Serogenogruppe").Should().Contain(expectedSerogroup);
+            interpretation.TypingAttribute("Serogenogruppe").Should().Contain("molekularbiologisch bestimmt");
+            interpretation.Serogroup.Should().Be(expectedSerogroup);
+
+            AssertNoMeningococciFlagIsValid(interpretation);
+            interpretation.Rule.Should().Be("StemInterpretation_40");
+        }
+        
+        [Test]
+        public void IsolateMatchingStemRule41_ReturnsCorrespondingInterpretation()
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = MeningoSerogroupAgg.Negative,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Positive,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.Positive,
+                FetAPcr = NativeMaterialTestResult.Positive,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z"
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(
+                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+
+            interpretation.TypingAttribute("Identifikation").Should().Be("Neisseria meningitidis");
+            interpretation.TypingAttribute("Agglutination").Should().Be("keine Agglutination mit Antikörpern gegen die Serogruppen  B, C, W und Y");
+            interpretation.TypingAttribute("PorA - Sequenztyp").Should().Be("X, Y");
+            interpretation.TypingAttribute("FetA - Sequenztyp").Should().Be("Z");
+            interpretation.Serogroup.Should().Be("NG");
+            
+            AssertNoMeningococciFlagIsValid(interpretation);
+            interpretation.Rule.Should().Be("StemInterpretation_41");
+        }
+
+        [Test]
+        public void IsolateMatchingStemRulePartialReport_ReturnsCorrespondingInterpretation()
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = InvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = MeningoSerogroupAgg.B,
+                Onpg = TestResult.NotDetermined,
+                GammaGt = TestResult.NotDetermined,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B"));
+
+            interpretation.TypingAttribute("Identifikation").Should().Be("Neisseria meningitidis");
+            interpretation.TypingAttribute("Serogruppe").Should().Be("B");
+            interpretation.TypingAttribute("Empfindlichkeitstestung (Etest)").Should().Be("folgt");
+            interpretation.Serogroup.Should().Be("B");
+            
+            AssertNoMeningococciFlagIsValid(interpretation);
+            interpretation.Rule.Should().Be("StemInterpretation_PartialReport");
         }
 
         [TestCase("B", NativeMaterialTestResult.Negative)]
