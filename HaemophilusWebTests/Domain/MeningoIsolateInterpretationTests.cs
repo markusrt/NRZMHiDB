@@ -885,7 +885,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("Agglutination").Should().Be("keine Agglutination mit Antikörpern gegen die Serogruppen  B, C, W und Y");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Be("X, Y");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Be("Z");
-            interpretation.Serogroup.Should().Be("NG");
+            interpretation.Serogroup.Should().Be(null); //TODO check if this should be NG instead
             
             AssertNoMeningococciFlagIsValid(interpretation);
             interpretation.Rule.Should().Be("StemInterpretation_41");
@@ -924,13 +924,16 @@ namespace HaemophilusWeb.Domain
             interpretation.Rule.Should().Be("StemInterpretation_PartialReport");
         }
 
-        [TestCase("B", NativeMaterialTestResult.Negative)]
-        [TestCase("B", NativeMaterialTestResult.NotDetermined)]
-        [TestCase("B", NativeMaterialTestResult.Inhibitory)]
-        [TestCase("C", NativeMaterialTestResult.Negative)]
-        [TestCase("C", NativeMaterialTestResult.NotDetermined)]
-        [TestCase("C", NativeMaterialTestResult.Inhibitory)]
-        public void IsolateMatchingNativeMaterialRule1Or2_ReturnsCorrespondingInterpretation(string serogroup, NativeMaterialTestResult cswyPcr)
+        [TestCase("B", NativeMaterialTestResult.Negative, NativeMaterialTestResult.NotDetermined)]
+        [TestCase("B", NativeMaterialTestResult.NotDetermined, NativeMaterialTestResult.NotDetermined)]
+        [TestCase("B", NativeMaterialTestResult.Inhibitory, NativeMaterialTestResult.NotDetermined)]
+        [TestCase("C", NativeMaterialTestResult.Negative, NativeMaterialTestResult.NotDetermined)]
+        [TestCase("C", NativeMaterialTestResult.NotDetermined, NativeMaterialTestResult.NotDetermined)]
+        [TestCase("C", NativeMaterialTestResult.Inhibitory, NativeMaterialTestResult.NotDetermined)]
+        public void IsolateMatchingNativeMaterialRule1aOr2_ReturnsCorrespondingInterpretation(
+            string serogroup,
+            NativeMaterialTestResult cswyPcr,
+            NativeMaterialTestResult realTimePcr)
         {
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -943,8 +946,13 @@ namespace HaemophilusWeb.Domain
                 FetAPcr = NativeMaterialTestResult.Positive,
                 PorAVr1 = "X",
                 PorAVr2 = "Y",
-                FetAVr = "Z"
+                FetAVr = "Z",
+                RealTimePcr = realTimePcr
             };
+            if (isolate.RealTimePcr == NativeMaterialTestResult.Positive)
+            {
+                isolate.RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis;
+            }
 
             interpretation.Interpret(isolate);
 
@@ -959,6 +967,72 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
             interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
             interpretation.Serogroup.Should().Be(serogroup);
+
+            if (realTimePcr == NativeMaterialTestResult.Positive)
+            {
+                interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+                    .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.");
+            }
+            else
+            {
+                interpretation.Typings.Should().NotContain(t =>
+                    t.Attribute == "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)");
+            }
+
+            AssertNoMeningococciFlagIsValid(interpretation);
+        }
+
+        [TestCase("B", NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingNativeMaterialRule1a_ReturnsCorrespondingInterpretation")]
+        [TestCase("B", NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule1b_ReturnsCorrespondingInterpretation")]
+        [TestCase("C", NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingNativeMaterialRule2_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingNativeMaterialRule1Or2_ReturnsCorrespondingInterpretation(
+            string serogroup,
+            NativeMaterialTestResult realTimePcr)
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
+                CsbPcr = "B" == serogroup ? NativeMaterialTestResult.Positive : GetRandomNegativeInhibitoryOrNotDetermined(),
+                CscPcr = "C" == serogroup ? NativeMaterialTestResult.Positive : GetRandomNegativeInhibitoryOrNotDetermined(),
+                CswyPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
+                PorAPcr = NativeMaterialTestResult.Positive,
+                FetAPcr = NativeMaterialTestResult.Positive,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z",
+                RealTimePcr = realTimePcr
+            };
+            if (isolate.RealTimePcr == NativeMaterialTestResult.Positive)
+            {
+                isolate.RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis;
+            }
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(s => s.Contains($"Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}."));
+            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
+            interpretation.Result.Report.Should().Contain(s => s.Contains($"Serogruppe {serogroup}"));
+            interpretation.Typings.Should().Contain(
+                t => t.Attribute == "Molekulare Typisierung" && t.Value == $"Das Serogruppe-{serogroup}-spezifische cs{serogroup.ToLower()}-Gen wurde nachgewiesen.");
+            interpretation.Typings.Should().Contain(t =>
+                t.Attribute == "PorA - Sequenztyp" && t.Value == "X, Y");
+            interpretation.Typings.Should().Contain(t =>
+                t.Attribute == "FetA - Sequenztyp" && t.Value == "Z");
+            interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
+            interpretation.Serogroup.Should().Be(serogroup);
+
+            if (realTimePcr == NativeMaterialTestResult.Positive)
+            {
+                interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+                    .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.");
+            }
+            else
+            {
+                interpretation.Typings.Should().NotContain(t =>
+                    t.Attribute == "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)");
+            }
+
             AssertNoMeningococciFlagIsValid(interpretation);
         }
 
@@ -1232,8 +1306,8 @@ namespace HaemophilusWeb.Domain
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
                 CsbPcr = NativeMaterialTestResult.Positive,
-                CscPcr = GetRandomNegativeOrNotDetermined(),
-                CswyPcr = GetRandomNegativeOrNotDetermined(),
+                CscPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
+                CswyPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
@@ -1324,9 +1398,9 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = GetRandomNegativeOrNotDetermined(),
+                CsbPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
                 CscPcr = NativeMaterialTestResult.Positive,
-                CswyPcr = GetRandomNegativeOrNotDetermined(),
+                CswyPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
@@ -1355,8 +1429,8 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = GetRandomNegativeOrNotDetermined(),
-                CscPcr = GetRandomNegativeOrNotDetermined(),
+                CsbPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
+                CscPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
                 CswyPcr = NativeMaterialTestResult.Positive,
                 CswyAllele = CswyAllel.Allele1,
                 PorAPcr = NativeMaterialTestResult.Negative,
@@ -1387,8 +1461,8 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = GetRandomNegativeOrNotDetermined(),
-                CscPcr = GetRandomNegativeOrNotDetermined(),
+                CsbPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
+                CscPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
                 CswyPcr = NativeMaterialTestResult.Positive,
                 CswyAllele = CswyAllel.Allele2,
                 PorAPcr = NativeMaterialTestResult.Negative,
@@ -1419,8 +1493,8 @@ namespace HaemophilusWeb.Domain
             var isolate = new MeningoIsolate
             {
                 Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
-                CsbPcr = GetRandomNegativeOrNotDetermined(),
-                CscPcr = GetRandomNegativeOrNotDetermined(),
+                CsbPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
+                CscPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
                 CswyPcr = NativeMaterialTestResult.Positive,
                 CswyAllele = CswyAllel.Allele3,
                 PorAPcr = NativeMaterialTestResult.Negative,
@@ -1441,6 +1515,83 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
                 .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.");
             interpretation.Serogroup.Should().Be("W/Y");
+            AssertNoMeningococciFlagIsValid(interpretation);
+        }
+
+        [TestCase(NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule29a_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingNativeMaterialRule29b_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Negative, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule30_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule31a_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule31b_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule32a_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule32b_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingNativeMaterialRule29To32_ReturnsCorrespondingInterpretation(
+            NativeMaterialTestResult porA,
+            NativeMaterialTestResult fetA,
+            NativeMaterialTestResult realTimePcr)
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
+                CsbPcr = NativeMaterialTestResult.Positive,
+                CscPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
+                CswyPcr = GetRandomNegativeInhibitoryOrNotDetermined(),
+                PorAPcr = porA,
+                FetAPcr = fetA,
+                RealTimePcr = realTimePcr,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z",
+            };
+            if (isolate.RealTimePcr == NativeMaterialTestResult.Positive)
+            {
+                isolate.RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis;
+            }
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken-spezifische DNA konnte nachgewiesen werden."));
+            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B"));
+            interpretation.TypingAttribute("Molekulare Typisierung").Should().Be("Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.");
+
+            if (porA == NativeMaterialTestResult.Negative)
+            {
+                interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            }
+            else
+            {
+                interpretation.TypingAttribute("PorA - Sequenztyp").Should().Be("X, Y");
+                interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
+            }
+
+            if (fetA == NativeMaterialTestResult.Negative)
+            {
+                interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            }
+            else
+            {
+                interpretation.TypingAttribute("FetA - Sequenztyp").Should().Be("Z");
+                interpretation.Result.Comment.Should().Contain("Microsynth Seqlab");
+            }
+
+            if (porA == NativeMaterialTestResult.Negative && fetA == NativeMaterialTestResult.Negative)
+            {
+                interpretation.Result.Comment.Should().BeNull();
+            }
+
+            if (realTimePcr == NativeMaterialTestResult.Positive)
+            {
+                interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+                    .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.");
+            }
+            else
+            {
+                interpretation.Typings.Should().NotContain(t =>
+                    t.Attribute == "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)");
+            }
+            interpretation.Serogroup.Should().Be("B");
             AssertNoMeningococciFlagIsValid(interpretation);
         }
 
@@ -1494,13 +1645,17 @@ namespace HaemophilusWeb.Domain
             interpretation.Interpret(isolate);
 
             interpretation.Serogroup.Should().Be("B");
-            interpretation.Rule.Should().Be("NativeMaterialInterpretation_01");
+            interpretation.Rule.Should().Be("NativeMaterialInterpretation_01a");
             AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         private NativeMaterialTestResult GetRandomNegativeOrInhibitory()
         {
             return _random.Next(2) == 0 ? NativeMaterialTestResult.Negative : NativeMaterialTestResult.Inhibitory;
+        }
+        private NativeMaterialTestResult GetRandomPositiveOrNotDetermined()
+        {
+            return _random.Next(2) == 0 ? NativeMaterialTestResult.Positive : NativeMaterialTestResult.NotDetermined;
         }
 
         private NativeMaterialTestResult GetRandomNegativeOrNotDetermined()
