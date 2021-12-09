@@ -535,7 +535,7 @@
     "Typings": [ "MolecularTyping", "NoPorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
-  "NativeMaterialInterpretation_31a": {
+  "NativeMaterialInterpretation_30a": {
     "CsbPcr": [ "Positive" ],
     "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
@@ -553,7 +553,7 @@
     "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
-  "NativeMaterialInterpretation_31b": {
+  "NativeMaterialInterpretation_30b": {
     "CsbPcr": [ "Positive" ],
     "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
@@ -570,7 +570,7 @@
     "Typings": [ "MolecularTyping", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
-  "NativeMaterialInterpretation_32a": {
+  "NativeMaterialInterpretation_31a": {
     "CsbPcr": [ "Positive" ],
     "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
@@ -588,7 +588,7 @@
     "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "PorA", "NoFetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
-  "NativeMaterialInterpretation_32b": {
+  "NativeMaterialInterpretation_31b": {
     "CsbPcr": [ "Positive" ],
     "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],

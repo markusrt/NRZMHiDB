@@ -109,6 +109,12 @@ namespace HaemophilusWeb.Domain
                 }
                 Serogroup = Regex.Replace(Serogroup, ".\\(.*\\)", "");
             }
+
+            var agglutination = Typings.SingleOrDefault(t => t.Attribute == "Agglutination")?.Value;
+            if (Serogroup == null && agglutination != null && agglutination.Contains("keine Agglutination"))
+            {
+                Serogroup = "NG";
+            }
         }
 
         private void RunNativeMaterialInterpretation(MeningoIsolate isolate)

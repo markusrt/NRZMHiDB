@@ -665,7 +665,7 @@ namespace HaemophilusWeb.Domain
                 t => t.Attribute == "Identifikation" && t.Value == "Neisseria meningitidis");
             interpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Agglutination" && t.Value == "keine Agglutination mit Antikörpern gegen die Serogruppen A, B, C, E, W, X und Y (Nicht-invasive Meningokokken sind oft unbekapselt.)");
-            interpretation.Serogroup.Should().BeNull();
+            interpretation.Serogroup.Should().Be("NG");
             AssertNoMeningococciFlagIsValid(interpretation);
         }
 
@@ -885,7 +885,7 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("Agglutination").Should().Be("keine Agglutination mit Antikörpern gegen die Serogruppen  B, C, W und Y");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Be("X, Y");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Be("Z");
-            interpretation.Serogroup.Should().Be(null); //TODO check if this should be NG instead
+            interpretation.Serogroup.Should().Be("NG");
             
             AssertNoMeningococciFlagIsValid(interpretation);
             interpretation.Rule.Should().Be("StemInterpretation_41");
@@ -1515,17 +1515,17 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
                 .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR.");
             interpretation.Serogroup.Should().Be("W/Y");
+            interpretation.Rule.Should().Be("NativeMaterialInterpretation_28");
             AssertNoMeningococciFlagIsValid(interpretation);
         }
 
         [TestCase(NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule29a_ReturnsCorrespondingInterpretation")]
         [TestCase(NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, NativeMaterialTestResult.NotDetermined, TestName = "IsolateMatchingNativeMaterialRule29b_ReturnsCorrespondingInterpretation")]
-        [TestCase(NativeMaterialTestResult.Negative, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule30_ReturnsCorrespondingInterpretation")]
-        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule31a_ReturnsCorrespondingInterpretation")]
-        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule31b_ReturnsCorrespondingInterpretation")]
-        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule32a_ReturnsCorrespondingInterpretation")]
-        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule32b_ReturnsCorrespondingInterpretation")]
-        public void IsolateMatchingNativeMaterialRule29To32_ReturnsCorrespondingInterpretation(
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule30a_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule30b_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule31a_ReturnsCorrespondingInterpretation")]
+        [TestCase(NativeMaterialTestResult.Positive, NativeMaterialTestResult.Negative, NativeMaterialTestResult.Positive, TestName = "IsolateMatchingNativeMaterialRule31b_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingNativeMaterialRule29To31_ReturnsCorrespondingInterpretation(
             NativeMaterialTestResult porA,
             NativeMaterialTestResult fetA,
             NativeMaterialTestResult realTimePcr)
