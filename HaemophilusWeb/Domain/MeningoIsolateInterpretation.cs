@@ -197,7 +197,7 @@ namespace HaemophilusWeb.Domain
 
         private bool CheckStemRule(StemInterpretationRule rule, MeningoIsolate isolate)
         {
-            return rule.SendingInvasive.Contains(isolate.Sending?.Invasive)
+            return (rule.SendingInvasive == null || rule.SendingInvasive.Contains(isolate.Sending?.Invasive))
                 && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
                 && (rule.GrowthOnMartinLewisAgar == null || rule.GrowthOnMartinLewisAgar.Contains(isolate.GrowthOnMartinLewisAgar))
                 && (!rule.Oxidase.HasValue || rule.Oxidase == isolate.Oxidase)

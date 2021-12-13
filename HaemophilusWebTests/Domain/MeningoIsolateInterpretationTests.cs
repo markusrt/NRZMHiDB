@@ -20,7 +20,7 @@ namespace HaemophilusWeb.Domain
             "NativeMaterialInterpretation_06", "NativeMaterialInterpretation_08", "NativeMaterialInterpretation_09", "NativeMaterialInterpretation_11", 
             "NativeMaterialInterpretation_12", "NativeMaterialInterpretation_13", "NativeMaterialInterpretation_15", "NativeMaterialInterpretation_16", 
             "NativeMaterialInterpretation_18", "NativeMaterialInterpretation_19", "NativeMaterialInterpretation_20", "NativeMaterialInterpretation_23",
-            "NativeMaterialInterpretation_24"
+            "NativeMaterialInterpretation_24", "StemInterpretation_NoNM_01", "StemInterpretation_NoNM_02"
         };
         
         private readonly Random _random = new Random();
@@ -891,6 +891,78 @@ namespace HaemophilusWeb.Domain
             interpretation.Rule.Should().Be("StemInterpretation_41");
         }
 
+        [TestCase(Growth.No, MeningoSamplingLocation.Blood)]
+        [TestCase(Growth.No, MeningoSamplingLocation.NasalSwab)]
+        [TestCase(Growth.ATypicalGrowth, MeningoSamplingLocation.Blood)]
+        [TestCase(Growth.ATypicalGrowth, MeningoSamplingLocation.NasalSwab)]
+        public void IsolateMatchingStemRuleNoNM_01_ReturnsCorrespondingInterpretation(
+            Growth growthOnMartinLewisAgar,
+            MeningoSamplingLocation samplingLocation)
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.ATypicalGrowth,
+                GrowthOnMartinLewisAgar = growthOnMartinLewisAgar,
+                Sending = new MeningoSending { SamplingLocation =  samplingLocation},
+                Oxidase = TestResult.Positive,
+                Agglutination = MeningoSerogroupAgg.NotDetermined,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.NotDetermined,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTof = UnspecificTestResult.Determined,
+                MaldiTofBestMatch = "N. gonorrhoeae",
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            interpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
+            interpretation.TypingAttribute("β-Galaktosidase").Should().Be("negativ");
+            interpretation.TypingAttribute("γ-Glutamyltransferase").Should().Be("n.d.");
+            interpretation.TypingAttribute("MALDI-TOF (VITEK MS)").Should().Be("N. gonorrhoeae");
+            interpretation.Serogroup.Should().BeNull();
+
+            AssertNoMeningococciFlagIsValid(interpretation);
+            interpretation.Rule.Should().Be("StemInterpretation_NoNM_01");
+        }
+
+        [TestCase(Growth.No, MeningoSamplingLocation.Blood)]
+        [TestCase(Growth.ATypicalGrowth, MeningoSamplingLocation.Blood)]
+        [TestCase(Growth.ATypicalGrowth, MeningoSamplingLocation.NasalSwab)]
+        public void IsolateMatchingStemRuleNoNM_02_ReturnsCorrespondingInterpretation(
+            Growth growthOnMartinLewisAgar,
+            MeningoSamplingLocation samplingLocation)
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.ATypicalGrowth,
+                GrowthOnMartinLewisAgar = growthOnMartinLewisAgar,
+                Sending = new MeningoSending { SamplingLocation =  samplingLocation},
+                Oxidase = TestResult.NotDetermined,
+                Agglutination = MeningoSerogroupAgg.NotDetermined,
+                Onpg = TestResult.NotDetermined,
+                GammaGt = TestResult.Negative,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            interpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
+            interpretation.Typings.Should().NotContain(t => t.Attribute == "MALDI-TOF (VITEK MS)");
+            interpretation.TypingAttribute("β-Galaktosidase").Should().Be("n.d.");
+            interpretation.TypingAttribute("γ-Glutamyltransferase").Should().Be("negativ");
+            interpretation.Serogroup.Should().BeNull();
+
+            AssertNoMeningococciFlagIsValid(interpretation);
+            interpretation.Rule.Should().Be("StemInterpretation_NoNM_02");
+        }
         [Test]
         public void IsolateMatchingStemRulePartialReport_ReturnsCorrespondingInterpretation()
         {
