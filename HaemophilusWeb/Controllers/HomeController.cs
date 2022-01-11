@@ -22,6 +22,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2022, 01, 11), "Update Befundvorlagen", ChangeType.Feature),
+                new Change(new DateTime(2021, 12, 13, 8, 45, 0), "Stämme Regeln NoNM_01 und NoNM_02", 77, ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2021, 12, 07), "Interpretation Nativmaterial, Regeln 29 bis 31 und Stämme Regeln 36-42", 77, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 12, 03, 8, 30, 0), "Teilbefund", 21, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 12, 03, 6, 30, 0), "Weiteres Feld zur Hib-Impfung \"nicht vollständig\"", 104, ChangeType.Feature),
                 new Change(new DateTime(2021, 11, 20, 15, 0, 0), "Befundampel wird bei Änderungen nicht mehr zurückgesetzt", 101, ChangeType.Bug, DatabaseType.None),
