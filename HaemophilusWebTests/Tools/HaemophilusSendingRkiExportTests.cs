@@ -5,6 +5,7 @@ using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.TestUtils;
 using NUnit.Framework;
+using static HaemophilusWeb.TestUtils.MockData;
 
 namespace HaemophilusWeb.Tools
 {
@@ -19,29 +20,22 @@ namespace HaemophilusWeb.Tools
         [SetUp]
         public void Setup()
         {
-            Sending  = MockData.CreateInstance<Sending>();
+            Sending  = CreateInstance<Sending>();
             Sending.Isolate.EpsilometerTests.Clear();
-            var eTestAmpicillin = MockData.CreateInstance<EpsilometerTest>();
-            eTestAmpicillin.EucastClinicalBreakpoint.Antibiotic = Antibiotic.Ampicillin;
-            eTestAmpicillin.Measurement = 2;
-            eTestAmpicillin.Result = EpsilometerTestResult.Resistant;
-            Sending.Isolate.EpsilometerTests.Add(eTestAmpicillin);
-
-            var eTestAmoxicillinClavulanate = MockData.CreateInstance<EpsilometerTest>();
-            eTestAmoxicillinClavulanate.EucastClinicalBreakpoint.Antibiotic = Antibiotic.AmoxicillinClavulanate;
-            eTestAmoxicillinClavulanate.Measurement = 0.75f;
-            eTestAmoxicillinClavulanate.Result = EpsilometerTestResult.Susceptible;
-            Sending.Isolate.EpsilometerTests.Add(eTestAmoxicillinClavulanate);
+            Sending.Isolate.EpsilometerTests.Add(Antibiotic.Ampicillin, 2);
+            Sending.Isolate.EpsilometerTests.Add(Antibiotic.AmoxicillinClavulanate, 0.75f, EpsilometerTestResult.Susceptible);
 
             Counties = new List<County>();
             for (var i = 1; i < 4; i++)
             {
-                var county = MockData.CreateInstance<County>();
+                var county = CreateInstance<County>();
                 county.CountyId = i;
                 county.CountyNumber = (12064000 + i).ToString();
                 Counties.Add(county);
             }
         }
+
+       
 
 
         [Test]
@@ -87,7 +81,7 @@ namespace HaemophilusWeb.Tools
             Sending.Patient.County = county.Name;
             Sending.Patient.State = State.BB;
             Sending.Patient.Gender = Gender.Female;
-            Sending.Patient.HibVaccination = YesNoUnknown.Yes;
+            Sending.Patient.HibVaccination = VaccinationStatus.Yes;
             Sending.Isolate.Evaluation = Evaluation.HaemophilusTypeA;
             Sending.Isolate.BetaLactamase = TestResult.Negative;
 

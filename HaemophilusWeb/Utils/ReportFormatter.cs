@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Views.Utils;
@@ -20,6 +21,15 @@ namespace HaemophilusWeb.Utils
         public static string ToReportFormat(this DateTime dateTime)
         {
             return dateTime.ToString("dd.MM.yyyy");
+        }
+
+        public static string ToReportFormatMonthYear(this DateTime? dateTime)
+        {
+            if (!dateTime.HasValue)
+            {
+                return "";
+            }
+            return dateTime.Value.ToString("MM / yyyy", CultureInfo.InvariantCulture);
         }
 
         public static string ToReportFormatPubMlst(this DateTime? dateTime)

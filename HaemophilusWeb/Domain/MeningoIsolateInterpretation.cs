@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -29,22 +30,84 @@ namespace HaemophilusWeb.Domain
 
         public IEnumerable<Typing> Typings => typings;
 
+        public string Serogroup { get; set; }
+
         public InterpretationResult Result { get; private set; } = new InterpretationResult();
+        public string Rule { get; set; }
+        
+        public bool NoMeningococci { get; set; }
 
         public void Interpret(MeningoIsolate isolate)
         {
+            //TODO fix mix of model and business logic in that class it  could just return
+            //     an interpretation here whereas this class would be more the interpreter.
             typings.Clear();
+            Serogroup = null;
+            Rule = null;
+            NoMeningococci = false;
 
             Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
+            Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
+            Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
 
-
-            if (isolate.Sending.Material == MeningoMaterial.NativeMaterial)
+            if (isolate.Sending.Material == MeningoMaterial.NativeMaterial || isolate.Sending.Material == MeningoMaterial.IsolatedDna)
             {
                 RunNativeMaterialInterpretation(isolate);
             }
             else
             {
                 RunStemInterpretation(isolate);
+            }
+
+            DetectSerogroup();
+        }
+
+        private void DetectSerogroup()
+        {
+            var serogroup = Typings.SingleOrDefault(t => t.Attribute == "Serogruppe")?.Value;
+            var serogenogroup = Typings.SingleOrDefault(t => t.Attribute == "Serogenogruppe")?.Value;
+            
+            if (serogroup != null && serogenogroup == null)
+            {
+                Serogroup = serogroup;
+            }
+            if (serogenogroup != null && serogroup == null)
+            {
+                Serogroup = serogenogroup;
+            }
+            if (serogenogroup != null && serogroup != null)
+            {
+                if (serogenogroup == serogroup)
+                {
+                    Serogroup = serogenogroup;
+                }
+                else if(serogroup.Contains("deutet auf unbekapselte Meningokokken hin") || serogroup.Contains("Nicht-invasiv"))
+                {
+                    Serogroup = serogenogroup;
+                }
+            }
+
+            var molecularTyping = Typings.SingleOrDefault(t => t.Attribute == "Molekulare Typisierung")?.Value;
+            if (molecularTyping != null)
+            {
+                var match = Regex.Match(molecularTyping, "Das Serogruppe.?-(.*)-spezifische .*-Gen wurde nachgewiesen.");
+                if (match.Success)
+                {
+                    Serogroup = match.Groups[1].Value;
+                }
+            }
+            
+            if (Serogroup != null)
+            {
+                if (Serogroup == "nicht gruppierbar" || Serogroup.Contains("Poly") || Serogroup.Contains("Auto"))
+                {
+                    Serogroup = "NG";
+                }
+                else if (Serogroup.Contains("cnl"))
+                {
+                    Serogroup = "cnl";
+                }
+                Serogroup = Regex.Replace(Serogroup, ".\\(.*\\)", "");
             }
         }
 
@@ -55,8 +118,8 @@ namespace HaemophilusWeb.Domain
             if (matchingRule.Key != null)
             {
                 var rule = matchingRule.Value;
-                Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
-                Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
+                Rule = matchingRule.Key;
+                NoMeningococci = rule.NoMeningococci;
 
                 Result.Comment = rule.Comment;
                 Result.Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray();
@@ -80,9 +143,9 @@ namespace HaemophilusWeb.Domain
             if (matchingRule.Key != null)
             {
                 var rule = matchingRule.Value;
-                Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
-                Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
-                
+                Rule = matchingRule.Key;
+                NoMeningococci = rule.NoMeningococci;
+
                 if (!string.IsNullOrEmpty(rule.Identification))
                 {
                     typings.Add(new Typing {Attribute = "Identifikation", Value = rule.Identification});
@@ -128,13 +191,13 @@ namespace HaemophilusWeb.Domain
 
         private bool CheckStemRule(StemInterpretationRule rule, MeningoIsolate isolate)
         {
-            return rule.SendingInvasive == isolate.Sending?.Invasive
+            return rule.SendingInvasive.Contains(isolate.Sending?.Invasive)
                 && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
-                && rule.GrowthOnMartinLewisAgar == isolate.GrowthOnMartinLewisAgar
+                && (rule.GrowthOnMartinLewisAgar == null || rule.GrowthOnMartinLewisAgar.Contains(isolate.GrowthOnMartinLewisAgar))
                 && (!rule.Oxidase.HasValue || rule.Oxidase == isolate.Oxidase)
                 && (rule.Agglutination == null || rule.Agglutination.Contains(isolate.Agglutination))
                 && (!rule.Onpg.HasValue || rule.Onpg == isolate.Onpg)
-                && (!rule.GammaGt.HasValue || rule.GammaGt == isolate.GammaGt)
+                && (rule.GammaGt == null || rule.GammaGt.Contains(isolate.GammaGt))
                 && (rule.SerogroupPcr == null || rule.SerogroupPcr.Contains(isolate.SerogroupPcr))
                 && (!rule.MaldiTof.HasValue || rule.MaldiTof == isolate.MaldiTof)
                 && (!rule.PorAPcr.HasValue || rule.PorAPcr == isolate.PorAPcr)

@@ -83,40 +83,35 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.2\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.2\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.3\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    <Reference Include="Microsoft.Owin, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.2.0\lib\net45\Microsoft.Owin.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.2.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.4.2.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.2.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Facebook, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.2.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.Facebook, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.4.2.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Google, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Security.Google.2.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.Google, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.4.2.0\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.2.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.4.2.0\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.2.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Owin.Security.Twitter, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.2.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    <Reference Include="Microsoft.Owin.Security.Twitter, Version=4.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.4.2.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -220,6 +215,7 @@
     <Compile Include="Controllers\ControllerBase.cs" />
     <Compile Include="Controllers\CountyController.cs" />
     <Compile Include="Controllers\EucastClinicalBreakpointsController.cs" />
+    <Compile Include="Controllers\PatientSendingControllerBase.cs" />
     <Compile Include="Controllers\PubMlstController.cs" />
     <Compile Include="Controllers\GeonamesController.cs" />
     <Compile Include="Controllers\HealthOfficesController.cs" />
@@ -263,15 +259,22 @@
     <Compile Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.Designer.cs">
       <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.cs" />
+    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.Designer.cs">
+      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
+    <Compile Include="Models\VaccinationStatus.cs" />
     <Compile Include="Services\PubMlstMatcher.cs" />
     <Compile Include="Services\PubMlstService.cs" />
     <Compile Include="Tools\HaemophilsPubMlstExport.cs" />
+    <Compile Include="Tools\MeningoSendingRkiExport.cs" />
     <Compile Include="Tools\HaemophilusSendingRkiExport.cs" />
     <Compile Include="Tools\HaemophilusSendingLaboratoryExport.cs" />
     <Compile Include="Tools\IDuplicatePatientDetectionColumns.cs" />
     <Compile Include="Tools\MeningoSendingIrisExport.cs" />
+    <Compile Include="Tools\MeningoStateAuthorityExport.cs" />
     <Compile Include="Tools\PubMlstColumns.cs" />
     <Compile Include="Tools\DuplicatePatientResolver.cs" />
     <Compile Include="Tools\RkiExportColumns.cs" />
@@ -702,6 +705,9 @@
     <EmbeddedResource Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.resx">
       <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.resx">
+      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -744,29 +750,30 @@
     <Content Include="Scripts\pizzip.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.german.js" />
-    <Content Include="ReportTemplates\BLNAR v8.docx" />
-    <Content Include="ReportTemplates\BLNAS v8.docx" />
-    <Content Include="ReportTemplates\BLPACR v8.docx" />
-    <Content Include="ReportTemplates\BLPACS v8.docx" />
-    <Content Include="ReportTemplates\Fax - BLNAR v8.docx" />
-    <Content Include="ReportTemplates\Fax - BLNAS v8.docx" />
-    <Content Include="ReportTemplates\Fax - BLPACR v8.docx" />
-    <Content Include="ReportTemplates\Fax - BLPACS v8.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Cipro-R v1.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Imi-R v1.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - Kein Haemophilus v1.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - lowBLNAR CTX-R Imi-R v1.docx" />
-    <Content Include="ReportTemplates\Sonstige - Ampi-S Cipro-R v1.docx" />
-    <Content Include="ReportTemplates\Sonstige - Ampi-S Imi-R v1.docx" />
-    <Content Include="ReportTemplates\Sonstige - Kein Haemophilus v1.docx" />
     <None Include="Properties\PublishProfiles\Prod Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Test Deploy.pubxml" />
-    <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v1.docx" />
-    <Content Include="ReportTemplates\Meningo\Untersuchungsbefund.docx" />
-    <Content Include="ReportTemplates\Meningo\Nativmaterial.docx" />
-    <Content Include="ReportTemplates\Fax - Teilbefund - Serotyp v2.docx" />
-    <Content Include="ReportTemplates\Meningo\Fax - Nativmaterial.docx" />
-    <Content Include="ReportTemplates\Meningo\Fax - Untersuchungsbefund.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Nativmaterial v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Teilbefund - v1.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Untersuchungsbefund v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Nativmaterial v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Untersuchungsbefund v2.docx" />
+    <Content Include="ReportTemplates\BLNAR v10.docx" />
+    <Content Include="ReportTemplates\BLNAS v10.docx" />
+    <Content Include="ReportTemplates\BLPACR v10.docx" />
+    <Content Include="ReportTemplates\BLPACS v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLNAR v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLNAS v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLPACR v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLPACS v10.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Cipro-R v3.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Imi-R v3.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Kein Haemophilus v3.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - lowBLNAR CTX-R Imi-R v3.docx" />
+    <Content Include="ReportTemplates\Fax - Teilbefund - Serotyp v4.docx" />
+    <Content Include="ReportTemplates\Sonstige - Ampi-S Cipro-R v3.docx" />
+    <Content Include="ReportTemplates\Sonstige - Ampi-S Imi-R v3.docx" />
+    <Content Include="ReportTemplates\Sonstige - Kein Haemophilus v3.docx" />
+    <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v3.docx" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />
@@ -1148,6 +1155,8 @@
     <Content Include="Web.config" />
     <Content Include="Views\MeningoPatientSending\IrisExport.cshtml" />
     <Content Include="Views\PatientSending\PubMlstExport.cshtml" />
+    <Content Include="Views\MeningoPatientSending\StateAuthorityExport.cshtml" />
+    <Content Include="Views\MeningoPatientSending\RkiExport.cshtml" />
     <None Include="Web.template.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>

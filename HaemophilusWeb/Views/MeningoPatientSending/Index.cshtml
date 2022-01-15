@@ -24,11 +24,14 @@
     <div class="col-md-2 col-sm-4 col-xs-12">
         <input id="searchPatientPostalCode" data-search-col="7" class="form-control col-sm-2" type="text" placeholder="Patient PLZ" />
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-12">
+    <div class="col-md-2 col-sm-4 col-xs-12">
         <input id="searchSenderLaboratoryNumber" data-search-col="9" class="form-control col-sm-2" type="text" placeholder="Einsender Labornummer" />
     </div>
-    <div class="col-md-3 col-sm-4 col-xs-12">
+    <div class="col-md-2 col-sm-4 col-xs-12">
         <input id="searchSenderPostalCode" data-search-col="8" class="form-control col-sm-2" type="text" placeholder="Einsender PLZ" />
+    </div>
+    <div class="col-md-2 col-sm-4 col-xs-12">
+        <input id="searchPatientId" data-search-col="10" class="form-control col-sm-2" type="text" placeholder="Patienten-Nr." />
     </div>
 </div>
 <div class="topmargin">
@@ -65,6 +68,9 @@
                 <th>
                     SenderLaboratoryNumber
                 </th>
+                <th>
+                    PatientId
+                </th>
                 <th></th>
                 <th>
                     Befund
@@ -84,7 +90,7 @@
                     DataTable(
                     {
                     "lengthChange": false,
-                    "order": [2, 'desc'],
+                    "order": [6, 'desc'],
                     "pageLength": 8,
                     "stateSave": true,
                     "processing": true,
@@ -105,41 +111,44 @@
                     ],
                     "columns": [
                         {
-                            "data": "Initials",
+                            "data": "Initials"
                         },
                         {
-                            "data": "BirthDate",
+                            "data": "BirthDate"
                         },
                         {
-                            "data": "StemNumber",
+                            "data": "StemNumber"
                         },
                         {
-                            "data": "ReceivingDate",
+                            "data": "ReceivingDate"
                         },
                         {
-                            "data": "SamplingLocation",
+                            "data": "SamplingLocation"
                         },
                         {
-                            "data": "Invasive",
+                            "data": "Invasive"
                         },
                         {
-                            "data": "LaboratoryNumber",
+                            "data": "LaboratoryNumber"
                         },
                         {
-                            "data": "PatientPostalCode",
+                            "data": "PatientPostalCode"
                         },
                         {
-                            "data": "SenderPostalCode",
+                            "data": "SenderPostalCode"
                         },
                         {
-                            "data": "SenderLaboratoryNumber",
+                            "data": "SenderLaboratoryNumber"
+                        },
+                        {
+                            "data": "PatientId"
                         },
                         {
                             "data": "Link",
-                            "sortable": false,
+                            "sortable": false
                         },
                         {
-                            "data": "ReportGenerated",
+                            "data": "ReportGenerated"
                         }
                     ]
                 });
@@ -152,6 +161,7 @@
                 table.columns(7).visible(false);
                 table.columns(8).visible(false);
                 table.columns(9).visible(false);
+                table.columns(10).visible(false);
             });
 
             function toggleExtendedSearch()

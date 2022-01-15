@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq.Expressions;
+using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.Views.Utils;
 
@@ -21,6 +22,16 @@ namespace HaemophilusWeb.Tools
         {
             Expression<Func<T, object>> wrapExpression = arg => field.Compile()(arg);
             exportedFields.Add(Tuple.Create(wrapExpression, headerName, typeof (TMember)));
+        }
+
+        protected void AddFieldOnPositiveTestResult<TMember>(Func<T, NativeMaterialTestResult> testResult, Func<T, TMember> field, string headerName)
+        {
+            AddField(s => testResult(s) == NativeMaterialTestResult.Positive 
+                ? ExportToString(field(s)) 
+                : testResult(s) == NativeMaterialTestResult.Negative
+                    ? EnumUtils.GetEnumDescription<NativeMaterialTestResult>(NativeMaterialTestResult.Negative)
+                    : null, 
+                headerName);
         }
 
         public DataTable ToDataTable(IEnumerable<T> entries)
@@ -63,7 +74,13 @@ namespace HaemophilusWeb.Tools
             var type = value.GetTypeOrNullableType();
             if (type.IsEnum)
             {
-                return EnumEditor.GetEnumDescription(value);
+                var enumDescription = EnumEditor.GetEnumDescription(value);
+                if ((int)(object)value == 0 && enumDescription.Equals("0"))
+                {
+                    return null;
+                }
+
+                return enumDescription;
             }
             return value.ToString();
         }

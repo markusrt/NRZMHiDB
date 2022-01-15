@@ -96,7 +96,7 @@ namespace HaemophilusWeb.Services
                     RplF = alleles.Get(RplF, ""),
                 };
 
-                var fields = isolateJson.GetValue("schemes").First["fields"];
+                var fields = isolateJson.GetValue("schemes")?.First["fields"];
                 if (fields != null)
                 {
                     isolate.SequenceType = fields[SequenceType]?.Value<string>();

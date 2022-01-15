@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Tools;
@@ -47,6 +49,25 @@ namespace HaemophilusWeb.Controllers
             return ExportToExcel(query, sendings, new MeningoSendingIrisExport(), "Iris");
         }
 
+        [Authorize(Roles = DefaultRoles.User + "," + DefaultRoles.PublicHealth)]
+        public ActionResult StateAuthorityExport(FromToQuery query)
+        {
+            if (query.From == DateTime.MinValue)
+            {
+                var lastYear = DateTime.Now.Year - 1;
+                var exportQuery = new FromToQueryWithAdjustment
+                {
+                    From = new DateTime(lastYear, 1, 1),
+                    To = new DateTime(lastYear, 12, 31)
+                };
+                return View(exportQuery);
+            }
+
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Rki).ToList();
+            var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
+            return ExportToExcel(query, sendings, new MeningoStateAuthorityExport(counties), "LGA");
+        }
+
 
         protected override IDbSet<MeningoSending> SendingDbSet()
         {
@@ -78,10 +99,6 @@ namespace HaemophilusWeb.Controllers
 
         protected override IEnumerable<MeningoSending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
-            if (exportType == ExportType.Rki)
-            {
-                throw new NotImplementedException("RKI export is not finished for Meningococci");
-            }
             var queryResult = NotDeletedSendings()
                 .Include(s => s.Patient)
                 .Include(s => s.Isolate)
@@ -91,18 +108,26 @@ namespace HaemophilusWeb.Controllers
                       || (s.SamplingDate >= query.From && s.SamplingDate <= query.To)
                 ).OrderBy(s => s.Isolate.StemNumber).ToList();
 
-            if (exportType == ExportType.Iris)
+            if (exportType == ExportType.Iris || exportType == ExportType.Rki)
             {
-                queryResult = queryResult.Where(s => s.Invasive == YesNo.Yes).ToList();
+                queryResult = queryResult.Where(s => s.Invasive == YesNo.Yes && MeningococciFound(s)).ToList();
             }
 
             return queryResult;
         }
 
+        private static bool MeningococciFound(MeningoSending sending)
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            isolateInterpretation.Interpret(sending.Isolate);
+            var meningococciFound = isolateInterpretation.NoMeningococci == false;
+            return meningococciFound;
+        }
+
         protected override ExportDefinition<MeningoSending> CreateRkiExportDefinition()
         {
-            var export = new ExportDefinition<MeningoSending>();
-            return export;
+            var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
+            return new MeningoSendingRkiExport(counties);
         }
 
         protected override ExportDefinition<MeningoSending> CreateLaboratoryExportDefinition()
@@ -128,6 +153,7 @@ namespace HaemophilusWeb.Controllers
                 x.Isolate.YearlySequentialIsolateNumber,
                 x.Isolate.Year,
                 x.SenderLaboratoryNumber,
+                x.MeningoPatientId,
                 PatientPostalCode = x.Patient.PostalCode,
                 SenderPostalCode = db.Senders.FirstOrDefault(s => s.SenderId == x.SenderId).PostalCode,
             });
@@ -144,6 +170,7 @@ namespace HaemophilusWeb.Controllers
                 {
                     SendingId = x.MeningoSendingId,
                     IsolateId = x.MeningoIsolateId,
+                    PatientId = x.MeningoPatientId,
                     Initials = x.Initials,
                     BirthDate = x.BirthDate,
                     StemNumber = x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Meningococci),
@@ -161,11 +188,17 @@ namespace HaemophilusWeb.Controllers
                             x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Meningococci),
                             x.ReceivingDate.ToReportFormat(),
                             invasive, samplingLocation, laboratoryNumber,
-                            x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber)
+                            x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber, x.MeningoPatientId)
                         .ToLower()
                 };
             }).ToList();
             return queryRecords;
+        }
+        
+        protected override ActionResult RkiExportWithPotentialAdjustments(FromToQueryWithAdjustment query)
+        {
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Rki).ToList();
+            return ExportToExcel(query, sendings, CreateRkiExportDefinition(), "RKI");
         }
     }
 }

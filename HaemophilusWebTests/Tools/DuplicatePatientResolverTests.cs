@@ -65,7 +65,7 @@ namespace HaemophilusWeb.Tools
 
             _sut.CleanOrMarkDuplicates(table);
 
-            table.Rows.Should().HaveCount(2);
+            table.Rows.Count.Should().Be(2);
 
             table.Rows[0][Col.StemNumber].Should().Be("H123");
             table.Rows[1][Col.StemNumber].Should().Be("H137");
@@ -87,7 +87,7 @@ namespace HaemophilusWeb.Tools
 
             _sut.CleanOrMarkDuplicates(table);
 
-            table.Rows.Should().HaveCount(4);
+            table.Rows.Count.Should().Be(4);
 
             table.Rows[0][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 1");
             table.Rows[2][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 1");
@@ -111,7 +111,7 @@ namespace HaemophilusWeb.Tools
 
             _sut.CleanOrMarkDuplicates(table);
 
-            table.Rows.Should().HaveCount(3);
+            table.Rows.Count.Should().Be(3);
 
             table.Rows[0][Col.StemNumber].Should().Be("H123");
             table.Rows[1][Col.StemNumber].Should().Be("H135");
@@ -137,7 +137,7 @@ namespace HaemophilusWeb.Tools
 
             _sut.CleanOrMarkDuplicates(table);
 
-            table.Rows.Should().HaveCount(4);
+            table.Rows.Count.Should().Be(4);
             table.Columns.Contains(DuplicatePatientResolver.ColDuplicateGroup).Should().BeFalse();
         }
 
@@ -158,7 +158,7 @@ namespace HaemophilusWeb.Tools
 
             _sut.CleanOrMarkDuplicates(table);
 
-            table.Rows.Should().HaveCount(2);
+            table.Rows.Count.Should().Be(2);
             table.Columns.Contains(Col.Initials).Should().BeFalse();
             table.Columns.Contains(Col.DateOfBirth).Should().BeFalse();
             table.Columns.Contains(Col.PostalCode).Should().BeFalse();
@@ -185,7 +185,7 @@ namespace HaemophilusWeb.Tools
 
             _sut.CleanOrMarkDuplicates(table);
 
-            table.Rows.Should().HaveCount(1);
+            table.Rows.Count.Should().Be(1);
 
             table.Rows[0][Col.StemNumber].Should().Be("H123");
         }
