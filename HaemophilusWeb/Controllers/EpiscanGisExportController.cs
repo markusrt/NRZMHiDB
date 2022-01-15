@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Tools;
@@ -27,8 +29,10 @@ namespace HaemophilusWeb.Controllers
             var samplingLocations = new List<MeningoSamplingLocation> { MeningoSamplingLocation.Blood, MeningoSamplingLocation.Liquor };
 
             var sendings = db.MeningoSendings.Include(s => s.Patient)
-                .Where(s => !s.Deleted && samplingLocations.Contains(s.SamplingLocation)  && (s.SamplingDate == null && s.ReceivingDate >= new DateTime(2019,10,01) || s.SamplingDate > new DateTime(2019,10,01)))
-                .OrderByDescending(s => s.Isolate.StemNumber).ToList();
+                .Where(s => !s.Deleted && samplingLocations.Contains(s.SamplingLocation) &&
+                            (s.SamplingDate == null && s.ReceivingDate >= new DateTime(2019, 05, 01) ||
+                             s.SamplingDate > new DateTime(2019, 05, 01)))
+                .OrderBy(s => s.MeningoPatientId).Take(50).ToList();
 
             /*
                 4248;04.10.2019;24.09.2019;B;22;14;5-5;15;48.26385;11.44317
@@ -40,16 +44,28 @@ namespace HaemophilusWeb.Controllers
              */
 
             var csvLines = new List<string>();
+            var geo = new GeonamesService();
 
             foreach (var sending in sendings)
             {
-                var line = $"{sending.Isolate.StemNumber};{(sending.SamplingDate??sending.ReceivingDate).ToReportFormat()};{sending.Isolate.SerogroupPcr.ToString()};"
+                // TODO
+                // Filter out empty Serogroup entries
+                // Filter out duplicate patients maybe using exporter
+                var interpretation = new MeningoIsolateInterpretation();
+                interpretation.Interpret(sending.Isolate);
+                var coordinate = geo.QueryCoordinateByPostalCode(sending.Patient.PostalCode, sending.Patient.City);
+                FormattableString line =
+                    $"{sending.MeningoPatientId};{sending.ReceivingDate.ToReportFormat()};{sending.SamplingDate.ToReportFormat(string.Empty)};{interpretation.Serogroup};{sending.Isolate.PorAVr1};{sending.Isolate.PorAVr2};{sending.Isolate.FetAVr};{sending.Isolate.PatientAgeAtSampling()};{coordinate?.Latitude};{coordinate?.Longitude}";
+                csvLines.Add(line.ToString(CultureInfo.InvariantCulture));
             }
             
             //CreateExcelFile.CreateExcelDocument(list, exportDefinition, tempFile, postProcessDataTable);
-            return File(System.IO.File.ReadAllBytes(tempFile),
+            System.IO.File.WriteAllLines(tempFile, csvLines);
+            var result = File(System.IO.File.ReadAllBytes(tempFile),
                 "text/csv",
                 $"EpiscanGis_Export_{DateTime.Now:yyyyMMdd}.csv");
+            System.IO.File.Delete(tempFile);
+            return result;
         }
     }
 }
