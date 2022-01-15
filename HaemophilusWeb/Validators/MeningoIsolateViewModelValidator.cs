@@ -9,6 +9,9 @@ namespace HaemophilusWeb.Validators
     {
         private const string OtherPropertiesShouldBeNotDeterminedOnNoGrowth =
             "Wenn {PropertyName} den Wert \"Nein\" hat, dann müssen alle Einträge unter \"Allgemein\" auf \"n.d.\" stehen (abgesehen von Serogruppen-PCR, siaA, ctrA und cnl).";
+
+        private const string PropertyMustNotBeNotDeterminedOnGrowth = "{PropertyName} darf nicht den Wert \"n.d.\" haben (angewachsen)";
+        
         private const string MoreThenOneSerogenoIsPositive = "Es darf nur ein Serogenotyp positiv sein.";
 
         public MeningoIsolateViewModelValidator()
@@ -26,6 +29,7 @@ namespace HaemophilusWeb.Validators
             RuleFor(i => i.LaboratoryNumber).NotEmpty();
             RuleFor(i => i.LaboratoryNumber).Matches(@"\d+/\d\d").WithMessage(
                 "Die Labornummer muss in der Form '39/14' eingegeben werden.");
+            RuleFor(i => i.Oxidase).Must(OxidaseIsMandatoryForAnyGrowth).WithMessage(PropertyMustNotBeNotDeterminedOnGrowth);
             RuleFor(i => i.GrowthOnBloodAgar).Must(OtherTypingFieldsBesidesSerogroupPcrAreEmptyIfNoGrowth)
                 .WithMessage(OtherPropertiesShouldBeNotDeterminedOnNoGrowth);
             RuleFor(i => i.GrowthOnMartinLewisAgar).Must(OtherTypingFieldsBesidesSerogroupPcrAreEmptyIfNoGrowth)
@@ -45,13 +49,22 @@ namespace HaemophilusWeb.Validators
             return !modelIsInvalid;
         }
 
+        private static bool OxidaseIsMandatoryForAnyGrowth(MeningoIsolateViewModel model, TestResult testResult)
+        {
+            var anyGrowth = model.GrowthOnBloodAgar != Growth.No || model.GrowthOnMartinLewisAgar != Growth.No;
+            var oxidaseDetermined = model.Oxidase == TestResult.NotDetermined;
+            var modelIsInvalid = anyGrowth && oxidaseDetermined;
+            return !modelIsInvalid;
+        }
+
         private static bool OtherTypingFieldsBesidesSerogroupPcrAreEmptyIfNoGrowth(MeningoIsolateViewModel model, Growth growth)
         {
-            var modelIsInvalid =
-                model.GrowthOnBloodAgar == Growth.No && model.GrowthOnMartinLewisAgar == Growth.No
-                 && (model.Oxidase != TestResult.NotDetermined || model.Agglutination != MeningoSerogroupAgg.NotDetermined
-                 || model.Onpg != TestResult.NotDetermined || model.GammaGt != TestResult.NotDetermined
-                 || model.MaldiTof != UnspecificTestResult.NotDetermined);
+            var noGrowthAtAll = model.GrowthOnBloodAgar == Growth.No && model.GrowthOnMartinLewisAgar == Growth.No;
+            var anyTestingDone =
+                model.Oxidase != TestResult.NotDetermined || model.Agglutination != MeningoSerogroupAgg.NotDetermined || 
+                model.Onpg != TestResult.NotDetermined || model.GammaGt != TestResult.NotDetermined || 
+                model.MaldiTof != UnspecificTestResult.NotDetermined;
+            var modelIsInvalid = noGrowthAtAll && anyTestingDone;
             return !modelIsInvalid;
         }
 

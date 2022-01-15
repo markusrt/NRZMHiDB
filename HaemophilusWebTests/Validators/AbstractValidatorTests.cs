@@ -72,5 +72,10 @@ namespace HaemophilusWeb.Validators
             validationResult.IsValid.Should().BeTrue("a valid {0} should be recognized as, this failed due to {1}",
                 typeof(TModel), string.Join(",", validationResult.Errors));
         }
+
+        protected static void AssertIsInvalid(ValidationResult validationResult)
+        {
+            validationResult.IsValid.Should().BeFalse("an invalid {0} should be recognized",  typeof(TModel));
+        }
     }
 }

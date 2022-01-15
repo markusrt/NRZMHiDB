@@ -10,7 +10,7 @@ namespace HaemophilusWeb.Models
     {
         public Patient()
         {
-            HibVaccination = YesNoUnknown.NotStated;
+            HibVaccination = VaccinationStatus.NotStated;
             Therapy = YesNoUnknown.NotStated;
         }
 
@@ -21,7 +21,7 @@ namespace HaemophilusWeb.Models
         public string OtherClinicalInformation { get; set; }
 
         [Display(Name = "Hib-Impfung")]
-        public YesNoUnknown HibVaccination { get; set; }
+        public VaccinationStatus HibVaccination { get; set; }
 
         [Display(Name = "Datum Hib-Impfung")]
         public DateTime? HibVaccinationDate { get; set; }

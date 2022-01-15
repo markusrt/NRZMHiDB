@@ -65,6 +65,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.MaldiTof));
             AddField(s => s.Isolate.MaldiTofBestMatch);
             AddField(s => s.Isolate.MaldiTofMatchConfidence);
+            AddField(s => ExportToString(s.Isolate.GenomeSequencing));
             AddField(s => ExportToString(s.Isolate.Ftsi));
             AddField(s => s.Isolate.FtsiEvaluation1);
             AddField(s => s.Isolate.FtsiEvaluation2);

@@ -50,7 +50,7 @@ namespace HaemophilusWeb.Controllers
 
             var actualResult = controller.Create().As<ViewResult>().ViewData.Keys;
 
-            actualResult.ShouldBeEquivalentTo(expectedResults);
+            actualResult.Should().BeEquivalentTo(expectedResults);
         }
 
         [Test]
