@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Tools;
@@ -62,8 +63,7 @@ namespace HaemophilusWeb.Controllers
                 return View(exportQuery);
             }
 
-            var sendings = SendingsMatchingExportQuery(query, ExportType.Laboratory).ToList();
-
+            var sendings = SendingsMatchingExportQuery(query, ExportType.Rki).ToList();
             var counties = db.Counties.OrderBy(c => c.ValidSince).ToList();
             return ExportToExcel(query, sendings, new MeningoStateAuthorityExport(counties), "LGA");
         }
@@ -110,10 +110,18 @@ namespace HaemophilusWeb.Controllers
 
             if (exportType == ExportType.Iris || exportType == ExportType.Rki)
             {
-                queryResult = queryResult.Where(s => s.Invasive == YesNo.Yes).ToList();
+                queryResult = queryResult.Where(s => s.Invasive == YesNo.Yes && MeningococciFound(s)).ToList();
             }
 
             return queryResult;
+        }
+
+        private static bool MeningococciFound(MeningoSending sending)
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            isolateInterpretation.Interpret(sending.Isolate);
+            var meningococciFound = isolateInterpretation.NoMeningococci == false;
+            return meningococciFound;
         }
 
         protected override ExportDefinition<MeningoSending> CreateRkiExportDefinition()

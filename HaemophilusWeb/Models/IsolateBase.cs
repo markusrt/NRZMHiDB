@@ -52,6 +52,9 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Serotyp-PCR")]
         public SerotypePcr SerotypePcr { get; set; }
 
+        [Display(Name = "Genomsequenzierung")]
+        public UnspecificTestResult GenomeSequencing { get; set; }
+
         [Display(Name = "ftsI")]
         public UnspecificTestResult Ftsi { get; set; }
 

@@ -259,8 +259,13 @@
     <Compile Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.Designer.cs">
       <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.cs" />
+    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.Designer.cs">
+      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
+    <Compile Include="Models\VaccinationStatus.cs" />
     <Compile Include="Services\PubMlstMatcher.cs" />
     <Compile Include="Services\PubMlstService.cs" />
     <Compile Include="Tools\HaemophilsPubMlstExport.cs" />
@@ -700,6 +705,9 @@
     <EmbeddedResource Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.resx">
       <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.resx">
+      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -742,29 +750,30 @@
     <Content Include="Scripts\pizzip.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.german.js" />
-    <Content Include="ReportTemplates\BLNAR v8.docx" />
-    <Content Include="ReportTemplates\BLNAS v8.docx" />
-    <Content Include="ReportTemplates\BLPACR v8.docx" />
-    <Content Include="ReportTemplates\BLPACS v8.docx" />
-    <Content Include="ReportTemplates\Fax - BLNAR v8.docx" />
-    <Content Include="ReportTemplates\Fax - BLNAS v8.docx" />
-    <Content Include="ReportTemplates\Fax - BLPACR v8.docx" />
-    <Content Include="ReportTemplates\Fax - BLPACS v8.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Cipro-R v1.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Imi-R v1.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - Kein Haemophilus v1.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - lowBLNAR CTX-R Imi-R v1.docx" />
-    <Content Include="ReportTemplates\Sonstige - Ampi-S Cipro-R v1.docx" />
-    <Content Include="ReportTemplates\Sonstige - Ampi-S Imi-R v1.docx" />
-    <Content Include="ReportTemplates\Sonstige - Kein Haemophilus v1.docx" />
     <None Include="Properties\PublishProfiles\Prod Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Test Deploy.pubxml" />
-    <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v1.docx" />
-    <Content Include="ReportTemplates\Meningo\Untersuchungsbefund.docx" />
-    <Content Include="ReportTemplates\Meningo\Nativmaterial.docx" />
-    <Content Include="ReportTemplates\Fax - Teilbefund - Serotyp v2.docx" />
-    <Content Include="ReportTemplates\Meningo\Fax - Nativmaterial.docx" />
-    <Content Include="ReportTemplates\Meningo\Fax - Untersuchungsbefund.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Nativmaterial v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Teilbefund - v1.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Untersuchungsbefund v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Nativmaterial v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Untersuchungsbefund v2.docx" />
+    <Content Include="ReportTemplates\BLNAR v10.docx" />
+    <Content Include="ReportTemplates\BLNAS v10.docx" />
+    <Content Include="ReportTemplates\BLPACR v10.docx" />
+    <Content Include="ReportTemplates\BLPACS v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLNAR v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLNAS v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLPACR v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLPACS v10.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Cipro-R v3.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Imi-R v3.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Kein Haemophilus v3.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - lowBLNAR CTX-R Imi-R v3.docx" />
+    <Content Include="ReportTemplates\Fax - Teilbefund - Serotyp v4.docx" />
+    <Content Include="ReportTemplates\Sonstige - Ampi-S Cipro-R v3.docx" />
+    <Content Include="ReportTemplates\Sonstige - Ampi-S Imi-R v3.docx" />
+    <Content Include="ReportTemplates\Sonstige - Kein Haemophilus v3.docx" />
+    <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v3.docx" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Images\logo1.png" />
     <Content Include="Images\logo2.png" />

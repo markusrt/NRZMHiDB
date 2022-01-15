@@ -1,13 +1,13 @@
 {
   // Rule 20, 22, 24, and 26 are more strict then 10 and 12 hence they must be placed further up
   "StemInterpretation_20": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "Poly" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -21,30 +21,32 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_22": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "Poly" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Report": [],
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
     "Typings": [ "PolyAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_24": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "Auto" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -58,13 +60,13 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_26": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "Auto" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -75,13 +77,13 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_01": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "No",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Oxidase": "NotDetermined",
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "NotDetermined",
-    "GammaGt": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
@@ -89,16 +91,17 @@
     "Report": [
       "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
     ],
-    "Typings": []
+    "Typings": [],
+    "NoMeningococci": true
   },
   "StemInterpretation_02": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "No",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Oxidase": "NotDetermined",
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "NotDetermined",
-    "GammaGt": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
     "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY", "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -114,9 +117,9 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_03": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "ATypicalGrowth",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Agglutination": [ "NotDetermined" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "NotDetermined",
@@ -125,15 +128,16 @@
     "Report": [
       "Kein Nachweis von Neisseria meningitidis."
     ],
-    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar" ]
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar" ],
+    "NoMeningococci": true
   },
   "StemInterpretation_04": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes", "No" ],
     "GrowthOnBloodAgar": "ATypicalGrowth",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "Negative",
-    "GammaGt": "Negative",
+    "GammaGt": [ "Negative" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "Determined",
     "PorAPcr": "NotDetermined",
@@ -141,15 +145,16 @@
     "Report": [
       "Kein Nachweis von Neisseria meningitidis."
     ],
-    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ]
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ],
+    "NoMeningococci": true
   },
   "StemInterpretation_05": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "ATypicalGrowth",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "Determined",
     "PorAPcr": "NotDetermined",
@@ -157,32 +162,35 @@
     "Report": [
       "Kein Nachweis von Neisseria meningitidis."
     ],
-    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ]
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ],
+    "NoMeningococci": true
   },
   "StemInterpretation_06": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
     "Identification": "Neisseria meningitidis",
-    "Report": [],
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
     "Typings": [ "Agglutination" ]
   },
   "StemInterpretation_07": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
@@ -195,12 +203,12 @@
     "Typings": [ "Agglutination" ]
   },
   "StemInterpretation_08": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Agglutination": [ "Auto" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY", "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -214,13 +222,13 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_09": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "Poly" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY", "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -234,43 +242,47 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_10": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Agglutination": [ "Auto" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY", "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Report": [],
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
     "Typings": [ "AgglutinationAutoNonInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_11": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Agglutination": [ "Poly" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY", "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Report": [],
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
     "Typings": [ "AgglutinationPolyNonInvasive", "SerogenogroupBiomolecular", "PorA", "FetA" ]
   },
   "StemInterpretation_12": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Agglutination": [ "Auto" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
@@ -280,13 +292,13 @@
     "Typings": [ "AgglutinationAutoNonInvasive" ]
   },
   "StemInterpretation_13": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "PorAPcr": "Positive",
     "Agglutination": [ "Poly" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
@@ -296,13 +308,13 @@
     "Typings": [ "AgglutinationPolyNonInvasive" ]
   },
   "StemInterpretation_14": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth", "ATypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive", "Negative" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -315,12 +327,12 @@
     "Typings": [ "Agglutination", "PorA", "FetA" ]
   },
   "StemInterpretation_15": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "Agglutination": [ "Negative" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
@@ -334,13 +346,13 @@
     "Typings": [ "NoAgglutination", "SerogenogroupCnl" ]
   },
   "StemInterpretation_16": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "Negative" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -354,46 +366,50 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_17": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "Agglutination": [ "Negative" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
     "Identification": "Neisseria meningitidis",
-    "Report": [],
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
     "Typings": [ "NoAgglutination", "SerogenogroupCnl" ]
   },
   "StemInterpretation_18": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "Negative" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
     "FetAPcr": "Positive",
     "Identification": "Neisseria meningitidis",
-    "Report": [],
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
     "Typings": [ "NoAgglutination", "SerogenogroupCnl", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
 
   "StemInterpretation_19": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "Agglutination": [ "Poly" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
@@ -407,28 +423,30 @@
     "Typings": [ "PolyAgglutination", "SerogenogroupCnl" ]
   },
   "StemInterpretation_21": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "Agglutination": [ "Poly" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
     "Identification": "Neisseria meningitidis",
-    "Report": [],
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
     "Typings": [ "PolyAgglutination", "SerogenogroupCnl" ]
   },
   "StemInterpretation_23": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "Agglutination": [ "Auto" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
@@ -442,12 +460,12 @@
     "Typings": [ "AutoAgglutination", "SerogenogroupCnl" ]
   },
   "StemInterpretation_25": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "Agglutination": [ "Auto" ],
     "SerogroupPcr": [ "cnl" ],
     "MaldiTof": "NotDetermined",
@@ -458,13 +476,13 @@
     "Typings": [ "AutoAgglutination", "SerogenogroupCnl" ]
   },
   "StemInterpretation_27": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "No",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Oxidase": "NotDetermined",
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "NotDetermined",
-    "GammaGt": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
@@ -472,16 +490,17 @@
     "Report": [
       "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
     ],
-    "Typings": []
+    "Typings": [],
+    "NoMeningococci": true
   },
   "StemInterpretation_28": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "No",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Oxidase": "NotDetermined",
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "NotDetermined",
-    "GammaGt": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
     "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY", "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -497,13 +516,13 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_29": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "No",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Oxidase": "NotDetermined",
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "NotDetermined",
-    "GammaGt": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
     "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY", "cnl" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Negative",
@@ -519,13 +538,13 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_30": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "No",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Oxidase": "NotDetermined",
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "NotDetermined",
-    "GammaGt": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
     "SerogroupPcr": [ "Negative" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -541,13 +560,13 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_31": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "No",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Oxidase": "NotDetermined",
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "NotDetermined",
-    "GammaGt": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
     "SerogroupPcr": [ "Negative" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Positive",
@@ -563,13 +582,13 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_32": {
-    "SendingInvasive": "Yes",
+    "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "No",
-    "GrowthOnMartinLewisAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
     "Oxidase": "NotDetermined",
     "Agglutination": [ "NotDetermined" ],
     "Onpg": "NotDetermined",
-    "GammaGt": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
     "SerogroupPcr": [ "Negative" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "Negative",
@@ -585,13 +604,13 @@
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "StemInterpretation_33": {
-    "SendingInvasive": "No",
+    "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
     "Oxidase": "Positive",
     "Agglutination": [ "Negative" ],
     "Onpg": "Negative",
-    "GammaGt": "Positive",
+    "GammaGt": [ "Positive" ],
     "SerogroupPcr": [ "NotDetermined" ],
     "MaldiTof": "NotDetermined",
     "PorAPcr": "NotDetermined",
@@ -601,5 +620,169 @@
       "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
     ],
     "Typings": [ "NoAgglutinationNonInvasive" ]
+  },
+  "StemInterpretation_34": {
+    "SendingInvasive": [ "Yes" ],
+    "GrowthOnBloodAgar": "ATypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "ATypicalGrowth" ],
+    "Agglutination": [ "NotDetermined" ],
+    "Onpg": "Negative",
+    "GammaGt": [ "Negative" ],
+    "SerogroupPcr": [ "NotDetermined" ],
+    "MaldiTof": "Determined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Report": [
+      "Kein Nachweis von Neisseria meningitidis."
+    ],
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ],
+    "NoMeningococci": true
+  },
+  "StemInterpretation_35": {
+    "SendingInvasive": [ "Yes" ],
+    "GrowthOnBloodAgar": "No",
+    "GrowthOnMartinLewisAgar": [ "No" ],
+    "Oxidase": "NotDetermined",
+    "Agglutination": [ "NotDetermined" ],
+    "Onpg": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
+    "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY", "cnl" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Negative",
+    "FetAPcr": "Negative",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {SerogroupPcr:enum()}.",
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden, daher war eine Antibiotikaresistenztestung nicht möglich."
+    ],
+    "Typings": [ "Serogenogroup", "NoPorA", "NoFetA" ]
+  },
+  "StemInterpretation_36": {
+    "SendingInvasive": [ "No" ],
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
+    "Agglutination": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
+    "Onpg": "Negative",
+    "GammaGt": [ "Positive" ],
+    "SerogroupPcr": [ "NotDetermined" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
+    "Typings": [ "Agglutination", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_37": {
+    "SendingInvasive": [ "No" ],
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
+    "Agglutination": [ "Poly" ],
+    "Onpg": "Negative",
+    "GammaGt": [ "Positive" ],
+    "SerogroupPcr": [ "Negative" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
+    "Typings": [ "AgglutinationPolyNonInvasive", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_38": {
+    "SendingInvasive": [ "No" ],
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
+    "Agglutination": [ "Auto" ],
+    "Onpg": "Negative",
+    "GammaGt": [ "Positive" ],
+    "SerogroupPcr": [ "NotDetermined" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
+    "Typings": [ "AgglutinationAutoNonInvasive", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "StemInterpretation_39": {
+    "SendingInvasive": [ "No" ],
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
+    "Oxidase": "Positive",
+    "Agglutination": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
+    "Onpg": "Negative",
+    "GammaGt": [ "Positive" ],
+    "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
+    "Typings": [ "Agglutination" ]
+  },
+  "StemInterpretation_40": {
+    "SendingInvasive": [ "No" ],
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
+    "Agglutination": [ "Negative", "Poly" ],
+    "Onpg": "Negative",
+    "GammaGt": [ "Positive" ],
+    "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
+    "Typings": [ "SerogenogroupBiomolecular" ]
+  },
+  "StemInterpretation_41": {
+    "SendingInvasive": [ "No" ],
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
+    "Oxidase": "Positive",
+    "Onpg": "Negative",
+    "GammaGt": [ "Positive" ],
+    "Agglutination": [ "Negative" ],
+    "SerogroupPcr": [ "NotDetermined" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "Positive",
+    "FetAPcr": "Positive",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
+    ],
+    "Typings": [ "NoAgglutinationBCWY", "PorA", "FetA" ]
+  },
+  "StemInterpretation_PartialReport": {
+    "SendingInvasive": [ "Yes" ],
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
+    "Oxidase": "Positive",
+    "Agglutination": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
+    "Onpg": "NotDetermined",
+    "GammaGt": [ "NotDetermined" ],
+    "SerogroupPcr": [ "NotDetermined" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe {Agglutination:enum()}."
+    ],
+    "Typings": [ "Agglutination", "ETestNotYetDone" ]
   }
+
 }

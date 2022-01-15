@@ -29,7 +29,7 @@ namespace CsvImporter
 
         public string OtherClinicalInformation { get; set; }
 
-        public YesNoUnknown HibVaccination { get; set; }
+        public VaccinationStatus HibVaccination { get; set; }
 
         public DateTime? HibVaccinationDate { get; set; }
 

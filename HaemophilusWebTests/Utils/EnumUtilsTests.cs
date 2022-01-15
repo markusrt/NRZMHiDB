@@ -81,7 +81,7 @@ namespace HaemophilusWeb.Utils
             var attribute = UtilsTest.One.FirstAttribute<MockAttribute>();
 
             attribute.Should().NotBeNull();
-            attribute.GetType().ShouldBeEquivalentTo(typeof (MockAttribute));
+            attribute.GetType().Should().Be(typeof (MockAttribute));
         }
 
         [Test]

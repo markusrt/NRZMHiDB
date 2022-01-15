@@ -35,7 +35,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(69);
+            export.Columns.Count.Should().Be(70);
         }
 
         [Test]
@@ -85,6 +85,7 @@ namespace HaemophilusWeb.Tools
             Sending.Patient.State = State.BY;
             Sending.Isolate.Growth = YesNoOptional.No;
             Sending.Isolate.Oxidase = TestResult.Positive;
+            Sending.Isolate.GenomeSequencing = UnspecificTestResult.Determined;
 
             var export = sut.ToDataTable(Sendings);
 
@@ -93,6 +94,7 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Bundesland"].Should().Be("Bayern");
             export.Rows[0]["Wachstum"].Should().Be("Nein");
             export.Rows[0]["Oxidase"].Should().Be("positiv");
+            export.Rows[0]["Genomsequenzierung"].Should().Be("durchgeführt");
         }
 
         [Test]

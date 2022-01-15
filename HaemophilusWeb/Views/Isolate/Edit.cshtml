@@ -13,6 +13,7 @@
 {
     @Html.ValidationSummary(true)
     @Html.HiddenFor(model => model.IsolateId)
+    @Html.HiddenFor(model => model.ReportStatus)
 
     @Html.TextEditorFor(m => m.LaboratoryNumber, prefix: DatabaseType.Haemophilus.LaboratoryNumberPrefix())
 
@@ -99,6 +100,8 @@
             @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
         </div>
     </div>
+
+    @Html.EnumRadioEditorFor(model => model.GenomeSequencing)
 
     @Html.EnumRadioEditorFor(model => model.Ftsi)
     <div id="FtsiEvaluationForm" class="form-group">
