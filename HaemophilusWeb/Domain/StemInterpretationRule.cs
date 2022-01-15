@@ -6,13 +6,13 @@ namespace HaemophilusWeb.Domain
 {
     public class StemInterpretationRule
     {
-        public YesNo? SendingInvasive { get; set; }
+        public List<YesNo?> SendingInvasive { get; set; }
         public Growth GrowthOnBloodAgar { get; set; }
-        public Growth GrowthOnMartinLewisAgar { get; set; }
+        public List<Growth> GrowthOnMartinLewisAgar { get; set; }
         public TestResult? Oxidase { get; set; }
         public List<MeningoSerogroupAgg> Agglutination { get; set; }
         public TestResult? Onpg { get; set; }
-        public TestResult? GammaGt { get; set;  }
+        public List<TestResult> GammaGt { get; set;  }
         public List<MeningoSerogroupPcr> SerogroupPcr { get; set; }
         public UnspecificTestResult? MaldiTof { get; set; }
         public NativeMaterialTestResult? PorAPcr { get; set; }

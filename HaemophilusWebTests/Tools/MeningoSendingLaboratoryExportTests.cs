@@ -255,7 +255,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["Serogruppe"].Should().Be("B");
-            export.Rows[0]["Regel"].Should().Be("NativeMaterialInterpretation_01");
+            export.Rows[0]["Regel"].Should().Be("NativeMaterialInterpretation_01a");
             export.Rows[0]["Meningokokken"].Should().Be(DBNull.Value);
         }
 

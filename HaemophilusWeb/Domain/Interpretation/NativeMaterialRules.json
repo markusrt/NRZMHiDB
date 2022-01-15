@@ -1,5 +1,5 @@
 {
-  "NativeMaterialInterpretation_01": {
+  "NativeMaterialInterpretation_01a": {
     "CsbPcr": [ "Positive" ],
     "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
@@ -16,6 +16,25 @@
       "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B."
     ],
     "Typings": [ "MolecularTyping", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "NativeMaterialInterpretation_01b": {
+    "CsbPcr": [ "Positive" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CswyAllele": 0,
+    "PorAPcr": [ "Positive" ],
+    "FetAPcr": [ "Positive" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "NeisseriaMeningitidis",
+    "MolecularTyping": "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe B.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B."
+    ],
+    "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
   "NativeMaterialInterpretation_02": {
@@ -364,8 +383,8 @@
   },
   "NativeMaterialInterpretation_22": {
     "CsbPcr": [ "Positive" ],
-    "CscPcr": [ "Negative", "NotDetermined" ],
-    "CswyPcr": [ "Negative", "NotDetermined" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "PorAPcr": [ "Negative" ],
     "FetAPcr": [ "Negative" ],
     "RibosomalRna16S": [ "NotDetermined" ],
@@ -411,9 +430,9 @@
     "NoMeningococci": true
   },
   "NativeMaterialInterpretation_25": {
-    "CsbPcr": [ "Negative", "NotDetermined" ],
+    "CsbPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CscPcr": [ "Positive" ],
-    "CswyPcr": [ "Negative", "NotDetermined" ],
+    "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "PorAPcr": [ "Negative" ],
     "FetAPcr": [ "Negative" ],
     "RibosomalRna16S": [ "NotDetermined" ],
@@ -428,8 +447,8 @@
     "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "NoPorA", "NoFetA" ]
   },
   "NativeMaterialInterpretation_26": {
-    "CsbPcr": [ "Negative", "NotDetermined" ],
-    "CscPcr": [ "Negative", "NotDetermined" ],
+    "CsbPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Positive" ],
     "CswyAllele": "Allele1",
     "PorAPcr": [ "Negative" ],
@@ -446,8 +465,8 @@
     "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "NoPorA", "NoFetA" ]
   },
   "NativeMaterialInterpretation_27": {
-    "CsbPcr": [ "Negative", "NotDetermined" ],
-    "CscPcr": [ "Negative", "NotDetermined" ],
+    "CsbPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Positive" ],
     "CswyAllele": "Allele2",
     "PorAPcr": [ "Negative" ],
@@ -464,8 +483,8 @@
     "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "NoPorA", "NoFetA" ]
   },
   "NativeMaterialInterpretation_28": {
-    "CsbPcr": [ "Negative", "NotDetermined" ],
-    "CscPcr": [ "Negative", "NotDetermined" ],
+    "CsbPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
     "CswyPcr": [ "Positive" ],
     "CswyAllele": "Allele3",
     "PorAPcr": [ "Negative" ],
@@ -480,5 +499,110 @@
       "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y."
     ],
     "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "NoPorA", "NoFetA" ]
+  },
+  "NativeMaterialInterpretation_29a": {
+    "CsbPcr": [ "Positive" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "PorAPcr": [ "Negative" ],
+    "FetAPcr": [ "Positive" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "NeisseriaMeningitidis",
+    "MolecularTyping": "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B."
+    ],
+    "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "NoPorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "NativeMaterialInterpretation_29b": {
+    "CsbPcr": [ "Positive" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "PorAPcr": [ "Negative" ],
+    "FetAPcr": [ "Positive" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "NotDetermined" ],
+    "MolecularTyping": "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B."
+    ],
+    "Typings": [ "MolecularTyping", "NoPorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "NativeMaterialInterpretation_31a": {
+    "CsbPcr": [ "Positive" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "PorAPcr": [ "Positive" ],
+    "FetAPcr": [ "Positive" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "NeisseriaMeningitidis",
+    "MolecularTyping": "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B."
+    ],
+    "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "NativeMaterialInterpretation_31b": {
+    "CsbPcr": [ "Positive" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "PorAPcr": [ "Positive" ],
+    "FetAPcr": [ "Positive" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "NotDetermined" ],
+    "MolecularTyping": "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B."
+    ],
+    "Typings": [ "MolecularTyping", "PorA", "FetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "NativeMaterialInterpretation_32a": {
+    "CsbPcr": [ "Positive" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "PorAPcr": [ "Positive" ],
+    "FetAPcr": [ "Negative" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "NeisseriaMeningitidis",
+    "MolecularTyping": "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B."
+    ],
+    "Typings": [ "RealTimePCRNeisseriaMeningitidis", "MolecularTyping", "PorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "NativeMaterialInterpretation_32b": {
+    "CsbPcr": [ "Positive" ],
+    "CscPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "CswyPcr": [ "Negative", "Inhibitory", "NotDetermined" ],
+    "PorAPcr": [ "Positive" ],
+    "FetAPcr": [ "Negative" ],
+    "RibosomalRna16S": [ "NotDetermined" ],
+    "RealTimePcr": [ "NotDetermined" ],
+    "MolecularTyping": "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.",
+    "Report": [
+      "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.",
+      "Der Nachweis von Neisseria meningitidis aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B."
+    ],
+    "Typings": [ "MolecularTyping", "PorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   }
 }
