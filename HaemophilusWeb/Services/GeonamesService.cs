@@ -13,7 +13,7 @@ using static HaemophilusWeb.Utils.HttpClientWrapper;
 
 namespace HaemophilusWeb.Utils
 {
-    public class GeonamesService
+    public class GeonamesService : IGeonamesService
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private const string BaseUrl = "http://api.geonames.org";

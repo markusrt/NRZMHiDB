@@ -270,6 +270,7 @@
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
+    <Compile Include="Services\IGeonamesService.cs" />
     <Compile Include="Services\PubMlstMatcher.cs" />
     <Compile Include="Services\PubMlstService.cs" />
     <Compile Include="Tools\HaemophilsPubMlstExport.cs" />

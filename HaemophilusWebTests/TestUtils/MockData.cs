@@ -42,6 +42,24 @@ namespace HaemophilusWeb.TestUtils
                 sending.Isolate = null;
                 dbContext.Sendings.Add(sending);
             }
+
+            for (var i = FirstId; i < EntityCount; i++)
+            {
+                var patient = Catalog.CreateInstance<MeningoPatient>();
+                patient.PatientId = i;
+                dbContext.MeningoPatientsDbSet.Add(patient);
+
+                var sender = Catalog.CreateInstance<Sender>();
+                sender.SenderId = i;
+                dbContext.Senders.Add(sender);
+
+                var sending = Catalog.CreateInstance<MeningoSending>();
+                sending.MeningoPatientId = i;
+                sending.SenderId = i;
+                sending.MeningoSendingId = i;
+                sending.Isolate = null;
+                dbContext.MeningoSendings.Add(sending);
+            }
         }
 
         public static T CreateInstance<T>()
@@ -65,6 +83,10 @@ namespace HaemophilusWeb.TestUtils
                 if (instance is Patient patient)
                 {
                     patient.Initials = $"{RandomLetter()}.{RandomLetter()}.";
+                }
+                if (instance is MeningoPatient meningoPatient)
+                {
+                    meningoPatient.Initials = $"{RandomLetter()}.{RandomLetter()}.";
                 }
             }
         }

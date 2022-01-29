@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
@@ -17,18 +16,28 @@ namespace HaemophilusWeb.Controllers
 {
     public class EpiscanGisExportController : Controller
     {
-        private readonly IApplicationDbContext db = new ApplicationDbContextWrapper(new ApplicationDbContext());
+        private readonly IApplicationDbContext _db;
+        private readonly IGeonamesService _geonamesService;
 
+        public EpiscanGisExportController() : this(new ApplicationDbContextWrapper(new ApplicationDbContext()), new GeonamesService())
+        {
+        }
+
+        public EpiscanGisExportController(IApplicationDbContext db, IGeonamesService geonamesService)
+        {
+            _db = db;
+            _geonamesService = geonamesService;
+        }
 
         [HttpGet]
         [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Download(HttpPostedFileBase file)
+        public ActionResult Download()
         {
             var tempFile = Path.GetTempFileName();
             
             var samplingLocations = new List<MeningoSamplingLocation> { MeningoSamplingLocation.Blood, MeningoSamplingLocation.Liquor };
 
-            var sendings = db.MeningoSendings.Include(s => s.Patient)
+            var sendings = _db.MeningoSendings.Include(s => s.Patient)
                 .Where(s => !s.Deleted && samplingLocations.Contains(s.SamplingLocation) &&
                             (s.SamplingDate == null && s.ReceivingDate >= new DateTime(2019, 05, 01) ||
                              s.SamplingDate > new DateTime(2019, 05, 01)))
@@ -44,7 +53,6 @@ namespace HaemophilusWeb.Controllers
              */
 
             var csvLines = new List<string>();
-            var geo = new GeonamesService();
 
             foreach (var sending in sendings)
             {
@@ -53,7 +61,15 @@ namespace HaemophilusWeb.Controllers
                 // Filter out duplicate patients maybe using exporter
                 var interpretation = new MeningoIsolateInterpretation();
                 interpretation.Interpret(sending.Isolate);
-                var coordinate = geo.QueryCoordinateByPostalCode(sending.Patient.PostalCode, sending.Patient.City);
+
+                var serogroup = interpretation.Serogroup;
+
+                if (string.IsNullOrEmpty(serogroup) || serogroup == "NG" || serogroup == "cnl")
+                {
+                    continue;
+                }
+
+                var coordinate = _geonamesService.QueryCoordinateByPostalCode(sending.Patient.PostalCode, sending.Patient.City);
                 FormattableString line =
                     $"{sending.MeningoPatientId};{sending.ReceivingDate.ToReportFormat()};{sending.SamplingDate.ToReportFormat(string.Empty)};{interpretation.Serogroup};{sending.Isolate.PorAVr1};{sending.Isolate.PorAVr2};{sending.Isolate.FetAVr};{sending.Isolate.PatientAgeAtSampling()};{coordinate?.Latitude};{coordinate?.Longitude}";
                 csvLines.Add(line.ToString(CultureInfo.InvariantCulture));
