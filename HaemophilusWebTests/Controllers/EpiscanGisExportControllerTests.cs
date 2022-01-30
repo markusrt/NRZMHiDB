@@ -47,6 +47,7 @@ namespace HaemophilusWeb.Controllers
 
                 sending.SamplingDate = new DateTime(2019, 05, 02);
                 sending.SamplingLocation = MeningoSamplingLocation.Blood;
+                sending.Material = MeningoMaterial.VitalStem;
                 sending.Deleted = false;
 
                 SetupToInterpretAsSerogroup(sending, MeningoSerogroupPcr.C);
@@ -109,6 +110,49 @@ namespace HaemophilusWeb.Controllers
             File.WriteAllBytes(testFile, content);
             File.ReadAllLines(testFile).Should().HaveCount(_db.MeningoSendings.Count()-1);
         }
+
+        [Test]
+        public void DownloadWithTwoEntriesMissingSerogroup_ReturnsTwoLineLess()
+        {
+            var testFile = Path.Combine(TemporaryDirectoryToStoreTestData, "download.csv");
+            var sut = CreateController();
+            _db.MeningoSendings.First().Isolate.SerogroupPcr = MeningoSerogroupPcr.NotDetermined;
+            _db.MeningoSendings.Skip(1).First().Isolate.SerogroupPcr = MeningoSerogroupPcr.NotDetermined;
+            
+            var actionResult = sut.Download();
+
+            var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
+            File.WriteAllBytes(testFile, content);
+            File.ReadAllLines(testFile).Should().HaveCount(_db.MeningoSendings.Count()-2);
+        }
+
+
+        
+        [Test]
+        public void DownloadWithTwoOfSamePatientMissingSerogroup_AddsPatientOnlyOnceAndChoosesTheOneWithMostData()
+        {
+            var testFile = Path.Combine(TemporaryDirectoryToStoreTestData, "download.csv");
+            var sut = CreateController();
+            
+            var firstEntry = _db.MeningoSendings.First();
+            SetupToInterpretAsSerogroup(firstEntry, MeningoSerogroupPcr.A);
+            firstEntry.Isolate.PorAVr1 = string.Empty;
+
+            var secondEntry = _db.MeningoSendings.Skip(1).First();
+            SetupToInterpretAsSerogroup(secondEntry, MeningoSerogroupPcr.B);
+            secondEntry.MeningoPatientId = firstEntry.MeningoPatientId;
+            
+            var actionResult = sut.Download();
+
+            var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
+            File.WriteAllBytes(testFile, content);
+            var lineOfSamePatient = File.ReadAllLines(testFile).Where(l => l.StartsWith($"{firstEntry.MeningoPatientId};"));
+            lineOfSamePatient.Should().HaveCount(1);
+
+            var exportedLineForThisPatient = lineOfSamePatient.Single();
+            exportedLineForThisPatient.Should().Match("*;B;22;14;5-5;*");
+        }
+
         private static void SetupToInterpretAsSerogroup(MeningoSending sending, MeningoSerogroupPcr serogroupPcr)
         {
             var isolate = sending.Isolate;
