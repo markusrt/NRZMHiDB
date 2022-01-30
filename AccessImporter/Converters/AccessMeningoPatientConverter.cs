@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Services;
 using HaemophilusWeb.Utils;
 using Newtonsoft.Json.Linq;
 

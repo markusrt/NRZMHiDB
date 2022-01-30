@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Services;
 using HaemophilusWeb.Tools;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.Views.Utils;
@@ -39,9 +40,9 @@ namespace HaemophilusWeb.Controllers
 
             var sendings = _db.MeningoSendings.Include(s => s.Patient)
                 .Where(s => !s.Deleted && samplingLocations.Contains(s.SamplingLocation) &&
-                            (s.SamplingDate == null && s.ReceivingDate >= new DateTime(2019, 05, 01) ||
-                             s.SamplingDate > new DateTime(2019, 05, 01)))
-                .OrderBy(s => s.MeningoPatientId).Take(50).ToList();
+                            (s.SamplingDate == null && s.ReceivingDate >= new DateTime(2019, 10, 01) ||
+                             s.SamplingDate > new DateTime(2019, 10, 01)))
+                .OrderBy(s => s.MeningoPatientId).ToList();
 
             var patientLines = new Dictionary<int, string>();
 
@@ -58,6 +59,10 @@ namespace HaemophilusWeb.Controllers
                 }
 
                 var coordinate = _geonamesService.QueryCoordinateByPostalCode(sending.Patient.PostalCode, sending.Patient.City);
+                if (coordinate == null)
+                {
+                    continue;
+                }
                 var patientId = sending.MeningoPatientId;
                 FormattableString line =
                     $"{patientId};{sending.ReceivingDate.ToReportFormat()};{sending.SamplingDate.ToReportFormat(string.Empty)};{interpretation.Serogroup};{sending.Isolate.PorAVr1};{sending.Isolate.PorAVr2};{sending.Isolate.FetAVr};{sending.Isolate.PatientAgeAtSampling()};{coordinate?.Latitude};{coordinate?.Longitude}";

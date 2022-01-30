@@ -10,6 +10,7 @@ using Geolocation;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Services;
 using HaemophilusWeb.TestUtils;
 using HaemophilusWeb.Utils;
 using Microsoft.AspNet.Identity;
@@ -45,7 +46,7 @@ namespace HaemophilusWeb.Controllers
                 sending.Isolate.EpsilometerTests.Add(MockData.CreateInstance<EpsilometerTest>());
                 sending.Isolate.Sending = sending;
 
-                sending.SamplingDate = new DateTime(2019, 05, 02);
+                sending.SamplingDate = new DateTime(2019, 10, 02);
                 sending.SamplingLocation = MeningoSamplingLocation.Blood;
                 sending.Material = MeningoMaterial.VitalStem;
                 sending.Deleted = false;

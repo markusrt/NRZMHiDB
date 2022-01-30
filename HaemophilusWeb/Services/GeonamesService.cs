@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Net;
 using Geolocation;
-using HaemophilusWeb.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static HaemophilusWeb.Utils.HttpClientWrapper;
 
-namespace HaemophilusWeb.Utils
+namespace HaemophilusWeb.Services
 {
     public class GeonamesService : IGeonamesService
     {
