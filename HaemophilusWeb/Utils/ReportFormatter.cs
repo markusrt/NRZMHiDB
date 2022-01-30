@@ -11,9 +11,14 @@ namespace HaemophilusWeb.Utils
     {
         public static string ToReportFormat(this DateTime? dateTime)
         {
+            return dateTime.ToReportFormat("keine Angabe");
+        }
+
+        public static string ToReportFormat(this DateTime? dateTime, string emptyString)
+        {
             if (!dateTime.HasValue)
             {
-                return "keine Angabe";
+                return emptyString;
             }
             return dateTime.Value.ToReportFormat();
         }

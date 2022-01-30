@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FluentAssertions;
+using HaemophilusWeb.Services;
 using HaemophilusWeb.Utils;
 using NUnit.Framework;
 
