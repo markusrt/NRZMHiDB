@@ -32,7 +32,7 @@ namespace HaemophilusWeb.Controllers
 
         [HttpGet]
         [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Download()
+        public ActionResult Index()
         {
             var tempFile = Path.GetTempFileName();
             
