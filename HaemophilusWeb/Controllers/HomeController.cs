@@ -22,7 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2022, 01, 31), "Korrektur Serogruppe LGA Export", ChangeType.Bug, DatabaseType.Meningococci),
+                new Change(new DateTime(2022, 01, 31), "Korrektur Serogruppe LGA Export", 70, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 01, 30), "EpiScanGIS Export", 6, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 01, 11), "Update Befundvorlagen", ChangeType.Feature),
                 new Change(new DateTime(2021, 12, 13, 8, 45, 0), "Stämme Regeln NoNM_01 und NoNM_02", 77, ChangeType.Feature, DatabaseType.Meningococci),
