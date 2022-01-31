@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
@@ -11,6 +12,8 @@ namespace HaemophilusWeb.Tools
     public class MeningoStateAuthorityExport : SendingExportDefinition<MeningoSending, MeningoPatient>
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
+
+        private readonly MeningoIsolateInterpretation _isolateInterpretation = new MeningoIsolateInterpretation();
 
         public MeningoStateAuthorityExport(IReadOnlyCollection<County> counties)
         {
@@ -32,7 +35,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => s.Patient.BirthDate.ToReportFormatMonthYear(), "Geburtsmonat");
             AddField(s => s.ReceivingDate.ToReportFormat());
             AddField(s => s.SamplingDate.ToReportFormat());
-            AddField(s => ExportToString(s.Isolate.Agglutination), "Serogruppe");
+            AddField(s => DetectSerogroup(s.Isolate), "Serogruppe");
             
             AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr1, "PorA VR1");
             AddFieldOnPositiveTestResult(s => s.Isolate.PorAPcr, s => s.Isolate.PorAVr2, "PorA VR2");
@@ -41,6 +44,11 @@ namespace HaemophilusWeb.Tools
             AddField(s => FindSpecies(s.Isolate), "Spezies");
             AddField(s => findCounty(s).CountyNumber, "Landkreis");
             AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "Bundesland");
+        }
+        private string DetectSerogroup(MeningoIsolate isolate)
+        {
+            _isolateInterpretation.Interpret(isolate);
+            return _isolateInterpretation.Serogroup;
         }
 
         private static string FindSpecies(MeningoIsolate isolate)
