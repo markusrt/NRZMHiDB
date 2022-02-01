@@ -1,25 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using FluentAssertions;
 using Geolocation;
-using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Services;
 using HaemophilusWeb.TestUtils;
-using HaemophilusWeb.Utils;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
-using Moq;
 using NSubstitute;
-using NSubstitute.ReceivedExtensions;
 using NUnit.Framework;
-using TestDataGenerator;
 
 namespace HaemophilusWeb.Controllers
 {
@@ -71,7 +61,7 @@ namespace HaemophilusWeb.Controllers
             var testFile = Path.Combine(TemporaryDirectoryToStoreTestData, "download.csv");
             var sut = CreateController();
             
-            var actionResult = sut.Download();
+            var actionResult = sut.Index();
 
             var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);
@@ -91,7 +81,7 @@ namespace HaemophilusWeb.Controllers
             var testFile = Path.Combine(TemporaryDirectoryToStoreTestData, "download.csv");
             var sut = CreateController();
             
-            var content = sut.Download().Should().BeOfType<FileContentResult>().Subject.FileContents;
+            var content = sut.Index().Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);
 
             var firstLine = File.ReadAllLines(testFile).First();
@@ -105,7 +95,7 @@ namespace HaemophilusWeb.Controllers
             var sut = CreateController();
             _db.MeningoSendings.First().SamplingLocation = MeningoSamplingLocation.EarSwab;
             
-            var actionResult = sut.Download();
+            var actionResult = sut.Index();
 
             var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);
@@ -120,7 +110,7 @@ namespace HaemophilusWeb.Controllers
             _db.MeningoSendings.First().Isolate.SerogroupPcr = MeningoSerogroupPcr.NotDetermined;
             _db.MeningoSendings.Skip(1).First().Isolate.SerogroupPcr = MeningoSerogroupPcr.NotDetermined;
             
-            var actionResult = sut.Download();
+            var actionResult = sut.Index();
 
             var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);
@@ -143,7 +133,7 @@ namespace HaemophilusWeb.Controllers
             SetupToInterpretAsSerogroup(secondEntry, MeningoSerogroupPcr.B);
             secondEntry.MeningoPatientId = firstEntry.MeningoPatientId;
             
-            var actionResult = sut.Download();
+            var actionResult = sut.Index();
 
             var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);
