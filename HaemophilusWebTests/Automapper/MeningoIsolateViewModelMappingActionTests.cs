@@ -105,6 +105,7 @@ namespace HaemophilusWeb.Automapper
             var isolateViewModel = new MeningoIsolateViewModel();
             var isolate = CreateEmptyIsolate();
             DbMock.Senders.Find(1).Name = "Test Sender";
+            DbMock.Senders.Find(1).Department = "Test Department";
             DbMock.Senders.Find(1).PostalCode = "12345";
             DbMock.Senders.Find(1).City = "The City";
             DbMock.Senders.Find(1).StreetWithNumber = "Long Street 123456";
@@ -114,6 +115,7 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.SenderName.Should().Be("Test Sender");
             isolateViewModel.SenderCity.Should().Be("12345 The City");
             isolateViewModel.SenderStreet.Should().Be("Long Street 123456");
+            isolateViewModel.SenderDepartment.Should().Be("Test Department");
         }
 
         private static MeningoIsolate CreateEmptyIsolate()

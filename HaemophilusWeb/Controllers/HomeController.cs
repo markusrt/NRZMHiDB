@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2022, 03, 30, 12, 0, 0), "Abteilung des Einsenders fehlt auf Befund", ChangeType.Bug, DatabaseType.None),
                 new Change(new DateTime(2022, 01, 31), "Korrektur Serogruppe LGA Export", 70, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 01, 30), "EpiScanGIS Export", 6, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 01, 11), "Update Befundvorlagen", ChangeType.Feature),

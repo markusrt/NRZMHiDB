@@ -110,6 +110,7 @@ namespace HaemophilusWeb.ViewModels
         }
 
         public string SenderName { get; set; }
+        public string SenderDepartment { get; set; }
         public string SenderStreet { get; set; }
         public string SenderCity { get; set; }
 

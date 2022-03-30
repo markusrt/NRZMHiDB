@@ -51,6 +51,7 @@ namespace HaemophilusWeb.Automapper
             if (sender != null) // special case for Meningo as old senders were not imported
             {
                 destination.SenderName = sender.Name;
+                destination.SenderDepartment = sender.Department;
                 destination.SenderStreet = sender.StreetWithNumber;
                 destination.SenderCity = $"{sender.PostalCode} {sender.City}";
             }
