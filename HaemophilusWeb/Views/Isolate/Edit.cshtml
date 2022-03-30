@@ -131,6 +131,8 @@
         <div class="col-sm-5">
             @EnumEditor.EnumDropDownListFor(Html, model => model.Evaluation, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Evaluation)
+            
+            <span id="EvaluationMisMatchWarning" class="label label-warning"></span>
         </div>
     </div>
 
@@ -149,12 +151,15 @@
     preventSiteNavigationWithPendingChanges();
 
     var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
+    var serogroups = ["A", "B", "C", "D", "E", "F"];
 
     $(document)
         .ready(function() {
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("select[id$=_Measurement]").change(ETestChange);
-            $("select[id$=_Antibiotic]").change(ETestChange);
+            $("select[id$=_Antibiotic]").change(ETestChange); 
+            $("input:radio[name$='Agglutination']").change(AgglutinationChange);
+            $("select[id$=Evaluation]").change(EvaluationChange);
             //TODO refactor all ShowXXXIfYYY methods to use ShowOnSpecificRadioValue
             ShowGrowthTypeIfGrowthIsSelectedWithYes();
             ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
@@ -237,6 +242,33 @@
             "Determined",
             "[id$='MlstSequenceType']"
         );
+    }
+
+    function AgglutinationChange() {
+        var agglutination = $("input:radio[name$='Agglutination']:checked").val();
+        if (serogroups.includes(agglutination)) {
+            $("select[id$=Evaluation]").val(`HaemophilusType${agglutination}`);
+        } 
+        else {
+            $("select[id$=Evaluation]").val("HaemophilusNonEncapsulated");
+        }
+
+    }
+
+    function EvaluationChange() {
+        var agglutination = $("input:radio[name$='Agglutination']:checked").val();
+        var warning = "";
+        if (serogroups.includes(agglutination)) {
+            var expectedEvaluation = `HaemophilusType${agglutination}`;
+            var actualEvaluation = $("select[id$=Evaluation]").val();
+            if (actualEvaluation !== expectedEvaluation) {
+                invalid = true;
+
+                warning = `Achtung: Diskrepanz zu Agglutination mit dem Wert "${agglutination}"`;
+            }
+        }
+        $("#EvaluationMisMatchWarning").text(warning);
+
     }
 
     function ETestChange() {
