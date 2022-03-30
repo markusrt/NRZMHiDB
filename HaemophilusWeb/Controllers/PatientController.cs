@@ -36,9 +36,6 @@ namespace HaemophilusWeb.Controllers
             viewBag.PossibleOtherClinicalInformation = DbSet().Where(
                     s => !string.IsNullOrEmpty(s.OtherClinicalInformation)).
                 Select(s => s.OtherClinicalInformation).AsDataList();
-            viewBag.PossibleTherapyDetails = DbSet().Where(
-                    s => !string.IsNullOrEmpty(s.TherapyDetails)).
-                Select(s => s.TherapyDetails).AsDataList();
         }
     }
 }

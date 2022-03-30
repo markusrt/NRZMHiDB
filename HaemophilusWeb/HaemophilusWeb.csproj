@@ -274,6 +274,10 @@
     <Compile Include="Migrations\202203301236005_ReorderSpecificTestResult.designer.cs">
       <DependentUpon>202203301236005_ReorderSpecificTestResult.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.cs" />
+    <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.designer.cs">
+      <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
@@ -826,6 +830,9 @@
     <Content Include="Content\DataTables\css\common.scss" />
     <EmbeddedResource Include="Migrations\202203301236005_ReorderSpecificTestResult.resx">
       <DependentUpon>202203301236005_ReorderSpecificTestResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.resx">
+      <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
