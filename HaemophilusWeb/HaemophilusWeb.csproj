@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -550,6 +550,7 @@
     <Compile Include="Utils\FileLister.cs" />
     <Compile Include="Services\GeonamesService.cs" />
     <Compile Include="Utils\HttpClientWrapper.cs" />
+    <Compile Include="Utils\DetailFormatter.cs" />
     <Compile Include="Utils\ReportFormatter.cs" />
     <Compile Include="Utils\ServerUtils.cs" />
     <Compile Include="Utils\TypeUtils.cs" />

@@ -189,6 +189,7 @@
     <Compile Include="Utils\ExceptionUtilsTests.cs" />
     <Compile Include="Utils\ExpressionUtilsTests.cs" />
     <Compile Include="Utils\FileListerTests.cs" />
+    <Compile Include="Utils\DetailFormatterTests.cs" />
     <Compile Include="Utils\ReportFormatterTests.cs" />
     <Compile Include="Validators\AbstractValidatorTests.cs" />
     <Compile Include="Validators\EpsilometerTestValidatorTest.cs" />
