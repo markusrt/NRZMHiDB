@@ -1,4 +1,5 @@
 ﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Utils
 @using HaemophilusWeb.Views.Utils
 @model HaemophilusWeb.Models.Sending
 
@@ -7,13 +8,13 @@
 
 <div class="form-group">
     @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
+    <div class="col-sm-8">
         @Html.DropDownListFor(model => model.SenderId, ((IEnumerable<Sender>)ViewBag.PossibleSenders).Select(option => new SelectListItem
-        {
-            Text = (option == null ? "Kein Einsender" : string.Format("#{0} - {1} - {2}", option.SenderId, option.Name, option.PostalCode, option.City)),
-            Value = option.SenderId.ToString(),
-            Selected = (Model != null) && (option.SenderId == Model.SenderId)
-        }), "Auswählen...", new { @class = "form-control" })
+   {
+       Text = option.ToDetail(),
+       Value = option.SenderId.ToString(),
+       Selected = (Model != null) && (option.SenderId == Model.SenderId),
+   }), "Auswählen...", new { @class = "form-control" })
 
         @Html.ValidationMessageFor(model => model.SenderId)
     </div>

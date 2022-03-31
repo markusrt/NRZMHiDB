@@ -178,7 +178,7 @@
                 documentData["Typing-"+typing.Attribute] = typing.Value;
             });
 
-            loadFile(templateFile,function(error,content){
+            loadFile(templateFile + "?nocache=" + Math.random(), function (error, content) {
                 if (error) { throw error };
                 var zip = new PizZip(content);
                 var doc = new window.Docxtemplater().loadZip(zip);

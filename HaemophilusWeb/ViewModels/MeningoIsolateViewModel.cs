@@ -42,6 +42,7 @@ namespace HaemophilusWeb.ViewModels
         public IEnumerable<Typing> Typings { get; set; }
 
         public string SenderName { get; set; }
+        public string SenderDepartment { get; set; }
         public string SenderStreet { get; set; }
         public string SenderCity { get; set; }
 

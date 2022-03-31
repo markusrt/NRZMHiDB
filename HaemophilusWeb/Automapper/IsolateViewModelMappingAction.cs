@@ -43,6 +43,7 @@ namespace HaemophilusWeb.Automapper
 
             var sender = db.Senders.Find(source.Sending.SenderId);
             destination.SenderName = sender.Name;
+            destination.SenderDepartment = sender.Department ?? string.Empty;
             destination.SenderStreet = sender.StreetWithNumber;
             destination.SenderCity = $"{sender.PostalCode} {sender.City}";
         }

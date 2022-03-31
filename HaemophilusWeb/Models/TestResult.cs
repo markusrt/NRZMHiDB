@@ -28,7 +28,8 @@ namespace HaemophilusWeb.Models
         [Description("negativ")] Negative = 1,
         [Description("H. influenzae")] HaemophilusInfluenzae = 2,
         [Description("H. haemolyticus")] HaemophilusHaemolyticus = 3,
-        [Description("nicht auswertbar")] NotEvaluable = 4,
+        [Description("H. parainfluenzae")] HaemophilusParainfluenzae = 4,
+        [Description("nicht auswertbar")] NotEvaluable = 100,
     }
 
     public enum NativeMaterialTestResult

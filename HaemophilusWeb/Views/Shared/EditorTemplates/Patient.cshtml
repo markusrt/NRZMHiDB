@@ -53,27 +53,11 @@
 
 @Html.DateEditorFor(m => m.HibVaccinationDate, "no-focus", "HibVaccinationDateForm");
 
-@Html.EnumRadioEditorFor(m => m.Therapy)
-<div id="TherapyDetailsForm" class="form-group">
-    @Html.LabelFor(m => m.TherapyDetails, new { @class = "col-sm-2 control-label" })
-    <div class="col-sm-5">
-        @Html.TextBoxFor(m => m.TherapyDetails, new { @class = "form-control", @list = "therapyDetailsAutocomplete", @autocomplete = "off" })
-        <datalist id="therapyDetailsAutocomplete">
-            @foreach (var item in ViewBag.PossibleTherapyDetails)
-            {
-                <option value="@item.ToString()" />
-            }
-        </datalist>
-        @Html.ValidationMessageFor(model => model.TherapyDetails)
-    </div>
-</div>
-
 <script>
     $(document).ready(function () {
         //TODO refactor all ShowXXXIfYYY methods to use ShowOnSpecificRadioValue
         ShowOtherClinicalInformationIfOtherIsSelected();
         ShowHibVaccinationDateIfHibVaccinationIsYes();
-        ShowTherapyDetailsIfTherapyIsYes();
     });
 
     function ShowOtherClinicalInformationIfOtherIsSelected() {
@@ -89,14 +73,6 @@
             "#HibVaccinationDateForm", "input:radio[name$='HibVaccination']",
             "input:radio[name$='HibVaccination']:checked",
             "Yes", "[id$='HibVaccinationDate']"
-        );
-    }
-
-    function ShowTherapyDetailsIfTherapyIsYes() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#TherapyDetailsForm", "input:radio[name$='Therapy']",
-            "input:radio[name$='Therapy']:checked",
-            "Yes", "[id$='TherapyDetails']"
         );
     }
 
