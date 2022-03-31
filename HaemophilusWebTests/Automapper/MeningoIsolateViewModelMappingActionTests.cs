@@ -98,13 +98,15 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.PatientId.Should().Be(123);
         }
 
-        [Test]
-        public void ProcessModelToViewModel_PopulatesSenderData()
+        [TestCase("Test Department", "Test Department")]
+        [TestCase(null, "")]
+        public void ProcessModelToViewModel_PopulatesSenderData(string department, string expectedDepartment)
         {
             var sut = new MeningoIsolateViewModelMappingAction();
             var isolateViewModel = new MeningoIsolateViewModel();
             var isolate = CreateEmptyIsolate();
             DbMock.Senders.Find(1).Name = "Test Sender";
+            DbMock.Senders.Find(1).Department = department;
             DbMock.Senders.Find(1).PostalCode = "12345";
             DbMock.Senders.Find(1).City = "The City";
             DbMock.Senders.Find(1).StreetWithNumber = "Long Street 123456";
@@ -114,6 +116,7 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.SenderName.Should().Be("Test Sender");
             isolateViewModel.SenderCity.Should().Be("12345 The City");
             isolateViewModel.SenderStreet.Should().Be("Long Street 123456");
+            isolateViewModel.SenderDepartment.Should().Be(expectedDepartment);
         }
 
         private static MeningoIsolate CreateEmptyIsolate()

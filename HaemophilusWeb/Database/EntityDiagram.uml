@@ -50,8 +50,6 @@ OtherClinicalInformation: nvarchar
 PatientId: int <<pk>>
 PostalCode: nvarchar
 State: State
-Therapy: YesNoUnknown
-TherapyDetails: nvarchar
 }
 
 table(dbo.Sendings) {

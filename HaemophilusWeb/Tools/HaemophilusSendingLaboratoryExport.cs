@@ -35,8 +35,6 @@ namespace HaemophilusWeb.Tools
                 s.Patient.ClinicalInformation, () => s.Patient.OtherClinicalInformation, _ => _.HasFlag(ClinicalInformation.Other)));
             AddField(s => ExportToString(s.Patient.HibVaccination));
             AddField(s => s.Patient.HibVaccinationDate.ToReportFormat());
-            AddField(s => ExportToString(s.Patient.Therapy));
-            AddField(s => s.Patient.TherapyDetails);
             AddField(s => s.Remark, "Bemerkung (Einsendung)");
 
             AddField(s => ExportToString(s.Isolate.Growth));

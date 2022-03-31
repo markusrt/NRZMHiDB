@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using DataTables.Mvc;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Services;
 using HaemophilusWeb.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

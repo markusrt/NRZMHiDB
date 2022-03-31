@@ -22,6 +22,15 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2022, 03, 30, 17, 0, 0), "<p>Automatisches setzen der Beurteilung</p>" +
+                  "<p>Bei der Auswahl von Agglutination a-f wird die Beurteilung entsprechend auf Hia-Hif gesetzt.</p>" +
+                  "<p>Bei manuellen diskrepanten Änderungen wird eine entsprechende Warnung angezeigt:</p>" +
+                  "<img class='img-rounded img-responsive' src='~/Images/changes/20220330.png'/>", ChangeType.Feature),
+                new Change(new DateTime(2022, 03, 30, 14, 45, 0), "Hinzufügen von ompP6 → H. Parainfluenzae", ChangeType.Feature),
+                new Change(new DateTime(2022, 03, 30, 14, 0, 0), "Anzeige der Adressdetails im Einsender Auswahlfeld", ChangeType.Feature, DatabaseType.None),
+                new Change(new DateTime(2022, 03, 30, 12, 0, 0), "Abteilung des Einsenders fehlt auf Befund", ChangeType.Bug, DatabaseType.None),
+                new Change(new DateTime(2022, 01, 31), "Korrektur Serogruppe LGA Export", 70, ChangeType.Bug, DatabaseType.Meningococci),
+                new Change(new DateTime(2022, 01, 30), "EpiScanGIS Export", 6, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 01, 11), "Update Befundvorlagen", ChangeType.Feature),
                 new Change(new DateTime(2021, 12, 13, 8, 45, 0), "Stämme Regeln NoNM_01 und NoNM_02", 77, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2021, 12, 07), "Interpretation Nativmaterial, Regeln 29 bis 31 und Stämme Regeln 36-42", 77, ChangeType.Feature, DatabaseType.Meningococci),

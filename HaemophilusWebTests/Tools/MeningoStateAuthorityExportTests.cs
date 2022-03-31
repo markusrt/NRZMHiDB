@@ -162,6 +162,42 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["FetA VR"].Should().Be("negativ");
         }
 
+        [Test]
+        public void DataTable_ContainsEmptySerogroup()
+        {
+            var sut = CreateExportDefinition();
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Serogruppe"].Should().Be(DBNull.Value);
+        }
+
+        [Test]
+        public void DataTable_ContainsInterpretedSerogroup()
+        {
+            var sut = CreateExportDefinition();
+            var isolate = new MeningoIsolate
+            {
+                CsbPcr = NativeMaterialTestResult.Negative,
+                CscPcr = NativeMaterialTestResult.Positive,
+                CswyPcr =  NativeMaterialTestResult.Negative,
+                PorAPcr = NativeMaterialTestResult.Positive,
+                FetAPcr = NativeMaterialTestResult.Positive,
+                PorAVr1 = "X",
+                PorAVr2 = "Y",
+                FetAVr = "Z",
+                Sending = Sending,
+                EpsilometerTests = new List<EpsilometerTest>()
+            };
+            isolate.Sending.Isolate.GrowthOnMartinLewisAgar = Growth.TypicalGrowth;
+            isolate.Sending.Material = MeningoMaterial.NativeMaterial;
+
+            Sending.Isolate = isolate;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Serogruppe"].Should().Be("C");
+        }
 
         private static MeningoStateAuthorityExport CreateExportDefinition()
         {

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -25,6 +26,8 @@
     <UseGlobalApplicationHostFile />
     <Use64BitIISExpress />
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,16 +65,19 @@
       <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation">
       <HintPath>..\packages\FluentValidation.5.0.0.1\lib\Net40\FluentValidation.dll</HintPath>
     </Reference>
     <Reference Include="FluentValidation.Mvc">
       <HintPath>..\packages\FluentValidation.MVC5.5.0.0.1\lib\Net45\FluentValidation.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Geolocation, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Geolocation.1.2.1\lib\net451\Geolocation.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -233,6 +239,7 @@
     <Compile Include="Controllers\MeningoReportController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReportControllerBase.cs" />
+    <Compile Include="Controllers\EpiscanGisExportController.cs" />
     <Compile Include="Controllers\RkiMatchController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\SenderController.cs" />
@@ -263,9 +270,18 @@
     <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.Designer.cs">
       <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202203301236005_ReorderSpecificTestResult.cs" />
+    <Compile Include="Migrations\202203301236005_ReorderSpecificTestResult.designer.cs">
+      <DependentUpon>202203301236005_ReorderSpecificTestResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.cs" />
+    <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.designer.cs">
+      <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
+    <Compile Include="Services\IGeonamesService.cs" />
     <Compile Include="Services\PubMlstMatcher.cs" />
     <Compile Include="Services\PubMlstService.cs" />
     <Compile Include="Tools\HaemophilsPubMlstExport.cs" />
@@ -545,6 +561,7 @@
     <Compile Include="Utils\FileLister.cs" />
     <Compile Include="Services\GeonamesService.cs" />
     <Compile Include="Utils\HttpClientWrapper.cs" />
+    <Compile Include="Utils\DetailFormatter.cs" />
     <Compile Include="Utils\ReportFormatter.cs" />
     <Compile Include="Utils\ServerUtils.cs" />
     <Compile Include="Utils\TypeUtils.cs" />
@@ -766,6 +783,7 @@
     <Content Include="Images\changes\20200430_1.png" />
     <Content Include="Images\changes\20200430_2.png" />
     <Content Include="Images\changes\20200430_3.png" />
+    <Content Include="Images\changes\20220330.png" />
     <Content Include="Images\logo4.png" />
     <Content Include="Images\sort_asc.png" />
     <Content Include="Images\sort_both.png" />
@@ -811,6 +829,12 @@
     <Content Include="Content\DataTables\css\semanticui.scss" />
     <Content Include="Content\DataTables\css\mixins.scss" />
     <Content Include="Content\DataTables\css\common.scss" />
+    <EmbeddedResource Include="Migrations\202203301236005_ReorderSpecificTestResult.resx">
+      <DependentUpon>202203301236005_ReorderSpecificTestResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.resx">
+      <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -926,7 +950,7 @@
     <None Include="Properties\PublishProfiles\Prod Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Test Deploy.pubxml" />
     <Content Include="ReportTemplates\Meningo\Fax - Nativmaterial v2.docx" />
-    <Content Include="ReportTemplates\Meningo\Fax - Teilbefund - v1.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Teilbefund - v2.docx" />
     <Content Include="ReportTemplates\Meningo\Fax - Untersuchungsbefund v2.docx" />
     <Content Include="ReportTemplates\Meningo\Nativmaterial v2.docx" />
     <Content Include="ReportTemplates\Meningo\Untersuchungsbefund v2.docx" />
@@ -1271,4 +1295,12 @@
   <Target Name="CustomWebConfigTransform">
     <TransformXml source="Web.template.config" transform="Web.$(Configuration).config" destination="Web.config" />
   </Target>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
 </Project>

@@ -12,7 +12,7 @@ namespace HaemophilusWeb.Models
 
         public readonly InMemoryDbSet<Sender> SenderDbSet = new InMemoryDbSet<Sender>(true)
         {
-            FindFunction = (senders, objects) => senders.Single(s => s.SenderId == (int) objects[0])
+            FindFunction = (senders, objects) => senders.First(s => s.SenderId == (int) objects[0])
         };
 
         public readonly InMemoryDbSet<Sending> SendingDbSet = new MockDbSet<Sending>(true);

@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Net;
-using HaemophilusWeb.Models;
+using Geolocation;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static HaemophilusWeb.Utils.HttpClientWrapper;
 
-namespace HaemophilusWeb.Utils
+namespace HaemophilusWeb.Services
 {
-    public class GeonamesService
+    public class GeonamesService : IGeonamesService
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
         private const string BaseUrl = "http://api.geonames.org";
@@ -72,6 +70,17 @@ namespace HaemophilusWeb.Utils
                 Log.Error(e, "$Failed to call Geonames PostalCodeSearchJSON REST API.");
                 return "{\"postalcodes\":[]}";
             }
+        }
+
+        public Coordinate? QueryCoordinateByPostalCode(string postalCode, string placeName = "")
+        {
+            var queryResult = JObject.Parse(QueryByPostalCode(postalCode, placeName))["postalcodes"] as JArray;
+            if (queryResult.Count > 0)
+            {
+                return new Coordinate(queryResult.First.Value<double>("lat"), queryResult.First.Value<double>("lng"));
+            }
+
+            return null;
         }
     }
 }
