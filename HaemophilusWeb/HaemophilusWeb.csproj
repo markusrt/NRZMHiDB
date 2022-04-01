@@ -562,6 +562,7 @@
     <Compile Include="Services\GeonamesService.cs" />
     <Compile Include="Utils\HttpClientWrapper.cs" />
     <Compile Include="Utils\DetailFormatter.cs" />
+    <Compile Include="Utils\MeningoMaterialExtensions.cs" />
     <Compile Include="Utils\ReportFormatter.cs" />
     <Compile Include="Utils\ServerUtils.cs" />
     <Compile Include="Utils\TypeUtils.cs" />

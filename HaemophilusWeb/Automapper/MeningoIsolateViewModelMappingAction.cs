@@ -68,8 +68,9 @@ namespace HaemophilusWeb.Automapper
 
         private void SetSendingNoGrowthAccordingToGrowthOnAgar(MeningoIsolateViewModel source, MeningoIsolate destination)
         {
-            if (source.GrowthOnBloodAgar == Growth.No && source.GrowthOnMartinLewisAgar == Growth.No
-                                                      && destination.Sending.Material != MeningoMaterial.NativeMaterial)
+            if (source.GrowthOnBloodAgar == Growth.No 
+                && source.GrowthOnMartinLewisAgar == Growth.No
+                && !destination.Sending.Material.IsNativeMaterial())
             {
                 destination.Sending.Material = MeningoMaterial.NoGrowth;
             }

@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2022, 04, 1), "Isolierte DNA wird beim speichern auf 'Nicht angewachsen' zurückgesetzt", 119, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 03, 30, 17, 0, 0), "<p>Automatisches setzen der Beurteilung</p>" +
                   "<p>Bei der Auswahl von Agglutination a-f wird die Beurteilung entsprechend auf Hia-Hif gesetzt.</p>" +
                   "<p>Bei manuellen diskrepanten Änderungen wird eine entsprechende Warnung angezeigt:</p>" +
