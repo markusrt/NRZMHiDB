@@ -6,6 +6,6 @@ public static class MeningoMaterialExtensions
 {
     public static bool IsNativeMaterial(this MeningoMaterial material)
     {
-        return material is MeningoMaterial.NativeMaterial or MeningoMaterial.IsolatedDna;
+        return material == MeningoMaterial.NativeMaterial || material == MeningoMaterial.IsolatedDna;
     }
 }
