@@ -148,14 +148,32 @@
                     {
                         format: "DD.MM.YYYY",
                         pickTime: false,
-                        language: "de",
+                        language: "de"
                     });
                 $(".datetimepicker").datetimepicker(
                     {
                         format: "DD.MM.YYYY HH:mm",
-                        language: "de",
+                        language: "de"
                     });
-                Globalize.culture("de-DE");
+
+                // Localization
+                $.when(
+                    $.getJSON("/Scripts/cldr/supplemental/likelySubtags.json"),
+                    $.getJSON("/Scripts/cldr/main/de/numbers.json"),
+                    $.getJSON("/Scripts/cldr/supplemental/numberingSystems.json"),
+                    $.getJSON("/Scripts/cldr/main/de/ca-gregorian.json"),
+                    $.getJSON("/Scripts/cldr/main/de/timeZoneNames.json"),
+                    $.getJSON("/Scripts/cldr/supplemental/timeData.json"),
+                    $.getJSON("/Scripts/cldr/supplemental/weekData.json")
+                ).then(function () {
+                    return [].slice.apply(arguments, [0]).map(function (result) {
+                        console.log("Sliced localization resources");
+                        return result[0];
+                    });
+                }).then(Cldr.load).then(function () {
+                    Globalize.locale(new Cldr("de"));
+                    console.log("Locale set to de");
+                }).then(console.log("Localization initialized"));
 
                 var errorMessage ='@TempData["ErrorMessage"]';
                 if (errorMessage.length > 0) {

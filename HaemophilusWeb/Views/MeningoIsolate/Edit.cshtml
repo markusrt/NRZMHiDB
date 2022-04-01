@@ -374,7 +374,7 @@
         }
 
 
-        var currentMeasurement = Globalize.parseFloat($(currentMeasurementSelector).val());
+        var currentMeasurement = Globalize.parseNumber($(currentMeasurementSelector).val());
         if (isNaN(currentMeasurement)) {
             return;
         }

@@ -20,8 +20,13 @@ namespace HaemophilusWeb
                 "~/Scripts/DataTables/dataTables.bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/globalize-de-DE")
-                .Include("~/Scripts/globalize/globalize.js")
-                .Include("~/Scripts/globalize/cultures/globalize.culture.de-DE.js"));
+                .Include("~/Scripts/cldr.js")
+                .Include("~/Scripts/cldr/supplemental.js")
+                .Include("~/Scripts/cldr/unresolved.js")
+                .Include("~/Scripts/cldr/event.js")
+                .Include("~/Scripts/globalize.js")
+                .Include("~/Scripts/globalize/date.js")
+                .Include("~/Scripts/globalize/number.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/globalized-validation")
                 .Include("~/Scripts/jquery.validate.globalize.js"));
