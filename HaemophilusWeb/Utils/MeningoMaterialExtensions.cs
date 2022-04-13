@@ -1,11 +1,12 @@
 ﻿using HaemophilusWeb.Models;
 
-namespace HaemophilusWeb.Utils;
-
-public static class MeningoMaterialExtensions
+namespace HaemophilusWeb.Utils
 {
-    public static bool IsNativeMaterial(this MeningoMaterial material)
+    public static class MeningoMaterialExtensions
     {
-        return material == MeningoMaterial.NativeMaterial || material == MeningoMaterial.IsolatedDna;
+        public static bool IsNativeMaterial(this MeningoMaterial material)
+        {
+            return material == MeningoMaterial.NativeMaterial || material == MeningoMaterial.IsolatedDna;
+        }
     }
 }
