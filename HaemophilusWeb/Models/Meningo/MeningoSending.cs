@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using FluentValidation.Attributes;
+using HaemophilusWeb.Utils;
 using HaemophilusWeb.Validators;
 
 namespace HaemophilusWeb.Models.Meningo
@@ -45,7 +46,7 @@ namespace HaemophilusWeb.Models.Meningo
             ? YesNo.Yes
             : YesNo.No;
 
-        public override bool AutoAssignStemNumber => Material != MeningoMaterial.NativeMaterial && Material != MeningoMaterial.IsolatedDna;
+        public override bool AutoAssignStemNumber => !Material.IsNativeMaterial();
 
         public static bool IsInvasive(MeningoSamplingLocation samplingLocation)
         {

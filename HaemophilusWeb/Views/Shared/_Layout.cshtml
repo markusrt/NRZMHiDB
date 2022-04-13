@@ -158,13 +158,13 @@
 
                 // Localization
                 $.when(
-                    $.getJSON("/Scripts/cldr/supplemental/likelySubtags.json"),
-                    $.getJSON("/Scripts/cldr/main/de/numbers.json"),
-                    $.getJSON("/Scripts/cldr/supplemental/numberingSystems.json"),
-                    $.getJSON("/Scripts/cldr/main/de/ca-gregorian.json"),
-                    $.getJSON("/Scripts/cldr/main/de/timeZoneNames.json"),
-                    $.getJSON("/Scripts/cldr/supplemental/timeData.json"),
-                    $.getJSON("/Scripts/cldr/supplemental/weekData.json")
+                    $.getJSON("@Url.Content("~/Scripts/cldr/supplemental/likelySubtags.json")"),
+                    $.getJSON("@Url.Content("~/Scripts/cldr/main/de/numbers.json")"),
+                    $.getJSON("@Url.Content("~/Scripts/cldr/supplemental/numberingSystems.json")"),
+                    $.getJSON("@Url.Content("~/Scripts/cldr/main/de/ca-gregorian.json")"),
+                    $.getJSON("@Url.Content("~/Scripts/cldr/main/de/timeZoneNames.json")"),
+                    $.getJSON("@Url.Content("~/Scripts/cldr/supplemental/timeData.json")"),
+                    $.getJSON("@Url.Content("~/Scripts/cldr/supplemental/weekData.json")")
                 ).then(function () {
                     return [].slice.apply(arguments, [0]).map(function (result) {
                         console.log("Sliced localization resources");

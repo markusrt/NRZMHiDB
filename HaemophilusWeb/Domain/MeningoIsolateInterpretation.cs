@@ -50,7 +50,7 @@ namespace HaemophilusWeb.Domain
             Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
             Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
 
-            if (isolate.Sending.Material == MeningoMaterial.NativeMaterial || isolate.Sending.Material == MeningoMaterial.IsolatedDna)
+            if (isolate.Sending.Material.IsNativeMaterial())
             {
                 RunNativeMaterialInterpretation(isolate);
             }

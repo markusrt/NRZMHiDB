@@ -25,11 +25,11 @@ namespace HaemophilusWeb.Automapper
             CreateMockData();
         }
 
-        [TestCase(MeningoMaterial.IsolatedDna, MeningoMaterial.NoGrowth)]
+        [TestCase(MeningoMaterial.IsolatedDna, MeningoMaterial.IsolatedDna)]
         [TestCase(MeningoMaterial.VitalStem, MeningoMaterial.NoGrowth)]
         [TestCase(MeningoMaterial.NoGrowth, MeningoMaterial.NoGrowth)]
         [TestCase(MeningoMaterial.NativeMaterial, MeningoMaterial.NativeMaterial)]
-        public void ProcessViewModelToModel_NoGrowthAtAll_SetFieldMeningoMaterialToNoGrowthExceptForNativeMaterial(MeningoMaterial currentMaterial, MeningoMaterial expectedMaterial)
+        public void ProcessViewModelToModel_NoGrowthAtAll_SetFieldMeningoMaterialToNoGrowthExceptForNativeAndDnaMaterial(MeningoMaterial currentMaterial, MeningoMaterial expectedMaterial)
         {
             var sut = new MeningoIsolateViewModelMappingAction();
             var isolateViewModel = new MeningoIsolateViewModel();
