@@ -1,12 +1,13 @@
-﻿namespace HaemophilusWeb.Services;
-
-public class PubMlstAuthorization
+﻿namespace HaemophilusWeb.Services
 {
-    public string AccessToken { get; set; }
+    public class PubMlstAuthorization
+    {
+        public string AccessToken { get; set; }
 
-    public string AccessTokenSecret { get; set; }
+        public string AccessTokenSecret { get; set; }
 
-    public string ConsumerKey { get; set; }
+        public string ConsumerKey { get; set; }
 
-    public string ConsumerSecret { get; set; }
+        public string ConsumerSecret { get; set; }
+    }
 }

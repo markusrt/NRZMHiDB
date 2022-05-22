@@ -1,18 +1,19 @@
 ﻿using System.Collections.Specialized;
 using HaemophilusWeb.Services;
 
-namespace HaemophilusWeb.Utils;
-
-public static class AppSettingsExtensions
+namespace HaemophilusWeb.Utils
 {
-    public static PubMlstAuthorization GetIrisAuthentication(this NameValueCollection appSettings)
+    public static class AppSettingsExtensions
     {
-        return new PubMlstAuthorization
+        public static PubMlstAuthorization GetIrisAuthentication(this NameValueCollection appSettings)
         {
-            AccessToken = appSettings["IrisAccessToken"],
-            AccessTokenSecret = appSettings["IrisAccessTokenSecret"],
-            ConsumerKey = appSettings["IrisConsumerKey"],
-            ConsumerSecret = appSettings["IrisConsumerSecret"]
-        };
+            return new PubMlstAuthorization
+            {
+                AccessToken = appSettings["IrisAccessToken"],
+                AccessTokenSecret = appSettings["IrisAccessTokenSecret"],
+                ConsumerKey = appSettings["IrisConsumerKey"],
+                ConsumerSecret = appSettings["IrisConsumerSecret"]
+            };
+        }
     }
 }
