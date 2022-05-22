@@ -15,7 +15,7 @@ namespace HaemophilusWeb.Services
 
         private const string DbUrl = "http://rest.pubmlst.org/db/pubmlst_neisseria_iris";
         
-        private const string SessionTokenUrl = $"{DbUrl}/oauth/get_session_token";
+        private const string SessionTokenUrl = DbUrl + "/oauth/get_session_token";
 
         protected override string BaseUrl => $"{DbUrl}/isolates";
 
