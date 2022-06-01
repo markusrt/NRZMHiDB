@@ -13,11 +13,9 @@ namespace HaemophilusWeb.Services
 
         private PubMlstSessionToken _sessionToken;
 
-        private const string DbUrl = "http://rest.pubmlst.org/db/pubmlst_neisseria_iris";
+        protected override string Database => "pubmlst_neisseria_iris";
         
-        private const string SessionTokenUrl = DbUrl + "/oauth/get_session_token";
-
-        protected override string BaseUrl => $"{DbUrl}/isolates";
+        private string SessionTokenUrl =>  $"{DbUrl}/oauth/get_session_token";
 
         public IrisPubMlstService(PubMlstAuthorization authorization) : this(authorization, CallUrlViaGet, CallUrlViaPost)
         {
@@ -31,18 +29,18 @@ namespace HaemophilusWeb.Services
 
         protected override string GetSearchUrl(string isolateReference)
         {
-            return CreateAuthUrl($"{BaseUrl}/search", HttpMethod.Post,
+            return CreateAuthUrl($"{IsolatesUrl}/search", HttpMethod.Post,
                 new Dictionary<string, string> { { "field.isolate", isolateReference } });
         }
 
         protected override string GetIdUrl(int id)
         {
-            return CreateAuthUrl($"{BaseUrl}/{id}", HttpMethod.Get, new Dictionary<string, string>());
+            return CreateAuthUrl($"{IsolatesUrl}/{id}", HttpMethod.Get, new Dictionary<string, string>());
         }
 
         protected override string GetAlleleIdUrl(int id)
         {
-            var alleleIdUrl = CreateAuthUrl($"{BaseUrl}/{id}/allele_ids", HttpMethod.Get,
+            var alleleIdUrl = CreateAuthUrl($"{IsolatesUrl}/{id}/allele_ids", HttpMethod.Get,
                 new Dictionary<string, string> { { "return_all", "1" } });
             return $"{alleleIdUrl}return_all=1";
         }

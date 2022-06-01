@@ -32,9 +32,14 @@ namespace HaemophilusWeb.Services
         public const string TrumenbaReactivity = "Trumenba_reactivity";
 
         protected Func<string, string> CallGetUrl { get; }
+        
         protected Func<string, Dictionary<string, string>, string> CallPostUrl { get; }
 
-        protected abstract string BaseUrl { get; }
+        protected abstract string Database { get; }
+
+        protected string DbUrl => $"http://rest.pubmlst.org/db/{Database}";
+
+        protected string IsolatesUrl => $"{DbUrl}/isolates";
 
         protected abstract string GetSearchUrl(string isolateReference);
         
@@ -61,7 +66,7 @@ namespace HaemophilusWeb.Services
             }
 
             var isolateUri = isolateRecord["isolates"].First.Value<string>();
-            var isolateId = isolateUri.Substring(BaseUrl.Length + 1);
+            var isolateId = isolateUri.Substring(IsolatesUrl.Length + 1);
             return GetIsolateById(int.Parse(isolateId));
         }
 
@@ -76,6 +81,7 @@ namespace HaemophilusWeb.Services
                 var isolate = new NeisseriaPubMlstIsolate
                 {
                     PubMlstId = id,
+                    Database = Database,
                     PorAVr1 = alleles.Get(PorAVr1, ""),
                     PorAVr2 = alleles.Get(PorAVr2, ""),
                     FetAVr = alleles.Get(FetAVr, ""),

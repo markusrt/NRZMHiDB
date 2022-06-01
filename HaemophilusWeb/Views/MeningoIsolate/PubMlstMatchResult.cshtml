@@ -19,6 +19,9 @@
             @Html.DisplayNameFor(model => model.PubMlstId)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Database)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.StemNumber)
         </th>
         <th>
@@ -27,26 +30,29 @@
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @if (item.PubMlstId.HasValue)
-            {
-                <span style="color:#00CC00" class="glyphicon glyphicon-ok-sign" aria-hidden="true" title="-"></span>
-                <a href="https://pubmlst.org/bigsdb?page=info&db=pubmlst_neisseria_isolates&id=@item.PubMlstId" role="button"> @item.PubMlstId</a>
-            }
-            else
-            {
-                <span style= "color:#CC0000" class="glyphicon glyphicon-remove-sign" aria-hidden="true" title="-"></span>
-                <span> kein Treffer</span>
-            }
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StemNumber)
-        </td>
-        <td>
-            <a class="btn-sm btn btn-default" href="@Url.Action("Edit", "MeningoIsolate", new {id=item.IsolateId})" role="button">@item.LaboratoryNumber</a>
-        </td>
-    </tr>
+<tr>
+    <td>
+        @if (item.PubMlstId.HasValue)
+        {
+            <span style="color:#00CC00" class="glyphicon glyphicon-ok-sign" aria-hidden="true" title="-"></span>
+            <a href="https://pubmlst.org/bigsdb?page=info&db=@item.Database&id=@item.PubMlstId" role="button"> @item.PubMlstId</a>
+        }
+        else
+        {
+            <span style="color:#CC0000" class="glyphicon glyphicon-remove-sign" aria-hidden="true" title="-"></span>
+            <span> kein Treffer</span>
+        }
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Database)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.StemNumber)
+    </td>
+    <td>
+        <a class="btn-sm btn btn-default" href="@Url.Action("Edit", "MeningoIsolate", new {id=item.IsolateId})" role="button">@item.LaboratoryNumber</a>
+    </td>
+</tr>
 }
 
 </table>

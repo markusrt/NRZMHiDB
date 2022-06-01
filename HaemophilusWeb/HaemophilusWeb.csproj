@@ -281,6 +281,10 @@
     <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.designer.cs">
       <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.cs" />
+    <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.designer.cs">
+      <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
@@ -843,6 +847,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.resx">
       <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.resx">
+      <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

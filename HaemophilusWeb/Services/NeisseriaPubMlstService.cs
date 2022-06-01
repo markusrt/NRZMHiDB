@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using static HaemophilusWeb.Utils.HttpClientWrapper;
 
 namespace HaemophilusWeb.Services 
 {
     public class NeisseriaPubMlstService : PubMlstService
     {
-        protected override string BaseUrl => "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates";
-
+        protected override string Database => "pubmlst_neisseria_isolates";
+        
         public NeisseriaPubMlstService() : this(CallUrlViaGet, CallUrlViaPost)
         {
         }
@@ -18,17 +19,17 @@ namespace HaemophilusWeb.Services
 
         protected override string GetSearchUrl(string isolateReference)
         {
-            return $"{BaseUrl}/search";
+            return $"{IsolatesUrl}/search";
         }
 
         protected override string GetIdUrl(int id)
         {
-            return $"{BaseUrl}/{id}";
+            return $"{IsolatesUrl}/{id}";
         }
 
         protected override string GetAlleleIdUrl(int id)
         {
-            return $"{BaseUrl}/{id}/allele_ids?return_all=1";
+            return $"{IsolatesUrl}/{id}/allele_ids?return_all=1";
         }
     }
 }

@@ -60,6 +60,7 @@ namespace HaemophilusWeb.Services
 
                     pubMlstMatchInfo.NeisseriaPubMlstIsolateId = pubMlstIsolate.NeisseriaPubMlstIsolateId;
                     pubMlstMatchInfo.PubMlstId = pubMlstIsolate.PubMlstId;
+                    pubMlstMatchInfo.Database = pubMlstIsolate.Database;
                 }
 
                 matches.Add(pubMlstMatchInfo);

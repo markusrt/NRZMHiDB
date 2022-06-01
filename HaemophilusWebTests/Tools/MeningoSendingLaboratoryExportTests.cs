@@ -39,7 +39,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(77);
+            export.Columns.Count.Should().Be(78);
         }
 
         [Test]
@@ -177,6 +177,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["PubMLST ID"].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PubMlstId);
+            export.Rows[0]["Datenbank"].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.Database);
             export.Rows[0][PorAVr1].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PorAVr1);
             export.Rows[0][PorAVr2].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PorAVr2);
             export.Rows[0][FetAVr].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.FetAVr);

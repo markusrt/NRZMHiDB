@@ -122,6 +122,7 @@ namespace HaemophilusWeb.Controllers
                 }
                 else
                 {
+                    neisseriaPubMlstIsolate.Database = pubMlstViewModel.Database;
                     neisseriaPubMlstIsolate.PorAVr1 = pubMlstViewModel.PorAVr1;
                     neisseriaPubMlstIsolate.PorAVr2 = pubMlstViewModel.PorAVr2;
                     neisseriaPubMlstIsolate.FetAVr = pubMlstViewModel.FetAVr;
