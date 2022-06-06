@@ -57,6 +57,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => new string(findCounty(s).CountyNumber.Take(2).ToArray()), "Bundesland");
 
             AddPubMsltProperty("PubMLST ID", _ => _.PubMlstId, "-");
+            AddPubMsltProperty("Datenbank", _ => _.Database);
             AddPubMsltProperty(PorAVr1, _ => _.PorAVr1);
             AddPubMsltProperty(PorAVr2, _ => _.PorAVr2);
             AddPubMsltProperty(FetAVr, _ => _.FetAVr);

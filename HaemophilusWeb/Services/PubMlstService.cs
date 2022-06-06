@@ -1,26 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Web.Mvc;
 using HaemophilusWeb.Models;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
-using NLog.Fluent;
 using ServiceStack.Text;
-using JsonSerializer = ServiceStack.Text.JsonSerializer;
-using static HaemophilusWeb.Utils.HttpClientWrapper;
 
 namespace HaemophilusWeb.Services
 {
-    public class PubMlstService
+    public abstract class PubMlstService
     {
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-        private const string BaseUrl = "http://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates";
         public const string PorAVr1 = "PorA_VR1";
         public const string PorAVr2 = "PorA_VR2";
         public const string FetAVr = "FetA_VR";
@@ -39,34 +31,42 @@ namespace HaemophilusWeb.Services
         public const string BexseroReactivity = "Bexsero_reactivity";
         public const string TrumenbaReactivity = "Trumenba_reactivity";
 
-        private readonly Func<string, string> callGetUrl;
-        private readonly Func<string, Dictionary<string, string>, string> callPostUrl;
+        protected Func<string, string> CallGetUrl { get; }
+        
+        protected Func<string, Dictionary<string, string>, string> CallPostUrl { get; }
 
-        public PubMlstService() : this(CallUrlViaGet, CallUrlViaPost)
+        protected abstract string Database { get; }
+
+        protected string DbUrl => $"http://rest.pubmlst.org/db/{Database}";
+
+        protected string IsolatesUrl => $"{DbUrl}/isolates";
+
+        protected abstract string GetSearchUrl(string isolateReference);
+        
+        protected abstract string GetIdUrl(int id);
+        
+        protected abstract string GetAlleleIdUrl(int id);
+
+        protected PubMlstService(Func<string, string> callGetUrl, Func<string, Dictionary<string,string>, string> callPostUrl)
         {
+            CallGetUrl = callGetUrl;
+            CallPostUrl = callPostUrl;
         }
-
-        public PubMlstService(Func<string, string> callGetUrl, Func<string, Dictionary<string,string>, string> callPostUrl)
-        {
-            this.callGetUrl = callGetUrl;
-            this.callPostUrl = callPostUrl;
-        }
-
-
+        
         public virtual NeisseriaPubMlstIsolate GetIsolateByReference(string isolateReference)
         {
-            var isolateRecord = JObject.Parse(callPostUrl($"{BaseUrl}/search",
+            var searchUrl = GetSearchUrl(isolateReference);
+            var isolateRecord = JObject.Parse(CallPostUrl(searchUrl,
                     new Dictionary<string, string> {{"field.isolate", isolateReference}}));
 
             if (isolateRecord["records"].Value<string>() != "1")
             {
-                Log.Error($"Failed to find isolate by reference {isolateReference}");
-                Log.Info($"PubMLST query returned either no or more than one result: {isolateRecord}");
+                Log.Info($"PubMLST query <{searchUrl}> returned either no or more than one result: {isolateRecord}");
                 return null;
             }
 
             var isolateUri = isolateRecord["isolates"].First.Value<string>();
-            var isolateId = isolateUri.Substring(BaseUrl.Length + 1);
+            var isolateId = isolateUri.Substring(IsolatesUrl.Length + 1);
             return GetIsolateById(int.Parse(isolateId));
         }
 
@@ -74,13 +74,14 @@ namespace HaemophilusWeb.Services
         {
             try
             {
-                var isolateJson = JObject.Parse(callGetUrl($"{BaseUrl}/{id}"));
+                var isolateJson = JObject.Parse(CallGetUrl(GetIdUrl(id)));
 
-                var allelesJson = JObject.Parse(callGetUrl($"{BaseUrl}/{id}/allele_ids?return_all=1"));
+                var allelesJson = JObject.Parse(CallGetUrl(GetAlleleIdUrl(id)));
                 var alleles = ConvertToDictionary(allelesJson.GetValue("allele_ids"));
                 var isolate = new NeisseriaPubMlstIsolate
                 {
                     PubMlstId = id,
+                    Database = Database,
                     PorAVr1 = alleles.Get(PorAVr1, ""),
                     PorAVr2 = alleles.Get(PorAVr2, ""),
                     FetAVr = alleles.Get(FetAVr, ""),

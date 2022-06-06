@@ -170,12 +170,13 @@
                     }
                     else
                     {
-                        <a id="PubMlstIsolateLink" class="btn" role="button" target="_blank" href="https://pubmlst.org/bigsdb?page=info&db=pubmlst_neisseria_isolates&id=@Model.NeisseriaPubMlstIsolate.PubMlstId">PubMLST Eintrag</a>
+                        <a id="PubMlstIsolateLink" class="btn" role="button" target="_blank" href="https://pubmlst.org/bigsdb?page=info&db=@Model.NeisseriaPubMlstIsolate.Database&id=@Model.NeisseriaPubMlstIsolate.PubMlstId">PubMLST Eintrag</a>
                     }
                 </div>
             </div>
             @Html.HiddenFor(m => m.NeisseriaPubMlstIsolate.NeisseriaPubMlstIsolateId)
             @Html.HiddenFor(m => m.NeisseriaPubMlstIsolate.PubMlstId)
+            @Html.HiddenFor(m => m.NeisseriaPubMlstIsolate.Database)
             <div class="form-group">
                 <label class="col-sm-2 control-label">ST</label>
                 <div class="col-sm-2">
@@ -299,7 +300,7 @@
         // TODO detect fields automatically based on incoming data
         var fields = [
             "PorAVr1", "PorAVr2", "FetAVr", "PorB", "Fhbp", "Nhba", "NadA", "PenA", "GyrA", "ParC", "ParE", "RpoB",
-            "RplF", "SequenceType", "ClonalComplex", "BexseroReactivity", "TrumenbaReactivity", "PubMlstId"
+            "RplF", "SequenceType", "ClonalComplex", "BexseroReactivity", "TrumenbaReactivity", "PubMlstId", "Database"
         ];
         var isolateReference = $("#StemNumberWithPrefix").val();
 
@@ -317,7 +318,7 @@
         .done(function (data) {
             fields.forEach(v => $('#NeisseriaPubMlstIsolate_' + v).val(data[v]));
             $("#PubMlstIsolateLink").attr("href",
-                "https://pubmlst.org/bigsdb?page=info&db=pubmlst_neisseria_isolates&id=" + data["PubMlstId"]).removeClass("disabled");
+                "https://pubmlst.org/bigsdb?page=info&db=" + data["Database"] + "&id=" + data["PubMlstId"]).removeClass("disabled");
             $("#PubMlstIsolateFound").show();
         })
         .fail(function () {

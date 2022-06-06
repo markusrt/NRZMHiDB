@@ -131,6 +131,9 @@
     <Reference Include="NodaTime, Version=3.0.0.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
       <HintPath>..\packages\NodaTime.3.0.0\lib\netstandard2.0\NodaTime.dll</HintPath>
     </Reference>
+    <Reference Include="OAuth, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75b3c62967edc2a2, processorArchitecture=MSIL">
+      <HintPath>..\packages\OAuth.1.0.3\lib\net40\OAuth.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text, Version=4.5.14.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.4.5.14\lib\net45\ServiceStack.Text.dll</HintPath>
     </Reference>
@@ -278,12 +281,20 @@
     <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.designer.cs">
       <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.cs" />
+    <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.designer.cs">
+      <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
     <Compile Include="Services\IGeonamesService.cs" />
+    <Compile Include="Services\IrisPubMlstService.cs" />
+    <Compile Include="Services\NeisseriaPubMlstService.cs" />
+    <Compile Include="Services\PubMlstAuthorization.cs" />
     <Compile Include="Services\PubMlstMatcher.cs" />
     <Compile Include="Services\PubMlstService.cs" />
+    <Compile Include="Services\PubMlstSessionToken.cs" />
     <Compile Include="Tools\HaemophilsPubMlstExport.cs" />
     <Compile Include="Tools\MeningoSendingRkiExport.cs" />
     <Compile Include="Tools\HaemophilusSendingRkiExport.cs" />
@@ -296,6 +307,7 @@
     <Compile Include="Tools\RkiExportColumns.cs" />
     <Compile Include="Tools\SendingExportDefinition.cs" />
     <Compile Include="Tools\MeningoSendingLaboratoryExport.cs" />
+    <Compile Include="Utils\AppSettingsExtensions.cs" />
     <Compile Include="Utils\EnumFormatter.cs" />
     <Compile Include="Domain\IsolateExtensions.cs" />
     <Compile Include="Domain\MeningoIsolateInterpretation.cs" />
@@ -835,6 +847,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.resx">
       <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.resx">
+      <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

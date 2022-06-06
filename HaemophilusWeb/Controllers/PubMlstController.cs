@@ -1,28 +1,38 @@
-﻿using System.Web.Mvc;
+﻿using System.Configuration;
+using System.Web.Mvc;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Services;
+using HaemophilusWeb.Utils;
+
 
 namespace HaemophilusWeb.Controllers
 {
     public class PubMlstController : Controller
     {
-        private readonly PubMlstService _service;
+        private readonly PubMlstService[] _pubMlstServices;
 
-        public PubMlstController() : this(new PubMlstService())
+        public PubMlstController() : this(new NeisseriaPubMlstService(), new IrisPubMlstService(ConfigurationManager.AppSettings.GetIrisAuthentication()))
         {
         }
 
-        public PubMlstController(PubMlstService pubMlstService)
+        public PubMlstController(params PubMlstService[] pubMlstServices)
         {
-            _service = pubMlstService;
+            _pubMlstServices = pubMlstServices;
         }
 
         [HttpPost]
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult NeisseriaIsolates(string isolateReference)
         {
-            
-            var isolate = _service.GetIsolateByReference(isolateReference);
+            NeisseriaPubMlstIsolate isolate = null;
+            foreach (var service in _pubMlstServices)
+            {
+                isolate = service.GetIsolateByReference(isolateReference);
+                if (isolate != null)
+                {
+                    break;
+                }
+            }
             if (isolate == null)
             {
                 return new HttpNotFoundResult();
