@@ -8,6 +8,7 @@ namespace HaemophilusWeb.Models
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int NeisseriaPubMlstIsolateId { get; set; }
 
+        public string Database { get; set; }
         public int PubMlstId { get; set; }
         public string PorAVr1 { get; set; }
         public string PorAVr2 { get; set; }

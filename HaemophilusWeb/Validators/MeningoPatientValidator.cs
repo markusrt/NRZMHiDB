@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using HaemophilusWeb.Controllers;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -10,6 +11,7 @@ namespace HaemophilusWeb.Validators
         public MeningoPatientValidator()
         {
             RuleFor(p => p.Initials).NotEmpty();
+            RuleFor(p => p.BirthDate).GreaterThan(new DateTime(1800, 1, 1));
             RuleFor(p => p.Initials).Matches(@"([a-zA-ZäöüÄÖÜ\?]\.)+").WithMessage(
                 "Die Initialen müssen in der Form 'E.M.' eingegeben werden.");
             RuleFor(p => p.Gender).NotEmpty();
