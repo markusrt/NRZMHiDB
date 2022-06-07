@@ -133,6 +133,14 @@ namespace HaemophilusWeb.ViewModels
         public string InterpretationPreliminary { get; set; }
         public string InterpretationDisclaimer { get; set; }
 
+        public string Comment { get; set; }
+        public bool HasComment => !string.IsNullOrEmpty(Comment);
+
+        public string Announcement { get; set; }
+        public bool HasAnnouncement => !string.IsNullOrEmpty(Announcement);
+
+        public bool HasCommentOrAnnouncement => HasComment || HasAnnouncement;
+
         public string Date
         {
             get { return DateTime.Now.ToReportFormat(); }

@@ -40,6 +40,8 @@ namespace HaemophilusWeb.Automapper
             destination.Interpretation = interpretationResult.Interpretation;
             destination.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
             destination.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
+            destination.Comment = interpretationResult.Comment;
+            destination.Announcement = ConfigurationManager.AppSettings["Announcement"];
 
             var sender = db.Senders.Find(source.Sending.SenderId);
             destination.SenderName = sender.Name;
