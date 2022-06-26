@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Tools;
 using HaemophilusWeb.Utils;
+using HaemophilusWeb.ViewModels;
 
 namespace HaemophilusWeb.Controllers
 {
@@ -41,6 +42,7 @@ namespace HaemophilusWeb.Controllers
             }
 
             var isolateViewModel = isolateController.ModelToViewModel(isolate);
+            IgnoreAntibioticsFromReport(isolateViewModel);
             return View(isolateViewModel);
         }
 
@@ -92,6 +94,9 @@ namespace HaemophilusWeb.Controllers
             return Json(true);
         }
 
+        protected virtual void IgnoreAntibioticsFromReport(TISolateViewModel isolateViewModel)
+        {
+        }
 
         private void AddReportTemplatesToViewBag()
         {
