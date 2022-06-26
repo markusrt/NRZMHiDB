@@ -18,7 +18,7 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Antibiotikum")]
         public Antibiotic? Antibiotic { get; set; }
 
-        [Display(Name = "EUCAST Breakpoint")]
+        [Display(Name = "Breakpoint")]
         public int? EucastClinicalBreakpointId { get; set; }
 
         [Display(Name = "Messwert")]
