@@ -7,7 +7,7 @@
 @{ 
     var relevantBreakPoints = ((IEnumerable<EucastClinicalBreakpoint>) ViewBag.ClinicalBreakpoints).Where(
         b => b.Antibiotic == Model.Antibiotic).ToList();
-    var measurements = EpsilometerTestValidator.GetETestScale(Model.Antibiotic);
+    var measurements = EpsilometerTestValidator.GetMhkScale(Model.Antibiotic);
 }
 
 <div class="form-group">
@@ -37,7 +37,7 @@
                 Text = option.ToString(),
                 Value = option.ToString(),
                 Selected = Model != null && option.Equals(Model.Measurement)
-            }), "E-Test Wert auswählen...", new {@class = "form-control"})
+            }), "MHK auswählen...", new {@class = "form-control"})
         @Html.ValidationMessageFor(m => m.Measurement)
     </div>
     <div class="col-sm-4 col-xs-7">
@@ -47,7 +47,7 @@
                 Text = option.Title,
                 Value = option.EucastClinicalBreakpointId.ToString(),
                 Selected = (Model != null) && (option.EucastClinicalBreakpointId == Model.EucastClinicalBreakpointId)
-            }), "EUCAST Breakpoint auswählen...", new { @class = "form-control" })
+            }), "Breakpoint auswählen...", new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.EucastClinicalBreakpointId)
     </div>
     <div class="col-sm-4 col-xs-2 etest-labels">
@@ -63,13 +63,17 @@
 
 <script>
     function CallChangefunc(val) {
-        var measurements = @Html.Raw(Json.Encode(EpsilometerTestValidator.OtherAntibioticsETestScale));
+        //TODO use a API call instead of reimplementing EpsilometerTestValidator.GetMhkScale
+        var measurements = @Html.Raw(Json.Encode(EpsilometerTestValidator.OtherAntibioticsMhkScale));
         $('#EpsilometerTestViewModels_0__Measurement').children().remove();
         if (val == @Html.Raw((int)Antibiotic.Ampicillin) || val == @Html.Raw((int)Antibiotic.AmoxicillinClavulanate) ) {
-            measurements = @Html.Raw(Json.Encode(EpsilometerTestValidator.AmpicillinAndAmoxicillinClavulanateETestScale));
+            measurements = @Html.Raw(Json.Encode(EpsilometerTestValidator.AmpicillinAndAmoxicillinClavulanateMhkScale));
+        }
+        else if (val == @Html.Raw((int)Antibiotic.Azithromycin) ) {
+            measurements = @Html.Raw(Json.Encode(EpsilometerTestValidator.AzithromycinMhkScale));
         }
 
-        $('<option/>').html("E-Test Wert auswählen...").appendTo('#EpsilometerTestViewModels_0__Measurement');
+        $('<option/>').html("MHK auswählen...").appendTo('#EpsilometerTestViewModels_0__Measurement');
         for (var i = 0; i < measurements.length;i++){
             $('<option/>').val(measurements[i].toLocaleString()).html(measurements[i].toLocaleString()).appendTo('#EpsilometerTestViewModels_0__Measurement');
         }

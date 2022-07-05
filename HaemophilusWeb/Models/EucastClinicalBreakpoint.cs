@@ -44,7 +44,7 @@ namespace HaemophilusWeb.Models
             {
                 if (NoEucastAvailable)
                 {
-                    return string.Format("{0} - ohne EUCAST Grenzwerte", AntibioticDetails);
+                    return string.Format("{0} - ohne Grenzwerte", AntibioticDetails);
                 }
                 return string.Format("{0} - v{1} vom {2:dd. MMM. yy}", AntibioticDetails, Version,
                     ValidFrom);

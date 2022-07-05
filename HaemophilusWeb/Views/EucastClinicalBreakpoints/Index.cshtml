@@ -4,10 +4,10 @@
 @model IEnumerable<HaemophilusWeb.Models.EucastClinicalBreakpoint>
 
 @{
-    ViewBag.Title = "EUCAST Grenzwerte";
+    ViewBag.Title = "Grenzwerte";
 }
 <p>
-    @Html.ActionLink("Neuen EUCAST Grenzwert anlegen", "Create", "EucastClinicalBreakpoints", null, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Neuen Grenzwert anlegen", "Create", "EucastClinicalBreakpoints", null, new { @class = "btn btn-primary" })
 </p>
 <table class="table table-striped" id="eucastClinicalBreakpoints">
     <thead>
