@@ -39,7 +39,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(77);
+            export.Columns.Count.Should().Be(80);
         }
 
         [Test]
@@ -177,6 +177,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["PubMLST ID"].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PubMlstId);
+            export.Rows[0]["Datenbank"].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.Database);
             export.Rows[0][PorAVr1].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PorAVr1);
             export.Rows[0][PorAVr2].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.PorAVr2);
             export.Rows[0][FetAVr].Should().Be(Sending.Isolate.NeisseriaPubMlstIsolate.FetAVr);
@@ -278,6 +279,27 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Serogruppe"].Should().Be(DBNull.Value);
             export.Rows[0]["Regel"].Should().Be("StemInterpretation_27");
             export.Rows[0]["Meningokokken"].Should().Be("kein Nachweis");
+        }
+
+        [Test]
+        public void DataTable_ContainsMicValues()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.EpsilometerTests.Clear();
+            Sending.Isolate.EpsilometerTests.Add(Antibiotic.Benzylpenicillin, 2.0f);
+            Sending.Isolate.EpsilometerTests.Add(Antibiotic.Ciprofloxacin, .75f);
+            Sending.Isolate.EpsilometerTests.Add(Antibiotic.Cefotaxime, 1.25f);
+            Sending.Isolate.EpsilometerTests.Add(Antibiotic.Rifampicin, 0.125f);
+            Sending.Isolate.EpsilometerTests.Add(Antibiotic.Azithromycin, 32f);
+
+            var export = sut.ToDataTable(Sendings);
+
+            var row = export.Rows[0];
+            export.Rows[0]["Penicillin MHK"].Should().Be(2.0d);
+            export.Rows[0]["Ciprofloxacin MHK"].Should().Be(.75d);
+            export.Rows[0]["Cefotaxim MHK"].Should().Be(1.25d);
+            export.Rows[0]["Rifampicin MHK"].Should().Be(.125d);
+            export.Rows[0]["Azithromycin MHK"].Should().Be(32d);
         }
 
         private static MeningoSendingLaboratoryExport CreateExportDefinition()

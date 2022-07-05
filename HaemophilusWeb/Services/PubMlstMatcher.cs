@@ -4,18 +4,21 @@ using System.Linq;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.ViewModels;
+using NLog;
 
 namespace HaemophilusWeb.Services
 {
     public class PubMlstMatcher
     {
-        private readonly IApplicationDbContext _db;
-        private readonly PubMlstService _pubMlstService;
+        private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
-        public PubMlstMatcher(IApplicationDbContext db, PubMlstService pubMlstService)
+        private readonly IApplicationDbContext _db;
+        private readonly PubMlstService[] _pubMlstServices;
+
+        public PubMlstMatcher(IApplicationDbContext db, params PubMlstService[] pubMlstServices)
         {
             _db = db;
-            _pubMlstService = pubMlstService;
+            _pubMlstServices = pubMlstServices;
         }
 
         public List<PubMlstMatchInfo> Match(FromToQuery fromTo)
@@ -34,10 +37,20 @@ namespace HaemophilusWeb.Services
                     StemNumber = isolate.StemNumberWithPrefix,
                     LaboratoryNumber = isolate.LaboratoryNumberWithPrefix
                 };
-                var pubMlstIsolate =
-                    isolate.StemNumber.HasValue
-                        ? _pubMlstService.GetIsolateByReference(isolate.StemNumberWithPrefix)
-                        : null;
+                NeisseriaPubMlstIsolate pubMlstIsolate = null;
+
+                if (isolate.StemNumber.HasValue)
+                {
+                    foreach (var pubMlstService in _pubMlstServices)
+                    {
+                        pubMlstIsolate = pubMlstService.GetIsolateByReference(isolate.StemNumberWithPrefix);
+                        if (pubMlstIsolate != null)
+                        {
+                            break;
+                        }
+                    }
+                    Log.Error($"Failed to match isolate by reference {isolate.StemNumberWithPrefix}");
+                }
 
                 if (pubMlstIsolate != null)
                 {
@@ -47,6 +60,7 @@ namespace HaemophilusWeb.Services
 
                     pubMlstMatchInfo.NeisseriaPubMlstIsolateId = pubMlstIsolate.NeisseriaPubMlstIsolateId;
                     pubMlstMatchInfo.PubMlstId = pubMlstIsolate.PubMlstId;
+                    pubMlstMatchInfo.Database = pubMlstIsolate.Database;
                 }
 
                 matches.Add(pubMlstMatchInfo);

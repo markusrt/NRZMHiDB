@@ -25,7 +25,7 @@ namespace HaemophilusWeb.Validators
         {
             return new MeningoPatient
             {
-                Initials = "E.M.",
+                Initials = "E-S.M-S.",
                 PostalCode = "78987",
                 Gender = Gender.Female
             };

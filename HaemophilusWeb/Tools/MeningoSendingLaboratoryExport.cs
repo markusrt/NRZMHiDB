@@ -75,8 +75,10 @@ namespace HaemophilusWeb.Tools
             AddEpsilometerTestFields(this, Antibiotic.Ciprofloxacin);
             AddEpsilometerTestFields(this, Antibiotic.Rifampicin);
             AddEpsilometerTestFields(this, Antibiotic.Cefotaxime);
+            AddEpsilometerTestFields(this, Antibiotic.Azithromycin);
 
             AddPubMsltProperty("PubMLST ID", _ => _.PubMlstId, "-");
+            AddPubMsltProperty("Datenbank", _ => _.Database);
             AddPubMsltProperty(SequenceType, _ => _.SequenceType);
             AddPubMsltProperty(ClonalComplex, _ => _.ClonalComplex);
             AddPubMsltProperty(PorAVr1, _ => _.PorAVr1);

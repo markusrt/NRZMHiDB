@@ -8,12 +8,12 @@ using NUnit.Framework;
 
 namespace HaemophilusWeb.Services
 {
-    public class PubMlstServiceTests
+    public class NeisseriaPubMlstServiceTests
     {
         [Test]
         public void NeisseriaIsolates_InexisingIsolate_ReturnsEmptyResult()
         {
-            var service = new PubMlstService(GetUrlReturns404, PostUrlReturns404);
+            var service = new NeisseriaPubMlstService(GetUrlReturns404, PostUrlReturns404);
 
             var isolate = service.GetIsolateById(0);
 
@@ -23,7 +23,7 @@ namespace HaemophilusWeb.Services
         [Test]
         public void GetIsolateById_ExistingIsolate_AllFieldsAreSet()
         {
-            var service = new PubMlstService(GetUrlReturningIsolate, PostUrlReturns404);
+            var service = new NeisseriaPubMlstService(GetUrlReturningIsolate, PostUrlReturns404);
 
             var isolate = service.GetIsolateById(1234);
 
@@ -50,7 +50,7 @@ namespace HaemophilusWeb.Services
         [Test]
         public void GetIsolateByReference_InexistingIsolate_ReturnsNull()
         {
-            var controller = new PubMlstService(GetUrlReturns404, PostUrlReturns404);
+            var controller = new NeisseriaPubMlstService(GetUrlReturns404, PostUrlReturns404);
 
             var isolate = controller.GetIsolateByReference("DE14");
 
@@ -60,7 +60,7 @@ namespace HaemophilusWeb.Services
         [Test]
         public void GetIsolateByReference_ExistingIsolate_FieldsAreSet()
         {
-            var controller = new PubMlstService(GetUrlReturningIsolate, PostUrlReturnsResult);
+            var controller = new NeisseriaPubMlstService(GetUrlReturningIsolate, PostUrlReturnsResult);
 
             var isolate = controller.GetIsolateByReference("DE14505");
 
@@ -74,7 +74,7 @@ namespace HaemophilusWeb.Services
         [Test]
         public void GetIsolateByReference_FieldsPropertyNull_OtherValuesAreSet()
         {
-            var controller = new PubMlstService(GetUrlReturningIsolateWithoutFields, PostUrlReturnsResult);
+            var controller = new NeisseriaPubMlstService(GetUrlReturningIsolateWithoutFields, PostUrlReturnsResult);
 
             var isolate = controller.GetIsolateByReference("DE14505");
 
@@ -90,7 +90,7 @@ namespace HaemophilusWeb.Services
         [Test]
         public void GetIsolateByReference_SchemesPropertyNull_OtherValuesAreSet()
         {
-            var controller = new PubMlstService(GetUrlReturningIsolateWithoutSchemes, PostUrlReturnsResult);
+            var controller = new NeisseriaPubMlstService(GetUrlReturningIsolateWithoutSchemes, PostUrlReturnsResult);
 
             var isolate = controller.GetIsolateByReference("DE14505");
 
@@ -119,7 +119,7 @@ namespace HaemophilusWeb.Services
         [Test]
         public void GetIsolateByReference_FieldsMissing_OtherValuesAreSet()
         {
-            var controller = new PubMlstService(GetUrlReturningIsolateWithMissingFields, PostUrlReturnsResult);
+            var controller = new NeisseriaPubMlstService(GetUrlReturningIsolateWithMissingFields, PostUrlReturnsResult);
 
             var isolate = controller.GetIsolateByReference("DE14505");
 
@@ -137,7 +137,7 @@ namespace HaemophilusWeb.Services
         [Category("Integration")]
         public void GetIsolateById_ExistingIsolateWithoutMock_FieldsAreSet()
         {
-            var controller = new PubMlstService();
+            var controller = new NeisseriaPubMlstService();
 
             var isolate = controller.GetIsolateById(93683);
 
@@ -152,7 +152,7 @@ namespace HaemophilusWeb.Services
         [Category("Integration")]
         public void GetIsolateByReference_InexistingIsolateWithoutMock_ReturnsNull()
         {
-            var controller = new PubMlstService();
+            var controller = new NeisseriaPubMlstService();
 
             var isolate = controller.GetIsolateByReference("DE14");
 
@@ -164,7 +164,7 @@ namespace HaemophilusWeb.Services
         [Category("Integration")]
         public void GetIsolateByReference_ExistingIsolateWithoutMock_FieldsAreSet()
         {
-            var controller = new PubMlstService();
+            var controller = new NeisseriaPubMlstService();
 
             var isolate = controller.GetIsolateByReference("DE14692");
 
@@ -223,7 +223,7 @@ namespace HaemophilusWeb.Services
 
         private static string DeserializeFromResource(string resourceName)
         {
-            using (var stream = typeof(PubMlstServiceTests).Assembly.GetManifestResourceStream(resourceName))
+            using (var stream = typeof(NeisseriaPubMlstServiceTests).Assembly.GetManifestResourceStream(resourceName))
             using (var reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
