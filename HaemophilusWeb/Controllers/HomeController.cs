@@ -22,7 +22,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2022, 06, 26), "Azithromycin mit CLSI MHKs", 109, ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2022, 10, 16, 11, 0, 0), "Sicherheitsupdate (Newtonsoft.Json)", ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2022, 10, 16, 10, 0, 0), "Automatischer EpiScanGIS Export", ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2022, 06, 26), "Azithromycin mit CLSI MHKs (wird nicht im Befund gelistet)", 109, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 06, 1), "PubMLST matching mit IRIS Datenbank", 123, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 04, 1), "Isolierte DNA wird beim speichern auf 'Nicht angewachsen' zurückgesetzt", 119, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 03, 30, 17, 0, 0), "<p>Automatisches setzen der Beurteilung</p>" +
