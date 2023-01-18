@@ -48,7 +48,7 @@ namespace HaemophilusWeb.Models
         public string IsolateLaboratoryNumber => GetIsolate()?.LaboratoryNumber;
 
         [NotMapped]
-        public virtual bool AutoAssignStemNumber => true;
+        public virtual bool AutoAssignStemNumber => false;
 
         public virtual TPatient Patient { get; set; }
 
