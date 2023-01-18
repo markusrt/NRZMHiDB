@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2023, 1, 18, 23, 0, 0), "Korrektur Nativmaterialien- und Teilbefund", ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2023, 1, 18, 22, 0, 0), "Stammnummer wird nicht mehr automatisch befüllt", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2022, 10, 16, 11, 0, 0), "Sicherheitsupdate (Newtonsoft.Json)", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 10, 16, 10, 0, 0), "Automatischer EpiScanGIS Export", ChangeType.Feature, DatabaseType.Meningococci),
