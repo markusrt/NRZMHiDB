@@ -57,7 +57,7 @@ namespace HaemophilusWeb.Controllers
             var isolate = sending.Isolate;
             isolate.Should().NotBeNull();
             isolate.LaboratoryNumber.Should().Be(expectedLaboratoryNumber);
-            isolate.StemNumber.Should().BeGreaterThan(0);
+            isolate.StemNumber.Should().BeNull();
         }
 
         [Test]
