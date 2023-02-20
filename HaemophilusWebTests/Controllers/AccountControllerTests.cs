@@ -6,9 +6,7 @@ using FluentAssertions;
 using HaemophilusWeb.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using Moq;
 using NSubstitute;
-using NSubstitute.ReceivedExtensions;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Controllers

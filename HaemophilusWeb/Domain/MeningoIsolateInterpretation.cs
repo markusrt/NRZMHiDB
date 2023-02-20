@@ -109,6 +109,12 @@ namespace HaemophilusWeb.Domain
                 }
                 Serogroup = Regex.Replace(Serogroup, ".\\(.*\\)", "");
             }
+
+            var agglutination = Typings.SingleOrDefault(t => t.Attribute == "Agglutination")?.Value;
+            if (Serogroup == null && agglutination != null && agglutination.Contains("keine Agglutination"))
+            {
+                Serogroup = "NG";
+            }
         }
 
         private void RunNativeMaterialInterpretation(MeningoIsolate isolate)
@@ -191,7 +197,7 @@ namespace HaemophilusWeb.Domain
 
         private bool CheckStemRule(StemInterpretationRule rule, MeningoIsolate isolate)
         {
-            return rule.SendingInvasive.Contains(isolate.Sending?.Invasive)
+            return (rule.SendingInvasive == null || rule.SendingInvasive.Contains(isolate.Sending?.Invasive))
                 && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
                 && (rule.GrowthOnMartinLewisAgar == null || rule.GrowthOnMartinLewisAgar.Contains(isolate.GrowthOnMartinLewisAgar))
                 && (!rule.Oxidase.HasValue || rule.Oxidase == isolate.Oxidase)

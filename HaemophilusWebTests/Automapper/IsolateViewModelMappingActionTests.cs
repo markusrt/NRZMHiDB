@@ -8,7 +8,6 @@ using HaemophilusWeb.Controllers;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.ViewModels;
-using Moq;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Automapper
