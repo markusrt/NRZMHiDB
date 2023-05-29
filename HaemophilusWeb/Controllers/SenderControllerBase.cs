@@ -9,12 +9,13 @@ using System;
 using System.Data.Entity;
 using HaemophilusWeb.Utils;
 
-namespace HaemophilusWeb.Controllers;
-
-public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
-    where TPatient : PatientBase, new()
-    where TSending : SendingBase<TPatient>, new()
+namespace HaemophilusWeb.Controllers
 {
+
+    public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
+        where TPatient : PatientBase, new()
+        where TSending : SendingBase<TPatient>, new()
+    {
         protected abstract DatabaseType DatabaseType { get; }
 
         protected abstract IQueryable<TSending> QuerySendings();
@@ -44,11 +45,13 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var sender = db.Senders.Find(id);
             if (sender == null)
             {
                 return HttpNotFound();
             }
+
             return View(sender);
         }
 
@@ -64,7 +67,8 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(
-            [Bind(Include = "SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
+            [Bind(Include = "SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")]
+            Sender sender)
         {
             if (ModelState.IsValid)
             {
@@ -83,11 +87,13 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var sender = db.Senders.Find(id);
             if (sender == null)
             {
                 return HttpNotFound();
             }
+
             return View(sender);
         }
 
@@ -97,7 +103,8 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(
-            [Bind(Include = "SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")] Sender sender)
+            [Bind(Include = "SenderId,Name,Department,StreetWithNumber,PostalCode,City,Phone1,Phone2,Fax,Email,Remark")]
+            Sender sender)
         {
             if (ModelState.IsValid)
             {
@@ -105,6 +112,7 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             return View(sender);
         }
 
@@ -115,11 +123,13 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var sender = db.Senders.Find(id);
             if (sender == null)
             {
                 return HttpNotFound();
             }
+
             var sendings = db.Sendings.Where(s => s.SenderId == sender.SenderId && !s.Deleted).ToList();
             ViewBag.Sendings = sendings;
 
@@ -154,11 +164,13 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             var sender = db.Senders.Find(id);
             if (sender == null)
             {
                 return HttpNotFound();
             }
+
             sender.Deleted = false;
             return EditUnvalidated(sender);
         }
@@ -177,21 +189,26 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
             }
 
             var sendings = SendersMatchingExportQuery(query).ToList();
-            return ExportToExcel(query, sendings, CreateExportDefinition(query), $"Einsender-{EnumUtils.GetEnumDescription<DatabaseType>(DatabaseType)}");
+            return ExportToExcel(query, sendings, CreateExportDefinition(query),
+                $"Einsender-{EnumUtils.GetEnumDescription<DatabaseType>(DatabaseType)}");
         }
 
         private ExportDefinition<Sender> CreateExportDefinition(FromToQuery query)
         {
             var export = new ExportDefinition<Sender>();
             var sendings = QuerySendings().Where
-                (s => (s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
-                          || (s.SamplingDate >= query.From && s.SamplingDate <= query.To)).ToList();
+            (s => (s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
+                  || (s.SamplingDate >= query.From && s.SamplingDate <= query.To)).ToList();
 
             Func<Sender, long> senderSendingCount = sender => sendings.Count(s => sender.SenderId == s.SenderId);
             Func<Sender, string> senderLaboratoryNumbers =
-                sender => string.Join(",", sendings.Where(s => sender.SenderId==s.SenderId).Select(s => s.GetIsolate().LaboratoryNumberWithPrefix));
+                sender => string.Join(",",
+                    sendings.Where(s => sender.SenderId == s.SenderId)
+                        .Select(s => s.GetIsolate().LaboratoryNumberWithPrefix));
             Func<Sender, string> senderStemNumbers =
-                sender => string.Join(",", sendings.Where(s => sender.SenderId == s.SenderId).Select(s => s.GetIsolate().StemNumber.HasValue ? s.GetIsolate().StemNumber.ToString() : "-"));
+                sender => string.Join(",",
+                    sendings.Where(s => sender.SenderId == s.SenderId).Select(s =>
+                        s.GetIsolate().StemNumber.HasValue ? s.GetIsolate().StemNumber.ToString() : "-"));
 
             export.AddField(s => s.SenderId);
             export.AddField(s => s.Name);
@@ -217,8 +234,8 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
                 .Include(s => s.Patient)
                 .Where
                 (s => (s.SamplingDate == null && s.ReceivingDate >= query.From && s.ReceivingDate <= query.To)
-                          || (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
-                .Select(s=>s.SenderId)
+                      || (s.SamplingDate >= query.From && s.SamplingDate <= query.To))
+                .Select(s => s.SenderId)
                 .ToList();
             return NotDeletedSenders().Where(s => senderIds.Contains(s.SenderId)).ToList();
 
@@ -235,6 +252,8 @@ public abstract class SenderControllerBase<TPatient, TSending> : ControllerBase
             {
                 db.Dispose();
             }
+
             base.Dispose(disposing);
         }
+    }
 }
