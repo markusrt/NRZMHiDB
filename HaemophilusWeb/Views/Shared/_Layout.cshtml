@@ -140,20 +140,23 @@
         </div>
 
         
-        <script>
+    <script>
             $(document).ready(function()
             {
                 $(".datepicker").datetimepicker(
                     {
                         format: "DD.MM.YYYY",
                         pickTime: false,
-                        language: "de"
+                        language: "de",
+                        useCurrent: false
                     });
                 $(".datetimepicker").datetimepicker(
                     {
                         format: "DD.MM.YYYY HH:mm",
                         language: "de"
                     });
+                
+                $("input").attr("autocomplete", "new-password");
 
                 // Localization
                 $.when(
