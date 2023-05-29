@@ -22,6 +22,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2023, 5, 29, 17, 30, 00), "Ausschalten der Autoverfollständigung vom Browser", ChangeType.Feature, DatabaseType.None),
+                new Change(new DateTime(2023, 5, 29, 17, 00, 00), "Geburtsdatum seht initial nicht auf dem aktuellen Datum sondern ist leer", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2023, 3, 11), "Update Befundvorlagen", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2023, 2, 19), "Regel NoNM_01 und NoNM_02 wird nicht angewendet", ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2023, 1, 18, 23, 0, 0), "Korrektur Nativmaterialien- und Teilbefund", ChangeType.Bug, DatabaseType.Meningococci),
