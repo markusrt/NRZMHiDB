@@ -42,14 +42,18 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Export <span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li>@Html.ActionLink("RKI Export (Haemophilus)", "RkiExport", "PatientSending")</li>
-                                    <li>@Html.ActionLink("Labor Export (Haemophilus)", "LaboratoryExport", "PatientSending")</li>
-                                    <li>@Html.ActionLink("PubMLST Export (Haemophilus)", "PubMlstExport", "PatientSending")</li>
-                                    <li>@Html.ActionLink("Labor Export (Meningokokken)", "LaboratoryExport", "MeningoPatientSending")</li>
-                                    <li>@Html.ActionLink("IRIS Export (Meningokokken)", "IrisExport", "MeningoPatientSending")</li>
-                                    <li>@Html.ActionLink("LGA Export (Meningokokken)", "StateAuthorityExport", "MeningoPatientSending")</li>
-                                    <li>@Html.ActionLink("RKI Export (Meningokokken)", "RkiExport", "MeningoPatientSending")</li>
+                                    <li class="dropdown-header">Haemophilus</li>
+                                    <li>@Html.ActionLink("RKI Export", "RkiExport", "PatientSending")</li>
+                                    <li>@Html.ActionLink("Labor Export", "LaboratoryExport", "PatientSending")</li>
+                                    <li>@Html.ActionLink("PubMLST Export", "PubMlstExport", "PatientSending")</li>
                                     <li>@Html.ActionLink("Einsender Export", "Export", "Sender")</li>
+                                    <li class="divider"></li>
+                                    <li class="dropdown-header">Meningokokken</li>
+                                    <li>@Html.ActionLink("Labor Export", "LaboratoryExport", "MeningoPatientSending")</li>
+                                    <li>@Html.ActionLink("IRIS Export", "IrisExport", "MeningoPatientSending")</li>
+                                    <li>@Html.ActionLink("LGA Export", "StateAuthorityExport", "MeningoPatientSending")</li>
+                                    <li>@Html.ActionLink("RKI Export", "RkiExport", "MeningoPatientSending")</li>
+                                    <li>@Html.ActionLink("Einsender Export", "Export", "MeningoSender")</li>
                                 </ul>
                             </li>
                             <li class="dropdown">
