@@ -29,7 +29,6 @@ namespace HaemophilusWeb.Validators
                 SenderLaboratoryNumber = "1234",
                 SamplingLocation = SamplingLocation.Other,
                 OtherSamplingLocation = "Other",
-                Invasive = YesNo.No
             };
         }
 
@@ -39,7 +38,7 @@ namespace HaemophilusWeb.Validators
             {
                 SenderConclusion = string.Empty
             };
-            yield return Tuple.Create(invalidSending, new[] { "Invasive", "SenderLaboratoryNumber", "SenderConclusion" });
+            yield return Tuple.Create(invalidSending, new[] {"SenderLaboratoryNumber", "SenderConclusion" });
 
             yield return Tuple.Create(CreateInvalidSendingWithReceivingDateBeforeReportDate(), new[] { "ReceivingDate"});
 
