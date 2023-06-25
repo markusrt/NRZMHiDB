@@ -57,7 +57,7 @@ namespace HaemophilusWeb.Controllers
 
             if (queryWithAdjustment.Unadjusted == YesNo.No)
             {
-                sendings.RemoveAll(s => s.SamplingLocation == SamplingLocation.Other);
+                sendings.RemoveAll(s => s.SamplingLocation == SamplingLocation.OtherNonInvasive);  //TODO OtherInvasive?
                 cleanDuplicates = duplicateResolver.CleanOrMarkDuplicates;
             }
 
@@ -87,7 +87,7 @@ namespace HaemophilusWeb.Controllers
         {
             var samplingLocations = exportType == ExportType.Rki || exportType == ExportType.Iris
                 ? new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor }
-                : new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor, SamplingLocation.Other };
+                : new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor, SamplingLocation.OtherNonInvasive };
 
             var filteredSendings = NotDeletedSendings()
                 .Include(s => s.Patient)
@@ -151,7 +151,7 @@ namespace HaemophilusWeb.Controllers
             var queryRecords = list.Select(x =>
             {
                 var invasive = EnumEditor.GetEnumDescription(x.Invasive);
-                var samplingLocation = x.SamplingLocation == SamplingLocation.Other
+                var samplingLocation = x.SamplingLocation == SamplingLocation.OtherNonInvasive
                     ? Server.HtmlEncode(x.OtherSamplingLocation)
                     : EnumEditor.GetEnumDescription(x.SamplingLocation);
                 var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year, DatabaseType.Haemophilus);

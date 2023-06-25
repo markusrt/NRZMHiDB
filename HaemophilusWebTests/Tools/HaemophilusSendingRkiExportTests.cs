@@ -75,7 +75,7 @@ namespace HaemophilusWeb.Tools
             var sut = CreateExportDefinition();
             var county = Counties.First();
 
-            Sending.SamplingLocation = SamplingLocation.Other;
+            Sending.SamplingLocation = SamplingLocation.OtherNonInvasive;  //TODO OtherInvasive
             Sending.OtherSamplingLocation = "Other Location";
             Sending.Patient.BirthDate = new DateTime(2005, 8, 31);
             Sending.Patient.County = county.Name;

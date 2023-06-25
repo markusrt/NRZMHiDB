@@ -178,7 +178,7 @@ namespace HaemophilusWeb.Tools
             {
                 SamplingLocation.Blood => "blood",
                 SamplingLocation.Liquor => "CSF",
-                SamplingLocation.Other => sending.OtherSamplingLocation,
+                SamplingLocation.OtherNonInvasive => sending.OtherSamplingLocation,  //TODO OtherInvasive?
                 _ => "other"
             };
         }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -286,6 +286,10 @@
     <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.cs" />
     <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.designer.cs">
       <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305301958098_Sending_AutoInvasive.cs" />
+    <Compile Include="Migrations\202305301958098_Sending_AutoInvasive.designer.cs">
+      <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
@@ -853,6 +857,9 @@
     <EmbeddedResource Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.resx">
       <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305301958098_Sending_AutoInvasive.resx">
+      <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -959,6 +966,8 @@
     <Content Include="Scripts\cldr\supplemental\numberingSystems.json" />
     <Content Include="Scripts\cldr\supplemental\timeData.json" />
     <Content Include="Scripts\cldr\supplemental\weekData.json" />
+    <None Include="Properties\PublishProfiles\New Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\New Prod.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.globalize.js" />
     <Content Include="Scripts\jquery.validate.globalize.min.js" />

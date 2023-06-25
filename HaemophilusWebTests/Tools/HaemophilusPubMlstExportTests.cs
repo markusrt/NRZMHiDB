@@ -222,7 +222,7 @@ namespace HaemophilusWeb.Tools
         public void DataTable_ContainsOtherInvasiveSamplingLocation()
         {
             var sut = CreateExportDefinition();
-            Sending.SamplingLocation = SamplingLocation.Other;
+            Sending.SamplingLocation = SamplingLocation.OtherNonInvasive;  //TODO OtherInvasive
             Sending.OtherSamplingLocation = "Anderer Entnahmeort";
 
             var export = sut.ToDataTable(Sendings);

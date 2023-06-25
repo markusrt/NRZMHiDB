@@ -44,8 +44,8 @@
         <td>
             @Html.DisplayFor(modelItem => item.ReceivingDate)
         </td>
-        <td>
-            @(item.SamplingLocation == SamplingLocation.Other ? Html.DisplayFor(modelItem => item.OtherSamplingLocation) : Html.DisplayFor(modelItem => item.SamplingLocation))
+        <td>  //TODO OtherInvasive
+            @(item.SamplingLocation == SamplingLocation.OtherNonInvasive ? Html.DisplayFor(modelItem => item.OtherSamplingLocation) : Html.DisplayFor(modelItem => item.SamplingLocation))
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Invasive)

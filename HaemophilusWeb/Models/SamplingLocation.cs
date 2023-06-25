@@ -10,6 +10,10 @@ namespace HaemophilusWeb.Models
         [Description("Liquor")]
         [InvasiveSamplingLocation]
         Liquor = 1,
-        [Description("Anderer")] Other = 2
+        [Description("Anderer nicht invasiv")]
+        OtherNonInvasive = 2,
+        [Description("Anderer invasiv")]
+        [InvasiveSamplingLocation]
+        OtherInvasive = 3
     }
 }

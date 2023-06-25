@@ -24,7 +24,7 @@ namespace HaemophilusWeb.Validators
 
         private static bool BeNotEmptyIfSamplingLocationIsOther(Sending sending, string otherSamplingLocation)
         {
-            return sending.SamplingLocation != SamplingLocation.Other || !string.IsNullOrEmpty(otherSamplingLocation);
+            return sending.SamplingLocation != SamplingLocation.OtherNonInvasive || !string.IsNullOrEmpty(otherSamplingLocation);  //TODO OtherInvasive
         }
     }
 }

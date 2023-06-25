@@ -27,7 +27,7 @@ namespace HaemophilusWeb.Validators
                 SenderId = 1,
                 PatientId = 1,
                 SenderLaboratoryNumber = "1234",
-                SamplingLocation = SamplingLocation.Other,
+                SamplingLocation = SamplingLocation.OtherNonInvasive,  //TODO OtherInvasive
                 OtherSamplingLocation = "Other",
             };
         }
@@ -48,7 +48,7 @@ namespace HaemophilusWeb.Validators
         private static Sending CreateInvalidSendingWithOtherSamplingLocationEmpty()
         {
             var sending = CreateSending();
-            sending.SamplingLocation = SamplingLocation.Other;
+            sending.SamplingLocation = SamplingLocation.OtherNonInvasive;  //TODO OtherInvasive
             sending.OtherSamplingLocation = string.Empty;
             return sending;
         }
