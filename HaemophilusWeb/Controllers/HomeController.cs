@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2023, 6, 25), "Interpretation Nativmaterial Regel 32", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2023, 5, 29, 21, 30, 00), "Einsender-Export für Meningokokken", 108, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2023, 5, 29, 17, 30, 00), "Ausschalten der Autovervollständigung vom Browser", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2023, 5, 29, 17, 00, 00), "Geburtsdatum seht initial nicht auf dem aktuellen Datum sondern ist leer", ChangeType.Feature, DatabaseType.None),
