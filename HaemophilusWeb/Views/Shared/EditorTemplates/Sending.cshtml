@@ -77,10 +77,10 @@
     });
 
     function ShowOtherSamplingLocationIfOtherIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+        ShowDivIfInputMatchesValueOrClearInputOtherwise(
             "#OtherSamplingLocationForm", "input:radio[name$='SamplingLocation']",
             "input:radio[name$='SamplingLocation']:checked",
-            "Other", "[id$='OtherSamplingLocation']"
+            /Other.*Invasive/g, "[id$='OtherSamplingLocation']"
         );
     }
 </script>
