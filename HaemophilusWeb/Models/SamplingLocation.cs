@@ -16,4 +16,13 @@ namespace HaemophilusWeb.Models
         [InvasiveSamplingLocation]
         OtherInvasive = 3
     }
+
+    public static class SamplingLocationExtension
+    {
+        public static bool IsOther(this SamplingLocation samplingLocation)
+        {
+            return samplingLocation == SamplingLocation.OtherNonInvasive ||
+                   samplingLocation == SamplingLocation.OtherInvasive;
+        }
+    }
 }

@@ -197,6 +197,7 @@ namespace HaemophilusWeb.Tools
         {
             var sut = CreateExportDefinition();
             Sending.SamplingLocation = location;
+            Sending.OtherSamplingLocation = "Other location";
 
             var export = sut.ToDataTable(Sendings);
 
@@ -218,11 +219,12 @@ namespace HaemophilusWeb.Tools
         }
 
 
-        [Test]
-        public void DataTable_ContainsOtherInvasiveSamplingLocation()
+        [TestCase(SamplingLocation.OtherNonInvasive)]
+        [TestCase(SamplingLocation.OtherInvasive)]
+        public void DataTable_ContainsOtherInvasiveSamplingLocation(SamplingLocation samplingLocation)
         {
             var sut = CreateExportDefinition();
-            Sending.SamplingLocation = SamplingLocation.OtherNonInvasive;  //TODO OtherInvasive
+            Sending.SamplingLocation = samplingLocation;
             Sending.OtherSamplingLocation = "Anderer Entnahmeort";
 
             var export = sut.ToDataTable(Sendings);

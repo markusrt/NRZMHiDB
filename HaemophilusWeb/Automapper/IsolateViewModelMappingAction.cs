@@ -21,7 +21,7 @@ namespace HaemophilusWeb.Automapper
         public void Process(Isolate source, IsolateViewModel destination)
         {
             var sending = source.Sending;
-            destination.SamplingLocation = sending.SamplingLocation == SamplingLocation.OtherNonInvasive //TODO OtherInvasive
+            destination.SamplingLocation = sending.SamplingLocation.IsOther()
                 ? sending.OtherSamplingLocation
                 : EnumEditor.GetEnumDescription(sending.SamplingLocation);
             destination.Material = EnumEditor.GetEnumDescription(sending.Material);

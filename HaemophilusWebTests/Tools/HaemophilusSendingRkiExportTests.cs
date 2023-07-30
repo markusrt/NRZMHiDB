@@ -69,13 +69,14 @@ namespace HaemophilusWeb.Tools
             export.Columns.Count.Should().Be(19);
         }
 
-        [Test]
-        public void DataTable_ContainsRkiColumns()
+        [TestCase(SamplingLocation.OtherInvasive)]
+        [TestCase(SamplingLocation.OtherNonInvasive)]
+        public void DataTable_ContainsRkiColumns(SamplingLocation samplingLocation)
         {
             var sut = CreateExportDefinition();
             var county = Counties.First();
 
-            Sending.SamplingLocation = SamplingLocation.OtherNonInvasive;  //TODO OtherInvasive
+            Sending.SamplingLocation = samplingLocation;
             Sending.OtherSamplingLocation = "Other Location";
             Sending.Patient.BirthDate = new DateTime(2005, 8, 31);
             Sending.Patient.County = county.Name;

@@ -80,11 +80,7 @@ namespace HaemophilusWeb.Tools
 
         private static string ExportSamplingLocation(SamplingLocation location, Sending sending)
         {
-            if (location == SamplingLocation.OtherNonInvasive)  //TODO OtherInvasive
-            {
-                return sending.OtherSamplingLocation;
-            }
-            return ExportToString(location);
+            return location.IsOther() ? sending.OtherSamplingLocation : ExportToString(location);
         }
     }
 }
