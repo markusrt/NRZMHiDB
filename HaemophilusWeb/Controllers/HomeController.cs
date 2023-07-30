@@ -22,7 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2023, 7, 30, 16, 00, 00), "Interpretation Nativmaterial Regel 32", ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2023, 7, 30, 16, 00, 00), "Entfernen des Feldes Invasiv Ja/Nein. Der Wert wird automatisch anhand des Entnahmeortes bestimmt.", ChangeType.Feature, DatabaseType.Haemophilus),
                 new Change(new DateTime(2023, 6, 25), "Interpretation Nativmaterial Regel 32", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2023, 5, 29, 21, 30, 00), "Einsender-Export für Meningokokken", 108, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2023, 5, 29, 17, 30, 00), "Ausschalten der Autovervollständigung vom Browser", ChangeType.Feature, DatabaseType.None),

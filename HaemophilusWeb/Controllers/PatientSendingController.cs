@@ -87,7 +87,7 @@ namespace HaemophilusWeb.Controllers
         {
             var samplingLocations = exportType == ExportType.Rki || exportType == ExportType.Iris
                 ? new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor, SamplingLocation.OtherInvasive }
-                : new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor, SamplingLocation.OtherNonInvasive };
+                : EnumUtils.AllEnumValues<SamplingLocation>().ToList();
 
             var filteredSendings = NotDeletedSendings()
                 .Include(s => s.Patient)
