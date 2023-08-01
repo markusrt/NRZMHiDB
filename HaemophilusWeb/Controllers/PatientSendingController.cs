@@ -149,10 +149,12 @@ namespace HaemophilusWeb.Controllers
             var list = query.ToList();
             var queryRecords = list.Select(x =>
             {
-                var samplingLocation = x.SamplingLocation == SamplingLocation.OtherNonInvasive
+                var samplingLocation = x.SamplingLocation.IsOther()
                     ? Server.HtmlEncode(x.OtherSamplingLocation)
                     : EnumEditor.GetEnumDescription(x.SamplingLocation);
                 var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year, DatabaseType.Haemophilus);
+                var isInvasive = Sending.IsInvasive(x.SamplingLocation) ? YesNo.Yes : YesNo.No;
+                var invasive = EnumEditor.GetEnumDescription(isInvasive);
                 return new QueryRecord
                 {
                     SendingId = x.SendingId,
@@ -163,6 +165,7 @@ namespace HaemophilusWeb.Controllers
                     StemNumber = x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Haemophilus),
                     ReceivingDate = x.ReceivingDate,
                     SamplingLocation = samplingLocation,
+                    Invasive = invasive,
                     LaboratoryNumber = x.Year * 10000 + x.YearlySequentialIsolateNumber,
                     LaboratoryNumberString = laboratoryNumber,
                     ReportStatus = x.ReportStatus,
@@ -172,7 +175,7 @@ namespace HaemophilusWeb.Controllers
                     FullTextSearch = String.Join(" ",
                             x.Initials, x.BirthDate.ToReportFormat(),
                             x.StemNumber.ToStemNumberWithPrefix(DatabaseType.Haemophilus), x.ReceivingDate.ToReportFormat(),
-                            samplingLocation, laboratoryNumber,
+                            invasive, samplingLocation, laboratoryNumber,
                             x.PatientPostalCode, x.SenderPostalCode, x.SenderLaboratoryNumber)
                         .ToLower()
                 };
