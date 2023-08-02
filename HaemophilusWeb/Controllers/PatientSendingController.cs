@@ -57,7 +57,7 @@ namespace HaemophilusWeb.Controllers
 
             if (queryWithAdjustment.Unadjusted == YesNo.No)
             {
-                sendings.RemoveAll(s => s.SamplingLocation == SamplingLocation.Other);
+                sendings.RemoveAll(s => s.SamplingLocation == SamplingLocation.OtherNonInvasive);
                 cleanDuplicates = duplicateResolver.CleanOrMarkDuplicates;
             }
 
@@ -86,8 +86,8 @@ namespace HaemophilusWeb.Controllers
         protected override IEnumerable<Sending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
             var samplingLocations = exportType == ExportType.Rki || exportType == ExportType.Iris
-                ? new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor }
-                : new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor, SamplingLocation.Other };
+                ? new List<SamplingLocation> { SamplingLocation.Blood, SamplingLocation.Liquor, SamplingLocation.OtherInvasive }
+                : EnumUtils.AllEnumValues<SamplingLocation>().ToList();
 
             var filteredSendings = NotDeletedSendings()
                 .Include(s => s.Patient)
@@ -139,7 +139,6 @@ namespace HaemophilusWeb.Controllers
                 x.ReceivingDate,
                 x.SamplingLocation,
                 x.OtherSamplingLocation,
-                x.Invasive,
                 x.Isolate.YearlySequentialIsolateNumber,
                 x.Isolate.Year,
                 x.SenderLaboratoryNumber,
@@ -150,11 +149,12 @@ namespace HaemophilusWeb.Controllers
             var list = query.ToList();
             var queryRecords = list.Select(x =>
             {
-                var invasive = EnumEditor.GetEnumDescription(x.Invasive);
-                var samplingLocation = x.SamplingLocation == SamplingLocation.Other
+                var samplingLocation = x.SamplingLocation.IsOther()
                     ? Server.HtmlEncode(x.OtherSamplingLocation)
                     : EnumEditor.GetEnumDescription(x.SamplingLocation);
                 var laboratoryNumber = ReportFormatter.ToLaboratoryNumber(x.YearlySequentialIsolateNumber, x.Year, DatabaseType.Haemophilus);
+                var isInvasive = Sending.IsInvasive(x.SamplingLocation) ? YesNo.Yes : YesNo.No;
+                var invasive = EnumEditor.GetEnumDescription(isInvasive);
                 return new QueryRecord
                 {
                     SendingId = x.SendingId,

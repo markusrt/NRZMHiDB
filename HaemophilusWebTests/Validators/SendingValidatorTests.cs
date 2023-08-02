@@ -27,9 +27,8 @@ namespace HaemophilusWeb.Validators
                 SenderId = 1,
                 PatientId = 1,
                 SenderLaboratoryNumber = "1234",
-                SamplingLocation = SamplingLocation.Other,
+                SamplingLocation = SamplingLocation.OtherInvasive,
                 OtherSamplingLocation = "Other",
-                Invasive = YesNo.No
             };
         }
 
@@ -39,17 +38,19 @@ namespace HaemophilusWeb.Validators
             {
                 SenderConclusion = string.Empty
             };
-            yield return Tuple.Create(invalidSending, new[] { "Invasive", "SenderLaboratoryNumber", "SenderConclusion" });
+            yield return Tuple.Create(invalidSending, new[] {"SenderLaboratoryNumber", "SenderConclusion" });
 
             yield return Tuple.Create(CreateInvalidSendingWithReceivingDateBeforeReportDate(), new[] { "ReceivingDate"});
 
-            yield return Tuple.Create(CreateInvalidSendingWithOtherSamplingLocationEmpty(), new[] { "OtherSamplingLocation" });
+            yield return Tuple.Create(CreateInvalidSendingWithOtherSamplingLocationEmpty(SamplingLocation.OtherNonInvasive), new[] { "OtherSamplingLocation" });
+            
+            yield return Tuple.Create(CreateInvalidSendingWithOtherSamplingLocationEmpty(SamplingLocation.OtherInvasive), new[] { "OtherSamplingLocation" });
         }
 
-        private static Sending CreateInvalidSendingWithOtherSamplingLocationEmpty()
+        private static Sending CreateInvalidSendingWithOtherSamplingLocationEmpty(SamplingLocation samplingLocation)
         {
             var sending = CreateSending();
-            sending.SamplingLocation = SamplingLocation.Other;
+            sending.SamplingLocation = samplingLocation; 
             sending.OtherSamplingLocation = string.Empty;
             return sending;
         }

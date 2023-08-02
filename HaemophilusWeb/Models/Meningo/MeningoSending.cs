@@ -48,7 +48,7 @@ namespace HaemophilusWeb.Models.Meningo
 
         public static bool IsInvasive(MeningoSamplingLocation samplingLocation)
         {
-            return samplingLocation.GetType().GetField(Enum.GetName(samplingLocation.GetType(), samplingLocation)).GetCustomAttributes(typeof(InvasiveSamplingLocationAttribute), false).Length > 0;
+            return samplingLocation.FirstAttribute<InvasiveSamplingLocationAttribute>() != null;
         }
 
         public virtual MeningoIsolate Isolate { get; set; }
