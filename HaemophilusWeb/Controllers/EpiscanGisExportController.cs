@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Globalization;
 using System.IO;
@@ -31,9 +32,14 @@ namespace HaemophilusWeb.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = DefaultRoles.User)]
-        public ActionResult Index()
+        [AllowAnonymous]
+        public ActionResult Index(string token)
         {
+            if (token != ConfigurationManager.AppSettings["RegistrationToken"])
+            {
+                return new HttpNotFoundResult();
+            }
+
             var tempFile = Path.GetTempFileName();
             
             var samplingLocations = new List<MeningoSamplingLocation> { MeningoSamplingLocation.Blood, MeningoSamplingLocation.Liquor };

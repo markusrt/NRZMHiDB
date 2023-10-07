@@ -8,7 +8,6 @@ using HaemophilusWeb.Controllers;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.ViewModels;
-using Moq;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Automapper
@@ -44,6 +43,22 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.SenderCity.Should().Be("12345 The City");
             isolateViewModel.SenderStreet.Should().Be("Long Street 123456");
             isolateViewModel.SenderDepartment.Should().Be(expectedDepartment);
+        }
+
+        [TestCase(SamplingLocation.OtherNonInvasive, "Nein")]
+        [TestCase(SamplingLocation.OtherInvasive, "Ja")]
+        public void ProcessModelToViewModel_PopulatesInvasive(SamplingLocation samplingLocation, string expectedInvasive)
+        {
+            var sut = new IsolateViewModelMappingAction();
+            var isolateViewModel = new IsolateViewModel();
+            var isolate = CreateEmptyIsolate();
+            isolate.Sending.SamplingLocation = samplingLocation;
+            isolate.Sending.OtherSamplingLocation = "other location";
+
+            sut.Process(isolate, isolateViewModel);
+
+            isolateViewModel.SamplingLocation.Should().Be("other location");
+            isolateViewModel.Invasive.Should().Be(expectedInvasive);
         }
 
         private static Isolate CreateEmptyIsolate()

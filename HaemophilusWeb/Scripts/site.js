@@ -31,7 +31,20 @@ function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
     }
 
     EnableShowDivIfCallbackReturnsTrueOrClearInputOtherwise(
-        showDivCallback, divToShow, inputSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue);
+        showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue, secondInputToClearOnOtherValue);
+}
+
+function ShowDivIfInputMatchesValueOrClearInputOtherwise(
+    divToShow, inputSelector, valueSelector, regexOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue)
+{
+    var showDivCallback = function()
+    {
+        var showDiv = $(valueSelector).val().match(regexOnWhichToShowDiv) !== null;
+        return showDiv;
+    }
+
+    EnableShowDivIfCallbackReturnsTrueOrClearInputOtherwise(
+        showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue, secondInputToClearOnOtherValue);
 }
 
 function ShowDivIfCheckBoxHasSpecificSelectedValueOrClearInputOtherwise(
@@ -49,11 +62,11 @@ function ShowDivIfCheckBoxHasSpecificSelectedValueOrClearInputOtherwise(
     }
 
     EnableShowDivIfCallbackReturnsTrueOrClearInputOtherwise(
-        showDivCallback, divToShow, inputSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue);
+        showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue);
 }
 
 function EnableShowDivIfCallbackReturnsTrueOrClearInputOtherwise(
-    showDivCallback, divToShow, inputSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue) {
+    showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue, secondInputToClearOnOtherValue) {
     ShowDivOrClearInput(showDivCallback, divToShow, inputToClearOnOtherValue, secondInputToClearOnOtherValue);
 
     $(inputSelector).change(function () {

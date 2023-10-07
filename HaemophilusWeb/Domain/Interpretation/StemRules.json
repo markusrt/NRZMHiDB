@@ -765,6 +765,34 @@
     ],
     "Typings": [ "NoAgglutinationBCWY", "PorA", "FetA" ]
   },
+  "StemInterpretation_NoNM_01": {
+    "GrowthOnBloodAgar": "ATypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "No", "ATypicalGrowth" ],
+    "Agglutination": [ "NotDetermined" ],
+    "SerogroupPcr": [ "NotDetermined" ],
+    "MaldiTof": "Determined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Report": [
+      "Kein Nachweis von Neisseria meningitidis."
+    ],
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt", "MaldiTof" ],
+    "NoMeningococci": true
+  },
+  "StemInterpretation_NoNM_02": {
+    "GrowthOnBloodAgar": "ATypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "No", "ATypicalGrowth" ],
+    "Agglutination": [ "NotDetermined" ],
+    "SerogroupPcr": [ "NotDetermined" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Report": [
+      "Kein Nachweis von Neisseria meningitidis."
+    ],
+    "Typings": [ "GrowthOnMartinLewisAgar", "GrowthOnBloodAgar", "Onpg", "GammaGt" ],
+    "NoMeningococci": true
+  },
   "StemInterpretation_PartialReport": {
     "SendingInvasive": [ "Yes" ],
     "GrowthOnBloodAgar": "TypicalGrowth",
