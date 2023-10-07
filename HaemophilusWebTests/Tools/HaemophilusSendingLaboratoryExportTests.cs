@@ -50,11 +50,12 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Geburtsdatum"].ToString().Should().Match("??.??.????");
         }
 
-        [Test]
-        public void DataTable_ContainsOtherInvasiveSamplingLocation()
+        [TestCase(SamplingLocation.OtherNonInvasive)]
+        [TestCase(SamplingLocation.OtherInvasive)]
+        public void DataTable_ContainsOtherInvasiveSamplingLocation(SamplingLocation samplingLocation)
         {
             var sut = CreateExportDefinition();
-            Sending.SamplingLocation = SamplingLocation.Other;
+            Sending.SamplingLocation = samplingLocation;
             Sending.OtherSamplingLocation = "Other Location";
 
             var export = sut.ToDataTable(Sendings);

@@ -604,5 +604,21 @@
     ],
     "Typings": [ "MolecularTyping", "PorA", "NoFetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
+  },
+  "NativeMaterialInterpretation_32": {
+    "CsbPcr": [ "Negative" ],
+    "CscPcr": [ "Negative" ],
+    "CswyPcr": [ "Negative" ],
+    "PorAPcr": [ "Negative" ],
+    "FetAPcr": [ "Negative" ],
+    "RibosomalRna16S": [ "Negative" ],
+    "RealTimePcr": [ "Negative" ],
+    "MolecularTyping": "Die Serogruppen B, C, W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.",
+    "Report": [
+      "Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.",
+      "Kein Hinweis auf Neisseria meningitidis."
+    ],
+    "Typings": [ "RealTimePCRNegative", "RibosomalRna16S", "MolecularTyping", "NoPorA", "NoFetA" ],
+    "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   }
 }

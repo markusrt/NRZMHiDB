@@ -2,6 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using FluentValidation.Attributes;
+using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Utils;
 using HaemophilusWeb.Validators;
 
 namespace HaemophilusWeb.Models
@@ -35,7 +37,14 @@ namespace HaemophilusWeb.Models
         public string SenderConclusion { get; set; }
 
         [Display(Name = "Invasiv")]
-        public YesNo? Invasive { get; set; }
+        public YesNo? Invasive => IsInvasive(SamplingLocation)
+            ? YesNo.Yes
+            : YesNo.No;
+
+        public static bool IsInvasive(SamplingLocation samplingLocation)
+        {
+            return samplingLocation.FirstAttribute<InvasiveSamplingLocationAttribute>() != null;
+        }
 
         [Display(Name = "Anderer Entnahmeort")]
         public string OtherSamplingLocation { get; set; }
