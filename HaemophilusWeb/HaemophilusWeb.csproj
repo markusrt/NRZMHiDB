@@ -245,7 +245,9 @@
     <Compile Include="Controllers\EpiscanGisExportController.cs" />
     <Compile Include="Controllers\RkiMatchController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\MeningoSenderController.cs" />
     <Compile Include="Controllers\SenderController.cs" />
+    <Compile Include="Controllers\SenderControllerBase.cs" />
     <Compile Include="Controllers\SendingController.cs" />
     <Compile Include="App_Start\ExceptionLogger.cs" />
     <Compile Include="Domain\NativeMaterialInterpretationRule.cs" />
@@ -284,6 +286,10 @@
     <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.cs" />
     <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.designer.cs">
       <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305301958098_Sending_AutoInvasive.cs" />
+    <Compile Include="Migrations\202305301958098_Sending_AutoInvasive.designer.cs">
+      <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
@@ -851,6 +857,9 @@
     <EmbeddedResource Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.resx">
       <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305301958098_Sending_AutoInvasive.resx">
+      <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -957,6 +966,8 @@
     <Content Include="Scripts\cldr\supplemental\numberingSystems.json" />
     <Content Include="Scripts\cldr\supplemental\timeData.json" />
     <Content Include="Scripts\cldr\supplemental\weekData.json" />
+    <None Include="Properties\PublishProfiles\New Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\New Prod.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.globalize.js" />
     <Content Include="Scripts\jquery.validate.globalize.min.js" />
@@ -1020,6 +1031,7 @@
     <Content Include="Views\MeningoPatientSending\RkiExport.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\moment-with-locales.min.js.map" />
+    <Content Include="Views\MeningoSender\Export.cshtml" />
     <None Include="Web.template.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>

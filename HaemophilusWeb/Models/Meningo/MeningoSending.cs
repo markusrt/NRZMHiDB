@@ -46,11 +46,9 @@ namespace HaemophilusWeb.Models.Meningo
             ? YesNo.Yes
             : YesNo.No;
 
-        public override bool AutoAssignStemNumber => !Material.IsNativeMaterial();
-
         public static bool IsInvasive(MeningoSamplingLocation samplingLocation)
         {
-            return samplingLocation.GetType().GetField(Enum.GetName(samplingLocation.GetType(), samplingLocation)).GetCustomAttributes(typeof(InvasiveSamplingLocationAttribute), false).Length > 0;
+            return samplingLocation.FirstAttribute<InvasiveSamplingLocationAttribute>() != null;
         }
 
         public virtual MeningoIsolate Isolate { get; set; }
