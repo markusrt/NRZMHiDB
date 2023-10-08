@@ -40,15 +40,6 @@ namespace HaemophilusWeb.Models
         [Display(Name = "bexA")]
         public TestResult BexA { get; set; }
 
-        [Display(Name = "api NH")]
-        public UnspecificTestResult ApiNh { get; set; }
-
-        [Display(Name = "api NH beste Übereinstimmung")]
-        public string ApiNhBestMatch { get; set; }
-
-        [Display(Name = "api NH Übereinstimmung")]
-        public double? ApiNhMatchInPercent { get; set; }
-
         [Display(Name = "Serotyp-PCR")]
         public SerotypePcr SerotypePcr { get; set; }
 
