@@ -11,7 +11,7 @@ using HaemophilusWeb.Automapper;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.TestUtils;
 using HaemophilusWeb.ViewModels;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 using TestDataGenerator;
 
@@ -74,12 +74,11 @@ namespace HaemophilusWeb.Controllers
             DbMock = new ApplicationDbContextMock();
             IsolateViewModelMappingActionBase.DbForTest = DbMock;
             controller = new ReportController(DbMock);
-            var context = new Mock<HttpContextBase>();
-            var server = new Mock<HttpServerUtilityBase>(MockBehavior.Loose);
-            server.Setup(i => i.MapPath(ReportController.ReportTemplatesPath))
-                .Returns(TemporaryDirectoryToStoreTestData);
-            context.SetupGet(x => x.Server).Returns(server.Object);
-            controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
+            var context = Substitute.For<HttpContextBase>();
+            var server = Substitute.For<HttpServerUtilityBase>();
+            server.MapPath(ReportController.ReportTemplatesPath).Returns(TemporaryDirectoryToStoreTestData);
+            context.Server.Returns(server);
+            controller.ControllerContext = new ControllerContext(context, new RouteData(), controller);
 
             ConfigurationManager.AppSettings["reportSigners"] = "signer1";
 

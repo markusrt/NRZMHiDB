@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using FluentAssertions;
 using HaemophilusWeb.Models;
-using Moq;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Views.Utils
