@@ -177,7 +177,7 @@ parse: function (selector) {
 /// <param name="selector" type="String">Any valid jQuery selector.</param>
 var $forms = $(selector)
 .parents("form")
-.andSelf()
+.addBack()
 .add($(selector).find("form"))
 .filter("form");
 // :input is a psuedoselector provided by jQuery which selects input and input-like elements
