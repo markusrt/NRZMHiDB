@@ -46,10 +46,6 @@ namespace HaemophilusWeb.Validators
             noRibosomalRna16SDetails.RibosomalRna16S = UnspecificTestResult.Determined;
             yield return Tuple.Create(noRibosomalRna16SDetails, new[] { "RibosomalRna16SBestMatch", "RibosomalRna16SMatchInPercent" });
 
-            var noApiNhDetails = CreateIsolateViewModel();
-            noApiNhDetails.ApiNh = UnspecificTestResult.Determined;
-            yield return Tuple.Create(noApiNhDetails, new[] { "ApiNhBestMatch", "ApiNhMatchInPercent" });
-
             var noMaldiTofDetails = CreateIsolateViewModel();
             noMaldiTofDetails.MaldiTof = UnspecificTestResult.Determined;
             yield return Tuple.Create(noMaldiTofDetails, new[] { "MaldiTofBestMatch", "MaldiTofMatchConfidence" });

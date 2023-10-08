@@ -61,15 +61,6 @@ namespace HaemophilusWeb.ViewModels
                     yield return
                         new Typing {Attribute = "Kapselgenotypen", Value = EnumEditor.GetEnumDescription(SerotypePcr)};
                 }
-                if (ApiNh == UnspecificTestResult.Determined)
-                {
-                    yield return
-                        new Typing
-                        {
-                            Attribute = "api NH",
-                            Value = string.Format("{0}, {1}%", ApiNhBestMatch, DoubleToString(ApiNhMatchInPercent))
-                        };
-                }
                 if (RibosomalRna16S == UnspecificTestResult.Determined)
                 {
                     yield return
