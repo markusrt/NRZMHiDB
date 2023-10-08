@@ -22,7 +22,18 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
-                new Change(new DateTime(2022, 06, 26), "Azithromycin mit CLSI MHKs", 109, ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2023, 7, 30, 16, 00, 00), "Entfernen des Feldes Invasiv Ja/Nein. Der Wert wird automatisch anhand des Entnahmeortes bestimmt.", ChangeType.Feature, DatabaseType.Haemophilus),
+                new Change(new DateTime(2023, 6, 25), "Interpretation Nativmaterial Regel 32", ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2023, 5, 29, 21, 30, 00), "Einsender-Export für Meningokokken", 108, ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2023, 5, 29, 17, 30, 00), "Ausschalten der Autovervollständigung vom Browser", ChangeType.Feature, DatabaseType.None),
+                new Change(new DateTime(2023, 5, 29, 17, 00, 00), "Geburtsdatum seht initial nicht auf dem aktuellen Datum sondern ist leer", ChangeType.Feature, DatabaseType.None),
+                new Change(new DateTime(2023, 3, 11), "Update Befundvorlagen", ChangeType.Feature, DatabaseType.None),
+                new Change(new DateTime(2023, 2, 19), "Regel NoNM_01 und NoNM_02 wird nicht angewendet", ChangeType.Bug, DatabaseType.Meningococci),
+                new Change(new DateTime(2023, 1, 18, 23, 0, 0), "Korrektur Nativmaterialien- und Teilbefund", ChangeType.Bug, DatabaseType.Meningococci),
+                new Change(new DateTime(2023, 1, 18, 22, 0, 0), "Stammnummer wird nicht mehr automatisch befüllt", ChangeType.Feature, DatabaseType.None),
+                new Change(new DateTime(2022, 10, 16, 11, 0, 0), "Sicherheitsupdate (Newtonsoft.Json)", ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2022, 10, 16, 10, 0, 0), "Automatischer EpiScanGIS Export", ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2022, 06, 26), "Azithromycin mit CLSI MHKs (wird nicht im Befund gelistet)", 109, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 06, 1), "PubMLST matching mit IRIS Datenbank", 123, ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 04, 1), "Isolierte DNA wird beim speichern auf 'Nicht angewachsen' zurückgesetzt", 119, ChangeType.Bug, DatabaseType.Meningococci),
                 new Change(new DateTime(2022, 03, 30, 17, 0, 0), "<p>Automatisches setzen der Beurteilung</p>" +

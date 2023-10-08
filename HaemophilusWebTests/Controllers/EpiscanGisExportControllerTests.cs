@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -15,6 +16,7 @@ namespace HaemophilusWeb.Controllers
 {
     public class EpiscanGisExportControllerTests : ITempDirectoryTest
     {
+        private const string ValidToken = "Token";
         private ApplicationDbContextMock _db = new();
 
         private IGeonamesService _geonamesService;
@@ -43,8 +45,9 @@ namespace HaemophilusWeb.Controllers
 
                 SetupToInterpretAsSerogroup(sending, MeningoSerogroupPcr.C);
             }
-        }
 
+            ConfigurationManager.AppSettings["RegistrationToken"] = ValidToken;
+        }
 
         [Test]
         public void Ctor_DoesNotThrow()
@@ -54,18 +57,29 @@ namespace HaemophilusWeb.Controllers
             sut.Should().NotBeNull();
         }
 
-
         [Test]
         public void Download_ReturnsFileContent()
         {
+            
             var testFile = Path.Combine(TemporaryDirectoryToStoreTestData, "download.csv");
             var sut = CreateController();
             
-            var actionResult = sut.Index();
+            var actionResult = sut.Index(ValidToken);
 
             var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);
             File.ReadAllLines(testFile).Should().HaveCount(_db.MeningoSendings.Count());
+        }
+
+        
+        [Test]
+        public void DownloadWithInvalidToken_Returns404()
+        {
+            var sut = CreateController();
+            
+            var actionResult = sut.Index("Invalid" + ValidToken);
+
+            var content = actionResult.Should().BeOfType<HttpNotFoundResult>();
         }
 
         [Test]
@@ -81,7 +95,7 @@ namespace HaemophilusWeb.Controllers
             var testFile = Path.Combine(TemporaryDirectoryToStoreTestData, "download.csv");
             var sut = CreateController();
             
-            var content = sut.Index().Should().BeOfType<FileContentResult>().Subject.FileContents;
+            var content = sut.Index(ValidToken).Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);
 
             var firstLine = File.ReadAllLines(testFile).First();
@@ -95,7 +109,7 @@ namespace HaemophilusWeb.Controllers
             var sut = CreateController();
             _db.MeningoSendings.First().SamplingLocation = MeningoSamplingLocation.EarSwab;
             
-            var actionResult = sut.Index();
+            var actionResult = sut.Index(ValidToken);
 
             var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);
@@ -110,7 +124,7 @@ namespace HaemophilusWeb.Controllers
             _db.MeningoSendings.First().Isolate.SerogroupPcr = MeningoSerogroupPcr.NotDetermined;
             _db.MeningoSendings.Skip(1).First().Isolate.SerogroupPcr = MeningoSerogroupPcr.NotDetermined;
             
-            var actionResult = sut.Index();
+            var actionResult = sut.Index(ValidToken);
 
             var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);
@@ -133,7 +147,7 @@ namespace HaemophilusWeb.Controllers
             SetupToInterpretAsSerogroup(secondEntry, MeningoSerogroupPcr.B);
             secondEntry.MeningoPatientId = firstEntry.MeningoPatientId;
             
-            var actionResult = sut.Index();
+            var actionResult = sut.Index(ValidToken);
 
             var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
             File.WriteAllBytes(testFile, content);

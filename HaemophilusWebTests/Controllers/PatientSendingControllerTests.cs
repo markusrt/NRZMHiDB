@@ -7,13 +7,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.UI.WebControls;
 using DataTables.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.TestUtils;
 using HaemophilusWeb.ViewModels;
-using Moq;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Controllers
@@ -195,21 +194,19 @@ namespace HaemophilusWeb.Controllers
 
         private PatientSendingController CreateController()
         {
-            var request = new Mock<HttpRequestBase>();
-            request.SetupGet(r => r.Form).Returns(requestForm);
-            var context = new Mock<HttpContextBase>();
-            var server = new Mock<HttpServerUtilityBase>();
-            context.SetupGet(x => x.Request).Returns(request.Object);
-            context.SetupGet(x => x.Server).Returns(server.Object);
+            var request = Substitute.For<HttpRequestBase>();
+            request.Form.Returns(requestForm);
+            var context = Substitute.For<HttpContextBase>();
+            var server = Substitute.For<HttpServerUtilityBase>();
+            context.Request.Returns(request);
+            context.Server.Returns(server);
             var controller = new PatientSendingController(DbMock, patientController, sendingController);
-            controller.ControllerContext = new ControllerContext(context.Object, new RouteData(), controller);
-            var urlHelper = new Mock<UrlHelper>();
-            urlHelper.Setup(u => u.Action(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<object>()))
-                .Returns(string.Empty);
-            urlHelper.Setup(u => u.Action(It.IsAny<string>(), It.IsAny<object>()))
-                .Returns(string.Empty);
+            controller.ControllerContext = new ControllerContext(context, new RouteData(), controller);
+            var urlHelper = Substitute.For<UrlHelper>();
+            urlHelper.Action(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>()).Returns(string.Empty);
+            urlHelper.Action(Arg.Any<string>(), Arg.Any<object>()).Returns(string.Empty);
 
-            controller.Url = urlHelper.Object;
+            controller.Url = urlHelper;
             return controller;
         }
 
