@@ -1721,6 +1721,34 @@ namespace HaemophilusWeb.Domain
             AssertNoMeningococciFlagIsValid(interpretation);
         }
 
+        [Test]
+        public void IsolateMatchingNativeMaterialRule32_ReturnsCorrespondingRule()
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial, SamplingLocation = InvasiveSamplingLocation},
+                CsbPcr = NativeMaterialTestResult.Negative,
+                CscPcr = NativeMaterialTestResult.Negative,
+                CswyPcr = NativeMaterialTestResult.Negative,
+                PorAPcr = NativeMaterialTestResult.Negative,
+                FetAPcr = NativeMaterialTestResult.Negative,
+                RibosomalRna16S = NativeMaterialTestResult.Negative,
+                RealTimePcr = NativeMaterialTestResult.Negative,
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.TypingAttribute("Molekulare Typisierung")
+                .Should().Be("Die Serogruppen B, C, W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.");
+            interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Hinweis auf Neisseria meningitidis."));
+
+            AssertNoMeningococciFlagIsValid(interpretation);
+        }
+
+
         private NativeMaterialTestResult GetRandomNegativeOrInhibitory()
         {
             return _random.Next(2) == 0 ? NativeMaterialTestResult.Negative : NativeMaterialTestResult.Inhibitory;

@@ -45,6 +45,22 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.SenderDepartment.Should().Be(expectedDepartment);
         }
 
+        [TestCase(SamplingLocation.OtherNonInvasive, "Nein")]
+        [TestCase(SamplingLocation.OtherInvasive, "Ja")]
+        public void ProcessModelToViewModel_PopulatesInvasive(SamplingLocation samplingLocation, string expectedInvasive)
+        {
+            var sut = new IsolateViewModelMappingAction();
+            var isolateViewModel = new IsolateViewModel();
+            var isolate = CreateEmptyIsolate();
+            isolate.Sending.SamplingLocation = samplingLocation;
+            isolate.Sending.OtherSamplingLocation = "other location";
+
+            sut.Process(isolate, isolateViewModel);
+
+            isolateViewModel.SamplingLocation.Should().Be("other location");
+            isolateViewModel.Invasive.Should().Be(expectedInvasive);
+        }
+
         private static Isolate CreateEmptyIsolate()
         {
             return new Isolate

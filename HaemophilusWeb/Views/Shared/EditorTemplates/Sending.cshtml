@@ -68,8 +68,6 @@
 
 @Html.EnumRadioEditorFor(m => m.Material)
 
-@Html.EnumRadioEditorFor(m => m.Invasive)
-
 @Html.TextEditorFor(m => m.SenderConclusion)
 
 <script>
@@ -79,10 +77,10 @@
     });
 
     function ShowOtherSamplingLocationIfOtherIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
+        ShowDivIfInputMatchesValueOrClearInputOtherwise(
             "#OtherSamplingLocationForm", "input:radio[name$='SamplingLocation']",
             "input:radio[name$='SamplingLocation']:checked",
-            "Other", "[id$='OtherSamplingLocation']"
+            /Other.*Invasive/g, "[id$='OtherSamplingLocation']"
         );
     }
 </script>
