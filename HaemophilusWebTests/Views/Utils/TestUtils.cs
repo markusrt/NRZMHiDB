@@ -2,7 +2,7 @@
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Moq;
+using NSubstitute;
 
 namespace HaemophilusWeb.Views.Utils
 {
@@ -10,28 +10,28 @@ namespace HaemophilusWeb.Views.Utils
     {
         public static HtmlHelper<T> CreateHtmlHelper<T>(ViewDataDictionary viewData)
         {
-            var cc = new Mock<ControllerContext>(
-                new Mock<HttpContextBase>().Object,
+            var cc = Substitute.For<ControllerContext>(
+                Substitute.For<HttpContextBase>(),
                 new RouteData(),
-                new Mock<ControllerBase>().Object);
+                Substitute.For<ControllerBase>());
 
-            var mockViewContext = new Mock<ViewContext>(
-                cc.Object,
-                new Mock<IView>().Object,
+            var mockViewContext = Substitute.For<ViewContext>(
+                cc,
+                Substitute.For<IView>(),
                 viewData,
                 new TempDataDictionary(),
                 TextWriter.Null);
 
-            mockViewContext.Setup(c => c.ViewData).Returns(viewData);
+            mockViewContext.ViewData.Returns(viewData);
 
-            mockViewContext.Object.ViewData = viewData;
+            mockViewContext.ViewData = viewData;
 
-            var mockViewDataContainer = new Mock<IViewDataContainer>();
+            var mockViewDataContainer = Substitute.For<IViewDataContainer>();
 
-            mockViewDataContainer.Setup(v => v.ViewData).Returns(viewData);
+            mockViewDataContainer.ViewData.Returns(viewData);
 
             return new HtmlHelper<T>(
-                mockViewContext.Object, mockViewDataContainer.Object);
+                mockViewContext, mockViewDataContainer);
         }
     }
 }

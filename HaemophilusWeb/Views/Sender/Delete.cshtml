@@ -1,4 +1,5 @@
 ﻿@using HaemophilusWeb.Models
+@using HaemophilusWeb.Models.Meningo
 @model HaemophilusWeb.Models.Sender
 
 @{
@@ -35,7 +36,7 @@
             @Html.DisplayFor(model => model.PostalCode) @Html.DisplayFor(model => model.City)
         </dd>
     </dl>
-    @if (ViewBag.Sendings.Count > 0)
+    @if (ViewBag.Sendings.Count > 0 || ViewBag.MeningoSendings.Count > 0)
     {
         <div class="alert alert-danger" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
@@ -53,7 +54,13 @@
         foreach (Sending sending in ViewBag.Sendings)
         {
             <p>
-                @Html.ActionLink("Einsendung " + sending.Isolate.LaboratoryNumber, "Edit", "PatientSending", new { id = sending.SendingId }, null)
+                @Html.ActionLink("Einsendung " + sending.Isolate.LaboratoryNumberWithPrefix, "Edit", "PatientSending", new { id = sending.SendingId }, null)
+            </p>
+        }
+        foreach (MeningoSending sending in ViewBag.MeningoSendings)
+        {
+            <p>
+                @Html.ActionLink("Einsendung " + sending.Isolate.LaboratoryNumberWithPrefix, "Edit", "MeningoPatientSending", new { id = sending.MeningoSendingId }, null)
             </p>
         }
         <div class="alert alert-info" role="alert">

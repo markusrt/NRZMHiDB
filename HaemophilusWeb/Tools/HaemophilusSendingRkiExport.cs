@@ -40,14 +40,9 @@ namespace HaemophilusWeb.Tools
 
         }
 
-
         private static string ExportSamplingLocation(SamplingLocation location, Sending sending)
         {
-            if (location == SamplingLocation.Other)
-            {
-                return sending.OtherSamplingLocation;
-            }
-            return ExportToString(location);
+            return location.IsOther() ? sending.OtherSamplingLocation : ExportToString(location);
         }
     }
 }
