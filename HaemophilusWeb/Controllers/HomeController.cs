@@ -22,6 +22,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2023, 11, 20, 21, 00, 00), "Entfernen des Standard Antibiotikas Imipenem, Export bleibt erhalten", ChangeType.Feature, DatabaseType.Haemophilus),
+                new Change(new DateTime(2023, 10, 8, 16, 00, 00), "Entfernen des Feldes ApiNH, Export bleibt erhalten", ChangeType.Feature, DatabaseType.Haemophilus),
+                new Change(new DateTime(2023, 10, 8, 12, 00, 00), "Sicherheitsupdate externer Bibiliotheken (JQuery, JQuery Validation, AspNet Identity, NLog, Moment.js, Datepicker)", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2023, 7, 30, 16, 00, 00), "Entfernen des Feldes Invasiv Ja/Nein. Der Wert wird automatisch anhand des Entnahmeortes bestimmt.", ChangeType.Feature, DatabaseType.Haemophilus),
                 new Change(new DateTime(2023, 6, 25), "Interpretation Nativmaterial Regel 32", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2023, 5, 29, 21, 30, 00), "Einsender-Export für Meningokokken", 108, ChangeType.Feature, DatabaseType.Meningococci),
