@@ -107,7 +107,7 @@ namespace HaemophilusWeb.Domain
                 serotypeString);
             interpretation.Interpretation.Should().Contain("Diskrepante");
             interpretation.InterpretationPreliminary.Should().Be(expectedInterpretationPreliminary);
-            interpretation.InterpretationDisclaimer.Should().BeEmpty();
+            interpretation.InterpretationDisclaimer.Should().Be("Eine molekularbiologische Typisierung und Resistenztestungen werden bei nicht-invasiven Isolaten aus epidemiologischen und Kostengründen nicht durchgeführt.");
         }
 
         [Test]
@@ -193,7 +193,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpretation.Should().Contain("nicht-typisierbar");
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
-            interpretation.InterpretationDisclaimer.Should().BeEmpty();
+            interpretation.InterpretationDisclaimer.Should().Be("Eine molekularbiologische Typisierung und Resistenztestungen werden bei nicht-invasiven Isolaten aus epidemiologischen und Kostengründen nicht durchgeführt.");
 
         }
 

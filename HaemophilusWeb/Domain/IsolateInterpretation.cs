@@ -7,7 +7,10 @@ namespace HaemophilusWeb.Domain
 {
     public class IsolateInterpretation
     {
-        private const string DisclaimerTemplate =
+        private const string NonInvasiveDisclaimer =
+            "Eine molekularbiologische Typisierung und Resistenztestungen werden bei nicht-invasiven Isolaten aus epidemiologischen und Kostengründen nicht durchgeführt.";
+
+        private const string InvasiveDisclaimerTemplate =
             "Der Nachweis von Haemophilus influenzae aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: {0}.";
 
         private const string TypingNotPossiblePlural =
@@ -62,10 +65,7 @@ namespace HaemophilusWeb.Domain
                         $"{TypingNotPossibleSingular} Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.";
                 }
 
-                if (isolate.Sending.Invasive == YesNo.Yes)
-                {
-                    interpretationDisclaimer = string.Format(DisclaimerTemplate, "Haemophilus influenzae, unbekapselt");
-                }
+                interpretationDisclaimer = isolate.Sending.Invasive == YesNo.Yes ? string.Format(InvasiveDisclaimerTemplate, "Haemophilus influenzae, unbekapselt") : NonInvasiveDisclaimer;
             }
             if (SpecificAgglutination.Contains(agglutination) && (bexA == TestResult.Positive || bexA == TestResult.NotDetermined) &&
                 (agglutination.ToString() == serotypePcr.ToString() || serotypePcr == SerotypePcr.NotDetermined))
@@ -80,11 +80,11 @@ namespace HaemophilusWeb.Domain
                     interpretation =
                         $"Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {agglutinationDescription} (Hi{agglutinationDescription}).";
                 }
-                if (isolate.Sending.Invasive == YesNo.Yes)
-                {
-                    interpretationDisclaimer = string.Format(DisclaimerTemplate,
-                        $"Haemophilus influenzae, Serotyp {agglutinationDescription}");
-                }
+
+                interpretationDisclaimer = isolate.Sending.Invasive == YesNo.Yes
+                    ? string.Format(InvasiveDisclaimerTemplate,
+                        $"Haemophilus influenzae, Serotyp {agglutinationDescription}")
+                    : NonInvasiveDisclaimer;
             }
 
             if (agglutination == SerotypeAgg.NotDetermined && serotypePcr == SerotypePcr.NotDetermined && bexA == TestResult.NotDetermined && growth != YesNoOptional.NotStated)
