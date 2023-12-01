@@ -11,7 +11,7 @@ namespace HaemophilusWeb.Domain
         [Test]
         public void Interpret_EmptyIsolate_IsUndetermined()
         {
-            var isolate = new IsolateBase();
+            var isolate = new Isolate();
 
             var interpretation = isolateInterpretation.Interpret(isolate);
 
@@ -38,11 +38,12 @@ namespace HaemophilusWeb.Domain
             SerotypePcr serotypePcr)
         {
             var serotypeString = serotypeAgg.ToString().ToLower();
-            var isolate = new IsolateBase
+            var isolate = new Isolate
             {
                 SerotypePcr = serotypePcr,
                 Agglutination = serotypeAgg,
-                BexA = TestResult.Positive
+                BexA = TestResult.Positive,
+                Sending = new Sending {SamplingLocation = SamplingLocation.Blood}
             };
 
             var interpretation = isolateInterpretation.Interpret(isolate);
@@ -68,11 +69,12 @@ namespace HaemophilusWeb.Domain
                 SerotypePcr serotypePcr)
         {
             var serotypeString = serotypeAgg.ToString().ToLower();
-            var isolate = new IsolateBase
+            var isolate = new Isolate
             {
                 SerotypePcr = serotypePcr,
                 Agglutination = serotypeAgg,
-                BexA = TestResult.NotDetermined
+                BexA = TestResult.NotDetermined,
+                Sending = new Sending {SamplingLocation = SamplingLocation.Blood}
             };
 
             var interpretation = isolateInterpretation.Interpret(isolate);
@@ -87,6 +89,28 @@ namespace HaemophilusWeb.Domain
         }
 
         [Test]
+        public void
+            Interpret_DistinctAgglutinationWithNotDeterminedBexA_NotDeterminedSerotype_NonInvasive_IsSpecificPreliminaryTypingWithEmptyDisclaimer()
+        {
+            var serotypeString = SerotypeAgg.E.ToString().ToLower();
+            var isolate = new Isolate
+            {
+                SerotypePcr = SerotypePcr.NotDetermined,
+                Agglutination = SerotypeAgg.E,
+                BexA = TestResult.NotDetermined,
+                Sending = new Sending {SamplingLocation = SamplingLocation.OtherNonInvasive}
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            var expectedInterpretationPreliminary = string.Format("Das Ergebnis spricht für eine Infektion mit Haemophilus influenzae des Serotyp {0} (Hi{0}).",
+                serotypeString);
+            interpretation.Interpretation.Should().Contain("Diskrepante");
+            interpretation.InterpretationPreliminary.Should().Be(expectedInterpretationPreliminary);
+            interpretation.InterpretationDisclaimer.Should().BeEmpty();
+        }
+
+        [Test]
         [TestCase(SerotypePcr.A)]
         [TestCase(SerotypePcr.B)]
         [TestCase(SerotypePcr.C)]
@@ -97,11 +121,12 @@ namespace HaemophilusWeb.Domain
             SerotypePcr serotypePcr)
         {
             var serotypeString = serotypePcr.ToString().ToLower();
-            var isolate = new IsolateBase
+            var isolate = new Isolate
             {
                 SerotypePcr = serotypePcr,
                 Agglutination = SerotypeAgg.Negative,
-                BexA = TestResult.Negative
+                BexA = TestResult.Negative,
+                Sending = new Sending {SamplingLocation = SamplingLocation.Blood}
             };
 
             var interpretation = isolateInterpretation.Interpret(isolate);
@@ -115,11 +140,12 @@ namespace HaemophilusWeb.Domain
         [Test]
         public void Interpret_OnlyNegativeAgglutination_TypingNotEfficient()
         {
-            var isolate = new IsolateBase
+            var isolate = new Isolate
             {
                 SerotypePcr = SerotypePcr.NotDetermined,
                 Agglutination = SerotypeAgg.Negative,
-                BexA = TestResult.NotDetermined
+                BexA = TestResult.NotDetermined,
+                Sending = new Sending {SamplingLocation = SamplingLocation.Blood}
             };
 
             var interpretation = isolateInterpretation.Interpret(isolate);
@@ -134,11 +160,12 @@ namespace HaemophilusWeb.Domain
         [TestCase(SerotypePcr.NotDetermined)]
         public void Interpret_BexaAndAgglutinationIsNegative_WithRespectiveSeroType_NotTypable(SerotypePcr serotype)
         {
-            var isolate = new IsolateBase
+            var isolate = new Isolate
             {
                 SerotypePcr = serotype,
                 Agglutination = SerotypeAgg.Negative,
-                BexA = TestResult.Negative
+                BexA = TestResult.Negative,
+                Sending = new Sending {SamplingLocation = SamplingLocation.Blood}
             };
 
             var interpretation = isolateInterpretation.Interpret(isolate);
@@ -150,10 +177,30 @@ namespace HaemophilusWeb.Domain
 
         }
 
+        [TestCase(SerotypePcr.Negative)]
+        [TestCase(SerotypePcr.NotDetermined)]
+        public void Interpret_BexaAndAgglutinationIsNegative_WithRespectiveSeroType_NonInvasive_NotTypable(SerotypePcr serotype)
+        {
+            var isolate = new Isolate
+            {
+                SerotypePcr = serotype,
+                Agglutination = SerotypeAgg.Negative,
+                BexA = TestResult.Negative,
+                Sending = new Sending {SamplingLocation = SamplingLocation.OtherNonInvasive}
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Interpretation.Should().Contain("nicht-typisierbar");
+            interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
+            interpretation.InterpretationDisclaimer.Should().BeEmpty();
+
+        }
+
         [Test]
         public void Interpret_AgglutinationBexAAndSerotypAreNotDeterminedButGrowthIsYes_WithRespectiveSeroType_RequestForResend()
         {
-            var isolate = new IsolateBase
+            var isolate = new Isolate
             {
                 SerotypePcr = SerotypePcr.NotDetermined,
                 Agglutination = SerotypeAgg.NotDetermined,
@@ -172,7 +219,7 @@ namespace HaemophilusWeb.Domain
         [Test]
         public void Interpret_AgglutinationBexAAndSerotypAreNotDetermined_ButGrowthIsNo_ReportEvaluation()
         {
-            var isolate = new IsolateBase
+            var isolate = new Isolate
             {
                 SerotypePcr = SerotypePcr.NotDetermined,
                 Agglutination = SerotypeAgg.NotDetermined,

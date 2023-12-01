@@ -29,7 +29,7 @@ namespace HaemophilusWeb.Domain
             SerotypeAgg.F
         };
 
-        public InterpretationResult Interpret(IsolateBase isolate)
+        public InterpretationResult Interpret(Isolate isolate)
         {
             var serotypePcr = isolate.SerotypePcr;
             var serotypePcrDescription = EnumEditor.GetEnumDescription(serotypePcr);
@@ -61,7 +61,11 @@ namespace HaemophilusWeb.Domain
                     interpretation =
                         $"{TypingNotPossibleSingular} Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.";
                 }
-                interpretationDisclaimer = string.Format(DisclaimerTemplate, "Haemophilus influenzae, unbekapselt");
+
+                if (isolate.Sending.Invasive == YesNo.Yes)
+                {
+                    interpretationDisclaimer = string.Format(DisclaimerTemplate, "Haemophilus influenzae, unbekapselt");
+                }
             }
             if (SpecificAgglutination.Contains(agglutination) && (bexA == TestResult.Positive || bexA == TestResult.NotDetermined) &&
                 (agglutination.ToString() == serotypePcr.ToString() || serotypePcr == SerotypePcr.NotDetermined))
@@ -76,8 +80,11 @@ namespace HaemophilusWeb.Domain
                     interpretation =
                         $"Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {agglutinationDescription} (Hi{agglutinationDescription}).";
                 }
-                interpretationDisclaimer = string.Format(DisclaimerTemplate,
-                    $"Haemophilus influenzae, Serotyp {agglutinationDescription}");
+                if (isolate.Sending.Invasive == YesNo.Yes)
+                {
+                    interpretationDisclaimer = string.Format(DisclaimerTemplate,
+                        $"Haemophilus influenzae, Serotyp {agglutinationDescription}");
+                }
             }
 
             if (agglutination == SerotypeAgg.NotDetermined && serotypePcr == SerotypePcr.NotDetermined && bexA == TestResult.NotDetermined && growth != YesNoOptional.NotStated)
