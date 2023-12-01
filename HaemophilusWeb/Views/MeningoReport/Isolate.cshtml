@@ -8,8 +8,6 @@
     ViewBag.Title = "Befund erstellen";
 }
 
-@Scripts.Render("~/bundles/docxgen")
-
 <div class="modal fade" id="discrepantResultsModal">
     <div class="modal-dialog">
         <div class="modal-content panel-warning">
@@ -183,7 +181,7 @@
             loadFile(templateFile + "?nocache=" + Math.random(), function (error, content) {
                 if (error) { throw error };
                 var zip = new PizZip(content);
-                var doc = new window.Docxtemplater().loadZip(zip);
+                var doc = new window.docxtemplater().loadZip(zip);
                 doc.setData(documentData);
                 doc.setOptions({ linebreaks: true });
                 try {
