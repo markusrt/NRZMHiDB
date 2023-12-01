@@ -124,7 +124,7 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = isolateInterpretation.Interpret(isolate);
 
-            var expectedInterpretation = "Das Ergebnis spricht für einen nicht-typisierbaren Haemophilus influenzae (NTHi).";
+            var expectedInterpretation = "Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae (sog. \"nicht-typisierbarer\" H. influenzae, NTHi).";
             interpretation.Interpretation.Should().Be(expectedInterpretation + " Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.");
             interpretation.InterpretationPreliminary.Should().Be(expectedInterpretation);
         }

@@ -11,10 +11,10 @@ namespace HaemophilusWeb.Domain
             "Der Nachweis von Haemophilus influenzae aus primär sterilem Material ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: {0}.";
 
         private const string TypingNotPossiblePlural =
-            "Die Ergebnisse sprechen für einen nicht-typisierbaren Haemophilus influenzae (NTHi).";
+            "Die Ergebnisse sprechen für einen unbekapselten Haemophilus influenzae (sog. \"nicht-typisierbarer\" H. influenzae, NTHi).";
 
         private const string TypingNotPossibleSingular =
-            "Das Ergebnis spricht für einen nicht-typisierbaren Haemophilus influenzae (NTHi).";
+            "Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae (sog. \"nicht-typisierbarer\" H. influenzae, NTHi).";
 
         private const string TypingNotPossiblePlural2 =
             "Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren Haemophilus influenzae (NTHi).";
