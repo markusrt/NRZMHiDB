@@ -38,6 +38,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Typings.Should().BeEmpty();
             isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
+            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("sollte unmittelbar vor dem Versand in Transportmedien"));
             isolateInterpretation.Serogroup.Should().BeNull();
             isolateInterpretation.Rule.Should().Be("StemInterpretation_27");
             AssertNoMeningococciFlagIsValid(isolateInterpretation);
