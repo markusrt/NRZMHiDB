@@ -22,6 +22,11 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2023, 12, 1, 20, 30, 00), "Update Report Generator auf Version 3.42.2", ChangeType.Bug, DatabaseType.None),
+                new Change(new DateTime(2023, 11, 30, 21, 30, 00), "Kein Hinweis auf Meldepflicht bei nicht-invasiven Befunden", ChangeType.Feature),
+                new Change(new DateTime(2023, 11, 30, 21, 00, 00), "Update Befund NTHi", ChangeType.Feature),
+                new Change(new DateTime(2023, 11, 30, 20, 30, 00), "Neue Befundvorlage für 'Kein Wachstum' und 'Nicht Invasiv'", ChangeType.Feature),
+                new Change(new DateTime(2023, 11, 30, 20, 00, 00), "Update Befundvorlage für 'Kein Wachstum'", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2023, 11, 20, 21, 00, 00), "Entfernen des Standard Antibiotikas Imipenem, Export bleibt erhalten", ChangeType.Feature, DatabaseType.Haemophilus),
                 new Change(new DateTime(2023, 10, 8, 16, 00, 00), "Entfernen des Feldes ApiNH, Export bleibt erhalten", ChangeType.Feature, DatabaseType.Haemophilus),
                 new Change(new DateTime(2023, 10, 8, 12, 00, 00), "Sicherheitsupdate externer Bibiliotheken (JQuery, JQuery Validation, AspNet Identity, NLog, Moment.js, Datepicker)", ChangeType.Feature, DatabaseType.None),
