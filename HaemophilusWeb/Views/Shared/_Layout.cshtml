@@ -7,18 +7,26 @@
 @using HaemophilusWeb.Models
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Haemophilus Web - @ViewBag.Title</title>
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/jquerydatatable")
-        @Scripts.Render("~/bundles/bootstrap")
-        
-        @Scripts.Render("~/bundles/site")
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Haemophilus Web - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquerydatatable")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/site")
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.42.2/docxtemplater.min.js"
+            integrity="sha512-sL5pDgMKgwMw1bYxoGy9Qwx4+d0a9gmzqBwGsoyfmIxukymE06xe6QfFdriU8kv0xFSAeOKWMuPeVefLrWp1Jw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"
+            integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/pizzip@3.0.6/dist/pizzip.js"></script>
+    <script src="https://unpkg.com/pizzip@3.0.6/dist/pizzip-utils.js"></script>
+</head>
     <body>
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">

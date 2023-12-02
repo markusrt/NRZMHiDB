@@ -46,13 +46,6 @@ namespace HaemophilusWeb
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                 "~/Scripts/site.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/docxgen")
-                .Include("~/Scripts/base64.js")
-                .Include("~/Scripts/pizzip.js")
-                .Include("~/Scripts/pizzip-utils.js")
-                .Include("~/Scripts/FileSaver.js")
-                .Include("~/Scripts/docxtemplater.js"));
-
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/bootstrap-datetimepicker.css",

@@ -951,7 +951,6 @@
     <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.js" />
     <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
-    <Content Include="Scripts\docxtemplater.js" />
     <Content Include="Scripts\globalize.js" />
     <Content Include="Scripts\globalize\currency.js" />
     <Content Include="Scripts\globalize\date.js" />
@@ -969,6 +968,10 @@
     <Content Include="Scripts\cldr\supplemental\weekData.json" />
     <None Include="Properties\PublishProfiles\New Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\New Prod.pubxml" />
+    <Content Include="ReportTemplates\Fax - Kein Wachstum v1.docx" />
+    <Content Include="ReportTemplates\Fax - Nicht Invasiv v1.docx" />
+    <Content Include="ReportTemplates\Kein Wachstum v1.docx" />
+    <Content Include="ReportTemplates\Nicht Invasiv v1.docx" />
     <None Include="Scripts\jquery-3.7.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
@@ -985,8 +988,6 @@
     <Content Include="Scripts\moment-with-locales.min.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\pizzip-utils.js" />
-    <Content Include="Scripts\pizzip.js" />
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\dataTables.german.js" />
     <None Include="Properties\PublishProfiles\Prod Deploy.pubxml" />
@@ -1017,8 +1018,6 @@
     <Content Include="Images\logo2.png" />
     <Content Include="Images\logo3.png" />
     <Content Include="Scripts\base64.js" />
-    <Content Include="Scripts\docxgen.js" />
-    <Content Include="Scripts\FileSaver.js" />
     <Content Include="Scripts\jquery-browser.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />

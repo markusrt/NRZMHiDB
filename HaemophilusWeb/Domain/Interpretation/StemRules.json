@@ -89,7 +89,9 @@
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
     "Report": [
-      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden.",
+      "Um Neueinsendung wird gebeten.",
+      "Bitte beachten Sie hierzu: Möglichst viel Kulturmaterial einer frischen Übernachtkultur sollte unmittelbar vor dem Versand in Transportmedien (z.B. Amies Medium, Port-A-Cul, Port-A-Germ) eingebracht werden. Alternativ ist der Versand der Bakterien als frische Übernachtkultur auf Nähragar (Kochblutagar, Blutagar o.ä.) – am besten Schrägagar – möglich. Untersuchungsmaterial sollte wegen verlängerter Transportdauer nicht unmittelbar vor dem Wochenende oder vor Feiertagen abgeschickt werden."
     ],
     "Typings": [],
     "NoMeningococci": true
@@ -488,7 +490,9 @@
     "PorAPcr": "NotDetermined",
     "FetAPcr": "NotDetermined",
     "Report": [
-      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten."
+      "Der von Ihnen eingesandte Stamm konnte nicht angezüchtet werden.",
+      "Um Neueinsendung wird gebeten.",
+      "Bitte beachten Sie hierzu: Möglichst viel Kulturmaterial einer frischen Übernachtkultur sollte unmittelbar vor dem Versand in Transportmedien (z.B. Amies Medium, Port-A-Cul, Port-A-Germ) eingebracht werden. Alternativ ist der Versand der Bakterien als frische Übernachtkultur auf Nähragar (Kochblutagar, Blutagar o.ä.) – am besten Schrägagar – möglich. Untersuchungsmaterial sollte wegen verlängerter Transportdauer nicht unmittelbar vor dem Wochenende oder vor Feiertagen abgeschickt werden."
     ],
     "Typings": [],
     "NoMeningococci": true

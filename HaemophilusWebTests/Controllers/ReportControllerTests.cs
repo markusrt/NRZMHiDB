@@ -109,7 +109,7 @@ namespace HaemophilusWeb.Controllers
             var viewResult = controller.Isolate(IsolateId) as ViewResult;
 
             var model = viewResult.Model as IsolateViewModel;
-            model.InterpretationPreliminary.Should().Contain("Das Ergebnis spricht für einen nicht-typisierbaren Haemophilus influenzae (NTHi).");
+            model.InterpretationPreliminary.Should().Contain("Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae (sog. \"nicht-typisierbarer\" H. influenzae, NTHi).");
             model.InterpretationPreliminary.Should().NotContain("Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.");
             model.Interpretation.Should().Contain("Eine molekularbiologische Typisierung wurde aus epidemiologischen und Kostengründen nicht durchgeführt.");
         }
