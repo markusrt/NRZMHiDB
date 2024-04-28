@@ -292,6 +292,10 @@
     <Compile Include="Migrations\202305301958098_Sending_AutoInvasive.designer.cs">
       <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202312180600593_SendingBase_DemisId.cs" />
+    <Compile Include="Migrations\202312180600593_SendingBase_DemisId.designer.cs">
+      <DependentUpon>202312180600593_SendingBase_DemisId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
@@ -860,6 +864,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202305301958098_Sending_AutoInvasive.resx">
       <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202312180600593_SendingBase_DemisId.resx">
+      <DependentUpon>202312180600593_SendingBase_DemisId.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

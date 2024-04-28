@@ -26,12 +26,12 @@
         @Html.LabelFor(model => model.MeningoPatientId, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-5">
             <div class="input-group">
-                @Html.DropDownListFor(model => model.MeningoPatientId, ((IEnumerable<MeningoPatient>) ViewBag.PossiblePatients).Select(option => new SelectListItem
+                @Html.DropDownListFor(model => model.MeningoPatientId, ((IEnumerable<MeningoPatient>)ViewBag.PossiblePatients).Select(option => new SelectListItem
                 {
                     Text = (option == null ? "None" : option.Initials),
                     Value = option.PatientId.ToString(),
                     Selected = (Model != null) && (option.PatientId == Model.MeningoPatientId)
-                }), "Auswählen...", new {@class = "form-control"})
+                }), "Auswählen...", new { @class = "form-control" })
 
                 <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
             </div>
@@ -43,6 +43,8 @@
 @Html.DateEditorFor(m => m.ReceivingDate)
 
 @Html.DateEditorFor(m => m.SamplingDate)
+
+@Html.TextEditorFor(m => m.DemisId, icon: "glyphicon-qrcode")
 
 @Html.TextEditorFor(m => m.SenderLaboratoryNumber)
 

@@ -41,6 +41,9 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Labnr. Einsender")]
         public string SenderLaboratoryNumber { get; set; }
 
+        [Display(Name = "DEMIS ID")]
+        public Guid? DemisId { get; set; }
+
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
 

@@ -44,6 +44,8 @@
 
 @Html.DateEditorFor(m => m.SamplingDate)
 
+@Html.TextEditorFor(m => m.DemisId, icon: "glyphicon-qrcode")
+
 @Html.TextEditorFor(m => m.SenderLaboratoryNumber)
 
 @Html.EnumRadioEditorFor(m=>m.SamplingLocation)
