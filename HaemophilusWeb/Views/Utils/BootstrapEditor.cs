@@ -21,13 +21,15 @@ namespace HaemophilusWeb.Views.Utils
         private const string DivSmFive = "<div class=\"col-sm-5\">{0}{1}</div>";
         
         private const string RequiredTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-star\"></span></span></div>";
+        
+        private const string IconTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-addon\"><span class=\"glyphicon {1}\"></span></span></div>";
 
         private const string PrefixTemplate =   "<div class=\"input-group\"><span class=\"input-group-addon\">{1}</span>{0}</div>";
 
         private const string DateTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-calendar\"></span></span></div>";
 
         public static MvcHtmlString TextEditorFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TProperty>> expression, string placeholder = null, string prefix = null, string id = null, string smXClass = ColSm5)
+            Expression<Func<TModel, TProperty>> expression, string placeholder = null, string prefix = null, string id = null, string smXClass = ColSm5, string icon=null)
         {
             var label = htmlHelper.LabelFor(expression);
             var textBox = htmlHelper.TextBoxFor(expression, new {placeholder, @class = $"form-control"}).ToHtmlString();
@@ -39,7 +41,11 @@ namespace HaemophilusWeb.Views.Utils
             {
                 textBox = string.Format(RequiredTemplate, textBox);
             }
-            else if (!String.IsNullOrEmpty(prefix))
+            else if (!string.IsNullOrEmpty(icon))
+            {
+                textBox = string.Format(IconTemplate, textBox, icon);
+            }
+            else if (!string.IsNullOrEmpty(prefix))
             {
                 textBox = string.Format(PrefixTemplate, textBox, prefix);
             }
