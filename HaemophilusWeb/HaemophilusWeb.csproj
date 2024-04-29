@@ -296,6 +296,10 @@
     <Compile Include="Migrations\202312180600593_SendingBase_DemisId.designer.cs">
       <DependentUpon>202312180600593_SendingBase_DemisId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202404280859485_SendingBase_DemisId_To_String.cs" />
+    <Compile Include="Migrations\202404280859485_SendingBase_DemisId_To_String.designer.cs">
+      <DependentUpon>202404280859485_SendingBase_DemisId_To_String.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
@@ -867,6 +871,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202312180600593_SendingBase_DemisId.resx">
       <DependentUpon>202312180600593_SendingBase_DemisId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202404280859485_SendingBase_DemisId_To_String.resx">
+      <DependentUpon>202404280859485_SendingBase_DemisId_To_String.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2024, 04, 28), "DEMIS ID erlaubt alle Werte und nicht nur UUID", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2023, 12, 18), "Eingabefeld für DEMIS ID", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2023, 12, 1, 20, 30, 00), "Update Report Generator auf Version 3.42.2", ChangeType.Bug, DatabaseType.None),
                 new Change(new DateTime(2023, 11, 30, 21, 30, 00), "Kein Hinweis auf Meldepflicht bei nicht-invasiven Befunden", ChangeType.Feature),
