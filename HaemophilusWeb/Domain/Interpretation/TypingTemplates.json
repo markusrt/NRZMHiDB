@@ -97,7 +97,7 @@
   },
   "RealTimePCRNeisseriaMeningitidis": {
     "Attribute": "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)",
-    "Value": "Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer spezifischer Real-Time-PCR."
+    "Value": "Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR."
   },
   "RealTimePCRStreptococcusPneumoniae": {
     "Attribute": "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)",
