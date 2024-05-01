@@ -885,6 +885,36 @@ namespace HaemophilusWeb.Domain
             interpretation.Rule.Should().Be("StemInterpretation_41");
         }
 
+        [Test]
+        public void IsolateMatchingStemRule43_ReturnsCorrespondingInterpretation()
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.TypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.TypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = NonInvasiveSamplingLocation },
+                Oxidase = TestResult.Positive,
+                Agglutination = MeningoSerogroupAgg.NotDetermined,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Positive,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTof = UnspecificTestResult.NotDetermined,
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(
+                s => s.Contains("Anmerkung: Eine Serogruppenbestimmnung und eine Resistenztestung wurden aus epidemiologischen und Kostengründen nicht durchgeführt."));
+
+            interpretation.TypingAttribute("Identifikation").Should().Be("Neisseria meningitidis");
+
+            AssertNoMeningococciFlagIsValid(interpretation);
+            interpretation.Rule.Should().Be("StemInterpretation_43");
+        }
+
         [TestCase(Growth.No, MeningoSamplingLocation.Blood)]
         [TestCase(Growth.No, MeningoSamplingLocation.NasalSwab)]
         [TestCase(Growth.ATypicalGrowth, MeningoSamplingLocation.Blood)]

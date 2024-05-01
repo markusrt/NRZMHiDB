@@ -755,6 +755,24 @@
     ],
     "Typings": [ "NoAgglutinationBCWY", "PorA", "FetA" ]
   },
+  "StemInterpretation_43": {
+    "SendingInvasive": [ "No" ],
+    "GrowthOnBloodAgar": "TypicalGrowth",
+    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
+    "Oxidase": "Positive",
+    "Agglutination": [ "NotDetermined" ],
+    "Onpg": "Negative",
+    "GammaGt": [ "Positive" ],
+    "SerogroupPcr": [ "NotDetermined" ],
+    "MaldiTof": "NotDetermined",
+    "PorAPcr": "NotDetermined",
+    "FetAPcr": "NotDetermined",
+    "Identification": "Neisseria meningitidis",
+    "Report": [
+      "Anmerkung: Eine Serogruppenbestimmnung und eine Resistenztestung wurden aus epidemiologischen und Kostengründen nicht durchgeführt."
+    ],
+    "Typings": []
+  },
   "StemInterpretation_NoNM_01": {
     "GrowthOnBloodAgar": "ATypicalGrowth",
     "GrowthOnMartinLewisAgar": [ "No", "ATypicalGrowth" ],
