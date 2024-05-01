@@ -97,6 +97,15 @@ namespace HaemophilusWeb.Controllers
 
         protected override string IsolateControllerName => "MeningoIsolate";
 
+        protected override IEnumerable<MeningoSending> SendingsByPatient(int patientId)
+        {
+            var queryResult = NotDeletedSendings()
+                .Include(s => s.Patient)
+                .Include(s => s.Isolate)
+                .Where(s => s.MeningoPatientId == patientId);
+            return queryResult;
+        }
+
         protected override IEnumerable<MeningoSending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
             var queryResult = NotDeletedSendings()

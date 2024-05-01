@@ -56,6 +56,17 @@ namespace HaemophilusWeb.Utils
             return $"{patient.Initials} / {patient.PostalCode}";
         }
 
+        public static string ToReportFormatLong(this PatientBase patient)
+        {
+            return $"Patienten-Nr.: {patient.PatientId},  Initialen: {patient.Initials}, Geschlecht: {EnumUtils.GetEnumDescription<Gender>(patient.Gender)}, Postleitzahl: {patient.PostalCode}";
+        }
+
+        public static string ToReportFormat<TPatient>(this SendingBase<TPatient> sending)
+        {
+            return $"Labornummer: {sending.GetIsolate().LaboratoryNumberWithPrefix}, Labnr. Einsender: {sending.SenderLaboratoryNumber}, Eingangsdatum: {sending.ReceivingDate.ToReportFormat()}, {sending.GetIsolate()} ";
+        }
+
+
         public static string ToStemNumberWithPrefix(this int? stemNumber, DatabaseType databaseType = DatabaseType.None)
         {
             var stemNumberString = stemNumber.HasValue? stemNumber.ToString() : " -";

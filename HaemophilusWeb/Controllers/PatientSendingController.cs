@@ -83,6 +83,15 @@ namespace HaemophilusWeb.Controllers
 
         protected override string IsolateControllerName => "Isolate";
 
+        protected override IEnumerable<Sending> SendingsByPatient(int patientId)
+        {
+            var queryResult = NotDeletedSendings()
+                .Include(s => s.Patient)
+                .Include(s => s.Isolate)
+                .Where(s => s.PatientId == patientId);
+            return queryResult;
+        }
+
         protected override IEnumerable<Sending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
             var samplingLocations = exportType == ExportType.Rki || exportType == ExportType.Iris

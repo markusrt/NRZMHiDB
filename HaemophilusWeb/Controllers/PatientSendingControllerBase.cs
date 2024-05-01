@@ -85,6 +85,8 @@ namespace HaemophilusWeb.Controllers
             return SendingDbSet().Where(s => !s.Deleted);
         }
 
+        protected abstract IEnumerable<TSending> SendingsByPatient(int patientId);
+
         protected abstract IEnumerable<TSending> SendingsMatchingExportQuery(FromToQuery query, ExportType additionalFilters);
 
         protected abstract ExportDefinition<TSending> CreateRkiExportDefinition();
@@ -112,6 +114,13 @@ namespace HaemophilusWeb.Controllers
             var sendingResult = sendingController.Edit(id) as ViewResult;
             var sending = (TSending) sendingResult.Model;
             return sending;
+        }
+
+        protected TPatient LoadPatientFromPatientController(int? id)
+        {
+            var patientResult = patientController.Edit(id) as ViewResult;
+            var patient = (TPatient) patientResult.Model;
+            return patient;
         }
 
         [HttpPost]
@@ -289,6 +298,30 @@ namespace HaemophilusWeb.Controllers
             var sendings = SendingsMatchingExportQuery(query, ExportType.Laboratory).ToList();
             return ExportToExcel(query, sendings, CreateLaboratoryExportDefinition(), "Labor");
         }
+
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult MergePatient(MergePatientRequest mergeRequest)
+        {
+            if (mergeRequest.PatientOneId <= 0 || mergeRequest.PatientTwoId<=0)
+            {
+                return View(mergeRequest);
+            }
+
+            var sendingsOne = SendingsByPatient(mergeRequest.PatientOneId).ToList();
+            var sendingsTwo = SendingsByPatient(mergeRequest.PatientTwoId).ToList();
+            
+            var confirmation = new MergePatientConfirmation
+            {
+                PatientOne =  sendingsOne.First().Patient.ToReportFormatLong(),
+                PatientOneId = mergeRequest.PatientOneId,
+                PatientOneSendings = sendingsOne.Select(s => s.ToReportFormat()).ToList(),
+                PatientTwo =  sendingsTwo.First().Patient.ToReportFormatLong(),
+                PatientTwoId = mergeRequest.PatientOneId,
+                PatientTwoSendings = sendingsTwo.Select(s => s.ToReportFormat()).ToList(),
+            };
+            return View("MergePatientConfirmation", confirmation);
+        }
+
 
         [HttpPost]
         [Authorize(Roles = DefaultRoles.User)]

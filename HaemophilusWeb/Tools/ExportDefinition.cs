@@ -10,8 +10,7 @@ namespace HaemophilusWeb.Tools
 {
     public class ExportDefinition<T>
     {
-        private readonly List<Tuple<Expression<Func<T, object>>, string, Type>> exportedFields =
-            new List<Tuple<Expression<Func<T, object>>, string, Type>>();
+        private readonly List<Tuple<Func<T, object>, string, Type>> _exportedFields = new();
 
         public void AddField<TMember>(Expression<Func<T, TMember>> field)
         {
@@ -20,9 +19,11 @@ namespace HaemophilusWeb.Tools
 
         public void AddField<TMember>(Expression<Func<T, TMember>> field, string headerName)
         {
-            Expression<Func<T, object>> wrapExpression = arg => field.Compile()(arg);
-            exportedFields.Add(Tuple.Create(wrapExpression, headerName, typeof (TMember)));
+            var compiledField = field.Compile();
+            Func<T, object> wrappedExpression = arg => compiledField(arg);
+            _exportedFields.Add(Tuple.Create(wrappedExpression, headerName, typeof(TMember)));
         }
+
 
         protected void AddFieldOnPositiveTestResult<TMember>(Func<T, NativeMaterialTestResult> testResult, Func<T, TMember> field, string headerName)
         {
@@ -87,7 +88,7 @@ namespace HaemophilusWeb.Tools
 
         private void AddColumnDefinitions(DataTable dataTable)
         {
-            foreach (var exportedField in exportedFields)
+            foreach (var exportedField in _exportedFields)
             {
                 var header = exportedField.Item2;
                 var type = exportedField.Item3;
@@ -116,10 +117,10 @@ namespace HaemophilusWeb.Tools
         private void AddRow(DataTable dataTable, T entry)
         {
             var row = dataTable.NewRow();
-            foreach (var exportedField in exportedFields)
+            foreach (var exportedField in _exportedFields)
             {
                 var columnName = exportedField.Item2;
-                var expression = exportedField.Item1.Compile();
+                var expression = exportedField.Item1;
                 row[columnName] = expression(entry) ?? DBNull.Value;
             }
             dataTable.Rows.Add(row);

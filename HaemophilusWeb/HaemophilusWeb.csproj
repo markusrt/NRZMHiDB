@@ -605,6 +605,8 @@
     <Compile Include="Validators\SendingValidator.cs" />
     <Compile Include="ViewModels\EpsilometerTestReportModel.cs" />
     <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
+    <Compile Include="ViewModels\MergePatientConfirmation.cs" />
+    <Compile Include="ViewModels\MergePatientRequest.cs" />
     <Compile Include="ViewModels\IsolateViewModel.cs" />
     <Compile Include="ViewModels\MeningoIsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
@@ -1049,6 +1051,8 @@
     <Content Include="Views\MeningoSender\Export.cshtml" />
     <Content Include="Scripts\moment.min.js.map" />
     <Content Include="Scripts\moment-with-locales.min.js.map" />
+    <Content Include="Views\MeningoPatientSending\MergePatient.cshtml" />
+    <Content Include="Views\MeningoPatientSending\MergePatientConfirmation.cshtml" />
     <None Include="Web.template.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>
