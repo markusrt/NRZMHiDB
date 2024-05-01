@@ -9,7 +9,7 @@ namespace HaemophilusWeb.Tools
 {
     public class HaemophilusPubMlstExportTests
     {
-        private IEnumerable<Sending> Sendings => new List<Sending> {Sending};
+        private List<Sending> Sendings;
 
         private Sending Sending { get; set; }
 
@@ -17,6 +17,7 @@ namespace HaemophilusWeb.Tools
         public void Setup()
         {
             Sending  = MockData.CreateInstance<Sending>();
+            Sendings = new List<Sending> {Sending};
             Sending.Isolate.EpsilometerTests.Clear();
             Sending.Isolate.EpsilometerTests.Add(MockData.CreateInstance<EpsilometerTest>());
         }
