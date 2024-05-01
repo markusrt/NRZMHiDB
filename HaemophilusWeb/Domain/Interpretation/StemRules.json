@@ -716,24 +716,6 @@
     "Typings": [ "AgglutinationAutoNonInvasive", "PorA", "FetA" ],
     "Comment": "Die technische Durchführung der Sequenzierung erfolgte durch den Unterauftragnehmer Microsynth Seqlab."
   },
-  "StemInterpretation_39": {
-    "SendingInvasive": [ "No" ],
-    "GrowthOnBloodAgar": "TypicalGrowth",
-    "GrowthOnMartinLewisAgar": [ "TypicalGrowth" ],
-    "Oxidase": "Positive",
-    "Agglutination": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
-    "Onpg": "Negative",
-    "GammaGt": [ "Positive" ],
-    "SerogroupPcr": [ "A", "B", "C", "E", "W", "X", "Y", "Z", "WY" ],
-    "MaldiTof": "NotDetermined",
-    "PorAPcr": "NotDetermined",
-    "FetAPcr": "NotDetermined",
-    "Identification": "Neisseria meningitidis",
-    "Report": [
-      "Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."
-    ],
-    "Typings": [ "Agglutination" ]
-  },
   "StemInterpretation_40": {
     "SendingInvasive": [ "No" ],
     "GrowthOnBloodAgar": "TypicalGrowth",

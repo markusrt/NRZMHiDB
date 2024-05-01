@@ -787,7 +787,7 @@ namespace HaemophilusWeb.Domain
         }
 
         [Test]
-        public void IsolateMatchingStemRule39_ReturnsCorrespondingInterpretation()
+        public void IsolateMatchingStemRule39_ReturnsInconclusiveAsRuleWasRemoved()
         {
             var interpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -808,14 +808,7 @@ namespace HaemophilusWeb.Domain
             interpretation.Interpret(isolate);
 
             interpretation.Result.Report.Should().Contain(
-                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
-
-            interpretation.TypingAttribute("Identifikation").Should().Be("Neisseria meningitidis");
-            interpretation.TypingAttribute("Serogruppe").Should().Be("C");
-            interpretation.Serogroup.Should().Be("C");
-            
-            AssertNoMeningococciFlagIsValid(interpretation);
-            interpretation.Rule.Should().Be("StemInterpretation_39");
+                s => s.Contains("Diskrepante Ergebnisse"));
         }
 
         [TestCase(MeningoSerogroupAgg.Negative, MeningoSerogroupPcr.B)]
