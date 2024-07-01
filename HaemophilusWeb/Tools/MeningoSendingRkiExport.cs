@@ -15,6 +15,7 @@ namespace HaemophilusWeb.Tools
 
         public MeningoSendingRkiExport(IReadOnlyCollection<County> counties)
         {
+            var col = new RkiExportColumns();
             var emptyCounty = new County { CountyNumber = "" };
             Func<MeningoSending, County> findCounty =
                 s =>
@@ -66,6 +67,8 @@ namespace HaemophilusWeb.Tools
             AddPubMsltProperty(RpoB, _ => _.RpoB);
             AddPubMsltProperty(SequenceType, _ => _.SequenceType);
             AddPubMsltProperty(ClonalComplex, _ => _.ClonalComplex);
+
+            AddField(s => ExportToString(s.DemisId), col.DemisId);
         }
 
         private void AddPubMsltProperty(string header, Func<NeisseriaPubMlstIsolate, object> property, string nullValue=null)

@@ -21,6 +21,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => s.ReceivingDate.ToReportFormat());
             AddField(s => s.SamplingDate.ToReportFormat());
             AddField(s => s.SenderLaboratoryNumber);
+            AddField(s => s.DemisId);
             AddField(s => ExportSamplingLocation(s.SamplingLocation, s));
             AddField(s => ExportToString(s.Material));
             AddField(s => ExportToString(s.Invasive));

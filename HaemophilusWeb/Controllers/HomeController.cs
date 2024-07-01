@@ -22,6 +22,9 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2024, 06, 30), "Stämme: Update Regel 43", ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2024, 06, 20, 8, 30, 0), "Deutlich schnellere Exporte", ChangeType.Bug, DatabaseType.None),
+                new Change(new DateTime(2024, 06, 20, 8, 0, 0), "Erweiterung der Exporte um Demis ID", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2024, 05, 19), "Stämme: Neue Regel 43 und 39 gelöscht, PCRs: Änderung Regel 3 und 25-31", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2024, 04, 28), "DEMIS ID erlaubt alle Werte und nicht nur UUID", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2023, 12, 18), "Eingabefeld für DEMIS ID", ChangeType.Feature, DatabaseType.None),

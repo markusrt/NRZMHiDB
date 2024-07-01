@@ -24,5 +24,6 @@
         public string AmxSir => "ampicillinBewertung";
         public string AmcMic => "amoxicillinClavulansaeureMHK";
         public string AmcSir => "bewertungAmoxicillinClavulansaeure";
+        public string DemisId => "demis_id";
     }
 }

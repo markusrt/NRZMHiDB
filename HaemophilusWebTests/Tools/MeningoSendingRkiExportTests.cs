@@ -50,7 +50,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(34);
+            export.Columns.Count.Should().Be(35);
         }
 
         [Test]
@@ -77,6 +77,26 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["PorA VR1"].Should().Be(Sending.Isolate.PorAVr1);
             export.Rows[0]["PorA VR2"].Should().Be(Sending.Isolate.PorAVr2);
             export.Rows[0]["FetA VR"].Should().Be(Sending.Isolate.FetAVr);
+            export.Rows[0]["demis_id"].Should().Be(Sending.DemisId);
+        }
+
+        [Test]
+        public void DataTable_SupportsNullForSimpleProperties()
+        {
+            var sut = CreateExportDefinition();
+            Sending.DemisId = null;
+            Sending.Isolate.PorAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.PorAVr1 = null;
+            Sending.Isolate.PorAVr2 = null;
+            Sending.Isolate.FetAPcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.FetAVr = null;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["PorA VR1"].Should().Be("");
+            export.Rows[0]["PorA VR2"].Should().Be("");
+            export.Rows[0]["FetA VR"].Should().Be("");
+            export.Rows[0]["demis_id"].Should().Be("");
         }
 
         [Test]
