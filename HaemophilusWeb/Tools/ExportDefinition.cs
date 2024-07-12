@@ -10,7 +10,7 @@ namespace HaemophilusWeb.Tools
 {
     public class ExportDefinition<T>
     {
-        private readonly List<Tuple<Func<T, object>, string, Type>> _exportedFields = new();
+        private readonly List<Tuple<Func<T, object>, string, Type>> exportedFields = new();
 
         public void AddField<TMember>(Expression<Func<T, TMember>> field)
         {
@@ -21,7 +21,7 @@ namespace HaemophilusWeb.Tools
         {
             var compiledField = field.Compile();
             Func<T, object> wrappedExpression = arg => compiledField(arg);
-            _exportedFields.Add(Tuple.Create(wrappedExpression, headerName, typeof(TMember)));
+            exportedFields.Add(Tuple.Create(wrappedExpression, headerName, typeof(TMember)));
         }
 
 
@@ -88,7 +88,7 @@ namespace HaemophilusWeb.Tools
 
         private void AddColumnDefinitions(DataTable dataTable)
         {
-            foreach (var exportedField in _exportedFields)
+            foreach (var exportedField in exportedFields)
             {
                 var header = exportedField.Item2;
                 var type = exportedField.Item3;
@@ -117,7 +117,7 @@ namespace HaemophilusWeb.Tools
         private void AddRow(DataTable dataTable, T entry)
         {
             var row = dataTable.NewRow();
-            foreach (var exportedField in _exportedFields)
+            foreach (var exportedField in exportedFields)
             {
                 var columnName = exportedField.Item2;
                 var expression = exportedField.Item1;

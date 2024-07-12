@@ -907,7 +907,7 @@ namespace HaemophilusWeb.Domain
             interpretation.Interpret(isolate);
 
             interpretation.Result.Report.Should().Contain(
-                s => s.Contains("Anmerkung: Eine Serogruppenbestimmnung und eine Resistenztestung wurden aus epidemiologischen und Kostengründen nicht durchgeführt."));
+                s => s.Contains("Anmerkung: Aus Kostengründen werden bei nicht-invasiven Isolaten keine Serogruppenbestimmungen und Resistenztestungen durchgeführt."));
 
             interpretation.TypingAttribute("Identifikation").Should().Be("Neisseria meningitidis");
 

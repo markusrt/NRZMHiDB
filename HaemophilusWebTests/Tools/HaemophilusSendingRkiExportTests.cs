@@ -54,7 +54,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
             
-            export.Columns.Count.Should().Be(22);
+            export.Columns.Count.Should().Be(23);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
             
             duplicatePatientResolver.RemovePatientData(export);
-            export.Columns.Count.Should().Be(19);
+            export.Columns.Count.Should().Be(20);
         }
 
         [TestCase(SamplingLocation.OtherInvasive)]
@@ -108,6 +108,28 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["amoxicillinClavulansaeureMHK"].Should().Be(0.75);
             export.Rows[0]["bewertungAmoxicillinClavulansaeure"].Should().Be("sensibel");
         }
+
+        [Test]
+        public void DataTable_ContainsSimpleProperties()
+        {
+            var sut = CreateExportDefinition();
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["demis_id"].Should().Be(Sending.DemisId);
+        }
+
+        [Test]
+        public void DataTable_SupportsNullForSimpleProperties()
+        {
+            var sut = CreateExportDefinition();
+            Sending.DemisId = null;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["demis_id"].Should().Be("");
+        }
+
 
         private HaemophilusSendingRkiExport CreateExportDefinition()
         {

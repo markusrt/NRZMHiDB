@@ -37,6 +37,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Patient.State), col.State);
             AddEpsilometerTestFields(this, Antibiotic.Ampicillin, false, col.AmxMic, col.AmxSir);
             AddEpsilometerTestFields(this, Antibiotic.AmoxicillinClavulanate, false, col.AmcMic, col.AmcSir);
+            AddField(s => ExportToString(s.DemisId), col.DemisId);
 
         }
 
