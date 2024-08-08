@@ -63,7 +63,7 @@ namespace HaemophilusWeb.Utils
 
         public static string ToReportFormat<TPatient>(this SendingBase<TPatient> sending)
         {
-            return $"Labornummer: {sending.GetIsolate().LaboratoryNumberWithPrefix}, Labnr. Einsender: {sending.SenderLaboratoryNumber}, Eingangsdatum: {sending.ReceivingDate.ToReportFormat()}, {sending.GetIsolate()} ";
+            return $"Labornummer: {sending.GetIsolate().LaboratoryNumberWithPrefix}, Labnr. Einsender: {sending.SenderLaboratoryNumber}, Eingangsdatum: {sending.ReceivingDate.ToReportFormat()}, Stammnummer: {sending.GetIsolate().StemNumberWithPrefix}";
         }
 
 

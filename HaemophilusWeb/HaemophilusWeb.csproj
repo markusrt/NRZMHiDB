@@ -600,6 +600,7 @@
     <Compile Include="Validators\EucastClinicalBreakpointValidator.cs" />
     <Compile Include="Validators\HealthOfficeValidator.cs" />
     <Compile Include="Validators\MeningoPatientValidator.cs" />
+    <Compile Include="Validators\MergePatientRequestValidator.cs" />
     <Compile Include="Validators\PatientValidator.cs" />
     <Compile Include="Validators\MeningoSendingValidator.cs" />
     <Compile Include="Validators\SendingValidator.cs" />
@@ -1053,6 +1054,7 @@
     <Content Include="Scripts\moment-with-locales.min.js.map" />
     <Content Include="Views\MeningoPatientSending\MergePatient.cshtml" />
     <Content Include="Views\MeningoPatientSending\MergePatientConfirmation.cshtml" />
+    <Content Include="Views\MeningoPatientSending\MergePatientSuccess.cshtml" />
     <None Include="Web.template.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>

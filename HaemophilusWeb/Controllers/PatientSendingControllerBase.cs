@@ -7,6 +7,7 @@ using System.Text;
 using System.Web.Mvc;
 using DataTables.Mvc;
 using FluentValidation;
+using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Tools;
 using HaemophilusWeb.Utils;
@@ -302,14 +303,27 @@ namespace HaemophilusWeb.Controllers
         [Authorize(Roles = DefaultRoles.User)]
         public ActionResult MergePatient(MergePatientRequest mergeRequest)
         {
-            if (mergeRequest.PatientOneId <= 0 || mergeRequest.PatientTwoId<=0)
+            if (!ModelState.IsValid)
             {
                 return View(mergeRequest);
             }
 
             var sendingsOne = SendingsByPatient(mergeRequest.PatientOneId).ToList();
+            if (!sendingsOne.Any())
+            {
+                ModelState.AddModelError(nameof(MergePatientRequest.PatientOneId), "Unbekannter Patient");
+            }
             var sendingsTwo = SendingsByPatient(mergeRequest.PatientTwoId).ToList();
-            
+            if (!sendingsTwo.Any())
+            {
+                ModelState.AddModelError(nameof(MergePatientRequest.PatientTwoId), "Unbekannter Patient");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(mergeRequest);
+            }
+
             var confirmation = new MergePatientConfirmation
             {
                 PatientOne =  sendingsOne.First().Patient.ToReportFormatLong(),
@@ -318,8 +332,19 @@ namespace HaemophilusWeb.Controllers
                 PatientTwo =  sendingsTwo.First().Patient.ToReportFormatLong(),
                 PatientTwoId = mergeRequest.PatientOneId,
                 PatientTwoSendings = sendingsTwo.Select(s => s.ToReportFormat()).ToList(),
+                MainPatient = mergeRequest.MainPatient,
+                Confirmation = true
             };
-            return View("MergePatientConfirmation", confirmation);
+
+            if (!mergeRequest.Confirmation)
+            {
+                return View("MergePatientConfirmation", confirmation);
+            }
+            else
+            {
+                return View("MergePatientSuccess", confirmation);
+            }
+           
         }
 
 

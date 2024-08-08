@@ -1,19 +1,22 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using HaemophilusWeb.Models;
+using FluentValidation.Attributes;
+using HaemophilusWeb.Validators;
 
 namespace HaemophilusWeb.ViewModels
 {
+    [Validator(typeof (MergePatientRequestValidator))]
     public class MergePatientRequest
     {
         [Display(Name = "Patienten-Nr. 1")]
-        [Required]
-        [Range(1, int.MaxValue)]
         public int PatientOneId { get; set; }
 
         [Display(Name = "Patienten-Nr. 2")]
-        [Required]
-        [Range(1, int.MaxValue)]
         public int PatientTwoId { get; set; }
+
+        [Display(Name = "Zusammenfügen zu")]
+        public MainPatientSelector MainPatient { get; set; } 
+
+        public bool Confirmation { get; set; }
     }
 }

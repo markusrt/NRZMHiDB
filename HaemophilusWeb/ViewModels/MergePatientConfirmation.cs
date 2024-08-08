@@ -7,13 +7,11 @@ using HaemophilusWeb.Models;
 
 namespace HaemophilusWeb.ViewModels
 {
-    public class MergePatientConfirmation
+    public class MergePatientConfirmation : MergePatientRequest
     {
         [Display(Name = "Patient 1")]
         public string PatientOne { get; set; }
 
-        public int PatientOneId { get; set; }
-        
         [Display(Name = "Einsendungen Patient 1")]
         public List<string> PatientOneSendings { get; set; }
 
@@ -23,10 +21,6 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Einsendungen Patient 2")]
         public List<string> PatientTwoSendings { get; set; }
 
-        public int PatientTwoId { get; set; }
-        
-        [Display(Name = "Zusammenfügen zu")]
-        public MainPatientSelector MainPatient { get; set; }
     }
 
     public enum MainPatientSelector
