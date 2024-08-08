@@ -1055,6 +1055,9 @@
     <Content Include="Views\MeningoPatientSending\MergePatient.cshtml" />
     <Content Include="Views\MeningoPatientSending\MergePatientConfirmation.cshtml" />
     <Content Include="Views\MeningoPatientSending\MergePatientSuccess.cshtml" />
+    <Content Include="Views\PatientSending\MergePatient.cshtml" />
+    <Content Include="Views\PatientSending\MergePatientConfirmation.cshtml" />
+    <Content Include="Views\PatientSending\MergePatientSuccess.cshtml" />
     <None Include="Web.template.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>

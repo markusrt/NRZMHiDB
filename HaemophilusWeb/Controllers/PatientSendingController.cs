@@ -92,6 +92,19 @@ namespace HaemophilusWeb.Controllers
             return queryResult;
         }
 
+        protected override void MergePatients(int patientIdToKeep, int patientIdToDelete)
+        {
+            var sendingsToMigrate = SendingsByPatient(patientIdToDelete);
+            foreach (var sending in sendingsToMigrate)
+            {
+                sending.PatientId = patientIdToKeep;
+            }
+
+            var patientToDelete = PatientDbSet().Find(patientIdToDelete);
+            PatientDbSet().Remove(patientToDelete);
+            db.SaveChanges();
+        }
+
         protected override IEnumerable<Sending> SendingsMatchingExportQuery(FromToQuery query, ExportType exportType)
         {
             var samplingLocations = exportType == ExportType.Rki || exportType == ExportType.Iris

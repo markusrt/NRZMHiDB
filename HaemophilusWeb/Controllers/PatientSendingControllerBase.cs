@@ -87,6 +87,8 @@ namespace HaemophilusWeb.Controllers
         }
 
         protected abstract IEnumerable<TSending> SendingsByPatient(int patientId);
+        
+        protected abstract void MergePatients(int patientIdToKeep, int patientIdToDelete);
 
         protected abstract IEnumerable<TSending> SendingsMatchingExportQuery(FromToQuery query, ExportType additionalFilters);
 
@@ -340,10 +342,17 @@ namespace HaemophilusWeb.Controllers
             {
                 return View("MergePatientConfirmation", confirmation);
             }
+
+            if (mergeRequest.MainPatient == MainPatientSelector.PatientOne)
+            {
+                MergePatients(mergeRequest.PatientOneId, mergeRequest.PatientTwoId);
+            }
             else
             {
-                return View("MergePatientSuccess", confirmation);
+                MergePatients(mergeRequest.PatientTwoId, mergeRequest.PatientOneId);
             }
+            
+            return View("MergePatientSuccess", confirmation);
            
         }
 

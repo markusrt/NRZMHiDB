@@ -9,7 +9,7 @@ namespace HaemophilusWeb.Validators
         public MergePatientRequestValidator()
         {
             RuleFor(m => m.PatientOneId).NotEqual(m => m.PatientTwoId)
-                .WithMessage("Das Zusammenfügen funktioniert nur mit unterschiedlichen Patientennummern");
+                .WithMessage("Bitte geben Sie zum Zusammenfügen zwei verschiedenen Patientennummern ein");
         }
     }
 }
