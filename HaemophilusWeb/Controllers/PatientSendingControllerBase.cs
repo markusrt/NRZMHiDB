@@ -7,6 +7,7 @@ using System.Text;
 using System.Web.Mvc;
 using DataTables.Mvc;
 using FluentValidation;
+using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Tools;
 using HaemophilusWeb.Utils;
@@ -85,6 +86,10 @@ namespace HaemophilusWeb.Controllers
             return SendingDbSet().Where(s => !s.Deleted);
         }
 
+        protected abstract IEnumerable<TSending> SendingsByPatient(int patientId);
+        
+        protected abstract void MergePatients(int patientIdToKeep, int patientIdToDelete);
+
         protected abstract IEnumerable<TSending> SendingsMatchingExportQuery(FromToQuery query, ExportType additionalFilters);
 
         protected abstract ExportDefinition<TSending> CreateRkiExportDefinition();
@@ -112,6 +117,13 @@ namespace HaemophilusWeb.Controllers
             var sendingResult = sendingController.Edit(id) as ViewResult;
             var sending = (TSending) sendingResult.Model;
             return sending;
+        }
+
+        protected TPatient LoadPatientFromPatientController(int? id)
+        {
+            var patientResult = patientController.Edit(id) as ViewResult;
+            var patient = (TPatient) patientResult.Model;
+            return patient;
         }
 
         [HttpPost]
@@ -289,6 +301,61 @@ namespace HaemophilusWeb.Controllers
             var sendings = SendingsMatchingExportQuery(query, ExportType.Laboratory).ToList();
             return ExportToExcel(query, sendings, CreateLaboratoryExportDefinition(), "Labor");
         }
+
+        [Authorize(Roles = DefaultRoles.User)]
+        public ActionResult MergePatient(MergePatientRequest mergeRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(mergeRequest);
+            }
+
+            var sendingsOne = SendingsByPatient(mergeRequest.PatientOneId).ToList();
+            if (!sendingsOne.Any())
+            {
+                ModelState.AddModelError(nameof(MergePatientRequest.PatientOneId), "Unbekannter Patient");
+            }
+            var sendingsTwo = SendingsByPatient(mergeRequest.PatientTwoId).ToList();
+            if (!sendingsTwo.Any())
+            {
+                ModelState.AddModelError(nameof(MergePatientRequest.PatientTwoId), "Unbekannter Patient");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(mergeRequest);
+            }
+
+            var confirmation = new MergePatientConfirmation
+            {
+                PatientOne =  sendingsOne.First().Patient.ToReportFormatLong(),
+                PatientOneId = mergeRequest.PatientOneId,
+                PatientOneSendings = sendingsOne.Select(s => s.ToReportFormat()).ToList(),
+                PatientTwo =  sendingsTwo.First().Patient.ToReportFormatLong(),
+                PatientTwoId = mergeRequest.PatientOneId,
+                PatientTwoSendings = sendingsTwo.Select(s => s.ToReportFormat()).ToList(),
+                MainPatient = mergeRequest.MainPatient,
+                Confirmation = true
+            };
+
+            if (!mergeRequest.Confirmation)
+            {
+                return View("MergePatientConfirmation", confirmation);
+            }
+
+            if (mergeRequest.MainPatient == MainPatientSelector.PatientOne)
+            {
+                MergePatients(mergeRequest.PatientOneId, mergeRequest.PatientTwoId);
+            }
+            else
+            {
+                MergePatients(mergeRequest.PatientTwoId, mergeRequest.PatientOneId);
+            }
+            
+            return View("MergePatientSuccess", confirmation);
+           
+        }
+
 
         [HttpPost]
         [Authorize(Roles = DefaultRoles.User)]

@@ -1,0 +1,57 @@
+﻿@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.MergePatientConfirmation
+
+@{
+    ViewBag.Title = "Patienten Zusammenfügen (Haemophilus)";
+}
+
+<h3>Bestätigung</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(m => m.PatientOneId)
+    @Html.HiddenFor(m => m.PatientTwoId)
+    @Html.HiddenFor(m => m.Confirmation)
+
+    @Html.ReadonlyFor(m => m.PatientOne, smXClass: "col-sm-10")
+    <div class="form-group">
+        <div class="col-sm-2 control-label">@Html.LabelFor(m => m.PatientOneSendings)</div>
+        <div class="col-sm-10 form-control-static">
+            <ul>
+                @foreach (var sending in Model.PatientOneSendings)
+                {
+                    <li>@sending</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <hr />
+    @Html.ReadonlyFor(m => m.PatientTwo, smXClass: "col-sm-10")
+    <div class="form-group">
+        <div class="col-sm-2 control-label">@Html.LabelFor(m => m.PatientTwoSendings)</div>
+        <div class="col-sm-10 form-control-static">
+            <ul>
+                @foreach (var sending in Model.PatientTwoSendings)
+                {
+                    <li>@sending</li>
+                }
+            </ul>
+        </div>
+    </div>
+    <hr />
+    @Html.EnumRadioEditorFor(m => m.MainPatient)
+    <hr />
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" name="primary-submit" value="Zusammenfügen und doppelten Patienten löschen" class="btn btn-danger" />
+            @Html.ActionLink("Abbrechen", "MergePatient", "MeningoPatientSending", null, new { @class = "btn btn-secondary" })
+        </div>
+    </div>
+</div>
+}
+

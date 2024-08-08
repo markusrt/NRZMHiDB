@@ -24,6 +24,7 @@ namespace HaemophilusWeb.Tools
             exportedFields.Add(Tuple.Create(wrappedExpression, headerName, typeof(TMember)));
         }
 
+
         protected void AddFieldOnPositiveTestResult<TMember>(Func<T, NativeMaterialTestResult> testResult, Func<T, TMember> field, string headerName)
         {
             AddField(s => testResult(s) == NativeMaterialTestResult.Positive 
