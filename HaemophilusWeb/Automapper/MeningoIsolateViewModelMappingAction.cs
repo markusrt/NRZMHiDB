@@ -1,4 +1,8 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Net;
 using AutoMapper;
 using HaemophilusWeb.Domain;
@@ -7,6 +11,7 @@ using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
 using HaemophilusWeb.Views.Utils;
+using QRCoder;
 
 namespace HaemophilusWeb.Automapper
 {
@@ -48,6 +53,16 @@ namespace HaemophilusWeb.Automapper
             destination.Comment = isolateInterpretation.Result.Comment;
             destination.Announcement = ConfigurationManager.AppSettings["Announcement"];
 
+            if (!string.IsNullOrEmpty(source.Sending.DemisId))
+            {
+                var qrGenerator = new QRCodeGenerator();
+                var qrCodeData = qrGenerator.CreateQrCode(source.Sending.DemisId, QRCodeGenerator.ECCLevel.Q);
+                var qrCode = new QRCode(qrCodeData);
+                var qrCodeAsBitmap = qrCode.GetGraphic(10);
+                var base64String = Convert.ToBase64String(ImageToByteArray(qrCodeAsBitmap));
+                destination.DemisIdQrImageUrl = "data:image/png;base64," + base64String;
+            }
+
             var sender = db.Senders.Find(source.Sending.SenderId);
             if (sender != null) // special case for Meningo as old senders were not imported
             {
@@ -65,6 +80,13 @@ namespace HaemophilusWeb.Automapper
 
             destination.EpsilometerTests =
                 EpsilometerTestsViewModelToModel(source.EpsilometerTestViewModels);
+        }
+
+        private byte[] ImageToByteArray(Image image)
+        {
+            using var memoryStream = new MemoryStream();
+            image.Save(memoryStream, ImageFormat.Png);
+            return memoryStream.ToArray();
         }
 
         private void SetSendingNoGrowthAccordingToGrowthOnAgar(MeningoIsolateViewModel source, MeningoIsolate destination)
