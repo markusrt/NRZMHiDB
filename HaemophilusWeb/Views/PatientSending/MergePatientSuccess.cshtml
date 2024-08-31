@@ -1,0 +1,58 @@
+﻿@using HaemophilusWeb.ViewModels
+@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.MergePatientConfirmation
+
+@{
+    ViewBag.Title = "Patienten Zusammenfügen (Haemophilus)";
+}
+
+<h3>Erfolgreich</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+
+    @Html.ReadonlyFor(m => m.PatientOne, smXClass: "col-sm-10")
+    <div class="form-group">
+        <div class="col-sm-2 control-label"><span class="glyphicon glyphicon-ok-sign"></span></div>
+        <div class="col-sm-10 form-control-static">
+            @if (Model.MainPatient == MainPatientSelector.PatientOne)
+            {
+                <div>Alle Einsendungen wurden diesem Patienten zugeordnet.</div>
+            }
+            else
+            {
+                <div>Der Patient wurde gelöscht.</div>
+            }
+        </div>
+    </div>
+
+    <hr />
+    
+    @Html.ReadonlyFor(m => m.PatientTwo, smXClass: "col-sm-10")
+    <div class="form-group">
+        <div class="col-sm-2 control-label"><span class="glyphicon glyphicon-ok-sign"></span></div>
+        <div class="col-sm-10 form-control-static">
+            @if (Model.MainPatient == MainPatientSelector.PatientTwo)
+            {
+                <div>Alle Einsendungen wurden diesem Patienten zugeordnet.</div>
+            }
+            else
+            {
+                <div>Der Patient wurde gelöscht.</div>
+            }
+        </div>
+    </div>
+    
+    <hr />
+    
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            @Html.ActionLink("Zurück zur Übersicht", "Index", "MeningoPatientSending", null, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+</div>
+}
+

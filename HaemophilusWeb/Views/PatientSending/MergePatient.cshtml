@@ -1,0 +1,27 @@
+﻿@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.MergePatientRequest
+
+@{
+    ViewBag.Title = "Patienten Zusammenfügen (Haemophilus)";
+}
+
+<h3>Patientennummern</h3>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true)
+
+        @Html.TextEditorFor(m => m.PatientOneId)
+        @Html.TextEditorFor(m => m.PatientTwoId)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" name="primary-submit" value="Zusammenfügen vorbereiten" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+

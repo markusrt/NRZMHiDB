@@ -22,6 +22,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2024, 08, 10), "Update Kopfzeile Befundvorlagen", ChangeType.Feature, DatabaseType.None),
+                new Change(new DateTime(2024, 08, 8), "Maske zum Zusammenfügen von Patienten", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2024, 06, 30), "Stämme: Update Regel 43", ChangeType.Feature, DatabaseType.Meningococci),
                 new Change(new DateTime(2024, 06, 20, 8, 30, 0), "Deutlich schnellere Exporte", ChangeType.Bug, DatabaseType.None),
                 new Change(new DateTime(2024, 06, 20, 8, 0, 0), "Erweiterung der Exporte um Demis ID", ChangeType.Feature, DatabaseType.None),
