@@ -55,12 +55,7 @@ namespace HaemophilusWeb.Automapper
 
             if (!string.IsNullOrEmpty(source.Sending.DemisId))
             {
-                var qrGenerator = new QRCodeGenerator();
-                var qrCodeData = qrGenerator.CreateQrCode(source.Sending.DemisId, QRCodeGenerator.ECCLevel.Q);
-                var qrCode = new QRCode(qrCodeData);
-                var qrCodeAsBitmap = qrCode.GetGraphic(10);
-                var base64String = Convert.ToBase64String(ImageToByteArray(qrCodeAsBitmap));
-                destination.DemisIdQrImageUrl = "data:image/png;base64," + base64String;
+                destination.DemisIdQrImageUrl = GenerateQrImageUrl(source.Sending.DemisId);
             }
 
             var sender = db.Senders.Find(source.Sending.SenderId);
@@ -80,13 +75,6 @@ namespace HaemophilusWeb.Automapper
 
             destination.EpsilometerTests =
                 EpsilometerTestsViewModelToModel(source.EpsilometerTestViewModels);
-        }
-
-        private byte[] ImageToByteArray(Image image)
-        {
-            using var memoryStream = new MemoryStream();
-            image.Save(memoryStream, ImageFormat.Png);
-            return memoryStream.ToArray();
         }
 
         private void SetSendingNoGrowthAccordingToGrowthOnAgar(MeningoIsolateViewModel source, MeningoIsolate destination)

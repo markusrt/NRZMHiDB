@@ -61,6 +61,20 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.Invasive.Should().Be(expectedInvasive);
         }
 
+        [Test]
+        public void ProcessModelToViewModel_PopulatesDemisIdImageUrl()
+        {
+            var sut = new IsolateViewModelMappingAction();
+            var isolateViewModel = new IsolateViewModel();
+            var isolate = CreateEmptyIsolate();
+            isolate.Sending.DemisId = "aa8fbf39-5cec-4000-9361-a2023a9a013c";
+
+            sut.Process(isolate, isolateViewModel);
+
+            isolateViewModel.DemisIdQrImageUrl.Should().StartWith("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaCAYAAAA2BoVjAAAA");
+            isolateViewModel.DemisIdQrImageUrl.Should().EndWith("/aNZaa31qf2jWWmt9an9o1lprfWp/aNZaa33of//7PzFUPlvfvwGnAAAAAElFTkSuQmCC");
+        }
+        
         private static Isolate CreateEmptyIsolate()
         {
             return new Isolate
