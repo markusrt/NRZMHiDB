@@ -43,6 +43,11 @@ namespace HaemophilusWeb.Automapper
             destination.Comment = interpretationResult.Comment;
             destination.Announcement = ConfigurationManager.AppSettings["Announcement"];
 
+            if (!string.IsNullOrEmpty(source.Sending.DemisId))
+            {
+                destination.DemisIdQrImageUrl = GenerateQrImageUrl(source.Sending.DemisId);
+            }
+
             var sender = db.Senders.Find(source.Sending.SenderId);
             destination.SenderName = sender.Name;
             destination.SenderDepartment = sender.Department ?? string.Empty;

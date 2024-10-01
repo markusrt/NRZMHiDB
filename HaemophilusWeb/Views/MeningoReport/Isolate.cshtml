@@ -60,7 +60,7 @@
         //TODO remove soon
         <dl class="dl-horizontal">
             @*<dt>@Html.DisplayNameFor(model => model.InterpretationPreliminary)</dt>
-            <dd>@Html.DisplayFor(model => model.InterpretationPreliminary)</dd>*@
+                <dd>@Html.DisplayFor(model => model.InterpretationPreliminary)</dd>*@
             <dt>@Html.DisplayNameFor(model => model.Interpretation)</dt>
             <dd>@Html.DisplayFor(model => model.Interpretation)</dd>
         </dl>
@@ -90,7 +90,7 @@
         <dt>E-Mail</dt>
         <dd id="healthOfficeEmail"></dd>
         <dt></dt>
-        <dd><br/>@Html.ActionLink("Gesundheitsamt bearbeiten", "Edit", "HealthOffices", new { postalCode = Model.PatientPostalCode }, new { @class = "btn btn-sm btn-info disabled", id="editHealthOfficeButton" })</dd>
+        <dd><br />@Html.ActionLink("Gesundheitsamt bearbeiten", "Edit", "HealthOffices", new { postalCode = Model.PatientPostalCode }, new { @class = "btn btn-sm btn-info disabled", id = "editHealthOfficeButton" })</dd>
     </dl>
 </div>
 <div class="clearfix"></div>
@@ -178,10 +178,25 @@
                 documentData["Typing-"+typing.Attribute] = typing.Value;
             });
 
+            documentData["DemisIdQrImage"] = base64DataURLToArrayBuffer(documentData["DemisIdQrImageUrl"]);
+
             loadFile(templateFile + "?nocache=" + Math.random(), function (error, content) {
                 if (error) { throw error };
                 var zip = new PizZip(content);
                 var doc = new window.docxtemplater().loadZip(zip);
+
+                var opts = {}
+                opts.centered = false;
+                opts.getImage = function (image) {
+                    return image;
+                };
+                opts.getSize = function (img, tagValue, tagName) {
+                    // FIXED SIZE IMAGE :
+                    return [100, 100];
+                }
+
+                const imageModule = new ImageModule(opts);
+                doc.attachModule(imageModule);
                 doc.setData(documentData);
                 doc.setOptions({ linebreaks: true });
                 try {
@@ -206,6 +221,26 @@
                 var url = "@Url.Content("~/MeningoReport/ReportGenerated/")";
                 $.post(url, { id: @Model.MeningoIsolateId, preliminary: preliminary } );
             });
+
+
+            function base64DataURLToArrayBuffer(dataURL) {
+                const stringBase64 = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
+                let binaryString
+                if (typeof window !== "undefined") {
+                    binaryString = window.atob(stringBase64);
+                }
+                else {
+                    binaryString = Buffer.from(stringBase64, "base64").toString("binary");
+                }
+                const len = binaryString.length;
+                const bytes = new Uint8Array(len);
+                for (let i = 0; i < len; i++) {
+                    const ascii = binaryString.charCodeAt(i);
+                    bytes[i] = ascii;
+                }
+                return bytes.buffer;
+            }
+
         }
 
         $(document).ready(function () {

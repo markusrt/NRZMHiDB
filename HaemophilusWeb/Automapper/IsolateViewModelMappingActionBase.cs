@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
+using QRCoder;
 
 namespace HaemophilusWeb.Automapper
 {
@@ -124,5 +128,22 @@ namespace HaemophilusWeb.Automapper
             destination.YearlySequentialIsolateNumber = yearlySequentialIsolateNumber;
         }
 
+        protected string GenerateQrImageUrl(string sendingDemisId)
+        {
+            var qrGenerator = new QRCodeGenerator();
+            var qrCodeData = qrGenerator.CreateQrCode(sendingDemisId, QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new QRCode(qrCodeData);
+            var qrCodeAsBitmap = qrCode.GetGraphic(10);
+            var base64String = Convert.ToBase64String(ImageToByteArray(qrCodeAsBitmap));
+            var qrImageUrl = "data:image/png;base64," + base64String;
+            return qrImageUrl;
+        }
+
+        private byte[] ImageToByteArray(Image image)
+        {
+            using var memoryStream = new MemoryStream();
+            image.Save(memoryStream, ImageFormat.Png);
+            return memoryStream.ToArray();
+        }
     }
 }

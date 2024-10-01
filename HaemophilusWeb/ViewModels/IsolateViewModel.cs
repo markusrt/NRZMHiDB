@@ -132,6 +132,8 @@ namespace HaemophilusWeb.ViewModels
 
         public bool HasCommentOrAnnouncement => HasComment || HasAnnouncement;
 
+        public string DemisIdQrImageUrl { get; set; }
+
         public string Date
         {
             get { return DateTime.Now.ToReportFormat(); }

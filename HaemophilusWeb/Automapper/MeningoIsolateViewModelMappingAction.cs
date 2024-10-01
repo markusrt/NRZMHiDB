@@ -1,4 +1,8 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Net;
 using AutoMapper;
 using HaemophilusWeb.Domain;
@@ -7,6 +11,7 @@ using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
 using HaemophilusWeb.Views.Utils;
+using QRCoder;
 
 namespace HaemophilusWeb.Automapper
 {
@@ -47,6 +52,11 @@ namespace HaemophilusWeb.Automapper
             destination.Typings = isolateInterpretation.Typings;
             destination.Comment = isolateInterpretation.Result.Comment;
             destination.Announcement = ConfigurationManager.AppSettings["Announcement"];
+
+            if (!string.IsNullOrEmpty(source.Sending.DemisId))
+            {
+                destination.DemisIdQrImageUrl = GenerateQrImageUrl(source.Sending.DemisId);
+            }
 
             var sender = db.Senders.Find(source.Sending.SenderId);
             if (sender != null) // special case for Meningo as old senders were not imported
