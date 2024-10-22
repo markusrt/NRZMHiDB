@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.TestUtils;
 using NUnit.Framework;
 using static HaemophilusWeb.TestUtils.MockData;
@@ -35,9 +36,6 @@ namespace HaemophilusWeb.Tools
             }
         }
 
-       
-
-
         [Test]
         public void Ctor_DoesNotCrash()
         {
@@ -54,7 +52,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
             
-            export.Columns.Count.Should().Be(23);
+            export.Columns.Count.Should().Be(25);
         }
 
         [Test]
@@ -66,7 +64,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
             
             duplicatePatientResolver.RemovePatientData(export);
-            export.Columns.Count.Should().Be(20);
+            export.Columns.Count.Should().Be(22);
         }
 
         [TestCase(SamplingLocation.OtherInvasive)]
@@ -85,6 +83,8 @@ namespace HaemophilusWeb.Tools
             Sending.Patient.HibVaccination = VaccinationStatus.Yes;
             Sending.Isolate.Evaluation = Evaluation.HaemophilusTypeA;
             Sending.Isolate.BetaLactamase = TestResult.Negative;
+            Sending.Isolate.RealTimePcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.RealTimePcrResult = RealTimePcrResult.HaemophilusInfluenzae;
 
             var export = sut.ToDataTable(Sendings);
 
@@ -107,6 +107,8 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["ampicillinBewertung"].Should().Be("resistent");
             export.Rows[0]["amoxicillinClavulansaeureMHK"].Should().Be(0.75);
             export.Rows[0]["bewertungAmoxicillinClavulansaeure"].Should().Be("sensibel");
+            export.Rows[0]["NHS Real-Time-PCR"].Should().Be("positiv");
+            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Haemophilus influenzae");
         }
 
         [Test]
@@ -128,6 +130,17 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["demis_id"].Should().Be("");
+        }
+
+        [Test]
+        public void DataTable_ContainsNullForUndefinedEnumValues()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.RealTimePcrResult = 0;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be(DBNull.Value);
         }
 
 

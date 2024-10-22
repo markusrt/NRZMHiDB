@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.TestUtils;
 using NUnit.Framework;
 
@@ -35,7 +36,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(69);
+            export.Columns.Count.Should().Be(71);
         }
 
         [Test]
@@ -110,6 +111,19 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["RKI InterneRef"].Should().Be(Sending.RkiMatchRecord.RkiReferenceId);
             export.Rows[0]["RKI Aktenzeichen"].Should().Be(Sending.RkiMatchRecord.RkiReferenceNumber);
             export.Rows[0]["RKI Status"].Should().Be("möglich");
+        }
+
+        [Test]
+        public void DataTable_ContainsRealTimePcrFields()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.RealTimePcr = NativeMaterialTestResult.Positive;
+            Sending.Isolate.RealTimePcrResult = RealTimePcrResult.StreptococcusPneumoniae;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["NHS Real-Time-PCR"].Should().Be("positiv");
+            export.Rows[0]["NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Streptococcus pneumoniae");
         }
 
         private static HaemophilusSendingLaboratoryExport CreateExportDefinition()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Web.Script.Serialization;
+using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 
 namespace HaemophilusWeb.Models
@@ -27,6 +28,12 @@ namespace HaemophilusWeb.Models
         public string StemNumberWithPrefix => StemNumber.ToStemNumberWithPrefix(DatabaseType);
 
         public TestResult Oxidase { get; set; }
+        
+        [Display(Name = "NHS Real-Time-PCR")]
+        public NativeMaterialTestResult RealTimePcr { get; set; }
+
+        [Display(Name = "NHS Real-Time-PCR Auswertung (RIDOM)")]
+        public RealTimePcrResult RealTimePcrResult { get; set; }
 
         [Display(Name = "16S rRNA Übereinstimmung")]
         public double? RibosomalRna16SMatchInPercent { get; set; }

@@ -53,6 +53,9 @@
 
     @Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP6, "col-sm-10")
 
+    @Html.EnumRadioEditorFor(model => model.RealTimePcr, "col-sm-6")
+    @Html.EnumRadioEditorFor(m => m.RealTimePcrResult, "col-sm-7", "RealTimePcrForm")
+
     @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
     <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
         @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 control-label" })
@@ -137,33 +140,31 @@
     var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
     var serogroups = ["A", "B", "C", "D", "E", "F"];
 
-    $(document)
-        .ready(function() {
+    $(document).ready(
+        function() {
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("select[id$=_Measurement]").change(ETestChange);
             $("select[id$=_Antibiotic]").change(ETestChange); 
             $("input:radio[name$='Agglutination']").change(AgglutinationChange);
             $("select[id$=Evaluation]").change(EvaluationChange);
-            //TODO refactor all ShowXXXIfYYY methods to use ShowOnSpecificRadioValue
-            ShowGrowthTypeIfGrowthIsSelectedWithYes();
-            ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected();
-            ShowApiNhMatchInPercentIfDeterminedIsSelected();
-            ShowMaldiTofMatchConfidenceIfDeterminedIsSelected();
-            ShowFtsiEvaluationIfDeterminedIsSelected();
-            ShowMlstSequenceTypeIfDeterminedIsSelected();
-        });
+            ConfigureConditionalFields();
+        }
+    );
 
-    function ShowGrowthTypeIfGrowthIsSelectedWithYes() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#GrowthTypeForm",
-            "input:radio[name$='Growth']",
-            "input:radio[name$='Growth']:checked",
-            "Yes",
-            "input:checkbox[name$='TypeOfGrowth']"
-        );
+    function ConfigureConditionalFields() {
+        ShowOnSpecificRadioValue("RibosomalRna16SMatchInPercentForm", "RibosomalRna16S", "Determined", GeneralInput("RibosomalRna16SBestMatch"), GeneralInput("RibosomalRna16SMatchInPercent"));
+        ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTof", "Determined", GeneralInput("MaldiTofBestMatch"), GeneralInput("MaldiTofMatchConfidence"));
+        ShowOnSpecificRadioValue("RealTimePcrForm", "RealTimePcr", "Positive", RadioInput("RealTimePcrResult"));
+        ShowOnSpecificRadioValue("FtsiEvaluationForm", "Ftsi", "Determined", GeneralInput("FtsiEvaluation1"), GeneralInput("FtsiEvaluation2"), GeneralInput("FtsiEvaluation3"));
+        ShowOnSpecificRadioValue("MlstSequenceTypeForm", "Mlst", "Determined", GeneralInput("MlstSequenceType"));
+        ShowOnSpecificRadioValue("GrowthTypeForm", "Growth", "Yes", CheckInput("TypeOfGrowth"));
+        AutoSelectGrowthIfEmpty();
+    }
+
+    function AutoSelectGrowthIfEmpty() {
         $("input:radio[name$='Growth']")
             .change(function() {
-                if ($("input:radio[name$='Growth']:checked").val() == "Yes") {
+                if ($("input:radio[name$='Growth']:checked").val() === "Yes") {
                     var checkedTypeOfGrowth = $("input:checkbox[name$='TypeOfGrowth']:checked");
                     if (!checkedTypeOfGrowth.val()) {
                         $("#TypeOfGrowth_TypicalGrowthOnKb").prop("checked", true);
@@ -171,61 +172,6 @@
                     }
                 }
             });
-    }
-
-
-    function ShowRibosomalRna16SMatchInPercentIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#RibosomalRna16SMatchInPercentForm",
-            "input:radio[name$='RibosomalRna16S']",
-            "input:radio[name$='RibosomalRna16S']:checked",
-            "Determined",
-            "[id$='RibosomalRna16SBestMatch']",
-            "[id$='RibosomalRna16SMatchInPercent']"
-        );
-    }
-
-    function ShowApiNhMatchInPercentIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#ApiNhMatchInPercentForm",
-            "input:radio[name$='ApiNh']",
-            "input:radio[name$='ApiNh']:checked",
-            "Determined",
-            "[id$='ApiNhBestMatch']",
-            "[id$='ApiNhMatchInPercent']"
-        );
-    }
-
-    function ShowMaldiTofMatchConfidenceIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#MaldiTofMatchConfidenceForm",
-            "input:radio[name$='MaldiTof']",
-            "input:radio[name$='MaldiTof']:checked",
-            "Determined",
-            "[id$='MaldiTofBestMatch']",
-            "[id$='MaldiTofMatchConfidence']"
-        );
-    }
-
-    function ShowFtsiEvaluationIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#FtsiEvaluationForm",
-            "input:radio[name$='Ftsi']",
-            "input:radio[name$='Ftsi']:checked",
-            "Determined",
-            "[id$='FtsiEvaluation1']",
-            "[id$='FtsiEvaluation2']"
-        );
-    }
-
-    function ShowMlstSequenceTypeIfDeterminedIsSelected() {
-        ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-            "#MlstSequenceTypeForm",
-            "input:radio[name$='Mlst']",
-            "input:radio[name$='Mlst']:checked",
-            "Determined",
-            "[id$='MlstSequenceType']"
-        );
     }
 
     function AgglutinationChange() {
@@ -236,7 +182,6 @@
         else {
             $("select[id$=Evaluation]").val("HaemophilusNonEncapsulated");
         }
-
     }
 
     function EvaluationChange() {
@@ -252,7 +197,6 @@
             }
         }
         $("#EvaluationMisMatchWarning").text(warning);
-
     }
 
     function ETestChange() {
