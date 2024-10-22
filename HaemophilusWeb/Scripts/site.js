@@ -1,16 +1,21 @@
-﻿function ShowOnSpecificRadioValue(idToShow, toggleRadio, toggleValue, inputToClearOnOtherValue, secondInputToClearOnOtherValue ) {
+﻿function ShowOnSpecificRadioValue(idToShow, toggleRadio, toggleValue, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue ) {
     ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
         "#"+idToShow,
         "input:radio[name$='" + toggleRadio + "']",
         "input:radio[name$='" + toggleRadio + "']:checked",
         toggleValue,
-        inputToClearOnOtherValue, secondInputToClearOnOtherValue
+        inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue
     );
 }
 
 function RadioInput(name)
 {
     return "input:radio[name$='" + name + "']";
+}
+
+function CheckInput(name)
+{
+    return "input:checkbox[name$='" + name + "']";
 }
 
 function ExactInput(id) {
@@ -22,7 +27,7 @@ function GeneralInput(id) {
 }
 
 function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
-    divToShow, inputSelector, valueSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue)
+    divToShow, inputSelector, valueSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue)
 {
     var showDivCallback = function()
     {
@@ -31,11 +36,11 @@ function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
     }
 
     EnableShowDivIfCallbackReturnsTrueOrClearInputOtherwise(
-        showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue, secondInputToClearOnOtherValue);
+        showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue);
 }
 
 function ShowDivIfInputMatchesValueOrClearInputOtherwise(
-    divToShow, inputSelector, valueSelector, regexOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue)
+    divToShow, inputSelector, valueSelector, regexOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue)
 {
     var showDivCallback = function()
     {
@@ -44,7 +49,7 @@ function ShowDivIfInputMatchesValueOrClearInputOtherwise(
     }
 
     EnableShowDivIfCallbackReturnsTrueOrClearInputOtherwise(
-        showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue, secondInputToClearOnOtherValue);
+        showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue);
 }
 
 function ShowDivIfCheckBoxHasSpecificSelectedValueOrClearInputOtherwise(
@@ -66,16 +71,16 @@ function ShowDivIfCheckBoxHasSpecificSelectedValueOrClearInputOtherwise(
 }
 
 function EnableShowDivIfCallbackReturnsTrueOrClearInputOtherwise(
-    showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue, secondInputToClearOnOtherValue) {
-    ShowDivOrClearInput(showDivCallback, divToShow, inputToClearOnOtherValue, secondInputToClearOnOtherValue);
+    showDivCallback, divToShow, inputSelector, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue) {
+    ShowDivOrClearInput(showDivCallback, divToShow, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue);
 
     $(inputSelector).change(function () {
-        ShowDivOrClearInput(showDivCallback, divToShow, inputToClearOnOtherValue, secondInputToClearOnOtherValue);
+        ShowDivOrClearInput(showDivCallback, divToShow, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue);
     });
 }
 
 function ShowDivOrClearInput(
-    showDivCallback, divToShow, inputToClearOnOtherValue, secondInputToClearOnOtherValue)
+    showDivCallback, divToShow, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue)
 {
     var showDiv = showDivCallback();
 
@@ -91,13 +96,14 @@ function ShowDivOrClearInput(
 
         if ($(inputToClearOnOtherValue).is(':checkbox') || $(inputToClearOnOtherValue).is(':radio'))
         {
-            $(inputToClearOnOtherValue).removeAttr('checked');
+            $(inputToClearOnOtherValue).prop('checked', false);
             $(inputToClearOnOtherValue).parent().removeClass('active');
         }
         else
         {
             $(inputToClearOnOtherValue).val("");
             $(secondInputToClearOnOtherValue).val("");
+            $(thirdInputToClearOnOtherValue).val("");
         }
     }
 }

@@ -22,6 +22,8 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2024, 10, 22), "Feld für NHS-PCR mit Labor- und RKI-Export", ChangeType.Feature, DatabaseType.Haemophilus),
+                new Change(new DateTime(2024, 10, 1), "DEMIS Meldungs-Id QR-Code auf Befund", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2024, 08, 10), "Update Kopfzeile Befundvorlagen", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2024, 08, 8), "Maske zum Zusammenfügen von Patienten", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2024, 06, 30), "Stämme: Update Regel 43", ChangeType.Feature, DatabaseType.Meningococci),
