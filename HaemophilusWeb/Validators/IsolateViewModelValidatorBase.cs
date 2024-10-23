@@ -21,5 +21,15 @@ namespace HaemophilusWeb.Validators
         {
             return testResult != UnspecificOrNoTestResult.Determined || !string.IsNullOrWhiteSpace(value);
         }
+
+        protected static bool BeSetIfPositive(double? value, NativeMaterialTestResult testResult)
+        {
+            return testResult != NativeMaterialTestResult.Positive || value.HasValue;
+        }
+
+        protected static bool BeSetIfPositive(string value, NativeMaterialTestResult testResult)
+        {
+            return testResult != NativeMaterialTestResult.Positive || !string.IsNullOrWhiteSpace(value);
+        }
     }
 }

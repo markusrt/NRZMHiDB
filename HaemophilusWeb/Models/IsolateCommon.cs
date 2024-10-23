@@ -35,7 +35,13 @@ namespace HaemophilusWeb.Models
         [Display(Name = "NHS Real-Time-PCR Auswertung (RIDOM)")]
         public RealTimePcrResult RealTimePcrResult { get; set; }
 
-        [Display(Name = "16S rRNA Übereinstimmung")]
+        [Display(Name = "16S rDNA")]
+        public NativeMaterialTestResult RibosomalRna16S { get; set; }
+        
+        [Display(Name = "16S rDNA beste Übereinstimmung")]
+        public string RibosomalRna16SBestMatch { get; set; }
+        
+        [Display(Name = "16S rDNA Übereinstimmung")]
         public double? RibosomalRna16SMatchInPercent { get; set; }
 
         [Display(Name = "MALDI-TOF")]

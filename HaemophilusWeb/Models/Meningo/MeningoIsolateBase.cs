@@ -14,12 +14,6 @@ namespace HaemophilusWeb.Models.Meningo
 
         public MeningoSerogroupAgg Agglutination { get; set; }
 
-        [Display(Name = "16S rDNA")]
-        public NativeMaterialTestResult RibosomalRna16S { get; set; }
-
-        [Display(Name = "16S rDNA beste Übereinstimmung")]
-        public string RibosomalRna16SBestMatch { get; set; }
-
         [Display(Name = "ONPG")]
         public TestResult Onpg { get; set; }
 

@@ -30,7 +30,7 @@ namespace HaemophilusWeb.Validators
                 LaboratoryNumber = "120/21",
                 Growth = YesNoOptional.Yes,
                 TypeOfGrowth = GrowthType.GrowthOnBlood,
-                Mlst = UnspecificOrNoTestResult.NoResult
+                Mlst = UnspecificOrNoTestResult.NoResult,
             };
         }
 
@@ -43,7 +43,7 @@ namespace HaemophilusWeb.Validators
             yield return Tuple.Create(growthIsYesButTypeOfGrowthIsNotFilled, new[] { "TypeOfGrowth", "LaboratoryNumber" });
 
             var noRibosomalRna16SDetails = CreateIsolateViewModel();
-            noRibosomalRna16SDetails.RibosomalRna16S = UnspecificTestResult.Determined;
+            noRibosomalRna16SDetails.RibosomalRna16S = NativeMaterialTestResult.Positive;
             yield return Tuple.Create(noRibosomalRna16SDetails, new[] { "RibosomalRna16SBestMatch", "RibosomalRna16SMatchInPercent" });
 
             var noMaldiTofDetails = CreateIsolateViewModel();

@@ -12,9 +12,9 @@ namespace HaemophilusWeb.Validators
             RuleFor(i => i.EpsilometerTestViewModels).SetCollectionValidator(new EpsilometerTestValidator());
             
             RuleFor(i => i.RibosomalRna16SBestMatch).Must((model, value)
-                => BeSetIfDetermined(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
+                => BeSetIfPositive(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.RibosomalRna16SMatchInPercent).Must((model, value)
-                => BeSetIfDetermined(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
+                => BeSetIfPositive(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofBestMatch).Must((model, value)
                 => BeSetIfDetermined(value, model.MaldiTof)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofMatchConfidence).Must((model, value)
