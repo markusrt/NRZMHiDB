@@ -61,12 +61,12 @@ namespace HaemophilusWeb.ViewModels
                     yield return
                         new Typing {Attribute = "Kapselgenotypen", Value = EnumEditor.GetEnumDescription(SerotypePcr)};
                 }
-                if (RibosomalRna16S == UnspecificTestResult.Determined)
+                if (RibosomalRna16S == NativeMaterialTestResult.Positive)
                 {
                     yield return
                         new Typing
                         {
-                            Attribute = "16S rRNA",
+                            Attribute = "16S rDNA",
                             Value =
                                 string.Format("{0}, {1}%", RibosomalRna16SBestMatch,
                                     DoubleToString(RibosomalRna16SMatchInPercent))

@@ -19,12 +19,6 @@ namespace HaemophilusWeb.Models
 
         public SerotypeAgg Agglutination { get; set; }
 
-        [Display(Name = "16S rRNA")]
-        public UnspecificTestResult RibosomalRna16S { get; set; }
-
-        [Display(Name = "16S rRNA beste Übereinstimmung")]
-        public string RibosomalRna16SBestMatch { get; set; }
-
         [Display(Name = "ß-Laktamase")]
         public TestResult BetaLactamase { get; set; }
 
