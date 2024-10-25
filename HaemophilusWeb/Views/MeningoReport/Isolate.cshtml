@@ -178,7 +178,9 @@
                 documentData["Typing-"+typing.Attribute] = typing.Value;
             });
 
-            documentData["DemisIdQrImage"] = base64DataURLToArrayBuffer(documentData["DemisIdQrImageUrl"]);
+            if (documentData["DemisIdQrImageUrl"]) {
+              documentData["DemisIdQrImage"] = base64DataURLToArrayBuffer(documentData["DemisIdQrImageUrl"]);
+            }
 
             loadFile(templateFile + "?nocache=" + Math.random(), function (error, content) {
                 if (error) { throw error };

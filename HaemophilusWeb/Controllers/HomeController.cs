@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2024, 10, 25), "Fehler bei Befunderstellung wenn keine DEMIS Meldungs-Id existiert", ChangeType.Bug, DatabaseType.None),
                 new Change(new DateTime(2024, 10, 23), "Angleich des Feldes 16S rDNA für beide Datenbanken", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2024, 10, 22), "Feld für NHS-PCR mit Labor- und RKI-Export", ChangeType.Feature, DatabaseType.Haemophilus),
                 new Change(new DateTime(2024, 10, 1), "DEMIS Meldungs-Id QR-Code auf Befund", ChangeType.Feature, DatabaseType.None),
