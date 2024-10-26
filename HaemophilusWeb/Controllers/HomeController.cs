@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2024, 10, 26, 13, 30, 00), "Update Befundsatz: 'Der direkte Nachweis von Haemophilus influenzae...'", ChangeType.Feature, DatabaseType.Haemophilus),
                 new Change(new DateTime(2024, 10, 26, 13, 00, 00), "Standard Antibiotika: Ampicillin, Cefotaxim, Amoxicillin/Clavulansäure, Meropenem.", ChangeType.Feature, DatabaseType.Haemophilus),
                 new Change(new DateTime(2024, 10, 25), "Fehler bei Befunderstellung wenn keine DEMIS Meldungs-Id existiert", ChangeType.Bug, DatabaseType.None),
                 new Change(new DateTime(2024, 10, 23), "Angleich des Feldes 16S rDNA für beide Datenbanken", ChangeType.Feature, DatabaseType.None),
