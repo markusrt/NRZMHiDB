@@ -50,10 +50,10 @@ namespace HaemophilusWeb.Domain
 
             var expectedInterpretation = string.Format("Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {0} (Hi{0}).",
                 serotypeString);
-            var expectedDisclaimer = $"Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp {serotypeString}";
             interpretation.Interpretation.Should().Be(expectedInterpretation);
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
-            interpretation.InterpretationDisclaimer.Should().Contain(expectedDisclaimer);
+            interpretation.InterpretationDisclaimer.Should().Contain($"Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp {serotypeString}");
+            interpretation.InterpretationDisclaimer.Should().Contain("Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig.");
         }
 
         [Test]
@@ -81,11 +81,10 @@ namespace HaemophilusWeb.Domain
 
             var expectedInterpretationPreliminary = string.Format("Das Ergebnis spricht für eine Infektion mit Haemophilus influenzae des Serotyp {0} (Hi{0}).",
                 serotypeString);
-            var expectedDisclaimer =
-                $"Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp {serotypeString}";
             interpretation.Interpretation.Should().Contain("Diskrepante");
             interpretation.InterpretationPreliminary.Should().Be(expectedInterpretationPreliminary);
-            interpretation.InterpretationDisclaimer.Should().Contain(expectedDisclaimer);
+            interpretation.InterpretationDisclaimer.Should().Contain($"Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp {serotypeString}");
+            interpretation.InterpretationDisclaimer.Should().Contain("Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig.");
         }
 
         [Test]
@@ -108,6 +107,7 @@ namespace HaemophilusWeb.Domain
             interpretation.Interpretation.Should().Contain("Diskrepante");
             interpretation.InterpretationPreliminary.Should().Be(expectedInterpretationPreliminary);
             interpretation.InterpretationDisclaimer.Should().Be("Eine molekularbiologische Typisierung und Resistenztestungen werden bei nicht-invasiven Isolaten aus epidemiologischen und Kostengründen nicht durchgeführt.");
+            interpretation.InterpretationDisclaimer.Should().NotContain("Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig.");
         }
 
         [Test]
@@ -133,8 +133,8 @@ namespace HaemophilusWeb.Domain
             var expectedInterpretation = $"Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren Haemophilus influenzae (NTHi). Ein vorhandener genetischer Kapsellocus für Polysaccharide des Serotyps {serotypeString} wird nicht exprimiert.";
             interpretation.Interpretation.Should().Be(expectedInterpretation);
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
-            interpretation.InterpretationDisclaimer.Should()
-                .Contain("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.");
+            interpretation.InterpretationDisclaimer.Should().Contain("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.");
+            interpretation.InterpretationDisclaimer.Should().Contain("Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig.");
         }
 
         [Test]
@@ -174,6 +174,7 @@ namespace HaemophilusWeb.Domain
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
             interpretation.InterpretationDisclaimer.Should()
                 .Contain("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.");
+            interpretation.InterpretationDisclaimer.Should().Contain("Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig.");
 
         }
 
