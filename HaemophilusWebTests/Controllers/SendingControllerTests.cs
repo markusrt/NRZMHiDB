@@ -99,8 +99,7 @@ namespace HaemophilusWeb.Controllers
 
             result.Should().NotBeNull();
 
-            CollectionAssert.AreEquivalent(result.ViewBag.PossibleOtherSamplingLocations,
-                availableOtherSamplingLocations);
+            ((IEnumerable)result.ViewBag.PossibleOtherSamplingLocations).Should().BeEquivalentTo(availableOtherSamplingLocations);
         }
 
         [Test]
@@ -135,8 +134,8 @@ namespace HaemophilusWeb.Controllers
 
             result.Should().NotBeNull();
 
-            CollectionAssert.AreEquivalent(result.ViewBag.PossibleSenders, DbMock.Senders.Where(s => !s.Deleted));
-            CollectionAssert.AreEquivalent(result.ViewBag.PossiblePatients, DbMock.Patients);
+            ((IEnumerable)result.ViewBag.PossibleSenders).Should().BeEquivalentTo(DbMock.Senders.Where(s => !s.Deleted));
+            ((IEnumerable)result.ViewBag.PossiblePatients).Should().BeEquivalentTo(DbMock.Patients);
         }
 
         [Test]
@@ -147,7 +146,7 @@ namespace HaemophilusWeb.Controllers
             var result = controller.Index() as ViewResult;
 
             result.Should().NotBeNull();
-            CollectionAssert.AreEquivalent((IEnumerable)result.Model, DbMock.Sendings.Where(s => !s.Deleted));
+            ((IEnumerable)result.Model).Should().BeEquivalentTo(DbMock.Sendings.Where(s => !s.Deleted));
         }
 
         class NoAutoAssignStemNumberSending : Sending

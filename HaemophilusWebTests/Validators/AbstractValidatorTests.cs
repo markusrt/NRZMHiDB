@@ -46,10 +46,9 @@ namespace HaemophilusWeb.Validators
 
             var errors = from error in Validate(instance).Errors
                 select error.PropertyName;
-
-            CollectionAssert.AreEquivalent(expectedErrors, errors.Distinct(),
+            expectedErrors.Should().BeEquivalentTo(errors.Distinct(),
                 "the validated fields defined in the test for {0} differ from the fields which {1} thinks are validated",
-                typeof (TModel), typeof (TValidator));
+                typeof(TModel), typeof(TValidator));
         }
 
 
