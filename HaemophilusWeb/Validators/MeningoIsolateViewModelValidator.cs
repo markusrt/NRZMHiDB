@@ -67,15 +67,5 @@ namespace HaemophilusWeb.Validators
             var modelIsInvalid = noGrowthAtAll && anyTestingDone;
             return !modelIsInvalid;
         }
-
-        private static bool BeSetIfPositive(double? value, NativeMaterialTestResult testResult)
-        {
-            return testResult != NativeMaterialTestResult.Positive || value.HasValue;
-        }
-
-        private static bool BeSetIfPositive(string value, NativeMaterialTestResult testResult)
-        {
-            return testResult != NativeMaterialTestResult.Positive || !string.IsNullOrWhiteSpace(value);
-        }
     }
 }
