@@ -94,6 +94,9 @@
     <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.4\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Owin, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.4.2.2\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -148,8 +151,23 @@
     <Reference Include="ServiceStack.Text, Version=6.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.8.6.0\lib\net472\ServiceStack.Text.dll</HintPath>
     </Reference>
-    <Reference Include="SmartFormat, Version=2.4.2.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
-      <HintPath>..\packages\SmartFormat.NET.2.4.2\lib\net45\SmartFormat.dll</HintPath>
+    <Reference Include="SmartFormat, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
+      <HintPath>..\packages\SmartFormat.3.6.0\lib\net462\SmartFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="SmartFormat.Extensions.Newtonsoft.Json, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
+      <HintPath>..\packages\SmartFormat.Extensions.Newtonsoft.Json.3.6.0\lib\net462\SmartFormat.Extensions.Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SmartFormat.Extensions.System.Text.Json, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
+      <HintPath>..\packages\SmartFormat.Extensions.System.Text.Json.3.6.0\lib\net462\SmartFormat.Extensions.System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SmartFormat.Extensions.Time, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
+      <HintPath>..\packages\SmartFormat.Extensions.Time.3.6.0\lib\net462\SmartFormat.Extensions.Time.dll</HintPath>
+    </Reference>
+    <Reference Include="SmartFormat.Extensions.Xml, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
+      <HintPath>..\packages\SmartFormat.Extensions.Xml.3.6.0\lib\net462\SmartFormat.Extensions.Xml.dll</HintPath>
+    </Reference>
+    <Reference Include="SmartFormat.Net, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
+      <HintPath>..\packages\SmartFormat.NET.3.6.0\lib\net462\SmartFormat.Net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -162,6 +180,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Pipelines, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Pipelines.9.0.3\lib\net462\System.IO.Pipelines.dll</HintPath>
+    </Reference>
     <Reference Include="System.Memory, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.6.2\lib\net462\System.Memory.dll</HintPath>
     </Reference>
@@ -176,6 +197,15 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.9.0.3\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Json.9.0.3\lib\net462\System.Text.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.2\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -219,6 +249,9 @@
       <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="ZString, Version=2.6.0.0, Culture=neutral, PublicKeyToken=df4c250b14d82627, processorArchitecture=MSIL">
+      <HintPath>..\packages\ZString.2.6.0\lib\netstandard2.0\ZString.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Owin">
