@@ -19,6 +19,21 @@ namespace HaemophilusWeb
 {
     public class MvcApplication : HttpApplication
     {
+        public static IMapper Mapper { get; private set; }
+
+        static MvcApplication()
+        {
+            var mapperConfiguration = new MapperConfiguration(cfg =>
+            {                
+                cfg.CreateMap<IsolateViewModel, Isolate>().AfterMap<IsolateViewModelMappingAction>();
+                cfg.CreateMap<Isolate, IsolateViewModel>().AfterMap<IsolateViewModelMappingAction>();
+                cfg.CreateMap<MeningoIsolate, MeningoIsolateViewModel>().AfterMap<MeningoIsolateViewModelMappingAction>();
+                cfg.CreateMap<MeningoIsolateViewModel, MeningoIsolate>().AfterMap<MeningoIsolateViewModelMappingAction>();
+            });
+
+            Mapper = mapperConfiguration.CreateMapper();
+        }
+
         private static readonly Logger Log = LogManager.GetCurrentClassLogger();
 
         protected void Application_Start()
@@ -32,7 +47,6 @@ namespace HaemophilusWeb
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
             FluentValidationModelValidatorProvider.Configure();
             OverwriteDefaultErrorMessages();
-            InitializeAutomapper();
             DisableTls1AndEnableTls12();
         }
 
@@ -40,16 +54,6 @@ namespace HaemophilusWeb
         {
             ServicePointManager.SecurityProtocol &= ~SecurityProtocolType.Tls;
             ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
-        }
-
-        public static void InitializeAutomapper()
-        {
-            Mapper.Initialize(cfg => {
-                cfg.CreateMap<IsolateViewModel, Isolate>().AfterMap<IsolateViewModelMappingAction>();
-                cfg.CreateMap<Isolate, IsolateViewModel>().AfterMap<IsolateViewModelMappingAction>();
-                cfg.CreateMap<MeningoIsolate, MeningoIsolateViewModel>().AfterMap<MeningoIsolateViewModelMappingAction>(); ;
-                cfg.CreateMap<MeningoIsolateViewModel, MeningoIsolate>().AfterMap<MeningoIsolateViewModelMappingAction>();
-            });
         }
 
         private static void OverwriteDefaultErrorMessages()

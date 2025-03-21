@@ -4,7 +4,8 @@ namespace HaemophilusWeb.Utils
 {
     public class EnumFormatter : IFormatter
     {
-        public string[] Names { get; set; } = { "enum" };
+        public string Name { get; set; } = "enum";
+        public bool CanAutoDetect { get; set; }
 
         public bool TryEvaluateFormat(IFormattingInfo formattingInfo)
         {

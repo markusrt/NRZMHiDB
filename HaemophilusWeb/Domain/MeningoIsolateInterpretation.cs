@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using HaemophilusWeb.Migrations;
-using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
 using Newtonsoft.Json;
-using SmartFormat;
 using SmartFormat.Core.Settings;
+using SmartFormat;
 
 namespace HaemophilusWeb.Domain
 {
@@ -47,8 +44,8 @@ namespace HaemophilusWeb.Domain
             NoMeningococci = false;
 
             Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
-            Smart.Default.Settings.FormatErrorAction = ErrorAction.ThrowError;
-            Smart.Default.Settings.ParseErrorAction = ErrorAction.ThrowError;
+            Smart.Default.Settings.Formatter.ErrorAction = FormatErrorAction.ThrowError;
+            Smart.Default.Settings.Parser.ErrorAction = ParseErrorAction.ThrowError;
 
             if (isolate.Sending.Material.IsNativeMaterial())
             {
@@ -197,17 +194,18 @@ namespace HaemophilusWeb.Domain
 
         private bool CheckStemRule(StemInterpretationRule rule, MeningoIsolate isolate)
         {
-            return (rule.SendingInvasive == null || rule.SendingInvasive.Contains(isolate.Sending?.Invasive))
-                && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
-                && (rule.GrowthOnMartinLewisAgar == null || rule.GrowthOnMartinLewisAgar.Contains(isolate.GrowthOnMartinLewisAgar))
-                && (!rule.Oxidase.HasValue || rule.Oxidase == isolate.Oxidase)
-                && (rule.Agglutination == null || rule.Agglutination.Contains(isolate.Agglutination))
-                && (!rule.Onpg.HasValue || rule.Onpg == isolate.Onpg)
-                && (rule.GammaGt == null || rule.GammaGt.Contains(isolate.GammaGt))
-                && (rule.SerogroupPcr == null || rule.SerogroupPcr.Contains(isolate.SerogroupPcr))
-                && (!rule.MaldiTof.HasValue || rule.MaldiTof == isolate.MaldiTof)
-                && (!rule.PorAPcr.HasValue || rule.PorAPcr == isolate.PorAPcr)
-                && (!rule.FetAPcr.HasValue || rule.FetAPcr == isolate.FetAPcr);
+            var checkStemRule = (rule.SendingInvasive == null || rule.SendingInvasive.Contains(isolate.Sending?.Invasive))
+                                && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
+                                && (rule.GrowthOnMartinLewisAgar == null || rule.GrowthOnMartinLewisAgar.Contains(isolate.GrowthOnMartinLewisAgar))
+                                && (!rule.Oxidase.HasValue || rule.Oxidase == isolate.Oxidase)
+                                && (rule.Agglutination == null || rule.Agglutination.Contains(isolate.Agglutination))
+                                && (!rule.Onpg.HasValue || rule.Onpg == isolate.Onpg)
+                                && (rule.GammaGt == null || rule.GammaGt.Contains(isolate.GammaGt))
+                                && (rule.SerogroupPcr == null || rule.SerogroupPcr.Contains(isolate.SerogroupPcr))
+                                && (!rule.MaldiTof.HasValue || rule.MaldiTof == isolate.MaldiTof)
+                                && (!rule.PorAPcr.HasValue || rule.PorAPcr == isolate.PorAPcr)
+                                && (!rule.FetAPcr.HasValue || rule.FetAPcr == isolate.FetAPcr);
+            return checkStemRule;
         }
     }
 }

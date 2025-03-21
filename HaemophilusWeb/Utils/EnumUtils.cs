@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using AutoMapper.Configuration.Internal;
+using AutoMapper.Internal;
 using ServiceStack;
 
 namespace HaemophilusWeb.Utils
@@ -182,7 +182,7 @@ namespace HaemophilusWeb.Utils
                 return enumValue.ToString();
             }
 
-            var field = (enumType.IsNullableType() ? PrimitiveHelper.GetTypeOfNullable(enumType) : enumType).GetField(value);
+            var field = (ReflectionExtensions.IsNullableType(enumType) ? Nullable.GetUnderlyingType(enumType) : enumType)?.GetField(value);
             if (field == null)
             {
                 return value;
@@ -201,7 +201,7 @@ namespace HaemophilusWeb.Utils
 
         private static Type GetEnumType(Type enumType)
         {
-            if (enumType.IsNullableType())
+            if (ReflectionExtensions.IsNullableType(enumType))
             {
                 enumType = Nullable.GetUnderlyingType(enumType);
             }

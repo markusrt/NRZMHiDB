@@ -45,19 +45,20 @@ namespace HaemophilusWeb.Tools
             return dataTable;
         }
 
-        protected object ExportChildProperty<T>(T property, Func<T, object> accessValue)
+        protected object ExportChildProperty<TProperty>(TProperty property, Func<TProperty, object> accessValue)
         {
+            // ReSharper disable once IntroduceOptionalParameters.Global as used in expression tree
             return ExportChildProperty(property, accessValue, null);
         }
 
-        protected object ExportChildProperty<T>(T property, Func<T, object> accessValue, string nullValue)
+        protected object ExportChildProperty<TProperty>(TProperty property, Func<TProperty, object> accessValue, string nullValue)
         {
             return property != null
                 ? ExportToStringIfEnum(accessValue(property))
                 : nullValue;
         }
 
-        protected static object ExportToStringIfEnum<T>(T value)
+        protected static object ExportToStringIfEnum<TValue>(TValue value)
         {
             if (value != null && value.GetTypeOrNullableType().IsEnum)
             {
@@ -66,7 +67,7 @@ namespace HaemophilusWeb.Tools
             return value;
         }
 
-        protected static string ExportToString<T>(T value)
+        protected static string ExportToString<TValue>(TValue value)
         {
             if (value == null)
             {

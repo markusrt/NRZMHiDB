@@ -23,7 +23,7 @@ namespace AccessImporter.Converters
         private void FillSamplingLocation(MeningoSending sending, Dictionary<string, object> source)
         {
             var materialNr = source["isol_mat_nr"];
-            sending.SamplingLocation = Mapper.Map<MeningoSamplingLocation>(materialNr);
+            sending.SamplingLocation = Program.Mapper.Map<MeningoSamplingLocation>(materialNr);
 
             if (20.Equals(materialNr))
             {

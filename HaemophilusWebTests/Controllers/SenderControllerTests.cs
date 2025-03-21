@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -31,7 +32,7 @@ namespace HaemophilusWeb.Controllers
             var sendingsInViewBag = (List<Sending>)result.ViewBag.Sendings;
             var sendingsOfSender = DbMock.Sendings.Where(s => s.SenderId == senderToDelete).ToList();
             sendingsInViewBag.Count.Should().Be(1);
-            CollectionAssert.AreEquivalent(sendingsOfSender, sendingsInViewBag);
+            sendingsOfSender.Should().BeEquivalentTo(sendingsInViewBag);
         }
 
         [Test]
@@ -39,7 +40,7 @@ namespace HaemophilusWeb.Controllers
         {
             var result = senderController.Delete(IdOfSenderWithoutSendings) as ViewResult;
 
-            Assert.IsTrue(result.ViewBag.Sendings.Count == 0);
+            ((List<Sending>)result.ViewBag.Sendings).Should().BeEmpty();
         }
     }
 }

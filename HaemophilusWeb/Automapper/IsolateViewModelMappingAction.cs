@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Net;
 using AutoMapper;
+using DocumentFormat.OpenXml.Wordprocessing;
 using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
@@ -18,7 +19,7 @@ namespace HaemophilusWeb.Automapper
         {
         }
 
-        public void Process(Isolate source, IsolateViewModel destination)
+        public void Process(Isolate source, IsolateViewModel destination, ResolutionContext context)
         {
             var sending = source.Sending;
             destination.SamplingLocation = sending.SamplingLocation.IsOther()
@@ -55,7 +56,7 @@ namespace HaemophilusWeb.Automapper
             destination.SenderCity = $"{sender.PostalCode} {sender.City}";
         }
 
-        public void Process(IsolateViewModel source, Isolate destination)
+        public void Process(IsolateViewModel source, Isolate destination, ResolutionContext context)
         {
             ParseAndMapLaboratoryNumber(source, destination);
 

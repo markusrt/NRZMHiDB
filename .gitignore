@@ -150,5 +150,5 @@ $RECYCLE.BIN/
 .DS_Store
 
 HaemophilusWeb/logs/
-/.vs
+**/.vs
 HaemophilusWeb/Web.config

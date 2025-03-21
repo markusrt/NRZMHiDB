@@ -15,8 +15,6 @@ namespace HaemophilusWeb.ViewModels
     [Validator(typeof (IsolateViewModelValidator))]
     public class IsolateViewModel : IsolateBase
     {
-        private List<EpsilometerTestViewModel> etests;
-
         public IsolateViewModel()
         {
             EpsilometerTestViewModels = new List<EpsilometerTestViewModel>();

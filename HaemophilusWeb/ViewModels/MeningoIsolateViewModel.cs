@@ -16,8 +16,6 @@ namespace HaemophilusWeb.ViewModels
     [Validator(typeof(MeningoIsolateViewModelValidator))]
     public class MeningoIsolateViewModel : MeningoIsolateBase
     {
-        private List<EpsilometerTestViewModel> etests;
-
         public MeningoIsolateViewModel()
         {
             EpsilometerTestViewModels = new List<EpsilometerTestViewModel>();
