@@ -10,7 +10,7 @@ namespace HaemophilusWeb
         public void OnException(ExceptionContext context)
         {
             var exception = context.Exception;
-            Log.ErrorException(string.Format("Unhandled error: {0}", exception.Message), exception);
+            Log.Error(string.Format("Unhandled error: {0}", exception.Message), exception);
         }
     }
 }
