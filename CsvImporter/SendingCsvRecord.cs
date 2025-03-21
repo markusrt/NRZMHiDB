@@ -49,12 +49,6 @@ namespace CsvImporter
 
         public string SenderConclusion { get; set; }
 
-        public string LaboratoryNumber { get; set; }
-
-        public int YearlySequentialIsolateNumber { get; set; }
-
-        public int Year { get; set; }
-
         public float? AmpicillinMeasurement { get; set; }
 
         public EpsilometerTestResult? AmpicillinEpsilometerTestResult { get; set; }

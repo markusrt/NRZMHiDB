@@ -117,7 +117,7 @@ namespace HaemophilusWeb.Controllers
             var result = controller.LaboratoryExport(new FromToQuery {From = DateTime.Now.AddYears(-100), To = DateTime.Now});
 
             var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
-            fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
+            fileResult.FileContents.Length.Should().BeGreaterThanOrEqualTo(10);
             File.WriteAllBytes(tempExcel.FullName, fileResult.FileContents);
 
             using (var fastExcel = new FastExcel.FastExcel(tempExcel))
@@ -150,7 +150,7 @@ namespace HaemophilusWeb.Controllers
             var result = controller.PubMlstExport(new FromToQueryWithAdjustment {From = DateTime.Now.AddYears(-100), To = DateTime.Now});
 
             var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
-            fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
+            fileResult.FileContents.Length.Should().BeGreaterThanOrEqualTo(10);
             File.WriteAllBytes(tempExcel.FullName, fileResult.FileContents);
 
             using (var fastExcel = new FastExcel.FastExcel(tempExcel))
@@ -183,7 +183,7 @@ namespace HaemophilusWeb.Controllers
             var result = controller.RkiExport(new FromToQueryWithAdjustment { From = DateTime.Now.AddYears(-100), To = DateTime.Now });
 
             var fileResult = result.Should().BeOfType<FileContentResult>().And.Subject.As<FileContentResult>();
-            fileResult.FileContents.Length.Should().BeGreaterOrEqualTo(10);
+            fileResult.FileContents.Length.Should().BeGreaterThanOrEqualTo(10);
             File.WriteAllBytes(tempExcel.FullName, fileResult.FileContents);
 
             using (var fastExcel = new FastExcel.FastExcel(tempExcel))
