@@ -38,7 +38,7 @@ namespace HaemophilusWeb.Controllers
 
         public override IsolateViewModel ModelToViewModel(Isolate isolate)
         {
-            return Mapper.Map<IsolateViewModel>(isolate);
+            return MvcApplication.Mapper.Map<IsolateViewModel>(isolate);
         }
 
         [HttpPost]
@@ -52,7 +52,7 @@ namespace HaemophilusWeb.Controllers
                     var isolate =
                         db.Isolates.Include(i => i.EpsilometerTests)
                             .Single(i => i.IsolateId == isolateViewModel.IsolateId);
-                    Mapper.Map(isolateViewModel, isolate);
+                    MvcApplication.Mapper.Map(isolateViewModel, isolate);
                     isolate.TypeOfGrowth =
                         EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<GrowthType>(Request.Form["TypeOfGrowth"]);
 

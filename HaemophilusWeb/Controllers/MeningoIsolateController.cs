@@ -40,7 +40,7 @@ namespace HaemophilusWeb.Controllers
 
         public override MeningoIsolateViewModel ModelToViewModel(MeningoIsolate isolate)
         {
-            var isolateViewModel = Mapper.Map<MeningoIsolateViewModel>(isolate);
+            var isolateViewModel = MvcApplication.Mapper.Map<MeningoIsolateViewModel>(isolate);
             var sending = isolate.Sending;
             isolateViewModel.Material = EnumEditor.GetEnumDescription(sending.Material);
             isolateViewModel.Invasive = EnumEditor.GetEnumDescription(sending.Invasive);
@@ -66,7 +66,7 @@ namespace HaemophilusWeb.Controllers
                             .Single(i => i.MeningoIsolateId == meningoIsolateId);
 
                     //TODO replace AutoMapper by https://github.com/Dotnet-Boxed/Framework and pass db context to mapper
-                    Mapper.Map(isolateViewModel, isolate);
+                    MvcApplication.Mapper.Map(isolateViewModel, isolate);
                     MapPubMlstData(isolateViewModel, isolate);
 
                     db.MarkAsModified(isolate);

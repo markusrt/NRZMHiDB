@@ -37,7 +37,7 @@ namespace HaemophilusWeb.Automapper
             DbMock.Senders.Find(1).City = "The City";
             DbMock.Senders.Find(1).StreetWithNumber = "Long Street 123456";
 
-            sut.Process(isolate, isolateViewModel);
+            sut.Process(isolate, isolateViewModel, null);
 
             isolateViewModel.SenderName.Should().Be("Test Sender");
             isolateViewModel.SenderCity.Should().Be("12345 The City");
@@ -55,7 +55,7 @@ namespace HaemophilusWeb.Automapper
             isolate.Sending.SamplingLocation = samplingLocation;
             isolate.Sending.OtherSamplingLocation = "other location";
 
-            sut.Process(isolate, isolateViewModel);
+            sut.Process(isolate, isolateViewModel, null);
 
             isolateViewModel.SamplingLocation.Should().Be("other location");
             isolateViewModel.Invasive.Should().Be(expectedInvasive);
@@ -69,7 +69,7 @@ namespace HaemophilusWeb.Automapper
             var isolate = CreateEmptyIsolate();
             isolate.Sending.DemisId = "aa8fbf39-5cec-4000-9361-a2023a9a013c";
 
-            sut.Process(isolate, isolateViewModel);
+            sut.Process(isolate, isolateViewModel, null);
 
             isolateViewModel.DemisIdQrImageUrl.Should().StartWith("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaCAYAAAA2BoVjAAAA");
             isolateViewModel.DemisIdQrImageUrl.Should().EndWith("/aNZaa31qf2jWWmt9an9o1lprfWp/aNZaa33of//7PzFUPlvfvwGnAAAAAElFTkSuQmCC");

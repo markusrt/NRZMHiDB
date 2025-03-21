@@ -65,7 +65,7 @@ namespace HaemophilusWeb.Controllers
         [OneTimeSetUp]
         public void InitializeAutomapper()
         {
-            MvcApplication.InitializeAutomapper();
+            MvcApplication.Mapper.Should().NotBeNull();
         }
 
         [SetUp]

@@ -21,7 +21,7 @@ namespace HaemophilusWeb.Automapper
         {
         }
 
-        public void Process(MeningoIsolate source, MeningoIsolateViewModel destination)
+        public void Process(MeningoIsolate source, MeningoIsolateViewModel destination, ResolutionContext context)
         {
             var sending = source.Sending;
             ParseAndMapLaboratoryNumber(source, destination);
@@ -68,7 +68,7 @@ namespace HaemophilusWeb.Automapper
             }
         }
 
-        public void Process(MeningoIsolateViewModel source, MeningoIsolate destination)
+        public void Process(MeningoIsolateViewModel source, MeningoIsolate destination, ResolutionContext context)
         {
             ParseAndMapLaboratoryNumber(source, destination);
             SetSendingNoGrowthAccordingToGrowthOnAgar(source, destination);

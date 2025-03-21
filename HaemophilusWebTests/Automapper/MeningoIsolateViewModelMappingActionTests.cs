@@ -35,7 +35,7 @@ namespace HaemophilusWeb.Automapper
             var isolate = CreateEmptyIsolate();
             isolate.Sending.Material = currentMaterial;
 
-            sut.Process(isolateViewModel, isolate);
+            sut.Process(isolateViewModel, isolate, null);
 
             isolate.Sending.Material.Should().Be(expectedMaterial);
         }
@@ -49,7 +49,7 @@ namespace HaemophilusWeb.Automapper
             isolate.Sending.SamplingLocation = MeningoSamplingLocation.BloodAndLiquor;
             isolate.Sending.Material = MeningoMaterial.IsolatedDna;
 
-            sut.Process(isolate, isolateViewModel);
+            sut.Process(isolate, isolateViewModel, null);
 
             isolateViewModel.SamplingLocation.Should().Be("Blut und Liquor");
             isolateViewModel.Material.Should().Be("Isolierte DNA");
@@ -65,7 +65,7 @@ namespace HaemophilusWeb.Automapper
             isolate.Sending.SamplingLocation = MeningoSamplingLocation.OtherInvasive;
             isolate.Sending.OtherInvasiveSamplingLocation = "Invasive Location";
 
-            sut.Process(isolate, isolateViewModel);
+            sut.Process(isolate, isolateViewModel, null);
 
             isolateViewModel.SamplingLocation.Should().Be("Invasive Location");
         }
@@ -79,7 +79,7 @@ namespace HaemophilusWeb.Automapper
             isolate.Sending.SamplingLocation = MeningoSamplingLocation.OtherNonInvasive;
             isolate.Sending.OtherNonInvasiveSamplingLocation = "Noninvasive Location";
 
-            sut.Process(isolate, isolateViewModel);
+            sut.Process(isolate, isolateViewModel, null);
 
             isolateViewModel.SamplingLocation.Should().Be("Noninvasive Location");
         }
@@ -92,7 +92,7 @@ namespace HaemophilusWeb.Automapper
             var isolate = CreateEmptyIsolate();
             isolate.Sending.Patient.PatientId = 123;
 
-            sut.Process(isolate, isolateViewModel);
+            sut.Process(isolate, isolateViewModel, null);
 
             isolateViewModel.PatientId.Should().Be(123);
         }
@@ -110,7 +110,7 @@ namespace HaemophilusWeb.Automapper
             DbMock.Senders.Find(1).City = "The City";
             DbMock.Senders.Find(1).StreetWithNumber = "Long Street 123456";
 
-            sut.Process(isolate, isolateViewModel);
+            sut.Process(isolate, isolateViewModel, null);
 
             isolateViewModel.SenderName.Should().Be("Test Sender");
             isolateViewModel.SenderCity.Should().Be("12345 The City");
@@ -126,7 +126,7 @@ namespace HaemophilusWeb.Automapper
             var isolate = CreateEmptyIsolate();
             isolate.Sending.DemisId = "aa8fbf39-5cec-4000-9361-a2023a9a013c";
 
-            sut.Process(isolate, isolateViewModel);
+            sut.Process(isolate, isolateViewModel, null);
 
             isolateViewModel.DemisIdQrImageUrl.Should().StartWith("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaCAYAAAA2BoVjAAAA");
             isolateViewModel.DemisIdQrImageUrl.Should().EndWith("/aNZaa31qf2jWWmt9an9o1lprfWp/aNZaa33of//7PzFUPlvfvwGnAAAAAElFTkSuQmCC");
