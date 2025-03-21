@@ -43,7 +43,7 @@ namespace HaemophilusWeb.Domain
             Rule = null;
             NoMeningococci = false;
 
-            Result.Report = ["Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."];
+            Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
             Smart.Default.Settings.Formatter.ErrorAction = FormatErrorAction.ThrowError;
             Smart.Default.Settings.Parser.ErrorAction = ParseErrorAction.ThrowError;
 
