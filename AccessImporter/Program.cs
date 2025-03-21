@@ -21,6 +21,8 @@ namespace AccessImporter
 {
     class Program
     {
+        public static IMapper Mapper { get; private set; }
+
         public static ApplicationDbContext Context = new ApplicationDbContext();
 
         public static string StemAccessTable = "Staemme_2019";
@@ -33,8 +35,9 @@ namespace AccessImporter
             var connectionString =
                 $"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={args[0]};Jet OLEDB:Database Password={args[1]}";
 
-            Mapper.Initialize(cfg =>
-            {
+
+            var mapperConfiguration = new MapperConfiguration(cfg =>
+            {                
                 cfg.CreateMap<object, MeningoSamplingLocation>()
                     .ConvertUsing<AccessMeningoSamplingLocationConverter>();
                 cfg.CreateMap<Dictionary<string, object>, MeningoPatient>()
@@ -195,7 +198,7 @@ namespace AccessImporter
                 }
                 var mapping = new MeningoIsolateViewModelMappingAction();
                 var viewModel = new MeningoIsolateViewModel();
-                mapping.Process(isolate, viewModel);
+                mapping.Process(isolate, viewModel, null);
                 var validator = new MeningoIsolateViewModelValidator();
 
                 if (validator.Validate(viewModel).Errors.Any())

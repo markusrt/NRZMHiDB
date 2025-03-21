@@ -27,7 +27,7 @@ namespace HaemophilusWeb
             {                
                 cfg.CreateMap<IsolateViewModel, Isolate>().AfterMap<IsolateViewModelMappingAction>();
                 cfg.CreateMap<Isolate, IsolateViewModel>().AfterMap<IsolateViewModelMappingAction>();
-                cfg.CreateMap<MeningoIsolate, MeningoIsolateViewModel>().AfterMap<MeningoIsolateViewModelMappingAction>(); ;
+                cfg.CreateMap<MeningoIsolate, MeningoIsolateViewModel>().AfterMap<MeningoIsolateViewModelMappingAction>();
                 cfg.CreateMap<MeningoIsolateViewModel, MeningoIsolate>().AfterMap<MeningoIsolateViewModelMappingAction>();
             });
 
