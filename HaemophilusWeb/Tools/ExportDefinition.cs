@@ -77,7 +77,7 @@ namespace HaemophilusWeb.Tools
             if (type.IsEnum)
             {
                 var enumDescription = EnumEditor.GetEnumDescription(value);
-                if ((int)(object)value == 0 && enumDescription.Equals("0"))
+                if ((int)(object)value == 0 && (enumDescription.Equals("0") || string.IsNullOrEmpty(enumDescription)))
                 {
                     return null;
                 }

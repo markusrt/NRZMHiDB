@@ -60,6 +60,11 @@ namespace HaemophilusWeb.Validators
                 new EpsilometerTestViewModel(Antibiotic.Amikacin) {Measurement = 123, EucastClinicalBreakpointId = 1}
             };
             yield return Tuple.Create(invalidEpsilometerTests, new[] { "EpsilometerTestViewModels[0].Measurement" });
+
+            var realTimePcrResultMissing = CreateIsolateViewModel();
+            realTimePcrResultMissing.RealTimePcr = NativeMaterialTestResult.Positive;
+            realTimePcrResultMissing.RealTimePcrResult = 0;
+            yield return Tuple.Create(realTimePcrResultMissing, new[] { "RealTimePcrResult" });
         }
     }
 }

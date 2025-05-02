@@ -154,7 +154,7 @@
     function ConfigureConditionalFields() {
         ShowOnSpecificRadioValue("RibosomalRna16SMatchInPercentForm", "RibosomalRna16S", "Positive", GeneralInput("RibosomalRna16SBestMatch"), GeneralInput("RibosomalRna16SMatchInPercent"));
         ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTof", "Determined", GeneralInput("MaldiTofBestMatch"), GeneralInput("MaldiTofMatchConfidence"));
-        ShowOnSpecificRadioValue("RealTimePcrForm", "RealTimePcr", "Positive", RadioInput("RealTimePcrResult"));
+        ShowOnSpecificRadioValue("RealTimePcrForm", "RealTimePcr", "Positive", CheckInput("RealTimePcrResult"));
         ShowOnSpecificRadioValue("FtsiEvaluationForm", "Ftsi", "Determined", GeneralInput("FtsiEvaluation1"), GeneralInput("FtsiEvaluation2"), GeneralInput("FtsiEvaluation3"));
         ShowOnSpecificRadioValue("MlstSequenceTypeForm", "Mlst", "Determined", GeneralInput("MlstSequenceType"));
         ShowOnSpecificRadioValue("GrowthTypeForm", "Growth", "Yes", CheckInput("TypeOfGrowth"));
