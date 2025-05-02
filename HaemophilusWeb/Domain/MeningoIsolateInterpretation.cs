@@ -42,6 +42,7 @@ namespace HaemophilusWeb.Domain
             Serogroup = null;
             Rule = null;
             NoMeningococci = false;
+            Result.RuleMatches.Clear();
 
             Result.Report = new [] { "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." };
             Smart.Default.Settings.Formatter.ErrorAction = FormatErrorAction.ThrowError;
@@ -126,6 +127,7 @@ namespace HaemophilusWeb.Domain
 
                 Result.Comment = rule.Comment;
                 Result.Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray();
+                Result.RuleMatches.Add(Rule, true);
 
                 foreach (var typingTemplateKey in rule.Typings)
                 {
@@ -137,6 +139,7 @@ namespace HaemophilusWeb.Domain
                     });
                 }
             }
+            Result.RuleMatches.Add("NoRule", matchingRule.Key == null);
         }
 
         private void RunStemInterpretation(MeningoIsolate isolate)
@@ -156,6 +159,7 @@ namespace HaemophilusWeb.Domain
 
                 Result.Comment = rule.Comment;
                 Result.Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray();
+                Result.RuleMatches.Add(Rule, true);
                 
                 foreach (var typingTemplateKey in rule.Typings)
                 {
@@ -167,6 +171,7 @@ namespace HaemophilusWeb.Domain
                     });
                 }
             }
+            Result.RuleMatches.Add("NoRule", matchingRule.Key == null);
         }
 
         private static T DeserializeFromResource<T>(string resourceName)

@@ -101,5 +101,6 @@ namespace HaemophilusWeb.ViewModels
         }
 
         public NeisseriaPubMlstIsolate NeisseriaPubMlstIsolate { get; set; }
+        public Dictionary<string, bool> RuleMatches { get; internal set; }
     }
 }

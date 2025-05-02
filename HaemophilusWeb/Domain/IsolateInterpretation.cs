@@ -117,6 +117,8 @@ namespace HaemophilusWeb.Domain
 
         public string[] Report { get; set; }
 
+        public Dictionary<string, bool> RuleMatches { get; set; } = new Dictionary<string, bool>();
+
         public string InterpretationPreliminary { get; set; }
 
         [Obsolete("Use Result array instead")]

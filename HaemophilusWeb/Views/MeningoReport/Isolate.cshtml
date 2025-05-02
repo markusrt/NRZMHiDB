@@ -54,6 +54,16 @@
             }
         </dl>
     }
+    @if (Model.RuleMatches.Any())
+    {
+        <dl class="dl-horizontal">
+            @foreach (var etest in Model.RuleMatches)
+            {
+                <dt>@etest.Key</dt>
+                <dd>@etest.Value</dd>
+            }
+        </dl>
+    }
 
     @if (!string.IsNullOrEmpty(Model.Interpretation))
     {
@@ -131,6 +141,9 @@
 
     <script>
         var documentData = @(Html.Raw(Json.Encode(Model)));
+        for (const [key, value] of Object.entries(documentData.RuleMatches)) {
+            documentData[key] = value;
+        }
 
         $("#TryCreateReport").click(function()
         {
@@ -172,6 +185,8 @@
 
         function DoCreateReport(templateFile, preliminary, signer)
         {
+           
+
             documentData["Signer"] = signer;
 
             $(documentData.Typings).each(function(index, typing) {
