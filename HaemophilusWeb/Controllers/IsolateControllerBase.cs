@@ -5,8 +5,11 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
+using DocumentFormat.OpenXml.Office2016.Excel;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
 
@@ -83,6 +86,13 @@ namespace HaemophilusWeb.Controllers
             {
                 throw exception;
             }
+        }
+        
+        protected void CreateAndEditPreparations(TISolateViewModel isolateViewModel)
+        {
+            isolateViewModel.RealTimePcrResult =
+                EnumUtils.ParseCommaSeperatedListOfNamesAsFlagsEnum<RealTimePcrResult>(
+                    Request.Form["RealTimePcrResult"]);
         }
 
         private List<Antibiotic> AvailableAntibiotics

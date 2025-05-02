@@ -124,7 +124,7 @@ namespace HaemophilusWeb.Tools
             Sending.Isolate.CswyAllele = CswyAllel.Allele3;
             Sending.Patient.Gender = Gender.Intersex;
             Sending.Isolate.RealTimePcr = NativeMaterialTestResult.Positive;
-            Sending.Isolate.RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis;
+            Sending.Isolate.RealTimePcrResult = RealTimePcrResult.HaemophilusInfluenzae | RealTimePcrResult.NeisseriaMeningitidis;
 
             var export = sut.ToDataTable(Sendings);
 
@@ -135,7 +135,7 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["cswy-PCR"].Should().Be("positiv");
             export.Rows[0]["cswy-Allel"].Should().Be("Allel 3 WY");
             export.Rows[0]["NHS Real-Time-PCR"].Should().Be("positiv");
-            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Neisseria meningitidis");
+            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Neisseria meningitidis, Haemophilus influenzae");
         }
 
         [Test]

@@ -5,10 +5,13 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using HaemophilusWeb.Domain;
+using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
 using HaemophilusWeb.Views.Utils;
@@ -45,6 +48,7 @@ namespace HaemophilusWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(IsolateViewModel isolateViewModel)
         {
+            CreateAndEditPreparations(isolateViewModel);
             if (ModelState.IsValid)
             {
                 try

@@ -27,6 +27,8 @@ namespace HaemophilusWeb.Validators
                     "Die Art des Wachstums muss angegeben werden.");
             RuleFor(p => p.LaboratoryNumber).Matches(@"\d+/\d\d").WithMessage(
                 "Die Labornummer muss in der Form '39/14' eingegeben werden.");
+            RuleFor(i => i.RealTimePcrResult).Must((model, value)
+                => BeSetIfPositive(value, model.RealTimePcr)).WithMessage(PropertyMustNotBeEmpty);
         }
     }
 }

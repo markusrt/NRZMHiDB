@@ -364,6 +364,10 @@
     <Compile Include="Migrations\202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.Designer.cs">
       <DependentUpon>202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202504061433021_RealTimePcrResultToFlags.cs" />
+    <Compile Include="Migrations\202504061433021_RealTimePcrResultToFlags.Designer.cs">
+      <DependentUpon>202504061433021_RealTimePcrResultToFlags.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
@@ -948,6 +952,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.resx">
       <DependentUpon>202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202504061433021_RealTimePcrResultToFlags.resx">
+      <DependentUpon>202504061433021_RealTimePcrResultToFlags.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

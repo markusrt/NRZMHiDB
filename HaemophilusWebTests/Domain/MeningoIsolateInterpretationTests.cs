@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
@@ -1221,6 +1222,30 @@ namespace HaemophilusWeb.Domain
             interpretation.Result.Comment.Should().BeNull();
             interpretation.Serogroup.Should().BeNull();
             AssertNoMeningococciFlagIsValid(interpretation);
+        }
+
+        [Test]
+        public void IsolateMatchingNativeMaterialRule7ButWithMultipleRealTimePcrResults_ReturnsInconclusive()
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                Sending = new MeningoSending { Material = MeningoMaterial.NativeMaterial },
+                CsbPcr = GetRandomNegativeOrInhibitory(),
+                CscPcr = GetRandomNegativeOrInhibitory(),
+                CswyPcr = NativeMaterialTestResult.NotDetermined,
+                PorAPcr = GetRandomNegativeOrInhibitory(),
+                FetAPcr = GetRandomNegativeOrInhibitory(),
+                RealTimePcr = NativeMaterialTestResult.Positive,
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis | RealTimePcrResult.HaemophilusInfluenzae
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."));
+            interpretation.Typings.Should().BeEmpty();
+            interpretation.Result.Comment.Should().BeNull();
+            interpretation.Serogroup.Should().BeNull();
         }
 
         [TestCase("Rule 10", NativeMaterialTestResult.Positive, false, "Neisseria meningitidis", "Meningokokken-spezifische DNA konnte nachgewiesen werden. Das Ergebnis spricht für eine invasive Meningokokkeninfektion.")]

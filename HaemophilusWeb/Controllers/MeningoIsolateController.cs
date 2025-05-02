@@ -56,6 +56,7 @@ namespace HaemophilusWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(MeningoIsolateViewModel isolateViewModel)
         {
+            CreateAndEditPreparations(isolateViewModel);
             if (ModelState.IsValid)
             {
                 try

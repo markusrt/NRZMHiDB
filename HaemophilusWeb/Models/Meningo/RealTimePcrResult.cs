@@ -1,7 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace HaemophilusWeb.Models.Meningo
 {
+    [Flags]
     public enum RealTimePcrResult
     {
         [Description("Neisseria meningitidis")]
@@ -9,6 +11,6 @@ namespace HaemophilusWeb.Models.Meningo
         [Description("Haemophilus influenzae")]
         HaemophilusInfluenzae = 2,
         [Description("Streptococcus pneumoniae")]
-        StreptococcusPneumoniae = 3,
+        StreptococcusPneumoniae = 4,
     }
 }

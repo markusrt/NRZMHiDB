@@ -37,6 +37,8 @@ namespace HaemophilusWeb.Validators
             RuleFor(i => i.CsbPcr).Must(OnlyOneSerogenoGroupShouldBePositive).WithMessage(MoreThenOneSerogenoIsPositive);
             RuleFor(i => i.CscPcr).Must(OnlyOneSerogenoGroupShouldBePositive).WithMessage(MoreThenOneSerogenoIsPositive);
             RuleFor(i => i.CswyPcr).Must(OnlyOneSerogenoGroupShouldBePositive).WithMessage(MoreThenOneSerogenoIsPositive);
+            RuleFor(i => i.RealTimePcrResult).Must((model, value)
+                => BeSetIfPositive(value, model.RealTimePcr)).WithMessage(PropertyMustNotBeEmpty);
         }
 
         private static bool OnlyOneSerogenoGroupShouldBePositive(MeningoIsolateViewModel model, NativeMaterialTestResult testResult)

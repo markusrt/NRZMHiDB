@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Utils;
 
 namespace HaemophilusWeb.Validators
 {
@@ -25,6 +27,11 @@ namespace HaemophilusWeb.Validators
         protected static bool BeSetIfPositive(double? value, NativeMaterialTestResult testResult)
         {
             return testResult != NativeMaterialTestResult.Positive || value.HasValue;
+        }
+
+        protected static bool BeSetIfPositive(RealTimePcrResult result, NativeMaterialTestResult testResult)
+        {
+            return testResult != NativeMaterialTestResult.Positive || (result != 0 && result.IsDefinedEnumValue());
         }
 
         protected static bool BeSetIfPositive(string value, NativeMaterialTestResult testResult)

@@ -128,6 +128,11 @@ namespace HaemophilusWeb.Validators
             twoSeroGenoGroupsPositive.CsbPcr = NativeMaterialTestResult.Positive;
             twoSeroGenoGroupsPositive.CswyPcr = NativeMaterialTestResult.Positive;
             yield return Tuple.Create(twoSeroGenoGroupsPositive, new[] { "CsbPcr", "CswyPcr" });
+
+            var realTimePcrResultMissing = CreateMeningoIsolateViewModel();
+            realTimePcrResultMissing.RealTimePcr = NativeMaterialTestResult.Positive;
+            realTimePcrResultMissing.RealTimePcrResult = 0;
+            yield return Tuple.Create(realTimePcrResultMissing, new[] { "RealTimePcrResult" });
         }
     }
 }
