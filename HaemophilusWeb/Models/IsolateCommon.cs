@@ -44,14 +44,14 @@ namespace HaemophilusWeb.Models
         [Display(Name = "16S rDNA Übereinstimmung")]
         public double? RibosomalRna16SMatchInPercent { get; set; }
 
-        [Display(Name = "MALDI-TOF")]
-        public UnspecificTestResult MaldiTof { get; set; }
+        [Display(Name = "MALDI-TOF (VITEK MS)")]
+        public UnspecificTestResult MaldiTofVitek { get; set; }
 
-        [Display(Name = "MALDI-TOF beste Übereinstimmung")]
-        public string MaldiTofBestMatch { get; set; }
+        [Display(Name = "MALDI-TOF (VITEK MS) beste Übereinstimmung")]
+        public string MaldiTofVitekBestMatch { get; set; }
 
-        [Display(Name = "MALDI-TOF Übereinstimmung")]
-        public double? MaldiTofMatchConfidence { get; set; }
+        [Display(Name = "MALDI-TOF (VITEK MS) Übereinstimmung")]
+        public double? MaldiTofVitekMatchConfidence { get; set; }
 
         [Display(Name = "Befund am")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]

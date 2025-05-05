@@ -72,21 +72,12 @@
         </div>
     </div>
 
-    @Html.EnumRadioEditorFor(model => model.MaldiTof)
-    <div id="MaldiTofMatchConfidenceForm" class="form-group">
-        @Html.LabelFor(m => m.MaldiTofMatchConfidence, new { @class = "col-sm-2 control-label" })
-        <div class="col-sm-4">
-            @Html.TextBoxFor(m => m.MaldiTofBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
-            @Html.ValidationMessageFor(model => model.MaldiTofBestMatch)
-        </div>
-        <div class="col-sm-3">
-            <div class="input-group">
-                @Html.TextBoxFor(m => m.MaldiTofMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
-                <span class="input-group-addon">00,0</span>
-            </div>
-            @Html.ValidationMessageFor(model => model.MaldiTofMatchConfidence)
-        </div>
-    </div>
+    @Html.ReadonlyFor(model => model.MaldiTofVitek,
+        suffix: Model.MaldiTofVitek == UnspecificTestResult.Determined
+            ? ", Beste Übereinstimmung: <b>" + Model.MaldiTofVitekBestMatch + "</b>, Konfidenz: " + Model.MaldiTofVitekMatchConfidence + "%"
+            : "")
+    @Html.HiddenFor(m => m.MaldiTofVitekBestMatch)
+    @Html.HiddenFor(m => m.MaldiTofVitekMatchConfidence)
 
     @Html.EnumRadioEditorFor(model => model.GenomeSequencing)
 
@@ -118,7 +109,7 @@
         <div class="col-sm-5">
             @EnumEditor.EnumDropDownListFor(Html, model => model.Evaluation, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Evaluation)
-            
+
             <span id="EvaluationMisMatchWarning" class="label label-warning"></span>
         </div>
     </div>
@@ -144,7 +135,7 @@
         function() {
             $("select[id$=_EucastClinicalBreakpointId]").change(ETestChange);
             $("select[id$=_Measurement]").change(ETestChange);
-            $("select[id$=_Antibiotic]").change(ETestChange); 
+            $("select[id$=_Antibiotic]").change(ETestChange);
             $("input:radio[name$='Agglutination']").change(AgglutinationChange);
             $("select[id$=Evaluation]").change(EvaluationChange);
             ConfigureConditionalFields();
@@ -178,7 +169,7 @@
         var agglutination = $("input:radio[name$='Agglutination']:checked").val();
         if (serogroups.includes(agglutination)) {
             $("select[id$=Evaluation]").val(`HaemophilusType${agglutination}`);
-        } 
+        }
         else {
             $("select[id$=Evaluation]").val("HaemophilusNonEncapsulated");
         }

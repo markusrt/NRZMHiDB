@@ -202,7 +202,7 @@ namespace HaemophilusWeb.Domain
                                 && (!rule.Onpg.HasValue || rule.Onpg == isolate.Onpg)
                                 && (rule.GammaGt == null || rule.GammaGt.Contains(isolate.GammaGt))
                                 && (rule.SerogroupPcr == null || rule.SerogroupPcr.Contains(isolate.SerogroupPcr))
-                                && (!rule.MaldiTof.HasValue || rule.MaldiTof == isolate.MaldiTof)
+                                && (!rule.MaldiTof.HasValue || rule.MaldiTof == isolate.MaldiTofVitek)
                                 && (!rule.PorAPcr.HasValue || rule.PorAPcr == isolate.PorAPcr)
                                 && (!rule.FetAPcr.HasValue || rule.FetAPcr == isolate.FetAPcr);
             return checkStemRule;

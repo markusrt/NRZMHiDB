@@ -60,7 +60,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.NotDetermined,
                 GammaGt = TestResult.NotDetermined,
                 SerogroupPcr = MeningoSerogroupPcr.C,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Positive,
             };
@@ -119,7 +119,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.NotDetermined,
                 GammaGt = TestResult.NotDetermined,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -151,7 +151,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.NotDetermined,
                 GammaGt = TestResult.NotDetermined,
                 SerogroupPcr = serogroupPcr,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = porAPcr,
                 FetAPcr = fetAPcr,
                 PorAVr1 = "X",
@@ -203,7 +203,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined,
             };
@@ -237,8 +237,8 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = gammaGtTestResult,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.Determined,
-                MaldiTofBestMatch = "N. gonorrhoeae",
+                MaldiTofVitek = UnspecificTestResult.Determined,
+                MaldiTofVitekBestMatch = "N. gonorrhoeae",
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -271,7 +271,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -303,7 +303,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -334,7 +334,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.WY,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
                 PorAVr1 = "X",
@@ -374,7 +374,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.WY,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
                 PorAVr1 = "X",
@@ -416,7 +416,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -452,7 +452,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = gammaGt,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
                 PorAVr1 = "X",
@@ -492,7 +492,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.Cnl,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = poraAndFeta,
                 FetAPcr = poraAndFeta,
                 PorAVr1 = "X",
@@ -548,7 +548,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.Cnl,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = poraAndFeta,
                 FetAPcr = poraAndFeta,
                 PorAVr1 = "X",
@@ -603,7 +603,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.Cnl,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = poraAndFeta,
                 FetAPcr = poraAndFeta,
                 PorAVr1 = "X",
@@ -655,7 +655,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined,
             };
@@ -685,8 +685,8 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Negative,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.Determined,
-                MaldiTofBestMatch = "N. gonorrhoeae",
+                MaldiTofVitek = UnspecificTestResult.Determined,
+                MaldiTofVitekBestMatch = "N. gonorrhoeae",
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -719,7 +719,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.NotDetermined,
                 GammaGt = TestResult.NotDetermined,
                 SerogroupPcr = MeningoSerogroupPcr.WY,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
             };
@@ -754,7 +754,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = serogroupPcr,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
                 PorAVr1 = "X",
@@ -801,7 +801,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.C,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -830,7 +830,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = serogroupPcr,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -863,7 +863,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.Positive,
                 FetAPcr = NativeMaterialTestResult.Positive,
                 PorAVr1 = "X",
@@ -900,7 +900,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Positive,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -935,8 +935,8 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.NotDetermined,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.Determined,
-                MaldiTofBestMatch = "N. gonorrhoeae",
+                MaldiTofVitek = UnspecificTestResult.Determined,
+                MaldiTofVitekBestMatch = "N. gonorrhoeae",
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };
@@ -1002,7 +1002,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.NotDetermined,
                 GammaGt = TestResult.NotDetermined,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
-                MaldiTof = UnspecificTestResult.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
                 FetAPcr = NativeMaterialTestResult.NotDetermined
             };

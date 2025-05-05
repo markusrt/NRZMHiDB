@@ -22,10 +22,10 @@ namespace HaemophilusWeb.Validators
                 => BeSetIfPositive(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.RibosomalRna16SMatchInPercent).Must((model, value)
                 => BeSetIfPositive(value, model.RibosomalRna16S)).WithMessage(PropertyMustNotBeEmpty);
-            RuleFor(i => i.MaldiTofBestMatch).Must((model, value)
-                => BeSetIfDetermined(value, model.MaldiTof)).WithMessage(PropertyMustNotBeEmpty);
-            RuleFor(i => i.MaldiTofMatchConfidence).Must((model, value)
-                => BeSetIfDetermined(value, model.MaldiTof)).WithMessage(PropertyMustNotBeEmpty);
+            RuleFor(i => i.MaldiTofVitekBestMatch).Must((model, value)
+                => BeSetIfDetermined(value, model.MaldiTofVitek)).WithMessage(PropertyMustNotBeEmpty);
+            RuleFor(i => i.MaldiTofVitekMatchConfidence).Must((model, value)
+                => BeSetIfDetermined(value, model.MaldiTofVitek)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.LaboratoryNumber).NotEmpty();
             RuleFor(i => i.LaboratoryNumber).Matches(@"\d+/\d\d").WithMessage(
                 "Die Labornummer muss in der Form '39/14' eingegeben werden.");
@@ -65,7 +65,7 @@ namespace HaemophilusWeb.Validators
             var anyTestingDone =
                 model.Oxidase != TestResult.NotDetermined || model.Agglutination != MeningoSerogroupAgg.NotDetermined || 
                 model.Onpg != TestResult.NotDetermined || model.GammaGt != TestResult.NotDetermined || 
-                model.MaldiTof != UnspecificTestResult.NotDetermined;
+                model.MaldiTofVitek != UnspecificTestResult.NotDetermined;
             var modelIsInvalid = noGrowthAtAll && anyTestingDone;
             return !modelIsInvalid;
         }

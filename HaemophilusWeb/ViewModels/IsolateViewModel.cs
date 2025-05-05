@@ -70,15 +70,15 @@ namespace HaemophilusWeb.ViewModels
                                     DoubleToString(RibosomalRna16SMatchInPercent))
                         };
                 }
-                if (MaldiTof == UnspecificTestResult.Determined)
+                if (MaldiTofVitek == UnspecificTestResult.Determined)
                 {
                     yield return
                         new Typing
                         {
-                            Attribute = "MALDI-TOF",
+                            Attribute = "MALDI-TOF (VITEK MS)",
                             Value =
-                                string.Format("{0}, {1}", MaldiTofBestMatch,
-                                    DoubleToString(MaldiTofMatchConfidence))
+                                string.Format("{0}, {1}", MaldiTofVitekBestMatch,
+                                    DoubleToString(MaldiTofVitekMatchConfidence))
                         };
                 }
                 if (Ftsi == UnspecificTestResult.Determined)

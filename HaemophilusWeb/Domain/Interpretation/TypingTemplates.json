@@ -49,7 +49,7 @@
   },
   "MaldiTof": {
     "Attribute": "MALDI-TOF (VITEK MS)",
-    "Value": "{MaldiTofBestMatch}"
+    "Value": "{MaldiTofVitekBestMatch}"
   },
   "Agglutination": {
     "Attribute": "Serogruppe",

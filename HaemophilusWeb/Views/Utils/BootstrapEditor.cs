@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HaemophilusWeb.Utils;
+using System;
 using System.Linq.Expressions;
 using System.Reflection.Emit;
 using System.Web.Mvc;
@@ -84,12 +85,17 @@ namespace HaemophilusWeb.Views.Utils
         }
 
         public static MvcHtmlString ReadonlyFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TProperty>> expression, string smXClass = ColSm5)
+            Expression<Func<TModel, TProperty>> expression, string smXClass = ColSm5, string suffix = "")
         {
+            var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             var label = htmlHelper.LabelFor(expression);
             var display = htmlHelper.DisplayFor(expression).ToHtmlString();
+            if (modelMetadata.ModelType.IsEnum)
+            {
+                display = EnumUtils.GetEnumDescription(modelMetadata.ModelType, modelMetadata.Model);
+            }
             var hidden = htmlHelper.HiddenFor(expression).ToHtmlString();
-            var readonlyField = string.Format(DivSmXStatic, smXClass, display, hidden);
+            var readonlyField = string.Format(DivSmXStatic, smXClass, display+suffix, hidden);
 
             return CreateFormGroup(label, readonlyField);
         }
