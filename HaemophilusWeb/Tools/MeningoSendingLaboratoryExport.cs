@@ -69,6 +69,9 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.MaldiTofVitek));
             AddField(s => s.Isolate.MaldiTofVitekBestMatch);
             AddField(s => s.Isolate.MaldiTofVitekMatchConfidence);
+            AddField(s => ExportToString(s.Isolate.MaldiTofBiotyper));
+            AddField(s => s.Isolate.MaldiTofBiotyperBestMatch);
+            AddField(s => s.Isolate.MaldiTofBiotyperMatchConfidence);
             AddField(s => s.Isolate.ReportDate);
             AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
 

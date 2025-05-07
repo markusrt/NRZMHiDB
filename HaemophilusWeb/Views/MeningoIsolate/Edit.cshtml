@@ -68,6 +68,22 @@
 
             @Html.EnumRadioEditorFor(model => model.SerogroupPcr, "col-sm-10")
             
+            @Html.EnumRadioEditorFor(model => model.MaldiTofBiotyper)
+            <div id="MaldiTofMatchConfidenceForm" class="form-group">
+                @Html.LabelFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.MaldiTofBiotyperBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+                    @Html.ValidationMessageFor(model => model.MaldiTofBiotyperBestMatch)
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        @Html.TextBoxFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
+                        <span class="input-group-addon">00,0</span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.MaldiTofBiotyperMatchConfidence)
+                </div>
+            </div>
+
             @Html.ReadonlyFor(model => model.MaldiTofVitek,
                 suffix: Model.MaldiTofVitek == UnspecificTestResult.Determined
                     ? ", Beste Übereinstimmung: <b>" + Model.MaldiTofVitekBestMatch + "</b>, Konfidenz: " + Model.MaldiTofVitekMatchConfidence + "%"
@@ -280,7 +296,7 @@
 
     function ConfigureConditionalFields() {
         ShowOnSpecificRadioValue("RibosomalRna16SMatchInPercentForm", "RibosomalRna16S", "Positive", GeneralInput("RibosomalRna16SBestMatch"), GeneralInput("RibosomalRna16SMatchInPercent"));
-        ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTof", "Determined", GeneralInput("MaldiTofBestMatch"), GeneralInput("MaldiTofMatchConfidence"));
+        ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTofBiotyper", "Determined", GeneralInput("MaldiTofBiotyperBestMatch"), GeneralInput("MaldiTofBiotyperMatchConfidence"));
         ShowOnSpecificRadioValue("PorAPcrForm", "PorAPcr", "Positive", ExactInput("PorAVr1"), ExactInput("PorAVr2"));
         ShowOnSpecificRadioValue("FetAPcrForm", "FetAPcr", "Positive", ExactInput("FetAVr"));
         ShowOnSpecificRadioValue("CswyAlleleForm", "CswyPcr", "Positive", RadioInput("CswyAllele"));

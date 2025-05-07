@@ -26,6 +26,10 @@ namespace HaemophilusWeb.Validators
                 => BeSetIfDetermined(value, model.MaldiTofVitek)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofVitekMatchConfidence).Must((model, value)
                 => BeSetIfDetermined(value, model.MaldiTofVitek)).WithMessage(PropertyMustNotBeEmpty);
+            RuleFor(i => i.MaldiTofBiotyperBestMatch).Must((model, value)
+                => BeSetIfDetermined(value, model.MaldiTofBiotyper)).WithMessage(PropertyMustNotBeEmpty);
+            RuleFor(i => i.MaldiTofBiotyperMatchConfidence).Must((model, value)
+                => BeSetIfDetermined(value, model.MaldiTofBiotyper)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.LaboratoryNumber).NotEmpty();
             RuleFor(i => i.LaboratoryNumber).Matches(@"\d+/\d\d").WithMessage(
                 "Die Labornummer muss in der Form '39/14' eingegeben werden.");
@@ -65,7 +69,7 @@ namespace HaemophilusWeb.Validators
             var anyTestingDone =
                 model.Oxidase != TestResult.NotDetermined || model.Agglutination != MeningoSerogroupAgg.NotDetermined || 
                 model.Onpg != TestResult.NotDetermined || model.GammaGt != TestResult.NotDetermined || 
-                model.MaldiTofVitek != UnspecificTestResult.NotDetermined;
+                model.MaldiTofVitek != UnspecificTestResult.NotDetermined || model.MaldiTofBiotyper != UnspecificTestResult.NotDetermined;
             var modelIsInvalid = noGrowthAtAll && anyTestingDone;
             return !modelIsInvalid;
         }

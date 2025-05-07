@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
@@ -141,7 +142,7 @@ namespace HaemophilusWeb.Domain
 
         private void RunStemInterpretation(MeningoIsolate isolate)
         {
-            var matchingRule = StemInterpretationRules.FirstOrDefault(r => CheckStemRule(r.Value, isolate));
+            var matchingRule = StemInterpretationRules.FirstOrDefault(r => CheckStemRule(r.Key, r.Value, isolate));
 
             if (matchingRule.Key != null)
             {
@@ -159,7 +160,8 @@ namespace HaemophilusWeb.Domain
                 
                 foreach (var typingTemplateKey in rule.Typings)
                 {
-                    var template = TypingTemplates[typingTemplateKey];
+                    var templateKey = AdaptTemplateKeyForMaldiTofSpecialCase(isolate, typingTemplateKey);
+                    var template = TypingTemplates[templateKey];
                     typings.Add(new Typing
                     {
                         Attribute = template.Attribute,
@@ -167,6 +169,24 @@ namespace HaemophilusWeb.Domain
                     });
                 }
             }
+        }
+
+        private static string AdaptTemplateKeyForMaldiTofSpecialCase(MeningoIsolate isolate, string typingTemplateKey)
+        {
+            var templateKey = typingTemplateKey;
+            if (templateKey == "MaldiTof")
+            {
+                if (isolate.MaldiTofBiotyper == UnspecificTestResult.Determined)
+                {
+                    templateKey = "MaldiTofBiotyper";
+                }
+                else
+                {
+                    templateKey = "MaldiTofVitek";
+                }
+            }
+
+            return templateKey;
         }
 
         private static T DeserializeFromResource<T>(string resourceName)
@@ -192,7 +212,7 @@ namespace HaemophilusWeb.Domain
                    && rule.RealTimePcrResult == isolate.RealTimePcrResult;
         }
 
-        private bool CheckStemRule(StemInterpretationRule rule, MeningoIsolate isolate)
+        private bool CheckStemRule(string argKey, StemInterpretationRule rule, MeningoIsolate isolate)
         {
             var checkStemRule = (rule.SendingInvasive == null || rule.SendingInvasive.Contains(isolate.Sending?.Invasive))
                                 && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
@@ -202,7 +222,10 @@ namespace HaemophilusWeb.Domain
                                 && (!rule.Onpg.HasValue || rule.Onpg == isolate.Onpg)
                                 && (rule.GammaGt == null || rule.GammaGt.Contains(isolate.GammaGt))
                                 && (rule.SerogroupPcr == null || rule.SerogroupPcr.Contains(isolate.SerogroupPcr))
-                                && (!rule.MaldiTof.HasValue || rule.MaldiTof == isolate.MaldiTofVitek)
+                                && (!rule.MaldiTof.HasValue 
+                                    || ( rule.MaldiTof == UnspecificTestResult.NotDetermined && rule.MaldiTof == isolate.MaldiTofVitek && rule.MaldiTof == isolate.MaldiTofBiotyper )
+                                    || ( rule.MaldiTof == UnspecificTestResult.Determined && (rule.MaldiTof == isolate.MaldiTofVitek || rule.MaldiTof == isolate.MaldiTofBiotyper))
+                                    )
                                 && (!rule.PorAPcr.HasValue || rule.PorAPcr == isolate.PorAPcr)
                                 && (!rule.FetAPcr.HasValue || rule.FetAPcr == isolate.FetAPcr);
             return checkStemRule;

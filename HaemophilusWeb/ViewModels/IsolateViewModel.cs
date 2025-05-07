@@ -77,8 +77,19 @@ namespace HaemophilusWeb.ViewModels
                         {
                             Attribute = "MALDI-TOF (VITEK MS)",
                             Value =
-                                string.Format("{0}, {1}", MaldiTofVitekBestMatch,
+                                string.Format("{0}, {1}%", MaldiTofVitekBestMatch,
                                     DoubleToString(MaldiTofVitekMatchConfidence))
+                        };
+                }
+                if (MaldiTofBiotyper == UnspecificTestResult.Determined)
+                {
+                    yield return
+                        new Typing
+                        {
+                            Attribute = "MALDI-TOF (Biotyper)",
+                            Value =
+                                string.Format("{0}, {1}", MaldiTofBiotyperBestMatch,
+                                    DoubleToString(MaldiTofBiotyperMatchConfidence))
                         };
                 }
                 if (Ftsi == UnspecificTestResult.Determined)

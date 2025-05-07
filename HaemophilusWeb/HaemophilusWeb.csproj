@@ -372,6 +372,10 @@
     <Compile Include="Migrations\202505050545536_RenameMaldiTofToVitek.Designer.cs">
       <DependentUpon>202505050545536_RenameMaldiTofToVitek.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202505070520582_Isolate_MaldiTofBiotyper.cs" />
+    <Compile Include="Migrations\202505070520582_Isolate_MaldiTofBiotyper.Designer.cs">
+      <DependentUpon>202505070520582_Isolate_MaldiTofBiotyper.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
@@ -962,6 +966,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202505050545536_RenameMaldiTofToVitek.resx">
       <DependentUpon>202505050545536_RenameMaldiTofToVitek.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505070520582_Isolate_MaldiTofBiotyper.resx">
+      <DependentUpon>202505070520582_Isolate_MaldiTofBiotyper.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

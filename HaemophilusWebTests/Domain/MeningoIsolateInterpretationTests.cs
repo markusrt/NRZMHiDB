@@ -224,7 +224,7 @@ namespace HaemophilusWeb.Domain
         [TestCase(TestResult.Negative, true, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
         [TestCase(TestResult.Negative, false, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
         [TestCase(TestResult.Positive, true, TestName = "IsolateMatchingStemRule5_ReturnsCorrespondingInterpretation")]
-        public void IsolateMatchingStemRule4And5_ReturnsCorrespondingInterpretation(TestResult gammaGtTestResult, bool invasive)
+        public void IsolateMatchingStemRule4And5Vitek_ReturnsCorrespondingInterpretation(TestResult gammaGtTestResult, bool invasive)
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -237,6 +237,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = gammaGtTestResult,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTofBiotyper = UnspecificTestResult.NotDetermined,
                 MaldiTofVitek = UnspecificTestResult.Determined,
                 MaldiTofVitekBestMatch = "N. gonorrhoeae",
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
@@ -253,6 +254,43 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "γ-Glutamyltransferase" && t.Value == EnumUtils.GetEnumDescription(typeof(TestResult), gammaGtTestResult));
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "MALDI-TOF (VITEK MS)" && t.Value == "N. gonorrhoeae");
+            isolateInterpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
+        }
+
+        [TestCase(TestResult.Negative, true, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
+        [TestCase(TestResult.Negative, false, TestName = "IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation")]
+        [TestCase(TestResult.Positive, true, TestName = "IsolateMatchingStemRule5_ReturnsCorrespondingInterpretation")]
+        public void IsolateMatchingStemRule4And5Biotyper_ReturnsCorrespondingInterpretation(TestResult gammaGtTestResult, bool invasive)
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.ATypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.No,
+                Sending = new MeningoSending { SamplingLocation = invasive ? InvasiveSamplingLocation : NonInvasiveSamplingLocation },
+                Oxidase = TestResult.Negative,
+                Agglutination = MeningoSerogroupAgg.NotDetermined,
+                Onpg = TestResult.Negative,
+                GammaGt = gammaGtTestResult,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
+                MaldiTofBiotyper = UnspecificTestResult.Determined,
+                MaldiTofBiotyperBestMatch = "N. gonorrhoeae",
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            isolateInterpretation.Interpret(isolate);
+
+            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "β-Galaktosidase" && t.Value == "negativ");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "γ-Glutamyltransferase" && t.Value == EnumUtils.GetEnumDescription(typeof(TestResult), gammaGtTestResult));
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "MALDI-TOF (Biotyper)" && t.Value == "N. gonorrhoeae");
             isolateInterpretation.Serogroup.Should().BeNull();
             AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
@@ -672,7 +710,7 @@ namespace HaemophilusWeb.Domain
         }
 
         [Test]
-        public void IsolateMatchingStemRule34_ReturnsCorrespondingInterpretation()
+        public void IsolateMatchingStemRule34Vitek_ReturnsCorrespondingInterpretation()
         {
             var isolateInterpretation = new MeningoIsolateInterpretation();
             var isolate = new MeningoIsolate
@@ -685,6 +723,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.Negative,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTofBiotyper = UnspecificTestResult.NotDetermined,
                 MaldiTofVitek = UnspecificTestResult.Determined,
                 MaldiTofVitekBestMatch = "N. gonorrhoeae",
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
@@ -701,6 +740,41 @@ namespace HaemophilusWeb.Domain
                 t.Attribute == "γ-Glutamyltransferase" && t.Value == "negativ");
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "MALDI-TOF (VITEK MS)" && t.Value == "N. gonorrhoeae");
+            isolateInterpretation.Serogroup.Should().BeNull();
+            AssertNoMeningococciFlagIsValid(isolateInterpretation);
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule34Biotyper_ReturnsCorrespondingInterpretation()
+        {
+            var isolateInterpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.ATypicalGrowth,
+                GrowthOnMartinLewisAgar = Growth.ATypicalGrowth,
+                Sending = new MeningoSending { SamplingLocation = InvasiveSamplingLocation },
+                Oxidase = TestResult.Negative,
+                Agglutination = MeningoSerogroupAgg.NotDetermined,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.Negative,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
+                MaldiTofBiotyper = UnspecificTestResult.Determined,
+                MaldiTofBiotyperBestMatch = "N. gonorrhoeae",
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            isolateInterpretation.Interpret(isolate);
+
+            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "β-Galaktosidase" && t.Value == "negativ");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "γ-Glutamyltransferase" && t.Value == "negativ");
+            isolateInterpretation.Typings.Should().Contain(t =>
+                t.Attribute == "MALDI-TOF (Biotyper)" && t.Value == "N. gonorrhoeae");
             isolateInterpretation.Serogroup.Should().BeNull();
             AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
@@ -920,7 +994,7 @@ namespace HaemophilusWeb.Domain
         [TestCase(Growth.No, MeningoSamplingLocation.NasalSwab)]
         [TestCase(Growth.ATypicalGrowth, MeningoSamplingLocation.Blood)]
         [TestCase(Growth.ATypicalGrowth, MeningoSamplingLocation.NasalSwab)]
-        public void IsolateMatchingStemRuleNoNM_01_ReturnsCorrespondingInterpretation(
+        public void IsolateMatchingStemRuleNoNM_01Vitek_ReturnsCorrespondingInterpretation(
             Growth growthOnMartinLewisAgar,
             MeningoSamplingLocation samplingLocation)
         {
@@ -935,6 +1009,7 @@ namespace HaemophilusWeb.Domain
                 Onpg = TestResult.Negative,
                 GammaGt = TestResult.NotDetermined,
                 SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTofBiotyper = UnspecificTestResult.NotDetermined,
                 MaldiTofVitek = UnspecificTestResult.Determined,
                 MaldiTofVitekBestMatch = "N. gonorrhoeae",
                 PorAPcr = NativeMaterialTestResult.NotDetermined,
@@ -948,6 +1023,45 @@ namespace HaemophilusWeb.Domain
             interpretation.TypingAttribute("β-Galaktosidase").Should().Be("negativ");
             interpretation.TypingAttribute("γ-Glutamyltransferase").Should().Be("n.d.");
             interpretation.TypingAttribute("MALDI-TOF (VITEK MS)").Should().Be("N. gonorrhoeae");
+            interpretation.Serogroup.Should().BeNull();
+
+            AssertNoMeningococciFlagIsValid(interpretation);
+            interpretation.Rule.Should().Be("StemInterpretation_NoNM_01");
+        }
+
+        [TestCase(Growth.No, MeningoSamplingLocation.Blood)]
+        [TestCase(Growth.No, MeningoSamplingLocation.NasalSwab)]
+        [TestCase(Growth.ATypicalGrowth, MeningoSamplingLocation.Blood)]
+        [TestCase(Growth.ATypicalGrowth, MeningoSamplingLocation.NasalSwab)]
+        public void IsolateMatchingStemRuleNoNM_01Biotyper_ReturnsCorrespondingInterpretation(
+            Growth growthOnMartinLewisAgar,
+            MeningoSamplingLocation samplingLocation)
+        {
+            var interpretation = new MeningoIsolateInterpretation();
+            var isolate = new MeningoIsolate
+            {
+                GrowthOnBloodAgar = Growth.ATypicalGrowth,
+                GrowthOnMartinLewisAgar = growthOnMartinLewisAgar,
+                Sending = new MeningoSending { SamplingLocation =  samplingLocation},
+                Oxidase = TestResult.Positive,
+                Agglutination = MeningoSerogroupAgg.NotDetermined,
+                Onpg = TestResult.Negative,
+                GammaGt = TestResult.NotDetermined,
+                SerogroupPcr = MeningoSerogroupPcr.NotDetermined,
+                MaldiTofVitek = UnspecificTestResult.NotDetermined,
+                MaldiTofBiotyper = UnspecificTestResult.Determined,
+                MaldiTofBiotyperBestMatch = "N. gonorrhoeae",
+                PorAPcr = NativeMaterialTestResult.NotDetermined,
+                FetAPcr = NativeMaterialTestResult.NotDetermined
+            };
+
+            interpretation.Interpret(isolate);
+
+            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            interpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
+            interpretation.TypingAttribute("β-Galaktosidase").Should().Be("negativ");
+            interpretation.TypingAttribute("γ-Glutamyltransferase").Should().Be("n.d.");
+            interpretation.TypingAttribute("MALDI-TOF (Biotyper)").Should().Be("N. gonorrhoeae");
             interpretation.Serogroup.Should().BeNull();
 
             AssertNoMeningococciFlagIsValid(interpretation);

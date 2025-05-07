@@ -169,6 +169,7 @@ namespace HaemophilusWeb.Controllers
             isolate.GammaGt = TestResult.NotDetermined;
             isolate.SerogroupPcr = serogroupPcr;
             isolate.MaldiTofVitek = UnspecificTestResult.NotDetermined;
+            isolate.MaldiTofBiotyper = UnspecificTestResult.NotDetermined;
             isolate.PorAPcr = NativeMaterialTestResult.Negative;
             isolate.FetAPcr = NativeMaterialTestResult.Positive;
             isolate.PorAVr1 = "22";

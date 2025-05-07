@@ -19,6 +19,10 @@ namespace HaemophilusWeb.Validators
                 => BeSetIfDetermined(value, model.MaldiTofVitek)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MaldiTofVitekMatchConfidence).Must((model, value)
                 => BeSetIfDetermined(value, model.MaldiTofVitek)).WithMessage(PropertyMustNotBeEmpty);
+            RuleFor(i => i.MaldiTofBiotyperBestMatch).Must((model, value)
+                => BeSetIfDetermined(value, model.MaldiTofBiotyper)).WithMessage(PropertyMustNotBeEmpty);
+            RuleFor(i => i.MaldiTofBiotyperMatchConfidence).Must((model, value)
+                => BeSetIfDetermined(value, model.MaldiTofBiotyper)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(i => i.MlstSequenceType).Must((model, value)
                 => BeSetIfDetermined(value, model.Mlst)).WithMessage(PropertyMustNotBeEmpty);
             RuleFor(p => p.LaboratoryNumber).NotEmpty();

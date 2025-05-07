@@ -53,6 +53,15 @@ namespace HaemophilusWeb.Models
         [Display(Name = "MALDI-TOF (VITEK MS) Übereinstimmung")]
         public double? MaldiTofVitekMatchConfidence { get; set; }
 
+        [Display(Name = "MALDI-TOF (Biotyper)")]
+        public UnspecificTestResult MaldiTofBiotyper { get; set; }
+
+        [Display(Name = "MALDI-TOF (Biotyper) beste Übereinstimmung")]
+        public string MaldiTofBiotyperBestMatch { get; set; }
+
+        [Display(Name = "MALDI-TOF (Biotyper) Übereinstimmung")]
+        public double? MaldiTofBiotyperMatchConfidence { get; set; }
+
         [Display(Name = "Befund am")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime? ReportDate { get; set; }
