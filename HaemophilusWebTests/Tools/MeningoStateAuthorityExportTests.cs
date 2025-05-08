@@ -80,7 +80,7 @@ namespace HaemophilusWeb.Tools
         public void DataTable_ContainsNoSpecies()
         {
             var sut = CreateExportDefinition();
-            Sending.Isolate.MaldiTofBestMatch = null;
+            Sending.Isolate.MaldiTofVitekBestMatch = null;
             Sending.Isolate.RibosomalRna16SBestMatch = null;
             Sending.Isolate.RealTimePcr = NativeMaterialTestResult.NotDetermined;
 
@@ -94,7 +94,7 @@ namespace HaemophilusWeb.Tools
         {
             var sut = CreateExportDefinition();
             Sending.Isolate.RibosomalRna16SBestMatch = null;
-            Sending.Isolate.MaldiTofBestMatch = "Spezies 1";
+            Sending.Isolate.MaldiTofVitekBestMatch = "Spezies 1";
 
             var export = sut.ToDataTable(Sendings);
 
@@ -105,7 +105,7 @@ namespace HaemophilusWeb.Tools
         public void DataTable_ContainsSpeciesFor16S()
         {
             var sut = CreateExportDefinition();
-            Sending.Isolate.MaldiTofBestMatch = null;
+            Sending.Isolate.MaldiTofVitekBestMatch = null;
             Sending.Isolate.RibosomalRna16SBestMatch = "Spezies 2";
 
             var export = sut.ToDataTable(Sendings);
@@ -117,7 +117,7 @@ namespace HaemophilusWeb.Tools
         public void DataTable_ContainsSpeciesForRealTimePCR()
         {
             var sut = CreateExportDefinition();
-            Sending.Isolate.MaldiTofBestMatch = null;
+            Sending.Isolate.MaldiTofVitekBestMatch = null;
             Sending.Isolate.RibosomalRna16SBestMatch = null;
             Sending.Isolate.RealTimePcr = NativeMaterialTestResult.Positive;
             Sending.Isolate.RealTimePcrResult = RealTimePcrResult.HaemophilusInfluenzae;

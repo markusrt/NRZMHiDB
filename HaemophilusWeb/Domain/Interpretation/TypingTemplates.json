@@ -47,9 +47,13 @@
     "Attribute": "γ-Glutamyltransferase",
     "Value": "{GammaGt:enum()}"
   },
-  "MaldiTof": {
+  "MaldiTofVitek": {
     "Attribute": "MALDI-TOF (VITEK MS)",
-    "Value": "{MaldiTofBestMatch}"
+    "Value": "{MaldiTofVitekBestMatch}"
+  },
+  "MaldiTofBiotyper": {
+    "Attribute": "MALDI-TOF (Biotyper)",
+    "Value": "{MaldiTofBiotyperBestMatch}"
   },
   "Agglutination": {
     "Attribute": "Serogruppe",

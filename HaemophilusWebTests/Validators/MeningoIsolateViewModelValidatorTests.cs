@@ -124,6 +124,18 @@ namespace HaemophilusWeb.Validators
             };
             yield return Tuple.Create(growthIsNoButOtherFieldsAreFilled, new[] { "GrowthOnBloodAgar", "GrowthOnMartinLewisAgar" });
 
+            var growthIsNoButMaldiBiotyperDetermined  = new MeningoIsolateViewModel
+            {
+                GrowthOnBloodAgar = Growth.No,
+                GrowthOnMartinLewisAgar = Growth.No,
+                MaldiTofBiotyper = UnspecificTestResult.Determined,
+                MaldiTofBiotyperBestMatch = "match",
+                MaldiTofBiotyperMatchConfidence = 2.3,
+                LaboratoryNumber = "10/10"
+            };
+            yield return Tuple.Create(growthIsNoButMaldiBiotyperDetermined, new[] { "GrowthOnBloodAgar", "GrowthOnMartinLewisAgar" });
+
+
             var twoSeroGenoGroupsPositive = CreateMeningoIsolateViewModel();
             twoSeroGenoGroupsPositive.CsbPcr = NativeMaterialTestResult.Positive;
             twoSeroGenoGroupsPositive.CswyPcr = NativeMaterialTestResult.Positive;
