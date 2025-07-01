@@ -36,7 +36,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(71);
+            export.Columns.Count.Should().Be(74);
         }
 
         [Test]

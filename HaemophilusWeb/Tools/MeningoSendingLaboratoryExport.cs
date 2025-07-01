@@ -66,9 +66,12 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.RibosomalRna16S));
             AddField(s => ExportToString(s.Isolate.RibosomalRna16SBestMatch));
             AddField(s => ExportToString(s.Isolate.RibosomalRna16SMatchInPercent));
-            AddField(s => ExportToString(s.Isolate.MaldiTof));
-            AddField(s => s.Isolate.MaldiTofBestMatch);
-            AddField(s => s.Isolate.MaldiTofMatchConfidence);
+            AddField(s => ExportToString(s.Isolate.MaldiTofVitek));
+            AddField(s => s.Isolate.MaldiTofVitekBestMatch);
+            AddField(s => s.Isolate.MaldiTofVitekMatchConfidence);
+            AddField(s => ExportToString(s.Isolate.MaldiTofBiotyper));
+            AddField(s => s.Isolate.MaldiTofBiotyperBestMatch);
+            AddField(s => s.Isolate.MaldiTofBiotyperMatchConfidence);
             AddField(s => s.Isolate.ReportDate);
             AddField(s => s.Isolate.Remark, "Bemerkung (Isolat)");
 

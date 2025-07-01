@@ -53,7 +53,7 @@ namespace HaemophilusWeb.Tools
 
         private static string FindSpecies(MeningoIsolate isolate)
         {
-            var possibleSpecies = new List<string> {isolate.MaldiTofBestMatch, isolate.RibosomalRna16SBestMatch};
+            var possibleSpecies = new List<string> {isolate.MaldiTofVitekBestMatch, isolate.RibosomalRna16SBestMatch};
             if (isolate.RealTimePcr == NativeMaterialTestResult.Positive)
             {
                 possibleSpecies.Add(EnumUtils.GetEnumDescription<RealTimePcrResult>(isolate.RealTimePcrResult));
