@@ -36,9 +36,9 @@ namespace HaemophilusWeb.Validators
         {
             var invalidSending = new Sending
             {
-                SenderConclusion = string.Empty
+                SenderSpecies = string.Empty
             };
-            yield return Tuple.Create(invalidSending, new[] {"SenderLaboratoryNumber", "SenderConclusion" });
+            yield return Tuple.Create(invalidSending, new[] {"SenderLaboratoryNumber", "SenderSpecies" });
 
             yield return Tuple.Create(CreateInvalidSendingWithReceivingDateBeforeReportDate(), new[] { "ReceivingDate"});
 

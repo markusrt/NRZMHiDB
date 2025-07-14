@@ -20,6 +20,7 @@ namespace HaemophilusWeb.Validators
                 "{PropertyName} darf nicht leer sein.");
             RuleFor(sending => sending.OtherNonInvasiveSamplingLocation).Must(BeNotEmptyIfSamplingLocationIsOtherNonInvasive).WithMessage(
                 "{PropertyName} darf nicht leer sein.");
+            RuleFor(sending => sending.SenderSpecies).NotEmpty();
         }
 
         private static bool BeNotEmptyIfSamplingLocationIsOtherInvasive(MeningoSending sending, string samplingLocation)
