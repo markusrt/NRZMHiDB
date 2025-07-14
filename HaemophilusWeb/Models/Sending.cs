@@ -15,7 +15,7 @@ namespace HaemophilusWeb.Models
         {
             ReceivingDate = DateTime.Now;
             SamplingDate = DateTime.Now.Subtract(TimeSpan.FromDays(7));
-            SenderConclusion = "H. influenzae";
+            SenderSpecies = "H. influenzae";
         }
 
         [Key]
@@ -33,9 +33,6 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Material")]
         public Material Material { get; set; }
 
-        [Display(Name = "Ergebnis Einsender")]
-        public string SenderConclusion { get; set; }
-
         [Display(Name = "Invasiv")]
         public YesNo? Invasive => IsInvasive(SamplingLocation)
             ? YesNo.Yes
@@ -48,6 +45,9 @@ namespace HaemophilusWeb.Models
 
         [Display(Name = "Anderer Entnahmeort")]
         public string OtherSamplingLocation { get; set; }
+
+        [Display(Name = "Serotyp Einsender")]
+        public string SerotypeSender { get; set; }
 
         public virtual RkiMatchRecord RkiMatchRecord { get; set; }
         public virtual Isolate Isolate { get; set; }

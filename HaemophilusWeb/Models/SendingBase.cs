@@ -47,6 +47,9 @@ namespace HaemophilusWeb.Models
         [Display(Name = "Bemerkung")]
         public string Remark { get; set; }
 
+        [Display(Name = "Spezies Einsender")]
+        public string SenderSpecies { get; set; }
+
         [NotMapped]
         public string IsolateLaboratoryNumber => GetIsolate()?.LaboratoryNumber;
 

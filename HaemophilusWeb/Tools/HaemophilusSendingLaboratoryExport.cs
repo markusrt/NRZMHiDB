@@ -22,7 +22,8 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportSamplingLocation(s.SamplingLocation, s));
             AddField(s => ExportToString(s.Material));
             AddField(s => ExportToString(s.Invasive));
-            AddField(s => s.SenderConclusion);
+            AddField(s => s.SerotypeSender);
+            AddField(s => s.SenderSpecies);
 
             AddField(s => s.Patient.Initials);
             AddField(s => s.Patient.BirthDate.ToReportFormat());
