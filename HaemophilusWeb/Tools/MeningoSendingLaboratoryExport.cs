@@ -26,6 +26,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Material));
             AddField(s => ExportToString(s.Invasive));
             AddField(s => s.SerogroupSender);
+            AddField(s => s.SenderSpecies);
 
             AddField(s => s.Patient.Initials);
             AddField(s => s.Patient.BirthDate.ToReportFormat());

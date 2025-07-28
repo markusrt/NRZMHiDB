@@ -17,7 +17,7 @@ namespace HaemophilusWeb.Validators
                 sample => sample.SamplingDate ?? DateTime.MinValue)
                 .WithMessage("Das Eingangsdatum muss nach dem Entnahmedatum liegen");
             RuleFor(sending => sending.SenderLaboratoryNumber).NotEmpty();
-            RuleFor(sending => sending.SenderConclusion).NotEmpty();
+            RuleFor(sending => sending.SenderSpecies).NotEmpty();
             RuleFor(sending => sending.OtherSamplingLocation).Must(BeNotEmptyIfSamplingLocationIsOther).WithMessage(
                 "{PropertyName} darf nicht leer sein.");
         }

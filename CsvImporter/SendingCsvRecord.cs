@@ -47,7 +47,7 @@ namespace CsvImporter
 
         public string SenderLaboratoryNumber { get; set; }
 
-        public string SenderConclusion { get; set; }
+        public string SenderSpecies { get; set; }
 
         public float? AmpicillinMeasurement { get; set; }
 

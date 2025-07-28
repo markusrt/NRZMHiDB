@@ -15,6 +15,7 @@ namespace HaemophilusWeb.Models.Meningo
             ReceivingDate = DateTime.Now;
             SamplingDate = DateTime.Now.Subtract(TimeSpan.FromDays(7));
             SamplingLocation = MeningoSamplingLocation.Blood;
+            SenderSpecies = "N. meningitidis";
         }
 
         [Key]

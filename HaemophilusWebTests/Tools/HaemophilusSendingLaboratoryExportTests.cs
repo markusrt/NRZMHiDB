@@ -36,7 +36,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(74);
+            export.Columns.Count.Should().Be(75);
         }
 
         [Test]
@@ -77,6 +77,8 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Labnr. Einsender"].Should().Be(Sending.SenderLaboratoryNumber);
             export.Rows[0]["Patienten-Nr."].Should().Be(Sending.PatientId);
             export.Rows[0]["DEMIS ID"].Should().Be(Sending.DemisId);
+            export.Rows[0]["Spezies Einsender"].Should().Be(Sending.SenderSpecies);
+            export.Rows[0]["Serotyp Einsender"].Should().Be(Sending.SerotypeSender);
         }
 
         [Test]
