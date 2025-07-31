@@ -915,6 +915,9 @@
     <EmbeddedResource Include="Domain\Interpretation\StemRules.json" />
     <EmbeddedResource Include="Domain\Interpretation\TypingTemplates.json" />
     <EmbeddedResource Include="Domain\Interpretation\NativeMaterialRules.json" />
+    <EmbeddedResource Include="Domain\Interpretation\HaemoStemRules.json" />
+    <EmbeddedResource Include="Domain\Interpretation\HaemoTypingTemplates.json" />
+    <EmbeddedResource Include="Domain\Interpretation\HaemoNativeMaterialRules.json" />
     <Content Include="App_Data\countries.json" />
     <EmbeddedResource Include="Migrations\201908152057267_Patient_Country.resx">
       <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>
