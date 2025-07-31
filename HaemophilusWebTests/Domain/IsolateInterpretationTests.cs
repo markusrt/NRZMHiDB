@@ -282,5 +282,24 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Typings.Should().NotBeEmpty();
         }
 
+        [Test]
+        public void Interpret_NoMatchingRule_FallsBackToOriginalLogic()
+        {
+            var isolate = new Isolate
+            {
+                SerotypePcr = SerotypePcr.A, // Different from rule which expects B
+                Agglutination = SerotypeAgg.A,
+                BexA = TestResult.Positive,
+                Oxidase = TestResult.Positive, // Different from rule which expects Negative
+                Sending = new Sending { SamplingLocation = SamplingLocation.Blood }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            // Should fall back to original hardcoded interpretation logic
+            interpretation.Interpretation.Should().Contain("Haemophilus influenzae des Serotyp a");
+            isolateInterpretation.Rule.Should().BeNull(); // No rule matched
+        }
+
     }
 }

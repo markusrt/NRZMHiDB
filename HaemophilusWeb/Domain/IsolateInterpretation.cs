@@ -5,6 +5,7 @@ using System.Linq;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
+using HaemophilusWeb.Views.Utils;
 using Newtonsoft.Json;
 using SmartFormat.Core.Settings;
 using SmartFormat;
