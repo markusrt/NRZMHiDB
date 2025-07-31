@@ -1,0 +1,16 @@
+{
+  "HaemoNativeMaterialInterpretation_01": {
+    "RibosomalRna16S": [ "Positive" ],
+    "RibosomalRna16SBestMatch": "Haemophilus influenzae",
+    "RealTimePcr": [ "Positive" ],
+    "RealTimePcrResult": "HaemophilusInfluenzae",
+    "MolecularTyping": "Haemophilus influenzae-spezifische DNA wurde nachgewiesen.",
+    "Report": [
+      "Haemophilus influenzae-spezifische DNA konnte nachgewiesen werden.",
+      "Der direkte Nachweis von Haemophilus influenzae aus primär sterilem Material ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Haemophilus influenzae."
+    ],
+    "Typings": [ "MolecularTyping", "16SrDNA" ],
+    "Comment": "Molekularbiologischer Nachweis mittels 16S rDNA-Sequenzierung."
+  }
+}

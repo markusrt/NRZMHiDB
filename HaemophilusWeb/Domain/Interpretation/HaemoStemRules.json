@@ -1,0 +1,17 @@
+{
+  "HaemoStemInterpretation_01": {
+    "SendingInvasive": [ "Yes" ],
+    "Agglutination": "B",
+    "SerotypePcr": "B",
+    "BexA": "Positive",
+    "Oxidase": "Negative",
+    "Identification": "Haemophilus influenzae",
+    "Report": [
+      "Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp b (Hib).",
+      "Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig.",
+      "Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp b."
+    ],
+    "Typings": [ "SerotypeB", "BexAPositive" ],
+    "Comment": ""
+  }
+}

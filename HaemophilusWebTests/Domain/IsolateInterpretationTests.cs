@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Domain
@@ -235,6 +236,50 @@ namespace HaemophilusWeb.Domain
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
             interpretation.InterpretationDisclaimer.Should()
                 .Contain("Beim eingesendeten Isolat handelt es sich am ehesten um Haemophilus sp., nicht H. influenzae.");
+        }
+
+        [Test]
+        public void Interpret_MatchingHaemoStemRule_UsesRuleBasedInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                SerotypePcr = SerotypePcr.B,
+                Agglutination = SerotypeAgg.B,
+                BexA = TestResult.Positive,
+                Oxidase = TestResult.Negative,
+                Sending = new Sending { SamplingLocation = SamplingLocation.Blood }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Report.Should().NotBeNull();
+            interpretation.Report.Should().Contain(s => s.Contains("Haemophilus influenzae des Serotyp b"));
+            isolateInterpretation.Rule.Should().Be("HaemoStemInterpretation_01");
+            isolateInterpretation.Typings.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void Interpret_MatchingHaemoNativeMaterialRule_UsesRuleBasedInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                RibosomalRna16S = NativeMaterialTestResult.Positive,
+                RibosomalRna16SBestMatch = "Haemophilus influenzae",
+                RealTimePcr = NativeMaterialTestResult.Positive,
+                RealTimePcrResult = RealTimePcrResult.HaemophilusInfluenzae,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.NativeMaterial
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Report.Should().NotBeNull();
+            interpretation.Report.Should().Contain(s => s.Contains("Haemophilus influenzae-spezifische DNA"));
+            isolateInterpretation.Rule.Should().Be("HaemoNativeMaterialInterpretation_01");
+            isolateInterpretation.Typings.Should().NotBeEmpty();
         }
 
     }

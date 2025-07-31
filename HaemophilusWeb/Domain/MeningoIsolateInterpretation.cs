@@ -19,8 +19,8 @@ namespace HaemophilusWeb.Domain
             Smart.Default.AddExtensions(new EnumFormatter());
         }
 
-        private static readonly Dictionary<string, StemInterpretationRule> StemInterpretationRules = DeserializeFromResource<Dictionary<string, StemInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.StemRules.json");
-        private static readonly Dictionary<string, NativeMaterialInterpretationRule> NativeMaterialInterpretationRules = DeserializeFromResource<Dictionary<string, NativeMaterialInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.NativeMaterialRules.json");
+        private static readonly Dictionary<string, MeningoStemInterpretationRule> StemInterpretationRules = DeserializeFromResource<Dictionary<string, MeningoStemInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.StemRules.json");
+        private static readonly Dictionary<string, MeningoNativeMaterialInterpretationRule> NativeMaterialInterpretationRules = DeserializeFromResource<Dictionary<string, MeningoNativeMaterialInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.NativeMaterialRules.json");
 
         private static readonly Dictionary<string, Typing> TypingTemplates = DeserializeFromResource<Dictionary<string, Typing>>("HaemophilusWeb.Domain.Interpretation.TypingTemplates.json");
 
@@ -198,7 +198,7 @@ namespace HaemophilusWeb.Domain
             }
         }
 
-        private bool CheckNativeMaterialRule(NativeMaterialInterpretationRule rule, MeningoIsolate isolate)
+        private bool CheckNativeMaterialRule(MeningoNativeMaterialInterpretationRule rule, MeningoIsolate isolate)
         {
             return rule.CsbPcr.Contains(isolate.CsbPcr)
                    && rule.CscPcr.Contains(isolate.CscPcr)
@@ -212,7 +212,7 @@ namespace HaemophilusWeb.Domain
                    && rule.RealTimePcrResult == isolate.RealTimePcrResult;
         }
 
-        private bool CheckStemRule(string argKey, StemInterpretationRule rule, MeningoIsolate isolate)
+        private bool CheckStemRule(string argKey, MeningoStemInterpretationRule rule, MeningoIsolate isolate)
         {
             var checkStemRule = (rule.SendingInvasive == null || rule.SendingInvasive.Contains(isolate.Sending?.Invasive))
                                 && rule.GrowthOnBloodAgar == isolate.GrowthOnBloodAgar
