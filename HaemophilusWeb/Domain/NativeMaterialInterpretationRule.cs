@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 
 namespace HaemophilusWeb.Domain
 {
