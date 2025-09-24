@@ -45,7 +45,7 @@ namespace HaemophilusWeb.ViewModels
                     var name = GetDisplayName(typingProperty);
                     if (value != TestResult.NotDetermined)
                     {
-                        if(typingProperty.Name != "BetaLactamase" || Invasive == EnumEditor.GetEnumDescription(YesNo.Yes))
+                        if(typingProperty.Name != "BetaLactamase" || Invasive == EnumEditor.GetEnumDescription(YesNo.No))
                         {
                             yield return new Typing { Attribute = name, Value = EnumEditor.GetEnumDescription(value) };
                         }
