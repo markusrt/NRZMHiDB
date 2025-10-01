@@ -1,131 +1,18 @@
 {
-  "Serogenogroup": {
-    "Attribute": "Serogenogruppe",
-    "Value": "{SerogroupPcr:enum()}"
+  "SerotypeB": {
+    "Attribute": "Serotyp",
+    "Value": "b"
   },
-  "SerogenogroupBiomolecular": {
-    "Attribute": "Serogenogruppe",
-    "Value": "{SerogroupPcr:enum()} (Die Serogruppe wurde molekularbiologisch bestimmt.)"
-  },
-  "SerogenogroupCnl": {
-    "Attribute": "Serogenogruppe",
-    "Value": "cnl (capsule null locus Meningokokken) - Bei cnl Meningokokken handelt es sich um bei gesunden Trägern häufig vorkommende, zumeist apathogene, unbekapselte Isolate, denen der Kapsellokus fehlt (Claus et al., Microbiology 2002; Claus et al. J Infect Dis 2005; Schoen et al., PNAS 2008). Invasive Infektionen durch cnl Meningokokken sind ausgesprochen selten (Vogel et al. J Clin Microbiol 2004, Findlow et al. J Infect Dis 2007). Es ist daher im Zusammenhang mit diesem Patienten eher von einem Zufallsbefund ohne pathologische Relevanz auszugehen."
-  },
-  "SerogenogroupNegative": {
-    "Attribute": "Serogenogruppe",
-    "Value": "nicht gruppierbar"
-  },
-  "PorA": {
-    "Attribute": "PorA - Sequenztyp",
-    "Value": "{PorAVr1}, {PorAVr2}"
-  },
-  "FetA": {
-    "Attribute": "FetA - Sequenztyp",
-    "Value": "{FetAVr}"
-  },
-  "NoPorA": {
-    "Attribute": "PorA - Sequenztyp",
-    "Value": "das porA-Gen konnte nicht amplifiziert werden"
-  },
-  "NoFetA": {
-    "Attribute": "FetA - Sequenztyp",
-    "Value": "das fetA-Gen konnte nicht amplifiziert werden"
-  },
-  "GrowthOnBloodAgar": {
-    "Attribute": "Wachstum auf Blutagar",
-    "Value": "{GrowthOnBloodAgar:enum()}"
-  },
-  "GrowthOnMartinLewisAgar": {
-    "Attribute": "Wachstum auf Martin-Lewis-Agar",
-    "Value": "{GrowthOnMartinLewisAgar:enum()}"
-  },
-  "Onpg": {
-    "Attribute": "β-Galaktosidase",
-    "Value": "{Onpg:enum()}"
-  },
-  "GammaGt": {
-    "Attribute": "γ-Glutamyltransferase",
-    "Value": "{GammaGt:enum()}"
-  },
-  "MaldiTofVitek": {
-    "Attribute": "MALDI-TOF (VITEK MS)",
-    "Value": "{MaldiTofVitekBestMatch}"
-  },
-  "MaldiTofBiotyper": {
-    "Attribute": "MALDI-TOF (Biotyper)",
-    "Value": "{MaldiTofBiotyperBestMatch}"
-  },
-  "Agglutination": {
-    "Attribute": "Serogruppe",
-    "Value": "{Agglutination:enum()}"
-  },
-  "AgglutinationAutoInvasive": {
-    "Attribute": "Serogruppe",
-    "Value": "Autoagglutination (Autoagglutination deutet auf unbekapselte Meningokokken hin.)"
-  },
-  "AgglutinationPolyInvasive": {
-    "Attribute": "Serogruppe",
-    "Value": "Polyagglutination (Polyagglutination deutet auf unbekapselte Meningokokken hin.)"
-  },
-  "AgglutinationAutoNonInvasive": {
-    "Attribute": "Serogruppe",
-    "Value": "Autoagglutination (Nicht-invasive Meningokokken sind oft unbekapselt, was zu unspezifischem Agglutinationsverhalten führt.)"
-  },
-  "AgglutinationPolyNonInvasive": {
-    "Attribute": "Serogruppe",
-    "Value": "Polyagglutination (Nicht-invasive Meningokokken sind oft unbekapselt, was zu unspezifischem Agglutinationsverhalten führt.)"
-  },
-  "NoAgglutination": {
-    "Attribute": "Agglutination",
-    "Value": "keine Agglutination mit Antikörpern gegen die Serogruppen A, B, C, E, W, X und Y"
-  },
-  "NoAgglutinationBCWY": {
-    "Attribute": "Agglutination",
-    "Value": "keine Agglutination mit Antikörpern gegen die Serogruppen  B, C, W und Y"
-  },
-  "NoAgglutinationNonInvasive": {
-    "Attribute": "Agglutination",
-    "Value": "keine Agglutination mit Antikörpern gegen die Serogruppen A, B, C, E, W, X und Y (Nicht-invasive Meningokokken sind oft unbekapselt.)"
-  },
-  "PolyAgglutination": {
-    "Attribute": "Agglutination",
-    "Value": "Poly-Agglutination mit Antikörpern gegen die Serogruppen B, C, W und Y"
-  },
-  "AutoAgglutination": {
-    "Attribute": "Agglutination",
-    "Value": "Auto-Agglutination"
-  },
-  "RealTimePCRNegative": {
-    "Attribute": "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)",
-    "Value": "Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae."
-  },
-  "RealTimePCRNeisseriaMeningitidis": {
-    "Attribute": "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)",
-    "Value": "Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR."
-  },
-  "RealTimePCRStreptococcusPneumoniae": {
-    "Attribute": "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)",
-    "Value": "Positiv für Streptococcus pneumoniae. Der molekularbiologische Nachweis von Streptococcus pneumoniae beruht auf dem Nachweis des Pneumolysin-Gens ply mittels spezifischer Real-Time-PCR."
-  },
-  "RealTimePCRHaemophilusInfluenzae": {
-    "Attribute": "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)",
-    "Value": "Positiv für bekapselte Haemophilus influenzae. Der molekularbiologische Nachweis von Haemophilus influenzae beruht auf dem Nachweis des Kapseltransportgens bexA mittels spezifischer Real-Time-PCR."
-  },
-  "RibosomalRna16S": {
-    "Attribute": "16S-rDNA-Nachweis",
-    "Value": "{RibosomalRna16S:enum()}"
-  },
-  "RibosomalRna16SBestMatch": {
-    "Attribute": "Ergebnis der DNA-Sequenzierung",
-    "Value": "{RibosomalRna16SBestMatch}"
+  "BexAPositive": {
+    "Attribute": "bexA",
+    "Value": "positiv"
   },
   "MolecularTyping": {
     "Attribute": "Molekulare Typisierung",
-    "Value": "{1:{MolecularTyping}}"
+    "Value": "{MolecularTyping}"
   },
-  "ETestNotYetDone": {
-    "Attribute": "Empfindlichkeitstestung (Etest)",
-    "Value": "folgt"
+  "16SrDNA": {
+    "Attribute": "16S rDNA",
+    "Value": "{RibosomalRna16SBestMatch} ({RibosomalRna16SMatchInPercent:F1}%)"
   }
-
 }

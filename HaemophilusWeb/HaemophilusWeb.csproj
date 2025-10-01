@@ -307,6 +307,8 @@
     <Compile Include="Controllers\SenderControllerBase.cs" />
     <Compile Include="Controllers\SendingController.cs" />
     <Compile Include="App_Start\ExceptionLogger.cs" />
+    <Compile Include="Domain\MeningoNativeMaterialInterpretationRule.cs" />
+    <Compile Include="Domain\MeningoStemInterpretationRule.cs" />
     <Compile Include="Domain\NativeMaterialInterpretationRule.cs" />
     <Compile Include="Migrations\201908152057267_Patient_Country.cs" />
     <Compile Include="Migrations\201908152057267_Patient_Country.Designer.cs">
@@ -912,12 +914,12 @@
     <Content Include="Database\EntityDiagram.uml" />
     <Content Include="Database\Readme.md" />
     <Content Include="Database\restore_to_test.bat" />
+    <EmbeddedResource Include="Domain\Interpretation\MeningoStemRules.json" />
+    <EmbeddedResource Include="Domain\Interpretation\MeningoTypingTemplates.json" />
+    <EmbeddedResource Include="Domain\Interpretation\MeningoNativeMaterialRules.json" />
     <EmbeddedResource Include="Domain\Interpretation\StemRules.json" />
     <EmbeddedResource Include="Domain\Interpretation\TypingTemplates.json" />
     <EmbeddedResource Include="Domain\Interpretation\NativeMaterialRules.json" />
-    <EmbeddedResource Include="Domain\Interpretation\HaemoStemRules.json" />
-    <EmbeddedResource Include="Domain\Interpretation\HaemoTypingTemplates.json" />
-    <EmbeddedResource Include="Domain\Interpretation\HaemoNativeMaterialRules.json" />
     <Content Include="App_Data\countries.json" />
     <EmbeddedResource Include="Migrations\201908152057267_Patient_Country.resx">
       <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>

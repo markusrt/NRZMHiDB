@@ -19,10 +19,10 @@ namespace HaemophilusWeb.Domain
             Smart.Default.AddExtensions(new EnumFormatter());
         }
 
-        private static readonly Dictionary<string, MeningoStemInterpretationRule> StemInterpretationRules = DeserializeFromResource<Dictionary<string, MeningoStemInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.StemRules.json");
-        private static readonly Dictionary<string, MeningoNativeMaterialInterpretationRule> NativeMaterialInterpretationRules = DeserializeFromResource<Dictionary<string, MeningoNativeMaterialInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.NativeMaterialRules.json");
+        private static readonly Dictionary<string, MeningoStemInterpretationRule> StemInterpretationRules = DeserializeFromResource<Dictionary<string, MeningoStemInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.MeningoStemRules.json");
+        private static readonly Dictionary<string, MeningoNativeMaterialInterpretationRule> NativeMaterialInterpretationRules = DeserializeFromResource<Dictionary<string, MeningoNativeMaterialInterpretationRule>>("HaemophilusWeb.Domain.Interpretation.MeningoNativeMaterialRules.json");
 
-        private static readonly Dictionary<string, Typing> TypingTemplates = DeserializeFromResource<Dictionary<string, Typing>>("HaemophilusWeb.Domain.Interpretation.TypingTemplates.json");
+        private static readonly Dictionary<string, Typing> TypingTemplates = DeserializeFromResource<Dictionary<string, Typing>>("HaemophilusWeb.Domain.Interpretation.MeningoTypingTemplates.json");
 
         private readonly List<Typing> typings = new List<Typing>();
 
