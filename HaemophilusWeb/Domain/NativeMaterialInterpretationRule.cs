@@ -10,9 +10,7 @@ namespace HaemophilusWeb.Domain
         public string RibosomalRna16SBestMatch { get; set; }
         public List<NativeMaterialTestResult> RealTimePcr { get; set; }
         public RealTimePcrResult RealTimePcrResult { get; set; }
-        public UnspecificTestResult? MaldiTofVitek { get; set; }
-        public UnspecificTestResult? MaldiTofBiotyper { get; set; }
-        public string MolecularTyping { get; set; }
+        public TestResult? FuculoKinase { get; set; }
         public string[] Report { get; set; }
         public string[] Typings { get; set; }
         public string Comment { get; set; }

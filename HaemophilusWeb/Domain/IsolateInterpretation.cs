@@ -135,6 +135,7 @@ namespace HaemophilusWeb.Domain
             }
             return new InterpretationResult
             {
+                Report = [interpretation],
                 Interpretation = interpretation,
                 InterpretationPreliminary = interpretationPreliminary,
                 InterpretationDisclaimer = interpretationDisclaimer
@@ -244,8 +245,7 @@ namespace HaemophilusWeb.Domain
                    && (rule.RibosomalRna16SBestMatch == null || rule.RibosomalRna16SBestMatch == isolate.RibosomalRna16SBestMatch)
                    && rule.RealTimePcr.Contains(isolate.RealTimePcr)
                    && rule.RealTimePcrResult == isolate.RealTimePcrResult
-                   && (!rule.MaldiTofVitek.HasValue || rule.MaldiTofVitek == isolate.MaldiTofVitek)
-                   && (!rule.MaldiTofBiotyper.HasValue || rule.MaldiTofBiotyper == isolate.MaldiTofBiotyper);
+                   && (!rule.FuculoKinase.HasValue || rule.FuculoKinase == isolate.FuculoKinase);
         }
 
         private bool CheckStemRule(string argKey, StemInterpretationRule rule, Isolate isolate)
