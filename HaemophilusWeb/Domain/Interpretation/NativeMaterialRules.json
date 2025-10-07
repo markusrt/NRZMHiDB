@@ -5,6 +5,6 @@
     "FuculoKinase": "Negative",
     "Report": [ "Kein Nachweis von Haemophilus influenzae." ],
     "Typings": [ "RealTimePCRNegative", "RibosomalRna16SNegative", "FuculoKinase" ],
-    "Comment": "Die verwendete fucK-PCR dient der Typisierung von Isolaten; sie ist für die Anwendung von Nativmaterialien nicht validiert. Befund unter Vorbehalt."
+    "Remark": "Die verwendete fucK-PCR dient der Typisierung von Isolaten; sie ist für die Anwendung von Nativmaterialien nicht validiert. Befund unter Vorbehalt."
   }
 }

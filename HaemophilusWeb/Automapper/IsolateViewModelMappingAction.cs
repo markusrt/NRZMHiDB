@@ -38,10 +38,25 @@ namespace HaemophilusWeb.Automapper
             destination.SenderLaboratoryNumber = source.Sending.SenderLaboratoryNumber;
             destination.EvaluationString = source.Evaluation.ToReportFormat();
             var interpretationResult = isolateInterpretation.Interpret(source);
-            destination.Interpretation = interpretationResult.Interpretation;
-            destination.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
-            destination.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
-            destination.Comment = interpretationResult.Comment;
+            if (interpretationResult.OldResult)
+            {
+                destination.Interpretation = interpretationResult.Interpretation;
+                destination.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
+                destination.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
+                destination.Comment = interpretationResult.Comment;
+                destination.Typings = destination.TypingsOld;
+                destination.OldResult = interpretationResult.OldResult;
+            }
+            else
+            {
+                destination.Report = interpretationResult.Report;
+                destination.Typings = isolateInterpretation.Typings;
+                destination.Comment = interpretationResult.Comment;
+                destination.ReportRemark = interpretationResult.Remark;
+                destination.OldResult = interpretationResult.OldResult;
+            }
+
+            
             destination.Announcement = ConfigurationManager.AppSettings["Announcement"];
 
             if (!string.IsNullOrEmpty(source.Sending.DemisId))

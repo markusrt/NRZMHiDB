@@ -257,7 +257,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Report.Should().NotBeNull();
             interpretation.Report.Should().Contain(s => s.Contains("Kein Nachweis von Haemophilus influenzae."));
-            //TODO add isolateInterpretation.Comment.Should().Xxx();
+            interpretation.Remark.Should()
+                .Be(
+                    "Die verwendete fucK-PCR dient der Typisierung von Isolaten; sie ist für die Anwendung von Nativmaterialien nicht validiert. Befund unter Vorbehalt.");
             isolateInterpretation.Rule.Should().Be("HaemophilusNativeMaterialInterpretation_01");
             isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "fucK" && t.Value == "negativ");
             isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "16S-rDNA-Nachweis" && t.Value == "kein Nachweis von Bakterien");

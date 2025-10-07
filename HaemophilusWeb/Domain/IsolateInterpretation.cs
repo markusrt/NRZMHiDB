@@ -138,7 +138,8 @@ namespace HaemophilusWeb.Domain
                 Report = [interpretation],
                 Interpretation = interpretation,
                 InterpretationPreliminary = interpretationPreliminary,
-                InterpretationDisclaimer = interpretationDisclaimer
+                InterpretationDisclaimer = interpretationDisclaimer,
+                OldResult = true
             };
         }
 
@@ -169,7 +170,8 @@ namespace HaemophilusWeb.Domain
                 var result = new InterpretationResult
                 {
                     Comment = rule.Comment,
-                    Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray()
+                    Report = rule.Report.Select(r => Smart.Format(r, isolate, rule)).ToArray(),
+                    Remark = rule.Remark
                 };
 
                 foreach (var typingTemplateKey in rule.Typings)
@@ -276,6 +278,11 @@ namespace HaemophilusWeb.Domain
         [Obsolete("Use Result array instead")]
         public string InterpretationDisclaimer { get; set; }
 
+        [Obsolete("Use new result")]
+        public bool OldResult { get; set; }
+
         public string Comment { get; set; }
+        
+        public string Remark { get; set; }
     }
 }

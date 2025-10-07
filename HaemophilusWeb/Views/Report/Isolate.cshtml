@@ -59,13 +59,28 @@
             }
         </dl>
     }
-
-    <dl class="dl-horizontal">
-        <dt>@Html.DisplayNameFor(model => model.InterpretationPreliminary)</dt>
-        <dd>@Html.DisplayFor(model => model.InterpretationPreliminary)</dd>
-        <dt>@Html.DisplayNameFor(model => model.Interpretation)</dt>
-        <dd>@Html.DisplayFor(model => model.Interpretation)</dd>
-    </dl>
+    
+    @if(Model.OldResult)
+    {
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.InterpretationPreliminary)</dt>
+            <dd>@Html.DisplayFor(model => model.InterpretationPreliminary)</dd>
+            <dt>@Html.DisplayNameFor(model => model.Interpretation)</dt>
+            <dd>@Html.DisplayFor(model => model.Interpretation)</dd>
+        </dl>
+    }
+    else
+    {
+        <dl class="dl-horizontal">
+            <dt>@Html.DisplayNameFor(model => model.Report)</dt>
+            <dd>
+                @foreach (var reportLine in Model.Report)
+                {
+                    <p>@reportLine</p>
+                }
+            </dd>
+        </dl>
+    }
 </div>
 <div class="col-md-6">
     <h3>Zuständiges Gesundheitsamt</h3>
@@ -136,7 +151,7 @@
             if (preliminary) {
                 interpretation = "InterpretationPreliminary";
             }
-            if (documentData[interpretation].indexOf("Diskrepant") > -1)
+            if (false)//documentData[interpretation].indexOf("Diskrepant") > -1) TODO
             {
                 $("#discrepantResultsModal").modal("show");
             }

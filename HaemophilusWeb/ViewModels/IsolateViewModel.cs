@@ -32,7 +32,13 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Patientenalter bei Entnahme")]
         public int PatientAgeAtSampling { get; set; }
 
-        public IEnumerable<Typing> Typings
+        public IEnumerable<Typing> Typings { get; set; }
+
+        [Obsolete("Replaced by new result")]
+        public bool OldResult { get; set; }
+
+        [Obsolete("Replaced by typings")]
+        public IEnumerable<Typing> TypingsOld
         {
             get
             {
@@ -128,6 +134,12 @@ namespace HaemophilusWeb.ViewModels
 
         [Display(Name = "Befund")]
         public string Interpretation { get; set; }
+
+        [Display(Name = "Befund")]
+        public string[] Report { get; set; }
+
+        public string ReportRemark { get; set; }
+        public bool HasReportRemark => !string.IsNullOrEmpty(ReportRemark);
 
         [Display(Name = "Teilbefund")]
         public string InterpretationPreliminary { get; set; }
