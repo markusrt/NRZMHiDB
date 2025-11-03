@@ -29,8 +29,7 @@ namespace HaemophilusWeb.Services
 
         protected override string GetSearchUrl(string isolateReference)
         {
-            return CreateAuthUrl($"{IsolatesUrl}/search", HttpMethod.Post,
-                new Dictionary<string, string> { { "field.isolate", isolateReference } });
+            return CreateAuthUrl($"{IsolatesUrl}/search", HttpMethod.Post, new Dictionary<string, string>());
         }
 
         protected override string GetIdUrl(int id)
