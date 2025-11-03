@@ -37,7 +37,7 @@ namespace HaemophilusWeb.Services
 
         protected abstract string Database { get; }
 
-        protected string DbUrl => $"http://rest.pubmlst.org/db/{Database}";
+        protected string DbUrl => $"https://rest.pubmlst.org/db/{Database}";
 
         protected string IsolatesUrl => $"{DbUrl}/isolates";
 

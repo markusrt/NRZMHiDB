@@ -11,7 +11,7 @@ namespace HaemophilusWeb.Controllers
     {
         private readonly PubMlstService[] _pubMlstServices;
 
-        public PubMlstController() : this(new NeisseriaPubMlstService(), new IrisPubMlstService(ConfigurationManager.AppSettings.GetIrisAuthentication()))
+        public PubMlstController() : this(new IrisPubMlstService(ConfigurationManager.AppSettings.GetIrisAuthentication()), new NeisseriaPubMlstService())
         {
         }
 

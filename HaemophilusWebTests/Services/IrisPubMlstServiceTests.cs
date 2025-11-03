@@ -29,7 +29,7 @@ namespace HaemophilusWeb.Services
             string PostCall(string url, Dictionary<string, string> _)
             {
                 postUrl = url;
-                return "{\"isolates\":[\"http://rest.pubmlst.org/db/pubmlst_neisseria_iris/isolates/93683\"],\"records\": 1}";
+                return "{\"isolates\":[\"https://rest.pubmlst.org/db/pubmlst_neisseria_iris/isolates/93683\"],\"records\": 1}";
             }
 
             var authorization = new PubMlstAuthorization

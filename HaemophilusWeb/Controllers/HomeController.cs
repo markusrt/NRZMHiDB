@@ -22,6 +22,11 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2025, 10, 9), "Update PubMLST Abfrage", ChangeType.Feature, DatabaseType.Meningococci),
+                new Change(new DateTime(2025, 9, 24, 7, 30, 0), "Update Signatur und Befund Kopfzeile", ChangeType.Feature, DatabaseType.None),
+                new Change(new DateTime(2025, 9, 24, 7, 30, 0), "Korrektur ß-Laktamase (positiv/negativ) für  nicht invasiven H. influenzae Befunde", ChangeType.Bug, DatabaseType.Haemophilus),
+                new Change(new DateTime(2025, 7, 28), "Einfügen von ß-Laktamase (positiv/negativ) für  nicht invasiven H. influenzae Befunde", ChangeType.Feature, DatabaseType.Haemophilus),
+                new Change(new DateTime(2025, 7, 28), "Angleich der Felder für Spezies als auch Serogruppe/Serotyp Einsender für beide Datenbanken", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2025, 5, 7), "Neues Feld für MALDI-TOF (Biotyper), VITEK MS wird nur schreibgeschützt angezeigt", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2025, 4, 30), "Mehrfachauswahl Species bei positiver NHS Real-Time-PCR", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2024, 11, 08), "Korrektur von 'Fehler! Verweisquelle konnte nicht gefunden werden.' auf gedruckten Befunden", ChangeType.Bug, DatabaseType.None),

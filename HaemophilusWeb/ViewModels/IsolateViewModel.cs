@@ -45,14 +45,16 @@ namespace HaemophilusWeb.ViewModels
                 var properties = GetType().GetProperties();
                 foreach (
                     var typingProperty in
-                        properties.Where(p => p.PropertyType == typeof (TestResult) && p.Name != "BetaLactamase"
-                                              && p.Name != "Oxidase"))
+                        properties.Where(p => p.PropertyType == typeof (TestResult) && p.Name != "Oxidase"))
                 {
                     var value = (TestResult) typingProperty.GetValue(this);
                     var name = GetDisplayName(typingProperty);
                     if (value != TestResult.NotDetermined)
                     {
-                        yield return new Typing {Attribute = name, Value = EnumEditor.GetEnumDescription(value)};
+                        if(typingProperty.Name != "BetaLactamase" || Invasive == EnumEditor.GetEnumDescription(YesNo.No))
+                        {
+                            yield return new Typing { Attribute = name, Value = EnumEditor.GetEnumDescription(value) };
+                        }
                     }
                 }
                 if (OuterMembraneProteinP6 != SpecificTestResult.NotDetermined)
