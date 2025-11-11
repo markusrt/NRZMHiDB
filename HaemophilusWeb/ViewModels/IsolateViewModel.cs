@@ -132,6 +132,8 @@ namespace HaemophilusWeb.ViewModels
         public string PatientBirthDate { get; set; }
         public string PatientPostalCode { get; set; }
         public string SenderLaboratoryNumber { get; set; }
+        
+        [Obsolete("Use Typing->Identification instead")]
         public string EvaluationString { get; set; }
 
         [Display(Name = "Befund")]
@@ -183,6 +185,12 @@ namespace HaemophilusWeb.ViewModels
         {
             get { return EnumEditor.GetEnumDescription(BetaLactamase); }
         }
+
+        [Display(Name = "Befundart")]
+        public string ReportType { get; set; }
+
+        public bool IsPreliminary { get; set; }
+        public bool IsFinal { get; set; }
 
         private static string GetDisplayName(MemberInfo member)
         {

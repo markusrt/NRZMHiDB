@@ -20,6 +20,6 @@ namespace HaemophilusWeb.Domain
         public string[] Report { get; set; }
         public string[] Typings { get; set; }
         public string Comment { get; set; }
-        public bool NoHaemophilusInfluenzae { get; set; }
+        public bool Preliminary { get; set; }
     }
 }

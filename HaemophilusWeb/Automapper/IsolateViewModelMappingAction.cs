@@ -54,6 +54,9 @@ namespace HaemophilusWeb.Automapper
                 destination.Comment = interpretationResult.Comment;
                 destination.ReportRemark = interpretationResult.Remark;
                 destination.OldResult = interpretationResult.OldResult;
+                destination.IsPreliminary = interpretationResult.Preliminary;
+                destination.IsFinal = !interpretationResult.Preliminary;
+                destination.ReportType = interpretationResult.Preliminary ? "Teilbefund" : "Endbefund";
             }
 
             

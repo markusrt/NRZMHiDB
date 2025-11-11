@@ -287,8 +287,7 @@ namespace HaemophilusWeb.Domain
             interpretation.Interpretation.Should().Be("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.");
             interpretation.Report.Should().Contain(s => s.Contains("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."));
             isolateInterpretation.Typings.Should().BeEmpty();
-            //TODO add isolateInterpretation.Comment.Should().BeNull();
-            //TODO check isolateInterpretation.Serogroup.Should().BeNull();
+            interpretation.Comment.Should().BeNull();
         }
 
         [Test]
@@ -308,6 +307,34 @@ namespace HaemophilusWeb.Domain
             // Should fall back to original hardcoded interpretation logic
             interpretation.Interpretation.Should().Contain("Haemophilus influenzae des Serotyp a");
             isolateInterpretation.Rule.Should().BeNull(); // No rule matched
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule1_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.Yes,
+                Agglutination = SerotypeAgg.Negative,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Preliminary.Should().BeTrue();
+            interpretation.Report.Should().NotBeNull();
+            interpretation.Report.Should().Contain(s => s.Contains("Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae"));
+            interpretation.Report.Should().Contain(s => s.Contains("Blut oder Liquor ist nach §7 IfSG meldepflichtig"));
+            interpretation.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt."));
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_01");
+            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "Wachstum" && t.Value == "Ja");
+            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "Agglutination" && t.Value == "negativ");
+            //TODO Test Attribute = "Identifizierung"
+            //TODO Test Preliminary = true
         }
 
     }

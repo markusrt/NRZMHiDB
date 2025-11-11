@@ -10,5 +10,13 @@
   "FuculoKinase": {
     "Attribute": "fucK",
     "Value": "{FuculoKinase:enum()}"
+  },
+  "Growth": {
+    "Attribute": "Wachstum",
+    "Value": "{Growth:enum()}"
+  },
+  "Agglutination": {
+    "Attribute": "Agglutination",
+    "Value": "{Agglutination:enum()}"
   }
 }

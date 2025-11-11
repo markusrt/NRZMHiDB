@@ -58,6 +58,7 @@ namespace HaemophilusWeb.Domain
             typings.Clear();
             Rule = null;
 
+            typings.Add(new Typing {Attribute = "Identifizierung", Value = isolate.Evaluation.ToReportFormat()});
             // Try rule-based interpretation first
             var ruleBasedResult = TryRuleBasedInterpretation(isolate);
             if (ruleBasedResult != null)
@@ -220,6 +221,7 @@ namespace HaemophilusWeb.Domain
                     });
                 }
 
+                result.Preliminary = rule.Preliminary;
                 return result;
             }
 
@@ -268,11 +270,14 @@ namespace HaemophilusWeb.Domain
 
     public class InterpretationResult
     {
-        [Obsolete("Use Result array instead")]
+        [Obsolete("Use Report array instead")]
         public string Interpretation { get; set; }
 
         public string[] Report { get; set; }
+        
+        public bool Preliminary { get; set; }
 
+        [Obsolete("Use ReportPreliminary array instead")]
         public string InterpretationPreliminary { get; set; }
 
         [Obsolete("Use Result array instead")]

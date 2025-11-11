@@ -1,17 +1,21 @@
 {
-  "HaemoStemInterpretation_01": {
+  "HaemophilusStemInterpretation_01": {
     "SendingInvasive": [ "Yes" ],
-    "Agglutination": "B",
-    "SerotypePcr": "B",
-    "BexA": "Positive",
-    "Oxidase": "Negative",
-    "Identification": "Haemophilus influenzae",
+    "Growth": "Yes",
+    "Agglutination": "Negative",
+    "BexA": "NotDetermined",
+    "SerotypePcr": "NotDetermined",
+    "MaldiTofVitek": "NotDetermined",
+    "MaldiTofBiotyper": "NotDetermined",
     "Report": [
-      "Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp b (Hib).",
+      "Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae (sog. \"nicht-typisierbarer\" H. influenzae, NTHi).",
       "Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig.",
-      "Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp b."
+      "Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.",
+      "",
+      "Untersuchungen zur Antibiotika-Resistenz: folgt"
     ],
-    "Typings": [ "SerotypeB", "BexAPositive" ],
+    "Typings": [ "Growth", "Agglutination" ],
+    "Preliminary": true,
     "Comment": ""
   }
 }
