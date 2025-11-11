@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Domain
@@ -235,6 +236,105 @@ namespace HaemophilusWeb.Domain
             interpretation.InterpretationPreliminary.Should().Contain("Diskrepante");
             interpretation.InterpretationDisclaimer.Should()
                 .Contain("Beim eingesendeten Isolat handelt es sich am ehesten um Haemophilus sp., nicht H. influenzae.");
+        }
+
+        [Test]
+        public void IsolateMatchingNativeMaterialRule1_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                RibosomalRna16S = NativeMaterialTestResult.Negative,
+                RealTimePcr = NativeMaterialTestResult.Negative,
+                FuculoKinase = TestResult.Negative,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.NativeMaterial
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Report.Should().NotBeNull();
+            interpretation.Report.Should().Contain(s => s.Contains("Kein Nachweis von Haemophilus influenzae."));
+            interpretation.Remark.Should()
+                .Be(
+                    "Die verwendete fucK-PCR dient der Typisierung von Isolaten; sie ist für die Anwendung von Nativmaterialien nicht validiert. Befund unter Vorbehalt.");
+            isolateInterpretation.Rule.Should().Be("HaemophilusNativeMaterialInterpretation_01");
+            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "fucK" && t.Value == "negativ");
+            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "16S-rDNA-Nachweis" && t.Value == "kein Nachweis von Bakterien");
+            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "Real-Time-PCR (NHS)" && t.Value == "kein Nachweis von bekapseltem Haemophilus influenzae");
+        }
+
+        [Test]
+        public void IsolateMatchingNoNativeMaterialRule_ReturnsInconclusive()
+        {
+            var isolate = new Isolate
+            {
+                RibosomalRna16S = NativeMaterialTestResult.Positive,
+                RealTimePcr = NativeMaterialTestResult.Negative,
+                FuculoKinase = TestResult.Negative,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.NativeMaterial
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Report.Should().NotBeNull();
+            interpretation.Interpretation.Should().Be("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.");
+            interpretation.Report.Should().Contain(s => s.Contains("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."));
+            isolateInterpretation.Typings.Should().BeEmpty();
+            interpretation.Comment.Should().BeNull();
+        }
+
+        [Test]
+        public void Interpret_NoMatchingRule_FallsBackToOriginalLogic()
+        {
+            var isolate = new Isolate
+            {
+                SerotypePcr = SerotypePcr.A, // Different from rule which expects B
+                Agglutination = SerotypeAgg.A,
+                BexA = TestResult.Positive,
+                Oxidase = TestResult.Positive, // Different from rule which expects Negative
+                Sending = new Sending { SamplingLocation = SamplingLocation.Blood }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            // Should fall back to original hardcoded interpretation logic
+            interpretation.Interpretation.Should().Contain("Haemophilus influenzae des Serotyp a");
+            isolateInterpretation.Rule.Should().BeNull(); // No rule matched
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule1_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.Yes,
+                Agglutination = SerotypeAgg.Negative,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Preliminary.Should().BeTrue();
+            interpretation.Report.Should().NotBeNull();
+            interpretation.Report.Should().Contain(s => s.Contains("Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae"));
+            interpretation.Report.Should().Contain(s => s.Contains("Blut oder Liquor ist nach §7 IfSG meldepflichtig"));
+            interpretation.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt."));
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_01");
+            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "Wachstum" && t.Value == "Ja");
+            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "Agglutination" && t.Value == "negativ");
+            //TODO Test Attribute = "Identifizierung"
+            //TODO Test Preliminary = true
         }
 
     }
