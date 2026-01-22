@@ -1,1478 +1,168 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>
-    </ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D561F029-A7C8-4275-8480-ABC121D4F91F}</ProjectGuid>
-    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HaemophilusWeb</RootNamespace>
     <AssemblyName>HaemophilusWeb</AssemblyName>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort>44300</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
-    <UseGlobalApplicationHostFile />
-    <Use64BitIISExpress />
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
-    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultItems>true</EnableDefaultItems>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <LangVersion>latest</LangVersion>
-    <TransformWebConfigEnabled>False</TransformWebConfigEnabled>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Antlr" Version="3.5.0.2" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="bootstrap" Version="3.4.1" />
+    <PackageReference Include="Bootstrap.v3.Datetimepicker.CSS" Version="4.17.49" />
+    <PackageReference Include="cldrjs" Version="0.5.1" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.3.0" />
+    <PackageReference Include="DocumentFormat.OpenXml.Framework" Version="3.3.0" />
+    <PackageReference Include="EntityFramework" Version="6.5.1" />
+    <PackageReference Include="FluentValidation" Version="8.6.1" />
+    <PackageReference Include="FluentValidation.Mvc5" Version="8.6.1" />
+    <PackageReference Include="FluentValidation.ValidatorAttribute" Version="8.6.1" />
+    <PackageReference Include="Geolocation" Version="1.2.1" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.0" />
+    <PackageReference Include="jQuery" Version="3.7.1" />
+    <PackageReference Include="jquery.datatables" Version="1.10.15" />
+    <PackageReference Include="jQuery.Validation" Version="1.19.5" />
+    <PackageReference Include="jQuery.Validation.Globalize" Version="1.1.0" />
+    <PackageReference Include="jquery-globalize" Version="1.4.2" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
+    <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.4" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.4" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNet.Razor" Version="3.3.0" />
+    <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
+    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.3.0" />
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="9.0.3" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Owin" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.Security" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.Security.Facebook" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.Security.Google" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.Security.MicrosoftAccount" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Owin.Security.Twitter" Version="4.2.2" />
+    <PackageReference Include="Microsoft.Web.Infrastructure" Version="2.0.0" />
+    <PackageReference Include="Modernizr" Version="2.6.2" />
+    <PackageReference Include="Moment.js" Version="2.29.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.4.0" />
+    <PackageReference Include="NLog.Config" Version="4.7.15" />
+    <PackageReference Include="NLog.Extended" Version="4.7.15" />
+    <PackageReference Include="NLog.Schema" Version="5.4.0" />
+    <PackageReference Include="NodaTime" Version="3.2.1" />
+    <PackageReference Include="OAuth" Version="1.0.3" />
+    <PackageReference Include="Owin" Version="1.0" />
+    <PackageReference Include="QRCoder" Version="1.6.0" />
+    <PackageReference Include="Respond" Version="1.3.0" />
+    <PackageReference Include="ServiceStack.Text" Version="8.6.0" />
+    <PackageReference Include="SmartFormat" Version="3.6.0" />
+    <PackageReference Include="SmartFormat.Extensions.Newtonsoft.Json" Version="3.6.0" />
+    <PackageReference Include="SmartFormat.Extensions.System.Text.Json" Version="3.6.0" />
+    <PackageReference Include="SmartFormat.Extensions.Time" Version="3.6.0" />
+    <PackageReference Include="SmartFormat.Extensions.Xml" Version="3.6.0" />
+    <PackageReference Include="SmartFormat.NET" Version="3.6.0" />
+    <PackageReference Include="System.Buffers" Version="4.6.1" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="9.0.3" />
+    <PackageReference Include="System.IO.Pipelines" Version="9.0.3" />
+    <PackageReference Include="System.Memory" Version="4.6.2" />
+    <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.1" />
+    <PackageReference Include="System.Text.Encodings.Web" Version="9.0.3" />
+    <PackageReference Include="System.Text.Json" Version="9.0.3" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.2" />
+    <PackageReference Include="WebGrease" Version="1.6.0" />
+    <PackageReference Include="ZString" Version="2.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="DataTables.Mvc">
       <HintPath>..\libraries\DataTables.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="DocumentFormat.OpenXml, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\packages\DocumentFormat.OpenXml.3.3.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
-    </Reference>
-    <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.3.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
-      <HintPath>..\packages\DocumentFormat.OpenXml.Framework.3.3.0\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentValidation, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentValidation.8.6.1\lib\net45\FluentValidation.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentValidation.Mvc, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentValidation.Mvc5.8.6.1\lib\net45\FluentValidation.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentValidation.ValidatorAttribute, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7de548da2fbae0f0, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentValidation.ValidatorAttribute.8.6.1\lib\net45\FluentValidation.ValidatorAttribute.dll</HintPath>
-    </Reference>
-    <Reference Include="Geolocation, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Geolocation.1.2.1\lib\net451\Geolocation.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.12.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.12.0\lib\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.4\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.4\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.4\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Owin, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.4.2.2\lib\net45\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.2.2\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.4.2.2\lib\net45\Microsoft.Owin.Security.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.2.2\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.Facebook, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.4.2.2\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.Google, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.Google.4.2.2\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.4.2.2\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.2.2\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Owin.Security.Twitter, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.4.2.2\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog, Version=5.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.5.4.0\lib\net46\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="NLog.Extended, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.Extended.4.7.15\lib\net45\NLog.Extended.dll</HintPath>
-    </Reference>
-    <Reference Include="NodaTime, Version=3.2.1.0, Culture=neutral, PublicKeyToken=4226afe0d9b296d1, processorArchitecture=MSIL">
-      <HintPath>..\packages\NodaTime.3.2.1\lib\netstandard2.0\NodaTime.dll</HintPath>
-    </Reference>
-    <Reference Include="OAuth, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75b3c62967edc2a2, processorArchitecture=MSIL">
-      <HintPath>..\packages\OAuth.1.0.3\lib\net40\OAuth.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QRCoder, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
-      <HintPath>..\packages\QRCoder.1.6.0\lib\net40\QRCoder.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text, Version=6.0.0.0, Culture=neutral, PublicKeyToken=02c12cbda47e6587, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Text.8.6.0\lib\net472\ServiceStack.Text.dll</HintPath>
-    </Reference>
-    <Reference Include="SmartFormat, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
-      <HintPath>..\packages\SmartFormat.3.6.0\lib\net462\SmartFormat.dll</HintPath>
-    </Reference>
-    <Reference Include="SmartFormat.Extensions.Newtonsoft.Json, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
-      <HintPath>..\packages\SmartFormat.Extensions.Newtonsoft.Json.3.6.0\lib\net462\SmartFormat.Extensions.Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SmartFormat.Extensions.System.Text.Json, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
-      <HintPath>..\packages\SmartFormat.Extensions.System.Text.Json.3.6.0\lib\net462\SmartFormat.Extensions.System.Text.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SmartFormat.Extensions.Time, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
-      <HintPath>..\packages\SmartFormat.Extensions.Time.3.6.0\lib\net462\SmartFormat.Extensions.Time.dll</HintPath>
-    </Reference>
-    <Reference Include="SmartFormat.Extensions.Xml, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
-      <HintPath>..\packages\SmartFormat.Extensions.Xml.3.6.0\lib\net462\SmartFormat.Extensions.Xml.dll</HintPath>
-    </Reference>
-    <Reference Include="SmartFormat.Net, Version=3.0.0.0, Culture=neutral, PublicKeyToken=568866805651201f, processorArchitecture=MSIL">
-      <HintPath>..\packages\SmartFormat.NET.3.6.0\lib\net462\SmartFormat.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.ComponentModel.Annotations, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ComponentModel.Annotations.4.4.1\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <!-- Framework references -->
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.9.0.3\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
-    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Pipelines, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.IO.Pipelines.9.0.3\lib\net462\System.IO.Pipelines.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.6.2\lib\net462\System.Memory.dll</HintPath>
-    </Reference>
     <Reference Include="System.Messaging" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.1\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encodings.Web.9.0.3\lib\net462\System.Text.Encodings.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Text.Json, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Json.9.0.3\lib\net462\System.Text.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.2\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="System.Transactions" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Optimization, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Routing" />
-    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
-    <Reference Include="System.Net.Http">
-    </Reference>
-    <Reference Include="System.Net.Http.WebRequest">
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="ZString, Version=2.6.0.0, Culture=neutral, PublicKeyToken=df4c250b14d82627, processorArchitecture=MSIL">
-      <HintPath>..\packages\ZString.2.6.0\lib\netstandard2.0\ZString.dll</HintPath>
-    </Reference>
   </ItemGroup>
+
+  <!-- Exclude specific patterns from default compilation -->
   <ItemGroup>
-    <Reference Include="Owin">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-    </Reference>
+    <Compile Remove="obj\**" />
+    <Content Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
   </ItemGroup>
+
+  <!-- App_GlobalResources with auto-generated designer file -->
   <ItemGroup>
-    <Compile Include="App_GlobalResources\MyResources.Designer.cs">
+    <Compile Update="App_GlobalResources\MyResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MyResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Automapper\IsolateViewModelMappingAction.cs" />
-    <Compile Include="Automapper\IsolateViewModelMappingActionBase.cs" />
-    <Compile Include="Automapper\MeningoIsolateViewModelMappingAction.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\ControllerBase.cs" />
-    <Compile Include="Controllers\CountyController.cs" />
-    <Compile Include="Controllers\EucastClinicalBreakpointsController.cs" />
-    <Compile Include="Controllers\PatientSendingControllerBase.cs" />
-    <Compile Include="Controllers\PubMlstController.cs" />
-    <Compile Include="Controllers\GeonamesController.cs" />
-    <Compile Include="Controllers\HealthOfficesController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MeningoIsolateController.cs" />
-    <Compile Include="Controllers\IsolateController.cs" />
-    <Compile Include="Controllers\IsolateControllerBase.cs" />
-    <Compile Include="Controllers\MeningoPatientController.cs" />
-    <Compile Include="Controllers\MeningoPatientSendingController.cs" />
-    <Compile Include="Controllers\MeningoSendingController.cs" />
-    <Compile Include="Controllers\PatientController.cs" />
-    <Compile Include="Controllers\PatientControllerBase.cs" />
-    <Compile Include="Controllers\PatientSendingController.cs" />
-    <Compile Include="Controllers\QueryRecord.cs" />
-    <Compile Include="Controllers\MeningoReportController.cs" />
-    <Compile Include="Controllers\ReportController.cs" />
-    <Compile Include="Controllers\ReportControllerBase.cs" />
-    <Compile Include="Controllers\EpiscanGisExportController.cs" />
-    <Compile Include="Controllers\RkiMatchController.cs" />
-    <Compile Include="Controllers\RoleController.cs" />
-    <Compile Include="Controllers\MeningoSenderController.cs" />
-    <Compile Include="Controllers\SenderController.cs" />
-    <Compile Include="Controllers\SenderControllerBase.cs" />
-    <Compile Include="Controllers\SendingController.cs" />
-    <Compile Include="App_Start\ExceptionLogger.cs" />
-    <Compile Include="Domain\NativeMaterialInterpretationRule.cs" />
-    <Compile Include="Migrations\201908152057267_Patient_Country.cs" />
-    <Compile Include="Migrations\201908152057267_Patient_Country.Designer.cs">
-      <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs" />
-    <Compile Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.Designer.cs">
-      <DependentUpon>201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs" />
-    <Compile Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.Designer.cs">
-      <DependentUpon>201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs" />
-    <Compile Include="Migrations\202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.Designer.cs">
-      <DependentUpon>202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs" />
-    <Compile Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.Designer.cs">
-      <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.cs" />
-    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.Designer.cs">
-      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202203301236005_ReorderSpecificTestResult.cs" />
-    <Compile Include="Migrations\202203301236005_ReorderSpecificTestResult.designer.cs">
-      <DependentUpon>202203301236005_ReorderSpecificTestResult.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.cs" />
-    <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.designer.cs">
-      <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.cs" />
-    <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.designer.cs">
-      <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202305301958098_Sending_AutoInvasive.cs" />
-    <Compile Include="Migrations\202305301958098_Sending_AutoInvasive.designer.cs">
-      <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202312180600593_SendingBase_DemisId.cs" />
-    <Compile Include="Migrations\202312180600593_SendingBase_DemisId.designer.cs">
-      <DependentUpon>202312180600593_SendingBase_DemisId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202404280859485_SendingBase_DemisId_To_String.cs" />
-    <Compile Include="Migrations\202404280859485_SendingBase_DemisId_To_String.designer.cs">
-      <DependentUpon>202404280859485_SendingBase_DemisId_To_String.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202410201042173_Isolate_RealTimePcr.cs" />
-    <Compile Include="Migrations\202410201042173_Isolate_RealTimePcr.Designer.cs">
-      <DependentUpon>202410201042173_Isolate_RealTimePcr.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.cs" />
-    <Compile Include="Migrations\202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.Designer.cs">
-      <DependentUpon>202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202504061433021_RealTimePcrResultToFlags.cs" />
-    <Compile Include="Migrations\202504061433021_RealTimePcrResultToFlags.Designer.cs">
-      <DependentUpon>202504061433021_RealTimePcrResultToFlags.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202505050545536_RenameMaldiTofToVitek.cs" />
-    <Compile Include="Migrations\202505050545536_RenameMaldiTofToVitek.Designer.cs">
-      <DependentUpon>202505050545536_RenameMaldiTofToVitek.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202505070520582_Isolate_MaldiTofBiotyper.cs" />
-    <Compile Include="Migrations\202505070520582_Isolate_MaldiTofBiotyper.Designer.cs">
-      <DependentUpon>202505070520582_Isolate_MaldiTofBiotyper.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202507140457406_SendingBase_SenderSpecies.cs" />
-    <Compile Include="Migrations\202507140457406_SendingBase_SenderSpecies.Designer.cs">
-      <DependentUpon>202507140457406_SendingBase_SenderSpecies.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202507140531037_Sending_SerotypeSender.cs" />
-    <Compile Include="Migrations\202507140531037_Sending_SerotypeSender.Designer.cs">
-      <DependentUpon>202507140531037_Sending_SerotypeSender.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Country.cs" />
-    <Compile Include="Models\PubMlstMatchInfo.cs" />
-    <Compile Include="Models\VaccinationStatus.cs" />
-    <Compile Include="Services\IGeonamesService.cs" />
-    <Compile Include="Services\IrisPubMlstService.cs" />
-    <Compile Include="Services\NeisseriaPubMlstService.cs" />
-    <Compile Include="Services\PubMlstAuthorization.cs" />
-    <Compile Include="Services\PubMlstMatcher.cs" />
-    <Compile Include="Services\PubMlstService.cs" />
-    <Compile Include="Services\PubMlstSessionToken.cs" />
-    <Compile Include="Tools\HaemophilsPubMlstExport.cs" />
-    <Compile Include="Tools\MeningoSendingRkiExport.cs" />
-    <Compile Include="Tools\HaemophilusSendingRkiExport.cs" />
-    <Compile Include="Tools\HaemophilusSendingLaboratoryExport.cs" />
-    <Compile Include="Tools\IDuplicatePatientDetectionColumns.cs" />
-    <Compile Include="Tools\MeningoSendingIrisExport.cs" />
-    <Compile Include="Tools\MeningoStateAuthorityExport.cs" />
-    <Compile Include="Tools\PubMlstColumns.cs" />
-    <Compile Include="Tools\DuplicatePatientResolver.cs" />
-    <Compile Include="Tools\RkiExportColumns.cs" />
-    <Compile Include="Tools\SendingExportDefinition.cs" />
-    <Compile Include="Tools\MeningoSendingLaboratoryExport.cs" />
-    <Compile Include="Utils\AppSettingsExtensions.cs" />
-    <Compile Include="Utils\EnumFormatter.cs" />
-    <Compile Include="Domain\IsolateExtensions.cs" />
-    <Compile Include="Domain\MeningoIsolateInterpretation.cs" />
-    <Compile Include="Domain\IsolateInterpretation.cs" />
-    <Compile Include="Domain\StemInterpretationRule.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201311070607139_InitialCreate.cs" />
-    <Compile Include="Migrations\201311070607139_InitialCreate.Designer.cs">
-      <DependentUpon>201311070607139_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201311070703159_RefinedSender.cs" />
-    <Compile Include="Migrations\201311070703159_RefinedSender.Designer.cs">
-      <DependentUpon>201311070703159_RefinedSender.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.cs" />
-    <Compile Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.Designer.cs">
-      <DependentUpon>201311181323010_ChangedRequiredFieldsOnSender.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201311242304525_Patient.cs" />
-    <Compile Include="Migrations\201311242304525_Patient.Designer.cs">
-      <DependentUpon>201311242304525_Patient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201401061223272_RefinedPatient.cs" />
-    <Compile Include="Migrations\201401061223272_RefinedPatient.Designer.cs">
-      <DependentUpon>201401061223272_RefinedPatient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201401081931532_RefinedSender1.cs" />
-    <Compile Include="Migrations\201401081931532_RefinedSender1.Designer.cs">
-      <DependentUpon>201401081931532_RefinedSender1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201401100947336_Sending.cs" />
-    <Compile Include="Migrations\201401100947336_Sending.Designer.cs">
-      <DependentUpon>201401100947336_Sending.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201402032311285_Isolate_1.cs" />
-    <Compile Include="Migrations\201402032311285_Isolate_1.Designer.cs">
-      <DependentUpon>201402032311285_Isolate_1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201403252007478_Isolate_2.cs" />
-    <Compile Include="Migrations\201403252007478_Isolate_2.Designer.cs">
-      <DependentUpon>201403252007478_Isolate_2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201404142153397_Sending_Add_ForeignKeyToPatient.cs" />
-    <Compile Include="Migrations\201404142153397_Sending_Add_ForeignKeyToPatient.Designer.cs">
-      <DependentUpon>201404142153397_Sending_Add_ForeignKeyToPatient.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201404160613229_Update_AspNetIdentity_Version_2.cs" />
-    <Compile Include="Migrations\201404160613229_Update_AspNetIdentity_Version_2.Designer.cs">
-      <DependentUpon>201404160613229_Update_AspNetIdentity_Version_2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201404231940084_Isolate_3_Default_To_ND.cs" />
-    <Compile Include="Migrations\201404231940084_Isolate_3_Default_To_ND.Designer.cs">
-      <DependentUpon>201404231940084_Isolate_3_Default_To_ND.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.cs" />
-    <Compile Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.Designer.cs">
-      <DependentUpon>201405051839287_Isolate_4_Add_StemNumber.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs" />
-    <Compile Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.Designer.cs">
-      <DependentUpon>201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.cs" />
-    <Compile Include="Migrations\201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.Designer.cs">
-      <DependentUpon>201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201406142110467_Isolate_7_AddRemark.cs" />
-    <Compile Include="Migrations\201406142110467_Isolate_7_AddRemark.Designer.cs">
-      <DependentUpon>201406142110467_Isolate_7_AddRemark.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201408312049376_RefinedPatient2.cs" />
-    <Compile Include="Migrations\201408312049376_RefinedPatient2.Designer.cs">
-      <DependentUpon>201408312049376_RefinedPatient2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs" />
-    <Compile Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.Designer.cs">
-      <DependentUpon>201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.cs" />
-    <Compile Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.Designer.cs">
-      <DependentUpon>201409221954353_Isolate_9_ftsi_MLST.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs" />
-    <Compile Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.Designer.cs">
-      <DependentUpon>201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs" />
-    <Compile Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.Designer.cs">
-      <DependentUpon>201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201502112024310_County.cs" />
-    <Compile Include="Migrations\201502112024310_County.Designer.cs">
-      <DependentUpon>201502112024310_County.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201506301117277_Isolate_10_Growth.cs" />
-    <Compile Include="Migrations\201506301117277_Isolate_10_Growth.Designer.cs">
-      <DependentUpon>201506301117277_Isolate_10_Growth.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201507140902578_Sender_Delete.cs" />
-    <Compile Include="Migrations\201507140902578_Sender_Delete.Designer.cs">
-      <DependentUpon>201507140902578_Sender_Delete.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201507201311481_Sending_Delete.cs" />
-    <Compile Include="Migrations\201507201311481_Sending_Delete.Designer.cs">
-      <DependentUpon>201507201311481_Sending_Delete.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.cs" />
-    <Compile Include="Migrations\201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.Designer.cs">
-      <DependentUpon>201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704192201344_HealthOffice.cs" />
-    <Compile Include="Migrations\201704192201344_HealthOffice.Designer.cs">
-      <DependentUpon>201704192201344_HealthOffice.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201704202158587_Isolate_11_ftsi_Eval3.cs" />
-    <Compile Include="Migrations\201704202158587_Isolate_11_ftsi_Eval3.Designer.cs">
-      <DependentUpon>201704202158587_Isolate_11_ftsi_Eval3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201802182157080_RkiMatch.cs" />
-    <Compile Include="Migrations\201802182157080_RkiMatch.Designer.cs">
-      <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807022228523_Isolate_12_ReportStatus.cs" />
-    <Compile Include="Migrations\201807022228523_Isolate_12_ReportStatus.Designer.cs">
-      <DependentUpon>201807022228523_Isolate_12_ReportStatus.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201807251901482_MeningoPatientAndSending.cs" />
-    <Compile Include="Migrations\201807251901482_MeningoPatientAndSending.Designer.cs">
-      <DependentUpon>201807251901482_MeningoPatientAndSending.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901052104363_Meningo_Isolate_1.cs" />
-    <Compile Include="Migrations\201901052104363_Meningo_Isolate_1.Designer.cs">
-      <DependentUpon>201901052104363_Meningo_Isolate_1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs" />
-    <Compile Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.Designer.cs">
-      <DependentUpon>201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.cs" />
-    <Compile Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.Designer.cs">
-      <DependentUpon>201901122122392_Meningo_Isolate_3_Agglutination.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.cs" />
-    <Compile Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.Designer.cs">
-      <DependentUpon>201901122131264_Meningo_Isolate_4_Onpg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.cs" />
-    <Compile Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.Designer.cs">
-      <DependentUpon>201901122155487_Meningo_Isolate_5_GammaGt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.cs" />
-    <Compile Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.Designer.cs">
-      <DependentUpon>201901122211462_Meningo_Isolate_6_SerogroupPcr.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.cs" />
-    <Compile Include="Migrations\201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.Designer.cs">
-      <DependentUpon>201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901182207369_Meningo_Isolate_7_Growth.cs" />
-    <Compile Include="Migrations\201901182207369_Meningo_Isolate_7_Growth.Designer.cs">
-      <DependentUpon>201901182207369_Meningo_Isolate_7_Growth.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901182228325_Meningo_Isolate_8_AdditionalFields.cs" />
-    <Compile Include="Migrations\201901182228325_Meningo_Isolate_8_AdditionalFields.Designer.cs">
-      <DependentUpon>201901182228325_Meningo_Isolate_8_AdditionalFields.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901200043344_EucastClinicalBreakpoint_Add_ValidFor.cs" />
-    <Compile Include="Migrations\201901200043344_EucastClinicalBreakpoint_Add_ValidFor.Designer.cs">
-      <DependentUpon>201901200043344_EucastClinicalBreakpoint_Add_ValidFor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.cs" />
-    <Compile Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.Designer.cs">
-      <DependentUpon>201901200118468_EucastClinicalBreakpoint_Update_Index.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.cs" />
-    <Compile Include="Migrations\201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.Designer.cs">
-      <DependentUpon>201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.cs" />
-    <Compile Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.Designer.cs">
-      <DependentUpon>201901232227223_Meningo_Isolate_10_RealTimePcr.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.cs" />
-    <Compile Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.Designer.cs">
-      <DependentUpon>201904012024228_NeisseriaPubMlstIsolate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\ChangeLog.cs" />
-    <Compile Include="Models\County.cs" />
-    <Compile Include="Models\DatabaseType.cs" />
-    <Compile Include="Models\DefaultRoles.cs" />
-    <Compile Include="Models\EpsilometerTest.cs" />
-    <Compile Include="Models\EpsilometerTestResult.cs" />
-    <Compile Include="Models\EucastClinicalBreakpoint.cs" />
-    <Compile Include="Models\Antibiotic.cs" />
-    <Compile Include="Models\GrowthType.cs" />
-    <Compile Include="Models\HealthOffice.cs" />
-    <Compile Include="Models\Meningo\CswyAllel.cs" />
-    <Compile Include="Models\Meningo\INeisseriaIsolateAlleleProperties.cs" />
-    <Compile Include="Models\IsolateBase.cs" />
-    <Compile Include="Models\IsolateCommon.cs" />
-    <Compile Include="Models\Material.cs" />
-    <Compile Include="Models\Meningo\Epidemiology.cs" />
-    <Compile Include="Models\ISendingReference.cs" />
-    <Compile Include="Models\InvasiveSamplingLocationAttribute.cs" />
-    <Compile Include="Models\Meningo\Growth.cs" />
-    <Compile Include="Models\Meningo\MeningoIsolate.cs" />
-    <Compile Include="Models\Meningo\MeningoIsolateBase.cs" />
-    <Compile Include="Models\Meningo\MeningoMaterial.cs" />
-    <Compile Include="Models\Meningo\MeningoClinicalInformation.cs" />
-    <Compile Include="Models\Meningo\MeningoPatient.cs" />
-    <Compile Include="Models\Meningo\MeningoSending.cs" />
-    <Compile Include="Models\Meningo\MeningoSamplingLocation.cs" />
-    <Compile Include="Models\Meningo\MeningoSerogroupPcr.cs" />
-    <Compile Include="Models\Meningo\MeningoSerogroupAgg.cs" />
-    <Compile Include="Models\Meningo\RealTimePcrResult.cs" />
-    <Compile Include="Models\Meningo\RiskFactors.cs" />
-    <Compile Include="Models\Meningo\UnderlyingDisease.cs" />
-    <Compile Include="Models\PatientBase.cs" />
-    <Compile Include="Models\Meningo\NeisseriaPubMlstIsolate.cs" />
-    <Compile Include="Models\ReportStatus.cs" />
-    <Compile Include="Models\RkiMatchRecord.cs" />
-    <Compile Include="Models\RkiStatus.cs" />
-    <Compile Include="Models\SendingBase.cs" />
-    <Compile Include="Models\SerotypePcr.cs" />
-    <Compile Include="Models\ApplicationDbContextWrapper.cs" />
-    <Compile Include="Models\ApplicationUser.cs" />
-    <Compile Include="Models\Change.cs" />
-    <Compile Include="Models\ChangeType.cs" />
-    <Compile Include="Models\ClinicalInformation.cs" />
-    <Compile Include="Models\Error.cs" />
-    <Compile Include="Models\Evaluation.cs" />
-    <Compile Include="Models\FactorTest.cs" />
-    <Compile Include="Models\Gender.cs" />
-    <Compile Include="Models\IApplicationDbContext.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\Isolate.cs" />
-    <Compile Include="Models\SamplingLocation.cs" />
-    <Compile Include="Models\State.cs" />
-    <Compile Include="Models\TestResult.cs" />
-    <Compile Include="Models\Sending.cs" />
-    <Compile Include="Models\Patient.cs" />
-    <Compile Include="Models\Sender.cs" />
-    <Compile Include="Models\YesNo.cs" />
-    <Compile Include="Models\YesNoOptional.cs" />
-    <Compile Include="Models\YesNoUnknown.cs" />
-    <Compile Include="Properties\GlobalAssemblyInfo.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Startup.cs" />
-    <Compile Include="Tools\RkiMatchImporter.cs" />
-    <Compile Include="Tools\CountyImporter.cs" />
-    <Compile Include="Tools\CreateExcelFile.cs" />
-    <Compile Include="Tools\ExportDefinition.cs" />
-    <Compile Include="Tools\RkiTool.cs" />
-    <Compile Include="Utils\AntibioticPriorityListComparer.cs" />
-    <Compile Include="Utils\EnumSerializer.cs" />
-    <Compile Include="Utils\EnumUtils.cs" />
-    <Compile Include="Utils\ExceptionUtils.cs" />
-    <Compile Include="Utils\ExpressionUtils.cs" />
-    <Compile Include="Utils\FileLister.cs" />
-    <Compile Include="Services\GeonamesService.cs" />
-    <Compile Include="Utils\HttpClientWrapper.cs" />
-    <Compile Include="Utils\DetailFormatter.cs" />
-    <Compile Include="Utils\MeningoMaterialExtensions.cs" />
-    <Compile Include="Utils\ReportFormatter.cs" />
-    <Compile Include="Utils\ServerUtils.cs" />
-    <Compile Include="Utils\TypeUtils.cs" />
-    <Compile Include="Validators\EpsilometerTestValidator.cs" />
-    <Compile Include="Validators\IsolateViewModelValidatorBase.cs" />
-    <Compile Include="Validators\MeningoIsolateViewModelValidator.cs" />
-    <Compile Include="Validators\IsolateViewModelValidator.cs" />
-    <Compile Include="Validators\EucastClinicalBreakpointValidator.cs" />
-    <Compile Include="Validators\HealthOfficeValidator.cs" />
-    <Compile Include="Validators\MeningoPatientValidator.cs" />
-    <Compile Include="Validators\MergePatientRequestValidator.cs" />
-    <Compile Include="Validators\PatientValidator.cs" />
-    <Compile Include="Validators\MeningoSendingValidator.cs" />
-    <Compile Include="Validators\SendingValidator.cs" />
-    <Compile Include="ViewModels\EpsilometerTestReportModel.cs" />
-    <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
-    <Compile Include="ViewModels\MergePatientConfirmation.cs" />
-    <Compile Include="ViewModels\MergePatientRequest.cs" />
-    <Compile Include="ViewModels\IsolateViewModel.cs" />
-    <Compile Include="ViewModels\MeningoIsolateViewModel.cs" />
-    <Compile Include="ViewModels\PatientSendingViewModel.cs" />
-    <Compile Include="ViewModels\FromToQuery.cs" />
-    <Compile Include="ViewModels\Typing.cs" />
-    <Compile Include="Views\Utils\AutoCompleteUtils.cs" />
-    <Compile Include="Views\Utils\BootstrapEditor.cs" />
-    <Compile Include="Views\Utils\EnumEditor.cs" />
+    <EmbeddedResource Update="App_GlobalResources\MyResources.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MyResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
+
+  <!-- Migration designer files -->
   <ItemGroup>
-    <Content Include="Content\bootstrap-datetimepicker.css" />
-    <Content Include="Content\bootstrap-datetimepicker.min.css" />
-    <Content Include="Content\bootstrap-select2.css" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\autoFill.bootstrap.css" />
-    <Content Include="Content\DataTables\css\autoFill.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\autoFill.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\autoFill.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\autoFill.dataTables.css" />
-    <Content Include="Content\DataTables\css\autoFill.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\autoFill.foundation.css" />
-    <Content Include="Content\DataTables\css\autoFill.foundation.min.css" />
-    <Content Include="Content\DataTables\css\autoFill.jqueryui.css" />
-    <Content Include="Content\DataTables\css\autoFill.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\autoFill.semanticui.css" />
-    <Content Include="Content\DataTables\css\autoFill.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\buttons.bootstrap.css" />
-    <Content Include="Content\DataTables\css\buttons.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\buttons.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\buttons.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\buttons.dataTables.css" />
-    <Content Include="Content\DataTables\css\buttons.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\buttons.foundation.css" />
-    <Content Include="Content\DataTables\css\buttons.foundation.min.css" />
-    <Content Include="Content\DataTables\css\buttons.jqueryui.css" />
-    <Content Include="Content\DataTables\css\buttons.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\buttons.semanticui.css" />
-    <Content Include="Content\DataTables\css\buttons.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\colReorder.bootstrap.css" />
-    <Content Include="Content\DataTables\css\colReorder.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\colReorder.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\colReorder.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\colReorder.dataTables.css" />
-    <Content Include="Content\DataTables\css\colReorder.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\colReorder.foundation.css" />
-    <Content Include="Content\DataTables\css\colReorder.foundation.min.css" />
-    <Content Include="Content\DataTables\css\colReorder.jqueryui.css" />
-    <Content Include="Content\DataTables\css\colReorder.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\colReorder.semanticui.css" />
-    <Content Include="Content\DataTables\css\colReorder.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\dataTables.bootstrap.css" />
-    <Content Include="Content\DataTables\css\dataTables.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\dataTables.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\dataTables.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\dataTables.foundation.css" />
-    <Content Include="Content\DataTables\css\dataTables.foundation.min.css" />
-    <Content Include="Content\DataTables\css\dataTables.jqueryui.css" />
-    <Content Include="Content\DataTables\css\dataTables.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\dataTables.material.css" />
-    <Content Include="Content\DataTables\css\dataTables.material.min.css" />
-    <Content Include="Content\DataTables\css\dataTables.semanticui.css" />
-    <Content Include="Content\DataTables\css\dataTables.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\dataTables.uikit.css" />
-    <Content Include="Content\DataTables\css\dataTables.uikit.min.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.bootstrap.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.dataTables.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.foundation.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.foundation.min.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.jqueryui.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.semanticui.css" />
-    <Content Include="Content\DataTables\css\fixedColumns.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.bootstrap.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.dataTables.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.foundation.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.foundation.min.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.jqueryui.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.semanticui.css" />
-    <Content Include="Content\DataTables\css\fixedHeader.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\jquery.dataTables.css" />
-    <Content Include="Content\DataTables\css\jquery.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\jquery.dataTables_themeroller.css" />
-    <Content Include="Content\DataTables\css\keyTable.bootstrap.css" />
-    <Content Include="Content\DataTables\css\keyTable.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\keyTable.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\keyTable.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\keyTable.dataTables.css" />
-    <Content Include="Content\DataTables\css\keyTable.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\keyTable.foundation.css" />
-    <Content Include="Content\DataTables\css\keyTable.foundation.min.css" />
-    <Content Include="Content\DataTables\css\keyTable.jqueryui.css" />
-    <Content Include="Content\DataTables\css\keyTable.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\keyTable.semanticui.css" />
-    <Content Include="Content\DataTables\css\keyTable.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\responsive.bootstrap.css" />
-    <Content Include="Content\DataTables\css\responsive.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\responsive.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\responsive.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\responsive.dataTables.css" />
-    <Content Include="Content\DataTables\css\responsive.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\responsive.foundation.css" />
-    <Content Include="Content\DataTables\css\responsive.foundation.min.css" />
-    <Content Include="Content\DataTables\css\responsive.jqueryui.css" />
-    <Content Include="Content\DataTables\css\responsive.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\responsive.semanticui.css" />
-    <Content Include="Content\DataTables\css\responsive.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\rowGroup.bootstrap.css" />
-    <Content Include="Content\DataTables\css\rowGroup.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\rowGroup.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\rowGroup.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\rowGroup.dataTables.css" />
-    <Content Include="Content\DataTables\css\rowGroup.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\rowGroup.foundation.css" />
-    <Content Include="Content\DataTables\css\rowGroup.foundation.min.css" />
-    <Content Include="Content\DataTables\css\rowGroup.jqueryui.css" />
-    <Content Include="Content\DataTables\css\rowGroup.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\rowGroup.semanticui.css" />
-    <Content Include="Content\DataTables\css\rowGroup.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\rowReorder.bootstrap.css" />
-    <Content Include="Content\DataTables\css\rowReorder.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\rowReorder.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\rowReorder.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\rowReorder.dataTables.css" />
-    <Content Include="Content\DataTables\css\rowReorder.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\rowReorder.foundation.css" />
-    <Content Include="Content\DataTables\css\rowReorder.foundation.min.css" />
-    <Content Include="Content\DataTables\css\rowReorder.jqueryui.css" />
-    <Content Include="Content\DataTables\css\rowReorder.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\rowReorder.semanticui.css" />
-    <Content Include="Content\DataTables\css\rowReorder.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\scroller.bootstrap.css" />
-    <Content Include="Content\DataTables\css\scroller.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\scroller.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\scroller.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\scroller.dataTables.css" />
-    <Content Include="Content\DataTables\css\scroller.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\scroller.foundation.css" />
-    <Content Include="Content\DataTables\css\scroller.foundation.min.css" />
-    <Content Include="Content\DataTables\css\scroller.jqueryui.css" />
-    <Content Include="Content\DataTables\css\scroller.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\scroller.semanticui.css" />
-    <Content Include="Content\DataTables\css\scroller.semanticui.min.css" />
-    <Content Include="Content\DataTables\css\select.bootstrap.css" />
-    <Content Include="Content\DataTables\css\select.bootstrap.min.css" />
-    <Content Include="Content\DataTables\css\select.bootstrap4.css" />
-    <Content Include="Content\DataTables\css\select.bootstrap4.min.css" />
-    <Content Include="Content\DataTables\css\select.dataTables.css" />
-    <Content Include="Content\DataTables\css\select.dataTables.min.css" />
-    <Content Include="Content\DataTables\css\select.foundation.css" />
-    <Content Include="Content\DataTables\css\select.foundation.min.css" />
-    <Content Include="Content\DataTables\css\select.jqueryui.css" />
-    <Content Include="Content\DataTables\css\select.jqueryui.min.css" />
-    <Content Include="Content\DataTables\css\select.semanticui.css" />
-    <Content Include="Content\DataTables\css\select.semanticui.min.css" />
-    <Content Include="Content\DataTables\images\details_close.png" />
-    <Content Include="Content\DataTables\images\details_open.png" />
-    <Content Include="Content\DataTables\images\sort_asc.png" />
-    <Content Include="Content\DataTables\images\sort_asc_disabled.png" />
-    <Content Include="Content\DataTables\images\sort_both.png" />
-    <Content Include="Content\DataTables\images\sort_desc.png" />
-    <Content Include="Content\DataTables\images\sort_desc_disabled.png" />
-    <Content Include="Content\DataTables\swf\flashExport.swf" />
-    <Content Include="Content\select2.css" />
-    <Content Include="Content\select2-spinner.gif" />
-    <Content Include="Content\select2.png" />
-    <Content Include="Content\select2x2.png" />
-    <Content Include="Database\backup.sql" />
-    <Content Include="Database\EntityDiagram.png" />
-    <Content Include="Database\heidisql_01.png" />
-    <Content Include="Database\heidisql_02.png" />
-    <Content Include="Database\heidisql_03.png" />
-    <Content Include="Database\heidisql_04.png" />
-    <Content Include="Database\NRZMHiDBReader.sql" />
-    <Content Include="Database\PlantUMLDiagram.sql" />
-    <Content Include="Database\restore.sql" />
+    <Compile Update="Migrations\*.Designer.cs">
+      <DependentUpon>$([System.Text.RegularExpressions.Regex]::Replace(%(Filename), '\.Designer$', '.cs'))</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <!-- Content and None items -->
+  <ItemGroup>
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
-    <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
-    <Content Include="Images\changes\20150630.png" />
-    <Content Include="Images\changes\20150715_1.png" />
-    <Content Include="Images\changes\20150715_2.png" />
-    <Content Include="Images\changes\20150715_3.png" />
-    <Content Include="Images\changes\20150715_4.png" />
-    <Content Include="Images\changes\20150715_5.png" />
-    <Content Include="Images\changes\20150831_1.png" />
-    <Content Include="Images\changes\20160513_1.png" />
-    <Content Include="Images\changes\20160513_2.png" />
-    <Content Include="Images\changes\20170420_1.png" />
-    <Content Include="Images\changes\20170420_2.png" />
-    <Content Include="Images\changes\20180703.png" />
-    <Content Include="Images\changes\20200430_1.png" />
-    <Content Include="Images\changes\20200430_2.png" />
-    <Content Include="Images\changes\20200430_3.png" />
-    <Content Include="Images\changes\20220330.png" />
-    <Content Include="Images\logo4.png" />
-    <Content Include="Images\sort_asc.png" />
-    <Content Include="Images\sort_both.png" />
-    <Content Include="Images\sort_desc.png" />
-    <Content Include="NLog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Database\backup.bat" />
-    <Content Include="Database\EntityDiagram.uml" />
-    <Content Include="Database\Readme.md" />
-    <Content Include="Database\restore_to_test.bat" />
-    <EmbeddedResource Include="Domain\Interpretation\StemRules.json" />
-    <EmbeddedResource Include="Domain\Interpretation\TypingTemplates.json" />
-    <EmbeddedResource Include="Domain\Interpretation\NativeMaterialRules.json" />
-    <Content Include="App_Data\countries.json" />
-    <EmbeddedResource Include="Migrations\201908152057267_Patient_Country.resx">
-      <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.resx">
-      <DependentUpon>201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.resx">
-      <DependentUpon>201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.resx">
-      <DependentUpon>202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs</DependentUpon>
-    </EmbeddedResource>
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <EmbeddedResource Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.resx">
-      <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.resx">
-      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
-    </EmbeddedResource>
-    <Content Include="Content\DataTables\css\semanticui.scss" />
-    <Content Include="Content\DataTables\css\mixins.scss" />
-    <Content Include="Content\DataTables\css\common.scss" />
-    <EmbeddedResource Include="Migrations\202203301236005_ReorderSpecificTestResult.resx">
-      <DependentUpon>202203301236005_ReorderSpecificTestResult.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.resx">
-      <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.resx">
-      <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202305301958098_Sending_AutoInvasive.resx">
-      <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202312180600593_SendingBase_DemisId.resx">
-      <DependentUpon>202312180600593_SendingBase_DemisId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202404280859485_SendingBase_DemisId_To_String.resx">
-      <DependentUpon>202404280859485_SendingBase_DemisId_To_String.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202410201042173_Isolate_RealTimePcr.resx">
-      <DependentUpon>202410201042173_Isolate_RealTimePcr.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.resx">
-      <DependentUpon>202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202504061433021_RealTimePcrResultToFlags.resx">
-      <DependentUpon>202504061433021_RealTimePcrResultToFlags.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202505050545536_RenameMaldiTofToVitek.resx">
-      <DependentUpon>202505050545536_RenameMaldiTofToVitek.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202505070520582_Isolate_MaldiTofBiotyper.resx">
-      <DependentUpon>202505070520582_Isolate_MaldiTofBiotyper.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202507140457406_SendingBase_SenderSpecies.resx">
-      <DependentUpon>202507140457406_SendingBase_SenderSpecies.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202507140531037_Sending_SerotypeSender.resx">
-      <DependentUpon>202507140531037_Sending_SerotypeSender.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Properties\PublishProfiles\haemophilus - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\haemophilus - Web Deploy.pubxml" />
-    <Content Include="Scripts\bootstrap-datetimepicker.js" />
-    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
-    <Content Include="Scripts\bootstrap.js" />
-    <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\cldr.js" />
-    <Content Include="Scripts\cldr\event.js" />
-    <Content Include="Scripts\cldr\supplemental.js" />
-    <Content Include="Scripts\cldr\unresolved.js" />
-    <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
-    <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
-    <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
-    <Content Include="Scripts\DataTables\autoFill.bootstrap4.min.js" />
-    <Content Include="Scripts\DataTables\autoFill.foundation.js" />
-    <Content Include="Scripts\DataTables\autoFill.foundation.min.js" />
-    <Content Include="Scripts\DataTables\autoFill.jqueryui.js" />
-    <Content Include="Scripts\DataTables\autoFill.jqueryui.min.js" />
-    <Content Include="Scripts\DataTables\autoFill.semanticui.js" />
-    <Content Include="Scripts\DataTables\autoFill.semanticui.min.js" />
-    <Content Include="Scripts\DataTables\buttons.bootstrap.js" />
-    <Content Include="Scripts\DataTables\buttons.bootstrap.min.js" />
-    <Content Include="Scripts\DataTables\buttons.bootstrap4.js" />
-    <Content Include="Scripts\DataTables\buttons.bootstrap4.min.js" />
-    <Content Include="Scripts\DataTables\buttons.colVis.js" />
-    <Content Include="Scripts\DataTables\buttons.colVis.min.js" />
-    <Content Include="Scripts\DataTables\buttons.flash.js" />
-    <Content Include="Scripts\DataTables\buttons.flash.min.js" />
-    <Content Include="Scripts\DataTables\buttons.foundation.js" />
-    <Content Include="Scripts\DataTables\buttons.foundation.min.js" />
-    <Content Include="Scripts\DataTables\buttons.html5.js" />
-    <Content Include="Scripts\DataTables\buttons.html5.min.js" />
-    <Content Include="Scripts\DataTables\buttons.jqueryui.js" />
-    <Content Include="Scripts\DataTables\buttons.jqueryui.min.js" />
-    <Content Include="Scripts\DataTables\buttons.print.js" />
-    <Content Include="Scripts\DataTables\buttons.print.min.js" />
-    <Content Include="Scripts\DataTables\buttons.semanticui.js" />
-    <Content Include="Scripts\DataTables\buttons.semanticui.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.autoFill.js" />
-    <Content Include="Scripts\DataTables\dataTables.autoFill.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.bootstrap.js" />
-    <Content Include="Scripts\DataTables\dataTables.bootstrap.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.bootstrap4.js" />
-    <Content Include="Scripts\DataTables\dataTables.bootstrap4.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.buttons.js" />
-    <Content Include="Scripts\DataTables\dataTables.buttons.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.colReorder.js" />
-    <Content Include="Scripts\DataTables\dataTables.colReorder.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.fixedColumns.js" />
-    <Content Include="Scripts\DataTables\dataTables.fixedColumns.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.fixedHeader.js" />
-    <Content Include="Scripts\DataTables\dataTables.fixedHeader.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.foundation.js" />
-    <Content Include="Scripts\DataTables\dataTables.foundation.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.jqueryui.js" />
-    <Content Include="Scripts\DataTables\dataTables.jqueryui.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.keyTable.js" />
-    <Content Include="Scripts\DataTables\dataTables.keyTable.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.material.js" />
-    <Content Include="Scripts\DataTables\dataTables.material.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.responsive.js" />
-    <Content Include="Scripts\DataTables\dataTables.responsive.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.rowGroup.js" />
-    <Content Include="Scripts\DataTables\dataTables.rowGroup.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.rowReorder.js" />
-    <Content Include="Scripts\DataTables\dataTables.rowReorder.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.scroller.js" />
-    <Content Include="Scripts\DataTables\dataTables.scroller.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.select.js" />
-    <Content Include="Scripts\DataTables\dataTables.select.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.semanticui.js" />
-    <Content Include="Scripts\DataTables\dataTables.semanticui.min.js" />
-    <Content Include="Scripts\DataTables\dataTables.uikit.js" />
-    <Content Include="Scripts\DataTables\dataTables.uikit.min.js" />
-    <Content Include="Scripts\DataTables\datetime-moment.js" />
-    <Content Include="Scripts\DataTables\jquery.dataTables.js" />
-    <Content Include="Scripts\DataTables\jquery.dataTables.min.js" />
-    <Content Include="Scripts\DataTables\responsive.bootstrap.js" />
-    <Content Include="Scripts\DataTables\responsive.bootstrap.min.js" />
-    <Content Include="Scripts\DataTables\responsive.bootstrap4.js" />
-    <Content Include="Scripts\DataTables\responsive.bootstrap4.min.js" />
-    <Content Include="Scripts\DataTables\responsive.foundation.js" />
-    <Content Include="Scripts\DataTables\responsive.foundation.min.js" />
-    <Content Include="Scripts\DataTables\responsive.jqueryui.js" />
-    <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
-    <Content Include="Scripts\DataTables\responsive.semanticui.js" />
-    <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
-    <Content Include="Scripts\globalize.js" />
-    <Content Include="Scripts\globalize\currency.js" />
-    <Content Include="Scripts\globalize\date.js" />
-    <Content Include="Scripts\globalize\message.js" />
-    <Content Include="Scripts\globalize\number.js" />
-    <Content Include="Scripts\globalize\plural.js" />
-    <Content Include="Scripts\globalize\relative-time.js" />
-    <Content Include="Scripts\globalize\unit.js" />
-    <Content Include="Scripts\cldr\main\de\ca-gregorian.json" />
-    <Content Include="Scripts\cldr\main\de\timeZoneNames.json" />
-    <Content Include="Scripts\cldr\main\de\numbers.json" />
-    <Content Include="Scripts\cldr\supplemental\likelySubtags.json" />
-    <Content Include="Scripts\cldr\supplemental\numberingSystems.json" />
-    <Content Include="Scripts\cldr\supplemental\timeData.json" />
-    <Content Include="Scripts\cldr\supplemental\weekData.json" />
-    <None Include="Properties\PublishProfiles\New Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\New Prod.pubxml" />
-    <Content Include="ReportTemplates\Fax - Kein Wachstum v1.docx" />
-    <Content Include="ReportTemplates\Fax - Nicht Invasiv v1.docx" />
-    <Content Include="ReportTemplates\Kein Wachstum v1.docx" />
-    <Content Include="ReportTemplates\Nicht Invasiv v1.docx" />
-    <None Include="Scripts\jquery-3.7.1.intellisense.js" />
-    <Content Include="Scripts\imagemodule.js" />
-    <Content Include="Scripts\jquery-3.7.1.js" />
-    <Content Include="Scripts\jquery-3.7.1.min.js" />
-    <Content Include="Scripts\jquery-3.7.1.slim.js" />
-    <Content Include="Scripts\jquery-3.7.1.slim.min.js" />
-    <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.7.1.min.map" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.globalize.js" />
-    <Content Include="Scripts\jquery.validate.globalize.min.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
-    <Content Include="Scripts\moment-with-locales.js" />
-    <Content Include="Scripts\moment-with-locales.min.js" />
-    <Content Include="Scripts\moment.js" />
-    <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\select2.js" />
-    <Content Include="Scripts\dataTables.german.js" />
-    <None Include="Properties\PublishProfiles\Prod Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\Test Deploy.pubxml" />
-    <Content Include="ReportTemplates\Meningo\Fax - Nativmaterial v2.docx" />
-    <Content Include="ReportTemplates\Meningo\Fax - Teilbefund - v2.docx" />
-    <Content Include="ReportTemplates\Meningo\Fax - Untersuchungsbefund v2.docx" />
-    <Content Include="ReportTemplates\Meningo\Nativmaterial v2.docx" />
-    <Content Include="ReportTemplates\Meningo\Untersuchungsbefund v2.docx" />
-    <Content Include="ReportTemplates\BLNAR v10.docx" />
-    <Content Include="ReportTemplates\BLNAS v10.docx" />
-    <Content Include="ReportTemplates\BLPACR v10.docx" />
-    <Content Include="ReportTemplates\BLPACS v10.docx" />
-    <Content Include="ReportTemplates\Fax - BLNAR v10.docx" />
-    <Content Include="ReportTemplates\Fax - BLNAS v10.docx" />
-    <Content Include="ReportTemplates\Fax - BLPACR v10.docx" />
-    <Content Include="ReportTemplates\Fax - BLPACS v10.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Cipro-R v3.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Imi-R v3.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - Kein Haemophilus v3.docx" />
-    <Content Include="ReportTemplates\Fax - Sonstige - lowBLNAR CTX-R Imi-R v3.docx" />
-    <Content Include="ReportTemplates\Fax - Teilbefund - Serotyp v4.docx" />
-    <Content Include="ReportTemplates\Sonstige - Ampi-S Cipro-R v3.docx" />
-    <Content Include="ReportTemplates\Sonstige - Ampi-S Imi-R v3.docx" />
-    <Content Include="ReportTemplates\Sonstige - Kein Haemophilus v3.docx" />
-    <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v3.docx" />
-    <Content Include="Images\logo1.png" />
-    <Content Include="Images\logo2.png" />
-    <Content Include="Images\logo3.png" />
-    <Content Include="Scripts\base64.js" />
-    <Content Include="Scripts\jquery-browser.min.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
-    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Scripts\jszip.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\site.js" />
-    <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
-    <Content Include="Views\MeningoPatientSending\IrisExport.cshtml" />
-    <Content Include="Views\PatientSending\PubMlstExport.cshtml" />
-    <Content Include="Views\MeningoPatientSending\StateAuthorityExport.cshtml" />
-    <Content Include="Views\MeningoPatientSending\RkiExport.cshtml" />
-    <Content Include="Views\MeningoSender\Export.cshtml" />
-    <Content Include="Scripts\moment.min.js.map" />
-    <Content Include="Scripts\moment-with-locales.min.js.map" />
-    <Content Include="Views\MeningoPatientSending\MergePatient.cshtml" />
-    <Content Include="Views\MeningoPatientSending\MergePatientConfirmation.cshtml" />
-    <Content Include="Views\MeningoPatientSending\MergePatientSuccess.cshtml" />
-    <Content Include="Views\PatientSending\MergePatient.cshtml" />
-    <Content Include="Views\PatientSending\MergePatientConfirmation.cshtml" />
-    <Content Include="Views\PatientSending\MergePatientSuccess.cshtml" />
-    <None Include="Web.template.config" />
+    <Content Include="Web.template.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </Content>
-    <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\_RemoveAccountPartial.cshtml" />
-    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Role\Create.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Sender\Create.cshtml" />
-    <Content Include="Views\Sender\Delete.cshtml" />
-    <Content Include="Views\Sender\Details.cshtml" />
-    <Content Include="Views\Sender\Edit.cshtml" />
-    <Content Include="Views\Sender\Index.cshtml" />
-    <Content Include="Views\View1.cshtml" />
-    <Content Include="Views\Sender\_CreateOrEdit.cshtml" />
-    <Content Include="Views\Shared\_CreateButton.cshtml" />
-    <Content Include="Views\Shared\_EditButton.cshtml" />
-    <Content Include="Views\Patient\Create.cshtml">
-      <SubType>
-      </SubType>
-    </Content>
-    <Content Include="Views\Patient\Delete.cshtml" />
-    <Content Include="Views\Patient\Details.cshtml" />
-    <Content Include="Views\Patient\Edit.cshtml" />
-    <Content Include="Views\Patient\Index.cshtml" />
-    <Content Include="Views\Shared\_QueryGoogleMaps.cshtml" />
-    <Content Include="Views\Shared\_QueryPostalCodeViaGeonames.cshtml" />
-    <Content Include="Views\Sending\Create.cshtml" />
-    <Content Include="Views\Sending\Delete.cshtml" />
-    <Content Include="Views\Sending\Details.cshtml" />
-    <Content Include="Views\Sending\Edit.cshtml" />
-    <Content Include="Views\Sending\Index.cshtml" />
-    <Content Include="Views\PatientSending\Create.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Patient.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\Sending.cshtml" />
-    <Content Include="Views\PatientSending\Index.cshtml" />
-    <Content Include="Views\PatientSending\Edit.cshtml" />
-    <Content Include="Views\Isolate\Edit.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\EpsilometerTestViewModel.cshtml" />
-    <Content Include="Views\Report\Isolate.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\SendingConclusion.cshtml" />
-    <Content Include="Views\County\Create.cshtml" />
-    <Content Include="Views\County\Delete.cshtml" />
-    <Content Include="Views\County\Details.cshtml" />
-    <Content Include="Views\County\Edit.cshtml" />
-    <Content Include="Views\County\Index.cshtml" />
-    <Content Include="Views\County\Upload.cshtml" />
-    <Content Include="Views\PatientSending\RkiExport.cshtml" />
-    <Content Include="Views\MeningoPatientSending\LaboratoryExport.cshtml" />
-    <Content Include="Views\Shared\_DeleteButton.cshtml" />
-    <Content Include="Views\Sender\Deleted.cshtml" />
-    <Content Include="Views\Home\Change.cshtml" />
-    <Content Include="Views\PatientSending\Delete.cshtml" />
-    <Content Include="Views\PatientSending\Deleted.cshtml" />
-    <Content Include="Views\Sender\Export.cshtml" />
-    <Content Include="Views\EucastClinicalBreakpoints\Create.cshtml" />
-    <Content Include="Views\EucastClinicalBreakpoints\Delete.cshtml" />
-    <Content Include="Views\EucastClinicalBreakpoints\Details.cshtml" />
-    <Content Include="Views\EucastClinicalBreakpoints\Edit.cshtml" />
-    <Content Include="Views\EucastClinicalBreakpoints\Index.cshtml" />
-    <Content Include="Views\EucastClinicalBreakpoints\_CreateOrEdit.cshtml" />
-    <Content Include="Views\Role\Index.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\HealthOffices\_CreateOrEdit.cshtml" />
-    <Content Include="Views\HealthOffices\Delete.cshtml" />
-    <Content Include="Views\HealthOffices\Details.cshtml" />
-    <Content Include="Views\HealthOffices\Edit.cshtml" />
-    <Content Include="Views\HealthOffices\Index.cshtml" />
-    <Content Include="Views\HealthOffices\Create.cshtml" />
-    <Content Include="Views\MeningoPatient\Create.cshtml" />
-    <Content Include="Views\MeningoPatient\Delete.cshtml" />
-    <Content Include="Views\MeningoPatient\Details.cshtml" />
-    <Content Include="Views\MeningoPatient\Edit.cshtml" />
-    <Content Include="Views\MeningoPatient\Index.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\MeningoPatient.cshtml" />
-    <Content Include="Views\RkiMatch\Index.cshtml" />
-    <Content Include="Views\MeningoSending\Create.cshtml" />
-    <Content Include="Views\MeningoSending\Delete.cshtml" />
-    <Content Include="Views\MeningoSending\Details.cshtml" />
-    <Content Include="Views\MeningoSending\Edit.cshtml" />
-    <Content Include="Views\MeningoSending\Index.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\MeningoSending.cshtml" />
-    <Content Include="Views\MeningoPatientSending\Index.cshtml" />
-    <Content Include="Views\Shared\EditorTemplates\MeningoSendingConclusion.cshtml" />
-    <Content Include="Views\MeningoPatientSending\Edit.cshtml" />
-    <Content Include="Views\MeningoPatientSending\Create.cshtml" />
-    <Content Include="Views\MeningoIsolate\Edit.cshtml" />
-    <Content Include="Views\MeningoReport\Isolate.cshtml" />
-    <Content Include="Views\MeningoIsolate\PubMlstMatch.cshtml" />
-    <Content Include="Views\MeningoIsolate\PubMlstMatchResult.cshtml" />
-    <Content Include="Views\PatientSending\LaboratoryExport.cshtml" />
+    <Content Include="NLog.config" />
+    <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
   </ItemGroup>
-  <ItemGroup />
+
   <ItemGroup>
-    <Content Include="packages.config">
-      <SubType>Designer</SubType>
-    </Content>
+    <None Include="NLog.xsd" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
+
+  <!-- Exclude Views from compile (they are compiled separately) -->
   <ItemGroup>
-    <Content Include="App_GlobalResources\MyResources.resx">
-      <Generator>GlobalResourceProxyGenerator</Generator>
-      <LastGenOutput>MyResources.Designer.cs</LastGenOutput>
-    </Content>
-    <EmbeddedResource Include="Migrations\201311070607139_InitialCreate.resx">
-      <DependentUpon>201311070607139_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201311070703159_RefinedSender.resx">
-      <DependentUpon>201311070703159_RefinedSender.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.resx">
-      <DependentUpon>201311181323010_ChangedRequiredFieldsOnSender.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201311242304525_Patient.resx">
-      <DependentUpon>201311242304525_Patient.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201401061223272_RefinedPatient.resx">
-      <DependentUpon>201401061223272_RefinedPatient.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201401081931532_RefinedSender1.resx">
-      <DependentUpon>201401081931532_RefinedSender1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201401100947336_Sending.resx">
-      <DependentUpon>201401100947336_Sending.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201402032311285_Isolate_1.resx">
-      <DependentUpon>201402032311285_Isolate_1.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201403252007478_Isolate_2.resx">
-      <DependentUpon>201403252007478_Isolate_2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201404142153397_Sending_Add_ForeignKeyToPatient.resx">
-      <DependentUpon>201404142153397_Sending_Add_ForeignKeyToPatient.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201404160613229_Update_AspNetIdentity_Version_2.resx">
-      <DependentUpon>201404160613229_Update_AspNetIdentity_Version_2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201404231940084_Isolate_3_Default_To_ND.resx">
-      <DependentUpon>201404231940084_Isolate_3_Default_To_ND.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.resx">
-      <DependentUpon>201405051839287_Isolate_4_Add_StemNumber.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.resx">
-      <DependentUpon>201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.resx">
-      <DependentUpon>201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201406142110467_Isolate_7_AddRemark.resx">
-      <DependentUpon>201406142110467_Isolate_7_AddRemark.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201408312049376_RefinedPatient2.resx">
-      <DependentUpon>201408312049376_RefinedPatient2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.resx">
-      <DependentUpon>201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.resx">
-      <DependentUpon>201409221954353_Isolate_9_ftsi_MLST.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.resx">
-      <DependentUpon>201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.resx">
-      <DependentUpon>201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201502112024310_County.resx">
-      <DependentUpon>201502112024310_County.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201506301117277_Isolate_10_Growth.resx">
-      <DependentUpon>201506301117277_Isolate_10_Growth.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201507140902578_Sender_Delete.resx">
-      <DependentUpon>201507140902578_Sender_Delete.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201507201311481_Sending_Delete.resx">
-      <DependentUpon>201507201311481_Sending_Delete.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.resx">
-      <DependentUpon>201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704192201344_HealthOffice.resx">
-      <DependentUpon>201704192201344_HealthOffice.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201704202158587_Isolate_11_ftsi_Eval3.resx">
-      <DependentUpon>201704202158587_Isolate_11_ftsi_Eval3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201802182157080_RkiMatch.resx">
-      <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807022228523_Isolate_12_ReportStatus.resx">
-      <DependentUpon>201807022228523_Isolate_12_ReportStatus.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201807251901482_MeningoPatientAndSending.resx">
-      <DependentUpon>201807251901482_MeningoPatientAndSending.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901052104363_Meningo_Isolate_1.resx">
-      <DependentUpon>201901052104363_Meningo_Isolate_1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.resx">
-      <DependentUpon>201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.resx">
-      <DependentUpon>201901122122392_Meningo_Isolate_3_Agglutination.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.resx">
-      <DependentUpon>201901122131264_Meningo_Isolate_4_Onpg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.resx">
-      <DependentUpon>201901122155487_Meningo_Isolate_5_GammaGt.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.resx">
-      <DependentUpon>201901122211462_Meningo_Isolate_6_SerogroupPcr.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.resx">
-      <DependentUpon>201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901182207369_Meningo_Isolate_7_Growth.resx">
-      <DependentUpon>201901182207369_Meningo_Isolate_7_Growth.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901182228325_Meningo_Isolate_8_AdditionalFields.resx">
-      <DependentUpon>201901182228325_Meningo_Isolate_8_AdditionalFields.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901200043344_EucastClinicalBreakpoint_Add_ValidFor.resx">
-      <DependentUpon>201901200043344_EucastClinicalBreakpoint_Add_ValidFor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.resx">
-      <DependentUpon>201901200118468_EucastClinicalBreakpoint_Update_Index.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.resx">
-      <DependentUpon>201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.resx">
-      <DependentUpon>201901232227223_Meningo_Isolate_10_RealTimePcr.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.resx">
-      <DependentUpon>201904012024228_NeisseriaPubMlstIsolate.cs</DependentUpon>
-    </EmbeddedResource>
+    <Content Include="Views\**\*.cshtml" />
   </ItemGroup>
-  <PropertyGroup>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
-  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
-    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
-  </Target>
-  <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-        <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>49310</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:49310/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
-  </ProjectExtensions>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target> -->
-  <PropertyGroup>
-    <BuildDependsOn>
-	  CustomWebConfigTransform;
-	  $(BuildDependsOn);
-    </BuildDependsOn>
-  </PropertyGroup>
-  <Target Name="CustomWebConfigTransform">
-    <TransformXml source="Web.template.config" transform="Web.$(Configuration).config" destination="Web.config" />
-  </Target>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
-    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
-  </Target>
-  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
-  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
 </Project>
