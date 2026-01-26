@@ -141,6 +141,13 @@
     </Compile>
   </ItemGroup>
 
+  <!-- Embedded resources for interpretation rules -->
+  <ItemGroup>
+    <EmbeddedResource Include="Domain\Interpretation\StemRules.json" />
+    <EmbeddedResource Include="Domain\Interpretation\TypingTemplates.json" />
+    <EmbeddedResource Include="Domain\Interpretation\NativeMaterialRules.json" />
+  </ItemGroup>
+
   <!-- Content and None items -->
   <ItemGroup>
     <Content Include="favicon.ico" />
