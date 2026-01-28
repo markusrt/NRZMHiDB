@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
@@ -152,28 +152,19 @@
     <EmbeddedResource Include="Domain\Interpretation\NativeMaterialRules.json" />
   </ItemGroup>
 
-  <!-- Content and None items -->
+  <!-- Content items with special dependencies (not auto-included by SDK) -->
   <ItemGroup>
-    <Content Include="favicon.ico" />
-    <Content Include="Global.asax" />
-    <Content Include="Web.template.config" />
-    <Content Include="Web.Debug.config">
+    <Content Update="Web.Debug.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </Content>
-    <Content Include="Web.Release.config">
+    <Content Update="Web.Release.config">
       <DependentUpon>Web.template.config</DependentUpon>
     </Content>
-    <Content Include="NLog.config" />
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="NLog.xsd" />
     <None Include="Project_Readme.html" />
-  </ItemGroup>
-
-  <!-- Exclude Views from compile (they are compiled separately) -->
-  <ItemGroup>
-    <Content Include="Views\**\*.cshtml" />
   </ItemGroup>
 </Project>
