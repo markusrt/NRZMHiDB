@@ -29,10 +29,13 @@ namespace HaemophilusWeb.Models
 
         public TestResult Oxidase { get; set; }
         
-        [Display(Name = "NHS Real-Time-PCR")]
+        [Display(Name = "Real-Time-PCR")]
         public NativeMaterialTestResult RealTimePcr { get; set; }
 
-        [Display(Name = "NHS Real-Time-PCR Auswertung (RIDOM)")]
+        [Display(Name = "Real-Time-PCR Gerät")]
+        public RealTimePcrDevice RealTimePcrDevice { get; set; }
+
+        [Display(Name = "Real-Time-PCR Auswertung (RIDOM)")]
         public RealTimePcrResult RealTimePcrResult { get; set; }
 
         [Display(Name = "16S rDNA")]

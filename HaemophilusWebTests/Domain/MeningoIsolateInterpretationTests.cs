@@ -1158,7 +1158,8 @@ namespace HaemophilusWeb.Domain
                 PorAVr1 = "X",
                 PorAVr2 = "Y",
                 FetAVr = "Z",
-                RealTimePcr = realTimePcr
+                RealTimePcr = realTimePcr,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
             if (isolate.RealTimePcr == NativeMaterialTestResult.Positive)
             {
@@ -1212,7 +1213,8 @@ namespace HaemophilusWeb.Domain
                 PorAVr1 = "X",
                 PorAVr2 = "Y",
                 FetAVr = "Z",
-                RealTimePcr = realTimePcr
+                RealTimePcr = realTimePcr,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
             if (isolate.RealTimePcr == NativeMaterialTestResult.Positive)
             {
@@ -1305,7 +1307,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = GetRandomNegativeOrInhibitory(),
                 FetAPcr = GetRandomNegativeOrInhibitory(),
                 RealTimePcr = realTimePcr == NativeMaterialTestResult.Negative ? GetRandomNegativeOrInhibitory() : realTimePcr,
-                RealTimePcrResult = realTimePcrResult
+                RealTimePcrResult = realTimePcrResult,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
 
             interpretation.Interpret(isolate);
@@ -1546,7 +1549,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
 
             interpretation.Interpret(isolate);
@@ -1577,7 +1581,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RibosomalRna16S = NativeMaterialTestResult.NotDetermined,
-                RealTimePcr = NativeMaterialTestResult.Negative
+                RealTimePcr = NativeMaterialTestResult.Negative,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
 
             interpretation.Interpret(isolate);
@@ -1608,7 +1613,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RibosomalRna16S = NativeMaterialTestResult.NotDetermined,
-                RealTimePcr = NativeMaterialTestResult.NotDetermined
+                RealTimePcr = NativeMaterialTestResult.NotDetermined,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
 
             interpretation.Interpret(isolate);
@@ -1639,7 +1645,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
 
             interpretation.Interpret(isolate);
@@ -1671,7 +1678,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
 
             interpretation.Interpret(isolate);
@@ -1703,7 +1711,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
 
             interpretation.Interpret(isolate);
@@ -1735,7 +1744,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace
             };
 
             interpretation.Interpret(isolate);
@@ -1775,6 +1785,7 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = porA,
                 FetAPcr = fetA,
                 RealTimePcr = realTimePcr,
+                RealTimePcrDevice = RealTimePcrDevice.Sacace,
                 PorAVr1 = "X",
                 PorAVr2 = "Y",
                 FetAVr = "Z",
