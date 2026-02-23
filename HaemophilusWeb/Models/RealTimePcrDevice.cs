@@ -1,11 +1,12 @@
 ﻿using System.ComponentModel;
+using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Models
 {
     public enum RealTimePcrDevice
     {
-        [Description("n.d.")] NotDetermined = 0,
-        [Description("NHS Meningitis Real Tm, Firma Sacace")] Sacace = 1,
-        [Description("BD MAX")] BdMax = 2
+        [Description(EnumEditor.HiddenOnUserInterface)] None = 0,
+        [Description("NSH Real-Time-PCR (BD-MAX)")] NshBdMax = 1,
+        [Description("NHS Real-Time-PCR (Sacace)")] NhsSacace = 2,
     }
 }

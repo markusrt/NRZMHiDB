@@ -16,6 +16,7 @@ namespace HaemophilusWeb.Models
         public IsolateCommon(DatabaseType databaseType)
         {
             DatabaseType = databaseType;
+            RealTimePcrDevice = RealTimePcrDevice.NshBdMax; // Latest device is default
         }
 
         private string customLaboratoryNumber;

@@ -7,14 +7,14 @@
     {
         public override void Up()
         {
-            AddColumn("dbo.MeningoIsolates", "RealTimePcrDevice", c => c.Int(nullable: false, defaultValue: 0));
-            AddColumn("dbo.Isolates", "RealTimePcrDevice", c => c.Int(nullable: false, defaultValue: 0));
+            AddColumn("dbo.Isolates", "RealTimePcrDevice", c => c.Int(nullable: false, defaultValue: 2));
+            AddColumn("dbo.MeningoIsolates", "RealTimePcrDevice", c => c.Int(nullable: false, defaultValue: 2));
         }
         
         public override void Down()
         {
-            DropColumn("dbo.Isolates", "RealTimePcrDevice");
             DropColumn("dbo.MeningoIsolates", "RealTimePcrDevice");
+            DropColumn("dbo.Isolates", "RealTimePcrDevice");
         }
     }
 }
