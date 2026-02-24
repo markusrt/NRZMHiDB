@@ -384,6 +384,10 @@
     <Compile Include="Migrations\202507140531037_Sending_SerotypeSender.Designer.cs">
       <DependentUpon>202507140531037_Sending_SerotypeSender.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202602230416057_IsolateCommon_RealTimePcrDevice.cs" />
+    <Compile Include="Migrations\202602230416057_IsolateCommon_RealTimePcrDevice.Designer.cs">
+      <DependentUpon>202602230416057_IsolateCommon_RealTimePcrDevice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
@@ -650,6 +654,7 @@
     <Compile Include="Models\SamplingLocation.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\TestResult.cs" />
+    <Compile Include="Models\RealTimePcrDevice.cs" />
     <Compile Include="Models\Sending.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\Sender.cs" />
@@ -983,6 +988,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202507140531037_Sending_SerotypeSender.resx">
       <DependentUpon>202507140531037_Sending_SerotypeSender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602230416057_IsolateCommon_RealTimePcrDevice.resx">
+      <DependentUpon>202602230416057_IsolateCommon_RealTimePcrDevice.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>

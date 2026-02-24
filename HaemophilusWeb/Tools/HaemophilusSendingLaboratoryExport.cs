@@ -57,6 +57,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.FuculoKinase));
             AddField(s => ExportToString(s.Isolate.OuterMembraneProteinP6));
             AddField(s => ExportToString(s.Isolate.RealTimePcr));
+            AddField(s => ExportToString(s.Isolate.RealTimePcrDevice));
             AddField(s => ExportToString(s.Isolate.RealTimePcrResult));
             AddField(s => ExportToString(s.Isolate.RibosomalRna16S));
             AddField(s => ExportToString(s.Isolate.RibosomalRna16SBestMatch));

@@ -54,7 +54,11 @@
     @Html.EnumRadioEditorFor(model => model.OuterMembraneProteinP6, "col-sm-10")
 
     @Html.EnumRadioEditorFor(model => model.RealTimePcr, "col-sm-6")
-    @Html.EnumRadioEditorFor(m => m.RealTimePcrResult, "col-sm-7", "RealTimePcrForm")
+    <div id="RealTimePcrForm" class="form-group">
+        @Html.EnumRadioEditorFor(model => model.RealTimePcrDevice, "col-sm-6")
+        @Html.EnumRadioEditorFor(m => m.RealTimePcrResult, "col-sm-7")
+    </div>
+    
 
     @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
     <div id="RibosomalRna16SMatchInPercentForm" class="form-group">

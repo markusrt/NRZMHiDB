@@ -1158,7 +1158,8 @@ namespace HaemophilusWeb.Domain
                 PorAVr1 = "X",
                 PorAVr2 = "Y",
                 FetAVr = "Z",
-                RealTimePcr = realTimePcr
+                RealTimePcr = realTimePcr,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace
             };
             if (isolate.RealTimePcr == NativeMaterialTestResult.Positive)
             {
@@ -1181,13 +1182,13 @@ namespace HaemophilusWeb.Domain
 
             if (realTimePcr == NativeMaterialTestResult.Positive)
             {
-                interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+                interpretation.TypingAttribute("NHS Real-Time-PCR (Sacace)")
                     .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR.");
             }
             else
             {
                 interpretation.Typings.Should().NotContain(t =>
-                    t.Attribute == "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)");
+                    t.Attribute == "NHS Real-Time-PCR (Sacace)");
             }
 
             AssertNoMeningococciFlagIsValid(interpretation);
@@ -1212,7 +1213,8 @@ namespace HaemophilusWeb.Domain
                 PorAVr1 = "X",
                 PorAVr2 = "Y",
                 FetAVr = "Z",
-                RealTimePcr = realTimePcr
+                RealTimePcr = realTimePcr,
+                RealTimePcrDevice = RealTimePcrDevice.NshBdMax
             };
             if (isolate.RealTimePcr == NativeMaterialTestResult.Positive)
             {
@@ -1235,13 +1237,13 @@ namespace HaemophilusWeb.Domain
 
             if (realTimePcr == NativeMaterialTestResult.Positive)
             {
-                interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+                interpretation.TypingAttribute("NSH Real-Time-PCR (BD-MAX)")
                     .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR.");
             }
             else
             {
                 interpretation.Typings.Should().NotContain(t =>
-                    t.Attribute == "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)");
+                    t.Attribute == "NSH Real-Time-PCR (BD-MAX)");
             }
 
             AssertNoMeningococciFlagIsValid(interpretation);
@@ -1305,7 +1307,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = GetRandomNegativeOrInhibitory(),
                 FetAPcr = GetRandomNegativeOrInhibitory(),
                 RealTimePcr = realTimePcr == NativeMaterialTestResult.Negative ? GetRandomNegativeOrInhibitory() : realTimePcr,
-                RealTimePcrResult = realTimePcrResult
+                RealTimePcrResult = realTimePcrResult,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace
             };
 
             interpretation.Interpret(isolate);
@@ -1329,7 +1332,7 @@ namespace HaemophilusWeb.Domain
                     cswyNegative
                         ? "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen."
                         : "Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.");
-            interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+            interpretation.TypingAttribute("NHS Real-Time-PCR (Sacace)")
                 .Should().Be(realTimePcrInterpretation);
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
@@ -1546,7 +1549,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace
             };
 
             interpretation.Interpret(isolate);
@@ -1558,7 +1562,7 @@ namespace HaemophilusWeb.Domain
                 .Should().Be("Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
-            interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+            interpretation.TypingAttribute("NHS Real-Time-PCR (Sacace)")
                 .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR.");
             interpretation.Serogroup.Should().Be("B");
             AssertNoMeningococciFlagIsValid(interpretation);
@@ -1577,7 +1581,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RibosomalRna16S = NativeMaterialTestResult.NotDetermined,
-                RealTimePcr = NativeMaterialTestResult.Negative
+                RealTimePcr = NativeMaterialTestResult.Negative,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace
             };
 
             interpretation.Interpret(isolate);
@@ -1589,7 +1594,7 @@ namespace HaemophilusWeb.Domain
             interpretation.Typings.Should().NotContain(t => t.Attribute == "Molekulare Typisierung");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
-            interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+            interpretation.TypingAttribute("NHS Real-Time-PCR (Sacace)")
                 .Should().Be("Negativ für bekapselte Neisseria meningitidis, bekapselte Haemophilus influenzae und Streptococcus pneumoniae.");
             interpretation.Serogroup.Should().BeNull();
             AssertNoMeningococciFlagIsValid(interpretation);
@@ -1608,7 +1613,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RibosomalRna16S = NativeMaterialTestResult.NotDetermined,
-                RealTimePcr = NativeMaterialTestResult.NotDetermined
+                RealTimePcr = NativeMaterialTestResult.NotDetermined,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace
             };
 
             interpretation.Interpret(isolate);
@@ -1619,7 +1625,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.TypingAttribute("Molekulare Typisierung")
                 .Should().Be("Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.");
-            interpretation.Typings.Should().NotContain(t => t.Attribute == "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)");
+            interpretation.Typings.Should().NotContain(t => t.Attribute == "NHS Real-Time-PCR (Sacace)");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.Serogroup.Should().BeNull();
@@ -1639,7 +1645,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace
             };
 
             interpretation.Interpret(isolate);
@@ -1651,7 +1658,7 @@ namespace HaemophilusWeb.Domain
                 .Should().Be("Das Serogruppe-C-spezifische csc-Gen wurde nachgewiesen.");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
-            interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+            interpretation.TypingAttribute("NHS Real-Time-PCR (Sacace)")
                 .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR.");
             interpretation.Serogroup.Should().Be("C");
             AssertNoMeningococciFlagIsValid(interpretation);
@@ -1671,7 +1678,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace
             };
 
             interpretation.Interpret(isolate);
@@ -1683,7 +1691,7 @@ namespace HaemophilusWeb.Domain
                 .Should().Be("Das Serogruppe-W-spezifische csw-Gen wurde nachgewiesen.");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
-            interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+            interpretation.TypingAttribute("NHS Real-Time-PCR (Sacace)")
                 .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR.");
             interpretation.Serogroup.Should().Be("W");
             AssertNoMeningococciFlagIsValid(interpretation);
@@ -1703,7 +1711,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace
             };
 
             interpretation.Interpret(isolate);
@@ -1715,7 +1724,7 @@ namespace HaemophilusWeb.Domain
                 .Should().Be("Das Serogruppe-Y-spezifische csy-Gen wurde nachgewiesen.");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
-            interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+            interpretation.TypingAttribute("NHS Real-Time-PCR (Sacace)")
                 .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR.");
             interpretation.Serogroup.Should().Be("Y");
             AssertNoMeningococciFlagIsValid(interpretation);
@@ -1735,7 +1744,8 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = NativeMaterialTestResult.Negative,
                 FetAPcr = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Positive,
-                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis
+                RealTimePcrResult = RealTimePcrResult.NeisseriaMeningitidis,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace
             };
 
             interpretation.Interpret(isolate);
@@ -1747,7 +1757,7 @@ namespace HaemophilusWeb.Domain
                 .Should().Be("Das Serogruppen-W/Y-spezifische csw/csy-Gen wurde nachgewiesen.");
             interpretation.TypingAttribute("PorA - Sequenztyp").Should().Contain("nicht amplifiziert");
             interpretation.TypingAttribute("FetA - Sequenztyp").Should().Contain("nicht amplifiziert");
-            interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+            interpretation.TypingAttribute("NHS Real-Time-PCR (Sacace)")
                 .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR.");
             interpretation.Serogroup.Should().Be("W/Y");
             interpretation.Rule.Should().Be("NativeMaterialInterpretation_28");
@@ -1775,6 +1785,7 @@ namespace HaemophilusWeb.Domain
                 PorAPcr = porA,
                 FetAPcr = fetA,
                 RealTimePcr = realTimePcr,
+                RealTimePcrDevice = RealTimePcrDevice.NhsSacace,
                 PorAVr1 = "X",
                 PorAVr2 = "Y",
                 FetAVr = "Z",
@@ -1818,13 +1829,13 @@ namespace HaemophilusWeb.Domain
 
             if (realTimePcr == NativeMaterialTestResult.Positive)
             {
-                interpretation.TypingAttribute("Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)")
+                interpretation.TypingAttribute("NHS Real-Time-PCR (Sacace)")
                     .Should().Be("Positiv für bekapselte Neisseria meningitidis. Der molekularbiologische Nachweis von Neisseria meningitidis beruht auf dem Nachweis des Kapseltransportgens ctrA mittels spezifischer Real-Time-PCR.");
             }
             else
             {
                 interpretation.Typings.Should().NotContain(t =>
-                    t.Attribute == "Real-Time-PCR (NHS Meningitis Real Tm, Firma Sacace)");
+                    t.Attribute == "NHS Real-Time-PCR (Sacace)");
             }
             interpretation.Serogroup.Should().Be("B");
             AssertNoMeningococciFlagIsValid(interpretation);
