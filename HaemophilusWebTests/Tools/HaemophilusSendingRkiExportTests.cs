@@ -52,7 +52,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
             
-            export.Columns.Count.Should().Be(25);
+            export.Columns.Count.Should().Be(26);
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
             
             duplicatePatientResolver.RemovePatientData(export);
-            export.Columns.Count.Should().Be(22);
+            export.Columns.Count.Should().Be(23);
         }
 
         [TestCase(SamplingLocation.OtherInvasive)]
@@ -107,8 +107,8 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["ampicillinBewertung"].Should().Be("resistent");
             export.Rows[0]["amoxicillinClavulansaeureMHK"].Should().Be(0.75);
             export.Rows[0]["bewertungAmoxicillinClavulansaeure"].Should().Be("sensibel");
-            export.Rows[0]["NHS Real-Time-PCR"].Should().Be("positiv");
-            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Haemophilus influenzae");
+            export.Rows[0]["Real-Time-PCR"].Should().Be("positiv");
+            export.Rows[0][ "Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Haemophilus influenzae");
         }
 
         [Test]
@@ -140,7 +140,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be(DBNull.Value);
+            export.Rows[0][ "Real-Time-PCR Auswertung (RIDOM)"].Should().Be(DBNull.Value);
         }
 
 

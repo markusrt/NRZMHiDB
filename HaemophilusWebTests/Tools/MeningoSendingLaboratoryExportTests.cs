@@ -39,7 +39,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(85);
+            export.Columns.Count.Should().Be(86);
         }
 
         [Test]
@@ -75,8 +75,8 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Rows[0]["NHS Real-Time-PCR"].Should().Be("positiv");
-            export.Rows[0]["NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Streptococcus pneumoniae");
+            export.Rows[0]["Real-Time-PCR"].Should().Be("positiv");
+            export.Rows[0]["Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Streptococcus pneumoniae");
         }
 
         [Test]

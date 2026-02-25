@@ -40,6 +40,7 @@ namespace HaemophilusWeb.Tools
 
             AddField(s => ExportToString(s.Isolate.SerogroupPcr));
             AddField(s => ExportToString(s.Isolate.RealTimePcr));
+            AddField(s => ExportToString(s.Isolate.RealTimePcrDevice));
 
             AddField(s => ExportToString(s.Isolate.CsbPcr));
             AddField(s => ExportToString(s.Isolate.CscPcr));
