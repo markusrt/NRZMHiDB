@@ -39,8 +39,8 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Interpret(isolate);
 
             isolateInterpretation.Typings.Should().BeEmpty();
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("sollte unmittelbar vor dem Versand in Transportmedien"));
+            isolateInterpretation.Result.Should().ContainReportLine("konnte nicht angezüchtet werden")
+                .And.ContainReportLine("sollte unmittelbar vor dem Versand in Transportmedien");
             isolateInterpretation.Serogroup.Should().BeNull();
             isolateInterpretation.Rule.Should().Be("StemInterpretation_27");
             AssertNoMeningococciFlagIsValid(isolateInterpretation);
@@ -128,7 +128,7 @@ namespace HaemophilusWeb.Domain
             isolateInterpretation.Interpret(isolate);
 
             isolateInterpretation.Typings.Should().BeEmpty();
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
+            isolateInterpretation.Result.Should().ContainReportLine("konnte nicht angezüchtet werden");
             isolateInterpretation.Serogroup.Should().BeNull();
             AssertNoMeningococciFlagIsValid(isolateInterpretation);
         }
@@ -162,7 +162,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
            
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
+            isolateInterpretation.Result.Should().ContainReportLine("konnte nicht angezüchtet werden");
             isolateInterpretation.Should()
                 .HaveTyping("Identifikation", "Neisseria meningitidis")
                 .And.HaveTyping("Serogenogruppe",
@@ -175,14 +175,12 @@ namespace HaemophilusWeb.Domain
 
             if (serogroupPcr == MeningoSerogroupPcr.Negative)
             {
-                isolateInterpretation.Result.Report.Should().Contain(s => s.Contains(
-                    "Meldekategorie dieses Befundes: Neisseria meningitidis, NG (keine Serogruppe bestimmbar)."));
+                isolateInterpretation.Result.Should().ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, NG (keine Serogruppe bestimmbar).");
                 isolateInterpretation.Serogroup.Should().Be("NG");
             }
             else
             {
-                isolateInterpretation.Result.Report.Should().Contain(s => s.Contains(
-                    "Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C."));
+                isolateInterpretation.Result.Should().ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C.");
                 isolateInterpretation.Serogroup.Should().Be("C");
             }
             AssertNoMeningococciFlagIsValid(isolateInterpretation);
@@ -208,7 +206,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            isolateInterpretation.Result.Should().ContainReportLine("Kein Nachweis von Neisseria meningitidis.");
             isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             isolateInterpretation.Should()
                 .HaveTyping("Wachstum auf Blutagar", "atypisches Wachstum")
@@ -243,7 +241,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            isolateInterpretation.Result.Should().ContainReportLine("Kein Nachweis von Neisseria meningitidis.");
             isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             isolateInterpretation.Should()
                 .HaveTyping("β-Galaktosidase", "negativ")
@@ -278,7 +276,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            isolateInterpretation.Result.Should().ContainReportLine("Kein Nachweis von Neisseria meningitidis.");
             isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             isolateInterpretation.Should()
                 .HaveTyping("β-Galaktosidase", "negativ")
@@ -309,8 +307,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(
-                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+            isolateInterpretation.Result.Should().ContainReportLine("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt.");
 
             isolateInterpretation.Should()
                 .HaveTyping("Identifikation", "Neisseria meningitidis")
@@ -340,7 +337,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe E."));
+            isolateInterpretation.Result.Should().ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe E.");
             isolateInterpretation.Should()
                 .HaveTyping("Identifikation", "Neisseria meningitidis")
                 .And.HaveTyping("Serogruppe", "E");
@@ -373,7 +370,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y."));
+            isolateInterpretation.Result.Should().ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y.");
             isolateInterpretation.Should().HaveTyping("Identifikation", "Neisseria meningitidis");
             isolateInterpretation.Typings.Should().Contain(t =>
                 t.Attribute == "Serogruppe" && t.Value.Contains(agglutination.ToString()) && !t.Value.Contains("Nicht-invasiv"));
@@ -411,8 +408,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(
-                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+            isolateInterpretation.Result.Should().ContainReportLine("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt.");
 
             isolateInterpretation.Should().HaveTyping("Identifikation", "Neisseria meningitidis");
             isolateInterpretation.Typings.Should().Contain(t =>
@@ -486,7 +482,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y."));
+            isolateInterpretation.Result.Should().ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y.");
             isolateInterpretation.Should()
                 .HaveTyping("Identifikation", "Neisseria meningitidis")
                 .And.HaveTyping("Serogruppe", "W/Y")
@@ -525,12 +521,11 @@ namespace HaemophilusWeb.Domain
 
             if (invasive)
             {
-                interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."));
+                interpretation.Result.Should().ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus).");
             }
             else
             {
-                interpretation.Result.Report.Should().Contain(
-                    s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+                interpretation.Result.Should().ContainReportLine("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt.");
             }
 
             interpretation.Should()
@@ -579,12 +574,11 @@ namespace HaemophilusWeb.Domain
 
             if (invasive)
             {
-                interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."));
+                interpretation.Result.Should().ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus).");
             }
             else
             {
-                interpretation.Result.Report.Should().Contain(
-                    s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+                interpretation.Result.Should().ContainReportLine("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt.");
             }
 
             interpretation.Should()
@@ -632,7 +626,7 @@ namespace HaemophilusWeb.Domain
 
             if (invasive)
             {
-                interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus)."));
+                interpretation.Result.Should().ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, cnl (capsule null locus).");
             }
             else
             {
@@ -677,7 +671,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+            interpretation.Result.Should().ContainReportLine("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt.");
             interpretation.Should()
                 .HaveTyping("Identifikation", "Neisseria meningitidis")
                 .And.HaveTyping("Agglutination", "keine Agglutination mit Antikörpern gegen die Serogruppen A, B, C, E, W, X und Y (Nicht-invasive Meningokokken sind oft unbekapselt.)");
@@ -708,7 +702,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            isolateInterpretation.Result.Should().ContainReportLine("Kein Nachweis von Neisseria meningitidis.");
             isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             isolateInterpretation.Should()
                 .HaveTyping("β-Galaktosidase", "negativ")
@@ -741,7 +735,7 @@ namespace HaemophilusWeb.Domain
 
             isolateInterpretation.Interpret(isolate);
 
-            isolateInterpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            isolateInterpretation.Result.Should().ContainReportLine("Kein Nachweis von Neisseria meningitidis.");
             isolateInterpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             isolateInterpretation.Should()
                 .HaveTyping("β-Galaktosidase", "negativ")
@@ -772,9 +766,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
            
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("konnte nicht angezüchtet werden"));
+            interpretation.Result.Should().ContainReportLine("meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y")
+                .And.ContainReportLine("konnte nicht angezüchtet werden");
             interpretation.Should()
                 .HaveTyping("Serogenogruppe", "W/Y")
                 .And.HaveTypingContaining("PorA - Sequenztyp", "nicht amplifiziert")
@@ -812,8 +806,7 @@ namespace HaemophilusWeb.Domain
             interpretation.Interpret(isolate);
 
             var agglutinationText = agglutination.ToString();
-            interpretation.Result.Report.Should().Contain(
-                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+            interpretation.Result.Should().ContainReportLine("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt.");
 
             interpretation.Should()
                 .HaveTyping("Identifikation", "Neisseria meningitidis")
@@ -856,8 +849,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(
-                s => s.Contains("Diskrepante Ergebnisse"));
+            interpretation.Result.Should().ContainReportLine("Diskrepante Ergebnisse");
         }
 
         [TestCase(MeningoSerogroupAgg.Negative, MeningoSerogroupPcr.B)]
@@ -885,8 +877,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(
-                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+            interpretation.Result.Should().ContainReportLine("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt.");
 
             interpretation.Should()
                 .HaveTyping("Identifikation", "Neisseria meningitidis")
@@ -922,8 +913,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(
-                s => s.Contains("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt."));
+            interpretation.Result.Should().ContainReportLine("Anmerkung: Eine Resistenztestung wurde aus epidemiologischen und  Kostengründen nicht durchgeführt.");
 
             interpretation.Should()
                 .HaveTyping("Identifikation", "Neisseria meningitidis")
@@ -957,8 +947,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(
-                s => s.Contains("Anmerkung: Aus Kostengründen werden bei nicht-invasiven Isolaten keine Serogruppenbestimmungen und Resistenztestungen durchgeführt."));
+            interpretation.Result.Should().ContainReportLine("Anmerkung: Aus Kostengründen werden bei nicht-invasiven Isolaten keine Serogruppenbestimmungen und Resistenztestungen durchgeführt.");
 
             interpretation.Should().HaveTyping("Identifikation", "Neisseria meningitidis");
 
@@ -994,7 +983,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            interpretation.Result.Should().ContainReportLine("Kein Nachweis von Neisseria meningitidis.");
             interpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             interpretation.Should()
                 .HaveTyping("β-Galaktosidase", "negativ")
@@ -1034,7 +1023,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            interpretation.Result.Should().ContainReportLine("Kein Nachweis von Neisseria meningitidis.");
             interpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             interpretation.Should()
                 .HaveTyping("β-Galaktosidase", "negativ")
@@ -1070,7 +1059,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Nachweis von Neisseria meningitidis."));
+            interpretation.Result.Should().ContainReportLine("Kein Nachweis von Neisseria meningitidis.");
             interpretation.Typings.Should().NotContain(t => t.Attribute == "Identifikation");
             interpretation.Typings.Should().NotContain(t => t.Attribute == "MALDI-TOF (VITEK MS)");
             interpretation.Should()
@@ -1102,8 +1091,8 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B"));
+            interpretation.Result.Should().ContainReportLine("meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B");
 
             interpretation.Should()
                 .HaveTyping("Identifikation", "Neisseria meningitidis")
@@ -1148,9 +1137,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains($"Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains($"Serogruppe {serogroup}"));
+            interpretation.Result.Should().ContainReportLine($"Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine($"Serogruppe {serogroup}");
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", $"Das Serogruppe-{serogroup}-spezifische cs{serogroup.ToLower()}-Gen wurde nachgewiesen.")
                 .And.HaveTyping("PorA - Sequenztyp", "X, Y")
@@ -1200,9 +1189,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains($"Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains($"Serogruppe {serogroup}"));
+            interpretation.Result.Should().ContainReportLine($"Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine($"Serogruppe {serogroup}");
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", $"Das Serogruppe-{serogroup}-spezifische cs{serogroup.ToLower()}-Gen wurde nachgewiesen.")
                 .And.HaveTyping("PorA - Sequenztyp", "X, Y")
@@ -1246,9 +1235,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains($"Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains($"Serogruppe {serogroup}"));
+            interpretation.Result.Should().ContainReportLine($"Meningokokken-spezifische DNA konnte nachgewiesen werden. Die Ergebnisse sprechen für eine invasive Infektion mit Meningokokken der Serogruppe {serogroup}.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine($"Serogruppe {serogroup}");
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", $"Das Serogruppe{plural}-{serogroup}-spezifische {gen}-Gen wurde nachgewiesen.")
                 .And.HaveTyping("PorA - Sequenztyp", "X, Y")
@@ -1287,18 +1276,18 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains(
+            interpretation.Result.Should().ContainReportLine(
                 realTimePcrResult == RealTimePcrResult.NeisseriaMeningitidis
                     ? "Meningokokken-spezifische DNA konnte nachgewiesen werden."
-                    : "Kein Hinweis auf Neisseria meningitidis"));
+                    : "Kein Hinweis auf Neisseria meningitidis");
 
             if (realTimePcrResult == RealTimePcrResult.NeisseriaMeningitidis)
             {
-                interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
+                interpretation.Result.Should().ContainReportLine("meldepflichtig");
             }
             else
             {
-                interpretation.Result.Report.Should().NotContain(s => s.Contains("meldepflichtig"));
+                interpretation.Result.Should().NotContainReportLine("meldepflichtig");
             }
 
             interpretation.Should()
@@ -1332,7 +1321,7 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."));
+            interpretation.Result.Should().ContainReportLine("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.");
             interpretation.Typings.Should().BeEmpty();
             interpretation.Result.Comment.Should().BeNull();
             interpretation.Serogroup.Should().BeNull();
@@ -1360,15 +1349,15 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains(expectedInterpretation));
+            interpretation.Result.Should().ContainReportLine(expectedInterpretation);
 
             if ("Neisseria meningitidis".Equals(ribosomalRna16SBestMatch))
             {
-                interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
+                interpretation.Result.Should().ContainReportLine("meldepflichtig");
             }
             else
             {
-                interpretation.Result.Report.Should().NotContain(s => s.Contains("meldepflichtig"));
+                interpretation.Result.Should().NotContainReportLine("meldepflichtig");
             }
 
             interpretation.Should()
@@ -1403,9 +1392,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Hinweis auf Neisseria meningitidis."));
-            interpretation.Result.Report.Should().NotContain(s => s.Contains("meldepflichtig"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.")
+                .And.ContainReportLine("Kein Hinweis auf Neisseria meningitidis.")
+                .And.NotContainReportLine("meldepflichtig");
 
             interpretation.Typings.Should().NotContain(t => t.Attribute == "Molekulare Typisierung");
 
@@ -1434,9 +1423,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Hinweis auf Neisseria meningitidis."));
-            interpretation.Result.Report.Should().NotContain(s => s.Contains("meldepflichtig"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.")
+                .And.ContainReportLine("Kein Hinweis auf Neisseria meningitidis.")
+                .And.NotContainReportLine("meldepflichtig");
 
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.")
@@ -1465,9 +1454,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Hinweis auf Neisseria meningitidis."));
-            interpretation.Result.Report.Should().NotContain(s => s.Contains("meldepflichtig"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.")
+                .And.ContainReportLine("Kein Hinweis auf Neisseria meningitidis.")
+                .And.NotContainReportLine("meldepflichtig");
 
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.")
@@ -1498,9 +1487,9 @@ namespace HaemophilusWeb.Domain
             interpretation.Interpret(isolate);
 
             
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken-spezifische DNA konnte nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis."));
+            interpretation.Result.Should().ContainReportLine("Meningokokken-spezifische DNA konnte nachgewiesen werden.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis.");
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", "Die Serogruppen B, C,  W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.")
                 .And.HaveTyping("PorA - Sequenztyp", "X, Y")
@@ -1529,9 +1518,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken-spezifische DNA konnte nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken-spezifische DNA konnte nachgewiesen werden.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B");
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.")
                 .And.HaveTypingContaining("PorA - Sequenztyp", "nicht amplifiziert")
@@ -1560,9 +1549,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Hinweis auf Neisseria meningitidis."));
-            interpretation.Result.Report.Should().NotContain(s => s.Contains("meldepflichtig"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.")
+                .And.ContainReportLine("Kein Hinweis auf Neisseria meningitidis.")
+                .And.NotContainReportLine("meldepflichtig");
 
             interpretation.Typings.Should().NotContain(t => t.Attribute == "Molekulare Typisierung");
             interpretation.Should()
@@ -1592,9 +1581,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Hinweis auf Neisseria meningitidis."));
-            interpretation.Result.Report.Should().NotContain(s => s.Contains("meldepflichtig"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken- spezifische DNA konnte nicht nachgewiesen werden.")
+                .And.ContainReportLine("Kein Hinweis auf Neisseria meningitidis.")
+                .And.NotContainReportLine("meldepflichtig");
 
             interpretation.Should().HaveTyping("Molekulare Typisierung", "Die Serogruppen B und C-spezifischen csb- und csc-Gene wurden nicht nachgewiesen.");
             interpretation.Typings.Should().NotContain(t => t.Attribute == "NHS Real-Time-PCR (Sacace)");
@@ -1624,9 +1613,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken-spezifische DNA konnte nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken-spezifische DNA konnte nachgewiesen werden.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe C");
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", "Das Serogruppe-C-spezifische csc-Gen wurde nachgewiesen.")
                 .And.HaveTypingContaining("PorA - Sequenztyp", "nicht amplifiziert")
@@ -1656,9 +1645,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken-spezifische DNA konnte nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken-spezifische DNA konnte nachgewiesen werden.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W");
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", "Das Serogruppe-W-spezifische csw-Gen wurde nachgewiesen.")
                 .And.HaveTypingContaining("PorA - Sequenztyp", "nicht amplifiziert")
@@ -1688,9 +1677,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken-spezifische DNA konnte nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe Y"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken-spezifische DNA konnte nachgewiesen werden.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe Y");
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", "Das Serogruppe-Y-spezifische csy-Gen wurde nachgewiesen.")
                 .And.HaveTypingContaining("PorA - Sequenztyp", "nicht amplifiziert")
@@ -1720,9 +1709,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken-spezifische DNA konnte nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken-spezifische DNA konnte nachgewiesen werden.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe W/Y");
             interpretation.Should()
                 .HaveTyping("Molekulare Typisierung", "Das Serogruppen-W/Y-spezifische csw/csy-Gen wurde nachgewiesen.")
                 .And.HaveTypingContaining("PorA - Sequenztyp", "nicht amplifiziert")
@@ -1766,9 +1755,9 @@ namespace HaemophilusWeb.Domain
 
             interpretation.Interpret(isolate);
 
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meningokokken-spezifische DNA konnte nachgewiesen werden."));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("meldepflichtig"));
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B"));
+            interpretation.Result.Should().ContainReportLine("Meningokokken-spezifische DNA konnte nachgewiesen werden.")
+                .And.ContainReportLine("meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Neisseria meningitidis, Serogruppe B");
             interpretation.Should().HaveTyping("Molekulare Typisierung", "Das Serogruppe-B-spezifische csb-Gen wurde nachgewiesen.");
 
             if (porA == NativeMaterialTestResult.Negative)
@@ -1885,7 +1874,7 @@ namespace HaemophilusWeb.Domain
                 .HaveTyping("Molekulare Typisierung", "Die Serogruppen B, C, W und Y-spezifischen csb-, csc-, csw- und csy-Gene wurden nicht nachgewiesen.")
                 .And.HaveTypingContaining("PorA - Sequenztyp", "nicht amplifiziert")
                 .And.HaveTypingContaining("FetA - Sequenztyp", "nicht amplifiziert");
-            interpretation.Result.Report.Should().Contain(s => s.Contains("Kein Hinweis auf Neisseria meningitidis."));
+            interpretation.Result.Should().ContainReportLine("Kein Hinweis auf Neisseria meningitidis.");
 
             AssertNoMeningococciFlagIsValid(interpretation);
         }
