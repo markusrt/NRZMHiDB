@@ -18,5 +18,13 @@
   "Agglutination": {
     "Attribute": "Agglutination",
     "Value": "{Agglutination:enum()}"
+  },
+  "SerotypePcr": {
+    "Attribute": "Serotyp-PCR",
+    "Value": "{SerotypePcr:enum()}"
+  },
+  "BexA": {
+    "Attribute": "bexA",
+    "Value": "{BexA:enum()}"
   }
 }

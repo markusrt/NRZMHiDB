@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using HaemophilusWeb.Models;
+﻿using HaemophilusWeb.Models;
+using HaemophilusWeb.Models.Meningo;
+using System.Collections.Generic;
 
 namespace HaemophilusWeb.Domain
 {
@@ -7,8 +8,8 @@ namespace HaemophilusWeb.Domain
     {
         public List<YesNo?> SendingInvasive { get; set; }
         public TestResult? Oxidase { get; set; }
-        public SerotypeAgg? Agglutination { get; set; }
-        public SerotypePcr? SerotypePcr { get; set; }
+        public List<SerotypeAgg> Agglutination { get; set; }
+        public List<SerotypePcr> SerotypePcr { get; set; }
         public TestResult? BexA { get; set; }
         public TestResult? BetaLactamase { get; set; }
         public UnspecificTestResult? MaldiTofVitek { get; set; }

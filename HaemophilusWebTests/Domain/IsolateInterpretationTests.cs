@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
+using HaemophilusWeb.CustomAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
+using HaemophilusWeb.Utils;
 using NUnit.Framework;
 
 namespace HaemophilusWeb.Domain
@@ -261,9 +263,10 @@ namespace HaemophilusWeb.Domain
                 .Be(
                     "Die verwendete fucK-PCR dient der Typisierung von Isolaten; sie ist für die Anwendung von Nativmaterialien nicht validiert. Befund unter Vorbehalt.");
             isolateInterpretation.Rule.Should().Be("HaemophilusNativeMaterialInterpretation_01");
-            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "fucK" && t.Value == "negativ");
-            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "16S-rDNA-Nachweis" && t.Value == "kein Nachweis von Bakterien");
-            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "Real-Time-PCR (NHS)" && t.Value == "kein Nachweis von bekapseltem Haemophilus influenzae");
+            isolateInterpretation.Should()
+                .HaveTyping("fucK", "negativ")
+                .And.HaveTyping("16S-rDNA-Nachweis", "kein Nachweis von Bakterien")
+                .And.HaveTyping("Real-Time-PCR (NHS)", "kein Nachweis von bekapseltem Haemophilus influenzae");
         }
 
         [Test]
@@ -271,9 +274,9 @@ namespace HaemophilusWeb.Domain
         {
             var isolate = new Isolate
             {
-                RibosomalRna16S = NativeMaterialTestResult.Positive,
+                RibosomalRna16S = NativeMaterialTestResult.Negative,
                 RealTimePcr = NativeMaterialTestResult.Negative,
-                FuculoKinase = TestResult.Negative,
+                FuculoKinase = TestResult.Positive,
                 Sending = new Sending 
                 { 
                     SamplingLocation = SamplingLocation.Blood,
@@ -325,16 +328,79 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = isolateInterpretation.Interpret(isolate);
 
-            interpretation.Preliminary.Should().BeTrue();
+            interpretation.Should().BePreliminary();
             interpretation.Report.Should().NotBeNull();
             interpretation.Report.Should().Contain(s => s.Contains("Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae"));
             interpretation.Report.Should().Contain(s => s.Contains("Blut oder Liquor ist nach §7 IfSG meldepflichtig"));
             interpretation.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt."));
             isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_01");
-            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "Wachstum" && t.Value == "Ja");
-            isolateInterpretation.Typings.Should().Contain(t => t.Attribute == "Agglutination" && t.Value == "negativ");
-            //TODO Test Attribute = "Identifizierung"
-            //TODO Test Preliminary = true
+
+            isolateInterpretation.Should()
+                .HaveTyping("Wachstum", "Ja")
+                .And.HaveTyping("Agglutination", "negativ")
+                .And.HaveTyping("Identifizierung", "Haemophilus influenzae");
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule2_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.Yes,
+                Agglutination = SerotypeAgg.B,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Should().BePreliminary();
+            interpretation.Report.Should().NotBeNull();
+            interpretation.Report.Should().Contain(s => s.Contains("Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp b (Hib)."));
+            interpretation.Report.Should().Contain(s => s.Contains("Blut oder Liquor ist nach §7 IfSG meldepflichtig"));
+            interpretation.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp b."));
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_02");
+            isolateInterpretation.Should()
+                .HaveTyping("Wachstum", "Ja")
+                .And.HaveTyping("Agglutination", "b")
+                .And.HaveTyping("Identifizierung", isolate.Evaluation.ToReportFormat());
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule3_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.Yes,
+                Agglutination = SerotypeAgg.Negative,
+                SerotypePcr = SerotypePcr.Negative,
+                BexA = TestResult.Negative,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Should().NotBePreliminary();
+            
+            interpretation.Report.Should().NotBeNull();
+            interpretation.Report.Should().Contain(s => s.Contains("Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae"));
+            interpretation.Report.Should().Contain(s => s.Contains("Blut oder Liquor ist nach §7 IfSG meldepflichtig"));
+            interpretation.Report.Should().Contain(s =>
+                s.Contains("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt."));
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_03");
+            isolateInterpretation.Should()
+                .HaveTyping("Wachstum", "Ja")
+                .And.HaveTyping("Agglutination", "negativ")
+                .And.HaveTyping("Serotyp-PCR", "negativ")
+                .And.HaveTyping("bexA", "negativ")
+                .And.HaveTyping("Identifizierung", isolate.Evaluation.ToReportFormat());
         }
 
     }

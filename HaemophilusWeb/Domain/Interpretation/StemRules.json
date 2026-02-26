@@ -2,9 +2,9 @@
   "HaemophilusStemInterpretation_01": {
     "SendingInvasive": [ "Yes" ],
     "Growth": "Yes",
-    "Agglutination": "Negative",
+    "Agglutination": [ "Negative" ],
     "BexA": "NotDetermined",
-    "SerotypePcr": "NotDetermined",
+    "SerotypePcr": [ "NotDetermined" ],
     "MaldiTofVitek": "NotDetermined",
     "MaldiTofBiotyper": "NotDetermined",
     "Report": [
@@ -16,6 +16,39 @@
     ],
     "Typings": [ "Growth", "Agglutination" ],
     "Preliminary": true,
+    "Comment": ""
+  },
+  "HaemophilusStemInterpretation_02": {
+    "SendingInvasive": [ "Yes" ],
+    "Growth": "Yes",
+    "Agglutination": [ "A", "B", "C", "D", "E", "F" ],
+    "BexA": "NotDetermined",
+    "SerotypePcr": [ "NotDetermined" ],
+    "MaldiTofVitek": "NotDetermined",
+    "MaldiTofBiotyper": "NotDetermined",
+    "Report": [
+      "Interpretation: Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {Agglutination:enum()} (Hi{Agglutination:enum()}).",
+      "Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp {Agglutination:enum()}.",
+      "",
+      "Untersuchungen zur Antibiotika-Resistenz: folgt"
+    ],
+    "Typings": [ "Growth", "Agglutination" ],
+    "Preliminary": true,
+    "Comment": ""
+  },
+  "HaemophilusStemInterpretation_03": {
+    "SendingInvasive": [ "Yes" ],
+    "Growth": "Yes",
+    "Agglutination": [ "Negative" ],
+    "BexA": "Negative",
+    "SerotypePcr": [ "Negative" ],
+    "MaldiTofVitek": "NotDetermined",
+    "MaldiTofBiotyper": "NotDetermined",
+    "Report": [
+      "Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae (sog. \"nicht-typisierbarer\" H. influenzae, NTHi).",
+      "Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.",
+    ],
+    "Typings": [ "Growth", "Agglutination", "SerotypePcr", "BexA" ],
     "Comment": ""
   }
 }

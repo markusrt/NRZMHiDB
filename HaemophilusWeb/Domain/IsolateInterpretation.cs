@@ -58,11 +58,12 @@ namespace HaemophilusWeb.Domain
             typings.Clear();
             Rule = null;
 
-            typings.Add(new Typing {Attribute = "Identifizierung", Value = isolate.Evaluation.ToReportFormat()});
             // Try rule-based interpretation first
             var ruleBasedResult = TryRuleBasedInterpretation(isolate);
             if (ruleBasedResult != null)
             {
+                typings.Add(new Typing {Attribute = "Identifizierung", Value = isolate.Evaluation.ToReportFormat()});
+
                 return ruleBasedResult;
             }
 
@@ -256,8 +257,8 @@ namespace HaemophilusWeb.Domain
         {
             return (rule.SendingInvasive == null || rule.SendingInvasive.Contains(isolate.Sending?.Invasive))
                    && (!rule.Oxidase.HasValue || rule.Oxidase == isolate.Oxidase)
-                   && (!rule.Agglutination.HasValue || rule.Agglutination == isolate.Agglutination)
-                   && (!rule.SerotypePcr.HasValue || rule.SerotypePcr == isolate.SerotypePcr)
+                   && (rule.Agglutination == null || rule.Agglutination.Contains(isolate.Agglutination))
+                   && (rule.SerotypePcr == null || rule.SerotypePcr.Contains(isolate.SerotypePcr))
                    && (!rule.BexA.HasValue || rule.BexA == isolate.BexA)
                    && (!rule.BetaLactamase.HasValue || rule.BetaLactamase == isolate.BetaLactamase)
                    && (!rule.MaldiTofVitek.HasValue || rule.MaldiTofVitek == isolate.MaldiTofVitek)
