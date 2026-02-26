@@ -32,7 +32,13 @@ namespace HaemophilusWeb.ViewModels
         [Display(Name = "Patientenalter bei Entnahme")]
         public int PatientAgeAtSampling { get; set; }
 
-        public IEnumerable<Typing> Typings
+        public IEnumerable<Typing> Typings { get; set; }
+
+        [Obsolete("Replaced by new result")]
+        public bool OldResult { get; set; }
+
+        [Obsolete("Replaced by typings")]
+        public IEnumerable<Typing> TypingsOld
         {
             get
             {
@@ -126,10 +132,18 @@ namespace HaemophilusWeb.ViewModels
         public string PatientBirthDate { get; set; }
         public string PatientPostalCode { get; set; }
         public string SenderLaboratoryNumber { get; set; }
+        
+        [Obsolete("Use Typing->Identification instead")]
         public string EvaluationString { get; set; }
 
         [Display(Name = "Befund")]
         public string Interpretation { get; set; }
+
+        [Display(Name = "Befund")]
+        public string[] Report { get; set; }
+
+        public string ReportRemark { get; set; }
+        public bool HasReportRemark => !string.IsNullOrEmpty(ReportRemark);
 
         [Display(Name = "Teilbefund")]
         public string InterpretationPreliminary { get; set; }
@@ -171,6 +185,12 @@ namespace HaemophilusWeb.ViewModels
         {
             get { return EnumEditor.GetEnumDescription(BetaLactamase); }
         }
+
+        [Display(Name = "Befundart")]
+        public string ReportType { get; set; }
+
+        public bool IsPreliminary { get; set; }
+        public bool IsFinal { get; set; }
 
         private static string GetDisplayName(MemberInfo member)
         {
