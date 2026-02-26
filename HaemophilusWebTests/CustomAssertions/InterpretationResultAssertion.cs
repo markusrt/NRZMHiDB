@@ -52,4 +52,24 @@ public class InterpretationResultAssertion(InterpretationResult instance, Assert
         return new AndConstraint<InterpretationResultAssertion>(this);
     }
 
+    public AndConstraint<InterpretationResultAssertion> NotContainReportLine(
+        string unexpectedSubstring, string because = "", params object[] becauseArgs)
+    {
+        assertionChain
+            .ForCondition(Subject.Report != null)
+            .BecauseOf(because, becauseArgs)
+            .FailWith("Expected Report not to be null{reason}.");
+
+        if (Subject.Report != null)
+        {
+            assertionChain
+                .ForCondition(!Subject.Report.Any(s => s.Contains(unexpectedSubstring)))
+                .BecauseOf(because, becauseArgs)
+                .FailWith("Expected Report not to contain a line matching {0}{reason}, but one was found.",
+                    unexpectedSubstring);
+        }
+
+        return new AndConstraint<InterpretationResultAssertion>(this);
+    }
+
 }
