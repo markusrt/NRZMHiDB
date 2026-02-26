@@ -285,6 +285,7 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = isolateInterpretation.Interpret(isolate);
 
+            interpretation.Interpretation.Should().Be("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.");
             interpretation.Should().ContainReportLine("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.");
             isolateInterpretation.Typings.Should().BeEmpty();
             interpretation.Comment.Should().BeNull();
