@@ -257,8 +257,7 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = isolateInterpretation.Interpret(isolate);
 
-            interpretation.Report.Should().NotBeNull();
-            interpretation.Report.Should().Contain(s => s.Contains("Kein Nachweis von Haemophilus influenzae."));
+            interpretation.Should().ContainReportLine("Kein Nachweis von Haemophilus influenzae.");
             interpretation.Remark.Should()
                 .Be(
                     "Die verwendete fucK-PCR dient der Typisierung von Isolaten; sie ist für die Anwendung von Nativmaterialien nicht validiert. Befund unter Vorbehalt.");
@@ -286,9 +285,7 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = isolateInterpretation.Interpret(isolate);
 
-            interpretation.Report.Should().NotBeNull();
-            interpretation.Interpretation.Should().Be("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.");
-            interpretation.Report.Should().Contain(s => s.Contains("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren."));
+            interpretation.Should().ContainReportLine("Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.");
             isolateInterpretation.Typings.Should().BeEmpty();
             interpretation.Comment.Should().BeNull();
         }
@@ -328,11 +325,10 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = isolateInterpretation.Interpret(isolate);
 
-            interpretation.Should().BePreliminary();
-            interpretation.Report.Should().NotBeNull();
-            interpretation.Report.Should().Contain(s => s.Contains("Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae"));
-            interpretation.Report.Should().Contain(s => s.Contains("Blut oder Liquor ist nach §7 IfSG meldepflichtig"));
-            interpretation.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt."));
+            interpretation.Should().BePreliminary()
+                .And.ContainReportLine("Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae")
+                .And.ContainReportLine("Blut oder Liquor ist nach §7 IfSG meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.");
             isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_01");
 
             isolateInterpretation.Should()
@@ -357,11 +353,10 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = isolateInterpretation.Interpret(isolate);
 
-            interpretation.Should().BePreliminary();
-            interpretation.Report.Should().NotBeNull();
-            interpretation.Report.Should().Contain(s => s.Contains("Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp b (Hib)."));
-            interpretation.Report.Should().Contain(s => s.Contains("Blut oder Liquor ist nach §7 IfSG meldepflichtig"));
-            interpretation.Report.Should().Contain(s => s.Contains("Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp b."));
+            interpretation.Should().BePreliminary()
+                .And.ContainReportLine("Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp b (Hib).")
+                .And.ContainReportLine("Blut oder Liquor ist nach §7 IfSG meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp b.");
             isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_02");
             isolateInterpretation.Should()
                 .HaveTyping("Wachstum", "Ja")
@@ -387,13 +382,10 @@ namespace HaemophilusWeb.Domain
 
             var interpretation = isolateInterpretation.Interpret(isolate);
 
-            interpretation.Should().NotBePreliminary();
-            
-            interpretation.Report.Should().NotBeNull();
-            interpretation.Report.Should().Contain(s => s.Contains("Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae"));
-            interpretation.Report.Should().Contain(s => s.Contains("Blut oder Liquor ist nach §7 IfSG meldepflichtig"));
-            interpretation.Report.Should().Contain(s =>
-                s.Contains("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt."));
+            interpretation.Should().NotBePreliminary()
+                .And.ContainReportLine("Das Ergebnis spricht für einen unbekapselten Haemophilus influenzae")
+                .And.ContainReportLine("Blut oder Liquor ist nach §7 IfSG meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Haemophilus influenzae, unbekapselt.");
             isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_03");
             isolateInterpretation.Should()
                 .HaveTyping("Wachstum", "Ja")
