@@ -22,6 +22,9 @@ namespace HaemophilusWeb.Models
         [Display(Name = "ß-Laktamase")]
         public TestResult BetaLactamase { get; set; }
 
+        [Display(Name = "Penicillin ADT")]
+        public PenicillinAdt PenicillinAdt { get; set; }
+
         [Display(Name = "ompP2")]
         public TestResult OuterMembraneProteinP2 { get; set; }
 
