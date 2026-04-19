@@ -265,7 +265,7 @@ namespace HaemophilusWeb.Domain
                    && (!rule.MaldiTofBiotyper.HasValue || rule.MaldiTofBiotyper == isolate.MaldiTofBiotyper)
                    && (!rule.ApiNh.HasValue || rule.ApiNh == isolate.ApiNh)
                    && (!rule.Growth.HasValue || rule.Growth == isolate.Growth)
-                   && (!rule.Evaluation.HasValue || rule.Evaluation == isolate.Evaluation);
+                   && (rule.Evaluation == null || rule.Evaluation.Contains(isolate.Evaluation));
         }
     }
 

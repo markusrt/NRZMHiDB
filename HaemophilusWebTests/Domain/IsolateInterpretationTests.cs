@@ -396,5 +396,166 @@ namespace HaemophilusWeb.Domain
                 .And.HaveTyping("Identifizierung", isolate.Evaluation.ToReportFormat());
         }
 
+        [Test]
+        public void IsolateMatchingStemRule4_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.Yes,
+                Agglutination = SerotypeAgg.Negative,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.OtherNonInvasive,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Should().NotBePreliminary()
+                .And.ContainReportLine("Haemophilus influenzae wurde nachgewiesen")
+                .And.ContainReportLine("nicht-invasiven Isolaten aus Kostengründen nicht durchgeführt");
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_04");
+            isolateInterpretation.Should()
+                .HaveTyping("Wachstum", "Ja")
+                .And.HaveTyping("Agglutination", "negativ")
+                .And.HaveTyping("Identifizierung", "Haemophilus influenzae");
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule5_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.Yes,
+                Agglutination = SerotypeAgg.B,
+                BexA = TestResult.Positive,
+                SerotypePcr = SerotypePcr.B,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Should().NotBePreliminary()
+                .And.ContainReportLine("Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp b (Hib).")
+                .And.ContainReportLine("Blut oder Liquor ist nach §7 IfSG meldepflichtig")
+                .And.ContainReportLine("Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp b.");
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_05");
+            isolateInterpretation.Should()
+                .HaveTyping("Wachstum", "Ja")
+                .And.HaveTyping("Agglutination", "b")
+                .And.HaveTyping("Serotyp-PCR", "b")
+                .And.HaveTyping("bexA", "positiv")
+                .And.HaveTyping("Identifizierung", isolate.Evaluation.ToReportFormat());
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule6_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.No,
+                Evaluation = Evaluation.NoGrowth,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Should().NotBePreliminary()
+                .And.ContainReportLine("Der eingesendete Stamm konnte nicht angezüchtet werden. Um Neueinsendung wird gebeten.")
+                .And.ContainReportLine("Möglichst viel Kulturmaterial einer frischen Übernachtkultur")
+                .And.ContainReportLine("Versand der Bakterien als frische Übernachtkultur auf Nähragar")
+                .And.ContainReportLine("nicht unmittelbar vor dem Wochenende oder vor Feiertagen");
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_06");
+            isolateInterpretation.Should()
+                .HaveTyping("Wachstum", "Nein")
+                .And.HaveTyping("Identifizierung", "kein Wachstum");
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule7_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.No,
+                Evaluation = Evaluation.NoGrowth,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.OtherNonInvasive,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Should().NotBePreliminary()
+                .And.ContainReportLine("Der eingesendete Stamm konnte nicht angezüchtet werden.")
+                .And.NotContainReportLine("Um Neueinsendung wird gebeten");
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_07");
+            isolateInterpretation.Should()
+                .HaveTyping("Wachstum", "Nein")
+                .And.HaveTyping("Identifizierung", "kein Wachstum");
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule8_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.Yes,
+                Evaluation = Evaluation.HaemophilusSpeciesNoHaemophilusInfluenzae,
+                MaldiTofVitek = UnspecificTestResult.Determined,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.Blood,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Should().NotBePreliminary()
+                .And.ContainReportLine("Kein Nachweis von Haemophilus influenzae.")
+                .And.ContainReportLine("Beim eingesendeten Isolat handelt es sich um Haemophilus sp., nicht H. influenzae.");
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_08");
+            isolateInterpretation.Should()
+                .HaveTyping("Wachstum", "Ja")
+                .And.HaveTyping("Identifizierung", "Haemophilus sp., nicht H. influenzae");
+        }
+
+        [Test]
+        public void IsolateMatchingStemRule9_ReturnsCorrespondingInterpretation()
+        {
+            var isolate = new Isolate
+            {
+                Growth = YesNoOptional.Yes,
+                Evaluation = Evaluation.HaemophilusParainfluenzae,
+                MaldiTofVitek = UnspecificTestResult.Determined,
+                Sending = new Sending 
+                { 
+                    SamplingLocation = SamplingLocation.OtherNonInvasive,
+                    Material = Material.Isolate
+                }
+            };
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Should().NotBePreliminary()
+                .And.ContainReportLine("Das Ergebnis spricht für einen Haemophilus parainfluenzae")
+                .And.ContainReportLine("epidemiologischen und Kostengründen nicht durchgeführt");
+            isolateInterpretation.Rule.Should().Be("HaemophilusStemInterpretation_09");
+            isolateInterpretation.Should()
+                .HaveTyping("Wachstum", "Ja")
+                .And.HaveTyping("Identifizierung", "H. parainfluenzae");
+        }
+
     }
 }

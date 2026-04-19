@@ -16,7 +16,7 @@ namespace HaemophilusWeb.Domain
         public UnspecificTestResult? MaldiTofBiotyper { get; set; }
         public UnspecificTestResult? ApiNh { get; set; }
         public YesNoOptional? Growth { get; set; }
-        public Evaluation? Evaluation { get; set; }
+        public List<Evaluation> Evaluation { get; set; }
         public string Identification { get; set; }
         public string[] Report { get; set; }
         public string[] Typings { get; set; }
