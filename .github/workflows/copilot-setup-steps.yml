@@ -27,4 +27,5 @@ jobs:
         run: nuget restore HaemophilusWeb.sln
 
       - name: Build solution
+        shell: cmd
         run: msbuild HaemophilusWeb.sln /p:Configuration=Debug /m
