@@ -222,9 +222,15 @@
     <Compile Include="Controllers\PatientSendingControllerTests.cs" />
     <Compile Include="Controllers\SendingControllerTests.cs" />
     <Compile Include="Controllers\HomeControllerTests.cs" />
+    <Compile Include="CustomAssertions\InterpretationResultAssertion.cs" />
+    <Compile Include="CustomAssertions\IsolateInterpretationAssertion.cs" />
+    <Compile Include="CustomAssertions\IsolateInterpretationAssertionExtensions.cs" />
+    <Compile Include="CustomAssertions\MeningoIsolateInterpretationAssertion.cs" />
+    <Compile Include="CustomAssertions\MeningoIsolateInterpretationAssertionExtensions.cs" />
     <Compile Include="Domain\IsolateExtensionsTests.cs" />
     <Compile Include="Domain\MeningoIsolateInterpretationTests.cs" />
     <Compile Include="Domain\IsolateInterpretationTests.cs" />
+    <Compile Include="CustomAssertions\InterpretationResultAssertionExtensions.cs" />
     <Compile Include="Mocks\ApplicationDbContextMock.cs" />
     <Compile Include="Mocks\FakeDbSet.cs" />
     <Compile Include="Models\SamplingLocationExtensionsTests.cs" />
@@ -306,6 +312,7 @@
   <ItemGroup>
     <Content Include="ILLink\ILLink.Descriptors.LibraryBuild.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
