@@ -45,6 +45,20 @@ namespace HaemophilusWeb.Validators
             AssertIsInvalid(validationResult);
         }
 
+        [Test]
+        public void Validate_WithOxidaseNotSetButMaldiBiotyperPerformed_IsValid()
+        {
+            var dto = CreateValidModel();
+            dto.Oxidase = TestResult.NotDetermined;
+            dto.MaldiTofBiotyper = UnspecificTestResult.Determined;
+            dto.MaldiTofBiotyperBestMatch = "N. meningitidis";
+            dto.MaldiTofBiotyperMatchConfidence = 2.3;
+
+            var validationResult = Validate(dto);
+
+            AssertIsValid(validationResult);
+        }
+
         [TestCase(Growth.ATypicalGrowth, Growth.No, TestResult.Negative)]
         [TestCase(Growth.TypicalGrowth, Growth.No, TestResult.Positive)]
         [TestCase(Growth.No, Growth.ATypicalGrowth, TestResult.Negative)]

@@ -58,8 +58,9 @@ namespace HaemophilusWeb.Validators
         private static bool OxidaseIsMandatoryForAnyGrowth(MeningoIsolateViewModel model, TestResult testResult)
         {
             var anyGrowth = model.GrowthOnBloodAgar != Growth.No || model.GrowthOnMartinLewisAgar != Growth.No;
-            var oxidaseDetermined = model.Oxidase == TestResult.NotDetermined;
-            var modelIsInvalid = anyGrowth && oxidaseDetermined;
+            var oxidaseNotDetermined = model.Oxidase == TestResult.NotDetermined;
+            var maldiBiotyperPerformed = model.MaldiTofBiotyper == UnspecificTestResult.Determined;
+            var modelIsInvalid = anyGrowth && oxidaseNotDetermined && !maldiBiotyperPerformed;
             return !modelIsInvalid;
         }
 
