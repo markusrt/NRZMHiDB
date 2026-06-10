@@ -1,0 +1,30 @@
+name: Copilot Setup Steps
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+  pull_request:
+    paths:
+      - .github/workflows/copilot-setup-steps.yml
+
+jobs:
+  copilot-setup-steps:
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2
+
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@d105a947828025cd7a980103c35ba2bfae586d0f # v2
+
+      - name: Restore NuGet packages
+        run: nuget restore HaemophilusWeb.sln
+
+      - name: Build solution
+        run: msbuild HaemophilusWeb.sln /p:Configuration=Debug /m
