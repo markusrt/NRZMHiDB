@@ -14,16 +14,16 @@ jobs:
   build:
     runs-on: windows-2022
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
 
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2
         
     - name: Setup VSTest.console.exe
-      uses: darenm/Setup-VSTest@v1.2
+      uses: darenm/Setup-VSTest@d9a5dffa3f11d9c27ec42eb69515d3aaeaad9ef8 # v1.2
 
     - name: Setup Nuget.exe
-      uses: nuget/setup-nuget@v2
+      uses: nuget/setup-nuget@d105a947828025cd7a980103c35ba2bfae586d0f # v2
       with:
         nuget-version: 'latest'
       
