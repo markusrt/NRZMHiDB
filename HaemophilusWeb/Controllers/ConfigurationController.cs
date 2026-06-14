@@ -88,7 +88,7 @@ namespace HaemophilusWeb.Controllers
 
         private static List<string> SplitBlocks(string value)
         {
-            return Regex.Split(NormalizeNewlines(value), "\n\\s*\n")
+            return Regex.Split(NormalizeNewlines(value), "\n\\s*\n", RegexOptions.None, TimeSpan.FromMilliseconds(100))
                 .Select(block => block.Trim())
                 .Where(block => block.Length > 0)
                 .ToList();
