@@ -1,4 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<!--
+  Classic ASP.NET (System.Web) MVC application on .NET Framework 4.8.
+  This is NOT an ASP.NET Core app, so it uses the plain Microsoft.NET.Sdk
+  (not Microsoft.NET.Sdk.Web) and imports Microsoft.WebApplication.targets to
+  give Visual Studio its IIS Express F5 integration. The app is hosted by IIS /
+  IIS Express and produces a library assembly; it cannot be launched with
+  `dotnet run`. The explicit Sdk.props / Sdk.targets import form is required so
+  the web targets can be imported after the SDK targets.
+-->
+<Project>
+  <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
     <OutputType>Library</OutputType>
@@ -11,6 +22,16 @@
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44300</IISExpressSSLPort>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">17.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <!--
+      Classic ASP.NET / IIS Express only loads assemblies from <siteroot>\bin.
+      Output flat into bin\ (no Debug\net48\ subfolder) so IIS Express runs the
+      assembly Visual Studio just built and its PDB matches the source — without
+      this, breakpoints fail to bind with "the code differs".
+    -->
+    <OutputPath>bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -167,4 +188,13 @@
     <None Include="NLog.xsd" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
+
+  <Import Project="Sdk.targets" Sdk="Microsoft.NET.Sdk" />
+
+  <!--
+    Provides Visual Studio's "run with IIS Express" (F5) support for classic
+    ASP.NET Framework web projects. Only imported when the Visual Studio web
+    tooling is present, so command-line / CI `dotnet build` is unaffected.
+  -->
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="Exists('$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets')" />
 </Project>
