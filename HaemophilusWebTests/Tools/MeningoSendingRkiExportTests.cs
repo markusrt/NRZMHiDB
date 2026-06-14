@@ -50,7 +50,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(35);
+            export.Columns.Count.Should().Be(36);
         }
 
         [Test]
@@ -134,8 +134,8 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["csc-PCR"].Should().Be("negativ");
             export.Rows[0]["cswy-PCR"].Should().Be("positiv");
             export.Rows[0]["cswy-Allel"].Should().Be("Allel 3 WY");
-            export.Rows[0]["NHS Real-Time-PCR"].Should().Be("positiv");
-            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Neisseria meningitidis, Haemophilus influenzae");
+            export.Rows[0]["Real-Time-PCR"].Should().Be("positiv");
+            export.Rows[0][ "Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Neisseria meningitidis, Haemophilus influenzae");
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["cswy-Allel"].Should().Be(DBNull.Value);
-            export.Rows[0][ "NHS Real-Time-PCR Auswertung (RIDOM)"].Should().Be(DBNull.Value);
+            export.Rows[0][ "Real-Time-PCR Auswertung (RIDOM)"].Should().Be(DBNull.Value);
         }
 
         [Test]

@@ -136,6 +136,441 @@
       <Generator>GlobalResourceProxyGenerator</Generator>
       <LastGenOutput>MyResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Automapper\IsolateViewModelMappingAction.cs" />
+    <Compile Include="Automapper\IsolateViewModelMappingActionBase.cs" />
+    <Compile Include="Automapper\MeningoIsolateViewModelMappingAction.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Controllers\CountyController.cs" />
+    <Compile Include="Controllers\EucastClinicalBreakpointsController.cs" />
+    <Compile Include="Controllers\PatientSendingControllerBase.cs" />
+    <Compile Include="Controllers\PubMlstController.cs" />
+    <Compile Include="Controllers\GeonamesController.cs" />
+    <Compile Include="Controllers\HealthOfficesController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MeningoIsolateController.cs" />
+    <Compile Include="Controllers\IsolateController.cs" />
+    <Compile Include="Controllers\IsolateControllerBase.cs" />
+    <Compile Include="Controllers\MeningoPatientController.cs" />
+    <Compile Include="Controllers\MeningoPatientSendingController.cs" />
+    <Compile Include="Controllers\MeningoSendingController.cs" />
+    <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Controllers\PatientControllerBase.cs" />
+    <Compile Include="Controllers\PatientSendingController.cs" />
+    <Compile Include="Controllers\QueryRecord.cs" />
+    <Compile Include="Controllers\MeningoReportController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\ReportControllerBase.cs" />
+    <Compile Include="Controllers\EpiscanGisExportController.cs" />
+    <Compile Include="Controllers\RkiMatchController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
+    <Compile Include="Controllers\MeningoSenderController.cs" />
+    <Compile Include="Controllers\SenderController.cs" />
+    <Compile Include="Controllers\SenderControllerBase.cs" />
+    <Compile Include="Controllers\SendingController.cs" />
+    <Compile Include="App_Start\ExceptionLogger.cs" />
+    <Compile Include="Domain\NativeMaterialInterpretationRule.cs" />
+    <Compile Include="Migrations\201908152057267_Patient_Country.cs" />
+    <Compile Include="Migrations\201908152057267_Patient_Country.Designer.cs">
+      <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs" />
+    <Compile Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.Designer.cs">
+      <DependentUpon>201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs" />
+    <Compile Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.Designer.cs">
+      <DependentUpon>201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs" />
+    <Compile Include="Migrations\202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.Designer.cs">
+      <DependentUpon>202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs" />
+    <Compile Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.Designer.cs">
+      <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.cs" />
+    <Compile Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.Designer.cs">
+      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202203301236005_ReorderSpecificTestResult.cs" />
+    <Compile Include="Migrations\202203301236005_ReorderSpecificTestResult.designer.cs">
+      <DependentUpon>202203301236005_ReorderSpecificTestResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.cs" />
+    <Compile Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.designer.cs">
+      <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.cs" />
+    <Compile Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.designer.cs">
+      <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202305301958098_Sending_AutoInvasive.cs" />
+    <Compile Include="Migrations\202305301958098_Sending_AutoInvasive.designer.cs">
+      <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202312180600593_SendingBase_DemisId.cs" />
+    <Compile Include="Migrations\202312180600593_SendingBase_DemisId.designer.cs">
+      <DependentUpon>202312180600593_SendingBase_DemisId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202404280859485_SendingBase_DemisId_To_String.cs" />
+    <Compile Include="Migrations\202404280859485_SendingBase_DemisId_To_String.designer.cs">
+      <DependentUpon>202404280859485_SendingBase_DemisId_To_String.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202410201042173_Isolate_RealTimePcr.cs" />
+    <Compile Include="Migrations\202410201042173_Isolate_RealTimePcr.Designer.cs">
+      <DependentUpon>202410201042173_Isolate_RealTimePcr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.cs" />
+    <Compile Include="Migrations\202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.Designer.cs">
+      <DependentUpon>202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202504061433021_RealTimePcrResultToFlags.cs" />
+    <Compile Include="Migrations\202504061433021_RealTimePcrResultToFlags.Designer.cs">
+      <DependentUpon>202504061433021_RealTimePcrResultToFlags.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202505050545536_RenameMaldiTofToVitek.cs" />
+    <Compile Include="Migrations\202505050545536_RenameMaldiTofToVitek.Designer.cs">
+      <DependentUpon>202505050545536_RenameMaldiTofToVitek.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202505070520582_Isolate_MaldiTofBiotyper.cs" />
+    <Compile Include="Migrations\202505070520582_Isolate_MaldiTofBiotyper.Designer.cs">
+      <DependentUpon>202505070520582_Isolate_MaldiTofBiotyper.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507140457406_SendingBase_SenderSpecies.cs" />
+    <Compile Include="Migrations\202507140457406_SendingBase_SenderSpecies.Designer.cs">
+      <DependentUpon>202507140457406_SendingBase_SenderSpecies.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202507140531037_Sending_SerotypeSender.cs" />
+    <Compile Include="Migrations\202507140531037_Sending_SerotypeSender.Designer.cs">
+      <DependentUpon>202507140531037_Sending_SerotypeSender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202602230416057_IsolateCommon_RealTimePcrDevice.cs" />
+    <Compile Include="Migrations\202602230416057_IsolateCommon_RealTimePcrDevice.Designer.cs">
+      <DependentUpon>202602230416057_IsolateCommon_RealTimePcrDevice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\PubMlstMatchInfo.cs" />
+    <Compile Include="Models\VaccinationStatus.cs" />
+    <Compile Include="Services\IGeonamesService.cs" />
+    <Compile Include="Services\IrisPubMlstService.cs" />
+    <Compile Include="Services\NeisseriaPubMlstService.cs" />
+    <Compile Include="Services\PubMlstAuthorization.cs" />
+    <Compile Include="Services\PubMlstMatcher.cs" />
+    <Compile Include="Services\PubMlstService.cs" />
+    <Compile Include="Services\PubMlstSessionToken.cs" />
+    <Compile Include="Tools\HaemophilsPubMlstExport.cs" />
+    <Compile Include="Tools\MeningoSendingRkiExport.cs" />
+    <Compile Include="Tools\HaemophilusSendingRkiExport.cs" />
+    <Compile Include="Tools\HaemophilusSendingLaboratoryExport.cs" />
+    <Compile Include="Tools\IDuplicatePatientDetectionColumns.cs" />
+    <Compile Include="Tools\MeningoSendingIrisExport.cs" />
+    <Compile Include="Tools\MeningoStateAuthorityExport.cs" />
+    <Compile Include="Tools\PubMlstColumns.cs" />
+    <Compile Include="Tools\DuplicatePatientResolver.cs" />
+    <Compile Include="Tools\RkiExportColumns.cs" />
+    <Compile Include="Tools\SendingExportDefinition.cs" />
+    <Compile Include="Tools\MeningoSendingLaboratoryExport.cs" />
+    <Compile Include="Utils\AppSettingsExtensions.cs" />
+    <Compile Include="Utils\EnumFormatter.cs" />
+    <Compile Include="Domain\IsolateExtensions.cs" />
+    <Compile Include="Domain\MeningoIsolateInterpretation.cs" />
+    <Compile Include="Domain\IsolateInterpretation.cs" />
+    <Compile Include="Domain\StemInterpretationRule.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311070607139_InitialCreate.cs" />
+    <Compile Include="Migrations\201311070607139_InitialCreate.Designer.cs">
+      <DependentUpon>201311070607139_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311070703159_RefinedSender.cs" />
+    <Compile Include="Migrations\201311070703159_RefinedSender.Designer.cs">
+      <DependentUpon>201311070703159_RefinedSender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.cs" />
+    <Compile Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.Designer.cs">
+      <DependentUpon>201311181323010_ChangedRequiredFieldsOnSender.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311242304525_Patient.cs" />
+    <Compile Include="Migrations\201311242304525_Patient.Designer.cs">
+      <DependentUpon>201311242304525_Patient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201401061223272_RefinedPatient.cs" />
+    <Compile Include="Migrations\201401061223272_RefinedPatient.Designer.cs">
+      <DependentUpon>201401061223272_RefinedPatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201401081931532_RefinedSender1.cs" />
+    <Compile Include="Migrations\201401081931532_RefinedSender1.Designer.cs">
+      <DependentUpon>201401081931532_RefinedSender1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201401100947336_Sending.cs" />
+    <Compile Include="Migrations\201401100947336_Sending.Designer.cs">
+      <DependentUpon>201401100947336_Sending.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201402032311285_Isolate_1.cs" />
+    <Compile Include="Migrations\201402032311285_Isolate_1.Designer.cs">
+      <DependentUpon>201402032311285_Isolate_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201403252007478_Isolate_2.cs" />
+    <Compile Include="Migrations\201403252007478_Isolate_2.Designer.cs">
+      <DependentUpon>201403252007478_Isolate_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201404142153397_Sending_Add_ForeignKeyToPatient.cs" />
+    <Compile Include="Migrations\201404142153397_Sending_Add_ForeignKeyToPatient.Designer.cs">
+      <DependentUpon>201404142153397_Sending_Add_ForeignKeyToPatient.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201404160613229_Update_AspNetIdentity_Version_2.cs" />
+    <Compile Include="Migrations\201404160613229_Update_AspNetIdentity_Version_2.Designer.cs">
+      <DependentUpon>201404160613229_Update_AspNetIdentity_Version_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201404231940084_Isolate_3_Default_To_ND.cs" />
+    <Compile Include="Migrations\201404231940084_Isolate_3_Default_To_ND.Designer.cs">
+      <DependentUpon>201404231940084_Isolate_3_Default_To_ND.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.cs" />
+    <Compile Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.Designer.cs">
+      <DependentUpon>201405051839287_Isolate_4_Add_StemNumber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs" />
+    <Compile Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.Designer.cs">
+      <DependentUpon>201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.cs" />
+    <Compile Include="Migrations\201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.Designer.cs">
+      <DependentUpon>201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201406142110467_Isolate_7_AddRemark.cs" />
+    <Compile Include="Migrations\201406142110467_Isolate_7_AddRemark.Designer.cs">
+      <DependentUpon>201406142110467_Isolate_7_AddRemark.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201408312049376_RefinedPatient2.cs" />
+    <Compile Include="Migrations\201408312049376_RefinedPatient2.Designer.cs">
+      <DependentUpon>201408312049376_RefinedPatient2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs" />
+    <Compile Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.Designer.cs">
+      <DependentUpon>201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.cs" />
+    <Compile Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.Designer.cs">
+      <DependentUpon>201409221954353_Isolate_9_ftsi_MLST.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs" />
+    <Compile Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.Designer.cs">
+      <DependentUpon>201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs" />
+    <Compile Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.Designer.cs">
+      <DependentUpon>201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502112024310_County.cs" />
+    <Compile Include="Migrations\201502112024310_County.Designer.cs">
+      <DependentUpon>201502112024310_County.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201506301117277_Isolate_10_Growth.cs" />
+    <Compile Include="Migrations\201506301117277_Isolate_10_Growth.Designer.cs">
+      <DependentUpon>201506301117277_Isolate_10_Growth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507140902578_Sender_Delete.cs" />
+    <Compile Include="Migrations\201507140902578_Sender_Delete.Designer.cs">
+      <DependentUpon>201507140902578_Sender_Delete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201507201311481_Sending_Delete.cs" />
+    <Compile Include="Migrations\201507201311481_Sending_Delete.Designer.cs">
+      <DependentUpon>201507201311481_Sending_Delete.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.cs" />
+    <Compile Include="Migrations\201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.Designer.cs">
+      <DependentUpon>201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704192201344_HealthOffice.cs" />
+    <Compile Include="Migrations\201704192201344_HealthOffice.Designer.cs">
+      <DependentUpon>201704192201344_HealthOffice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704202158587_Isolate_11_ftsi_Eval3.cs" />
+    <Compile Include="Migrations\201704202158587_Isolate_11_ftsi_Eval3.Designer.cs">
+      <DependentUpon>201704202158587_Isolate_11_ftsi_Eval3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201802182157080_RkiMatch.cs" />
+    <Compile Include="Migrations\201802182157080_RkiMatch.Designer.cs">
+      <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807022228523_Isolate_12_ReportStatus.cs" />
+    <Compile Include="Migrations\201807022228523_Isolate_12_ReportStatus.Designer.cs">
+      <DependentUpon>201807022228523_Isolate_12_ReportStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201807251901482_MeningoPatientAndSending.cs" />
+    <Compile Include="Migrations\201807251901482_MeningoPatientAndSending.Designer.cs">
+      <DependentUpon>201807251901482_MeningoPatientAndSending.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901052104363_Meningo_Isolate_1.cs" />
+    <Compile Include="Migrations\201901052104363_Meningo_Isolate_1.Designer.cs">
+      <DependentUpon>201901052104363_Meningo_Isolate_1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs" />
+    <Compile Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.Designer.cs">
+      <DependentUpon>201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.cs" />
+    <Compile Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.Designer.cs">
+      <DependentUpon>201901122122392_Meningo_Isolate_3_Agglutination.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.cs" />
+    <Compile Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.Designer.cs">
+      <DependentUpon>201901122131264_Meningo_Isolate_4_Onpg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.cs" />
+    <Compile Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.Designer.cs">
+      <DependentUpon>201901122155487_Meningo_Isolate_5_GammaGt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.cs" />
+    <Compile Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.Designer.cs">
+      <DependentUpon>201901122211462_Meningo_Isolate_6_SerogroupPcr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.cs" />
+    <Compile Include="Migrations\201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.Designer.cs">
+      <DependentUpon>201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901182207369_Meningo_Isolate_7_Growth.cs" />
+    <Compile Include="Migrations\201901182207369_Meningo_Isolate_7_Growth.Designer.cs">
+      <DependentUpon>201901182207369_Meningo_Isolate_7_Growth.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901182228325_Meningo_Isolate_8_AdditionalFields.cs" />
+    <Compile Include="Migrations\201901182228325_Meningo_Isolate_8_AdditionalFields.Designer.cs">
+      <DependentUpon>201901182228325_Meningo_Isolate_8_AdditionalFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901200043344_EucastClinicalBreakpoint_Add_ValidFor.cs" />
+    <Compile Include="Migrations\201901200043344_EucastClinicalBreakpoint_Add_ValidFor.Designer.cs">
+      <DependentUpon>201901200043344_EucastClinicalBreakpoint_Add_ValidFor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.cs" />
+    <Compile Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.Designer.cs">
+      <DependentUpon>201901200118468_EucastClinicalBreakpoint_Update_Index.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.cs" />
+    <Compile Include="Migrations\201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.Designer.cs">
+      <DependentUpon>201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.cs" />
+    <Compile Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.Designer.cs">
+      <DependentUpon>201901232227223_Meningo_Isolate_10_RealTimePcr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.cs" />
+    <Compile Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.Designer.cs">
+      <DependentUpon>201904012024228_NeisseriaPubMlstIsolate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ChangeLog.cs" />
+    <Compile Include="Models\County.cs" />
+    <Compile Include="Models\DatabaseType.cs" />
+    <Compile Include="Models\DefaultRoles.cs" />
+    <Compile Include="Models\EpsilometerTest.cs" />
+    <Compile Include="Models\EpsilometerTestResult.cs" />
+    <Compile Include="Models\EucastClinicalBreakpoint.cs" />
+    <Compile Include="Models\Antibiotic.cs" />
+    <Compile Include="Models\GrowthType.cs" />
+    <Compile Include="Models\HealthOffice.cs" />
+    <Compile Include="Models\Meningo\CswyAllel.cs" />
+    <Compile Include="Models\Meningo\INeisseriaIsolateAlleleProperties.cs" />
+    <Compile Include="Models\IsolateBase.cs" />
+    <Compile Include="Models\IsolateCommon.cs" />
+    <Compile Include="Models\Material.cs" />
+    <Compile Include="Models\Meningo\Epidemiology.cs" />
+    <Compile Include="Models\ISendingReference.cs" />
+    <Compile Include="Models\InvasiveSamplingLocationAttribute.cs" />
+    <Compile Include="Models\Meningo\Growth.cs" />
+    <Compile Include="Models\Meningo\MeningoIsolate.cs" />
+    <Compile Include="Models\Meningo\MeningoIsolateBase.cs" />
+    <Compile Include="Models\Meningo\MeningoMaterial.cs" />
+    <Compile Include="Models\Meningo\MeningoClinicalInformation.cs" />
+    <Compile Include="Models\Meningo\MeningoPatient.cs" />
+    <Compile Include="Models\Meningo\MeningoSending.cs" />
+    <Compile Include="Models\Meningo\MeningoSamplingLocation.cs" />
+    <Compile Include="Models\Meningo\MeningoSerogroupPcr.cs" />
+    <Compile Include="Models\Meningo\MeningoSerogroupAgg.cs" />
+    <Compile Include="Models\Meningo\RealTimePcrResult.cs" />
+    <Compile Include="Models\Meningo\RiskFactors.cs" />
+    <Compile Include="Models\Meningo\UnderlyingDisease.cs" />
+    <Compile Include="Models\PatientBase.cs" />
+    <Compile Include="Models\Meningo\NeisseriaPubMlstIsolate.cs" />
+    <Compile Include="Models\ReportStatus.cs" />
+    <Compile Include="Models\RkiMatchRecord.cs" />
+    <Compile Include="Models\RkiStatus.cs" />
+    <Compile Include="Models\SendingBase.cs" />
+    <Compile Include="Models\SerotypePcr.cs" />
+    <Compile Include="Models\ApplicationDbContextWrapper.cs" />
+    <Compile Include="Models\ApplicationUser.cs" />
+    <Compile Include="Models\Change.cs" />
+    <Compile Include="Models\ChangeType.cs" />
+    <Compile Include="Models\ClinicalInformation.cs" />
+    <Compile Include="Models\Error.cs" />
+    <Compile Include="Models\Evaluation.cs" />
+    <Compile Include="Models\FactorTest.cs" />
+    <Compile Include="Models\Gender.cs" />
+    <Compile Include="Models\IApplicationDbContext.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Isolate.cs" />
+    <Compile Include="Models\SamplingLocation.cs" />
+    <Compile Include="Models\State.cs" />
+    <Compile Include="Models\TestResult.cs" />
+    <Compile Include="Models\RealTimePcrDevice.cs" />
+    <Compile Include="Models\Sending.cs" />
+    <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\Sender.cs" />
+    <Compile Include="Models\YesNo.cs" />
+    <Compile Include="Models\YesNoOptional.cs" />
+    <Compile Include="Models\YesNoUnknown.cs" />
+    <Compile Include="Properties\GlobalAssemblyInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="Tools\RkiMatchImporter.cs" />
+    <Compile Include="Tools\CountyImporter.cs" />
+    <Compile Include="Tools\CreateExcelFile.cs" />
+    <Compile Include="Tools\ExportDefinition.cs" />
+    <Compile Include="Tools\RkiTool.cs" />
+    <Compile Include="Utils\AntibioticPriorityListComparer.cs" />
+    <Compile Include="Utils\EnumSerializer.cs" />
+    <Compile Include="Utils\EnumUtils.cs" />
+    <Compile Include="Utils\ExceptionUtils.cs" />
+    <Compile Include="Utils\ExpressionUtils.cs" />
+    <Compile Include="Utils\FileLister.cs" />
+    <Compile Include="Services\GeonamesService.cs" />
+    <Compile Include="Utils\HttpClientWrapper.cs" />
+    <Compile Include="Utils\DetailFormatter.cs" />
+    <Compile Include="Utils\MeningoMaterialExtensions.cs" />
+    <Compile Include="Utils\ReportFormatter.cs" />
+    <Compile Include="Utils\ServerUtils.cs" />
+    <Compile Include="Utils\TypeUtils.cs" />
+    <Compile Include="Validators\EpsilometerTestValidator.cs" />
+    <Compile Include="Validators\IsolateViewModelValidatorBase.cs" />
+    <Compile Include="Validators\MeningoIsolateViewModelValidator.cs" />
+    <Compile Include="Validators\IsolateViewModelValidator.cs" />
+    <Compile Include="Validators\EucastClinicalBreakpointValidator.cs" />
+    <Compile Include="Validators\HealthOfficeValidator.cs" />
+    <Compile Include="Validators\MeningoPatientValidator.cs" />
+    <Compile Include="Validators\MergePatientRequestValidator.cs" />
+    <Compile Include="Validators\PatientValidator.cs" />
+    <Compile Include="Validators\MeningoSendingValidator.cs" />
+    <Compile Include="Validators\SendingValidator.cs" />
+    <Compile Include="ViewModels\EpsilometerTestReportModel.cs" />
+    <Compile Include="ViewModels\EpsilometerTestViewModel.cs" />
+    <Compile Include="ViewModels\MergePatientConfirmation.cs" />
+    <Compile Include="ViewModels\MergePatientRequest.cs" />
+    <Compile Include="ViewModels\IsolateViewModel.cs" />
+    <Compile Include="ViewModels\MeningoIsolateViewModel.cs" />
+    <Compile Include="ViewModels\PatientSendingViewModel.cs" />
+    <Compile Include="ViewModels\FromToQuery.cs" />
+    <Compile Include="ViewModels\Typing.cs" />
+    <Compile Include="Views\Utils\AutoCompleteUtils.cs" />
+    <Compile Include="Views\Utils\BootstrapEditor.cs" />
+    <Compile Include="Views\Utils\EnumEditor.cs" />
   </ItemGroup>
 
   <!-- Migration designer files -->
@@ -150,6 +585,365 @@
     <EmbeddedResource Include="Domain\Interpretation\StemRules.json" />
     <EmbeddedResource Include="Domain\Interpretation\TypingTemplates.json" />
     <EmbeddedResource Include="Domain\Interpretation\NativeMaterialRules.json" />
+    <Content Include="App_Data\countries.json" />
+    <EmbeddedResource Include="Migrations\201908152057267_Patient_Country.resx">
+      <DependentUpon>201908152057267_Patient_Country.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911162228409_Meningo_Isolate_11_Remove_ApiNH.resx">
+      <DependentUpon>201911162228409_Meningo_Isolate_11_Remove_ApiNH.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.resx">
+      <DependentUpon>201912022008344_Meningo_Isolate_12_Add_SIAA_CNL_CRTA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.resx">
+      <DependentUpon>202002112117102_NeisseriaPubMlstIsolate_AddPubMlstIdAndFixReference.cs</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <EmbeddedResource Include="Migrations\202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.resx">
+      <DependentUpon>202005131948330_NeisseriaPubMlstIsolate_ReactivityFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202111111841542_Isolate_AddGenomeSequencing.resx">
+      <DependentUpon>202111111841542_Isolate_AddGenomeSequencing.cs</DependentUpon>
+    </EmbeddedResource>
+    <Content Include="Content\DataTables\css\semanticui.scss" />
+    <Content Include="Content\DataTables\css\mixins.scss" />
+    <Content Include="Content\DataTables\css\common.scss" />
+    <EmbeddedResource Include="Migrations\202203301236005_ReorderSpecificTestResult.resx">
+      <DependentUpon>202203301236005_ReorderSpecificTestResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202203301306580_Patient_RemoveTherapyAndDetails.resx">
+      <DependentUpon>202203301306580_Patient_RemoveTherapyAndDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202206010430320_NeisseriaPubMlstIsolate_Database.resx">
+      <DependentUpon>202206010430320_NeisseriaPubMlstIsolate_Database.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202305301958098_Sending_AutoInvasive.resx">
+      <DependentUpon>202305301958098_Sending_AutoInvasive.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202312180600593_SendingBase_DemisId.resx">
+      <DependentUpon>202312180600593_SendingBase_DemisId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202404280859485_SendingBase_DemisId_To_String.resx">
+      <DependentUpon>202404280859485_SendingBase_DemisId_To_String.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410201042173_Isolate_RealTimePcr.resx">
+      <DependentUpon>202410201042173_Isolate_RealTimePcr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.resx">
+      <DependentUpon>202410231239265_Isolate_RibosomalRna16S_UnspecifiedToNativeMaterialTestResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202504061433021_RealTimePcrResultToFlags.resx">
+      <DependentUpon>202504061433021_RealTimePcrResultToFlags.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505050545536_RenameMaldiTofToVitek.resx">
+      <DependentUpon>202505050545536_RenameMaldiTofToVitek.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202505070520582_Isolate_MaldiTofBiotyper.resx">
+      <DependentUpon>202505070520582_Isolate_MaldiTofBiotyper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507140457406_SendingBase_SenderSpecies.resx">
+      <DependentUpon>202507140457406_SendingBase_SenderSpecies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202507140531037_Sending_SerotypeSender.resx">
+      <DependentUpon>202507140531037_Sending_SerotypeSender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202602230416057_IsolateCommon_RealTimePcrDevice.resx">
+      <DependentUpon>202602230416057_IsolateCommon_RealTimePcrDevice.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\PublishProfiles\haemophilus - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\haemophilus - Web Deploy.pubxml" />
+    <Content Include="Scripts\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\cldr.js" />
+    <Content Include="Scripts\cldr\event.js" />
+    <Content Include="Scripts\cldr\supplemental.js" />
+    <Content Include="Scripts\cldr\unresolved.js" />
+    <Content Include="Scripts\DataTables\autoFill.bootstrap.js" />
+    <Content Include="Scripts\DataTables\autoFill.bootstrap.min.js" />
+    <Content Include="Scripts\DataTables\autoFill.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\autoFill.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\autoFill.foundation.js" />
+    <Content Include="Scripts\DataTables\autoFill.foundation.min.js" />
+    <Content Include="Scripts\DataTables\autoFill.jqueryui.js" />
+    <Content Include="Scripts\DataTables\autoFill.jqueryui.min.js" />
+    <Content Include="Scripts\DataTables\autoFill.semanticui.js" />
+    <Content Include="Scripts\DataTables\autoFill.semanticui.min.js" />
+    <Content Include="Scripts\DataTables\buttons.bootstrap.js" />
+    <Content Include="Scripts\DataTables\buttons.bootstrap.min.js" />
+    <Content Include="Scripts\DataTables\buttons.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\buttons.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\buttons.colVis.js" />
+    <Content Include="Scripts\DataTables\buttons.colVis.min.js" />
+    <Content Include="Scripts\DataTables\buttons.flash.js" />
+    <Content Include="Scripts\DataTables\buttons.flash.min.js" />
+    <Content Include="Scripts\DataTables\buttons.foundation.js" />
+    <Content Include="Scripts\DataTables\buttons.foundation.min.js" />
+    <Content Include="Scripts\DataTables\buttons.html5.js" />
+    <Content Include="Scripts\DataTables\buttons.html5.min.js" />
+    <Content Include="Scripts\DataTables\buttons.jqueryui.js" />
+    <Content Include="Scripts\DataTables\buttons.jqueryui.min.js" />
+    <Content Include="Scripts\DataTables\buttons.print.js" />
+    <Content Include="Scripts\DataTables\buttons.print.min.js" />
+    <Content Include="Scripts\DataTables\buttons.semanticui.js" />
+    <Content Include="Scripts\DataTables\buttons.semanticui.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.autoFill.js" />
+    <Content Include="Scripts\DataTables\dataTables.autoFill.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.bootstrap.js" />
+    <Content Include="Scripts\DataTables\dataTables.bootstrap.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\dataTables.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.buttons.js" />
+    <Content Include="Scripts\DataTables\dataTables.buttons.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.colReorder.js" />
+    <Content Include="Scripts\DataTables\dataTables.colReorder.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.fixedColumns.js" />
+    <Content Include="Scripts\DataTables\dataTables.fixedColumns.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.fixedHeader.js" />
+    <Content Include="Scripts\DataTables\dataTables.fixedHeader.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.foundation.js" />
+    <Content Include="Scripts\DataTables\dataTables.foundation.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.jqueryui.js" />
+    <Content Include="Scripts\DataTables\dataTables.jqueryui.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.keyTable.js" />
+    <Content Include="Scripts\DataTables\dataTables.keyTable.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.material.js" />
+    <Content Include="Scripts\DataTables\dataTables.material.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.responsive.js" />
+    <Content Include="Scripts\DataTables\dataTables.responsive.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.rowGroup.js" />
+    <Content Include="Scripts\DataTables\dataTables.rowGroup.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.rowReorder.js" />
+    <Content Include="Scripts\DataTables\dataTables.rowReorder.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.scroller.js" />
+    <Content Include="Scripts\DataTables\dataTables.scroller.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.select.js" />
+    <Content Include="Scripts\DataTables\dataTables.select.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.semanticui.js" />
+    <Content Include="Scripts\DataTables\dataTables.semanticui.min.js" />
+    <Content Include="Scripts\DataTables\dataTables.uikit.js" />
+    <Content Include="Scripts\DataTables\dataTables.uikit.min.js" />
+    <Content Include="Scripts\DataTables\datetime-moment.js" />
+    <Content Include="Scripts\DataTables\jquery.dataTables.js" />
+    <Content Include="Scripts\DataTables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap.min.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\responsive.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\responsive.foundation.js" />
+    <Content Include="Scripts\DataTables\responsive.foundation.min.js" />
+    <Content Include="Scripts\DataTables\responsive.jqueryui.js" />
+    <Content Include="Scripts\DataTables\responsive.jqueryui.min.js" />
+    <Content Include="Scripts\DataTables\responsive.semanticui.js" />
+    <Content Include="Scripts\DataTables\responsive.semanticui.min.js" />
+    <Content Include="Scripts\globalize.js" />
+    <Content Include="Scripts\globalize\currency.js" />
+    <Content Include="Scripts\globalize\date.js" />
+    <Content Include="Scripts\globalize\message.js" />
+    <Content Include="Scripts\globalize\number.js" />
+    <Content Include="Scripts\globalize\plural.js" />
+    <Content Include="Scripts\globalize\relative-time.js" />
+    <Content Include="Scripts\globalize\unit.js" />
+    <Content Include="Scripts\cldr\main\de\ca-gregorian.json" />
+    <Content Include="Scripts\cldr\main\de\timeZoneNames.json" />
+    <Content Include="Scripts\cldr\main\de\numbers.json" />
+    <Content Include="Scripts\cldr\supplemental\likelySubtags.json" />
+    <Content Include="Scripts\cldr\supplemental\numberingSystems.json" />
+    <Content Include="Scripts\cldr\supplemental\timeData.json" />
+    <Content Include="Scripts\cldr\supplemental\weekData.json" />
+    <None Include="Properties\PublishProfiles\New Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\New Prod.pubxml" />
+    <Content Include="ReportTemplates\Fax - Kein Wachstum v1.docx" />
+    <Content Include="ReportTemplates\Fax - Nicht Invasiv v1.docx" />
+    <Content Include="ReportTemplates\Kein Wachstum v1.docx" />
+    <Content Include="ReportTemplates\Nicht Invasiv v1.docx" />
+    <None Include="Scripts\jquery-3.7.1.intellisense.js" />
+    <Content Include="Scripts\imagemodule.js" />
+    <Content Include="Scripts\jquery-3.7.1.js" />
+    <Content Include="Scripts\jquery-3.7.1.min.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.7.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.7.1.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.globalize.js" />
+    <Content Include="Scripts\jquery.validate.globalize.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\moment-with-locales.js" />
+    <Content Include="Scripts\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\moment.min.js" />
+    <Content Include="Scripts\select2.js" />
+    <Content Include="Scripts\dataTables.german.js" />
+    <None Include="Properties\PublishProfiles\Prod Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Test Deploy.pubxml" />
+    <Content Include="ReportTemplates\Meningo\Fax - Nativmaterial v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Teilbefund - v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Fax - Untersuchungsbefund v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Nativmaterial v2.docx" />
+    <Content Include="ReportTemplates\Meningo\Untersuchungsbefund v2.docx" />
+    <Content Include="ReportTemplates\BLNAR v10.docx" />
+    <Content Include="ReportTemplates\BLNAS v10.docx" />
+    <Content Include="ReportTemplates\BLPACR v10.docx" />
+    <Content Include="ReportTemplates\BLPACS v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLNAR v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLNAS v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLPACR v10.docx" />
+    <Content Include="ReportTemplates\Fax - BLPACS v10.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Cipro-R v3.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Ampi-S Imi-R v3.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - Kein Haemophilus v3.docx" />
+    <Content Include="ReportTemplates\Fax - Sonstige - lowBLNAR CTX-R Imi-R v3.docx" />
+    <Content Include="ReportTemplates\Fax - Teilbefund - Serotyp v4.docx" />
+    <Content Include="ReportTemplates\Sonstige - Ampi-S Cipro-R v3.docx" />
+    <Content Include="ReportTemplates\Sonstige - Ampi-S Imi-R v3.docx" />
+    <Content Include="ReportTemplates\Sonstige - Kein Haemophilus v3.docx" />
+    <Content Include="ReportTemplates\Sonstige - lowBLNAR CTX-R Imi-R v3.docx" />
+    <Content Include="Images\logo1.png" />
+    <Content Include="Images\logo2.png" />
+    <Content Include="Images\logo3.png" />
+    <Content Include="Scripts\base64.js" />
+    <Content Include="Scripts\jquery-browser.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jszip.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\site.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config" />
+    <Content Include="Views\MeningoPatientSending\IrisExport.cshtml" />
+    <Content Include="Views\PatientSending\PubMlstExport.cshtml" />
+    <Content Include="Views\MeningoPatientSending\StateAuthorityExport.cshtml" />
+    <Content Include="Views\MeningoPatientSending\RkiExport.cshtml" />
+    <Content Include="Views\MeningoSender\Export.cshtml" />
+    <Content Include="Scripts\moment.min.js.map" />
+    <Content Include="Scripts\moment-with-locales.min.js.map" />
+    <Content Include="Views\MeningoPatientSending\MergePatient.cshtml" />
+    <Content Include="Views\MeningoPatientSending\MergePatientConfirmation.cshtml" />
+    <Content Include="Views\MeningoPatientSending\MergePatientSuccess.cshtml" />
+    <Content Include="Views\PatientSending\MergePatient.cshtml" />
+    <Content Include="Views\PatientSending\MergePatientConfirmation.cshtml" />
+    <Content Include="Views\PatientSending\MergePatientSuccess.cshtml" />
+    <None Include="Web.template.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.template.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.template.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\_RemoveAccountPartial.cshtml" />
+    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Manage.cshtml" />
+    <Content Include="Views\Role\Create.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Sender\Create.cshtml" />
+    <Content Include="Views\Sender\Delete.cshtml" />
+    <Content Include="Views\Sender\Details.cshtml" />
+    <Content Include="Views\Sender\Edit.cshtml" />
+    <Content Include="Views\Sender\Index.cshtml" />
+    <Content Include="Views\View1.cshtml" />
+    <Content Include="Views\Sender\_CreateOrEdit.cshtml" />
+    <Content Include="Views\Shared\_CreateButton.cshtml" />
+    <Content Include="Views\Shared\_EditButton.cshtml" />
+    <Content Include="Views\Patient\Create.cshtml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Content Include="Views\Patient\Delete.cshtml" />
+    <Content Include="Views\Patient\Details.cshtml" />
+    <Content Include="Views\Patient\Edit.cshtml" />
+    <Content Include="Views\Patient\Index.cshtml" />
+    <Content Include="Views\Shared\_QueryGoogleMaps.cshtml" />
+    <Content Include="Views\Shared\_QueryPostalCodeViaGeonames.cshtml" />
+    <Content Include="Views\Sending\Create.cshtml" />
+    <Content Include="Views\Sending\Delete.cshtml" />
+    <Content Include="Views\Sending\Details.cshtml" />
+    <Content Include="Views\Sending\Edit.cshtml" />
+    <Content Include="Views\Sending\Index.cshtml" />
+    <Content Include="Views\PatientSending\Create.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Patient.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Sending.cshtml" />
+    <Content Include="Views\PatientSending\Index.cshtml" />
+    <Content Include="Views\PatientSending\Edit.cshtml" />
+    <Content Include="Views\Isolate\Edit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EpsilometerTestViewModel.cshtml" />
+    <Content Include="Views\Report\Isolate.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SendingConclusion.cshtml" />
+    <Content Include="Views\County\Create.cshtml" />
+    <Content Include="Views\County\Delete.cshtml" />
+    <Content Include="Views\County\Details.cshtml" />
+    <Content Include="Views\County\Edit.cshtml" />
+    <Content Include="Views\County\Index.cshtml" />
+    <Content Include="Views\County\Upload.cshtml" />
+    <Content Include="Views\PatientSending\RkiExport.cshtml" />
+    <Content Include="Views\MeningoPatientSending\LaboratoryExport.cshtml" />
+    <Content Include="Views\Shared\_DeleteButton.cshtml" />
+    <Content Include="Views\Sender\Deleted.cshtml" />
+    <Content Include="Views\Home\Change.cshtml" />
+    <Content Include="Views\PatientSending\Delete.cshtml" />
+    <Content Include="Views\PatientSending\Deleted.cshtml" />
+    <Content Include="Views\Sender\Export.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Create.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Delete.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Details.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Edit.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\Index.cshtml" />
+    <Content Include="Views\EucastClinicalBreakpoints\_CreateOrEdit.cshtml" />
+    <Content Include="Views\Role\Index.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\HealthOffices\_CreateOrEdit.cshtml" />
+    <Content Include="Views\HealthOffices\Delete.cshtml" />
+    <Content Include="Views\HealthOffices\Details.cshtml" />
+    <Content Include="Views\HealthOffices\Edit.cshtml" />
+    <Content Include="Views\HealthOffices\Index.cshtml" />
+    <Content Include="Views\HealthOffices\Create.cshtml" />
+    <Content Include="Views\MeningoPatient\Create.cshtml" />
+    <Content Include="Views\MeningoPatient\Delete.cshtml" />
+    <Content Include="Views\MeningoPatient\Details.cshtml" />
+    <Content Include="Views\MeningoPatient\Edit.cshtml" />
+    <Content Include="Views\MeningoPatient\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MeningoPatient.cshtml" />
+    <Content Include="Views\RkiMatch\Index.cshtml" />
+    <Content Include="Views\MeningoSending\Create.cshtml" />
+    <Content Include="Views\MeningoSending\Delete.cshtml" />
+    <Content Include="Views\MeningoSending\Details.cshtml" />
+    <Content Include="Views\MeningoSending\Edit.cshtml" />
+    <Content Include="Views\MeningoSending\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MeningoSending.cshtml" />
+    <Content Include="Views\MeningoPatientSending\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MeningoSendingConclusion.cshtml" />
+    <Content Include="Views\MeningoPatientSending\Edit.cshtml" />
+    <Content Include="Views\MeningoPatientSending\Create.cshtml" />
+    <Content Include="Views\MeningoIsolate\Edit.cshtml" />
+    <Content Include="Views\MeningoReport\Isolate.cshtml" />
+    <Content Include="Views\MeningoIsolate\PubMlstMatch.cshtml" />
+    <Content Include="Views\MeningoIsolate\PubMlstMatchResult.cshtml" />
+    <Content Include="Views\PatientSending\LaboratoryExport.cshtml" />
   </ItemGroup>
 
   <!-- Content items with special dependencies (not auto-included by SDK) -->
@@ -167,4 +961,201 @@
     <None Include="NLog.xsd" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
+</Project>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\MyResources.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>MyResources.Designer.cs</LastGenOutput>
+    </Content>
+    <EmbeddedResource Include="Migrations\201311070607139_InitialCreate.resx">
+      <DependentUpon>201311070607139_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311070703159_RefinedSender.resx">
+      <DependentUpon>201311070703159_RefinedSender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311181323010_ChangedRequiredFieldsOnSender.resx">
+      <DependentUpon>201311181323010_ChangedRequiredFieldsOnSender.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311242304525_Patient.resx">
+      <DependentUpon>201311242304525_Patient.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401061223272_RefinedPatient.resx">
+      <DependentUpon>201401061223272_RefinedPatient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401081931532_RefinedSender1.resx">
+      <DependentUpon>201401081931532_RefinedSender1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201401100947336_Sending.resx">
+      <DependentUpon>201401100947336_Sending.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201402032311285_Isolate_1.resx">
+      <DependentUpon>201402032311285_Isolate_1.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201403252007478_Isolate_2.resx">
+      <DependentUpon>201403252007478_Isolate_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404142153397_Sending_Add_ForeignKeyToPatient.resx">
+      <DependentUpon>201404142153397_Sending_Add_ForeignKeyToPatient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404160613229_Update_AspNetIdentity_Version_2.resx">
+      <DependentUpon>201404160613229_Update_AspNetIdentity_Version_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201404231940084_Isolate_3_Default_To_ND.resx">
+      <DependentUpon>201404231940084_Isolate_3_Default_To_ND.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405051839287_Isolate_4_Add_StemNumber.resx">
+      <DependentUpon>201405051839287_Isolate_4_Add_StemNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405061900327_Isolate_5_AddMatchesAndMaldiTof.resx">
+      <DependentUpon>201405061900327_Isolate_5_AddMatchesAndMaldiTof.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.resx">
+      <DependentUpon>201406102134059_Isolate_6_AddBestMatchForApiNHAnd16SrRNA.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406142110467_Isolate_7_AddRemark.resx">
+      <DependentUpon>201406142110467_Isolate_7_AddRemark.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408312049376_RefinedPatient2.resx">
+      <DependentUpon>201408312049376_RefinedPatient2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.resx">
+      <DependentUpon>201408312132390_Isolate_8_BestMatchForMaldiAndMovedEvaluationAndReportDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409221954353_Isolate_9_ftsi_MLST.resx">
+      <DependentUpon>201409221954353_Isolate_9_ftsi_MLST.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409281610249_Sending_2_Rename_Material_To_SamplingLocation.resx">
+      <DependentUpon>201409281610249_Sending_2_Rename_Material_To_SamplingLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.resx">
+      <DependentUpon>201409281805458_Sending_3_Add_Material_And_Make_SamplingDate_Optional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502112024310_County.resx">
+      <DependentUpon>201502112024310_County.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201506301117277_Isolate_10_Growth.resx">
+      <DependentUpon>201506301117277_Isolate_10_Growth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507140902578_Sender_Delete.resx">
+      <DependentUpon>201507140902578_Sender_Delete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201507201311481_Sending_Delete.resx">
+      <DependentUpon>201507201311481_Sending_Delete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.resx">
+      <DependentUpon>201604072345545_EucastClinicalBreakpoint_Make_Some_Fields_Optional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704192201344_HealthOffice.resx">
+      <DependentUpon>201704192201344_HealthOffice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704202158587_Isolate_11_ftsi_Eval3.resx">
+      <DependentUpon>201704202158587_Isolate_11_ftsi_Eval3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201802182157080_RkiMatch.resx">
+      <DependentUpon>201802182157080_RkiMatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807022228523_Isolate_12_ReportStatus.resx">
+      <DependentUpon>201807022228523_Isolate_12_ReportStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201807251901482_MeningoPatientAndSending.resx">
+      <DependentUpon>201807251901482_MeningoPatientAndSending.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901052104363_Meningo_Isolate_1.resx">
+      <DependentUpon>201901052104363_Meningo_Isolate_1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901061232221_Meningo_Isolate_2_TypeOfGrowth.resx">
+      <DependentUpon>201901061232221_Meningo_Isolate_2_TypeOfGrowth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901122122392_Meningo_Isolate_3_Agglutination.resx">
+      <DependentUpon>201901122122392_Meningo_Isolate_3_Agglutination.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901122131264_Meningo_Isolate_4_Onpg.resx">
+      <DependentUpon>201901122131264_Meningo_Isolate_4_Onpg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901122155487_Meningo_Isolate_5_GammaGt.resx">
+      <DependentUpon>201901122155487_Meningo_Isolate_5_GammaGt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901122211462_Meningo_Isolate_6_SerogroupPcr.resx">
+      <DependentUpon>201901122211462_Meningo_Isolate_6_SerogroupPcr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.resx">
+      <DependentUpon>201901142109394_MeningoSending_2_InvasiveAndNonInvasiveSamplingLocation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901182207369_Meningo_Isolate_7_Growth.resx">
+      <DependentUpon>201901182207369_Meningo_Isolate_7_Growth.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901182228325_Meningo_Isolate_8_AdditionalFields.resx">
+      <DependentUpon>201901182228325_Meningo_Isolate_8_AdditionalFields.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901200043344_EucastClinicalBreakpoint_Add_ValidFor.resx">
+      <DependentUpon>201901200043344_EucastClinicalBreakpoint_Add_ValidFor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901200118468_EucastClinicalBreakpoint_Update_Index.resx">
+      <DependentUpon>201901200118468_EucastClinicalBreakpoint_Update_Index.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.resx">
+      <DependentUpon>201901222142537_Meningo_Isolate_9_AdditionalMolecularTypings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901232227223_Meningo_Isolate_10_RealTimePcr.resx">
+      <DependentUpon>201901232227223_Meningo_Isolate_10_RealTimePcr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904012024228_NeisseriaPubMlstIsolate.resx">
+      <DependentUpon>201904012024228_NeisseriaPubMlstIsolate.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != '' And Exists('$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets')" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>49310</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:49310/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <PropertyGroup Condition="'$(OS)' == 'Windows_NT'">
+    <BuildDependsOn>
+	  CustomWebConfigTransform;
+	  $(BuildDependsOn);
+    </BuildDependsOn>
+  </PropertyGroup>
+  <Target Name="CustomWebConfigTransform" Condition="'$(OS)' == 'Windows_NT'">
+    <TransformXml source="Web.template.config" transform="Web.$(Configuration).config" destination="Web.config" />
+  </Target>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+  <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
 </Project>

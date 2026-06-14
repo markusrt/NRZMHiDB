@@ -12,6 +12,7 @@ namespace HaemophilusWeb.Views.Utils
 {
     public static class EnumEditor
     {
+        public const string HiddenOnUserInterface = "~~hidden~~";
         private static readonly SelectListItem[] SingleEmptyItem = {new SelectListItem {Text = "", Value = ""}};
 
         private static Type GetNonNullableModelType(ModelMetadata modelMetadata)
@@ -52,6 +53,7 @@ namespace HaemophilusWeb.Views.Utils
 
             var items = from value in GetEnumValues<TEnum>(modelMetadata)
                 orderby GetEnumDescription(value)
+                where GetEnumDescription(value) != HiddenOnUserInterface
                 select new SelectListItem
                 {
                     Text = GetEnumDescription(value),
@@ -90,7 +92,9 @@ namespace HaemophilusWeb.Views.Utils
             foreach (var value in GetEnumValues<TEnum>(modelMetadata))
             {
                 var intValue = Convert.ToInt32(value);
-                if (isFlagsEnum && intValue == 0)
+                var description = GetEnumDescription(value);
+
+                if (isFlagsEnum && intValue == 0 || description == HiddenOnUserInterface)
                 {
                     continue;
                 }
@@ -98,7 +102,6 @@ namespace HaemophilusWeb.Views.Utils
                 var name = GetName(modelMetadata, value);
                 var id = $"{modelMetadata.PropertyName}_{name}";
                 var isActive = currentValue == name || isFlagsEnum && (intValue & Convert.ToInt32(currentEnumValue)) == intValue;
-                var description = GetEnumDescription(value);
                 if (shortName)
                 {
                     description = description.First().ToString();

@@ -133,7 +133,7 @@ namespace HaemophilusWeb.Domain
                     var template = TypingTemplates[typingTemplateKey];
                     typings.Add(new Typing
                     {
-                        Attribute = template.Attribute,
+                        Attribute = Smart.Format(template.Attribute, isolate, rule),
                         Value = Smart.Format(template.Value, isolate, rule)
                     });
                 }
@@ -164,7 +164,7 @@ namespace HaemophilusWeb.Domain
                     var template = TypingTemplates[templateKey];
                     typings.Add(new Typing
                     {
-                        Attribute = template.Attribute,
+                        Attribute = Smart.Format(template.Attribute, isolate),
                         Value = Smart.Format(template.Value, isolate)
                     });
                 }

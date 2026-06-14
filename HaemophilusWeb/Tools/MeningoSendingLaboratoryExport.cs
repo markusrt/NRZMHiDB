@@ -63,6 +63,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.CswyPcr));
             AddField(s => ExportToString(s.Isolate.CswyAllele));
             AddField(s => ExportToString(s.Isolate.RealTimePcr));
+            AddField(s => ExportToString(s.Isolate.RealTimePcrDevice));
             AddField(s => ExportToString(s.Isolate.RealTimePcrResult));
             AddField(s => ExportToString(s.Isolate.RibosomalRna16S));
             AddField(s => ExportToString(s.Isolate.RibosomalRna16SBestMatch));
