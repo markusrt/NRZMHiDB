@@ -18,6 +18,8 @@ namespace HaemophilusWeb.Models
 
         IDbSet<HealthOffice> HealthOffices { get; }
 
+        IDbSet<ConfigurationEntry> ConfigurationEntries { get; }
+
         IDbSet<EpsilometerTest> EpsilometerTests { get; }
 
         IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints { get; }
