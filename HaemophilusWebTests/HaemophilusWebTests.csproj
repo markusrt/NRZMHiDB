@@ -233,6 +233,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\GeonamesServiceTest.cs" />
     <Compile Include="Services\IrisPubMlstServiceTests.cs" />
+    <Compile Include="Services\ConfigurationServiceTests.cs" />
     <Compile Include="Services\NeisseriaPubMlstServiceTests.cs" />
     <Compile Include="Services\PubMlstMatcherTests.cs" />
     <Compile Include="TestDoubles\Isolate.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Validators\EpsilometerTestValidatorTest.cs" />
     <Compile Include="Validators\IsolateViewModelValidatorTests.cs" />
     <Compile Include="Validators\HealthOfficeValidatorTests.cs" />
+    <Compile Include="Validators\ConfigurationViewModelValidatorTests.cs" />
     <Compile Include="Validators\MeningoPatientValidatorTests.cs" />
     <Compile Include="Validators\PatientValidatorTests.cs" />
     <Compile Include="Validators\MeningoIsolateViewModelValidatorTests.cs" />

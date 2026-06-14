@@ -51,7 +51,7 @@ namespace HaemophilusWeb.Automapper
             destination.Report = isolateInterpretation.Result.Report;
             destination.Typings = isolateInterpretation.Typings;
             destination.Comment = isolateInterpretation.Result.Comment;
-            destination.Announcement = ConfigurationManager.AppSettings["Announcement"];
+            ApplyReportConfiguration(destination);
 
             if (!string.IsNullOrEmpty(source.Sending.DemisId))
             {

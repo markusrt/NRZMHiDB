@@ -13,7 +13,7 @@ using HaemophilusWeb.Views.Utils;
 namespace HaemophilusWeb.ViewModels
 {
     [Validator(typeof (IsolateViewModelValidator))]
-    public class IsolateViewModel : IsolateBase
+    public class IsolateViewModel : IsolateBase, IReportConfigurationTarget
     {
         public IsolateViewModel()
         {
@@ -142,6 +142,13 @@ namespace HaemophilusWeb.ViewModels
         public bool HasAnnouncement => !string.IsNullOrEmpty(Announcement);
 
         public bool HasCommentOrAnnouncement => HasComment || HasAnnouncement;
+
+        public string LabDirector { get; set; }
+
+        public string MedicalDirector { get; set; }
+
+        public string Contacts { get; set; }
+        public bool HasContacts => !string.IsNullOrEmpty(Contacts);
 
         public string DemisIdQrImageUrl { get; set; }
 

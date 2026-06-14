@@ -30,6 +30,8 @@ namespace HaemophilusWeb.Models
 
         public IDbSet<HealthOffice> HealthOffices => wrappedContext.HealthOffices;
 
+        public IDbSet<ConfigurationEntry> ConfigurationEntries => wrappedContext.ConfigurationEntries;
+
         public IDbSet<EpsilometerTest> EpsilometerTests => wrappedContext.EpsilometerTests;
 
         public IDbSet<EucastClinicalBreakpoint> EucastClinicalBreakpoints => wrappedContext.EucastClinicalBreakpoints;

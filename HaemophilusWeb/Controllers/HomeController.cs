@@ -22,6 +22,7 @@ namespace HaemophilusWeb.Controllers
             },
             new List<Change>
             {
+                new Change(new DateTime(2026, 6, 14), "Konfiguration von Unterzeichnern, Mitteilung im Befund, Leitungsnamen und Kontaktdaten über das Menü Administration", 214, ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2026, 2, 24), "Update Befundvorlagen gemäß DAkkS Reviewanmerkungen", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2026, 2, 23), "Auswahlmöglichkeit für Gerät bei Real-Time-PCR", ChangeType.Feature, DatabaseType.None),
                 new Change(new DateTime(2025, 10, 9), "Update PubMLST Abfrage", ChangeType.Feature, DatabaseType.Meningococci),
