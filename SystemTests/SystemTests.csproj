@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\NUnit.4.3.2\build\NUnit.props" Condition="Exists('..\packages\NUnit.4.3.2\build\NUnit.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -39,6 +39,10 @@
     <Reference Include="FluentAssertions, Version=8.2.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.8.2.0\lib\net47\FluentAssertions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.9.0.3\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="nunit.framework, Version=4.3.2.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.4.3.2\lib\net462\nunit.framework.dll</HintPath>
     </Reference>
@@ -51,6 +55,10 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Pipelines, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.IO.Pipelines.9.0.3\lib\net462\System.IO.Pipelines.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Memory, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.6.2\lib\net462\System.Memory.dll</HintPath>
     </Reference>
@@ -61,14 +69,22 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.1\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Text.Encodings.Web, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Text.Encodings.Web.9.0.3\lib\net462\System.Text.Encodings.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Text.Json, Version=9.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Text.Json.9.0.3\lib\net462\System.Text.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebDriver, Version=2.48.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Selenium.WebDriver.2.48.2\lib\net40\WebDriver.dll</HintPath>
+    <Reference Include="WebDriver, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Selenium.WebDriver.4.30.0\lib\netstandard2.0\WebDriver.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -88,8 +104,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NUnit.4.3.2\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.4.3.2\build\NUnit.props'))" />
     <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
+    <Error Condition="!Exists('../packages/Selenium.WebDriver.4.30.0/build/Selenium.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '../packages/Selenium.WebDriver.4.30.0/build/Selenium.WebDriver.targets'))" />
   </Target>
   <Import Project="..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
+  <Import Project="../packages/Selenium.WebDriver.4.30.0/build/Selenium.WebDriver.targets" Condition="Exists('../packages/Selenium.WebDriver.4.30.0/build/Selenium.WebDriver.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
