@@ -13,7 +13,7 @@ namespace HaemophilusWeb.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202604170521000_Isolate_PenicillinAdt"; }
+            get { return "202607080444509_Isolate_PenicillinAdt"; }
         }
         
         string IMigrationMetadata.Source

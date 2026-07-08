@@ -77,10 +77,9 @@ namespace HaemophilusWeb.Views.Utils
             Expression<Func<TModel, TProperty>> expression, string radioColSmXClass = ColSm5, string id = null, string suffix = null)
         {
             var label = htmlHelper.LabelFor(expression);
-            var enumRadioButton = htmlHelper.EnumRadioButtonFor(expression).ToHtmlString();
-            var suffixHtml = string.IsNullOrEmpty(suffix) ? string.Empty : " " + suffix;
+            var enumRadioButton = htmlHelper.EnumRadioButtonFor(expression, suffix:suffix).ToHtmlString();
 
-            var enumRadioEditor = string.Format(DivSmX, radioColSmXClass, enumRadioButton, suffixHtml);
+            var enumRadioEditor = string.Format(DivSmX, radioColSmXClass, enumRadioButton, string.Empty);
 
             return CreateFormGroup(label, enumRadioEditor, id);
         }
