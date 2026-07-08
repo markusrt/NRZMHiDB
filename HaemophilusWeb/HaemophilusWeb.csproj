@@ -392,6 +392,7 @@
     <Compile Include="Migrations\202604170521000_Isolate_PenicillinAdt.cs" />
     <Compile Include="Migrations\202604170521000_Isolate_PenicillinAdt.Designer.cs">
       <DependentUpon>202604170521000_Isolate_PenicillinAdt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\202606130800504_AddConfigurationEntries.cs" />
     <Compile Include="Migrations\202606130800504_AddConfigurationEntries.Designer.cs">
       <DependentUpon>202606130800504_AddConfigurationEntries.cs</DependentUpon>
@@ -1010,6 +1011,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202604170521000_Isolate_PenicillinAdt.resx">
       <DependentUpon>202604170521000_Isolate_PenicillinAdt.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202606130800504_AddConfigurationEntries.resx">
       <DependentUpon>202606130800504_AddConfigurationEntries.cs</DependentUpon>
     </EmbeddedResource>
