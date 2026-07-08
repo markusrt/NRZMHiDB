@@ -19,6 +19,7 @@ namespace HaemophilusWeb.Models
         public readonly InMemoryDbSet<Isolate> IsolatesDbSet = new InMemoryDbSet<Isolate>(true);
         public readonly InMemoryDbSet<County> CountiesDbSet = new InMemoryDbSet<County>(true);
         public readonly InMemoryDbSet<HealthOffice> HealthOfficesDbSet = new InMemoryDbSet<HealthOffice>(true);
+        public readonly InMemoryDbSet<ConfigurationEntry> ConfigurationEntriesDbSet = new InMemoryDbSet<ConfigurationEntry>(true);
         public readonly InMemoryDbSet<EpsilometerTest> EpsilometerTestsDbSet = new InMemoryDbSet<EpsilometerTest>(true);
         public readonly InMemoryDbSet<MeningoPatient> MeningoPatientsDbSet = new InMemoryDbSet<MeningoPatient>(true);
         public readonly InMemoryDbSet<MeningoSending> MeningoSendingsDbSet = new InMemoryDbSet<MeningoSending>(true);
@@ -43,6 +44,8 @@ namespace HaemophilusWeb.Models
         public IDbSet<County> Counties => CountiesDbSet;
 
         public IDbSet<HealthOffice> HealthOffices => HealthOfficesDbSet;
+
+        public IDbSet<ConfigurationEntry> ConfigurationEntries => ConfigurationEntriesDbSet;
 
         public IDbSet<EpsilometerTest> EpsilometerTests => EpsilometerTestsDbSet;
 

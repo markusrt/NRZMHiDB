@@ -1,0 +1,99 @@
+@using HaemophilusWeb.Views.Utils
+@model HaemophilusWeb.ViewModels.ConfigurationViewModel
+
+@{
+    ViewBag.Title = "Konfiguration";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" id="successAlert">@TempData["SuccessMessage"]</div>
+}
+
+@using (Html.BeginForm("Edit", "Configuration", FormMethod.Post, new { @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.ReportSigners, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.TextAreaFor(m => m.ReportSigners, new { @class = "form-control", rows = 4 })
+            <span class="help-block">Ein Unterzeichner pro Zeile.</span>
+            @Html.ValidationMessageFor(m => m.ReportSigners)
+        </div>
+    </div>
+
+    <hr />
+    <h4 class="col-sm-offset-2">Mitteilung im Befund</h4>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AnnouncementText, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.TextAreaFor(m => m.AnnouncementText, new { @class = "form-control", rows = 3 })
+            <span class="help-block">Wird im Befund nur innerhalb des G&uuml;ltigkeitszeitraums angezeigt.</span>
+            @Html.ValidationMessageFor(m => m.AnnouncementText)
+        </div>
+    </div>
+    @Html.DateEditorFor(m => m.AnnouncementStart)
+    @Html.DateEditorFor(m => m.AnnouncementEnd)
+
+    <hr />
+    <h4 class="col-sm-offset-2">Leitung und Kontakte</h4>
+    @Html.TextEditorFor(m => m.LabDirector)
+    @Html.TextEditorFor(m => m.MedicalDirector)
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Contacts, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-5">
+            @Html.TextAreaFor(m => m.Contacts, new { @class = "form-control", rows = 12 })
+            <span class="help-block">Mehrere Kontaktbl&ouml;cke durch eine Leerzeile trennen. Zeilenumbr&uuml;che innerhalb eines Blocks bleiben erhalten.</span>
+            @Html.ValidationMessageFor(m => m.Contacts)
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Speichern</button>
+            @Html.ActionLink("Abbrechen", "Index", "Home", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+}
+
+@section scripts {
+<script>
+    $(function () {
+        function parseDE(s) {
+            var p = s.split('.');
+            return p.length === 3 ? new Date(+p[2], p[1] - 1, +p[0]) : null;
+        }
+
+        function validateDateRange() {
+            var startVal = $("#AnnouncementStart").val();
+            var endVal   = $("#AnnouncementEnd").val();
+            var span     = $("span[data-valmsg-for='AnnouncementEnd']");
+            if (startVal && endVal) {
+                var d1 = parseDE(startVal), d2 = parseDE(endVal);
+                if (d1 && d2 && d2 < d1) {
+                    span.text("Das Enddatum darf nicht vor dem Startdatum liegen.");
+                    span.addClass("field-validation-error").removeClass("field-validation-valid");
+                    return false;
+                }
+            }
+            span.text("").addClass("field-validation-valid").removeClass("field-validation-error");
+            return true;
+        }
+
+        $("#AnnouncementStart, #AnnouncementEnd").on("dp.change change", validateDateRange);
+
+        $("form").on("submit", function (e) {
+            if (!validateDateRange()) {
+                e.preventDefault();
+            }
+        });
+
+        setTimeout(function () {
+            $("#successAlert").fadeOut(800);
+        }, 4000);
+    });
+</script>
+}

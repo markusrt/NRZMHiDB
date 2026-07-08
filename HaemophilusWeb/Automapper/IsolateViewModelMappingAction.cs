@@ -42,7 +42,7 @@ namespace HaemophilusWeb.Automapper
             destination.InterpretationPreliminary = interpretationResult.InterpretationPreliminary;
             destination.InterpretationDisclaimer = interpretationResult.InterpretationDisclaimer;
             destination.Comment = interpretationResult.Comment;
-            destination.Announcement = ConfigurationManager.AppSettings["Announcement"];
+            ApplyReportConfiguration(destination);
 
             if (!string.IsNullOrEmpty(source.Sending.DemisId))
             {

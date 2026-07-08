@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Services;
 using HaemophilusWeb.Tools;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
@@ -108,7 +109,8 @@ namespace HaemophilusWeb.Controllers
 
         private void AddReportSignersToViewBag()
         {
-            ViewBag.ReportSigners = ConfigurationManager.AppSettings["reportSigners"].Split(';');
+            var configuration = new ConfigurationService(db);
+            ViewBag.ReportSigners = configuration.GetReportSigners();
         }
 
     }
