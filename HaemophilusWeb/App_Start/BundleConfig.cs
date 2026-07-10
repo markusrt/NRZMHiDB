@@ -36,19 +36,20 @@ namespace HaemophilusWeb
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                 "~/Scripts/modernizr-*"));
 
+            // Bootstrap 5's own JS/CSS are loaded directly in _Layout (pre-minified) because the legacy
+            // System.Web.Optimization minifier cannot parse modern (ES6+) syntax. respond.js (IE8 shim)
+            // is obsolete under Bootstrap 5 and has been dropped.
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                "~/Scripts/bootstrap.js",
                 "~/Scripts/moment-with-locales.js",
                 "~/Scripts/bootstrap-datetimepicker.js",
-                "~/Scripts/select2.js",
-                "~/Scripts/respond.js"));
+                "~/Scripts/select2.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
                 "~/Scripts/site.js",
                 "~/Scripts/imagemodule.js"));
 
+            // bootstrap.min.css is linked directly in _Layout (see note on the bootstrap script bundle).
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/bootstrap.css",
                 "~/Content/bootstrap-datetimepicker.css",
                 "~/Content/select2.css",
                 "~/Content/bootstrap-select2.css",

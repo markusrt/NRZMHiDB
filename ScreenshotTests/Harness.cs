@@ -69,8 +69,11 @@ namespace ScreenshotTests
             await page.FillAsync("#Password", Seeder.Password);
             await page.ClickAsync("input[type=submit]");
 
-            // The layout renders a "Abmelden" (logout) link only when authenticated.
-            await page.WaitForSelectorAsync("text=Abmelden", new PageWaitForSelectorOptions { Timeout = 30000 });
+            // The layout renders a #logoutForm only when authenticated. Wait for it to be present in the
+            // DOM (Attached, not Visible) so the check is independent of navbar styling — the collapsed
+            // navbar hides it mid-migration, which is expected and captured by the screenshots themselves.
+            await page.WaitForSelectorAsync("#logoutForm",
+                new PageWaitForSelectorOptions { State = WaitForSelectorState.Attached, Timeout = 30000 });
 
             await context.StorageStateAsync(new BrowserContextStorageStateOptions { Path = _storageStatePath });
             await context.CloseAsync();
