@@ -61,7 +61,15 @@ namespace HaemophilusWeb.Views.Utils
             var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(simpleModel));
             var enumRadioEditorHtml = helper.EnumRadioEditorFor(m => m.HibVaccination, suffix: "test");
 
-            enumRadioEditorHtml.ToHtmlString().Should().Be($"<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label\" for=\"HibVaccination\">Hib-Impfung</label><div class=\"col-sm-5\"><div><div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"btn btn-default \"><input id=\"HibVaccination_No\" name=\"HibVaccination\" type=\"radio\" value=\"No\" /> Nein</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Yes\" name=\"HibVaccination\" type=\"radio\" value=\"Yes\" /> Ja</label><label class=\"btn btn-default active\"><input checked=\"checked\" id=\"HibVaccination_NotStated\" name=\"HibVaccination\" type=\"radio\" value=\"NotStated\" /> keine Angabe</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Unknown\" name=\"HibVaccination\" type=\"radio\" value=\"Unknown\" /> Unbekannt</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Incomplete\" name=\"HibVaccination\" type=\"radio\" value=\"Incomplete\" /> nicht vollständig</label></div><span style=\"margin-left:0.5em\" class=\"badge badge-light\">test</span></div></div></div>");
+            var html = enumRadioEditorHtml.ToHtmlString();
+            html.Should().StartWith("<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label\" for=\"HibVaccination\">Hib-Impfung</label><div class=\"col-sm-5\">");
+            html.Should().Contain("<div class=\"btn-group flex-wrap\" role=\"group\">");
+            html.Should().Contain("class=\"btn-check\"");
+            html.Should().Contain("<label class=\"btn btn-outline-secondary\" for=\"HibVaccination_NotStated\">keine Angabe</label>");
+            html.Should().Contain("checked=\"checked\"");
+            html.Should().Contain("<span style=\"margin-left:0.5em\" class=\"badge text-bg-light\">test</span>");
+            html.Should().NotContain("data-toggle");
+            html.Should().NotContain("btn-default");
         }
 
         [Test]
@@ -71,7 +79,13 @@ namespace HaemophilusWeb.Views.Utils
             var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(simpleModel));
             var enumRadioEditorHtml = helper.EnumRadioEditorFor(m => m.ClinicalInformation, "col-lg-9");
 
-            enumRadioEditorHtml.ToHtmlString().Should().Be("<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label\" for=\"ClinicalInformation\">Klinische Angaben</label><div class=\"col-lg-9\"><div><div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_NotAvailable\" name=\"ClinicalInformation\" value=\"NotAvailable\" /> k.A.</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Meningitis\" name=\"ClinicalInformation\" value=\"Meningitis\" /> Meningitis</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Sepsis\" name=\"ClinicalInformation\" value=\"Sepsis\" /> Sepsis</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Pneumonia\" name=\"ClinicalInformation\" value=\"Pneumonia\" /> Pneumonie</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Other\" name=\"ClinicalInformation\" value=\"Other\" /> Andere</label></div></div></div></div>");
+            var html = enumRadioEditorHtml.ToHtmlString();
+            html.Should().StartWith("<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label\" for=\"ClinicalInformation\">Klinische Angaben</label><div class=\"col-lg-9\">");
+            html.Should().Contain("<div class=\"btn-group flex-wrap\" role=\"group\">");
+            html.Should().Contain("<input type=\"checkbox\" class=\"btn-check\" id=\"ClinicalInformation_Meningitis\" name=\"ClinicalInformation\" value=\"Meningitis\" autocomplete=\"off\" />");
+            html.Should().Contain("<label class=\"btn btn-outline-secondary\" for=\"ClinicalInformation_Meningitis\">Meningitis</label>");
+            html.Should().NotContain("data-toggle");
+            html.Should().NotContain("btn-default");
         }
     }
 }

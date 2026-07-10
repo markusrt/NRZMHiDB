@@ -88,7 +88,9 @@ namespace HaemophilusWeb.Views.Utils
             var isFlagsEnum = enumType.GetCustomAttributes<FlagsAttribute>().Any();
 
             var sb = new StringBuilder();
-            sb.Append("<div><div class=\"btn-group\" data-toggle=\"buttons\">");
+            // Bootstrap 5 .btn-check pattern: a visually hidden input followed by a styled label. This
+            // replaces Bootstrap 3's data-toggle="buttons" plugin, which was removed in Bootstrap 5.
+            sb.Append("<div><div class=\"btn-group flex-wrap\" role=\"group\">");
             foreach (var value in GetEnumValues<TEnum>(modelMetadata))
             {
                 var intValue = Convert.ToInt32(value);
@@ -108,16 +110,15 @@ namespace HaemophilusWeb.Views.Utils
                 }
 
                 var selectHtml = isFlagsEnum ?
-                    $"<input type=\"checkbox\" id=\"{id}\" name=\"{modelMetadata.PropertyName}\" value=\"{value}\" {(isActive ? "checked" : string.Empty)}/>"
-                    : htmlHelper.RadioButtonFor(expression, name, new { id }).ToHtmlString();
+                    $"<input type=\"checkbox\" class=\"btn-check\" id=\"{id}\" name=\"{modelMetadata.PropertyName}\" value=\"{value}\" autocomplete=\"off\" {(isActive ? "checked" : string.Empty)}/>"
+                    : htmlHelper.RadioButtonFor(expression, name, new { id, @class = "btn-check", autocomplete = "off" }).ToHtmlString();
 
-                sb.AppendFormat("<label class=\"btn btn-default {2}\">{0} {1}</label>", selectHtml, description,
-                    isActive ? "active" : "");
+                sb.AppendFormat("{0}<label class=\"btn btn-outline-secondary\" for=\"{1}\">{2}</label>", selectHtml, id, description);
             }
             sb.Append("</div>");
             if (suffix != null)
             {
-                sb.Append($"<span style=\"margin-left:0.5em\" class=\"badge badge-light\">{suffix}</span>");
+                sb.Append($"<span style=\"margin-left:0.5em\" class=\"badge text-bg-light\">{suffix}</span>");
             }
             sb.Append("</div>");
             sb.Append(htmlHelper.ValidationMessageFor(expression)?.ToHtmlString());
