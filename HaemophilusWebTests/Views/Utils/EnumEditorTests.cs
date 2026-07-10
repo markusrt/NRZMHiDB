@@ -34,7 +34,7 @@ namespace HaemophilusWeb.Views.Utils
             var enumRadioEditorHtml = helper.EnumRadioButtonFor(m => m.GrowthType);
 
             enumRadioEditorHtml.ToHtmlString().Should().NotContain("GrowthType_None");
-            enumRadioEditorHtml.ToHtmlString().Should().Contain("<input type=\"checkbox\" id=\"GrowthType_GrowthOnBlood\" name=\"GrowthType\" value=\"GrowthOnBlood\" /> Wachstum auf Blut");
+            enumRadioEditorHtml.ToHtmlString().Should().Contain("<input type=\"checkbox\" class=\"btn-check\" id=\"GrowthType_GrowthOnBlood\" name=\"GrowthType\" value=\"GrowthOnBlood\" autocomplete=\"off\" /><label class=\"btn btn-outline-secondary\" for=\"GrowthType_GrowthOnBlood\">Wachstum auf Blut</label>");
         }
     }
 }
