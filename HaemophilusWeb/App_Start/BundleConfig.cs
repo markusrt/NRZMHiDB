@@ -17,7 +17,7 @@ namespace HaemophilusWeb
             bundles.Add(new ScriptBundle("~/bundles/jquerydatatable").Include(
                 "~/Scripts/DataTables/jquery.dataTables.min.js",
                 "~/Scripts/DataTables/datetime-moment.js",
-                "~/Scripts/DataTables/dataTables.bootstrap.js"));
+                "~/Scripts/DataTables/dataTables.bootstrap5.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/globalize-de-DE")
                 .Include("~/Scripts/cldr.js")
@@ -53,7 +53,7 @@ namespace HaemophilusWeb
                 "~/Content/bootstrap-datetimepicker.css",
                 "~/Content/select2.css",
                 "~/Content/bootstrap-select2.css",
-                "~/Content/DataTables/css/dataTables.bootstrap.css",
+                "~/Content/DataTables/css/dataTables.bootstrap5.min.css",
                 "~/Content/site.css"));
         }
     }
