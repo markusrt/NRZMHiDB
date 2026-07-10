@@ -29,8 +29,8 @@ namespace HaemophilusWeb.Views.Utils
             var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(new SimpleModel()));
             var textEditorHtml = helper.TextEditorFor(m => m.SimpleProperty);
 
-            textEditorHtml.ToHtmlString().Should().NotContain("input-group-addon");
-            textEditorHtml.ToHtmlString().Should().NotContain("glyphicon glyphicon-star");
+            textEditorHtml.ToHtmlString().Should().NotContain("input-group-text");
+            textEditorHtml.ToHtmlString().Should().NotContain("bi bi-star-fill");
         }
 
         [Test]
@@ -39,19 +39,19 @@ namespace HaemophilusWeb.Views.Utils
             var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(new SimpleModel()));
             var textEditorHtml = helper.TextEditorFor(m => m.SimpleProperty, prefix: "PF");
 
-            textEditorHtml.ToHtmlString().Should().Match("*<span class*input-group-addon*>PF<*span>*");
+            textEditorHtml.ToHtmlString().Should().Match("*<span class*input-group-text*>PF<*span>*");
             textEditorHtml.ToHtmlString().Should().Match("*<label*for*SimpleProperty*");
             textEditorHtml.ToHtmlString().Should().Match("*<input*form-control*id=\"SimpleProperty\" name=\"SimpleProperty\"*");
         }
 
         [Test]
-        public void TextEditorFor_RequiredProperty_ShouldContainGlyphiconStar()
+        public void TextEditorFor_RequiredProperty_ShouldContainRequiredIcon()
         {
             var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(new SimpleModel()));
             var textEditorHtml = helper.TextEditorFor(m => m.RequiredProperty);
 
-            textEditorHtml.ToHtmlString().Should().Contain("input-group-addon");
-            textEditorHtml.ToHtmlString().Should().Contain("glyphicon glyphicon-star");
+            textEditorHtml.ToHtmlString().Should().Contain("input-group-text");
+            textEditorHtml.ToHtmlString().Should().Contain("bi bi-star-fill");
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace HaemophilusWeb.Views.Utils
             var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(simpleModel));
             var enumRadioEditorHtml = helper.EnumRadioEditorFor(m => m.HibVaccination, suffix: "test");
 
-            enumRadioEditorHtml.ToHtmlString().Should().Be($"<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"HibVaccination\">Hib-Impfung</label><div class=\"col-sm-5\"><div><div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"btn btn-default \"><input id=\"HibVaccination_No\" name=\"HibVaccination\" type=\"radio\" value=\"No\" /> Nein</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Yes\" name=\"HibVaccination\" type=\"radio\" value=\"Yes\" /> Ja</label><label class=\"btn btn-default active\"><input checked=\"checked\" id=\"HibVaccination_NotStated\" name=\"HibVaccination\" type=\"radio\" value=\"NotStated\" /> keine Angabe</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Unknown\" name=\"HibVaccination\" type=\"radio\" value=\"Unknown\" /> Unbekannt</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Incomplete\" name=\"HibVaccination\" type=\"radio\" value=\"Incomplete\" /> nicht vollständig</label></div><span style=\"margin-left:0.5em\" class=\"badge badge-light\">test</span></div></div></div>");
+            enumRadioEditorHtml.ToHtmlString().Should().Be($"<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label\" for=\"HibVaccination\">Hib-Impfung</label><div class=\"col-sm-5\"><div><div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"btn btn-default \"><input id=\"HibVaccination_No\" name=\"HibVaccination\" type=\"radio\" value=\"No\" /> Nein</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Yes\" name=\"HibVaccination\" type=\"radio\" value=\"Yes\" /> Ja</label><label class=\"btn btn-default active\"><input checked=\"checked\" id=\"HibVaccination_NotStated\" name=\"HibVaccination\" type=\"radio\" value=\"NotStated\" /> keine Angabe</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Unknown\" name=\"HibVaccination\" type=\"radio\" value=\"Unknown\" /> Unbekannt</label><label class=\"btn btn-default \"><input id=\"HibVaccination_Incomplete\" name=\"HibVaccination\" type=\"radio\" value=\"Incomplete\" /> nicht vollständig</label></div><span style=\"margin-left:0.5em\" class=\"badge badge-light\">test</span></div></div></div>");
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace HaemophilusWeb.Views.Utils
             var helper = TestUtils.CreateHtmlHelper<SimpleModel>(new ViewDataDictionary(simpleModel));
             var enumRadioEditorHtml = helper.EnumRadioEditorFor(m => m.ClinicalInformation, "col-lg-9");
 
-            enumRadioEditorHtml.ToHtmlString().Should().Be("<div class=\"form-group\"><label class=\"col-sm-2 control-label\" for=\"ClinicalInformation\">Klinische Angaben</label><div class=\"col-lg-9\"><div><div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_NotAvailable\" name=\"ClinicalInformation\" value=\"NotAvailable\" /> k.A.</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Meningitis\" name=\"ClinicalInformation\" value=\"Meningitis\" /> Meningitis</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Sepsis\" name=\"ClinicalInformation\" value=\"Sepsis\" /> Sepsis</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Pneumonia\" name=\"ClinicalInformation\" value=\"Pneumonia\" /> Pneumonie</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Other\" name=\"ClinicalInformation\" value=\"Other\" /> Andere</label></div></div></div></div>");
+            enumRadioEditorHtml.ToHtmlString().Should().Be("<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label\" for=\"ClinicalInformation\">Klinische Angaben</label><div class=\"col-lg-9\"><div><div class=\"btn-group\" data-toggle=\"buttons\"><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_NotAvailable\" name=\"ClinicalInformation\" value=\"NotAvailable\" /> k.A.</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Meningitis\" name=\"ClinicalInformation\" value=\"Meningitis\" /> Meningitis</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Sepsis\" name=\"ClinicalInformation\" value=\"Sepsis\" /> Sepsis</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Pneumonia\" name=\"ClinicalInformation\" value=\"Pneumonia\" /> Pneumonie</label><label class=\"btn btn-default \"><input type=\"checkbox\" id=\"ClinicalInformation_Other\" name=\"ClinicalInformation\" value=\"Other\" /> Andere</label></div></div></div></div>");
         }
     }
 }

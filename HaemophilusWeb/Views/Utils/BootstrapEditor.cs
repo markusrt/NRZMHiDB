@@ -9,25 +9,25 @@ namespace HaemophilusWeb.Views.Utils
 {
     public static class BootstrapEditor
     {
-        private const string FormGroupTemplate = "<div class=\"form-group\">{0}{1}</div>";
+        private const string FormGroupTemplate = "<div class=\"row mb-3\">{0}{1}</div>";
 
-        private const string FormGroupTemplateWithId = "<div id=\"{2}\" class=\"form-group\">{0}{1}</div>";
+        private const string FormGroupTemplateWithId = "<div id=\"{2}\" class=\"row mb-3\">{0}{1}</div>";
 
         private const string ColSm5 = "col-sm-5";
 
         private const string DivSmX = "<div class=\"{0}\">{1}{2}</div>";
 
-        private const string DivSmXStatic = "<div class=\"{0} form-control-static\">{1}{2}</div>";
-        
+        private const string DivSmXStatic = "<div class=\"{0} form-control-plaintext\">{1}{2}</div>";
+
         private const string DivSmFive = "<div class=\"col-sm-5\">{0}{1}</div>";
-        
-        private const string RequiredTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-star\"></span></span></div>";
-        
-        private const string IconTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-addon\"><span class=\"glyphicon {1}\"></span></span></div>";
 
-        private const string PrefixTemplate =   "<div class=\"input-group\"><span class=\"input-group-addon\">{1}</span>{0}</div>";
+        private const string RequiredTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-text\"><span class=\"bi bi-star-fill\"></span></span></div>";
 
-        private const string DateTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-addon\"><span class=\"glyphicon glyphicon-calendar\"></span></span></div>";
+        private const string IconTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-text\"><span class=\"bi {1}\"></span></span></div>";
+
+        private const string PrefixTemplate =   "<div class=\"input-group\"><span class=\"input-group-text\">{1}</span>{0}</div>";
+
+        private const string DateTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-text\"><span class=\"bi bi-calendar\"></span></span></div>";
 
         public static MvcHtmlString TextEditorFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression, string placeholder = null, string prefix = null, string id = null, string smXClass = ColSm5, string icon=null)
@@ -109,7 +109,7 @@ namespace HaemophilusWeb.Views.Utils
 
         private static string LabelFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
         {
-            return htmlHelper.LabelFor(expression, new { @class = "col-sm-2 control-label" }).ToHtmlString();
+            return htmlHelper.LabelFor(expression, new { @class = "col-sm-2 col-form-label" }).ToHtmlString();
         }
 
         private static string GetValidationHtml<TModel, TProperty>(HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
