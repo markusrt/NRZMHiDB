@@ -6,8 +6,8 @@
 @Html.ReadonlyFor(model => model.LaboratoryNumberWithPrefix)
 @Html.HiddenFor(model => model.LaboratoryNumber)
 
-<div class="form-group">
-    @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 control-label" })
+<div class="row mb-3">
+    @Html.LabelFor(model => model.SenderId, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-8">
         @Html.DropDownListFor(model => model.SenderId, ((IEnumerable<Sender>)ViewBag.PossibleSenders).Select(option => new SelectListItem
    {
@@ -22,8 +22,8 @@
 
 @if (@Request.Path.Contains("/Sending/"))
 {
-    <div class="form-group">
-        @Html.LabelFor(model => model.PatientId, new {@class = "col-sm-2 control-label"})
+    <div class="row mb-3">
+        @Html.LabelFor(model => model.PatientId, new {@class = "col-sm-2 col-form-label"})
         <div class="col-sm-5">
             <div class="input-group">
                 @Html.DropDownListFor(model => model.PatientId, ((IEnumerable<Patient>) ViewBag.PossiblePatients).Select(option => new SelectListItem
@@ -50,8 +50,8 @@
 
 @Html.EnumRadioEditorFor(m=>m.SamplingLocation)
 
-<div id="OtherSamplingLocationForm" class="form-group">
-    @Html.LabelFor(m => m.OtherSamplingLocation, new { @class = "col-sm-2 control-label" })
+<div id="OtherSamplingLocationForm" class="row mb-3">
+    @Html.LabelFor(m => m.OtherSamplingLocation, new { @class = "col-sm-2 col-form-label" })
     <div class="col-sm-5">
         <div class="input-group">
             @Html.TextBoxFor(m => m.OtherSamplingLocation, new { @class = "form-control", @list = "otherSamplingLocationsAutocomplete", @autocomplete = "off" })

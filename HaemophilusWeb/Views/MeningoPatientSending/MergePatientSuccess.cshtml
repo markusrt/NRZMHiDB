@@ -15,8 +15,8 @@
 <div class="form-horizontal">
 
     @Html.ReadonlyFor(m => m.PatientOne, smXClass: "col-sm-10")
-    <div class="form-group">
-        <div class="col-sm-2 control-label"><span class="glyphicon glyphicon-ok-sign"></span></div>
+    <div class="row mb-3">
+        <div class="col-sm-2 col-form-label"><span class="glyphicon glyphicon-ok-sign"></span></div>
         <div class="col-sm-10 form-control-static">
             @if (Model.MainPatient == MainPatientSelector.PatientOne)
             {
@@ -32,8 +32,8 @@
     <hr />
     
     @Html.ReadonlyFor(m => m.PatientTwo, smXClass: "col-sm-10")
-    <div class="form-group">
-        <div class="col-sm-2 control-label"><span class="glyphicon glyphicon-ok-sign"></span></div>
+    <div class="row mb-3">
+        <div class="col-sm-2 col-form-label"><span class="glyphicon glyphicon-ok-sign"></span></div>
         <div class="col-sm-10 form-control-static">
             @if (Model.MainPatient == MainPatientSelector.PatientTwo)
             {
@@ -48,8 +48,8 @@
     
     <hr />
     
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+    <div class="row mb-3">
+        <div class="offset-md-2 col-md-10">
             @Html.ActionLink("Zurück zur Übersicht", "Index", "MeningoPatientSending", null, new { @class = "btn btn-primary" })
         </div>
     </div>

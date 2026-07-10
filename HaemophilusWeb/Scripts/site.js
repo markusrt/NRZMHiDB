@@ -85,14 +85,14 @@ function ShowDivOrClearInput(
     var showDiv = showDivCallback();
 
     if (showDiv) {
-        $(divToShow).removeClass("hidden");
+        $(divToShow).removeClass("d-none");
         if ($(inputToClearOnOtherValue).val().length == 0 && !$(inputToClearOnOtherValue).hasClass("no-focus"))
         {
             $(inputToClearOnOtherValue).focus();
         }
     }
     else {
-        $(divToShow).addClass("hidden");
+        $(divToShow).addClass("d-none");
 
         if ($(inputToClearOnOtherValue).is(':checkbox') || $(inputToClearOnOtherValue).is(':radio'))
         {
@@ -111,14 +111,14 @@ function ShowDivOrClearInput(
 function hideAll(selector)
 {
     $.each($(selector), function (index, value) {
-        $(value).addClass("hidden");
+        $(value).addClass("d-none");
     });
 }
 
 function showAll(selector)
 {
     $.each($(selector), function (index, value) {
-        $(value).removeClass("hidden");
+        $(value).removeClass("d-none");
     });
 }
 
@@ -135,8 +135,8 @@ function ShowWarning(message)
 }
 
 function CreateAlertHtml(alertStyle, title, message) {
-    return '<div class="alert ' + alertStyle + ' alert-dismissable">' +
-        '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' +
+    return '<div class="alert ' + alertStyle + ' alert-dismissible">' +
+        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Schließen"></button>' +
         '<strong>' + title + '</strong> ' + message +
       '</div>';
 }

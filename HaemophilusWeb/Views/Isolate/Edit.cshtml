@@ -39,8 +39,8 @@
 
     @Html.EnumRadioEditorFor(model => model.FactorTest)
 
-    <div class="form-group">
-        <label class="col-sm-2 control-label">E-Test Messwerte</label>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">E-Test Messwerte</label>
     </div>
 
     @Html.EditorFor(model => model.EpsilometerTestViewModels)
@@ -60,8 +60,8 @@
     @Html.EnumRadioEditorFor(model => model.RealTimePcrDevice, "col-sm-8")
 
     @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
-    <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
-        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 control-label" })
+    <div id="RibosomalRna16SMatchInPercentForm" class="row mb-3">
+        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.RibosomalRna16SBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
             @Html.ValidationMessageFor(model => model.RibosomalRna16SBestMatch)
@@ -76,8 +76,8 @@
     </div>
 
     @Html.EnumRadioEditorFor(model => model.MaldiTofBiotyper)
-    <div id="MaldiTofMatchConfidenceForm" class="form-group">
-        @Html.LabelFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "col-sm-2 control-label" })
+    <div id="MaldiTofMatchConfidenceForm" class="row mb-3">
+        @Html.LabelFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.MaldiTofBiotyperBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
             @Html.ValidationMessageFor(model => model.MaldiTofBiotyperBestMatch)
@@ -101,8 +101,8 @@
     @Html.EnumRadioEditorFor(model => model.GenomeSequencing)
 
     @Html.EnumRadioEditorFor(model => model.Ftsi)
-    <div id="FtsiEvaluationForm" class="form-group">
-        @Html.LabelFor(m => m.FtsiEvaluation1, new { @class = "col-sm-2 control-label" })
+    <div id="FtsiEvaluationForm" class="row mb-3">
+        @Html.LabelFor(m => m.FtsiEvaluation1, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.FtsiEvaluation1, new { @class = "form-control" })
         </div>
@@ -115,28 +115,28 @@
     </div>
 
     @Html.EnumRadioEditorFor(model => model.Mlst)
-    <div id="MlstSequenceTypeForm" class="form-group">
-        @Html.LabelFor(m => m.MlstSequenceType, new { @class = "col-sm-2 control-label" })
+    <div id="MlstSequenceTypeForm" class="row mb-3">
+        @Html.LabelFor(m => m.MlstSequenceType, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-4">
             @Html.TextBoxFor(m => m.MlstSequenceType, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.MlstSequenceType)
         </div>
     </div>
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.Evaluation, new { @class = "col-sm-2 control-label" })
+    <div class="row mb-3">
+        @Html.LabelFor(m => m.Evaluation, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-5">
             @EnumEditor.EnumDropDownListFor(Html, model => model.Evaluation, new { @class = "form-control" })
             @Html.ValidationMessageFor(model => model.Evaluation)
 
-            <span id="EvaluationMisMatchWarning" class="label label-warning"></span>
+            <span id="EvaluationMisMatchWarning" class="badge text-bg-warning"></span>
         </div>
     </div>
 
     @Html.DateEditorFor(model => model.ReportDate)
 
-    <div class="form-group">
-        @Html.LabelFor(m => m.Remark, new { @class = "col-sm-2 control-label" })
+    <div class="row mb-3">
+        @Html.LabelFor(m => m.Remark, new { @class = "col-sm-2 col-form-label" })
         <div class="col-sm-5">
             @Html.TextAreaFor(m => m.Remark, new { @class = "form-control", @rows = "5" })
         </div>

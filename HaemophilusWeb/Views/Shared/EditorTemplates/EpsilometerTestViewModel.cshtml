@@ -10,16 +10,16 @@
     var measurements = EpsilometerTestValidator.GetMhkScale(Model.Antibiotic);
 }
 
-<div class="form-group">
+<div class="row mb-3">
         @if (Model.ReadonlyAntibiotic)
         {
-            <label title="@EnumEditor.GetEnumDescription(Model.Antibiotic)" class="col-sm-2 control-label nowrap-ellipsis">@EnumEditor.GetEnumDescription(Model.Antibiotic)</label>
+            <label title="@EnumEditor.GetEnumDescription(Model.Antibiotic)" class="col-sm-2 col-form-label nowrap-ellipsis">@EnumEditor.GetEnumDescription(Model.Antibiotic)</label>
             @Html.HiddenFor(model => model.Antibiotic);
             @Html.HiddenFor(model => model.ReadonlyAntibiotic);
         }
         else
         {
-            <div class="col-sm-2 col-xs-12">
+            <div class="col-sm-2 col-12">
                 @Html.DropDownListFor(model => model.Antibiotic, ((IEnumerable<Antibiotic>)ViewBag.Antibiotics).Select(
                 option => new SelectListItem
                 {
@@ -30,7 +30,7 @@
             </div>
         }
 
-    <div class="col-sm-2 col-xs-3">
+    <div class="col-sm-2 col-3">
         @Html.DropDownListFor(m => m.Measurement, measurements.Select(
             option => new SelectListItem
             {
@@ -40,7 +40,7 @@
             }), "MHK auswählen...", new {@class = "form-control"})
         @Html.ValidationMessageFor(m => m.Measurement)
     </div>
-    <div class="col-sm-4 col-xs-7">
+    <div class="col-sm-4 col-7">
         @Html.DropDownListFor(model => model.EucastClinicalBreakpointId, relevantBreakPoints.Select(
             option => new SelectListItem
             {
@@ -50,10 +50,10 @@
             }), "Breakpoint auswählen...", new { @class = "form-control" })
         @Html.ValidationMessageFor(m => m.EucastClinicalBreakpointId)
     </div>
-    <div class="col-sm-4 col-xs-2 etest-labels">
+    <div class="col-sm-4 col-2 etest-labels">
         @foreach (var eTestResult in EnumUtils.AllEnumValues<EpsilometerTestResult>())
         {
-            <span class="label label-etest-@(eTestResult.ToString())" style="@(Model.Result == eTestResult ? "" : "display:none")">
+            <span class="badge label-etest-@(eTestResult.ToString())" style="@(Model.Result == eTestResult ? "" : "display:none")">
                 @EnumEditor.GetEnumDescription(eTestResult)
             </span>
         }

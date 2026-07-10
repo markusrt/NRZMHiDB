@@ -1,11 +1,11 @@
-﻿<div class="form-group">
-    <div class="col-md-offset-2 col-md-10">
+﻿<div class="row mb-3">
+    <div class="offset-md-2 col-md-10">
         <input type="submit" name="primary-submit" value="Änderungen speichern" class="btn btn-primary" />
         @if (ViewBag.SecondarySubmit != null)
         {
             <input type="submit" name="secondary-submit" value="@ViewBag.SecondarySubmit" class="btn btn-info" />
         }
-        @Html.ActionLink("Zurück zur Liste", "Index", (string)ViewBag.Controller, null, new { @class = "btn btn-default" })
+        @Html.ActionLink("Zurück zur Liste", "Index", (string)ViewBag.Controller, null, new { @class = "btn btn-secondary" })
         @if (ViewBag.DeleteId != null)
         {
             @Html.ActionLink("Eintrag löschen", "Delete", (string)ViewBag.Controller, new { id = ViewBag.DeleteId }, new { @class = "btn btn-danger" })

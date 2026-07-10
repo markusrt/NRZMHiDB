@@ -9,17 +9,17 @@
 
 <div class="modal fade" id="discrepantResultsModal">
     <div class="modal-dialog">
-        <div class="modal-content panel-warning">
-            <div class="modal-header  panel-heading">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <div class="modal-content border border-warning">
+            <div class="modal-header bg-warning-subtle">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Diskrepante Ergebnisse</h4>
             </div>
             <div class="modal-body">
                 <p>Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren. Soll dennoch ein Befundvorschlag ausgegeben werden?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Nein</button>
-                <button id="ForceCreateReport" type="button" class="btn btn-default">Ja</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Nein</button>
+                <button id="ForceCreateReport" type="button" class="btn btn-secondary">Ja</button>
             </div>
         </div>
     </div>
@@ -86,8 +86,8 @@
 <div class="col-md-12">
     <hr />
     <div class="form-horizontal">
-        <div class="form-group">
-            @Html.Label("Befundsvorlage", new { @class = "col-sm-2 control-label" })
+        <div class="row mb-3">
+            @Html.Label("Befundsvorlage", new { @class = "col-sm-2 col-form-label" })
             <div class="col-sm-5">
                 @Html.DropDownList("ReportTemplate", ((IEnumerable<FileInfo>)ViewBag.ReportTemplates).Select(option => new SelectListItem
             {
@@ -96,8 +96,8 @@
             }), "Auswählen...", new { @class = "form-control" })
             </div>
         </div>
-        <div class="form-group">
-            @Html.Label("Unterzeichner", new { @class = "col-sm-2 control-label" })
+        <div class="row mb-3">
+            @Html.Label("Unterzeichner", new { @class = "col-sm-2 col-form-label" })
             <div class="col-sm-5">
                 @Html.DropDownList("ReportSigner", ((IEnumerable<string>)ViewBag.ReportSigners).Select(option => new SelectListItem
             {
@@ -106,10 +106,10 @@
             }), "Auswählen...", new { @class = "form-control" })
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+        <div class="row mb-3">
+            <div class="offset-md-2 col-md-10">
                 <button id="TryCreateReport" class="btn btn-primary">Befund erstellen</button>
-                @Html.ActionLink("Isolat bearbeiten", "Edit", "Isolate", new { id = Model.IsolateId }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Isolat bearbeiten", "Edit", "Isolate", new { id = Model.IsolateId }, new { @class = "btn btn-secondary" })
             </div>
         </div>
     </div>

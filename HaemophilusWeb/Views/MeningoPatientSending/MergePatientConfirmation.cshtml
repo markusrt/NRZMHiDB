@@ -19,8 +19,8 @@
     @Html.HiddenFor(m => m.Confirmation)
 
     @Html.ReadonlyFor(m => m.PatientOne, smXClass: "col-sm-10")
-    <div class="form-group">
-        <div class="col-sm-2 control-label">@Html.LabelFor(m => m.PatientOneSendings)</div>
+    <div class="row mb-3">
+        <div class="col-sm-2 col-form-label">@Html.LabelFor(m => m.PatientOneSendings)</div>
         <div class="col-sm-10 form-control-static">
             <ul>
                 @foreach (var sending in Model.PatientOneSendings)
@@ -32,8 +32,8 @@
     </div>
     <hr />
     @Html.ReadonlyFor(m => m.PatientTwo, smXClass: "col-sm-10")
-    <div class="form-group">
-        <div class="col-sm-2 control-label">@Html.LabelFor(m => m.PatientTwoSendings)</div>
+    <div class="row mb-3">
+        <div class="col-sm-2 col-form-label">@Html.LabelFor(m => m.PatientTwoSendings)</div>
         <div class="col-sm-10 form-control-static">
             <ul>
                 @foreach (var sending in Model.PatientTwoSendings)
@@ -46,8 +46,8 @@
     <hr />
     @Html.EnumRadioEditorFor(m => m.MainPatient)
     <hr />
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
+    <div class="row mb-3">
+        <div class="offset-md-2 col-md-10">
             <input type="submit" name="primary-submit" value="Zusammenfügen und doppelten Patienten löschen" class="btn btn-danger" />
             @Html.ActionLink("Abbrechen", "MergePatient", "MeningoPatientSending", null, new { @class = "btn btn-secondary" })
         </div>

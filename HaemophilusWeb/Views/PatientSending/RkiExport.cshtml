@@ -15,16 +15,16 @@
     <div class="form-horizontal">
         @Html.ValidationSummary(true)
 
-        <div class="form-group">
+        <div class="row mb-3">
             @Html.DateEditorFor(m => m.From)
             @Html.DateEditorFor(m => m.To)
         </div>
-        <div class="form-group">
+        <div class="row mb-3">
             @Html.EnumRadioEditorFor(m => m.Unadjusted)
-            <small class="form-text text-muted col-sm-offset-2">Unbereinigt: Inklusive doppelter Einsendungen.</small>
+            <small class="form-text text-muted offset-sm-2">Unbereinigt: Inklusive doppelter Einsendungen.</small>
         </div>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
+        <div class="row mb-3">
+            <div class="offset-md-2 col-md-10">
                 <input type="submit" name="primary-submit" value="Exportieren nach Excel" class="btn btn-primary" />
 
             </div>
