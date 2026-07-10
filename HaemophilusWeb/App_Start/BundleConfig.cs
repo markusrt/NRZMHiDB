@@ -41,7 +41,6 @@ namespace HaemophilusWeb
             // is obsolete under Bootstrap 5 and has been dropped.
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/moment-with-locales.js",
-                "~/Scripts/bootstrap-datetimepicker.js",
                 "~/Scripts/select2.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/site").Include(
@@ -50,7 +49,6 @@ namespace HaemophilusWeb
 
             // bootstrap.min.css is linked directly in _Layout (see note on the bootstrap script bundle).
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/bootstrap-datetimepicker.css",
                 "~/Content/select2.css",
                 "~/Content/bootstrap-select2.css",
                 "~/Content/DataTables/css/dataTables.bootstrap5.min.css",

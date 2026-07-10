@@ -27,7 +27,12 @@ namespace HaemophilusWeb.Views.Utils
 
         private const string PrefixTemplate =   "<div class=\"input-group\"><span class=\"input-group-text\">{1}</span>{0}</div>";
 
-        private const string DateTemplate = "<div class=\"input-group\">{0}<span class=\"input-group-text\"><span class=\"bi bi-calendar\"></span></span></div>";
+        // Tempus Dominus 6 markup: the input-group carries the picker id and the toggle/target data-td-* hooks.
+        private const string DateTemplate =
+            "<div class=\"input-group\" id=\"{1}\" data-td-target-input=\"nearest\" data-td-target-toggle=\"nearest\">" +
+            "{0}" +
+            "<span class=\"input-group-text\" data-td-target=\"#{1}\" data-td-toggle=\"datetimepicker\"><span class=\"bi bi-calendar\"></span></span>" +
+            "</div>";
 
         public static MvcHtmlString TextEditorFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper,
             Expression<Func<TModel, TProperty>> expression, string placeholder = null, string prefix = null, string id = null, string smXClass = ColSm5, string icon=null)
@@ -62,12 +67,19 @@ namespace HaemophilusWeb.Views.Utils
             var label = htmlHelper.LabelFor(expression);
             var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             var model = modelMetadata.Model;
+            var pickerId = $"{modelMetadata.PropertyName}_picker";
             htmlHelper.EnableClientValidation(false);
-            var textBox = htmlHelper.TextBoxFor(expression, new { @class = "form-control datepicker " + additionalClass, type = "datetime", Value = model == null ? "" : $"{model:dd.MM.yyyy}"}).ToHtmlString();
+            var textBox = htmlHelper.TextBoxFor(expression, new
+            {
+                @class = "form-control datepicker " + additionalClass,
+                Value = model == null ? "" : $"{model:dd.MM.yyyy}",
+                data_td_target = "#" + pickerId,
+                autocomplete = "off"
+            }).ToHtmlString();
             htmlHelper.EnableClientValidation(true);
             var validationHtml = GetValidationHtml(htmlHelper, expression);
 
-            var textBoxHtml = string.Format(DivSmFive, string.Format(DateTemplate, textBox), validationHtml);
+            var textBoxHtml = string.Format(DivSmFive, string.Format(DateTemplate, textBox, pickerId), validationHtml);
 
             return CreateFormGroup(label, textBoxHtml, id);
         }

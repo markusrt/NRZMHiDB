@@ -724,8 +724,7 @@
     <Compile Include="Views\Utils\EnumEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-datetimepicker.css" />
-    <Content Include="Content\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\tempus-dominus.min.css" />
     <Content Include="Content\bootstrap-select2.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -1018,10 +1017,10 @@
     </None>
     <None Include="Properties\PublishProfiles\haemophilus - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\haemophilus - Web Deploy.pubxml" />
-    <Content Include="Scripts\bootstrap-datetimepicker.js" />
-    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\tempus-dominus.min.js" />
     <Content Include="Scripts\cldr.js" />
     <Content Include="Scripts\cldr\event.js" />
     <Content Include="Scripts\cldr\supplemental.js" />
