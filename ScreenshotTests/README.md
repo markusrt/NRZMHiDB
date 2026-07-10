@@ -54,6 +54,13 @@ dotnet test ScreenshotTests\ScreenshotTests.csproj --no-build --filter GalleryRe
 
 `screenshots/baseline/` is committed; `screenshots/current/` and `report/` are git-ignored.
 
-During the Bootstrap 3 → 5 upgrade the gallery is a **review aid** (differences are expected). Once
-the migration is complete the baseline is re-recorded on Bootstrap 5 and the suite becomes a
-regression gate.
+During the Bootstrap 3 → 5 upgrade the gallery was a **review aid** (differences were expected). The
+committed baseline now reflects **Bootstrap 5**, so the suite is a regression reference going forward.
+
+## CI
+
+The `screenshot-tests` job in `.github/workflows/main.yml` builds the app (which generates `Web.config`
+from `Web.template.config`), installs headless Chromium, starts SQL LocalDB, captures the current
+screenshots, verifies every view renders and the date picker opens, and uploads the screenshots and
+diff gallery as a build artifact. Pixel diffing is a human-review aid (font rendering differs across
+machines), not a hard pass/fail gate.
