@@ -20,6 +20,33 @@ for tagged routes) into `screenshots/<mode>/`. `GalleryReportTest` (namespace
 `ScreenshotTests.Reporting`, so it does **not** boot the app) diffs `baseline/` vs `current/` and
 writes `report/index.html`.
 
+## Run locally (quick start)
+
+No manual database setup is needed — the harness creates and seeds its own isolated LocalDB catalog.
+From the repository root, in PowerShell:
+
+```powershell
+$msbuild = "C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe"
+
+# 1. Build (compiles the web app + this project, copies runtime deps).
+& $msbuild ScreenshotTests\ScreenshotTests.csproj /t:Restore,Build
+
+# 2. One-time: download the headless browser.
+pwsh ScreenshotTests\bin\Debug\net48\playwright.ps1 install chromium
+
+# 3. Capture the current screenshots (boots the app, seeds data, logs in, shoots every view).
+$env:SCREENSHOT_MODE = "current"
+dotnet test ScreenshotTests\ScreenshotTests.csproj --no-build --filter GoldMasterTests
+
+# 4. Build the baseline-vs-current gallery, then open it.
+dotnet test ScreenshotTests\ScreenshotTests.csproj --no-build --filter GalleryReportTest
+start ScreenshotTests\report\index.html
+```
+
+Re-run steps 1, 3 and 4 after a UI change to see what moved. To reset the gold master to the current
+rendering, capture with `SCREENSHOT_MODE = "baseline"` instead and commit `screenshots/baseline/`.
+See **Build** and **Run** below for details.
+
 ## Prerequisites
 
 - Visual Studio 2022 Build Tools / MSBuild, IIS Express, and SQL Server LocalDB (`MSSQLLocalDB`).
