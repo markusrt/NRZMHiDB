@@ -152,3 +152,9 @@ $RECYCLE.BIN/
 HaemophilusWeb/logs/
 **/.vs
 HaemophilusWeb/Web.config
+
+# Bootstrap upgrade gold-master screenshot harness
+ScreenshotTests/screenshots/current/
+ScreenshotTests/report/
+ScreenshotTests/*.log
+*.screenshotbak
