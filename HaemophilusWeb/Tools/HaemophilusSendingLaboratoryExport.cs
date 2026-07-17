@@ -43,6 +43,7 @@ namespace HaemophilusWeb.Tools
             AddField(s => ExportToString(s.Isolate.TypeOfGrowth));
             AddField(s => ExportToString(s.Isolate.Oxidase));
             AddField(s => ExportToString(s.Isolate.BetaLactamase));
+            AddField(s => ExportPenicillinAdt(s.Isolate.PenicillinAdt), "Penicillin ADT");
             AddField(s => ExportToString(s.Isolate.Agglutination));
             AddField(s => ExportToString(s.Isolate.FactorTest));
             AddEpsilometerTestFields(this, Antibiotic.Ampicillin);
@@ -89,6 +90,12 @@ namespace HaemophilusWeb.Tools
         private static string ExportSamplingLocation(SamplingLocation location, Sending sending)
         {
             return location.IsOther() ? sending.OtherSamplingLocation : ExportToString(location);
+        }
+
+        private static string ExportPenicillinAdt(PenicillinAdt penicillinAdt)
+        {
+            var value = ExportToString(penicillinAdt);
+            return value != null ? value + " mm" : null;
         }
     }
 }

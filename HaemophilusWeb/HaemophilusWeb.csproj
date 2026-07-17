@@ -393,6 +393,10 @@
     <Compile Include="Migrations\202606130800504_AddConfigurationEntries.Designer.cs">
       <DependentUpon>202606130800504_AddConfigurationEntries.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202607080444509_Isolate_PenicillinAdt.cs" />
+    <Compile Include="Migrations\202607080444509_Isolate_PenicillinAdt.Designer.cs">
+      <DependentUpon>202607080444509_Isolate_PenicillinAdt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
@@ -663,6 +667,7 @@
     <Compile Include="Models\SamplingLocation.cs" />
     <Compile Include="Models\State.cs" />
     <Compile Include="Models\TestResult.cs" />
+    <Compile Include="Models\PenicillinAdt.cs" />
     <Compile Include="Models\RealTimePcrDevice.cs" />
     <Compile Include="Models\Sending.cs" />
     <Compile Include="Models\Patient.cs" />
@@ -1006,6 +1011,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202606130800504_AddConfigurationEntries.resx">
       <DependentUpon>202606130800504_AddConfigurationEntries.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202607080444509_Isolate_PenicillinAdt.resx">
+      <DependentUpon>202607080444509_Isolate_PenicillinAdt.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
