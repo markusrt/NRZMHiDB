@@ -284,6 +284,7 @@
     <Compile Include="Controllers\PatientSendingControllerBase.cs" />
     <Compile Include="Controllers\PubMlstController.cs" />
     <Compile Include="Controllers\GeonamesController.cs" />
+    <Compile Include="Controllers\ConfigurationController.cs" />
     <Compile Include="Controllers\HealthOfficesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MeningoIsolateController.cs" />
@@ -388,10 +389,17 @@
     <Compile Include="Migrations\202602230416057_IsolateCommon_RealTimePcrDevice.Designer.cs">
       <DependentUpon>202602230416057_IsolateCommon_RealTimePcrDevice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202606130800504_AddConfigurationEntries.cs" />
+    <Compile Include="Migrations\202606130800504_AddConfigurationEntries.Designer.cs">
+      <DependentUpon>202606130800504_AddConfigurationEntries.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\PubMlstMatchInfo.cs" />
     <Compile Include="Models\VaccinationStatus.cs" />
     <Compile Include="Services\IGeonamesService.cs" />
+    <Compile Include="Services\IConfigurationService.cs" />
+    <Compile Include="Services\ConfigurationService.cs" />
+    <Compile Include="Services\AnnouncementSetting.cs" />
     <Compile Include="Services\IrisPubMlstService.cs" />
     <Compile Include="Services\NeisseriaPubMlstService.cs" />
     <Compile Include="Services\PubMlstAuthorization.cs" />
@@ -602,6 +610,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangeLog.cs" />
+    <Compile Include="Models\ConfigurationEntry.cs" />
     <Compile Include="Models\County.cs" />
     <Compile Include="Models\DatabaseType.cs" />
     <Compile Include="Models\DefaultRoles.cs" />
@@ -687,6 +696,7 @@
     <Compile Include="Validators\MeningoIsolateViewModelValidator.cs" />
     <Compile Include="Validators\IsolateViewModelValidator.cs" />
     <Compile Include="Validators\EucastClinicalBreakpointValidator.cs" />
+    <Compile Include="Validators\ConfigurationViewModelValidator.cs" />
     <Compile Include="Validators\HealthOfficeValidator.cs" />
     <Compile Include="Validators\MeningoPatientValidator.cs" />
     <Compile Include="Validators\MergePatientRequestValidator.cs" />
@@ -698,6 +708,8 @@
     <Compile Include="ViewModels\MergePatientConfirmation.cs" />
     <Compile Include="ViewModels\MergePatientRequest.cs" />
     <Compile Include="ViewModels\IsolateViewModel.cs" />
+    <Compile Include="ViewModels\IReportConfigurationTarget.cs" />
+    <Compile Include="ViewModels\ConfigurationViewModel.cs" />
     <Compile Include="ViewModels\MeningoIsolateViewModel.cs" />
     <Compile Include="ViewModels\PatientSendingViewModel.cs" />
     <Compile Include="ViewModels\FromToQuery.cs" />
@@ -992,6 +1004,9 @@
     <EmbeddedResource Include="Migrations\202602230416057_IsolateCommon_RealTimePcrDevice.resx">
       <DependentUpon>202602230416057_IsolateCommon_RealTimePcrDevice.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202606130800504_AddConfigurationEntries.resx">
+      <DependentUpon>202606130800504_AddConfigurationEntries.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1254,6 +1269,7 @@
     <Content Include="Views\HealthOffices\_CreateOrEdit.cshtml" />
     <Content Include="Views\HealthOffices\Delete.cshtml" />
     <Content Include="Views\HealthOffices\Details.cshtml" />
+    <Content Include="Views\Configuration\Edit.cshtml" />
     <Content Include="Views\HealthOffices\Edit.cshtml" />
     <Content Include="Views\HealthOffices\Index.cshtml" />
     <Content Include="Views\HealthOffices\Create.cshtml" />

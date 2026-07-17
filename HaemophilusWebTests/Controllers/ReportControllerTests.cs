@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -79,8 +78,6 @@ namespace HaemophilusWeb.Controllers
             server.MapPath(ReportController.ReportTemplatesPath).Returns(TemporaryDirectoryToStoreTestData);
             context.Server.Returns(server);
             controller.ControllerContext = new ControllerContext(context, new RouteData(), controller);
-
-            ConfigurationManager.AppSettings["reportSigners"] = "signer1";
 
             CreateMockReportTemplates();
 

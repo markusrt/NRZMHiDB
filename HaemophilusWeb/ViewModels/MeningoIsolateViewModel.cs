@@ -14,7 +14,7 @@ using HaemophilusWeb.Views.Utils;
 namespace HaemophilusWeb.ViewModels
 {
     [Validator(typeof(MeningoIsolateViewModelValidator))]
-    public class MeningoIsolateViewModel : MeningoIsolateBase
+    public class MeningoIsolateViewModel : MeningoIsolateBase, IReportConfigurationTarget
     {
         public MeningoIsolateViewModel()
         {
@@ -79,6 +79,13 @@ namespace HaemophilusWeb.ViewModels
         public bool HasAnnouncement => !string.IsNullOrEmpty(Announcement);
 
         public bool HasCommentOrAnnouncement => HasComment || HasAnnouncement;
+
+        public string LabDirector { get; set; }
+
+        public string MedicalDirector { get; set; }
+
+        public string Contacts { get; set; }
+        public bool HasContacts => !string.IsNullOrEmpty(Contacts);
 
         public string DemisIdQrImageUrl { get; set; }
 

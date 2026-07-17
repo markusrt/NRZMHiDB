@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using HaemophilusWeb.Models;
+using HaemophilusWeb.Services;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
 using QRCoder;
@@ -41,6 +42,15 @@ namespace HaemophilusWeb.Automapper
             this.databaseType = databaseType;
             this.primaryAntibiotics = primaryAntibiotics;
             antibioticPriorityListComparer = new AntibioticPriorityListComparer(ConfigurationManager.AppSettings["AntibioticsOrder"]);
+        }
+
+        protected void ApplyReportConfiguration(IReportConfigurationTarget destination)
+        {
+            var configuration = new ConfigurationService(db);
+            destination.Announcement = configuration.GetActiveAnnouncement();
+            destination.LabDirector = configuration.GetLabDirector();
+            destination.MedicalDirector = configuration.GetMedicalDirector();
+            destination.Contacts = string.Join("\n\n", configuration.GetContacts());
         }
 
         protected ICollection<EpsilometerTestViewModel> EpsilometerTestsModelToViewModel(IEnumerable<EpsilometerTest> epsilometerTests)
