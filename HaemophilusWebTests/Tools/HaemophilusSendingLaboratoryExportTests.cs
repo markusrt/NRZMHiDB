@@ -36,7 +36,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Columns.Count.Should().Be(76);
+            export.Columns.Count.Should().Be(77);
         }
 
         [Test]
@@ -126,6 +126,39 @@ namespace HaemophilusWeb.Tools
 
             export.Rows[0]["Real-Time-PCR"].Should().Be("positiv");
             export.Rows[0]["Real-Time-PCR Auswertung (RIDOM)"].Should().Be("Streptococcus pneumoniae");
+        }
+
+        [Test]
+        public void DataTable_ContainsPenicillinAdtWithMmSuffix()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PenicillinAdt = PenicillinAdt.Six;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Penicillin ADT"].Should().Be("6 mm");
+        }
+
+        [Test]
+        public void DataTable_ContainsPenicillinAdtNotDetermined()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PenicillinAdt = PenicillinAdt.NotDetermined;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Penicillin ADT"].Should().Be("n.d. mm");
+        }
+
+        [Test]
+        public void DataTable_ContainsPenicillinAdtGreaterThanTwelve()
+        {
+            var sut = CreateExportDefinition();
+            Sending.Isolate.PenicillinAdt = PenicillinAdt.GreaterThanTwelve;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["Penicillin ADT"].Should().Be("≥ 12 mm");
         }
 
         private static HaemophilusSendingLaboratoryExport CreateExportDefinition()
