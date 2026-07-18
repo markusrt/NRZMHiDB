@@ -424,24 +424,24 @@ namespace HaemophilusWeb.Controllers
         private static string CreateReportGeneratedIcon(ReportStatus reportStatus)
         {
             var color = "#CC0000";
-            var icon = "glyphicon-remove-sign";
+            var icon = "bi-x-circle-fill";
             if (reportStatus == ReportStatus.Preliminary)
             {
                 color = "#FFCC00";
-                icon = "glyphicon-time";
+                icon = "bi-clock-fill";
             }
             else if (reportStatus == ReportStatus.Final)
             {
                 color = "#00CC00";
-                icon = "glyphicon-ok-sign";
+                icon = "bi-check-circle-fill";
             }
-            return $"<span style=\"color:{color}\" class=\"glyphicon {icon}\" aria-hidden=\"true\" title=\"{EnumEditor.GetEnumDescription(reportStatus)}\"></span>";
+            return $"<span style=\"color:{color}\" class=\"bi {icon}\" aria-hidden=\"true\" title=\"{EnumEditor.GetEnumDescription(reportStatus)}\"></span>";
         }
 
         private string CreateIsolateLink(int isolateId, string laboratoryNumber)
         {
             return
-                $"<a class=\"btn-sm btn btn-default\" href=\"{Url.Action("Edit", IsolateControllerName, new {id = isolateId})}\" role=\"button\">{laboratoryNumber}</a>";
+                $"<a class=\"btn btn-sm btn-outline-secondary\" href=\"{Url.Action("Edit", IsolateControllerName, new {id = isolateId})}\" role=\"button\">{laboratoryNumber}</a>";
         }
 
         private string CreateEditControls(int sendingId, int isolateId)
@@ -449,17 +449,17 @@ namespace HaemophilusWeb.Controllers
             var builder = new StringBuilder();
             builder.Append("<div class=\"btn-group btn-group-sm\">");
 
-            builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Bearbeiten</a>",
+            builder.AppendFormat("<a class=\"btn btn-secondary\" href=\"{0}\" role=\"button\">Bearbeiten</a>",
                 Url.Action("Edit", new { id = sendingId }));
             //TODO make this cleaner
             if (this is PatientSendingController)
             {
-                builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
+                builder.AppendFormat("<a class=\"btn btn-secondary\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
                     Url.Action("Isolate", "Report", new { id = isolateId }));
             }
             else if (this is MeningoPatientSendingController)
             {
-                builder.AppendFormat("<a class=\"btn btn-default\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
+                builder.AppendFormat("<a class=\"btn btn-secondary\" href=\"{0}\" role=\"button\">Befund erstellen</a>",
                     Url.Action("Isolate", "MeningoReport", new { id = isolateId }));
             }
             builder.Append("</div>");

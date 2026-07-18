@@ -102,11 +102,11 @@ namespace HaemophilusWeb.Controllers
                 new Change(new DateTime(2021, 01, 28, 07, 10, 0), "Auflisten der Einsendungen nach Eingangsdatum", ChangeType.Bug, database:DatabaseType.Meningococci),
                 new Change(new DateTime(2020, 08, 03, 19, 00, 00),
                     "<p>Anzeige der Patienten Nummer</p>" +
-                    "<p><a class=\"btn btn-default btn-xs\" href=\"https://github.com/markusrt/NRZMHiDB/issues/58\"><span class=\"glyphicon glyphicon-link\" aria-hidden=\"true\"></span> GitHub Issue 58</a></p>",
+                    "<p><a class=\"btn btn-outline-secondary btn-sm\" href=\"https://github.com/markusrt/NRZMHiDB/issues/58\"><span class=\"bi bi-link\" aria-hidden=\"true\"></span> GitHub Issue 58</a></p>",
                     ChangeType.Feature),
                 new Change(new DateTime(2020, 08, 03),
                     "<p>Markierung von doppelten Einsendungen für den RKI Export</p>" +
-                    "<p><a class=\"btn btn-default btn-xs\" href=\"https://github.com/markusrt/NRZMHiDB/issues/59\"><span class=\"glyphicon glyphicon-link\" aria-hidden=\"true\"></span> GitHub Issue 59</a></p>",
+                    "<p><a class=\"btn btn-outline-secondary btn-sm\" href=\"https://github.com/markusrt/NRZMHiDB/issues/59\"><span class=\"bi bi-link\" aria-hidden=\"true\"></span> GitHub Issue 59</a></p>",
                     ChangeType.Feature),
                 new Change(new DateTime(2020, 07, 07), "PubMLST Export", ChangeType.Feature),
                 new Change(new DateTime(2020, 05, 26), "IRIS Export", ChangeType.Feature, database:DatabaseType.Meningococci),

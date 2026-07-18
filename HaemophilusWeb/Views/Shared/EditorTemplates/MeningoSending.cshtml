@@ -33,7 +33,7 @@
                     Selected = (Model != null) && (option.PatientId == Model.MeningoPatientId)
                 }), "Auswählen...", new { @class = "form-control" })
 
-                <span class="input-group-addon"><span class="glyphicon glyphicon-star"></span></span>
+                <span class="input-group-text"><span class="bi bi-star-fill"></span></span>
             </div>
             @Html.ValidationMessageFor(model => model.MeningoPatientId)
         </div>
@@ -44,7 +44,7 @@
 
 @Html.DateEditorFor(m => m.SamplingDate)
 
-@Html.TextEditorFor(m => m.DemisId, icon: "glyphicon-qrcode")
+@Html.TextEditorFor(m => m.DemisId, icon: "bi-qr-code")
 
 @Html.TextEditorFor(m => m.SenderLaboratoryNumber)
 

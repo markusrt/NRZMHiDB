@@ -34,12 +34,12 @@
     <td>
         @if (item.PubMlstId.HasValue)
         {
-            <span style="color:#00CC00" class="glyphicon glyphicon-ok-sign" aria-hidden="true" title="-"></span>
+            <span style="color:#00CC00" class="bi bi-check-circle-fill" aria-hidden="true" title="-"></span>
             <a href="https://pubmlst.org/bigsdb?page=info&db=@item.Database&id=@item.PubMlstId" role="button"> @item.PubMlstId</a>
         }
         else
         {
-            <span style="color:#CC0000" class="glyphicon glyphicon-remove-sign" aria-hidden="true" title="-"></span>
+            <span style="color:#CC0000" class="bi bi-x-circle-fill" aria-hidden="true" title="-"></span>
             <span> kein Treffer</span>
         }
     </td>

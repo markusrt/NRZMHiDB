@@ -17,7 +17,7 @@ namespace HaemophilusWeb.Models
         public Change(DateTime date, string details, int gitHubIssue, ChangeType type, DatabaseType database = DatabaseType.Haemophilus, int priority = 0) : this(date, "", type, database, priority)
         {
             Details = $"<p>{details}</p>" +
-                      $"<p><a class=\"btn btn-default btn-xs\" href=\"https://github.com/markusrt/NRZMHiDB/issues/{gitHubIssue}\"><span class=\"glyphicon glyphicon-link\" aria-hidden=\"true\"></span> GitHub Issue {gitHubIssue}</a></p>";
+                      $"<p><a class=\"btn btn-outline-secondary btn-sm\" href=\"https://github.com/markusrt/NRZMHiDB/issues/{gitHubIssue}\"><span class=\"bi bi-link\" aria-hidden=\"true\"></span> GitHub Issue {gitHubIssue}</a></p>";
         }
 
         [Display(Name = "Priorität")]

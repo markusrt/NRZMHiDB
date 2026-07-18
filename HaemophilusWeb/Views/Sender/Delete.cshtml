@@ -39,7 +39,7 @@
     @if (ViewBag.Sendings.Count > 0 || ViewBag.MeningoSendings.Count > 0)
     {
         <div class="alert alert-danger" role="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="bi bi-exclamation-triangle-fill" aria-hidden="true"></span>
             <span class="sr-only">Fehler:</span>
             Dem Einsender "@Model.Name" sind noch Einsendungen zugeordnet.
         </div>
@@ -64,7 +64,7 @@
             </p>
         }
         <div class="alert alert-info" role="alert">
-            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+            <span class="bi bi-info-circle-fill" aria-hidden="true"></span>
             <span class="sr-only">Info:</span>
             Am einfachsten lässt sich die Neuzuordnung durchführen in dem Sie jeden der obigen Links in einem neuen Fenster
             öffenen, einen anderen Einsender auswählen und den Datensatz speichern. Anschließend können Sie dieses Fenster
