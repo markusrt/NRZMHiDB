@@ -1,6 +1,7 @@
 ﻿body {
     padding-bottom: 20px;
     padding-top: 56px;
+    font-size: 0.875rem; /* Match Bootstrap 3's 14px base; BS5 defaults to 16px */
 }
 
 /* Set padding to keep content from hitting the edges */

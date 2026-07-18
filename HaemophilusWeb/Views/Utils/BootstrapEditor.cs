@@ -121,7 +121,7 @@ namespace HaemophilusWeb.Views.Utils
 
         private static string LabelFor<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
         {
-            return htmlHelper.LabelFor(expression, new { @class = "col-sm-2 col-form-label" }).ToHtmlString();
+            return htmlHelper.LabelFor(expression, new { @class = "col-sm-2 col-form-label text-end fw-semibold" }).ToHtmlString();
         }
 
         private static string GetValidationHtml<TModel, TProperty>(HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)

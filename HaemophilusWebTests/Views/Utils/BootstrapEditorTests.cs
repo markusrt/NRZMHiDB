@@ -62,7 +62,7 @@ namespace HaemophilusWeb.Views.Utils
             var enumRadioEditorHtml = helper.EnumRadioEditorFor(m => m.HibVaccination, suffix: "test");
 
             var html = enumRadioEditorHtml.ToHtmlString();
-            html.Should().StartWith("<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label\" for=\"HibVaccination\">Hib-Impfung</label><div class=\"col-sm-5\">");
+            html.Should().StartWith("<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label text-end fw-semibold\" for=\"HibVaccination\">Hib-Impfung</label><div class=\"col-sm-5\">");
             html.Should().Contain("<div class=\"btn-group flex-wrap\" role=\"group\">");
             html.Should().Contain("class=\"btn-check\"");
             html.Should().Contain("<label class=\"btn btn-outline-secondary\" for=\"HibVaccination_NotStated\">keine Angabe</label>");
@@ -80,7 +80,7 @@ namespace HaemophilusWeb.Views.Utils
             var enumRadioEditorHtml = helper.EnumRadioEditorFor(m => m.ClinicalInformation, "col-lg-9");
 
             var html = enumRadioEditorHtml.ToHtmlString();
-            html.Should().StartWith("<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label\" for=\"ClinicalInformation\">Klinische Angaben</label><div class=\"col-lg-9\">");
+            html.Should().StartWith("<div class=\"row mb-3\"><label class=\"col-sm-2 col-form-label text-end fw-semibold\" for=\"ClinicalInformation\">Klinische Angaben</label><div class=\"col-lg-9\">");
             html.Should().Contain("<div class=\"btn-group flex-wrap\" role=\"group\">");
             html.Should().Contain("<input type=\"checkbox\" class=\"btn-check\" id=\"ClinicalInformation_Meningitis\" name=\"ClinicalInformation\" value=\"Meningitis\" autocomplete=\"off\" />");
             html.Should().Contain("<label class=\"btn btn-outline-secondary\" for=\"ClinicalInformation_Meningitis\">Meningitis</label>");
