@@ -79,13 +79,19 @@
     <div id="MaldiTofMatchConfidenceForm" class="form-group">
         @Html.LabelFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "col-sm-2 control-label" })
         <div class="col-sm-4">
-            @Html.TextBoxFor(m => m.MaldiTofBiotyperBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+            @Html.TextBoxFor(m => m.MaldiTofBiotyperBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung", @list = "maldiTofBiotyperBestMatchAutocomplete", @autocomplete = "off" })
+            <datalist id="maldiTofBiotyperBestMatchAutocomplete">
+                @foreach (var item in ViewBag.PossibleMaldiTofBiotyperBestMatches)
+                {
+                    <option value="@item.ToString()" />
+                }
+            </datalist>
             @Html.ValidationMessageFor(model => model.MaldiTofBiotyperBestMatch)
         </div>
         <div class="col-sm-3">
             <div class="input-group">
                 @Html.TextBoxFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
-                <span class="input-group-addon">00,0</span>
+                <span class="input-group-addon">0,0</span>
             </div>
             @Html.ValidationMessageFor(model => model.MaldiTofBiotyperMatchConfidence)
         </div>
@@ -149,6 +155,7 @@
 
     var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
     var serogroups = ["A", "B", "C", "D", "E", "F"];
+    var defaultMaldiTofBiotyperBestMatch = @(Html.Raw(Json.Encode(ViewBag.DefaultMaldiTofBiotyperBestMatch)));
 
     $(document).ready(
         function() {
@@ -158,6 +165,7 @@
             $("input:radio[name$='Agglutination']").change(AgglutinationChange);
             $("select[id$=Evaluation]").change(EvaluationChange);
             ConfigureConditionalFields();
+            ConfigureMaldiTofBiotyperDefaults();
         }
     );
 
@@ -169,6 +177,23 @@
         ShowOnSpecificRadioValue("MlstSequenceTypeForm", "Mlst", "Determined", GeneralInput("MlstSequenceType"));
         ShowOnSpecificRadioValue("GrowthTypeForm", "Growth", "Yes", CheckInput("TypeOfGrowth"));
         AutoSelectGrowthIfEmpty();
+    }
+
+    function ConfigureMaldiTofBiotyperDefaults() {
+        $("input:radio[name$='MaldiTofBiotyper']").change(function() {
+            if ($(this).val() !== "Determined" || !$(this).is(":checked")) {
+                return;
+            }
+
+            var bestMatchInput = GeneralInput("MaldiTofBiotyperBestMatch");
+            var confidenceInput = GeneralInput("MaldiTofBiotyperMatchConfidence");
+
+            if ($(bestMatchInput).val().length === 0) {
+                $(bestMatchInput).val(defaultMaldiTofBiotyperBestMatch);
+            }
+
+            setTimeout(function() { $(confidenceInput).focus(); }, 0);
+        });
     }
 
     function AutoSelectGrowthIfEmpty() {
