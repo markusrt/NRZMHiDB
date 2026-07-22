@@ -72,13 +72,19 @@
             <div id="MaldiTofMatchConfidenceForm" class="form-group">
                 @Html.LabelFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "col-sm-2 control-label" })
                 <div class="col-sm-4">
-                    @Html.TextBoxFor(m => m.MaldiTofBiotyperBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
+                    @Html.TextBoxFor(m => m.MaldiTofBiotyperBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung", @list = "maldiTofBiotyperBestMatchAutocomplete", @autocomplete = "off" })
+                    <datalist id="maldiTofBiotyperBestMatchAutocomplete">
+                        @foreach (var item in ViewBag.PossibleMaldiTofBiotyperBestMatches)
+                        {
+                            <option value="@item.ToString()" />
+                        }
+                    </datalist>
                     @Html.ValidationMessageFor(model => model.MaldiTofBiotyperBestMatch)
                 </div>
                 <div class="col-sm-3">
                     <div class="input-group">
                         @Html.TextBoxFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
-                        <span class="input-group-addon">00,0</span>
+                        <span class="input-group-addon">0,0</span>
                     </div>
                     @Html.ValidationMessageFor(model => model.MaldiTofBiotyperMatchConfidence)
                 </div>
@@ -277,6 +283,7 @@
     preventSiteNavigationWithPendingChanges();
 
     var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
+    var defaultMaldiTofBiotyperBestMatch = @(Html.Raw(Json.Encode(ViewBag.DefaultMaldiTofBiotyperBestMatch)));
 
     $(document).ready(
         function () {
@@ -285,6 +292,7 @@
             $("select[id$=_Antibiotic]").change(ETestChange);
 
             ConfigureConditionalFields();
+            ConfigureMaldiTofBiotyperDefaults();
 
             $("#PubMlstQuery").click(QueryPubMlstDatabase);
 
@@ -298,10 +306,27 @@
     function ConfigureConditionalFields() {
         ShowOnSpecificRadioValue("RibosomalRna16SMatchInPercentForm", "RibosomalRna16S", "Positive", GeneralInput("RibosomalRna16SBestMatch"), GeneralInput("RibosomalRna16SMatchInPercent"));
         ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTofBiotyper", "Determined", GeneralInput("MaldiTofBiotyperBestMatch"), GeneralInput("MaldiTofBiotyperMatchConfidence"));
-        ShowOnSpecificRadioValue("PorAPcrForm", "PorAPcr", "Positive", ExactInput("PorAVr1"), ExactInput("PorAVr2"));
+        DisableRadioGroupOnSpecificRadioValue("MaldiTofBiotyper", "Determined", "NotDetermined", ["Oxidase", "Onpg"]);
         ShowOnSpecificRadioValue("FetAPcrForm", "FetAPcr", "Positive", ExactInput("FetAVr"));
         ShowOnSpecificRadioValue("CswyAlleleForm", "CswyPcr", "Positive", RadioInput("CswyAllele"));
         ShowOnSpecificRadioValue("RealTimePcrForm", "RealTimePcr", "Positive", CheckInput("RealTimePcrResult"));
+    }
+
+    function ConfigureMaldiTofBiotyperDefaults() {
+        $("input:radio[name$='MaldiTofBiotyper']").change(function() {
+            if ($(this).val() !== "Determined" || !$(this).is(":checked")) {
+                return;
+            }
+
+            var bestMatchInput = GeneralInput("MaldiTofBiotyperBestMatch");
+            var confidenceInput = GeneralInput("MaldiTofBiotyperMatchConfidence");
+
+            if ($(bestMatchInput).val().length === 0) {
+                $(bestMatchInput).val(defaultMaldiTofBiotyperBestMatch);
+            }
+
+            setTimeout(function() { $(confidenceInput).focus(); }, 0);
+        });
     }
 
     function QueryPubMlstDatabase() {

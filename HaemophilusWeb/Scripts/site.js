@@ -26,6 +26,33 @@ function GeneralInput(id) {
     return "[id$='" + id + "']";
 }
 
+function DisableRadioGroupOnSpecificRadioValue(toggleRadio, toggleValue, valueToSet, radioNamesToDisable) {
+    var toggleSelector = "input:radio[name$='" + toggleRadio + "']";
+
+    var applyState = function () {
+        var disabled = $(toggleSelector + ":checked").val() === toggleValue;
+        $.each(radioNamesToDisable, function (index, radioName) {
+            SetRadioGroupValueAndDisabledState(radioName, valueToSet, disabled);
+        });
+    };
+
+    applyState();
+    $(toggleSelector).change(applyState);
+}
+
+function SetRadioGroupValueAndDisabledState(radioName, valueToSet, disabled) {
+    $("input:radio[name$='" + radioName + "']").each(function () {
+        var input = $(this);
+        if (disabled) {
+            var isTarget = input.val() === valueToSet;
+            input.prop("checked", isTarget);
+            input.parent().toggleClass("active", isTarget);
+        }
+        input.prop("disabled", disabled);
+        input.parent().toggleClass("disabled", disabled);
+    });
+}
+
 function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
     divToShow, inputSelector, valueSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue)
 {
