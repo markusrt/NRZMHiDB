@@ -14,24 +14,16 @@ jobs:
   build:
     runs-on: windows-2022
     steps:
-    - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
+    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-    - name: Add msbuild to PATH
+    - name: Setup .NET Framework
       uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2
         
-    - name: Setup VSTest.console.exe
-      uses: darenm/Setup-VSTest@d9a5dffa3f11d9c27ec42eb69515d3aaeaad9ef8 # v1.2
-
-    - name: Setup Nuget.exe
-      uses: nuget/setup-nuget@d105a947828025cd7a980103c35ba2bfae586d0f # v2
-      with:
-        nuget-version: 'latest'
-      
     - name: Restore NuGet packages
-      run: nuget restore HaemophilusWeb.sln 
+      run: dotnet restore HaemophilusWeb.sln
         
     - name: Build solution
-      run: msbuild HaemophilusWeb.sln 
+      run: dotnet build HaemophilusWeb.sln --configuration Debug --no-restore
       
     - name: Run unit tests
-      run: VSTest.console.exe /Enablecodecoverage HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll 
+      run: dotnet test HaemophilusWebTests/HaemophilusWebTests.csproj --configuration Debug --no-build --verbosity normal

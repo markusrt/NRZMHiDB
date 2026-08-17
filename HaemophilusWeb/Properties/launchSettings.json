@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "IIS Express": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\IIS Express\\iisexpress.exe",
+      "commandLineArgs": "/config:\"$(SolutionDir).vs\\HaemophilusWeb\\config\\applicationhost.config\" /site:HaemophilusWeb",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:49310/",
+      "workingDirectory": "$(ProjectDir)"
+    }
+  }
+}
