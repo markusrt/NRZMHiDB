@@ -33,6 +33,8 @@
 
     @Html.EnumRadioEditorFor(model => model.BetaLactamase)
 
+    @Html.EnumRadioEditorFor(model => model.PenicillinAdt, "col-sm-10", suffix: "mm")
+
     @Html.EnumRadioEditorFor(model => model.Agglutination, "col-sm-10")
 
     @Html.EnumRadioEditorFor(model => model.FactorTest)

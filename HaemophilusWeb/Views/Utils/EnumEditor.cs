@@ -79,7 +79,7 @@ namespace HaemophilusWeb.Views.Utils
 
 
         public static MvcHtmlString EnumRadioButtonFor<TModel, TEnum>(this HtmlHelper<TModel> htmlHelper,
-            Expression<Func<TModel, TEnum>> expression, bool shortName = false)
+            Expression<Func<TModel, TEnum>> expression, bool shortName = false, string suffix = null)
         {
             var modelMetadata = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
             var currentValue = htmlHelper.ValueFor(expression).ToString();
@@ -114,7 +114,12 @@ namespace HaemophilusWeb.Views.Utils
                 sb.AppendFormat("<label class=\"btn btn-default {2}\">{0} {1}</label>", selectHtml, description,
                     isActive ? "active" : "");
             }
-            sb.Append("</div></div>");
+            sb.Append("</div>");
+            if (suffix != null)
+            {
+                sb.Append($"<span style=\"margin-left:0.5em\" class=\"badge badge-light\">{suffix}</span>");
+            }
+            sb.Append("</div>");
             sb.Append(htmlHelper.ValidationMessageFor(expression)?.ToHtmlString());
             return MvcHtmlString.Create(sb.ToString());
         }
