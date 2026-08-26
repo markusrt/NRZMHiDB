@@ -204,7 +204,7 @@ and confirm a spreadsheet download is produced containing the senders active in 
   FluentValidation validator", but there is no `SenderValidator` in `Validators/`. Sender
   validation is enforced entirely by DataAnnotations on the `Sender` model: `[Required]` on Name
   and Telefon #1, `[Phone]` on Telefon #1/Telefon #2/Fax, and `[EmailAddress]` on E-Mail. This is
-  recorded as an observed as-is fact, not a proposed change.
+  recorded as an observed as-is fact, not a proposed change. [POTENTIAL-REFACTORING]
 - **A separate `MeningoSenderController` does exist** (resolving the open question in the backlog):
   both `SenderController` (Haemophilus) and `MeningoSenderController` (Meningococci) derive from a
   shared `SenderControllerBase` and operate on the *same* shared sender table. They differ only in
@@ -213,7 +213,7 @@ and confirm a spreadsheet download is produced containing the senders active in 
 - **Sender CRUD is surfaced only through the Haemophilus "Einsender" area in navigation.** Only
   the Meningococci sender *export* is linked from navigation; list/create/edit/delete/restore are
   reached via the shared Haemophilus sender pages. Both controllers technically expose the same
-  actions against the shared directory.
+  actions against the shared directory. [POTENTIAL-REFACTORING]
 - **Authorization**: All sender actions require the standard laboratory-user role
   ("Standardbenutzer"). Navigation exposes the "Einsender" and "Gelöschte Einsender" entries to
   standard-user or administrator roles; the deleted-senders list is placed under the
