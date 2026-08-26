@@ -1,20 +1,26 @@
 <!--
 Sync Impact Report
 ==================
-Version change: (unversioned template) → 1.0.0
-Bump rationale: Initial ratification. The prior file contained only unfilled template
-placeholders, so this is the first concrete adoption (MAJOR baseline 1.0.0).
+Version change: 1.0.0 → 1.1.0
+Bump rationale: MINOR — added a new "Known Architectural Constraints (Legacy Debt)" section
+capturing two standing constraints derived from the legacy codebase (parallel
+Meningococci/Haemophilus domains; god-controllers with weak dependency injection). No principle
+was removed or redefined.
 
-Modified principles:
-  - [PRINCIPLE_1_NAME] → I. Patient Data Integrity & Domain Validation (NON-NEGOTIABLE)
-  - [PRINCIPLE_2_NAME] → II. Test-First Discipline
-  - [PRINCIPLE_3_NAME] → III. Layered Architecture & Separation of Concerns
-  - [PRINCIPLE_4_NAME] → IV. Data Privacy, Security & Least Privilege
-  - [PRINCIPLE_5_NAME] → V. Explicit, Reversible Schema Evolution
+Amendment history:
+  - 1.0.0 (2026-08-26): Initial ratification from the legacy codebase. Established Principles
+    I–V and the Technology/Workflow/Governance sections (prior file was an unfilled template).
+  - 1.1.0 (2026-08-26): Added "Known Architectural Constraints (Legacy Debt)".
+
+Principles (unchanged since 1.0.0):
+  - I. Patient Data Integrity & Domain Validation (NON-NEGOTIABLE)
+  - II. Test-First Discipline
+  - III. Layered Architecture & Separation of Concerns
+  - IV. Data Privacy, Security & Least Privilege
+  - V. Explicit, Reversible Schema Evolution
 
 Added sections:
-  - Technology & Platform Constraints (was [SECTION_2_NAME])
-  - Development Workflow & Quality Gates (was [SECTION_3_NAME])
+  - Known Architectural Constraints (Legacy Debt)  [v1.1.0]
 
 Removed sections: None
 
@@ -130,6 +136,30 @@ environments and enables safe, auditable evolution of clinical data structures.
 - Complexity that deviates from these principles MUST be justified in the PR; unjustified
   complexity is grounds to request changes.
 
+## Known Architectural Constraints (Legacy Debt)
+
+This constitution was derived from a legacy codebase that carries known architectural debt. The
+following constraints are documented so new work is measured against them: changes MUST NOT
+deepen these patterns, and SHOULD reduce them when a change already touches the affected area.
+Deviations MUST be justified in the PR.
+
+- **Parallel Meningococci and Haemophilus domains.** The domain is duplicated across two
+  near-parallel model/controller families — the unprefixed types (e.g. `Sending`, `Patient`,
+  `Isolate`) are Haemophilus (which existed first) and the `Meningo*` types (e.g.
+  `MeningoSending`, `MeningoPatient`, `MeningoIsolate`) are Meningococci. The two behave
+  differently and were kept separate under time pressure rather than unified behind a shared
+  abstraction. New work MUST NOT add a third parallel copy; where practical it SHOULD extract or
+  reuse shared concepts (e.g. `Sender`, already shared across both databases) rather than
+  duplicate them again.
+- **God-controllers with weak dependency injection.** Most business logic currently lives in MVC
+  controllers, and wiring to the few repositories and services is done manually because the
+  application lacks a dependency-injection container. New logic SHOULD move toward `Services/`
+  and `Domain/` (per Principle III) and SHOULD be constructor-injected so it can be tested in
+  isolation, instead of adding more responsibility to controllers.
+
+Rationale: Naming and documenting this debt keeps it visible and prevents it from silently
+growing; it also gives reviewers an explicit basis to push back on changes that entrench it.
+
 ## Governance
 
 This constitution supersedes ad-hoc conventions for the NRZMHi Database project. When guidance
@@ -147,4 +177,4 @@ here conflicts with habit or convenience, this document wins.
   `.specify/templates/` for day-to-day development and planning guidance consistent with this
   constitution.
 
-**Version**: 1.0.0 | **Ratified**: 2026-08-26 | **Last Amended**: 2026-08-26
+**Version**: 1.1.0 | **Ratified**: 2026-08-26 | **Last Amended**: 2026-08-26
