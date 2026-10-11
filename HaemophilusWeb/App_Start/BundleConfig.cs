@@ -43,9 +43,11 @@ namespace HaemophilusWeb
                 "~/Scripts/select2.js",
                 "~/Scripts/respond.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/site").Include(
+            var siteBundle = new ScriptBundle("~/bundles/site").Include(
                 "~/Scripts/site.js",
-                "~/Scripts/imagemodule.js"));
+                "~/Scripts/imagemodule.js");
+            siteBundle.Transforms.Clear();
+            bundles.Add(siteBundle);
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",

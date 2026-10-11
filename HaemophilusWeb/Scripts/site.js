@@ -27,10 +27,10 @@ function GeneralInput(id) {
 }
 
 function DisableRadioGroupOnSpecificRadioValue(toggleRadio, toggleValue, valueToSet, radioNamesToDisable) {
-    var toggleSelector = "input:radio[name$='" + toggleRadio + "']";
+    let toggleSelector = "input:radio[name$='" + toggleRadio + "']";
 
-    var applyState = function () {
-        var disabled = $(toggleSelector + ":checked").val() === toggleValue;
+    let applyState = function () {
+        let disabled = $(toggleSelector + ":checked").val() === toggleValue;
         $.each(radioNamesToDisable, function (index, radioName) {
             SetRadioGroupValueAndDisabledState(radioName, valueToSet, disabled);
         });
@@ -42,9 +42,9 @@ function DisableRadioGroupOnSpecificRadioValue(toggleRadio, toggleValue, valueTo
 
 function SetRadioGroupValueAndDisabledState(radioName, valueToSet, disabled) {
     $("input:radio[name$='" + radioName + "']").each(function () {
-        var input = $(this);
+        let input = $(this);
         if (disabled) {
-            var isTarget = input.val() === valueToSet;
+            let isTarget = input.val() === valueToSet;
             input.prop("checked", isTarget);
             input.parent().toggleClass("active", isTarget);
         }
