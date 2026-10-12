@@ -69,20 +69,12 @@
             @Html.EnumRadioEditorFor(model => model.SerogroupPcr, "col-sm-10")
             
             @Html.EnumRadioEditorFor(model => model.MaldiTofBiotyper)
-            <div id="MaldiTofMatchConfidenceForm" class="form-group">
-                @Html.LabelFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-4">
-                    @Html.TextBoxFor(m => m.MaldiTofBiotyperBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
-                    @Html.ValidationMessageFor(model => model.MaldiTofBiotyperBestMatch)
-                </div>
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        @Html.TextBoxFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
-                        <span class="input-group-addon">00,0</span>
-                    </div>
-                    @Html.ValidationMessageFor(model => model.MaldiTofBiotyperMatchConfidence)
-                </div>
-            </div>
+            @Html.MatchWithConfidenceEditorFor(
+                m => m.MaldiTofBiotyperBestMatch,
+                m => m.MaldiTofBiotyperMatchConfidence,
+                id: "MaldiTofMatchConfidenceForm",
+                datalistId: "maldiTofBiotyperBestMatchAutocomplete",
+                autocompleteList: (IEnumerable<string>)ViewBag.PossibleMaldiTofBiotyperBestMatches)
 
             @Html.ReadonlyFor(model => model.MaldiTofVitek,
                 suffix: Model.MaldiTofVitek == UnspecificTestResult.Determined
@@ -116,20 +108,12 @@
             @Html.EnumRadioEditorFor(model => model.RealTimePcrDevice, "col-sm-6")
 
             @Html.EnumRadioEditorFor(model => model.RibosomalRna16S, "col-sm-6")
-            <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
-                @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 control-label" })
-                <div class="col-sm-4">
-                    @Html.TextBoxFor(m => m.RibosomalRna16SBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
-                    @Html.ValidationMessageFor(model => model.RibosomalRna16SBestMatch)
-                </div>
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "form-control", placeholder = "in Prozent" })
-                        <span class="input-group-addon">%</span>
-                    </div>
-                    @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
-                </div>
-            </div>
+            @Html.MatchWithConfidenceEditorFor(
+                m => m.RibosomalRna16SBestMatch,
+                m => m.RibosomalRna16SMatchInPercent,
+                id: "RibosomalRna16SMatchInPercentForm",
+                addon: "%",
+                confidencePlaceholder: "in Prozent")
 
             <div class="form-group">
                 <label class="col-sm-12">Bestimmung der Serogenogruppe</label>
@@ -277,6 +261,7 @@
     preventSiteNavigationWithPendingChanges();
 
     var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
+    var defaultMaldiTofBiotyperBestMatch = @(Html.Raw(Json.Encode(ViewBag.DefaultMaldiTofBiotyperBestMatch)));
 
     $(document).ready(
         function () {
@@ -285,6 +270,7 @@
             $("select[id$=_Antibiotic]").change(ETestChange);
 
             ConfigureConditionalFields();
+            ConfigureMaldiTofBiotyperDefaults(defaultMaldiTofBiotyperBestMatch);
 
             $("#PubMlstQuery").click(QueryPubMlstDatabase);
 
@@ -298,7 +284,7 @@
     function ConfigureConditionalFields() {
         ShowOnSpecificRadioValue("RibosomalRna16SMatchInPercentForm", "RibosomalRna16S", "Positive", GeneralInput("RibosomalRna16SBestMatch"), GeneralInput("RibosomalRna16SMatchInPercent"));
         ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTofBiotyper", "Determined", GeneralInput("MaldiTofBiotyperBestMatch"), GeneralInput("MaldiTofBiotyperMatchConfidence"));
-        ShowOnSpecificRadioValue("PorAPcrForm", "PorAPcr", "Positive", ExactInput("PorAVr1"), ExactInput("PorAVr2"));
+        DisableRadioGroupOnSpecificRadioValue("MaldiTofBiotyper", "Determined", "NotDetermined", ["Oxidase", "Onpg"]);
         ShowOnSpecificRadioValue("FetAPcrForm", "FetAPcr", "Positive", ExactInput("FetAVr"));
         ShowOnSpecificRadioValue("CswyAlleleForm", "CswyPcr", "Positive", RadioInput("CswyAllele"));
         ShowOnSpecificRadioValue("RealTimePcrForm", "RealTimePcr", "Positive", CheckInput("RealTimePcrResult"));

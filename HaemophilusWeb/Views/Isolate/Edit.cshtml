@@ -60,36 +60,20 @@
     @Html.EnumRadioEditorFor(model => model.RealTimePcrDevice, "col-sm-8")
 
     @Html.EnumRadioEditorFor(model => model.RibosomalRna16S)
-    <div id="RibosomalRna16SMatchInPercentForm" class="form-group">
-        @Html.LabelFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "col-sm-2 control-label" })
-        <div class="col-sm-4">
-            @Html.TextBoxFor(m => m.RibosomalRna16SBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
-            @Html.ValidationMessageFor(model => model.RibosomalRna16SBestMatch)
-        </div>
-        <div class="col-sm-3">
-            <div class="input-group">
-                @Html.TextBoxFor(m => m.RibosomalRna16SMatchInPercent, new { @class = "form-control", placeholder = "in Prozent" })
-                <span class="input-group-addon">%</span>
-            </div>
-            @Html.ValidationMessageFor(model => model.RibosomalRna16SMatchInPercent)
-        </div>
-    </div>
+    @Html.MatchWithConfidenceEditorFor(
+        m => m.RibosomalRna16SBestMatch,
+        m => m.RibosomalRna16SMatchInPercent,
+        id: "RibosomalRna16SMatchInPercentForm",
+        addon: "%",
+        confidencePlaceholder: "in Prozent")
 
     @Html.EnumRadioEditorFor(model => model.MaldiTofBiotyper)
-    <div id="MaldiTofMatchConfidenceForm" class="form-group">
-        @Html.LabelFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "col-sm-2 control-label" })
-        <div class="col-sm-4">
-            @Html.TextBoxFor(m => m.MaldiTofBiotyperBestMatch, new { @class = "form-control", placeholder = "Beste Übereinstimmung" })
-            @Html.ValidationMessageFor(model => model.MaldiTofBiotyperBestMatch)
-        </div>
-        <div class="col-sm-3">
-            <div class="input-group">
-                @Html.TextBoxFor(m => m.MaldiTofBiotyperMatchConfidence, new { @class = "form-control", @placeholder = "Konfidenzwert" })
-                <span class="input-group-addon">00,0</span>
-            </div>
-            @Html.ValidationMessageFor(model => model.MaldiTofBiotyperMatchConfidence)
-        </div>
-    </div>
+    @Html.MatchWithConfidenceEditorFor(
+        m => m.MaldiTofBiotyperBestMatch,
+        m => m.MaldiTofBiotyperMatchConfidence,
+        id: "MaldiTofMatchConfidenceForm",
+        addon: "0,0",
+        autocompleteList: (IEnumerable<string>)ViewBag.PossibleMaldiTofBiotyperBestMatches)
 
     @Html.ReadonlyFor(model => model.MaldiTofVitek,
         suffix: Model.MaldiTofVitek == UnspecificTestResult.Determined
@@ -149,6 +133,7 @@
 
     var clinicalBreakpoints = @(Html.Raw(Json.Encode(ViewBag.ClinicalBreakpoints)));
     var serogroups = ["A", "B", "C", "D", "E", "F"];
+    var defaultMaldiTofBiotyperBestMatch = @(Html.Raw(Json.Encode(ViewBag.DefaultMaldiTofBiotyperBestMatch)));
 
     $(document).ready(
         function() {
@@ -158,13 +143,14 @@
             $("input:radio[name$='Agglutination']").change(AgglutinationChange);
             $("select[id$=Evaluation]").change(EvaluationChange);
             ConfigureConditionalFields();
+            ConfigureMaldiTofBiotyperDefaults(defaultMaldiTofBiotyperBestMatch);
         }
     );
 
     function ConfigureConditionalFields() {
         ShowOnSpecificRadioValue("RibosomalRna16SMatchInPercentForm", "RibosomalRna16S", "Positive", GeneralInput("RibosomalRna16SBestMatch"), GeneralInput("RibosomalRna16SMatchInPercent"));
         ShowOnSpecificRadioValue("MaldiTofMatchConfidenceForm", "MaldiTofBiotyper", "Determined", GeneralInput("MaldiTofBiotyperBestMatch"), GeneralInput("MaldiTofBiotyperMatchConfidence"));
-        ShowOnSpecificRadioValue("RealTimePcrForm", "RealTimePcr", "Positive", CheckInput("RealTimePcrResult"));
+        DisableRadioGroupOnSpecificRadioValue("MaldiTofBiotyper", "Determined", "NotDetermined", ["Oxidase", "FactorTest"]);
         ShowOnSpecificRadioValue("FtsiEvaluationForm", "Ftsi", "Determined", GeneralInput("FtsiEvaluation1"), GeneralInput("FtsiEvaluation2"), GeneralInput("FtsiEvaluation3"));
         ShowOnSpecificRadioValue("MlstSequenceTypeForm", "Mlst", "Determined", GeneralInput("MlstSequenceType"));
         ShowOnSpecificRadioValue("GrowthTypeForm", "Growth", "Yes", CheckInput("TypeOfGrowth"));
