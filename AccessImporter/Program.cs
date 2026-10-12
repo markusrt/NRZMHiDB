@@ -15,6 +15,7 @@ using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.Validators;
 using HaemophilusWeb.ViewModels;
+using Microsoft.Extensions.Logging.Abstractions;
 using Sending = HaemophilusWeb.Migrations.Sending;
 
 namespace AccessImporter
@@ -46,7 +47,7 @@ namespace AccessImporter
                     .ConvertUsing<AccessMeningoSendingConverter>();
                 cfg.CreateMap<Dictionary<string, object>, MeningoIsolate>()
                     .ConvertUsing<AccessMeningoIsolateConverter>();
-            });
+            }, NullLoggerFactory.Instance);
 
             var selectSamplingLocations = "SELECT * FROM tbl_isol_mat";
             foreach (var meningoSamplingLocation in LoadAndConvert<MeningoSamplingLocation>(connectionString, selectSamplingLocations, "isol_mat_nr"))

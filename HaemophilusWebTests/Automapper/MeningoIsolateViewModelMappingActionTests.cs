@@ -132,6 +132,48 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.DemisIdQrImageUrl.Should().EndWith("/aNZaa31qf2jWWmt9an9o1lprfWp/aNZaa33of//7PzFUPlvfvwGnAAAAAElFTkSuQmCC");
         }
 
+        [Test]
+        public void Mapper_ModelToViewModel_MapsPropertiesAndRunsMappingAction()
+        {
+            var isolate = CreateEmptyIsolate();
+            isolate.MeningoIsolateId = 123;
+            isolate.Remark = "Test remark";
+            isolate.Sending.SamplingLocation = MeningoSamplingLocation.BloodAndLiquor;
+
+            var viewModel = MvcApplication.Mapper.Map<MeningoIsolateViewModel>(isolate);
+
+            viewModel.MeningoIsolateId.Should().Be(123);
+            viewModel.Remark.Should().Be("Test remark");
+            viewModel.SamplingLocation.Should().Be("Blut und Liquor");
+            viewModel.EpsilometerTestViewModels.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void Mapper_ViewModelToModel_MapsPropertiesAndRunsMappingAction()
+        {
+            var isolate = CreateEmptyIsolate();
+            isolate.Sending.Material = MeningoMaterial.VitalStem;
+            var viewModel = new MeningoIsolateViewModel
+            {
+                MeningoIsolateId = 123,
+                LaboratoryNumber = "456/26",
+                Remark = "Test remark",
+                GrowthOnBloodAgar = Growth.No,
+                GrowthOnMartinLewisAgar = Growth.No
+            };
+            var sending = isolate.Sending;
+
+            MvcApplication.Mapper.Map(viewModel, isolate);
+
+            isolate.MeningoIsolateId.Should().Be(123);
+            isolate.Remark.Should().Be("Test remark");
+            isolate.Year.Should().Be(2026);
+            isolate.YearlySequentialIsolateNumber.Should().Be(456);
+            isolate.Sending.Should().BeSameAs(sending);
+            isolate.Sending.Material.Should().Be(MeningoMaterial.NoGrowth);
+            isolate.EpsilometerTests.Should().BeEmpty();
+        }
+
         private static MeningoIsolate CreateEmptyIsolate()
         {
             return new MeningoIsolate
