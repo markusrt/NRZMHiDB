@@ -192,4 +192,21 @@ function installBeforeUnloadListener() {
         return "Sie besitzen ungespeicherte Änderungen!";
     });
     window.installedBeforeUnloadListenerOnPendingChanges = true;
-};
+}
+
+function ConfigureMaldiTofBiotyperDefaults(defaultBestMatch) {
+    $("input:radio[name$='MaldiTofBiotyper']").change(function () {
+        if ($(this).val() !== "Determined" || !$(this).is(":checked")) {
+            return;
+        }
+
+        var bestMatchInput = GeneralInput("MaldiTofBiotyperBestMatch");
+        var confidenceInput = GeneralInput("MaldiTofBiotyperMatchConfidence");
+
+        if ($(bestMatchInput).val().length === 0) {
+            $(bestMatchInput).val(defaultBestMatch);
+        }
+
+        setTimeout(function () { $(confidenceInput).focus(); }, 0);
+    });
+}

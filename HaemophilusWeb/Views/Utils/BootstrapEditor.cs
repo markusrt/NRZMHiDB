@@ -1,7 +1,11 @@
 ﻿using HaemophilusWeb.Utils;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
-using System.Reflection.Emit;
+using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 
@@ -98,6 +102,71 @@ namespace HaemophilusWeb.Views.Utils
             var readonlyField = string.Format(DivSmXStatic, smXClass, display+suffix, hidden);
 
             return CreateFormGroup(label, readonlyField);
+        }
+
+        public static MvcHtmlString MatchWithConfidenceEditorFor<TModel, TBestMatch, TConfidence>(
+            this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TBestMatch>> bestMatchExpression,
+            Expression<Func<TModel, TConfidence>> confidenceExpression,
+            string id = null,
+            string addon = "0,0",
+            IEnumerable<string> autocompleteList = null,
+            string autocompleteViewDataKey = null,
+            string bestMatchPlaceholder = "Beste Übereinstimmung",
+            string confidencePlaceholder = "Konfidenzwert",
+            string datalistId = null)
+        {
+            var propertyName = ExpressionHelper.GetExpressionText(bestMatchExpression);
+            if (autocompleteList == null)
+            {
+                var viewDataKey = autocompleteViewDataKey ?? $"Possible{propertyName}es";
+                if (htmlHelper.ViewData.ContainsKey(viewDataKey) && htmlHelper.ViewData[viewDataKey] is IEnumerable enumerable)
+                {
+                    autocompleteList = enumerable.Cast<object>().Select(o => o?.ToString()).ToList();
+                }
+            }
+
+            var label = htmlHelper.LabelFor(confidenceExpression);
+
+            var resolvedDatalistId = datalistId ?? (string.IsNullOrEmpty(propertyName)
+                ? "matchAutocomplete"
+                : char.ToLowerInvariant(propertyName[0]) + propertyName.Substring(1) + "Autocomplete");
+
+            var datalistHtml = string.Empty;
+            string bestMatchTextBox;
+            if (autocompleteList != null)
+            {
+                bestMatchTextBox = htmlHelper.TextBoxFor(
+                    bestMatchExpression,
+                    new { @class = "form-control", placeholder = bestMatchPlaceholder, @list = resolvedDatalistId, @autocomplete = "off" }).ToHtmlString();
+
+                var options = new StringBuilder();
+                foreach (var item in autocompleteList)
+                {
+                    if (item != null)
+                    {
+                        options.Append($"<option value=\"{HttpUtility.HtmlAttributeEncode(item)}\" />");
+                    }
+                }
+                datalistHtml = $"<datalist id=\"{resolvedDatalistId}\">{options}</datalist>";
+            }
+            else
+            {
+                bestMatchTextBox = htmlHelper.TextBoxFor(
+                    bestMatchExpression,
+                    new { @class = "form-control", placeholder = bestMatchPlaceholder }).ToHtmlString();
+            }
+
+            var bestMatchValidation = GetValidationHtml(htmlHelper, bestMatchExpression);
+            var bestMatchCol = $"<div class=\"col-sm-4\">{bestMatchTextBox}{datalistHtml}{bestMatchValidation}</div>";
+
+            var confidenceTextBox = htmlHelper.TextBoxFor(
+                confidenceExpression,
+                new { @class = "form-control", placeholder = confidencePlaceholder }).ToHtmlString();
+            var confidenceValidation = GetValidationHtml(htmlHelper, confidenceExpression);
+            var confidenceCol = $"<div class=\"col-sm-3\"><div class=\"input-group\">{confidenceTextBox}<span class=\"input-group-addon\">{addon}</span></div>{confidenceValidation}</div>";
+
+            return CreateFormGroup(label, bestMatchCol + confidenceCol, id);
         }
 
         private static MvcHtmlString CreateFormGroup(string labelHtml, string elementHtml, string id = null)
