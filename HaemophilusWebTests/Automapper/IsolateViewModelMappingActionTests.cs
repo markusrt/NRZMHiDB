@@ -75,6 +75,44 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.DemisIdQrImageUrl.Should().EndWith("/aNZaa31qf2jWWmt9an9o1lprfWp/aNZaa33of//7PzFUPlvfvwGnAAAAAElFTkSuQmCC");
         }
         
+        [Test]
+        public void Mapper_ModelToViewModel_MapsPropertiesAndRunsMappingAction()
+        {
+            var isolate = CreateEmptyIsolate();
+            isolate.IsolateId = 123;
+            isolate.Remark = "Test remark";
+            DbMock.Senders.Find(1).Name = "Test Sender";
+
+            var viewModel = MvcApplication.Mapper.Map<IsolateViewModel>(isolate);
+
+            viewModel.IsolateId.Should().Be(123);
+            viewModel.Remark.Should().Be("Test remark");
+            viewModel.SenderName.Should().Be("Test Sender");
+            viewModel.EpsilometerTestViewModels.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void Mapper_ViewModelToModel_MapsPropertiesAndRunsMappingAction()
+        {
+            var isolate = CreateEmptyIsolate();
+            var viewModel = new IsolateViewModel
+            {
+                IsolateId = 123,
+                LaboratoryNumber = "456/26",
+                Remark = "Test remark"
+            };
+            var sending = isolate.Sending;
+
+            MvcApplication.Mapper.Map(viewModel, isolate);
+
+            isolate.IsolateId.Should().Be(123);
+            isolate.Remark.Should().Be("Test remark");
+            isolate.Year.Should().Be(2026);
+            isolate.YearlySequentialIsolateNumber.Should().Be(456);
+            isolate.Sending.Should().BeSameAs(sending);
+            isolate.EpsilometerTests.Should().BeEmpty();
+        }
+
         private static Isolate CreateEmptyIsolate()
         {
             return new Isolate

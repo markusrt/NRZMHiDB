@@ -13,6 +13,7 @@ using HaemophilusWeb.Migrations;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.ViewModels;
+using Microsoft.Extensions.Logging.Abstractions;
 using NLog;
 
 namespace HaemophilusWeb
@@ -29,7 +30,7 @@ namespace HaemophilusWeb
                 cfg.CreateMap<Isolate, IsolateViewModel>().AfterMap<IsolateViewModelMappingAction>();
                 cfg.CreateMap<MeningoIsolate, MeningoIsolateViewModel>().AfterMap<MeningoIsolateViewModelMappingAction>();
                 cfg.CreateMap<MeningoIsolateViewModel, MeningoIsolate>().AfterMap<MeningoIsolateViewModelMappingAction>();
-            });
+            }, NullLoggerFactory.Instance);
 
             Mapper = mapperConfiguration.CreateMapper();
         }
