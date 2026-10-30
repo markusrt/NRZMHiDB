@@ -41,3 +41,4 @@
   - Administrator refusal assumes single-role accounts, as in specs 011 and 014.
   - No automated test covers the merge function.
 - As-is observations tagged in the spec: 6 [SUSPECTED-DEFECT], 1 [POTENTIAL-REFACTORING].
+- Review 2026-10-30: the Assumptions no longer describe spec 003 as contradicting this spec; spec 003 was aligned with the finding that no Meningococci delete-confirmation page exists.

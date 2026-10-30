@@ -36,4 +36,4 @@
 - One observed naming deviation (the "Deleted" action queries non-deleted submissions) is recorded
   factually in the Assumptions section rather than corrected.
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`.
-</content>
+- Review 2026-10-30: FR-021 corrected — the combined form carries anti-forgery tokens but the create/edit saves do not verify them (spec 021; tagged [SUSPECTED-DEFECT]). User Story 3 scenario 4, SC-006, and the Assumptions now state that restore is reachable only by direct address because the deleted-submissions page lists active submissions (spec 020).

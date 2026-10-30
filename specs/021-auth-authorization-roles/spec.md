@@ -304,11 +304,11 @@ sign in with the new password.
 - **Anti-forgery tokens — consolidated**: The token is verified on sign-in, registration, sign-out, password change,
   and on the create/edit/delete forms of senders, patients, sendings, isolates, breakpoints, health offices,
   counties, configuration, and PubMLST matching (specs 001, 004, 005, 016–020). It is **not** verified on:
-  the combined Haemophilus and Meningococci submission create and edit (contrary to spec 002 FR-021 and spec 003 FR-023, which
-  describe tokens on the form; the form carries one but the save does not check it) [SUSPECTED-DEFECT]; all seven
+  the combined Haemophilus and Meningococci submission create and edit (the form carries a token but the save does
+  not check it; recorded in spec 002 FR-021 and spec 003 FR-023) [SUSPECTED-DEFECT]; all seven
   exports and both sender exports, which also accept any request method (specs 011, 013); both patient merges (specs
   014, 015); restoring senders and submissions (spec 020); the health-office lookup and report-status marking (specs
-  008, 009, 016); the individual PubMLST lookup (spec 019) and the postal-code lookups (spec 001); the submission list
+  008, 009, 016); the individual PubMLST lookup (spec 019) and the postal-code lookups (spec 022); the submission list
   data requests; the county file upload, which accepts any request method; the RKI match import; and the role page
   save. [POTENTIAL-REFACTORING]
 - **Helper functions reachable by address**: Some internal helper functions of the controllers are reachable by direct
@@ -325,11 +325,10 @@ sign in with the new password.
 - **Least privilege** (Constitution Principle IV): The Public Health boundary is enforced only on functions that name
   their roles; the report pages, health offices, and RKI match import name none and are therefore open to Public
   Health, contrary to "PublicHealth is limited to RKI exports". The navigation alone hides them.
-- **Inconsistencies with earlier specs** (left unchanged there): spec 001, User Story 2 scenario 3, has "an
-  administrator" restore a sender, but an Administrator-only account is refused there (spec 020); specs 002 FR-021 and
-  003 FR-023 name anti-forgery tokens as protection of the combined submission form, which the save does not verify;
-  specs 008 and 009 record the open report pages without tagging them. The findings of specs 011, 013, 014–020 on
-  roles agree with this spec.
+- **Consistency with earlier specs**: spec 001 (User Story 2 scenario 3: restore by a standard user), specs 002
+  FR-021 and 003 FR-023 (combined submission save does not verify the anti-forgery token), and specs 008 and 009
+  (report pages open to any signed-in account) were aligned with this spec during review. The findings of specs 011,
+  013, 014–020 on roles agree with this spec.
 - **Architecture** (Constitution "Known Architectural Constraints (Legacy Debt)", Principles II and III): Access
   rules are declared per page group or per function, partly in shared base page groups used by both pathogens
   (submissions, senders, isolates, patients, sendings) and partly in the derived ones; the navigation repeats the role
@@ -395,7 +394,7 @@ that role. "Signed-in" means any signed-in account, including accounts without r
 | Laboratory exports, Haemophilus PubMLST export, IRIS export | – | ✓ | – (menu shown) | – | User, Admin | No; any method | 011, 012 |
 | Isolate entry (both pathogens) | – | ✓ | – | – | Reached from submissions | Yes | 004, 005 |
 | PubMLST matching (Meningococci), individual PubMLST lookup | – | ✓ | – (menu shown) | – | User, Admin | Matching yes; lookup no | 019 |
-| Postal-code lookups (sender and patient forms) | – | ✓ | – | – | Used inside forms | No | 001, 018 |
+| Postal-code lookups (sender and patient forms) | – | ✓ | – | – | Used inside forms | No | 022 |
 | Configuration "Konfiguration" | – | ✓ | – (menu shown) | – | User, Admin | Yes | 018 |
 | EUCAST breakpoints "Antibiotika Grenzwerte" | – | ✓ | – (menu shown) | – | User, Admin | Yes | 017 |
 | Counties (generated pages, file upload) | – | ✓ | – | – | None | Forms yes; upload no, any method | this spec |

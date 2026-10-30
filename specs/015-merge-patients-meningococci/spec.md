@@ -288,8 +288,8 @@ Findings of spec 014, checked against the Meningococci variant:
   absence of a Meningococci deletion page (none has ever existed in the repository history) and of a Meningococci
   "Gelöschte Einsendungen" menu entry; it was not exercised. It is assumed that the legacy data import does not set
   the soft-delete flag (the importer does not touch it), so existing soft-deleted Meningococci submissions, if any,
-  stem from requests outside the normal pages or direct database changes. Spec 003 describes a working
-  delete-confirmation page for Meningococci; this inventory records the observed absence and does not change spec 003.
+  stem from requests outside the normal pages or direct database changes. Spec 003 (User Story 3, FR-018)
+  records the same absence.
 - The EpiScanGIS grouping effect is derived from that export's code (one line per patient number); the export itself
   is not yet specified.
 - As in specs 011 and 014, accounts are assumed to hold exactly one role, so an Administrator account is refused.

@@ -38,3 +38,4 @@
   (2) a separate `MeningoSenderController` **does** exist, sharing a base controller and the same
   sender table with the Haemophilus `SenderController`.
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`.
+- Review 2026-10-30: User Story 2 scenario 3 corrected (restore is done by a standard user; Administrator-only accounts are refused by the sender pages, spec 021). FR-015 now notes that the per-sender export values include soft-deleted submissions (spec 013).

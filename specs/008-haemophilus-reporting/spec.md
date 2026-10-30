@@ -133,8 +133,12 @@ image, then inspect the downloaded document and confirm that no signed state is 
 
 - Opening report creation without an isolate identifier returns a bad-request outcome; using an
   identifier that does not resolve to an isolate returns a not-found outcome.
-- If no report templates exist, the template list communicates that none are stored and report
-  generation cannot pass the required-selection check.
+- If no report templates exist, the template list offers only the "Auswählen..." placeholder (the
+  "Keine Vorlagen hinterlegt" label in the page is never shown; see spec 010) and report generation
+  cannot pass the required-selection check.
+- The report routes require only a signed-in account and check no role, so a Public Health (`RKI`)
+  account can open the report page of any isolate by direct address, generate the document, and set
+  the report status (see FR-002 and spec 021). [SUSPECTED-DEFECT]
 - Preliminary classification depends only on the selected template path containing the configured
   preliminary marker. A selected template without that marker follows the final path.
 - A document-template loading or rendering error stops the flow before the report-generation

@@ -222,12 +222,10 @@ with a Public Health account and verify that all are refused.
 - **No audit trail**: Neither a sender nor a submission records who deleted or restored it, or when; the deleted
   mark is the only trace, and restoring removes it (cf. Constitution Principle I, "Data-losing operations … MUST be
   explicit, auditable, and recoverable"). [POTENTIAL-REFACTORING]
-- **Inconsistency with earlier specs**: Specs 002 and 003 (User Story 3 of both, spec 002 FR-016, spec 003 FR-018,
-  SC-006 of both) describe a submission
-  restore that returns a deleted submission to the active list, and spec 003 describes a working soft delete for
-  Meningococci submissions. As found here, restoring is possible only by direct address or by saving the edit page,
-  and Meningococci submissions cannot be soft-deleted through the normal pages, which agrees with the finding of spec
-  015. Specs 002, 003, and 015 are left unchanged; this spec records the current behavior.
+- **Relation to earlier specs**: Specs 002 and 003 (User Story 3 of both, spec 002 FR-016, spec 003 FR-018, SC-006
+  of both) describe the soft delete and restore of submissions from the intake perspective and refer to this spec
+  for the recovery path: restoring is possible only by direct address or by saving the edit page, and Meningococci
+  submissions cannot be soft-deleted through the normal pages, which agrees with the finding of spec 015.
 - **Authorization**: All delete, deleted-list, and restore functions admit only the Standard User role. The
   "Administration" menu with both deleted-records entries is shown to Standard User and Administrator accounts, so an
   Administrator-only account sees the entries but is refused, as in specs 011, 014, 017, 018, and 019.

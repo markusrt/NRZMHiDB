@@ -59,6 +59,8 @@
   - Direct registration submission without token, the role-less account after a crafted role name, the missing-setting
     cases, and helper functions reachable by address are derived from code; not exercised.
   - Whether multi-role accounts exist in the production database cannot be determined from code.
-- Inconsistencies with earlier specs, recorded in the spec and left unchanged there: spec 001 User Story 2 scenario 3
-  (an administrator restores a sender), spec 002 FR-021 / spec 003 FR-023 (anti-forgery tokens on the submission form).
+- Review 2026-10-30: earlier specs were aligned with this spec — spec 001 User Story 2 scenario 3 (restore by a
+  standard user, not an administrator), spec 002 FR-021 / spec 003 FR-023 (the combined submission save does not verify
+  the anti-forgery token), specs 008/009 (report pages open to any signed-in account, now tagged there). Cross-references
+  to the postal-code lookup now point to spec 022.
 - As-is observations tagged in the spec: 12 [SUSPECTED-DEFECT], 8 [POTENTIAL-REFACTORING].

@@ -37,3 +37,4 @@
   boundaries, template selection, document download, and external signing boundaries were
   cross-checked against the current controller, report view, shared layout, and global
   authorization behavior.
+- Review 2026-10-30: Edge case on an empty template list corrected (only the "Auswählen..." placeholder is shown; spec 010). Added the untagged-until-now observation that report routes check no role, so Public Health accounts can open report pages by direct address (spec 021; tagged [SUSPECTED-DEFECT]).

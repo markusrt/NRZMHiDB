@@ -58,3 +58,4 @@
   Administrator sees the "Administration" menu entries but is refused. All functions here check the Standard User role;
   delete confirmations verify the anti-forgery token, restore requests (plain links) do not.
 - As-is observations tagged in the spec: 9 [SUSPECTED-DEFECT], 4 [POTENTIAL-REFACTORING].
+- Review 2026-10-30: the edge case "Inconsistency with earlier specs" was reworded to "Relation to earlier specs" after specs 002 and 003 were aligned with this spec's findings.

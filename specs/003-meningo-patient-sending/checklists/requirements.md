@@ -34,3 +34,4 @@
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`.
 - This is an *as-is* status-quo inventory; one suspected defect is recorded factually in Assumptions
   (the "Deleted" view queries non-deleted submissions) and is intentionally not proposed as a change.
+- Review 2026-10-30: User Story 3 scenarios 3–4, FR-018, FR-019, SC-006, and the Assumptions corrected — no Meningococci delete-confirmation or deleted-submissions page exists, so "Eintrag löschen" ends on the error page and restore is reachable only by direct address (specs 015, 020; tagged [SUSPECTED-DEFECT]). FR-021 now lists the LGA export among the filtered exports (spec 011). FR-023 corrected — the create/edit saves do not verify the anti-forgery token (spec 021).

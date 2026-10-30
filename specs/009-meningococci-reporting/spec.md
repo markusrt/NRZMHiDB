@@ -60,7 +60,7 @@ The report page lets the user inspect the isolate's prepared reporting data and 
 1. **Given** no template or no signer is selected, **When** the user requests generation, **Then** one error asks for both selections and no document is generated.
 2. **Given** susceptibility results include Azithromycin, **When** report creation opens, **Then** that antibiotic is excluded from the report model while other applicable measured susceptibility results remain available.
 3. **Given** prepared report text describes discrepant results, **When** the user has selected a template and signer and requests generation, **Then** generation proceeds without a discrepancy confirmation.
-4. **Given** no Meningococci templates are stored, **When** the page opens, **Then** the template choice indicates that no templates are available and generation cannot pass the required-selection check.
+4. **Given** no Meningococci templates are stored, **When** the page opens, **Then** the template choice offers only the "Auswählen..." placeholder (the "Keine Vorlagen hinterlegt" label in the page is never shown; see spec 010) and generation cannot pass the required-selection check.
 
 ---
 
@@ -93,6 +93,7 @@ The generated document is downloaded to the user's device. The selected signer i
 - The report data's displayed date and the filename date reflect the generation day. The persisted final report date records the later notification time and includes time of day.
 - Health-office lookup is ancillary. Missing or failed health-office data does not itself block document generation.
 - If an isolate's sender cannot be resolved, sender address fields are not populated, but report creation otherwise continues with the available data.
+- The report routes require only a signed-in account and check no role, so a Public Health (`RKI`) account can open the report page of any isolate by direct address, generate the document, and set the report status (see FR-002 and spec 021). [SUSPECTED-DEFECT]
 
 ## Requirements *(mandatory)*
 

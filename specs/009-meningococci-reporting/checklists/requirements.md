@@ -32,3 +32,4 @@
 ## Notes
 
 - Validation iteration 1: all 16 quality items pass after clarifying that automatic final generation stores date and time while the isolate edit screen exposes a day-granular report-date control.
+- Review 2026-10-30: User Story 3 scenario 4 corrected (only the "Auswählen..." placeholder is shown on an empty template list; spec 010). Added the observation that report routes check no role, so Public Health accounts can open report pages by direct address (spec 021; tagged [SUSPECTED-DEFECT]).

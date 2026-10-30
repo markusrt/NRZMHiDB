@@ -66,8 +66,10 @@ appears under "Gelöschte Einsender", restore it, and confirm it returns to the 
    opens the delete confirmation page, **Then** a warning is shown listing the associated
    submissions (from both Haemophilus and Meningococci) with links to reassign them, and the
    user may still confirm deletion.
-3. **Given** a deleted sender, **When** an administrator opens "Gelöschte Einsender" and chooses
-   "Wiederherstellen", **Then** the sender is un-flagged and returns to the active list.
+3. **Given** a deleted sender, **When** a standard user opens "Gelöschte Einsender" and chooses
+   "Wiederherstellen", **Then** the sender is un-flagged and returns to the active list. (The entry
+   is also shown to Administrator accounts, but the sender pages admit only the standard
+   laboratory-user role; see FR-016 and spec 021.)
 4. **Given** a sender is deleted, **When** existing submissions already attributed to it are
    viewed, **Then** those submissions remain attributed to the (now-deleted) sender.
 
@@ -156,7 +158,9 @@ and confirm a spreadsheet download is produced containing the senders active in 
 - **FR-014**: When the export is opened without a date range, the system MUST default the range
   to the entire previous calendar year.
 - **FR-015**: The export MUST match a submission to the range by its sampling date when present,
-  otherwise by its receiving date, and MUST exclude deleted submissions.
+  otherwise by its receiving date, and MUST exclude deleted submissions when selecting the senders
+  to list (the per-sender count and number lists, however, currently include soft-deleted
+  submissions; see spec 013).
 - **FR-016**: All sender maintenance actions (list, create, edit, details, delete, restore,
   export) MUST require the user to hold the standard laboratory-user role; unauthenticated or
   unauthorized requests MUST be denied.

@@ -112,11 +112,16 @@ restore it.
 2. **Given** a submission, **When** the user opens it for editing, changes patient or sending fields,
    and saves with valid data, **Then** both the patient and the sending changes are persisted and the
    user is returned to the list.
-3. **Given** a submission, **When** the user confirms deletion on the delete-confirmation page,
-   **Then** the submission is flagged as deleted, saved without field-level validation, and removed
-   from the active submissions list.
-4. **Given** a deleted submission, **When** the user restores it, **Then** its deleted flag is
-   cleared (again saved without field-level validation) and it returns to the active list.
+3. **Given** a submission's edit page, **When** the user selects "Eintrag löschen", **Then** the
+   generic error page is shown, because no delete-confirmation page exists for Meningococci
+   submissions; the submission is not deleted. The inherited delete action would, for a confirmation
+   request sent outside the normal pages, flag the submission as deleted, save it without field-level
+   validation, and remove it from the active list (derived from code; see Assumptions and spec 020).
+   [SUSPECTED-DEFECT]
+4. **Given** a deleted submission, **When** its restore address is requested with the internal
+   submission number, or its edit page is opened by direct address and saved, **Then** its deleted
+   flag is cleared (again saved without field-level validation) and it returns to the active list.
+   No page lists deleted Meningococci submissions (spec 020).
 
 ---
 
@@ -206,23 +211,28 @@ restore it.
 - **FR-017**: The system MUST let an authorized user edit an existing submission's patient and sending
   fields together and persist both on a valid save, returning to the list.
 - **FR-018**: The system MUST support removal of a submission as a soft delete (a recoverable
-  "deleted" flag); deleted submissions MUST NOT appear in the active submissions list.
+  "deleted" flag); deleted submissions MUST NOT appear in the active submissions list. The delete
+  action is inherited from the shared base controller, but no Meningococci delete-confirmation page
+  exists, so "Eintrag löschen" on the edit page currently ends on the generic error page (see User
+  Story 3 and spec 020).
 - **FR-019**: The system MUST allow the deleted flag to be toggled (delete and restore) without
-  enforcing the normal field-level validation on the submission.
+  enforcing the normal field-level validation on the submission; restore is currently reachable
+  only by direct address (spec 020).
 - **FR-020**: The system MUST provide a patient-merge action that reassigns all submissions from one
   patient to another and removes the emptied patient, after showing a confirmation of both patients
   and their submissions.
 - **FR-021**: The system MUST provide spreadsheet exports over the recorded submissions — a Laboratory
-  export, an RKI export, an IRIS export, and a State Authority (LGA) export — with the IRIS and RKI
-  exports restricted to invasive submissions in which meningococci were found.
+  export, an RKI export, an IRIS export, and a State Authority (LGA) export — with the RKI, IRIS,
+  and LGA exports restricted to invasive submissions in which meningococci were found (spec 011).
 - **FR-022**: All intake actions (create, edit, list/data, delete, restore, merge) MUST require the
   user to hold the standard laboratory-user role ("Standardbenutzer"); the RKI export and the State
   Authority (LGA) export additionally permit the public-health role ("RKI"); the IRIS and Laboratory
   exports require the standard laboratory-user role. Unauthenticated or unauthorized requests MUST be
   denied.
 - **FR-023**: The system MUST protect create and edit against over-posting by binding only the
-  intended patient and sending fields from the combined form (e.g. anti-forgery tokens on the
-  sub-forms).
+  intended patient and sending fields from the combined form. The combined form carries anti-forgery
+  tokens, but the create and edit saves do not verify them (current behavior; see spec 021).
+  [SUSPECTED-DEFECT]
 
 ### Key Entities *(include if feature involves data)*
 
@@ -264,14 +274,19 @@ restore it.
   date, or a missing free-text "other" sampling location) never persists the record and always returns
   an actionable validation message.
 - **SC-006**: 100% of deletions are recoverable: any soft-deleted submission can be restored to the
-  active list, and delete/restore succeeds even for records that would otherwise fail field validation.
+  active list (currently only by direct address, see spec 020), and delete/restore succeeds even for
+  records that would otherwise fail field validation.
 
 ## Assumptions
 
 - **Naming deviation ("Deleted" action)**: The controller action that renders the "deleted"
   submissions view queries *non-deleted* submissions rather than deleted ones (inherited from the
-  shared base controller). This is documented as observed behavior; it is recorded factually and not
-  treated as a proposed change. [SUSPECTED-DEFECT]
+  shared base controller). For Meningococci neither a "deleted submissions" page nor a
+  delete-confirmation page exists, so both the inherited deleted-list action and "Eintrag löschen"
+  end on the generic error page; soft deletion through the normal pages is therefore not possible
+  today (derived from the set of existing pages; not exercised; see specs 015 and 020). This is
+  documented as observed behavior; it is recorded factually and not treated as a proposed change.
+  [SUSPECTED-DEFECT]
 - **Exports and patient-merge are out of scope here**: Besides the intake create/edit/list/delete
   actions, the same controller also hosts spreadsheet exports (Laboratory, RKI, IRIS, State
   Authority/LGA) and a patient-merge flow. This spec documents those only where they touch intake —

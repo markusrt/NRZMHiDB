@@ -267,7 +267,7 @@ server; the application offers no page for them. Values are deliberately not rep
 | `PreliminaryReportMarker` | Report pages of both pathogens: a template whose name contains this text is treated as a preliminary report (see spec 010). |
 | `PrimaryAntibiotics_Haemophilus`, `PrimaryAntibiotics_Meningococci` | Isolate forms and report data: the standard antibiotics whose E-Test rows are shown by default (see specs 004, 005, and 017). |
 | `AntibioticsOrder` | Isolate forms and report data: order in which antibiotics are listed. |
-| `GeonamesAccount` | Account name used for the external postal-code and place-name lookup service (used, among others, by sender management, see spec 001, and by the Episcan GIS export). |
+| `GeonamesAccount` | Account name used for the external postal-code and place-name lookup service (see spec 022; used by the sender and patient forms and by the Episcan GIS export). |
 | `RegistrationToken` | Token required to register a new account and to access the Episcan GIS export. |
 | `IrisAccessToken`, `IrisAccessTokenSecret`, `IrisConsumerKey`, `IrisConsumerSecret` | Credentials for the external IRIS PubMLST service used by the PubMLST lookup and matching. |
 | `Beta` | When set to true, every page shows a warning banner that the installation is a demonstration version whose changes are not stored centrally. |

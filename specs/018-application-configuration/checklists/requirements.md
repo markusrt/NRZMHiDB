@@ -41,3 +41,4 @@
   - The announcement being decided at report-page opening time (server date), and settings being read when an isolate form is opened, are derived from code paths; not exercised.
 - Consistent with specs 011, 014, and 017: accounts are assumed to hold exactly one role, so an Administrator sees the menu entry but is refused. The configuration page does check a role (Standard User only), and its save verifies the anti-forgery token.
 - As-is observations tagged in the spec: 1 [SUSPECTED-DEFECT], 3 [POTENTIAL-REFACTORING].
+- Review 2026-10-30: the `GeonamesAccount` row now references spec 022 (postal-code lookup) instead of spec 001.
