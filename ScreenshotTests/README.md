@@ -141,6 +141,11 @@ New-Item ScreenshotTests\host.stop   # shuts the host down and restores Web.conf
 role, `Standard1` (Standardbenutzer), `Admin1` (Administrator) and `Rki1` (RKI), all with password
 `123456`. Both marker files are git-ignored.
 
+Run one host at a time. The host does not check whether port 9899 is free: a second host reseeds the
+shared catalog and writes `host.ready`, although its IIS Express fails to bind and exits. A killed host
+leaves `host.ready` behind. So `host.ready` alone does not prove that the app runs; the `/spec-verify`
+skill checks the host process, the IIS Express process and the login page.
+
 On top of the gold-master seed, the host adds fixtures that later specs need
 (`Seeder.SeedSpecVerificationFixtures`, listed in `host.ready`): sender `SV-Seed-DEC-002` with the
 Haemophilus submissions KL002/20 (active) and KL003/20 (soft-deleted) and the Meningococci submissions

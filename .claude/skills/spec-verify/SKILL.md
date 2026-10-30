@@ -27,17 +27,36 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
 
 ## Preconditions (check, do not assume)
 
-1. **Host**: `ScreenshotTests/host.ready` exists. It lists the base URL (`http://localhost:9899`),
-   the LocalDB catalog and the seeded accounts. If it is missing, start the host yourself in the
-   background and wait for the file (up to 5 minutes):
+1. **Host**: exactly one host runs and serves the app. `ScreenshotTests/host.ready` lists the base
+   URL (`http://localhost:9899`), the LocalDB catalog and the seeded accounts, but it is no proof:
+   the host writes it even when its IIS Express failed to start (port 9899 taken by a second host),
+   and it stays behind when the host process is killed. Check all three:
+
+   ```powershell
+   $hosts = @(Get-CimInstance Win32_Process -Filter "Name='dotnet.exe'" | Where-Object { $_.CommandLine -match '\stest\s' -and $_.CommandLine -match 'SpecVerificationHost' })
+   $iis = @(Get-CimInstance Win32_Process -Filter "Name='iisexpress.exe'" | Where-Object CommandLine -match '/port:9899')
+   "Hosts: $($hosts.Count), IIS Express on 9899: $($iis.Count)"
+   (Invoke-WebRequest http://localhost:9899/Account/Login -UseBasicParsing -TimeoutSec 30).StatusCode
+   ```
+
+   Expected: one host, one IIS Express, status 200. (The port listener belongs to `System` through
+   http.sys, so `Get-NetTCPConnection` does not name the owner.) With two hosts, both reseed the same
+   catalog and only one IIS Express serves the port: stop and ask the owner which one to stop. With a
+   host but no IIS Express or no answer, the app is gone: stop and ask the owner to restart the host.
+   If no host runs at all (stale or missing `host.ready`), start it yourself in the background and
+   wait until `host.ready` is rewritten and the check above passes (up to 5 minutes):
 
    ```powershell
    dotnet test ScreenshotTests\ScreenshotTests.csproj --no-build --filter SpecVerificationHost
    ```
 
    If the build output is missing, build first (MSBuild, not `dotnet build`; see
-   `ScreenshotTests/README.md`). Leave the host running at the end; other specs may follow. Only
-   stop it (`New-Item ScreenshotTests\host.stop`) when the owner asks.
+   `ScreenshotTests/README.md`). Claude Code may end background shells under memory pressure, which
+   kills a host started there without restoring `Web.config` (the next host start restores the
+   backup); a host the owner started in an own terminal is not affected. Repeat the check when the
+   app stops answering during the verification and, if it fails, stop and report instead of
+   restarting. Leave the host running at the end; other specs may follow. Only stop it
+   (`New-Item ScreenshotTests\host.stop`) when the owner asks.
 
    Sign in once as `Standard1` to confirm the app uses the seeded catalog. Any build that compiles
    `HaemophilusWeb` (the solution, the web project, or a project that references it without
@@ -116,12 +135,14 @@ not in the repo.
 
 Log in via `/Account/Login` with the account the item needs. For each item: navigate, act, observe
 the exact strings, validation messages, redirects, list contents and downloads. Take a screenshot of
-each state that proves a verdict (`browser_take_screenshot` with a filename like
-`FR-012-validation.png`); the MCP server writes them to `.playwright-mcp/`. Move them to
-`specs/NNN-*/verification/` at the end. For files, click the export button; the MCP server saves
-the download in `.playwright-mcp/` under the suggested name. Move it to `specs/NNN-*/verification/`
-too and inspect it with the shell (an `.xlsx` is a zip: read `xl/sharedStrings.xml` and
-`xl/worksheets/sheet1.xml`).
+each state that proves a verdict with `page.screenshot({ path: '.playwright-mcp/FR-012-validation.png' })`
+inside `browser_run_code_unsafe`; `browser_take_screenshot` with a bare filename writes into the
+repository root instead. Move the screenshots to `specs/NNN-*/verification/` at the end. For files,
+click the export button; the MCP server saves every download in `.playwright-mcp/` on its own. When
+you also call `download.saveAs(…)`, delete the automatic copy (same name with a hyphenated suffix)
+so each export is kept once. Move the files to `specs/NNN-*/verification/` too and inspect them with
+the shell (an `.xlsx` is a zip: read `xl/sharedStrings.xml` and `xl/worksheets/sheet1.xml`). Before
+committing, `git status` must show no stray `.png` or export in the repository root.
 
 Practical notes for this application:
 
@@ -129,6 +150,13 @@ Practical notes for this application:
   returns the observed strings as JSON; use `browser_snapshot` only to find selectors. Stay on
   `http://localhost:9899`. `page.request.get/post` (with the form's `__RequestVerificationToken`)
   is the way to check status codes and server-side validation that the browser would block.
+  Such crafted requests verify what a user can reach by bypassing the browser (client-side
+  validation, a hidden link, a direct address, a missing role). A request no form can produce
+  (e.g. only the token without the record's fields) is out of scope: no row, no verdict; mention it
+  under "Open questions" only when it changes or exposes data.
+- Check role behavior in a separate browser context instead of signing out and in:
+  `const ctx = await page.context().browser().newContext(); const p2 = await ctx.newPage();`, sign
+  in there with the second account, and close the context afterwards.
 - Forms with `preventSiteNavigationWithPendingChanges` raise a `beforeunload` dialog when you
   leave them with changes. It interrupts the running call; answer it with `browser_handle_dialog`
   and check the page state before continuing.
@@ -143,7 +171,9 @@ Practical notes for this application:
 - New Haemophilus and Meningococci submissions get a laboratory number of the year of saving, not of
   the sampling date (002 FR-003); plan date-range checks with that in mind.
 - A signed-in account without the required role is redirected to `/Account/Login?ReturnUrl=…`
-  (HTTP 302), not shown a 403 page. Missing views and unhandled errors show as HTTP 500.
+  (HTTP 302), not shown a 403 page. Missing views and unhandled errors show as HTTP 500. The host
+  runs with detailed errors, so it shows the ASP.NET error page with the exception; production may
+  show a generic page. Write "HTTP 500" in specs and reports, not the page's appearance.
 - With the `Beta` app setting active, every page shows the banner "Achtung: Änderungen werden
   nicht zentral gespeichert!"; it is not part of the spec under test.
 
