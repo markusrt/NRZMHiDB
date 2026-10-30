@@ -162,4 +162,4 @@ ScreenshotTests/*.log
 ScreenshotTests/host.ready
 ScreenshotTests/host.stop
 .playwright-mcp/
-specs/*/verification/*.png
+specs/*/verification/

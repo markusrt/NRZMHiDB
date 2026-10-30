@@ -33,23 +33,6 @@ Feature: Sender management
     Then I am on "/Sender"
     And the sender list row "SV-001-Alpha" shows "SV-001 Abteilung Bakteriologie"
 
-  @FR-004
-  Scenario: Name and first phone number are required
-    When I open "/Sender/Create"
-    And I click "Neu anlegen"
-    Then I see the validation message "Das Feld \"Name\" ist erforderlich."
-    And I see the validation message "Das Feld \"Telefon #1\" ist erforderlich."
-    And no sender has been created
-
-  @FR-005
-  Scenario: A malformed phone number is rejected by the server
-    When I open "/Sender/Create"
-    And I enter "SV-001-Invalid" into "Name"
-    And I enter "abc" into "Telefon #1"
-    And I click "Neu anlegen"
-    Then I see the validation message "Das Feld Telefon #1 enthält keine gültige Telefonnummer."
-    And no sender named "SV-001-Invalid" exists
-
   @US2 @FR-008 @FR-011
   Scenario: Delete a sender without submissions and restore it
     Given a sender "SV-001-Beta" without submissions exists

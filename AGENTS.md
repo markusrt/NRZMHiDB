@@ -32,7 +32,7 @@ Meningococci (constitution, "Known Architectural Constraints").
 | Path | Purpose |
 | --- | --- |
 | `HaemophilusWeb/` | Web application (Controllers, Domain, Models, Services, Validators, Views, Migrations) |
-| `HaemophilusWebTests/` | Unit tests (NUnit 4, FluentAssertions, Moq); folders mirror the source |
+| `HaemophilusWebTests/` | Unit tests (NUnit 4, FluentAssertions, NSubstitute, TestDataGenerator); folders mirror the source |
 | `SystemTests/`, `DbTest/` | Legacy Selenium/system tests; `SystemTests/Features/` holds the Gherkin features written during spec verification |
 | `ScreenshotTests/` | Playwright harness: isolated LocalDB, seeder, IIS Express on port 9899, gold-master screenshots, and the `SpecVerificationHost` that keeps the seeded app running |
 | `AccessImporter/`, `CsvImporter/` | One-off import tools |
@@ -87,11 +87,13 @@ the review method for specs the owner does not read line by line. One spec per s
   `HaemophilusWeb_Screenshots`, starts IIS Express on `http://localhost:9899` and waits until
   `ScreenshotTests/host.stop` exists. `host.ready` lists URL and accounts: `Labor1` (all roles),
   `Standard1`, `Admin1`, `Rki1` (one role each), password `123456`. See `ScreenshotTests/README.md`.
-- **Browser**: Playwright MCP, configured project-wide in `.mcp.json` (headless Chromium, isolated
-  profile, screenshots in `.playwright-mcp/`).
+- **Browser**: Playwright MCP, pinned in `.mcp.json` (headless Chromium, isolated profile, output in
+  `.playwright-mcp/`). After a version bump, install its browser once with
+  `npx -y @playwright/mcp@<version> install-browser chrome-for-testing`.
 - **Outputs**: `specs/NNN-*/verification.md` (results table with verdicts Match / Spec deviation /
-  Defect confirmed / New defect / Not verifiable), screenshots in `specs/NNN-*/verification/`
-  (git-ignored), spec corrections with a dated checklist note, backlog updates, and
+  Defect confirmed / New defect / Not verifiable), screenshots and downloaded files in
+  `specs/NNN-*/verification/` (git-ignored), spec corrections with a dated checklist note, backlog
+  updates, and
   `SystemTests/Features/NNN-<slug>.feature` with at least one `@smoke` scenario (English Gherkin,
   German UI strings verbatim, tags `@spec-NNN @US… @FR-…`, no step definitions yet).
 - **Rules**: Geonames lookups are allowed; RKI, PubMLST, IRIS and EpiScanGIS calls are not. Test
@@ -103,8 +105,10 @@ the review method for specs the owner does not read line by line. One spec per s
   ID in a comment; never for defects. 006/007, 012 and the column definitions of 011/013/023 use
   this path only; 019/022/023 (external services) and 024 (needs an RKI match file) are recorded
   as not verifiable where no test exists.
-- **Gherkin scope**: one `@smoke` scenario per UI spec now; step definitions (Reqnroll on the
-  Playwright harness) only after the Bootstrap 5 merge, so nothing is automated twice.
+- **Gherkin scope**: one `@smoke` scenario per UI spec now, further scenarios only for UI behavior
+  no unit test covers, phrased with the shared steps in `SystemTests/Features/README.md`; step
+  definitions (Reqnroll on the Playwright harness) only after the Bootstrap 5 merge, so nothing is
+  automated twice.
 
 ## Autonomy and hard rules
 

@@ -39,15 +39,26 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
    `ScreenshotTests/README.md`). Leave the host running at the end; other specs may follow. Only
    stop it (`New-Item ScreenshotTests\host.stop`) when the owner asks.
 2. **Browser tools**: the Playwright MCP tools (`mcp__playwright__browser_*`) must be available.
-   They are configured in `.mcp.json`. If they are not loaded, load them with ToolSearch; if the
-   server is not connected, stop and tell the owner to approve the project MCP server and restart
-   the session. Do not fall back to Claude in Chrome or to hand-written Playwright scripts.
+   They are configured (version-pinned) in `.mcp.json`. If they are not loaded, load them with
+   ToolSearch; if the server is not connected, stop and tell the owner to approve the project MCP
+   server and restart the session. If the first navigation reports a missing browser, install it
+   with the version from `.mcp.json` and retry:
+
+   ```powershell
+   npx -y @playwright/mcp@<version> install-browser chrome-for-testing
+   ```
+
+   Do not fall back to Claude in Chrome or to Playwright scripts outside the MCP server.
 3. **Accounts**: `Labor1` (all roles), `Standard1` (Standardbenutzer), `Admin1` (Administrator),
    `Rki1` (RKI), password `123456`. Use `Standard1` for ordinary laboratory flows so role gaps show
    up; use the others only for role-specific checks.
 4. **Data**: the catalog is disposable and reseeded on every host start. Create your own records
    with the prefix `SV-NNN-` (e.g. sender name `SV-001-Alpha`) so they are recognizable in lists and
-   exports. Soft deletes, merges and uploads are fine. Seeded ids 1 exist for every entity.
+   exports. Soft deletes, merges and uploads are fine. Seeded ids 1 exist for every entity. You may
+   change a seeded record through the UI when no own record can show the behavior (e.g. a sender
+   with submissions), but restore it afterwards and list the change in the report. Data is changed
+   only through the UI; the SQL access below is read-only. Behavior that needs data the UI cannot
+   create (e.g. an invalid legacy record) goes to the unit-test path.
 
 ## Hard rules
 
@@ -64,9 +75,13 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
 
 ### 1. Read and plan
 
-Read `specs/NNN-*/spec.md` and `checklists/requirements.md`. Build a verification plan with one
-row per checkable item: every acceptance scenario, every FR with observable behavior, every edge
-case, every `[SUSPECTED-DEFECT]`. Classify each item:
+Read `specs/NNN-*/spec.md` and `checklists/requirements.md`, and search `specs/BACKLOG.md` for
+entries whose subject this spec covers, even when another spec is their source. Build a
+verification plan with one row per FR. Attach every acceptance scenario and edge case to the FR it
+exercises (they become the row's IDs, e.g. `FR-009 · US2.2 · EC4`); give a scenario or edge case
+its own row only when no FR covers it. Add a row for every `[SUSPECTED-DEFECT]`, every related
+backlog entry, and every success criterion or assumption that claims something no FR states
+(e.g. "the count is shown"); skip the others. Classify each row:
 
 - **UI**: observable in the browser.
 - **DB**: observable only in data; query the catalog with
@@ -88,7 +103,26 @@ Log in via `/Account/Login` with the account the item needs. For each item: navi
 the exact strings, validation messages, redirects, list contents and downloads. Take a screenshot of
 each state that proves a verdict (`browser_take_screenshot` with a filename like
 `FR-012-validation.png`); the MCP server writes them to `.playwright-mcp/`. Move them to
-`specs/NNN-*/verification/` at the end. For files, save the download and inspect it with the shell.
+`specs/NNN-*/verification/` at the end. For files, click the export button; the MCP server saves
+the download in `.playwright-mcp/` under the suggested name. Move it to `specs/NNN-*/verification/`
+too and inspect it with the shell (an `.xlsx` is a zip: read `xl/sharedStrings.xml` and
+`xl/worksheets/sheet1.xml`).
+
+Practical notes for this application:
+
+- Batch a flow (fill, submit, read the result) into one `browser_run_code_unsafe` call that
+  returns the observed strings as JSON; use `browser_snapshot` only to find selectors. Stay on
+  `http://localhost:9899`. `page.request.get/post` (with the form's `__RequestVerificationToken`)
+  is the way to check status codes and server-side validation that the browser would block.
+- Forms with `preventSiteNavigationWithPendingChanges` raise a `beforeunload` dialog when you
+  leave them with changes. It interrupts the running call; answer it with `browser_handle_dialog`
+  and check the page state before continuing.
+- The date pickers open over the submit button. Set date fields with `page.evaluate` (value in
+  `dd.MM.yyyy`) and click the button via `page.evaluate` as well.
+- A signed-in account without the required role is redirected to `/Account/Login?ReturnUrl=…`
+  (HTTP 302), not shown a 403 page. Missing views and unhandled errors show as HTTP 500.
+- With the `Beta` app setting active, every page shows the banner "Achtung: Änderungen werden
+  nicht zentral gespeichert!"; it is not part of the spec under test.
 
 Record for each item: spec statement (quote the ID), what the app showed, verdict:
 
@@ -96,8 +130,8 @@ Record for each item: spec statement (quote the ID), what the app showed, verdic
 | --- | --- |
 | `Match` | App behaves as the spec says. |
 | `Spec deviation` | Spec text is wrong or incomplete about current behavior. Fix the spec. |
-| `Defect confirmed` | A tagged `[SUSPECTED-DEFECT]` reproduced on the system. |
-| `New defect` | Behavior that looks wrong and is not in the spec. Add tag and backlog entry. |
+| `Defect confirmed` | A `[SUSPECTED-DEFECT]` of this spec, or an existing backlog entry from another spec, reproduced on the system. |
+| `New defect` | Behavior that looks wrong and is in neither the spec nor the backlog. Add tag and backlog entry. |
 | `Not verifiable` | With the reason and what would make it verifiable. |
 
 ### 2b. Map to unit tests and fill gaps
@@ -111,8 +145,16 @@ For every item classified **Test** (and for UI items where a test already exists
 2. If no test exists and the verdict is `Match` or `Spec deviation` (after the fix), write one:
    a `[Test]` or `[TestCase]` in the mirror folder of the source (`Validators/`, `Domain/`,
    `Services/`, `Tools/`, `Controllers/`), named after the behavior, with the spec ID in a comment
-   (`// specs/001 FR-004`). Use the existing stack (NUnit, FluentAssertions, Moq, Faker) and keep
-   it deterministic. Extend an existing fixture before creating a new file.
+   (`// specs/001 FR-004`). Use the existing stack (NUnit 4, FluentAssertions, NSubstitute,
+   TestDataGenerator via `MockData`; there is no Moq) and keep it deterministic. Extend an existing
+   fixture before creating a new file; a new file must also be added to
+   `HaemophilusWebTests.csproj` (old-style project, explicit `Compile` items).
+   `ApplicationDbContextMock` and `InMemoryDbSet<T>(bool)` share one static store per entity type,
+   and every new instance clears it, so tests that depend on specific records can break other
+   fixtures. Give such tests their own sets (`new InMemoryDbSet<T>(new HashSet<T>())` with a
+   `FindFunction`) in a small `IApplicationDbContext` stub or an NSubstitute substitute.
+   DataAnnotations rules are tested with `Validator.TryValidateObject`; assert member names, not
+   message texts (they depend on the culture).
 3. Never write a test for `Defect confirmed` or `New defect`: a test would cement the defect. The
    backlog entry is the record.
 4. Run the affected fixtures before committing (PowerShell, from the repository root):
@@ -122,8 +164,16 @@ For every item classified **Test** (and for UI items where a test already exists
    vstest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /Tests:SenderValidatorTests
    ```
 
-   A red test means your reading of the code or of the app is wrong; investigate, do not adjust
-   the assertion to pass. Report the result (counts) in `verification.md`.
+   Then run the full suite once with a results file, so a failure can be named:
+
+   ```powershell
+   vstest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /logger:trx /ResultsDirectory:<scratchpad>\TestResults
+   ```
+
+   A red test of yours means your reading of the code or of the app is wrong; investigate, do not
+   adjust the assertion to pass. A red existing test that passes on a rerun is flaky: name it in
+   the report and in `TEST-002`. Report the results (counts) in `verification.md`. The console
+   output follows the Windows display language (e.g. "Bestanden", "Nicht bestanden").
 
 ### 3. Write `specs/NNN-*/verification.md`
 
@@ -144,16 +194,18 @@ SpecVerificationHost (`http://localhost:9899`, catalog `HaemophilusWeb_Screensho
 | New defect | n |
 | Not verifiable | n |
 
-By evidence path: Browser n · Unit test (existing) n · Unit test (added) n · File n · DB n ·
-Not verifiable n. Test run: `vstest.console.exe … /Tests:<fixtures>` → n passed, 0 failed.
+By primary path: Browser n · File n · DB n · Unit test (existing) n · Unit test (added) n ·
+Not verifiable n (adds up to the row count). Also test-asserted: n rows with a browser, file or DB
+verdict. Test run: `vstest.console.exe … /Tests:<fixtures>` → n passed, 0 failed; full suite →
+n passed, n failed.
 
 ## Results
 
-| ID | Spec says | App/test shows | Verdict | Evidence |
-| --- | --- | --- | --- | --- |
-| US1.1 | … | … | Match | `verification/US1-1.png` |
-| FR-004 | … | … | Match | test-asserted: `Validators/SenderValidatorTests.PostalCode…` |
-| FR-009 | … | … | Match | test added: `Validators/SenderValidatorTests.Phone1IsRequired` |
+| ID | Spec says | App/test shows | Verdict | Path | Evidence |
+| --- | --- | --- | --- | --- | --- |
+| FR-003 · US1.1 | … | … | Match | Browser | `verification/US1-1.png` |
+| FR-004 · EC1 | … | … | Match | Browser | `verification/FR-004.png`; also test-asserted: `Models/SenderTests.Validate_WithoutName_FailsOnName` |
+| FR-012 | … | … | Match | Unit test (added) | `Controllers/SenderControllerTests.DeleteConfirmed_…` |
 
 ## Unit tests added
 
@@ -177,8 +229,11 @@ Not verifiable n. Test run: `vstest.console.exe … /Tests:<fixtures>` → n pas
 - …
 ```
 
-Screenshots stay local (`specs/*/verification/*.png` is git-ignored); the report references them by
-name so the owner can open them from the working tree.
+The ID column names the FR first, then the scenarios (`US2.2`) and edge cases (`EC1` = first
+bullet under Edge Cases) the row covers. Path is the one evidence path that decided the verdict;
+further evidence goes into the Evidence column. Screenshots and downloads stay local
+(`specs/*/verification/` is git-ignored); the report references them by name so the owner can open
+them from the working tree.
 
 ### 4. Correct the spec and the backlog
 
@@ -186,16 +241,24 @@ name so the owner can open them from the working tree.
   not add `[NEEDS CLARIFICATION]`. Append to `checklists/requirements.md`:
   `- Verification YYYY-MM-DD: <what changed and why>`.
 - `Defect confirmed`: in `specs/BACKLOG.md`, append `Confirmed on system YYYY-MM-DD (NNN
-  verification).` to the entry's text. Do not change its type or "Offen".
+  verification).` to the entry's text. Do not change its type or "Offen". If the entry came from
+  another spec, also add `NNN <section>` to its source and a `[SUSPECTED-DEFECT]` note to this spec
+  that cross-references the source spec and the backlog ID. For a `DEC-*` entry, only record what
+  was observed; never take the decision.
 - `New defect`: add a `[SUSPECTED-DEFECT]` observation to the spec where it belongs (edge case or
   FR note) and a new backlog entry with the next free ID of the fitting prefix, type, source and
   "Offen" if a decision is needed. Never create or resolve `DEC-*` items; if a finding needs an
   owner decision, write it under "Open questions" and as a `DEC-*` candidate in the report only.
+- New refactoring observation (dead or unreachable code, leftovers, scaffolding): verdict
+  `Spec deviation`. Describe it in the spec with a `[POTENTIAL-REFACTORING]` tag and extend the
+  `REF-*` entry with the same subject, or add a new one with the next free ID.
 
 ### 5. Write the Gherkin feature
 
 `SystemTests/Features/NNN-<spec-slug>.feature`, English Gherkin keywords, UI strings in German
-exactly as observed, in double quotes. No step definitions. Shape:
+exactly as observed, in double quotes. No step definitions. Phrase steps with the shared step
+vocabulary in `SystemTests/Features/README.md`; when a scenario needs a step that is not listed,
+add it there in the same commit. Shape:
 
 ```gherkin
 @spec-001
@@ -215,9 +278,12 @@ Feature: Sender management
 ```
 
 At least one `@smoke` scenario per spec covering the primary user story's happy path exactly as
-observed. Add further scenarios only for items with verdict `Match` or `Spec deviation` (after the
-fix), never for defects; defects belong in the backlog, not in a regression suite that would cement
-them. Tag scenarios with the US and FR IDs they exercise.
+observed. Add further scenarios only for UI behavior (navigation, page flow, messages, role
+redirects) with verdict `Match` or `Spec deviation` (after the fix) that no unit test covers; rules
+already asserted by a unit test (validation, export columns, interpretation) get no scenario.
+Never write scenarios for defects; defects belong in the backlog, not in a regression suite that
+would cement them. Aim for the smoke scenario plus at most five more. Tag scenarios with the US and
+FR IDs they exercise.
 
 ### 6. Commit and report
 
@@ -230,8 +296,9 @@ Verify spec NNN against running app
 ```
 
 Include `spec.md`, `checklists/requirements.md`, `verification.md`, `specs/BACKLOG.md`, the
-`.feature` file and any test files you added or extended under `HaemophilusWebTests/`. Exclude
-screenshots, `.playwright-mcp/`, `host.*`, `Web.config`, and build output.
+`.feature` file, `SystemTests/Features/README.md` if you added steps, and any test files (plus
+`HaemophilusWebTests.csproj` for new files) under `HaemophilusWebTests/`. Exclude
+`specs/*/verification/`, `.playwright-mcp/`, `host.*`, `Web.config`, and build output.
 
 Then report to the owner in German: the summary table, the deviations you fixed, confirmed and new
 defects with backlog IDs, what was not verifiable and why, open questions, and the suggested next
