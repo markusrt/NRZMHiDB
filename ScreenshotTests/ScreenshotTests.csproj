@@ -45,7 +45,9 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="BuildWebApp" BeforeTargets="ResolveAssemblyReferences">
+  <!-- Building the web app regenerates its Web.config (CustomWebConfigTransform) and would disconnect a running
+       spec-verification host from its catalog; pass /p:SkipWebAppBuild=true to compile against the existing output. -->
+  <Target Name="BuildWebApp" BeforeTargets="ResolveAssemblyReferences" Condition="'$(SkipWebAppBuild)' != 'true'">
     <MSBuild Projects="..\HaemophilusWeb\HaemophilusWeb.csproj" Targets="Build" Properties="Configuration=$(Configuration)" />
   </Target>
 

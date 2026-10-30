@@ -38,6 +38,15 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
    If the build output is missing, build first (MSBuild, not `dotnet build`; see
    `ScreenshotTests/README.md`). Leave the host running at the end; other specs may follow. Only
    stop it (`New-Item ScreenshotTests\host.stop`) when the owner asks.
+
+   `host.ready` alone does not prove that the app uses the seeded catalog. Sign in once as
+   `Standard1` and check that `HaemophilusWeb/Web.config` names `Initial Catalog=HaemophilusWeb_Screenshots`
+   in `DefaultConnection`. Any build that compiles `HaemophilusWeb` (the solution, the web project, or a
+   project that references it without `/p:BuildProjectReferences=false`) regenerates `Web.config` from
+   `Web.template.config` (`CustomWebConfigTransform`) and silently points the running app back at the
+   developer database. If that happened, stop and ask the owner whether to re-set the connection string
+   to the host value (the host restores the original from `Web.config.screenshotbak` on shutdown) or to
+   restart the host (reseeds, own records are lost).
 2. **Browser tools**: the Playwright MCP tools (`mcp__playwright__browser_*`) must be available.
    They are configured (version-pinned) in `.mcp.json`. If they are not loaded, load them with
    ToolSearch; if the server is not connected, stop and tell the owner to approve the project MCP
@@ -54,7 +63,12 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
    up; use the others only for role-specific checks.
 4. **Data**: the catalog is disposable and reseeded on every host start. Create your own records
    with the prefix `SV-NNN-` (e.g. sender name `SV-001-Alpha`) so they are recognizable in lists and
-   exports. Soft deletes, merges and uploads are fine. Seeded ids 1 exist for every entity. You may
+   exports. Soft deletes, merges and uploads are fine. Seeded ids 1 exist for every entity. The host
+   also seeds fixtures that later specs need and that the UI cannot create reliably in one session;
+   `host.ready` lists them (e.g. sender `SV-Seed-DEC-002` with one active and one soft-deleted
+   submission per database for 013 FR-015 / DEC-002). Use them read-only. Records you create live only
+   until the next host start; when another spec needs data that must survive a restart, propose a seed
+   extension in the report instead of relying on your own records. You may
    change a seeded record through the UI when no own record can show the behavior (e.g. a sender
    with submissions), but restore it afterwards and list the change in the report. Data is changed
    only through the UI; the SQL access below is read-only. Behavior that needs data the UI cannot
@@ -67,7 +81,8 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
   023 export run). File exports that are generated locally and downloaded are fine.
 - Never copy secret values (`RegistrationToken`, `Iris*`, `GeonamesAccount`) into any file.
 - Never paste real patient data. Use obviously synthetic initials, dates and postal codes.
-- Do not change application code or `Web.config`. The host swaps the connection string itself.
+- Do not change application code or `Web.config`. The host swaps the connection string itself; the
+  only exception is re-setting that connection string with the owner's approval (Preconditions, 1).
 - Do not edit other specs than `NNN` except for cross-reference fixes that `NNN` requires; record
   those in the verification report.
 
@@ -119,6 +134,14 @@ Practical notes for this application:
   and check the page state before continuing.
 - The date pickers open over the submit button. Set date fields with `page.evaluate` (value in
   `dd.MM.yyyy`) and click the button via `page.evaluate` as well.
+- Radio buttons and flag checkboxes sit inside Bootstrap button-group labels that intercept clicks;
+  click the surrounding `label` (`input.closest('label').click()` in `page.evaluate`), not the input.
+- The sender selection ("Einsendernummer") is a select2 widget. Set the underlying `select` value in
+  `page.evaluate` and trigger `change` via jQuery (`$('#Sending_SenderId').trigger('change')`).
+- Postal-code fields call Geonames on every keystroke (allowed, but slow); set them with
+  `page.evaluate` unless the lookup itself is under test.
+- New Haemophilus and Meningococci submissions get a laboratory number of the year of saving, not of
+  the sampling date (002 FR-003); plan date-range checks with that in mind.
 - A signed-in account without the required role is redirected to `/Account/Login?ReturnUrl=…`
   (HTTP 302), not shown a 403 page. Missing views and unhandled errors show as HTTP 500.
 - With the `Beta` app setting active, every page shows the banner "Achtung: Änderungen werden
@@ -133,6 +156,11 @@ Record for each item: spec statement (quote the ID), what the app showed, verdic
 | `Defect confirmed` | A `[SUSPECTED-DEFECT]` of this spec, or an existing backlog entry from another spec, reproduced on the system. |
 | `New defect` | Behavior that looks wrong and is in neither the spec nor the backlog. Add tag and backlog entry. |
 | `Not verifiable` | With the reason and what would make it verifiable. |
+
+When the spec claims a behavior the app lacks and the actual behavior looks wrong (e.g. the spec
+says "binds only the intended fields", the app binds all of them), the verdict is `New defect` (or
+`Defect confirmed` if the backlog already has it). Correct the spec text anyway and list the fix
+under "Spec corrections applied"; the verdict counts once.
 
 ### 2b. Map to unit tests and fill gaps
 
@@ -157,10 +185,14 @@ For every item classified **Test** (and for UI items where a test already exists
    message texts (they depend on the culture).
 3. Never write a test for `Defect confirmed` or `New defect`: a test would cement the defect. The
    backlog entry is the record.
-4. Run the affected fixtures before committing (PowerShell, from the repository root):
+4. Run the affected fixtures before committing (PowerShell, from the repository root). Build with
+   `/p:BuildProjectReferences=false`: the test project references `HaemophilusWeb`, and rebuilding it
+   regenerates `Web.config` and disconnects the running host from its catalog (Preconditions, 1).
+   Specs are verified without application changes, so the existing `HaemophilusWeb` build output is
+   current; if it is missing, stop the host before building the solution.
 
    ```powershell
-   msbuild HaemophilusWebTests\HaemophilusWebTests.csproj /p:Configuration=Debug /m /verbosity:minimal
+   msbuild HaemophilusWebTests\HaemophilusWebTests.csproj /p:Configuration=Debug /p:BuildProjectReferences=false /m /verbosity:minimal
    vstest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /Tests:SenderValidatorTests
    ```
 
@@ -230,7 +262,10 @@ n passed, n failed.
 ```
 
 The ID column names the FR first, then the scenarios (`US2.2`) and edge cases (`EC1` = first
-bullet under Edge Cases) the row covers. Path is the one evidence path that decided the verdict;
+bullet under Edge Cases) the row covers. Number the edge cases as the list stood before this
+verification and state the numbering under the summary; edge cases that the verification adds to
+the spec are referred to by their bold title ("New EC "…""), so the numbers in the report never
+shift. Path is the one evidence path that decided the verdict;
 further evidence goes into the Evidence column. Screenshots and downloads stay local
 (`specs/*/verification/` is git-ignored); the report references them by name so the owner can open
 them from the working tree.

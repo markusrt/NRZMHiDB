@@ -140,3 +140,19 @@ New-Item ScreenshotTests\host.stop   # shuts the host down and restores Web.conf
 `host.ready` lists the base URL and the seeded accounts: `Labor1` (all roles) plus one account per
 role, `Standard1` (Standardbenutzer), `Admin1` (Administrator) and `Rki1` (RKI), all with password
 `123456`. Both marker files are git-ignored.
+
+On top of the gold-master seed, the host adds fixtures that later specs need
+(`Seeder.SeedSpecVerificationFixtures`, listed in `host.ready`): sender `SV-Seed-DEC-002` with the
+Haemophilus submissions KL002/20 (active) and KL003/20 (soft-deleted) and the Meningococci submissions
+MZ002/20 (active) and MZ003/20 (soft-deleted), sampled 10.03.2020 and 15.06.2020 (spec 013 FR-015,
+backlog DEC-002). The gold-master run does not seed them, so its lists keep one record each.
+
+**Do not build the web app while the host runs.** Every build of `HaemophilusWeb` (the solution, the
+web project, `ScreenshotTests` without the switch below, or `HaemophilusWebTests` without
+`/p:BuildProjectReferences=false`) regenerates `HaemophilusWeb\Web.config` from `Web.template.config`
+and points the running app back at the developer database. Use:
+
+```powershell
+msbuild HaemophilusWebTests\HaemophilusWebTests.csproj /p:Configuration=Debug /p:BuildProjectReferences=false
+& $msbuild ScreenshotTests\ScreenshotTests.csproj /restore /t:Build /p:SkipWebAppBuild=true   # only while the host is stopped: its DLL is locked
+```

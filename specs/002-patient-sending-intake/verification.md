@@ -120,7 +120,9 @@ Sender `SV-001-Alpha` (sender 2) now has exactly two Haemophilus submissions sam
 | KL002/26 | 15.06.2020 | 17.06.2020 | SV-002-A2 | X.B. | soft-deleted |
 
 The laboratory numbers carry the year of saving (26), not 2020 (FR-003). Neither has a stem number. The data lives
-only in the current catalog; a host restart reseeds it.
+only in the current catalog; a host restart reseeds it. Since 2026-10-30 the host seeds a permanent fixture for the
+same purpose (sender `SV-Seed-DEC-002`, KL002/20 active, KL003/20 soft-deleted, plus MZ002/20 and MZ003/20); use
+that for 013.
 
 ## Records and seed changes
 

@@ -86,7 +86,10 @@ the review method for specs the owner does not read line by line. One spec per s
 - **Host**: `ScreenshotTests/SpecVerificationHost` resets and seeds the catalog
   `HaemophilusWeb_Screenshots`, starts IIS Express on `http://localhost:9899` and waits until
   `ScreenshotTests/host.stop` exists. `host.ready` lists URL and accounts: `Labor1` (all roles),
-  `Standard1`, `Admin1`, `Rki1` (one role each), password `123456`. See `ScreenshotTests/README.md`.
+  `Standard1`, `Admin1`, `Rki1` (one role each), password `123456`, and the host-only fixtures (sender
+  `SV-Seed-DEC-002` with an active and a soft-deleted submission per database for 013 FR-015 / DEC-002).
+  While it runs, never build `HaemophilusWeb`: the build regenerates `Web.config` and disconnects the app
+  from the catalog. Build unit tests with `/p:BuildProjectReferences=false`. See `ScreenshotTests/README.md`.
 - **Browser**: Playwright MCP, pinned in `.mcp.json` (headless Chromium, isolated profile, output in
   `.playwright-mcp/`). After a version bump, install its browser once with
   `npx -y @playwright/mcp@<version> install-browser chrome-for-testing`.
@@ -157,6 +160,8 @@ The CI workflow in `.github/workflows/main.yml` is the reference. On Windows wit
 nuget restore HaemophilusWeb.sln
 msbuild HaemophilusWeb.sln /p:Configuration=Debug /m
 vstest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll
+# while the spec verification host runs, build tests without rebuilding the web app:
+msbuild HaemophilusWebTests\HaemophilusWebTests.csproj /p:Configuration=Debug /p:BuildProjectReferences=false
 npx -y markdownlint-cli "specs/**/*.md"   # config: .markdownlint.json (MD013 disabled)
 
 # Spec verification host (build with /restore first, see ScreenshotTests/README.md)

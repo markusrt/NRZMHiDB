@@ -33,6 +33,8 @@ namespace ScreenshotTests
                 Environment.GetEnvironmentVariable("SPEC_VERIFY_TIMEOUT_MINUTES"), out var parsed) ? parsed : 240;
             var deadline = DateTime.UtcNow.AddMinutes(timeoutMinutes);
 
+            Seeder.SeedSpecVerificationFixtures();
+
             File.Delete(StopFile);
             File.WriteAllText(ReadyFile, ReadyInfo());
             TestContext.Progress.WriteLine(ReadyInfo());
@@ -64,7 +66,9 @@ namespace ScreenshotTests
                 "Accounts:\n" +
                 $"  {Seeder.UserName} / {Seeder.Password}  (all roles)\n" +
                 singleRole + "\n" +
-                "Seeded ids: Sender 1, Patient 1, Sending 1, Isolate 1, MeningoPatient 1, MeningoSending 1, MeningoIsolate 1\n";
+                "Seeded ids: Sender 1, Patient 1, Sending 1, Isolate 1, MeningoPatient 1, MeningoSending 1, MeningoIsolate 1\n" +
+                $"Fixtures: sender {Seeder.FixtureSenderName} with KL002/20 (active), KL003/20 (soft-deleted), " +
+                "MZ002/20 (active), MZ003/20 (soft-deleted), sampled 10.03.2020 / 15.06.2020 (013 FR-015, DEC-002)\n";
         }
     }
 }
