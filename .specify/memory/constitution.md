@@ -1,16 +1,19 @@
 <!--
 Sync Impact Report
 ==================
-Version change: 1.0.0 → 1.1.0
-Bump rationale: MINOR — added a new "Known Architectural Constraints (Legacy Debt)" section
-capturing two standing constraints derived from the legacy codebase (parallel
-Meningococci/Haemophilus domains; god-controllers with weak dependency injection). No principle
-was removed or redefined.
+Version change: 1.1.0 → 1.2.0
+Bump rationale: MINOR — added a new "Specification Structure" section recording the five
+decisions (D1–D5) that shaped the retrospective as-is specifications 001–025, plus the rule that
+behavior changes start from `specs/BACKLOG.md`. The Governance "Runtime guidance" pointer now
+names `AGENTS.md`/`CLAUDE.md` instead of the retired Copilot instructions. No principle was
+removed or redefined.
 
 Amendment history:
   - 1.0.0 (2026-08-26): Initial ratification from the legacy codebase. Established Principles
     I–V and the Technology/Workflow/Governance sections (prior file was an unfilled template).
   - 1.1.0 (2026-08-26): Added "Known Architectural Constraints (Legacy Debt)".
+  - 1.2.0 (2026-10-30): Added "Specification Structure" (D1–D5 carried over from the retired
+    `feature-prompts.md`; resolves backlog item DEC-012). Updated Governance runtime guidance.
 
 Principles (unchanged since 1.0.0):
   - I. Patient Data Integrity & Domain Validation (NON-NEGOTIABLE)
@@ -21,6 +24,7 @@ Principles (unchanged since 1.0.0):
 
 Added sections:
   - Known Architectural Constraints (Legacy Debt)  [v1.1.0]
+  - Specification Structure  [v1.2.0]
 
 Removed sections: None
 
@@ -29,9 +33,11 @@ Deferred / follow-up TODOs:
     informal adoption date is known, amend as a PATCH and update this report.
 
 Template propagation check:
-  - .specify/templates/plan-template.md — review Constitution Check gates for alignment (no change required)
+  - .specify/templates/plan-template.md — Constitution Check gates still align (no change required)
   - .specify/templates/spec-template.md — no constitution-specific tokens
   - .specify/templates/tasks-template.md — no constitution-specific tokens
+  - AGENTS.md / CLAUDE.md — created alongside v1.2.0; they restate the spec conventions and
+    the backlog rule and point back to this document
 -->
 
 # NRZMHi Database Constitution
@@ -160,6 +166,39 @@ Deviations MUST be justified in the PR.
 Rationale: Naming and documenting this debt keeps it visible and prevents it from silently
 growing; it also gives reviewers an explicit basis to push back on changes that entrench it.
 
+## Specification Structure
+
+The feature specifications under `specs/` were written retrospectively as an as-is inventory of
+the legacy application (001–025, branch `speckit-init`). The decisions below shaped that
+inventory and MUST be applied to new specifications so the set stays navigable.
+
+- **D1 — One specification per capability and pathogen.** Where Meningococci and Haemophilus
+  code paths differ (see Legacy Debt), each capability MUST be specified separately per pathogen.
+  Each spec MUST name the concepts it shares with its counterpart (e.g. `Sender`, the export
+  mechanism, docx templates, merge logic) and reference the owning spec instead of restating them.
+- **D2 — As-is specifications describe the code, not the intent.** An inventory spec MUST
+  record the behavior of the code on its branch, including observed defects, which are tagged
+  `[SUSPECTED-DEFECT]` or `[POTENTIAL-REFACTORING]` and otherwise described neutrally. It MUST
+  NOT contain `[NEEDS CLARIFICATION]` markers or silently "correct" observed behavior. Work in
+  flight on other branches is documented as-is and re-inventoried on that branch later.
+- **D3 — Exports: one generic specification.** The export mechanism is specified once (011)
+  with its targets enumerated. A new export target extends that enumeration; it gets its own
+  spec only when its mechanism differs (as 013 sender export and 023 EpiScanGIS do).
+- **D4 — Reporting per pathogen, interpretation separately.** Preliminary and final reports
+  are specified together per pathogen (008, 009). The interpretation engines have their own spec
+  per pathogen (006 if/else tree, 007 JSON rule set) because the mechanisms differ.
+- **D5 — Report templates have their own specification (010)**, because the docx mechanism
+  may be replaced independently of the reporting flow.
+- **Changes start from the backlog.** Every tagged observation is consolidated in
+  `specs/BACKLOG.md`. A change to current behavior MUST reference a backlog ID and MUST have
+  either its own feature specification (`/speckit-specify`) or a recorded owner decision before
+  implementation. Inventory specs are not rewritten to describe desired behavior; the change
+  spec supersedes the affected parts and says so.
+
+Rationale: The inventory exists to make a legacy system reviewable. Mixing "is" and "should" in
+one document, or cutting specs along inconsistent lines, would make both the review and the
+later change specs unreliable.
+
 ## Governance
 
 This constitution supersedes ad-hoc conventions for the NRZMHi Database project. When guidance
@@ -173,8 +212,8 @@ here conflicts with habit or convenience, this document wins.
   - PATCH: clarifications, wording, and non-semantic refinements.
 - **Compliance review**: Every PR review MUST confirm the change complies with these
   principles. Deviations MUST be documented and justified, or the change MUST be revised.
-- **Runtime guidance**: Use `.github/copilot-instructions.md` and the Spec Kit templates under
-  `.specify/templates/` for day-to-day development and planning guidance consistent with this
-  constitution.
+- **Runtime guidance**: Use `AGENTS.md` (vendor-neutral agent and contributor guide), `CLAUDE.md`
+  (Claude Code specifics) and the Spec Kit templates under `.specify/templates/` for day-to-day
+  development and planning guidance consistent with this constitution.
 
-**Version**: 1.1.0 | **Ratified**: 2026-08-26 | **Last Amended**: 2026-08-26
+**Version**: 1.2.0 | **Ratified**: 2026-08-26 | **Last Amended**: 2026-10-30

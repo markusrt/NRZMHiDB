@@ -4,13 +4,14 @@
 
 **Created**: 2026-10-30
 
-**Status**: Draft — not yet triaged by the owner
+**Status**: Draft — not yet triaged by the owner (2026-10-30: the owner will take the DEC decisions later; nothing in
+this list is blocked on them)
 
 **Source**: Every `[SUSPECTED-DEFECT]` and `[POTENTIAL-REFACTORING]` observation recorded in the as-is
 specifications `specs/001` to `specs/025` (status-quo inventory of the NRZMHi Database), consolidated into one
 entry per underlying issue. Items observed in several specs are listed once and cite all sources.
 
-> **Rule** (as in the owner's earlier Spec Kit project): nothing in this list is approved. Before an item is
+> **Rule** (constitution v1.2.0, "Specification Structure"): nothing in this list is approved. Before an item is
 > implemented it needs either its own feature specification (`/speckit-specify`, referencing the backlog ID) or an
 > explicit owner decision recorded here. Items are observations derived from reading the code; unless marked
 > "test-asserted" they were **not** exercised in a running system. The specs describe current behavior; this list is
@@ -25,21 +26,12 @@ entry per underlying issue. Items observed in several specs are listed once and 
   observation.
 - **Offen** names what the owner must decide; absent when the fix is unambiguous.
 
-## Spec structure decisions (carried over from the retired `feature-prompts.md`)
+## Spec structure decisions
 
-These decisions shaped how the as-is specs were cut. They are recorded here so the reasoning survives the removal of
-the planning file; D6 lives in `.specify/memory/constitution.md` (v1.1.0).
-
-- **D1 — Meningococci vs Haemophilus: separate specs per capability.** The two domains behave differently and were kept
-  parallel only for lack of time for a shared architecture; shared concepts (Sender, export mechanism, docx
-  templates, merge logic) are called out explicitly in each spec.
-- **D2 — As-is only.** Specs capture the code on this branch; in-flight refactorings (e.g. the Haemophilus
-  interpretation tree in PR #186) are documented as-is and re-run on the refactor branch later.
-- **D3 — Exports: one generic spec (011)** documenting the mechanism and enumerating the targets, not one spec per
-  target.
-- **D4 — Reporting: preliminary + final together, per pathogen (008, 009)**; interpretation engines separately per
-  pathogen because the mechanisms differ (006 if/else tree vs 007 JSON ruleset).
-- **D5 — Report templates: own spec (010)**, because the docx mechanism may move to a different system.
+The decisions D1–D5 that shaped how the as-is specs were cut (one spec per capability and pathogen; as-is only;
+one generic export spec; reporting per pathogen with separate interpretation specs; own spec for report
+templates) live in `.specify/memory/constitution.md` v1.2.0, section "Specification Structure", together with the
+backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved there on 2026-10-30 (DEC-012).
 
 ## DEC — Owner decisions
 
@@ -78,8 +70,8 @@ the planning file; D6 lives in `.specify/memory/constitution.md` (v1.1.0).
   setting. Offen: should Meningococci RKI/IRIS get the same pseudonymization as Haemophilus RKI/PubMLST?
 - **DEC-011 – Report pages open to every signed-in account** (Decision; source: 008, 009 Edge Cases, 021 US4.4): See
   SEC-004; the decision is whether report generation stays available to roles other than Standard User at all.
-- **DEC-012 – Where to keep D1–D5** (Decision): Keep the spec structure decisions above in this file, or amend the
-  constitution (v1.2.0) with them.
+- **DEC-012 – Where to keep D1–D5** (Decision; **decided 2026-10-30**): Moved to the constitution (v1.2.0, section
+  "Specification Structure"). This file keeps only the pointer above.
 
 ## SEC — Security and access
 
