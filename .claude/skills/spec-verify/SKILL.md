@@ -72,8 +72,12 @@ case, every `[SUSPECTED-DEFECT]`. Classify each item:
 - **DB**: observable only in data; query the catalog with
   `sqlcmd -S "(LocalDB)\MSSQLLocalDB" -d HaemophilusWeb_Screenshots -Q "..."` (read-only).
 - **File**: observable in a downloaded export or generated report; download and inspect it.
-- **Not verifiable here**: external service, missing fixture (e.g. an RKI match file), timing, or
-  behavior that only tests exercise. Say why.
+- **Test**: domain logic, validation rules, export column layouts, duplicate/anonymization rules.
+  Verified by mapping the FR to a unit test in `HaemophilusWebTests/` (step 2b), not in the browser.
+  Prefer this path for 006, 007, 012, the validator FRs of 001–005/016/017, and the column
+  definitions of 011/013/023. A validator FR may be checked both ways; record both.
+- **Not verifiable here**: external service, missing fixture (e.g. an RKI match file), timing.
+  Say why and what would make it verifiable.
 
 Work data-creating stories before data-reading ones. Keep the plan in your head or the scratchpad,
 not in the repo.
@@ -96,6 +100,31 @@ Record for each item: spec statement (quote the ID), what the app showed, verdic
 | `New defect` | Behavior that looks wrong and is not in the spec. Add tag and backlog entry. |
 | `Not verifiable` | With the reason and what would make it verifiable. |
 
+### 2b. Map to unit tests and fill gaps
+
+For every item classified **Test** (and for UI items where a test already exists):
+
+1. Search `HaemophilusWebTests/` for a test that asserts the FR (grep for the German string, the
+   rule number, the validator or method under test). Record it as evidence:
+   `Match, test-asserted: Validators/SenderValidatorTests.PostalCodeMustHaveFiveDigits`. Read the
+   assertion; a test that merely calls the method is not evidence.
+2. If no test exists and the verdict is `Match` or `Spec deviation` (after the fix), write one:
+   a `[Test]` or `[TestCase]` in the mirror folder of the source (`Validators/`, `Domain/`,
+   `Services/`, `Tools/`, `Controllers/`), named after the behavior, with the spec ID in a comment
+   (`// specs/001 FR-004`). Use the existing stack (NUnit, FluentAssertions, Moq, Faker) and keep
+   it deterministic. Extend an existing fixture before creating a new file.
+3. Never write a test for `Defect confirmed` or `New defect`: a test would cement the defect. The
+   backlog entry is the record.
+4. Run the affected fixtures before committing (PowerShell, from the repository root):
+
+   ```powershell
+   msbuild HaemophilusWebTests\HaemophilusWebTests.csproj /p:Configuration=Debug /m /verbosity:minimal
+   vstest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /Tests:SenderValidatorTests
+   ```
+
+   A red test means your reading of the code or of the app is wrong; investigate, do not adjust
+   the assertion to pass. Report the result (counts) in `verification.md`.
+
 ### 3. Write `specs/NNN-*/verification.md`
 
 ```markdown
@@ -115,11 +144,20 @@ SpecVerificationHost (`http://localhost:9899`, catalog `HaemophilusWeb_Screensho
 | New defect | n |
 | Not verifiable | n |
 
+By evidence path: Browser n · Unit test (existing) n · Unit test (added) n · File n · DB n ·
+Not verifiable n. Test run: `vstest.console.exe … /Tests:<fixtures>` → n passed, 0 failed.
+
 ## Results
 
-| ID | Spec says | App shows | Verdict | Evidence |
+| ID | Spec says | App/test shows | Verdict | Evidence |
 | --- | --- | --- | --- | --- |
 | US1.1 | … | … | Match | `verification/US1-1.png` |
+| FR-004 | … | … | Match | test-asserted: `Validators/SenderValidatorTests.PostalCode…` |
+| FR-009 | … | … | Match | test added: `Validators/SenderValidatorTests.Phone1IsRequired` |
+
+## Unit tests added
+
+- `HaemophilusWebTests/Validators/SenderValidatorTests.cs`: `Phone1IsRequired` (FR-009)
 
 ## Spec corrections applied
 
@@ -191,8 +229,9 @@ Verify spec NNN against running app
 <one line per: deviations fixed, defects confirmed/new, feature file>
 ```
 
-Include `spec.md`, `checklists/requirements.md`, `verification.md`, `specs/BACKLOG.md` and the
-`.feature` file. Exclude screenshots, `.playwright-mcp/`, `host.*`, `Web.config`.
+Include `spec.md`, `checklists/requirements.md`, `verification.md`, `specs/BACKLOG.md`, the
+`.feature` file and any test files you added or extended under `HaemophilusWebTests/`. Exclude
+screenshots, `.playwright-mcp/`, `host.*`, `Web.config`, and build output.
 
 Then report to the owner in German: the summary table, the deviations you fixed, confirmed and new
 defects with backlog IDs, what was not verifiable and why, open questions, and the suggested next

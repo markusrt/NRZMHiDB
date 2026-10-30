@@ -97,9 +97,14 @@ the review method for specs the owner does not read line by line. One spec per s
 - **Rules**: Geonames lookups are allowed; RKI, PubMLST, IRIS and EpiScanGIS calls are not. Test
   data carries the prefix `SV-NNN-`. Defects are recorded, never "fixed" in the spec or cemented in
   a feature file. `DEC-*` items are never decided during verification.
-- **Not verifiable in the browser**: 006/007 (interpretation engines), 012 (duplicate rules),
-  019/022/023 (external services), 024 (needs an RKI match file). For those, map FRs to the unit
-  tests in `HaemophilusWebTests/` instead and record the mapping in `verification.md`.
+- **Unit tests as evidence**: domain logic, validation rules, export columns and duplicate rules
+  are verified by mapping each FR to a test in `HaemophilusWebTests/` (`test-asserted: …` in the
+  results table). Missing tests for verified behavior are added in the mirror folder with the spec
+  ID in a comment; never for defects. 006/007, 012 and the column definitions of 011/013/023 use
+  this path only; 019/022/023 (external services) and 024 (needs an RKI match file) are recorded
+  as not verifiable where no test exists.
+- **Gherkin scope**: one `@smoke` scenario per UI spec now; step definitions (Reqnroll on the
+  Playwright harness) only after the Bootstrap 5 merge, so nothing is automated twice.
 
 ## Autonomy and hard rules
 
