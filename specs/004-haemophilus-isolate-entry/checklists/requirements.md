@@ -34,4 +34,3 @@
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
 - This is an *as-is* status-quo inventory (backlog ref A3-H); it documents observed behavior only
   and proposes no changes.
-</content>

@@ -252,5 +252,3 @@ warning is shown; save and proceed to report creation.
   it is required for all isolate edit actions.
 - **No in-app task planning**: Coordinating who performs which analysis is out of scope by design;
   the system offers no assignment or scheduling of analyses.
-</content>
-</invoke>
