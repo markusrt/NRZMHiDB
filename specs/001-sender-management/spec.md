@@ -105,17 +105,25 @@ and confirm a spreadsheet download is produced containing the senders active in 
 - **Missing required fields**: Creating or editing a sender without a Name or without Telefon #1
   fails validation; the form is redisplayed with validation messages and nothing is persisted.
 - **Malformed contact fields**: A malformed e-mail address, or a phone/fax value that does not
-  satisfy phone formatting, fails validation on save; the form is redisplayed.
-- **Missing id**: Requesting Details, Edit, or Delete with no id returns a "bad request"
+  satisfy phone formatting, fails validation on save; the form is redisplayed. The e-mail check (and
+  the Name/Telefon #1 required checks) already run in the browser before the form is sent; the
+  phone/fax format checks run only on the server, so a malformed phone or fax number is reported
+  only after a round trip (e.g. "Das Feld Telefon #1 enthält keine gültige Telefonnummer.").
+- **Missing id**: Requesting Details, Edit, Delete, or restore with no id returns a "bad request"
   outcome; requesting a non-existent id returns a "not found" outcome.
 - **Deleting a sender with active submissions**: Deletion is still permitted; the sender simply
   becomes unavailable for new submissions while remaining attached to the existing ones.
 - **Delete/restore bypasses field validation**: Toggling the deleted flag saves the record even
   if it would otherwise fail normal field validation, so an incomplete legacy record can still
   be deleted or restored.
+- **Editing a deleted sender restores it**: The edit page of a deleted sender stays reachable by
+  its address; saving it clears the deleted mark without notice, because the edit form does not
+  carry the flag (see FR-017 and spec 020, backlog DATA-007). [SUSPECTED-DEFECT]
 - **Meningococci sender maintenance**: Only the sender *export* is surfaced for the Meningococci
   workflow in navigation; list/create/edit/delete/restore of senders are reached through the
-  Haemophilus "Einsender" area and operate on the same shared directory.
+  Haemophilus "Einsender" area and operate on the same shared directory. The Meningococci
+  controller's own list, create, edit, details, delete and deleted-list addresses have no pages
+  and end in a server error (HTTP 500, view not found). [POTENTIAL-REFACTORING]
 
 ## Requirements *(mandatory)*
 
@@ -125,7 +133,8 @@ and confirm a spreadsheet download is produced containing the senders active in 
   Haemophilus and the Meningococci workflows; a sender created once is usable from either.
 - **FR-002**: The system MUST let an authorized user list active (non-deleted) senders, showing
   Name, Abteilung (department), Ort (city), Telefon #1, and E-Mail, with a paged, sortable,
-  searchable table and an action to create a new sender.
+  searchable table and an action to create a new sender. Each row offers only "Bearbeiten";
+  deletion is started from the edit page's "Eintrag löschen" button.
 - **FR-003**: The system MUST let an authorized user create a sender by entering Name, Abteilung,
   Straße (street), Postleitzahl (postal code), Ort, Telefon #1, Telefon #2, Fax, E-Mail, and
   Bemerkung (remark); on success the sender is persisted and the user is returned to the list.
@@ -133,11 +142,16 @@ and confirm a spreadsheet download is produced containing the senders active in 
   save that omits either, redisplaying the entry form without persisting.
 - **FR-005**: The system MUST validate that E-Mail, when provided, is a well-formed e-mail
   address, and that Telefon #1, Telefon #2, and Fax, when provided, satisfy phone formatting;
-  invalid input MUST cause the save to be rejected and the form redisplayed.
+  invalid input MUST cause the save to be rejected and the form redisplayed. The e-mail format is
+  also checked in the browser before submitting; the phone and fax formats are checked only on the
+  server.
 - **FR-006**: The system MUST let an authorized user edit an existing sender's fields and
   persist the changes, returning the user to the list on success.
 - **FR-007**: The system MUST provide a read-only details view of a single sender showing Name,
-  Abteilung, Telefon #1, Telefon #2, Fax, E-Mail, and Bemerkung.
+  Abteilung, Telefon #1, Telefon #2, Fax, E-Mail, and Bemerkung. The view is reachable only by its
+  address: no page links to it (the list's details link is commented out), and its headings and
+  links are untranslated scaffolding ("Details", "Sender", "Edit", "Back to List").
+  [POTENTIAL-REFACTORING]
 - **FR-008**: The system MUST support removal of a sender as a soft delete (a recoverable
   "deleted" flag) rather than a permanent deletion; deleted senders MUST NOT appear in the
   active list and MUST NOT be offered for new submissions.
@@ -166,7 +180,7 @@ and confirm a spreadsheet download is produced containing the senders active in 
   unauthorized requests MUST be denied.
 - **FR-017**: The system MUST protect create and edit against over-posting by binding only the
   editable sender fields from the form, so the deleted flag cannot be set through those forms.
-- **FR-018**: Requests for a single sender (details, edit, delete) with a missing id MUST return
+- **FR-018**: Requests for a single sender (details, edit, delete, restore) with a missing id MUST return
   a bad-request outcome, and with a non-existent id MUST return a not-found outcome.
 - **FR-019**: The create/edit form MUST offer a postal-code lookup that can populate city/postal
   code from a geonames-based search, and MUST warn the user before navigating away with unsaved
@@ -194,8 +208,9 @@ and confirm a spreadsheet download is produced containing the senders active in 
   submission workflows, with no duplicate entry required.
 - **SC-003**: 100% of deletions are recoverable: any deleted sender can be restored to the active
   directory, and no submission loses its sender attribution as a result of a deletion.
-- **SC-004**: When deleting a sender that still has active submissions, the user is shown the
-  count and links of all affected submissions from both databases before confirming.
+- **SC-004**: When deleting a sender that still has active submissions, the user is shown one link
+  per affected submission ("Einsendung" plus laboratory number) from both databases before
+  confirming; no count is shown.
 - **SC-005**: Attempting to save a sender without a Name or Telefon #1, or with a malformed
   e-mail/phone/fax, never persists the record and always returns an actionable validation message.
 - **SC-006**: The sender export for a chosen period returns a spreadsheet whose rows are exactly
@@ -213,11 +228,13 @@ and confirm a spreadsheet download is produced containing the senders active in 
   both `SenderController` (Haemophilus) and `MeningoSenderController` (Meningococci) derive from a
   shared `SenderControllerBase` and operate on the *same* shared sender table. They differ only in
   which submission set they query (for the delete warning and the export) and in the export's
-  database label/filename.
+  database label/filename. Only the Meningococci export has a page; the other actions of
+  `MeningoSenderController` end in a server error because their views do not exist.
 - **Sender CRUD is surfaced only through the Haemophilus "Einsender" area in navigation.** Only
   the Meningococci sender *export* is linked from navigation; list/create/edit/delete/restore are
   reached via the shared Haemophilus sender pages. Both controllers technically expose the same
-  actions against the shared directory. [POTENTIAL-REFACTORING]
+  actions against the shared directory, but only the Haemophilus ones have pages.
+  [POTENTIAL-REFACTORING]
 - **Authorization**: All sender actions require the standard laboratory-user role
   ("Standardbenutzer"). Navigation exposes the "Einsender" and "Gelöschte Einsender" entries to
   standard-user or administrator roles; the deleted-senders list is placed under the

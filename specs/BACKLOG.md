@@ -40,6 +40,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   every function except the unlinked role pages and the functions open to any signed-in account refuses it. Nine specs
   tag this `[SUSPECTED-DEFECT]`. Offen: is Administrator meant to be a pure role-management role (then the navigation
   is wrong and the tags become one UX item) or a superset of Standard User (then the authorization rules are wrong)?
+  Confirmed on system 2026-10-30 for the sender pages (001 verification): `Admin1` sees "Einsender", both "Einsender
+  Export" entries and "Gelöschte Einsender", and every sender address redirects it to the sign-in page.
 - **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
   Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
   include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
@@ -130,7 +132,7 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   "Inverted selection"; 002/003 Assumptions): Inverted by the 2018 generics restructuring (commit `e8aac1d`); no page
   lists deleted submissions, restore works only by direct address.
 - **DATA-007 – Saving the edit page of a deleted submission or sender silently restores it** (Bugfix; source: 020
-  US3.3–3.4).
+  US3.3–3.4; 001 Edge Cases). Confirmed on system 2026-10-30 (001 verification) for senders.
 - **DATA-008 – Restore is a plain link without confirmation; unknown id ends on the error page** (Bugfix; source: 020
   US3.5, US5.4).
 - **DATA-009 – Patient merge: soft-deleted submissions, latent data mix-up, no audit** (Bugfix; source: 014/015 Edge
@@ -237,7 +239,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **REF-007 – Health-office records saved without validation and then unsavable** (Refactoring; source: 016 Edge Cases):
   Deliberate exception to Principle I that blocks the edit page until values are corrected.
 - **REF-008 – Sender model validated by DataAnnotations only; Meningococci sender controller exposes full CRUD without
-  navigation** (Refactoring; source: 001 Assumptions).
+  navigation** (Refactoring; source: 001 Assumptions, Edge Cases, FR-007): The Meningococci CRUD addresses have no
+  views and end in HTTP 500 (confirmed on system 2026-10-30, 001 verification); its restore address would clear the
+  deleted mark before failing (from code, not exercised). The sender details page is unlinked, untranslated
+  scaffolding.
 - **REF-009 – Postal-code lookup leftovers** (Refactoring; source: 022 Edge Cases, US3.3): `countries.json` snapshot from
   2020 (code TODO to refresh); "Unbekannt" assigned twice; fields matched by id suffix; `LoadCountries` reachable by
   URL returning a type name.

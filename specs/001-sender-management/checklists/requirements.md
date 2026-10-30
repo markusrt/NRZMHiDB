@@ -39,3 +39,9 @@
   sender table with the Haemophilus `SenderController`.
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`.
 - Review 2026-10-30: User Story 2 scenario 3 corrected (restore is done by a standard user; Administrator-only accounts are refused by the sender pages, spec 021). FR-015 now notes that the per-sender export values include soft-deleted submissions (spec 013).
+- Verification 2026-10-30: Checked against the running app (see `verification.md`). FR-005 and the
+  malformed-contact edge case now say that phone/fax formats are checked only on the server; FR-018
+  and the missing-id edge case include restore; FR-007 records that the details view is unlinked
+  scaffolding and FR-002 names the only row action ("Bearbeiten"); SC-004 says links, not a count;
+  the Meningococci edge case and Assumptions record that `MeningoSender` CRUD addresses end in HTTP
+  500; new edge case for DATA-007 (saving the edit page of a deleted sender restores it).
