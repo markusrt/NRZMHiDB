@@ -192,7 +192,7 @@ with a Public Health account and verify that all are refused.
   in the sender choice of those submissions (spec 001, spec 002 FR-004).
 - **What deletion changes for submissions** (summary with references):
   - Excluded: the Haemophilus and Meningococci submission overviews and their search, all seven exports
-    (spec 011), the token-protected EpiScanGIS export (not yet specified; derived from code), the selection of
+    (spec 011), the token-protected EpiScanGIS export (spec 023), the selection of
     senders for the sender exports (spec 013), the list of submissions on the sender delete warning (spec 001), and
     the patient lookup and reassignment of both merges (specs 014, 015).
   - Still included: the "Anzahl Einsendungen", "Stammnummern", and "Labornummern" values of the sender exports

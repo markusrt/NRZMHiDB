@@ -17,7 +17,7 @@
 > lookup used by the EpiScanGIS export is summarised as a second consumer only. It does **not** propose changes. Out of
 > scope and referenced instead: the rest of the sender form (spec 001), the rest of the submission forms and the
 > state/country consistency rule (specs 002, 003), the settings table (spec 018), access and anti-forgery rules (spec
-> 021), the use of the county text by exports (spec 011), and the EpiScanGIS export itself (spec 021, User Story 7).
+> 021), the use of the county text by exports (spec 011), and the EpiScanGIS export itself (spec 023).
 > The value of the `GeonamesAccount` setting is named but never reproduced. No call to the external service was made;
 > everything is derived from code, configuration structure, version history, and automated tests.
 
@@ -124,7 +124,7 @@ country choice exists.
 
 ### User Story 4 - Supply coordinates for the EpiScanGIS export (Priority: P3)
 
-The automated EpiScanGIS export (spec 021, User Story 7) asks the same lookup for the coordinates of each case's
+The automated EpiScanGIS export (spec 023) asks the same lookup for the coordinates of each case's
 patient postal code.
 
 **Why this priority**: It is a second, non-interactive consumer of the same external service and the same place-name

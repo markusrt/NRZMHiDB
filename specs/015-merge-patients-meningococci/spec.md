@@ -163,7 +163,7 @@ Findings of spec 014, checked against the Meningococci variant:
 - **Derived patient age changes — Meningococci relevant.** "Patientenalter bei Entnahme" in the Meningococci
   Laboratory and IRIS exports and on the isolate page is computed from the kept patient's date of birth, so it can
   change for moved submissions when the two records' dates of birth differed.
-- **EpiScanGIS export grouping — Meningococci specific.** The token-protected EpiScanGIS export (not yet specified)
+- **EpiScanGIS export grouping — Meningococci specific.** The token-protected EpiScanGIS export (spec 023)
   writes at most one line per Meningococci patient number. After a merge, the moved submissions share the kept
   patient's number, so the export emits one line for the merged person instead of one line per former patient
   record.
@@ -291,6 +291,6 @@ Findings of spec 014, checked against the Meningococci variant:
   stem from requests outside the normal pages or direct database changes. Spec 003 (User Story 3, FR-018)
   records the same absence.
 - The EpiScanGIS grouping effect is derived from that export's code (one line per patient number); the export itself
-  is not yet specified.
+  is specified in spec 023.
 - As in specs 011 and 014, accounts are assumed to hold exactly one role, so an Administrator account is refused.
 - "Active submission" means a submission not soft-deleted as described in spec 003.
