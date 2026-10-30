@@ -39,6 +39,9 @@ listed, add it here in the same commit.
 | `When I click the button "<text>"` | Click the submit button with this text when a link has the same text. |
 | `When I click "<text>" in the row "<row text>"` | Click a link or button inside the table row that contains the row text. |
 | `When I enter "<value>" into "<label>"` | Fill the field with this label. |
+| `When I enter "<value>" into the search field "<placeholder>"` | Fill the search field showing this placeholder (list searches without labels). |
+| `When I select "<option text>" in "<label>"` | Choose the entry of the selection list with this label whose text contains the option text. |
+| `When I choose "<option>" for "<label>"` | Pick the radio button or toggle with this text in the group with this label. |
 | `When I open the edit page of "<name>"` | Open the edit page of the record with this name from its list. |
 
 ### Assertions
@@ -62,3 +65,9 @@ listed, add it here in the same commit.
 | `Then the sender list does not contain "<name>"` | 001 | As above, negated. |
 | `Then the sender list row "<name>" shows "<text>"` | 001 | The row of that sender contains the text. |
 | `Then the sender selection offers "<name>"` | 001 | The "Einsender" selection of a submission form lists the sender. |
+| `Given a submission with sender laboratory number "<lab no>" exists` | 002 | Create a Haemophilus submission with this "Labnr. Einsender" through the UI if missing (sender `SV-001-Alpha`, synthetic patient). |
+| `Given a submission for patient "<initials>" born "<date>" with postal code "<code>" exists` | 002 | As above, for a patient with these identifying details. |
+| `When I open the edit page of the submission "<lab no>"` | 002 | Find the submission by its "Labnr. Einsender" in the list search and click "Bearbeiten". |
+| `Then the submission list row "<search text>" shows "<text>"` | 002 | The Haemophilus submission list (`/PatientSending`), filtered with the search box, has a row containing the text. |
+| `Then the submission list does not contain "<search text>"` | 002 | The search box finds no row for the text. |
+| `Then the submission list shows <n> row(s)` | 002 | The list currently shows exactly this many rows. |

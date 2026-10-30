@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using HaemophilusWeb.Models;
 using NUnit.Framework;
 
@@ -45,6 +46,29 @@ namespace HaemophilusWeb.Validators
             yield return Tuple.Create(CreateInvalidSendingWithOtherSamplingLocationEmpty(SamplingLocation.OtherNonInvasive), new[] { "OtherSamplingLocation" });
             
             yield return Tuple.Create(CreateInvalidSendingWithOtherSamplingLocationEmpty(SamplingLocation.OtherInvasive), new[] { "OtherSamplingLocation" });
+        }
+
+        // specs/002 FR-006: the receiving date may equal the sampling date
+        [Test]
+        public void Validate_ReceivingDateOnSamplingDate_IsValid()
+        {
+            var sending = CreateSending();
+            sending.SamplingDate = new DateTime(2020, 3, 10);
+            sending.ReceivingDate = new DateTime(2020, 3, 10);
+
+            AssertIsValid(Validate(sending));
+        }
+
+        // specs/002 FR-006: "Invasiv" is derived from the sampling location, so its rule never fails
+        [TestCase(SamplingLocation.Blood)]
+        [TestCase(SamplingLocation.Liquor)]
+        [TestCase(SamplingLocation.OtherNonInvasive)]
+        public void Validate_AnySamplingLocation_PassesInvasiveRule(SamplingLocation samplingLocation)
+        {
+            var sending = CreateSending();
+            sending.SamplingLocation = samplingLocation;
+
+            Validate(sending).Errors.Should().NotContain(e => e.PropertyName == nameof(Sending.Invasive));
         }
 
         private static Sending CreateInvalidSendingWithOtherSamplingLocationEmpty(SamplingLocation samplingLocation)

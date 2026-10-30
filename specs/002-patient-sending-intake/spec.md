@@ -24,8 +24,9 @@ A laboratory user records a newly received laboratory submission ("Einsendung") 
 Haemophilus workflow. From a single "Einsendung erfassen" form they capture, together, the
 received-material details (the Sending) and the base patient plus epidemiological/clinical data
 (the Patient). The submission is attributed to a sender (the submitting institution) and to a
-patient, and on save the system assigns the laboratory identifiers (stem number and laboratory
-number) so downstream processing can begin.
+patient, and on save the system creates the isolate record and assigns its laboratory number so
+downstream processing can begin (the stem number is entered later during the isolate work-up, see
+spec 004).
 
 **Why this priority**: This combined intake is the entry point of the entire Haemophilus
 laboratory workflow — nothing downstream (isolate work-up, reporting, exports) can exist until a
@@ -34,8 +35,8 @@ feature.
 
 **Independent Test**: Sign in as a standard laboratory user, open "Neue Einsendung erfassen",
 select a sender, fill in the required sending and patient fields, and save; confirm the
-submission is persisted, appears in the submissions list, and has been assigned a stem number
-and laboratory number.
+submission is persisted, appears in the submissions list, and has been assigned a laboratory
+number.
 
 **Acceptance Scenarios**:
 
@@ -46,8 +47,9 @@ and laboratory number.
 2. **Given** the combined form, **When** the user selects a sender, enters a sender laboratory
    number and sender species, chooses a sampling location, sets receiving/sampling dates, and
    enters patient initials, gender (and remaining patient data), and saves, **Then** a new patient
-   is created, a new submission linked to that patient and the selected sender is persisted, a stem
-   number and laboratory number are assigned, and the user is returned to the submissions list.
+   is created, a new submission linked to that patient and the selected sender is persisted, a
+   laboratory number is assigned (the stem number stays empty and is listed as "H -"), and the user
+   is returned to the submissions list.
 3. **Given** a saved submission whose assigned laboratory number differs from the one implied at
    entry, **When** the save completes, **Then** the user is shown a warning stating the laboratory
    number changed, including the new laboratory number.
@@ -107,9 +109,10 @@ restore it.
 
 1. **Given** recorded submissions, **When** the user opens the submissions list, **Then** a paged,
    sortable, server-side-searchable table is shown with, per submission, the patient initials,
-   birth date, stem number, receiving date, sampling location, invasive flag, a report-status icon,
-   the laboratory number (linking to the isolate), patient postal code, sender postal code, and
-   sender laboratory number, plus actions to edit and to create a report ("Befund erstellen").
+   birth date, stem number, receiving date, sampling location, invasive flag, the laboratory number
+   (linking to the isolate), actions to edit and to create a report ("Befund erstellen"), and a
+   report-status icon (column "Befund"); patient postal code, sender postal code, and sender
+   laboratory number are hidden columns that only the searches use.
 2. **Given** a submission, **When** the user opens it for editing, changes patient or sending
    fields, and saves with valid data, **Then** both the patient and the sending changes are
    persisted and the user is returned to the list.
@@ -129,10 +132,18 @@ restore it.
 
 - **Missing required patient fields**: Saving without patient initials, or with initials not in the
   `E.M.` dotted form, or without a gender, fails validation; the combined form is redisplayed and
-  nothing is persisted.
-- **Missing required sending fields**: Saving without a sender, without a patient link, without a
-  receiving date, without an invasive value, without a sender laboratory number, or without a sender
-  species, fails validation; the form is redisplayed.
+  nothing is persisted. The browser checks these fields before submitting; the server repeats the
+  checks, but its initials check is weaker (see "Initials format on the server").
+- **Initials format on the server**: The browser requires the whole value to consist of letter-dot
+  pairs. The server only requires one letter followed by a dot anywhere in the value, so initials such
+  as "Max M." sent past the browser check are stored (upper-cased, "MAX M."). [SUSPECTED-DEFECT]
+  (backlog DATA-030)
+- **Missing required sending fields**: Saving without a sender, without a receiving date, without a
+  sender laboratory number, or without a sender species fails validation; the form is redisplayed. A
+  missing patient link and a missing invasive value cannot occur: the patient link is set by the
+  system on save and "Invasiv" is derived from the sampling location. When the sender is missing, the
+  server-side redisplay shows only the sender message; the browser shows all messages before
+  submitting.
 - **Receiving before sampling**: Saving with a receiving date earlier than the sampling date fails
   validation with "Das Eingangsdatum muss nach dem Entnahmedatum liegen".
 - **"Other" sampling location without free text**: When the sampling location is "other", the free-text
@@ -140,7 +151,13 @@ restore it.
 - **Duplicate patient (one match)**: The save is paused and the user must pick a duplicate-resolution
   option before the record is stored.
 - **Duplicate patient (two or more matches)**: A third patient with the same identifying details is
-  rejected and cannot be stored.
+  rejected when the form is saved without a duplicate-resolution choice.
+- **Duplicate-resolution choice skips the third-patient check**: When a request already carries a
+  duplicate-resolution choice (two pages left at the duplicate prompt for the same patient, or a
+  crafted request), the two-or-more check is skipped: "Neuen Patienten anlegen" stores a third
+  patient with the same initials, birth date, and postal code, and "Bestehenden Patienten verwenden"
+  ends in HTTP 500 ("Die Sequenz enthält mehr als ein Element."). [SUSPECTED-DEFECT] (backlog
+  DATA-031)
 - **Delete/restore bypasses validation**: Toggling the deleted flag saves the submission even if the
   record would otherwise fail normal field validation, so an incomplete legacy record can still be
   deleted or restored.
@@ -149,6 +166,12 @@ restore it.
   that submission.
 - **Laboratory number reassignment**: If the laboratory number assigned on save differs from the one
   implied at entry, a warning with the new laboratory number is surfaced after saving.
+- **Missing or unknown submission number**: Opening the edit, delete-confirmation, or restore address
+  without a submission number or with an unknown one ends in HTTP 500 (null reference) instead of a
+  "bad request" or "not found" answer. [SUSPECTED-DEFECT] (backlog UX-010; restore also DATA-008)
+- **Editing a deleted submission restores it**: The edit page of a soft-deleted submission opens by
+  direct address; saving it clears the deleted flag, because the form does not carry the flag (see
+  spec 020 US3.3). [SUSPECTED-DEFECT] (backlog DATA-007)
 
 ## Requirements *(mandatory)*
 
@@ -161,20 +184,32 @@ restore it.
   sampling date = today minus 7 days, sender species = "H. influenzae", and Hib vaccination status =
   "not stated".
 - **FR-003**: On creating an intake, the system MUST link the submission to exactly one sender
-  (Einsender) and to exactly one patient, and MUST assign the submission a stem number and a
-  laboratory number as part of the save.
+  (Einsender) and to exactly one patient, and MUST create the submission's isolate with a laboratory
+  number as part of the save. The laboratory number is the next sequential number of the year of
+  saving, not of the sampling or receiving date (a submission sampled in 2020 and saved in 2026
+  receives e.g. "KL001/26"). No stem number is assigned; it stays empty ("H -" in the list) until it is
+  entered on the isolate page (spec 004). The code for automatic stem numbers exists but is never
+  enabled for either pathogen. [POTENTIAL-REFACTORING] (backlog REF-018)
 - **FR-004**: The system MUST offer, for sender selection, the active (non-deleted) senders plus the
   sender already attached to the submission being edited.
 - **FR-005**: The sender directory used for selection MUST be the single directory shared with the
   Meningococci database; a sender is the same record whether referenced from a Haemophilus or a
   Meningococci submission.
-- **FR-006**: The system MUST validate the Sending on save, requiring a sender, a patient link, a
-  receiving date, an invasive value, a sender laboratory number, and a sender species; requiring the
-  receiving date to be on or after the sampling date (message "Das Eingangsdatum muss nach dem
-  Entnahmedatum liegen"); and requiring the free-text "other sampling location" when the sampling
-  location is "other".
-- **FR-007**: The system MUST validate the Patient on save, requiring initials, requiring the initials
-  to match the dotted form (e.g. "E.M."), and requiring a gender.
+- **FR-006**: The system MUST validate the Sending on save, requiring a sender ("'Einsendernummer'
+  darf kein Nullwert sein."), a receiving date ("'Eingangsdatum' darf kein Nullwert sein."), a sender
+  laboratory number ("'Labnr. Einsender' darf nicht leer sein."), and a sender species ("'Spezies
+  Einsender' darf nicht leer sein."); requiring the receiving date to be on or after the sampling date
+  (message "Das Eingangsdatum muss nach dem Entnahmedatum liegen"); and requiring the free-text
+  "Anderer Entnahmeort" when the sampling location is "Anderer nicht invasiv" or "Anderer invasiv"
+  ("Anderer Entnahmeort darf nicht leer sein."). The rule set also names the patient link and the
+  invasive value, but neither can fail: the patient link is set by the system on save and "Invasiv" is
+  derived from the sampling location ("Ja" for "Blut", "Liquor", "Anderer invasiv").
+- **FR-007**: The system MUST validate the Patient on save, requiring initials ("'Initialen' darf
+  nicht leer sein."), requiring the initials to match the dotted form (e.g. "E.M."; message "Die
+  Initialen müssen in der Form 'E.M.' eingegeben werden."), and requiring a gender ("'Geschlecht'
+  darf nicht leer sein."). The browser enforces the dotted form for the whole value; the server only
+  checks that the value contains a letter followed by a dot (see Edge Cases, "Initials format on the
+  server"). [SUSPECTED-DEFECT] (backlog DATA-030)
 - **FR-008**: When required fields are missing or invalid, the system MUST reject the save, persist
   nothing, and redisplay the combined form with validation messages.
 - **FR-009**: On intake, the system MUST detect an existing patient with the same initials, birth
@@ -184,13 +219,21 @@ restore it.
   the existing patient and update that patient from the entered form data rather than creating a
   duplicate; when the user chooses "create new patient", it MUST create a new patient.
 - **FR-011**: When two or more patients already match the entered initials, birth date, and postal
-  code, the system MUST reject the save with a message that a third such patient cannot be stored.
+  code, the system MUST reject the save with the message "Es existieren bereits zwei Patienten mit
+  den selben Initialen, Geburtsdatum und Postleitzahl. Ein dritter Patient mit den selben
+  Eigenschaften kann leider nicht gespeichert werden." The check runs only when the request carries
+  no duplicate-resolution choice; with a choice it is skipped (see Edge Cases). [SUSPECTED-DEFECT]
+  (backlog DATA-031)
 - **FR-012**: After a successful save where the assigned laboratory number differs from the one
   implied at entry, the system MUST warn the user and include the new laboratory number.
-- **FR-013**: The system MUST provide a submissions list showing, per submission, patient initials,
-  birth date, stem number, receiving date, sampling location, invasive flag, a report-status icon,
-  the laboratory number (linking to the isolate), patient postal code, sender postal code, and sender
-  laboratory number, with server-side paging, sorting, full-text search, and per-column search.
+- **FR-013**: The system MUST provide a submissions list ("Einsendungen") showing, per submission,
+  patient initials, birth date, stem number, receiving date, sampling location, invasive flag, the
+  laboratory number ("Labor-Nr", linking to the isolate), and a report-status icon (column "Befund",
+  e.g. "Kein Befund erstellt"), with server-side paging (8 rows per page), sorting (default: "Labor-Nr"
+  descending; the browser remembers the last sort and search), and full-text search. Patient postal
+  code, sender postal code, and sender laboratory number are loaded as hidden columns: the full-text
+  search covers them, and "Erweiterte Suche" replaces the search box with fields for "Initialen",
+  "Geburtsdatum", "Patient PLZ", "Einsender Labornummer", and "Einsender PLZ".
 - **FR-014**: Each submissions-list row MUST offer an action to edit the submission and an action to
   create its report ("Befund erstellen").
 - **FR-015**: The system MUST let an authorized user edit an existing submission's patient and sending
@@ -207,10 +250,13 @@ restore it.
 - **FR-020**: All intake actions (create, edit, list/data, delete, restore, merge) MUST require the
   user to hold the standard laboratory-user role ("Standardbenutzer"); the RKI export additionally
   permits the public-health role ("RKI"). Unauthenticated or unauthorized requests MUST be denied.
-- **FR-021**: The system MUST protect create and edit against over-posting by binding only the
-  intended patient and sending fields from the combined form. The combined form carries anti-forgery
-  tokens, but the create and edit saves do not verify them (current behavior; see spec 021).
-  [SUSPECTED-DEFECT]
+- **FR-021**: Create and edit bind every patient and sending property from the posted form; there is
+  no list of intended fields. A request can therefore set values the form does not offer, e.g.
+  "Sending.Deleted=true" stores a new submission as deleted, and on edit the posted patient and
+  submission numbers decide which records are overwritten (from code, not exercised).
+  [SUSPECTED-DEFECT] (backlog SEC-013) The
+  combined form carries anti-forgery tokens, but the create and edit saves do not verify them; a save
+  without token is stored (current behavior; see spec 021). [SUSPECTED-DEFECT] (backlog SEC-005)
 
 ### Key Entities *(include if feature involves data)*
 
@@ -229,27 +275,29 @@ restore it.
 - **Sender ("Einsender")**: The submitting institution a submission is attributed to. Shared across
   both the Haemophilus and the Meningococci databases; selectable when it is active or already
   attached to the submission. Only referenced here for linking and selection.
-- **Isolate**: The laboratory work-up record created for a submission on save; carries the year,
-  yearly sequential isolate number, stem number, and the resulting laboratory number. Referenced here
-  only insofar as intake creates it and assigns its identifiers.
+- **Isolate**: The laboratory work-up record created for a submission on save; carries the year (of
+  saving), yearly sequential isolate number, the resulting laboratory number, and the stem number
+  (empty after intake). Referenced here only insofar as intake creates it and assigns its laboratory
+  number.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
 - **SC-001**: An authorized user can record a new valid submission together with its patient in one
-  form and, on save, see it in the submissions list with an assigned stem number and laboratory
-  number, without a second data-entry step.
+  form and, on save, see it in the submissions list with an assigned laboratory number, without a
+  second data-entry step (the stem number follows during the isolate work-up).
 - **SC-002**: When intake would create a patient that duplicates an existing one (same initials,
   birth date, and postal code), the user is always prompted to reuse or create before any record is
   stored, and choosing to reuse never creates a duplicate patient.
-- **SC-003**: A third patient with identical initials, birth date, and postal code is never stored.
+- **SC-003**: A third patient with identical initials, birth date, and postal code is not stored when
+  the form is saved without a duplicate-resolution choice (with a choice it is, see FR-011).
 - **SC-004**: Every submission is attributed to exactly one sender and one patient, and the sender
   chosen is the same shared record available to the Meningococci workflow.
 - **SC-005**: Attempting to save an intake with any missing/invalid required field (patient initials
-  format, gender, sender, receiving date, invasive, sender laboratory number, sender species, or a
-  receiving date before the sampling date) never persists the record and always returns an actionable
-  validation message.
+  format, gender, sender, receiving date, sender laboratory number, sender species, or a receiving
+  date before the sampling date) never persists the record and always returns an actionable
+  validation message (the server accepts initials the browser would reject, see FR-007).
 - **SC-006**: 100% of deletions are recoverable: any soft-deleted submission can be restored to the
   active list (currently only by direct address, see spec 020), and delete/restore succeeds even for
   records that would otherwise fail field validation.
@@ -270,5 +318,6 @@ restore it.
   public-health role, per the application's default role set.
 - **Meningococci parity**: The parallel `MeningoPatientSending` workflow shares the same base
   controller and behaves analogously; only the shared Sender directory is in scope here.
-- **Identifiers assigned at save**: Stem number and laboratory number are generated by the system
-  during the create save, not entered by the user.
+- **Identifiers assigned at save**: The laboratory number is generated by the system during the
+  create save, not entered by the user; the create form shows the number expected at that moment.
+  The stem number is not generated at intake (FR-003).
