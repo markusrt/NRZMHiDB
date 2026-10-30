@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>false</IsPackable>
+    <Nullable>disable</Nullable>
+    <!-- The web app runs on x86 (IIS Express) / uses SQL LocalDB; keep this test host consistent. -->
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="NUnit" Version="4.3.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Playwright.NUnit" Version="1.49.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Used for baseline/current pixel diffing and gallery thumbnails (Windows-only harness). -->
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+
+  <!-- The web app is a classic packages.config project; referencing it as a ProjectReference breaks the
+       SDK Restore target. Instead we build it via the MSBuild task below and reference its compiled output,
+       then copy its whole bin (all runtime dependencies) into our output so the in-process seeder can run. -->
+  <ItemGroup>
+    <Reference Include="HaemophilusWeb">
+      <HintPath>..\HaemophilusWeb\bin\HaemophilusWeb.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\HaemophilusWeb\bin\EntityFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\HaemophilusWeb\bin\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\HaemophilusWeb\bin\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <Target Name="BuildWebApp" BeforeTargets="ResolveAssemblyReferences">
+    <MSBuild Projects="..\HaemophilusWeb\HaemophilusWeb.csproj" Targets="Build" Properties="Configuration=$(Configuration)" />
+  </Target>
+
+  <Target Name="CopyWebBin" AfterTargets="Build" Condition="'$(SkipWebBinCopy)' != 'true'">
+    <ItemGroup>
+      <WebBinFiles Include="..\HaemophilusWeb\bin\*.dll" />
+    </ItemGroup>
+    <!-- Only bring web dependencies we don't already ship, so we never downgrade the test host's own
+         (newer) framework assemblies that Playwright/NUnit rely on. -->
+    <Copy SourceFiles="@(WebBinFiles)" DestinationFolder="$(OutDir)"
+          Condition="!Exists('$(OutDir)%(WebBinFiles.Filename)%(WebBinFiles.Extension)')" />
+  </Target>
+
+</Project>

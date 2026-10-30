@@ -33,7 +33,8 @@ Meningococci (constitution, "Known Architectural Constraints").
 | --- | --- |
 | `HaemophilusWeb/` | Web application (Controllers, Domain, Models, Services, Validators, Views, Migrations) |
 | `HaemophilusWebTests/` | Unit tests (NUnit 4, FluentAssertions, Moq); folders mirror the source |
-| `SystemTests/`, `DbTest/` | Integration/system tests that need a database or browser |
+| `SystemTests/`, `DbTest/` | Legacy Selenium/system tests; `SystemTests/Features/` holds the Gherkin features written during spec verification |
+| `ScreenshotTests/` | Playwright harness: isolated LocalDB, seeder, IIS Express on port 9899, gold-master screenshots, and the `SpecVerificationHost` that keeps the seeded app running |
 | `AccessImporter/`, `CsvImporter/` | One-off import tools |
 | `specs/001-…025-*/` | As-is specifications (status-quo inventory), one per capability and pathogen |
 | `specs/BACKLOG.md` | Every `[SUSPECTED-DEFECT]` / `[POTENTIAL-REFACTORING]` observation, consolidated |
@@ -75,6 +76,30 @@ its own as `Add as-is spec: <Feature title>`. Afterwards add every new tag to `s
 `DEC-*` entries need an owner decision before a spec is written; record the decision in the
 backlog entry (`**decided YYYY-MM-DD**`) and keep the entry. Inventory specs are not rewritten
 to describe the desired behavior; the change spec says which parts it supersedes.
+
+## Spec verification against the running app
+
+The inventory specs were written from code. `/spec-verify NNN` (skill in
+`.claude/skills/spec-verify/`) checks one spec against the real application in a browser and is
+the review method for specs the owner does not read line by line. One spec per session.
+
+- **Host**: `ScreenshotTests/SpecVerificationHost` resets and seeds the catalog
+  `HaemophilusWeb_Screenshots`, starts IIS Express on `http://localhost:9899` and waits until
+  `ScreenshotTests/host.stop` exists. `host.ready` lists URL and accounts: `Labor1` (all roles),
+  `Standard1`, `Admin1`, `Rki1` (one role each), password `123456`. See `ScreenshotTests/README.md`.
+- **Browser**: Playwright MCP, configured project-wide in `.mcp.json` (headless Chromium, isolated
+  profile, screenshots in `.playwright-mcp/`).
+- **Outputs**: `specs/NNN-*/verification.md` (results table with verdicts Match / Spec deviation /
+  Defect confirmed / New defect / Not verifiable), screenshots in `specs/NNN-*/verification/`
+  (git-ignored), spec corrections with a dated checklist note, backlog updates, and
+  `SystemTests/Features/NNN-<slug>.feature` with at least one `@smoke` scenario (English Gherkin,
+  German UI strings verbatim, tags `@spec-NNN @US… @FR-…`, no step definitions yet).
+- **Rules**: Geonames lookups are allowed; RKI, PubMLST, IRIS and EpiScanGIS calls are not. Test
+  data carries the prefix `SV-NNN-`. Defects are recorded, never "fixed" in the spec or cemented in
+  a feature file. `DEC-*` items are never decided during verification.
+- **Not verifiable in the browser**: 006/007 (interpretation engines), 012 (duplicate rules),
+  019/022/023 (external services), 024 (needs an RKI match file). For those, map FRs to the unit
+  tests in `HaemophilusWebTests/` instead and record the mapping in `verification.md`.
 
 ## Autonomy and hard rules
 
@@ -124,6 +149,11 @@ nuget restore HaemophilusWeb.sln
 msbuild HaemophilusWeb.sln /p:Configuration=Debug /m
 vstest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll
 npx -y markdownlint-cli "specs/**/*.md"   # config: .markdownlint.json (MD013 disabled)
+
+# Spec verification host (build with /restore first, see ScreenshotTests/README.md)
+msbuild ScreenshotTests\ScreenshotTests.csproj /restore /t:Build /p:Configuration=Debug
+dotnet test ScreenshotTests\ScreenshotTests.csproj --no-build --filter "FullyQualifiedName~SpecVerificationHost"
+New-Item ScreenshotTests\host.stop   # shuts the host down
 ```
 
 Unit tests under `HaemophilusWebTests/` need no database or network. `SystemTests/` and
