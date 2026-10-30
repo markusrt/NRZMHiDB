@@ -250,8 +250,7 @@ without a session and with a Public Health account.
    list helper of the postal-code lookup.
 5. **Given** the RKI match import page, **Then** it is not linked from any page, offers a file field "CSV Datei" and
    the button "Upload", does not verify an anti-forgery token, and writes RKI match states into Haemophilus
-   submissions; it reports "File Uploaded Successfully!!" or "File upload failed: `<message>`" (derived from code; not
-   specified in any other spec). [SUSPECTED-DEFECT]
+   submissions; it reports "File Uploaded Successfully!!" or "File upload failed: `<message>`" (spec 024). [SUSPECTED-DEFECT]
 
 ---
 
@@ -397,11 +396,11 @@ that role. "Signed-in" means any signed-in account, including accounts without r
 | Postal-code lookups (sender and patient forms) | – | ✓ | – | – | Used inside forms | No | 022 |
 | Configuration "Konfiguration" | – | ✓ | – (menu shown) | – | User, Admin | Yes | 018 |
 | EUCAST breakpoints "Antibiotika Grenzwerte" | – | ✓ | – (menu shown) | – | User, Admin | Yes | 017 |
-| Counties (generated pages, file upload) | – | ✓ | – | – | None | Forms yes; upload no, any method | this spec |
+| Counties (generated pages, file upload) | – | ✓ | – | – | None | Forms yes; upload no, any method | 025, this spec |
 | Generated patient and sending pages, helper functions | – | ✓ | – | – | None | Forms yes; helpers no | 020, this spec |
 | Health offices "Gesundheitsämter" (all pages) | – | ✓ | ✓ | ✓ | User, Admin | Forms yes | 016 |
 | Report pages (both pathogens), report-status marking, health-office lookup | – | ✓ | ✓ | ✓ | Reached from submissions/isolates | No | 008, 009, 016 |
-| RKI match import "RKI Matching Daten" | – | ✓ | ✓ | ✓ | None | No | this spec |
+| RKI match import "RKI Matching Daten" | – | ✓ | ✓ | ✓ | None | No | 024, this spec |
 | Country list helper | – | ✓ | ✓ | ✓ | None | — | this spec |
 
 ### Roles and Boundaries
