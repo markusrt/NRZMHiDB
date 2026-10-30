@@ -45,6 +45,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   Confirmed on system 2026-10-30 for the Haemophilus intake (002 verification): `Admin1` sees "Haemophilus",
   "Gelöschte Einsendungen (Haemophilus)" and "Patienten Zusammenfügen", and every `/PatientSending` address (list,
   create, edit, delete, restore, merge, all three exports, list data) redirects it to the sign-in page.
+  Confirmed on system 2026-10-30 for the Meningococci intake (003 verification): `Admin1` sees "Meningokokken",
+  "Labor Export", "IRIS Export", "LGA Export", "RKI Export" and "Patienten Zusammenfügen" for Meningococci, and every
+  `/MeningoPatientSending` address (list, create, edit, delete, deleted list, restore, merge, all four exports, list
+  data) redirects it to the sign-in page.
 - **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
   Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
   include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
@@ -62,7 +66,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   `RKI` role but not in its navigation. Offen: should Public Health have it (add to menu) or not (restrict)?
 - **DEC-007 – Soft deletion of Meningococci submissions** (Decision; source: 003 US3, 015, 020 US4): No Meningococci
   delete-confirmation or deleted-submissions page exists; "Eintrag löschen" ends on the error page. Offen: is soft
-  delete wanted for Meningococci (add pages) or not (remove the button and inherited actions)?
+  delete wanted for Meningococci (add pages) or not (remove the button and inherited actions)? Confirmed on system
+  2026-10-30 (003 verification; observation only, no decision): "Eintrag löschen" and `/MeningoPatientSending/Deleted`
+  end in HTTP 500 (view not found); a delete request with anti-forgery token sent outside the pages soft-deletes the
+  submission, and `/MeningoPatientSending/Undelete/<id>` restores it.
 - **DEC-008 – EpiScanGIS case selection** (Decision; source: 023 Edge Cases): Only sampling locations "Blut" and
   "Liquor" are exported, not the invasive set used by RKI/IRIS/LGA (011 FR-011); the date window starts 2019-10-01 with
   an asymmetric boundary. Offen: agreed with the receiver, or drift?
@@ -97,7 +104,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   without the confirmation page), restore links, the health-office lookup (which stores records), report-status
   marking, the PubMLST and postal-code lookups, list data requests, the county upload, the RKI match import, and the
   role page save. Confirmed on system 2026-10-30 (002 verification) for the combined Haemophilus submission create
-  save: a POST without token is stored.
+  save: a POST without token is stored. Confirmed on system 2026-10-30 (003 verification) for the combined
+  Meningococci submission create and edit saves.
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
@@ -116,9 +124,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **SEC-012 – Temporary export/import files are never deleted** (Bugfix; source: 011, 013 Edge Cases, 023, 024, 025):
   Every spreadsheet export, the EpiScanGIS export, the RKI match upload and the county upload leave files in the
   server's temp directory; exports and the RKI match file contain patient data (Principle IV).
-- **SEC-013 – Combined submission form binds every patient and sending property** (Bugfix; source: 002 FR-021): Create
-  and edit have no list of intended fields. Confirmed on system 2026-10-30 (002 verification): a create request with
-  `Sending.Deleted=true` stores the new submission as deleted. From code: on edit, the posted patient and submission
+- **SEC-013 – Combined submission form binds every patient and sending property** (Bugfix; source: 002 FR-021; 003
+  FR-023): Create and edit have no list of intended fields. Confirmed on system 2026-10-30 (002 verification): a create
+  request with `Sending.Deleted=true` stores the new submission as deleted. Confirmed on system 2026-10-30 (003
+  verification) for Meningococci submissions. From code: on edit, the posted patient and submission
   numbers decide which records are overwritten, so one request can change another patient. The sender pages already
   restrict binding (001 FR-017).
 
@@ -142,11 +151,13 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   lists deleted submissions, restore works only by direct address. Confirmed on system 2026-10-30 (002
   verification).
 - **DATA-007 – Saving the edit page of a deleted submission or sender silently restores it** (Bugfix; source: 020
-  US3.3–3.4; 001 Edge Cases; 002 Edge Cases). Confirmed on system 2026-10-30 (001 verification) for senders.
-  Confirmed on system 2026-10-30 (002 verification) for Haemophilus submissions.
+  US3.3–3.4; 001 Edge Cases; 002 Edge Cases; 003 Edge Cases). Confirmed on system 2026-10-30 (001 verification) for
+  senders. Confirmed on system 2026-10-30 (002 verification) for Haemophilus submissions. Confirmed on system
+  2026-10-30 (003 verification) for Meningococci submissions.
 - **DATA-008 – Restore is a plain link without confirmation; unknown id ends on the error page** (Bugfix; source: 020
-  US3.5, US5.4; 002 Edge Cases). Confirmed on system 2026-10-30 (002 verification): `/PatientSending/Undelete/<id>`
-  restores on a plain GET; an unknown or missing id ends in HTTP 500 (null reference).
+  US3.5, US5.4; 002 Edge Cases; 003 Edge Cases). Confirmed on system 2026-10-30 (002 verification):
+  `/PatientSending/Undelete/<id>` restores on a plain GET; an unknown or missing id ends in HTTP 500 (null reference).
+  Confirmed on system 2026-10-30 (003 verification) for `/MeningoPatientSending/Undelete/<id>`.
 - **DATA-009 – Patient merge: soft-deleted submissions, latent data mix-up, no audit** (Bugfix; source: 014/015 Edge
   Cases, FR-011/FR-014): Soft-deleted submissions of the patient to delete make the save fail (or are dropped silently
   without isolate); Patient 1's number is placed in Patient 2's slot of the confirmation data (masked today); no log,
@@ -204,16 +215,19 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   treats only certain numeric types as numbers.
 - **DATA-027 – Empty signer list is accepted and blocks all reporting** (Bugfix; source: 018 US1.5, Edge Cases, untagged
   there): No warning on save; afterwards every report attempt fails the required-selection check.
-- **DATA-030 – Server-side initials check accepts free text** (Bugfix; source: 002 FR-007, Edge Cases): The Haemophilus
-  patient rule `([a-zA-ZäöüÄÖÜ]\.)+` is not anchored, so any value containing one letter followed by a dot passes;
-  only the browser check enforces the whole "E.M." form. Confirmed on system 2026-10-30 (002 verification): "Max M."
-  sent past the browser is stored as "MAX M.". Not checked for the Meningococci patient rule.
-- **DATA-031 – Duplicate-resolution choice skips the third-patient block** (Bugfix; source: 002 FR-011, Edge Cases):
+- **DATA-030 – Server-side initials check accepts free text** (Bugfix; source: 002 FR-007, Edge Cases; 003 FR-007,
+  Edge Cases): The Haemophilus patient rule `([a-zA-ZäöüÄÖÜ]\.)+` and the Meningococci rule `([a-zA-ZäöüÄÖÜ\?]\.)+`
+  are not anchored, so any value containing one letter (or "?") followed by a dot passes; only the browser check
+  enforces the whole "E.M." form. Confirmed on system 2026-10-30 (002 verification): "Max M." sent past the browser
+  is stored as "MAX M.". Confirmed on system 2026-10-30 (003 verification) for Meningococci patients.
+- **DATA-031 – Duplicate-resolution choice skips the third-patient block** (Bugfix; source: 002 FR-011, Edge Cases;
+  003 FR-012, Edge Cases):
   The "two patients already exist" check runs only when the request carries no duplicate-resolution choice.
   Confirmed on system 2026-10-30 (002 verification): with "Neuen Patienten anlegen" posted, a third patient with the
   same initials, birth date and postal code was stored; with "Bestehenden Patienten verwenden" the save ends in HTTP
   500 ("Die Sequenz enthält mehr als ein Element."). Reachable through the UI when two pages sit at the duplicate
-  prompt for the same patient.
+  prompt for the same patient. Confirmed on system 2026-10-30 (003 verification) for Meningococci patients, with the
+  same two outcomes.
 
 ## UX — Robustness and user feedback
 
@@ -237,10 +251,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   The Meningococci list offers both.
 - **UX-009 – Breakpoint and health-office details/delete pages are untranslated generated pages** (Refactoring; source:
   016, 017 Edge Cases): Internal identifiers shown in "Gültig für" and on details pages.
-- **UX-010 – Submission pages with missing or unknown id end in HTTP 500** (Bugfix; source: 002 Edge Cases):
-  `/PatientSending/Edit`, `/Delete` and `/Undelete` without id or with an unknown id fail with a null reference
+- **UX-010 – Submission pages with missing or unknown id end in HTTP 500** (Bugfix; source: 002 Edge Cases; 003 Edge
+  Cases): `/PatientSending/Edit`, `/Delete` and `/Undelete` without id or with an unknown id fail with a null reference
   instead of "bad request"/"not found" (the sender pages answer 400/404, 001 FR-018). Confirmed on system 2026-10-30
-  (002 verification). Restore overlaps DATA-008.
+  (002 verification). Confirmed on system 2026-10-30 (003 verification) for the same `/MeningoPatientSending`
+  addresses. Restore overlaps DATA-008.
 
 ## REF — Refactoring and legacy debt
 
@@ -297,10 +312,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **REF-016 – No audit trail for data-losing operations** (Refactoring; source: 014/015, 017, 020 Edge Cases, 024):
   Patient merges, breakpoint deletion, sender/submission delete and restore, RKI match import. Cross-cutting consequence
   of Principle I; overlaps DATA-009, DATA-011 and SEC-006.
-- **REF-018 – Automatic stem numbers implemented but never enabled** (Refactoring; source: 002 FR-003): The sending
-  controllers compute the next stem number, but the switch that enables it is `false` for every submission type, so
-  intake leaves the stem number empty and it is entered on the isolate page. Confirmed on system 2026-10-30 (002
-  verification). Specs 002 (corrected) and 003 (not yet verified) described automatic stem numbers.
+- **REF-018 – Automatic stem numbers implemented but never enabled** (Refactoring; source: 002 FR-003; 003 FR-003): The
+  sending controllers compute the next stem number, but the switch that enables it is `false` for every submission
+  type, so intake leaves the stem number empty and it is entered on the isolate page. Confirmed on system 2026-10-30
+  (002 and 003 verifications). Specs 002 and 003 described automatic stem numbers; both are corrected.
 
 ## TEST — Test gaps
 

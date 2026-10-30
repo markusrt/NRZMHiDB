@@ -51,6 +51,7 @@ listed, add it here in the same commit.
 | `Then I see "<text>"` | The text is visible on the page. |
 | `Then I see the link "<text>"` | A link with this text is visible. |
 | `Then I see the validation message "<text>"` | A field validation message with this text is shown. |
+| `Then I see the search field "<placeholder>"` | A search field showing this placeholder is visible (list searches without labels). |
 | `Then "<label>" contains <value description>` | The field with this label holds the described value (e.g. "January 1st of the previous year"). |
 | `Then a file named like "<pattern>" is downloaded` | A download starts whose file name matches the wildcard pattern. |
 
@@ -71,3 +72,7 @@ listed, add it here in the same commit.
 | `Then the submission list row "<search text>" shows "<text>"` | 002 | The Haemophilus submission list (`/PatientSending`), filtered with the search box, has a row containing the text. |
 | `Then the submission list does not contain "<search text>"` | 002 | The search box finds no row for the text. |
 | `Then the submission list shows <n> row(s)` | 002 | The list currently shows exactly this many rows. |
+| `Given a Meningococci submission with sender laboratory number "<lab no>" exists` | 003 | Create a Meningococci submission with this "Labnr. Einsender" through the UI if missing (sender `SV-003-Alpha`, synthetic patient). |
+| `Given a Meningococci submission for patient "<initials>" born "<date>" with postal code "<code>" exists` | 003 | As above, for a patient with these identifying details. |
+| `Then the Meningococci submission list row "<search text>" shows "<text>"` | 003 | The Meningococci submission list (`/MeningoPatientSending`), filtered with the search box, has a row containing the text. |
+| `Then the Meningococci submission list shows <n> row(s)` | 003 | The Meningococci list currently shows exactly this many rows. |

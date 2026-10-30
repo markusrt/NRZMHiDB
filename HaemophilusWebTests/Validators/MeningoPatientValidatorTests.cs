@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using NUnit.Framework;
@@ -50,6 +52,43 @@ namespace HaemophilusWeb.Validators
             var foreignPatient = CreatePatient();
             foreignPatient.Country = "Wonderland";
             yield return Tuple.Create(foreignPatient, new[] { "Country" });
+        }
+
+        // specs/003 FR-007: the birth date is optional; only a given date must be after 01.01.1800
+        [Test]
+        public void Validate_WithoutBirthDate_IsValid()
+        {
+            var patient = CreatePatient();
+            patient.BirthDate = null;
+
+            AssertIsValid(Validate(patient));
+        }
+
+        // specs/003 FR-007, Edge Cases (birth date too early)
+        [TestCase(1800, 1, 1, false)]
+        [TestCase(1800, 1, 2, true)]
+        public void Validate_BirthDateAroundFirstJanuary1800_IsValidOnlyAfterIt(int year, int month, int day, bool expectedValid)
+        {
+            var patient = CreatePatient();
+            patient.BirthDate = new DateTime(year, month, day);
+
+            var result = Validate(patient);
+
+            result.IsValid.Should().Be(expectedValid);
+            if (!expectedValid)
+            {
+                result.Errors.Select(e => e.PropertyName).Should().Equal("BirthDate");
+            }
+        }
+
+        // specs/003 FR-007: "?" stands for an unknown letter
+        [Test]
+        public void Validate_QuestionMarkInitials_IsValid()
+        {
+            var patient = CreatePatient();
+            patient.Initials = "?.?.";
+
+            AssertIsValid(Validate(patient));
         }
 
         private static MeningoPatient CreatePatientWithEmptyInitials()

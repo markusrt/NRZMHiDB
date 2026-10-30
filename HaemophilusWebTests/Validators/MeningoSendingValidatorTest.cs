@@ -48,6 +48,27 @@ namespace HaemophilusWeb.Validators
             yield return Tuple.Create(CreateInvalidSendingWithOtherSamplingLocationEmpty(MeningoSamplingLocation.OtherInvasive), new[] { "OtherInvasiveSamplingLocation" });
         }
 
+        // specs/003 FR-006: receiving on the sampling day is accepted
+        [Test]
+        public void Validate_ReceivingDateOnSamplingDate_IsValid()
+        {
+            var sending = CreateSending();
+            sending.SamplingDate = new DateTime(2020, 3, 10);
+            sending.ReceivingDate = new DateTime(2020, 3, 10);
+
+            AssertIsValid(Validate(sending));
+        }
+
+        // specs/003 FR-006: the sampling date is optional
+        [Test]
+        public void Validate_WithoutSamplingDate_IsValid()
+        {
+            var sending = CreateSending();
+            sending.SamplingDate = null;
+
+            AssertIsValid(Validate(sending));
+        }
+
         private static MeningoSending CreateInvalidSendingWithOtherSamplingLocationEmpty(MeningoSamplingLocation samplingLocation)
         {
             var sending = CreateSending();
