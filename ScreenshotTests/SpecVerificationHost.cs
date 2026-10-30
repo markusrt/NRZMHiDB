@@ -41,12 +41,20 @@ namespace ScreenshotTests
             TestContext.Progress.WriteLine(
                 $"Waiting up to {timeoutMinutes} min. Create '{StopFile}' to shut down.");
 
+            DateTime? appExitedAt = null;
             try
             {
                 var configSwap = new WebConfigConnectionSwap();
                 while (DateTime.UtcNow < deadline && !File.Exists(StopFile))
                 {
                     await Task.Delay(TimeSpan.FromSeconds(2));
+                    if (!Harness.AppIsRunning)
+                    {
+                        // host.ready must not outlive the app it announces.
+                        appExitedAt = DateTime.Now;
+                        break;
+                    }
+
                     KeepConnectionSwapped(configSwap);
                 }
             }
@@ -54,6 +62,11 @@ namespace ScreenshotTests
             {
                 File.Delete(ReadyFile);
                 File.Delete(StopFile);
+            }
+
+            if (appExitedAt.HasValue)
+            {
+                Assert.Fail($"IIS Express exited at {appExitedAt:HH:mm:ss}; the app is no longer served. Host stopped.");
             }
 
             TestContext.Progress.WriteLine("Spec verification host stopped.");
@@ -91,7 +104,9 @@ namespace ScreenshotTests
                 singleRole + "\n" +
                 "Seeded ids: Sender 1, Patient 1, Sending 1, Isolate 1, MeningoPatient 1, MeningoSending 1, MeningoIsolate 1\n" +
                 $"Fixtures: sender {Seeder.FixtureSenderName} with KL002/20 (active), KL003/20 (soft-deleted), " +
-                "MZ002/20 (active), MZ003/20 (soft-deleted), sampled 10.03.2020 / 15.06.2020 (013 FR-015, DEC-002)\n";
+                "MZ002/20 (active), MZ003/20 (soft-deleted), sampled 10.03.2020 / 15.06.2020 (013 FR-015, DEC-002)\n" +
+                $"Fixtures: sender {Seeder.PositiveFindingSenderName} with MZ004/20 (active, blood, Neisseria meningitidis " +
+                "serogroup W/Y), sampled 20.05.2020, included in the RKI, IRIS and LGA exports (003 FR-021, 011)\n";
         }
     }
 }

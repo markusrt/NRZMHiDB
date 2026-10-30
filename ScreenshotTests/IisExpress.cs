@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,6 +12,23 @@ namespace ScreenshotTests
     internal sealed class IisExpress : IDisposable
     {
         private Process _process;
+
+        public bool HasExited => _process == null || _process.HasExited;
+
+        /// <summary>
+        /// Fails when something already listens on the port (for example a second spec verification host):
+        /// IIS Express could not bind it, yet the readiness check would succeed against the other app.
+        /// </summary>
+        public static void EnsurePortIsFree()
+        {
+            var listeners = IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners();
+            if (listeners.Any(endpoint => endpoint.Port == Paths.Port))
+            {
+                throw new InvalidOperationException(
+                    $"Port {Paths.Port} is already in use (another spec verification host or IIS Express?). " +
+                    "Stop it first; the test catalog was not touched.");
+            }
+        }
 
         public void Start()
         {

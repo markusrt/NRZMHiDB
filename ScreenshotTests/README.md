@@ -141,16 +141,20 @@ New-Item ScreenshotTests\host.stop   # shuts the host down and restores Web.conf
 role, `Standard1` (Standardbenutzer), `Admin1` (Administrator) and `Rki1` (RKI), all with password
 `123456`. Both marker files are git-ignored.
 
-Run one host at a time. The host does not check whether port 9899 is free: a second host reseeds the
-shared catalog and writes `host.ready`, although its IIS Express fails to bind and exits. A killed host
-leaves `host.ready` behind. So `host.ready` alone does not prove that the app runs; the `/spec-verify`
-skill checks the host process, the IIS Express process and the login page.
+Run one host at a time. Every harness run (host and gold-master) fails before touching the catalog or
+`Web.config` when port 9899 is already in use. While the host waits, it watches its IIS Express; when
+that exits, the host deletes `host.ready`, restores `Web.config` and ends with a failed test. A killed
+host process leaves `host.ready` behind, so the file alone does not prove that the app runs; the
+`/spec-verify` skill checks the host process, the IIS Express process and the login page.
 
 On top of the gold-master seed, the host adds fixtures that later specs need
 (`Seeder.SeedSpecVerificationFixtures`, listed in `host.ready`): sender `SV-Seed-DEC-002` with the
 Haemophilus submissions KL002/20 (active) and KL003/20 (soft-deleted) and the Meningococci submissions
 MZ002/20 (active) and MZ003/20 (soft-deleted), sampled 10.03.2020 and 15.06.2020 (spec 013 FR-015,
-backlog DEC-002). The gold-master run does not seed them, so its lists keep one record each.
+backlog DEC-002); sender `SV-Seed-Positive` with the Meningococci submission MZ004/20 (blood, sampled
+20.05.2020, isolate matching stem interpretation rule 8: Neisseria meningitidis, serogroup W/Y), the only
+record the RKI, IRIS and LGA exports include (spec 003 FR-021, spec 011). The gold-master run does not
+seed them, so its lists keep one record each.
 
 **Avoid building the web app while the host runs.** Every build of `HaemophilusWeb` (the solution, the
 web project, `ScreenshotTests` without the switch below, or `HaemophilusWebTests` without

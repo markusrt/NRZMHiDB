@@ -36,6 +36,12 @@ namespace ScreenshotTests
         /// </summary>
         public const string FixtureSenderName = "SV-Seed-DEC-002";
 
+        /// <summary>
+        /// Sender of the spec-verification fixture with an invasive Meningococci finding (MZ004/20), the only
+        /// record the RKI, IRIS and LGA exports include (spec 003 FR-021, spec 011).
+        /// </summary>
+        public const string PositiveFindingSenderName = "SV-Seed-Positive";
+
         // Fixed dates keep screenshots stable across runs/days (avoids DateTime.Now noise in diffs).
         private static readonly DateTime Sampling = new DateTime(2020, 1, 1);
         private static readonly DateTime Receiving = new DateTime(2020, 1, 3);
@@ -215,7 +221,8 @@ namespace ScreenshotTests
         /// Data that only the spec-verification host seeds, on top of <see cref="Seed"/>, so the gold-master
         /// screenshots keep their single-record lists. Idempotent.
         /// Haemophilus: KL002/20 (active), KL003/20 (soft-deleted); Meningococci: MZ002/20 (active),
-        /// MZ003/20 (soft-deleted); all attributed to <see cref="FixtureSenderName"/>.
+        /// MZ003/20 (soft-deleted); all attributed to <see cref="FixtureSenderName"/>. Meningococci MZ004/20
+        /// (active, invasive, Neisseria meningitidis serogroup W/Y) attributed to <see cref="PositiveFindingSenderName"/>.
         /// </summary>
         public static void SeedSpecVerificationFixtures()
         {
@@ -226,22 +233,46 @@ namespace ScreenshotTests
                     return;
                 }
 
-                var sender = new Sender
-                {
-                    Name = FixtureSenderName,
-                    Department = "Seed for 013 FR-015 / DEC-002",
-                    PostalCode = "97080",
-                    City = "Würzburg",
-                    Phone1 = "+49 931 0000-0"
-                };
-                context.Senders.Add(sender);
-                context.SaveChanges();
-
+                var sender = AddFixtureSender(context, FixtureSenderName, "Seed for 013 FR-015 / DEC-002");
                 SeedFixtureSending(context, sender.SenderId, "S.A.", new DateTime(2020, 3, 10), "SEED-H-1", 2, deleted: false);
                 SeedFixtureSending(context, sender.SenderId, "S.B.", new DateTime(2020, 6, 15), "SEED-H-2", 3, deleted: true);
                 SeedFixtureMeningoSending(context, sender.SenderId, "S.C.", new DateTime(2020, 3, 10), "SEED-M-1", 2, deleted: false);
                 SeedFixtureMeningoSending(context, sender.SenderId, "S.D.", new DateTime(2020, 6, 15), "SEED-M-2", 3, deleted: true);
+
+                var positiveSender = AddFixtureSender(context, PositiveFindingSenderName, "Seed for 003 FR-021 / 011 positive finding");
+                var positiveIsolate = SeedFixtureMeningoSending(context, positiveSender.SenderId, "S.E.",
+                    new DateTime(2020, 5, 20), "SEED-M-3", 4, deleted: false, MeningoSamplingLocation.Blood);
+                // Matches stem interpretation rule 8 (see MeningoIsolateInterpretationTests): meningococci found.
+                positiveIsolate.GrowthOnBloodAgar = Growth.TypicalGrowth;
+                positiveIsolate.GrowthOnMartinLewisAgar = Growth.TypicalGrowth;
+                positiveIsolate.Oxidase = TestResult.Positive;
+                positiveIsolate.Agglutination = MeningoSerogroupAgg.Auto;
+                positiveIsolate.Onpg = TestResult.Negative;
+                positiveIsolate.GammaGt = TestResult.Positive;
+                positiveIsolate.SerogroupPcr = MeningoSerogroupPcr.WY;
+                positiveIsolate.MaldiTofVitek = UnspecificTestResult.NotDetermined;
+                positiveIsolate.PorAPcr = NativeMaterialTestResult.Positive;
+                positiveIsolate.FetAPcr = NativeMaterialTestResult.Positive;
+                positiveIsolate.PorAVr1 = "X";
+                positiveIsolate.PorAVr2 = "Y";
+                positiveIsolate.FetAVr = "Z";
+                context.SaveChanges();
             }
+        }
+
+        private static Sender AddFixtureSender(ApplicationDbContext context, string name, string department)
+        {
+            var sender = new Sender
+            {
+                Name = name,
+                Department = department,
+                PostalCode = "97080",
+                City = "Würzburg",
+                Phone1 = "+49 931 0000-0"
+            };
+            context.Senders.Add(sender);
+            context.SaveChanges();
+            return sender;
         }
 
         private static void SeedFixtureSending(ApplicationDbContext context, int senderId, string initials,
@@ -273,8 +304,9 @@ namespace ScreenshotTests
             context.SaveChanges();
         }
 
-        private static void SeedFixtureMeningoSending(ApplicationDbContext context, int senderId, string initials,
-            DateTime sampling, string senderLaboratoryNumber, int number, bool deleted)
+        private static MeningoIsolate SeedFixtureMeningoSending(ApplicationDbContext context, int senderId, string initials,
+            DateTime sampling, string senderLaboratoryNumber, int number, bool deleted,
+            MeningoSamplingLocation samplingLocation = default)
         {
             var patient = new MeningoPatient { Initials = initials, BirthDate = new DateTime(1990, 2, number), PostalCode = "97082", City = "Würzburg" };
             context.MeningoPatients.Add(patient);
@@ -287,19 +319,22 @@ namespace ScreenshotTests
                 SamplingDate = sampling,
                 ReceivingDate = sampling.AddDays(2),
                 SenderLaboratoryNumber = senderLaboratoryNumber,
+                SamplingLocation = samplingLocation,
                 Deleted = deleted
             };
             context.MeningoSendings.Add(sending);
             context.SaveChanges();
 
-            context.MeningoIsolates.Add(new MeningoIsolate
+            var isolate = new MeningoIsolate
             {
                 MeningoSendingId = sending.MeningoSendingId,
                 StemNumber = number,
                 YearlySequentialIsolateNumber = number,
                 Year = 2020
-            });
+            };
+            context.MeningoIsolates.Add(isolate);
             context.SaveChanges();
+            return isolate;
         }
     }
 }

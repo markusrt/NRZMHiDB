@@ -29,8 +29,9 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
 
 1. **Host**: exactly one host runs and serves the app. `ScreenshotTests/host.ready` lists the base
    URL (`http://localhost:9899`), the LocalDB catalog and the seeded accounts, but it is no proof:
-   the host writes it even when its IIS Express failed to start (port 9899 taken by a second host),
-   and it stays behind when the host process is killed. Check all three:
+   it stays behind when the host process is killed. (A host refuses to start while port 9899 is in
+   use and deletes `host.ready` when its IIS Express exits; hosts built before that change do
+   neither.) Check all three:
 
    ```powershell
    $hosts = @(Get-CimInstance Win32_Process -Filter "Name='dotnet.exe'" | Where-Object { $_.CommandLine -match '\stest\s' -and $_.CommandLine -match 'SpecVerificationHost' })
@@ -40,8 +41,9 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
    ```
 
    Expected: one host, one IIS Express, status 200. (The port listener belongs to `System` through
-   http.sys, so `Get-NetTCPConnection` does not name the owner.) With two hosts, both reseed the same
-   catalog and only one IIS Express serves the port: stop and ask the owner which one to stop. With a
+   http.sys, so `Get-NetTCPConnection` does not name the owner.) With two hosts (an older build),
+   both reseed the same catalog and only one IIS Express serves the port: stop and ask the owner
+   which one to stop. With a
    host but no IIS Express or no answer, the app is gone: stop and ask the owner to restart the host.
    If no host runs at all (stale or missing `host.ready`), start it yourself in the background and
    wait until `host.ready` is rewritten and the check above passes (up to 5 minutes):
@@ -85,7 +87,9 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
    exports. Soft deletes, merges and uploads are fine. Seeded ids 1 exist for every entity. The host
    also seeds fixtures that later specs need and that the UI cannot create reliably in one session;
    `host.ready` lists them (e.g. sender `SV-Seed-DEC-002` with one active and one soft-deleted
-   submission per database for 013 FR-015 / DEC-002). Use them read-only. Records you create live only
+   submission per database for 013 FR-015 / DEC-002, sender `SV-Seed-Positive` with MZ004/20, the
+   one invasive Meningococci finding that the RKI, IRIS and LGA exports of 2020 include, for 003
+   FR-021 and 011). Use them read-only. Records you create live only
    until the next host start; when another spec needs data that must survive a restart, propose a seed
    extension in the report instead of relying on your own records. You may
    change a seeded record through the UI when no own record can show the behavior (e.g. a sender
@@ -168,6 +172,9 @@ Practical notes for this application:
   `page.evaluate` and trigger `change` via jQuery (`$('#Sending_SenderId').trigger('change')`).
 - Postal-code fields call Geonames on every keystroke (allowed, but slow); set them with
   `page.evaluate` unless the lookup itself is under test.
+- Export addresses called directly (`page.request.get`) need ISO dates in the query
+  (`?From=2020-01-01&To=2020-12-31`); `dd.MM.yyyy` there is not bound and yields a file with only
+  the header row. The export forms in the UI are not affected.
 - New Haemophilus and Meningococci submissions get a laboratory number of the year of saving, not of
   the sampling date (002 FR-003); plan date-range checks with that in mind.
 - A signed-in account without the required role is redirected to `/Account/Login?ReturnUrl=…`

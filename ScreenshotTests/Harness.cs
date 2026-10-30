@@ -20,19 +20,24 @@ namespace ScreenshotTests
         private static IisExpress _iis;
         private static readonly WebConfigConnectionSwap ConfigSwap = new WebConfigConnectionSwap();
         private static string _storageStatePath;
+        private static bool _configSwapped;
 
         internal static IBrowser Browser =>
             _browser ?? throw new InvalidOperationException("Playwright browser not initialised.");
 
         internal static string StorageStatePath => _storageStatePath;
 
+        internal static bool AppIsRunning => _iis != null && !_iis.HasExited;
+
         [OneTimeSetUp]
         public async Task GlobalSetUp()
         {
+            IisExpress.EnsurePortIsFree();
             LocalDb.DropTestCatalog();
             Seeder.Seed();
 
             ConfigSwap.Apply();
+            _configSwapped = true;
 
             _iis = new IisExpress();
             _iis.Start();
@@ -55,7 +60,13 @@ namespace ScreenshotTests
 
             _playwright?.Dispose();
             _iis?.Dispose();
-            ConfigSwap.Restore();
+
+            // A run that failed before the swap (e.g. port already in use) must not restore the Web.config of
+            // the host that owns the port.
+            if (_configSwapped)
+            {
+                ConfigSwap.Restore();
+            }
         }
 
         private async Task LogInAsync()
