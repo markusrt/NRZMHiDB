@@ -140,8 +140,12 @@ interpretation and requires explicit confirmation before report generation conti
 - Specific agglutination a through f with not-determined bexA and a matching determined PCR
   serotype enters the specific branch and assigns a serotype disclaimer, but neither interpretation
   is replaced; both remain discrepant.
-- Specific agglutination with negative bexA, or with positive bexA and a conflicting determined PCR
-  serotype, is unmatched and retains both discrepancy texts with an empty disclaimer.
+- Specific agglutination with negative bexA, or with positive or not-determined bexA and a
+  conflicting determined PCR value (a different serotype or PCR negative), is unmatched and retains
+  both discrepancy texts with an empty disclaimer.
+- The three top-level branches (negative agglutination; specific agglutination a through f; all three
+  typing inputs not determined) are mutually exclusive by agglutination value, so no combination
+  enters more than one branch and the order of the branches has no observable effect.
 - Auto-agglutination, poly-agglutination, and non-evaluable agglutination have no dedicated outcome
   and retain the discrepancy defaults unless another documented branch can match (none currently
   can).
@@ -153,21 +157,29 @@ interpretation and requires explicit confirmation before report generation conti
 - Invasive status affects only the disclaimer, not the final or preliminary interpretation. Blood,
   cerebrospinal fluid, and "other invasive" are invasive; "other non-invasive" is non-invasive.
 - Recognized negative-agglutination and specific-serotype branches require an associated submission
-  to determine invasive status. The normal report flow supplies that association.
+  to determine invasive status; for an isolate without a submission association these branches fail
+  with an error instead of returning a result. The normal report flow supplies that association
+  (the automated test for an empty isolate without submission only exercises the all-not-determined
+  path).
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: The system MUST derive the Haemophilus interpretation when an isolate is prepared for
-  report preview or report generation; interpretation MUST NOT alter the isolate or submission.
+- **FR-001**: The system MUST derive the Haemophilus interpretation whenever a persisted isolate is
+  converted into its view model; this happens when the report page is opened and also when the
+  isolate edit page is opened (where the interpretation values are not displayed). Report document
+  generation reuses the values computed when the report page was opened and performs no further
+  interpretation. Interpretation MUST NOT alter the isolate or submission.
 - **FR-002**: The decision MUST use only these recorded inputs: agglutination, bexA result,
   serotype-PCR result, growth result, isolate evaluation, and invasive status derived from the
   submission's sampling location.
 - **FR-003**: Agglutination MUST distinguish not determined, specific serotypes a through f,
   negative, auto, poly, and non-evaluable values; serotype PCR MUST distinguish not determined,
   serotypes a through f, and negative; bexA MUST distinguish not determined, negative, and positive;
-  growth MUST distinguish no, yes, and not stated.
+  growth MUST distinguish no, yes, and not stated. A newly created isolate starts with agglutination,
+  bexA, and serotype PCR "not determined" and growth "not stated". Other typing fields of the isolate
+  (e.g. type of growth, beta-lactamase, ftsI, MLST) are not read by the decision.
 - **FR-004**: Before evaluating a combination, the system MUST initialize both final and preliminary
   interpretations to "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren." and the
   disclaimer to an empty value.
@@ -176,9 +188,12 @@ interpretation and requires explicit confirmation before report generation conti
   Haemophilus influenzae (sog. \"nicht-typisierbarer\" H. influenzae, NTHi)."; the preliminary
   interpretation MUST retain the discrepancy warning.
 - **FR-006**: For negative agglutination with negative bexA and serotype PCR a through f, the final
-  interpretation MUST identify a phenotypically non-typable *H. influenzae* and state that the
-  genetic capsule locus for the PCR serotype is not expressed; the preliminary interpretation MUST
-  retain the discrepancy warning.
+  interpretation MUST be "Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren
+  Haemophilus influenzae (NTHi). Ein vorhandener genetischer Kapsellocus für Polysaccharide des
+  Serotyps {pcr} wird nicht exprimiert.", where `{pcr}` is the displayed serotype-PCR value (a–f);
+  the preliminary interpretation MUST retain the discrepancy warning. The word "phänotpischen" is
+  spelled this way in the produced text and in the automated test that asserts it.
+  [SUSPECTED-DEFECT]
 - **FR-007**: For negative agglutination with both bexA and serotype PCR not determined, the
   preliminary interpretation MUST be "Das Ergebnis spricht für einen unbekapselten Haemophilus
   influenzae (sog. \"nicht-typisierbarer\" H. influenzae, NTHi)." and the final interpretation MUST
@@ -186,7 +201,13 @@ interpretation and requires explicit confirmation before report generation conti
   durchgeführt."
 - **FR-008**: Every negative-agglutination combination, including combinations whose interpretation
   remains discrepant, MUST receive the invasive unencapsulated reporting disclaimer or the
-  non-invasive testing disclaimer according to sampling location.
+  non-invasive testing disclaimer according to sampling location. The invasive disclaimer is "Der
+  direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig.
+  Meldekategorie dieses Befundes: {category}.", with `{category}` = "Haemophilus influenzae,
+  unbekapselt" for the negative-agglutination branch and "Haemophilus influenzae, Serotyp
+  {serotype}" for the specific-serotype branch (FR-011). The non-invasive disclaimer is "Eine
+  molekularbiologische Typisierung und Resistenztestungen werden bei nicht-invasiven Isolaten aus
+  epidemiologischen und Kostengründen nicht durchgeführt."
 - **FR-009**: For specific agglutination a through f with positive bexA and either a matching
   serotype-PCR result or not-determined serotype PCR, the final interpretation MUST state "Die
   Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp {serotype}
@@ -201,7 +222,10 @@ interpretation and requires explicit confirmation before report generation conti
 - **FR-012**: With agglutination, bexA, and serotype PCR all not determined and growth "yes", the
   final interpretation MUST be "Der eingesendete Stamm konnte nicht angezüchtet werden. Um
   Wiedereinsendung wird gebeten.", the preliminary interpretation MUST remain discrepant, and the
-  disclaimer MUST be "Eine telefonische Vorabmitteilung ist erfolgt."
+  disclaimer MUST be "Eine telefonische Vorabmitteilung ist erfolgt." The growth field is labelled
+  "Wachstum" on the isolate form; its value "Ja" yields this could-not-be-cultivated text and "Nein"
+  yields the no-detection text of FR-013. This association is asserted by the automated tests.
+  [SUSPECTED-DEFECT]
 - **FR-013**: With agglutination, bexA, and serotype PCR all not determined and growth "no", the
   final interpretation MUST be "Kein Nachweis von Haemophilus influenzae.", the preliminary
   interpretation MUST remain discrepant, and the disclaimer MUST be "Beim eingesendeten Isolat
@@ -212,12 +236,20 @@ interpretation and requires explicit confirmation before report generation conti
   combinations.
 - **FR-015**: The interpreter MUST output three report fields: final interpretation, preliminary
   interpretation, and one disclaimer shared by both report types. It MUST NOT produce report-array
-  entries or a comment for Haemophilus isolates.
-- **FR-016**: The report preview MUST display final and preliminary interpretation values, and the
-  report document data MUST include all three interpretation fields.
+  entries or a comment for Haemophilus isolates (the unset comment is copied into the report data as
+  an empty value; the report-array field is not copied at all).
+- **FR-016**: The report preview MUST display the preliminary interpretation (labelled
+  "Teilbefund") and the final interpretation (labelled "Befund"); the disclaimer is not shown on the
+  page. The report document data (the complete view model embedded in the page) MUST include all
+  three interpretation fields.
 - **FR-017**: Report creation MUST inspect the final interpretation for final templates and the
-  preliminary interpretation for preliminary templates; if the selected value contains the
-  discrepancy marker, explicit user confirmation MUST be required before document generation.
+  preliminary interpretation for preliminary templates; a template counts as preliminary when its
+  file name contains the configured preliminary-report marker (currently "Teilbefund - "). If the
+  selected value contains the substring "Diskrepant", a dialog "Diskrepante Ergebnisse" with the
+  text "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren. Soll dennoch ein
+  Befundvorschlag ausgegeben werden?" and the buttons "Nein"/"Ja" MUST be shown, and document
+  generation proceeds only on "Ja". This check is active on the Haemophilus report page; the
+  Meningococci report page contains the same dialog but its check is disabled (out of scope).
 - **FR-018**: This feature MUST preserve the current decision-tree outcomes as documented and MUST
   NOT introduce new clinical rules, resolve discrepant combinations, or change report wording.
 
@@ -236,6 +268,10 @@ interpretation and requires explicit confirmation before report generation conti
 | Not determined | Not determined | Not determined | No | No *H. influenzae* detected | Discrepancy | Most likely identity from evaluation |
 | Any unmatched combination | Any | Any | Any | Discrepancy | Discrepancy | Empty unless the negative or specific branch assigned one as above |
 
+Automated tests cover rows 1, 2, 3, 5, 6, 8, and 9 (including the non-invasive disclaimer for rows
+1 and 6) and the empty, all-not-determined isolate. Rows 4 and 7 and the remaining unmatched
+combinations are derived from code and not exercised by tests.
+
 ### Key Entities *(include if feature involves data)*
 
 - **Haemophilus isolate**: The laboratory result record being interpreted. Of its many analysis
@@ -244,7 +280,9 @@ interpretation and requires explicit confirmation before report generation conti
   whether the disclaimer follows the invasive or non-invasive path.
 - **Interpretation result**: A transient reporting result containing final interpretation,
   preliminary interpretation, and disclaimer. The result type also has report-array and comment
-  fields, but this Haemophilus decision tree leaves both unset.
+  fields, but this Haemophilus decision tree leaves both unset. The final-interpretation and
+  disclaimer fields are marked obsolete in favour of the report array, yet the Haemophilus path
+  still populates and consumes only them. [POTENTIAL-REFACTORING]
 - **Report data**: The report-preview data populated from the isolate and interpretation result.
   The selected report template determines whether final or preliminary interpretation is checked
   for discrepancy before document generation.
@@ -272,6 +310,12 @@ interpretation and requires explicit confirmation before report generation conti
 
 - This inventory treats the current domain decision tree and its automated tests as the source of
   truth, including wording or value associations that may appear counterintuitive.
+- In the negative-agglutination/negative-bexA branch, the condition guarding the a-through-f outcome
+  ("serotype PCR is not not-determined") is always true at that point because negative and
+  not-determined PCR were handled by the preceding condition; it has no observable effect.
+  [POTENTIAL-REFACTORING]
+- The interpretation is invoked from the Haemophilus isolate view-model mapping, which carries a
+  note to move it to the shared mapping base class. [POTENTIAL-REFACTORING]
 - The report flow supplies a persisted isolate with its associated submission. Behavior for a
   missing submission association is outside the supported reporting flow.
 - "Invasive" is derived from sampling location: blood, cerebrospinal fluid, and other invasive are
