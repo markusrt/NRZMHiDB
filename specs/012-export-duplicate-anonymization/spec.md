@@ -99,32 +99,32 @@ A reviewer (data-protection officer, maintainer, or recipient liaison) needs to 
 
 ### Functional Requirements
 
-**Mode selection**
+#### Mode selection
 
 - **FR-001**: The Haemophilus RKI and Haemophilus PubMLST exports MUST offer the "Unbereinigte Daten" choice ("Nein"/"Ja"), preselected with "Nein"; a request without this value MUST be treated as "Nein".
 - **FR-002**: With "Nein" the system MUST apply, in this order: (a) empty-strain removal (FR-005), (b) repeated-submission dropping (FR-006), (c) duplicate-group marking (FR-008), (d) identifier removal (FR-009). With "Ja" the system MUST apply only identifier removal (FR-009). All steps MUST run on the already selected and ordered export rows (spec 011) before the file is written.
 
-**Patient matching**
+#### Patient matching
 
 - **FR-003**: Submissions MUST be treated as belonging to the same patient exactly when their exported initials, date of birth, postal code, and gender value are textually identical (case-sensitive; an empty value matches only an empty value).
 - **FR-004**: Patient matching MUST be repeated from the remaining rows before each of the steps FR-005, FR-006, and FR-008.
 
-**Cleaning**
+#### Cleaning
 
 - **FR-005**: Within each patient (including patients with one submission), a submission whose beta-lactamase, ampicillin-evaluation, and serotype/evaluation values are all empty MUST be dropped. (In both current exports the serotype/evaluation value is never empty; see Edge Cases.)
 - **FR-006**: Within each patient, submissions MUST be processed in ascending stem-number order; a submission MUST be dropped when an earlier kept submission of the same patient has identical beta-lactamase, ampicillin-evaluation, serotype/evaluation, and sampling-location values and the calendar difference from the later to the earlier receiving date has a month component from 0 to 5 (counting the remaining months after whole years, with a negative value meaning the earlier submission was received first).
 - **FR-007**: When a submission with identical strain characteristics is kept, it MUST replace the earlier one as the reference for later comparisons of that strain for the patient; a dropped submission MUST NOT become the reference.
 
-**Marking**
+#### Marking
 
 - **FR-008**: After dropping, for every patient with two or more remaining submissions the system MUST write the label `Group <n>` into a column `duplicate_group` appended after all other columns, with `n` starting at 1 and increasing per patient in order of the patient's first remaining row; the column MUST be added only if at least one such patient exists, and rows of other patients MUST stay empty in it.
 
-**Identifier removal (privacy)**
+#### Identifier removal (privacy)
 
 - **FR-009**: In both modes the system MUST remove the initials (`initials`), date-of-birth (`date_of_birth`), and postal-code (`postal_code`) columns from the Haemophilus RKI and PubMLST files; these values MUST be used only for patient matching and MUST NOT appear in the downloaded file.
 - **FR-010**: Identifier removal MUST leave all other export columns unchanged, in particular: for RKI the birth month and year, gender, county name and number, state name and number, sender, DEMIS ID, and sampling and receiving dates; for PubMLST age in years and (under 12 months) months, sex, region, sampling year, and sampling and receiving dates.
 
-**Boundaries**
+#### Boundaries
 
 - **FR-011**: The Haemophilus and Meningococci Laboratory exports and the Meningococci RKI, IRIS, and LGA exports MUST NOT apply any of the steps FR-005 to FR-009.
 - **FR-012**: Dropping and marking MUST affect only the produced file; no submission, patient, or isolate record MUST be changed, merged, or deleted, and no record of the export run MUST be stored.

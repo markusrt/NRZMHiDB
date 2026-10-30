@@ -144,7 +144,7 @@ Users see and can run only the exports their role permits; the navigation offers
 
 ### Functional Requirements
 
-**Generic export mechanism**
+#### Generic export mechanism
 
 - **FR-001**: Each export MUST be reachable at its own address and MUST, when no start date is supplied, show a form under the heading "Entnahmedatum" with start date ("Start-Datum") and end date ("Ende-Datum") fields in `DD.MM.YYYY` format, pre-filled with 1 January and 31 December of the previous calendar year, and an "Exportieren nach Excel" button.
 - **FR-002**: When a start date is supplied, the system MUST select all non-deleted submissions of the export's pathogen whose sampling date lies within start and end date inclusive or, if no sampling date is recorded, whose receiving date lies within that range.
@@ -154,7 +154,7 @@ Users see and can run only the exports their role permits; the navigation offers
 - **FR-006**: The system MUST return a single-worksheet spreadsheet (`.xlsx`) with a header row, named `<Prefix>-Export_<start yyyyMMdd>-<end yyyyMMdd>.xlsx`, where the prefix is `RKI`, `Labor`, `PubMLST`, `Iris`, or `LGA`.
 - **FR-007**: Exports MUST NOT validate that the start date precedes the end date and MUST NOT persist any record of an export run.
 
-**Targets**
+#### Targets
 
 - **FR-008**: Haemophilus and Meningococci Laboratory exports MUST include all sampling locations without any interpretation or geography filter and MUST include identifying patient data (initials, birth date, postal code, city, county).
 - **FR-009**: The Haemophilus RKI export MUST include only blood, liquor, and other-invasive submissions.
@@ -165,7 +165,7 @@ Users see and can run only the exports their role permits; the navigation offers
 - **FR-014**: Exports carrying county and state numbers (Haemophilus RKI, Meningococci RKI, LGA) MUST derive the county number from the stored county list matched on the patient's county text, and the state number from the first two digits of that county number; both MUST be empty when no county matches.
 - **FR-015**: Each export MUST contain the column content listed in its user story and in the Export Catalogue.
 
-**Access**
+#### Access
 
 - **FR-016**: The Haemophilus RKI, Meningococci RKI, and LGA exports MUST be permitted for the Standard User and Public Health roles; the Haemophilus Laboratory, Haemophilus PubMLST, Meningococci Laboratory, and IRIS exports MUST be permitted for the Standard User role only. No export MUST admit the Administrator role on its own.
 - **FR-017**: The navigation MUST offer the full Export menu to Standard User and Administrator roles and only the two RKI exports to the Public Health role.

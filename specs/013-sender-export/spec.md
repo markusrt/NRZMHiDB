@@ -100,14 +100,14 @@ Only users with the Standard User role can run the sender exports; the navigatio
 
 ### Functional Requirements
 
-**Form and query**
+#### Form and query
 
 - **FR-001**: The system MUST offer a sender export per pathogen (Haemophilus, Meningococci), each reachable at its own address and from the respective section of the Export menu as "Einsender Export".
 - **FR-002**: When no start date is supplied, the export MUST show a form titled "Export der Einsender (Haemophilus)" or "Export der Einsender (Meningokokken)" with the heading "Entnahmedatum der Einsendung(en)", "Start-Datum" and "Ende-Datum" fields in `DD.MM.YYYY` format pre-filled with 1 January and 31 December of the previous calendar year, and an "Exportieren nach Excel" button.
 - **FR-003**: When a start date is supplied, the system MUST consider a submission of the export's pathogen "in the range" when its sampling date lies within start and end date inclusive or, if it has no sampling date, when its receiving date lies within that range.
 - **FR-004**: The system MUST NOT validate that the start date precedes the end date and MUST NOT persist any record of an export run.
 
-**Selection and content**
+#### Selection and content
 
 - **FR-005**: The export MUST contain exactly one row per sender that is not soft-deleted and has at least one non-deleted submission of the export's pathogen in the range; no other senders MUST appear.
 - **FR-006**: Each row MUST contain, in order: sender number ("Einsendernummer"), "Name", "Abteilung", "Straße", "Postleitzahl", "Ort", "Telefon #1", "Telefon #2", "Fax", "E-Mail", "Bemerkung", taken from the sender's current record, with empty cells for missing values.
@@ -115,11 +115,11 @@ Only users with the Standard User role can run the sender exports; the navigatio
 - **FR-008**: The per-sender values of FR-007 MUST, as currently implemented, be computed over all of the sender's submissions in the range including soft-deleted ones (see Edge Cases).
 - **FR-009**: The export MUST NOT include patient data and MUST NOT apply duplicate cleaning or anonymization.
 
-**Output**
+#### Output
 
 - **FR-010**: The system MUST return a single-worksheet spreadsheet (`.xlsx`) with a header row, named `Einsender-<Pathogen>-Export_<start yyyyMMdd>-<end yyyyMMdd>.xlsx`, where `<Pathogen>` is `Haemophilus` or `Meningokokken`, produced by the generic export mechanism of spec 011.
 
-**Access**
+#### Access
 
 - **FR-011**: Both sender exports MUST be permitted for the Standard User (`Standardbenutzer`) role only; Public Health and Administrator-only accounts MUST be refused, and unauthenticated visitors MUST be asked to log in.
 - **FR-012**: The navigation MUST offer both sender exports to Standard User and Administrator roles and none to the Public Health role.
