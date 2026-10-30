@@ -156,8 +156,8 @@ Run in a fresh session (one specify run per session). In Claude Code, the main s
 `general-purpose` subagent per spec with this prompt, then verifies and commits the result.
 
 ```text
-/speckit-specify Feature title: "<Title>" (backlog ref <planning ref, optional>). Document the
-current, as-implemented behavior of <capability> as it exists today. Read <controllers, models,
+/speckit-specify Feature title: "<Title>". Document the current, as-implemented behavior of
+<capability> as it exists today. Read <controllers, models,
 validators, views>. Cover <aspects: create/edit/list, validation, roles, …>. Note <related specs or
 shared concepts>. Document observable behavior only — do not propose changes.
 ```
