@@ -18,7 +18,11 @@ namespace ScreenshotTests
             Restore();
 
             File.Copy(Paths.WebConfig, BackupPath, overwrite: false);
+            SwapConnectionString();
+        }
 
+        private static void SwapConnectionString()
+        {
             var doc = XDocument.Load(Paths.WebConfig);
             var connectionStringsElement = doc.Root?.Element("connectionStrings");
             if (connectionStringsElement == null)
@@ -39,6 +43,25 @@ namespace ScreenshotTests
             add.SetAttributeValue("connectionString", Paths.ConnectionString);
             add.SetAttributeValue("providerName", "System.Data.SqlClient");
             doc.Save(Paths.WebConfig);
+        }
+
+        /// <summary>
+        /// Re-applies the swap when something rewrote Web.config while the harness runs (a build of the web app
+        /// regenerates it from Web.template.config). The rewritten file becomes the new backup, so shutdown
+        /// restores the latest generated configuration. Returns true when the swap had to be re-applied.
+        /// </summary>
+        public bool EnsureApplied()
+        {
+            var doc = XDocument.Load(Paths.WebConfig);
+            var add = FindDefaultConnection(doc.Root?.Element("connectionStrings") ?? new XElement("connectionStrings"));
+            if (add != null && (string)add.Attribute("connectionString") == Paths.ConnectionString)
+            {
+                return false;
+            }
+
+            File.Copy(Paths.WebConfig, BackupPath, overwrite: true);
+            SwapConnectionString();
+            return true;
         }
 
         public void Restore()

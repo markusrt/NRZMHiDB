@@ -39,14 +39,14 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
    `ScreenshotTests/README.md`). Leave the host running at the end; other specs may follow. Only
    stop it (`New-Item ScreenshotTests\host.stop`) when the owner asks.
 
-   `host.ready` alone does not prove that the app uses the seeded catalog. Sign in once as
-   `Standard1` and check that `HaemophilusWeb/Web.config` names `Initial Catalog=HaemophilusWeb_Screenshots`
-   in `DefaultConnection`. Any build that compiles `HaemophilusWeb` (the solution, the web project, or a
-   project that references it without `/p:BuildProjectReferences=false`) regenerates `Web.config` from
-   `Web.template.config` (`CustomWebConfigTransform`) and silently points the running app back at the
-   developer database. If that happened, stop and ask the owner whether to re-set the connection string
-   to the host value (the host restores the original from `Web.config.screenshotbak` on shutdown) or to
-   restart the host (reseeds, own records are lost).
+   Sign in once as `Standard1` to confirm the app uses the seeded catalog. Any build that compiles
+   `HaemophilusWeb` (the solution, the web project, or a project that references it without
+   `/p:BuildProjectReferences=false`) regenerates `Web.config` from `Web.template.config`
+   (`CustomWebConfigTransform`). The host checks every two seconds, re-applies its connection string and
+   appends "Connection swap re-applied at …" to `host.ready`, but the app still recycles and runs on
+   rebuilt binaries, so avoid such builds while it runs. If sign-in fails although `host.ready` exists
+   (e.g. a host started before this check existed), stop and ask the owner whether to restart the host
+   (reseeds, own records are lost).
 2. **Browser tools**: the Playwright MCP tools (`mcp__playwright__browser_*`) must be available.
    They are configured (version-pinned) in `.mcp.json`. If they are not loaded, load them with
    ToolSearch; if the server is not connected, stop and tell the owner to approve the project MCP
@@ -81,8 +81,8 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
   023 export run). File exports that are generated locally and downloaded are fine.
 - Never copy secret values (`RegistrationToken`, `Iris*`, `GeonamesAccount`) into any file.
 - Never paste real patient data. Use obviously synthetic initials, dates and postal codes.
-- Do not change application code or `Web.config`. The host swaps the connection string itself; the
-  only exception is re-setting that connection string with the owner's approval (Preconditions, 1).
+- Do not change application code or `Web.config`. The host swaps the connection string itself and
+  re-applies it when a build regenerates the file.
 - Do not edit other specs than `NNN` except for cross-reference fixes that `NNN` requires; record
   those in the verification report.
 
@@ -187,7 +187,7 @@ For every item classified **Test** (and for UI items where a test already exists
    backlog entry is the record.
 4. Run the affected fixtures before committing (PowerShell, from the repository root). Build with
    `/p:BuildProjectReferences=false`: the test project references `HaemophilusWeb`, and rebuilding it
-   regenerates `Web.config` and disconnects the running host from its catalog (Preconditions, 1).
+   regenerates `Web.config` and recycles the running app (Preconditions, 1).
    Specs are verified without application changes, so the existing `HaemophilusWeb` build output is
    current; if it is missing, stop the host before building the solution.
 

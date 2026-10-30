@@ -147,10 +147,13 @@ Haemophilus submissions KL002/20 (active) and KL003/20 (soft-deleted) and the Me
 MZ002/20 (active) and MZ003/20 (soft-deleted), sampled 10.03.2020 and 15.06.2020 (spec 013 FR-015,
 backlog DEC-002). The gold-master run does not seed them, so its lists keep one record each.
 
-**Do not build the web app while the host runs.** Every build of `HaemophilusWeb` (the solution, the
+**Avoid building the web app while the host runs.** Every build of `HaemophilusWeb` (the solution, the
 web project, `ScreenshotTests` without the switch below, or `HaemophilusWebTests` without
-`/p:BuildProjectReferences=false`) regenerates `HaemophilusWeb\Web.config` from `Web.template.config`
-and points the running app back at the developer database. Use:
+`/p:BuildProjectReferences=false`) regenerates `HaemophilusWeb\Web.config` from `Web.template.config`,
+which would point the running app back at the developer database. The host checks `Web.config` every
+two seconds, re-applies its connection string (the regenerated file becomes the backup restored on
+shutdown) and appends "Connection swap re-applied at …" to `host.ready`; the app still recycles and runs
+on the rebuilt binaries. Use:
 
 ```powershell
 msbuild HaemophilusWebTests\HaemophilusWebTests.csproj /p:Configuration=Debug /p:BuildProjectReferences=false

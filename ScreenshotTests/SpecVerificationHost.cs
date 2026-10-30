@@ -43,9 +43,11 @@ namespace ScreenshotTests
 
             try
             {
+                var configSwap = new WebConfigConnectionSwap();
                 while (DateTime.UtcNow < deadline && !File.Exists(StopFile))
                 {
                     await Task.Delay(TimeSpan.FromSeconds(2));
+                    KeepConnectionSwapped(configSwap);
                 }
             }
             finally
@@ -55,6 +57,27 @@ namespace ScreenshotTests
             }
 
             TestContext.Progress.WriteLine("Spec verification host stopped.");
+        }
+
+        /// <summary>
+        /// A build of the web app regenerates Web.config and would silently point the running app at the
+        /// developer database; re-apply the swap and note it in host.ready.
+        /// </summary>
+        private static void KeepConnectionSwapped(WebConfigConnectionSwap configSwap)
+        {
+            try
+            {
+                if (configSwap.EnsureApplied())
+                {
+                    var note = $"Connection swap re-applied at {DateTime.Now:HH:mm:ss} (Web.config was regenerated).";
+                    File.AppendAllText(ReadyFile, note + "\n");
+                    TestContext.Progress.WriteLine(note);
+                }
+            }
+            catch (Exception exception) when (exception is IOException || exception is System.Xml.XmlException)
+            {
+                // Web.config is being written right now; check again on the next tick.
+            }
         }
 
         private static string ReadyInfo()
