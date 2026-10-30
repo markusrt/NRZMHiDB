@@ -67,7 +67,7 @@ all (change history 2016-05-13: only antibiotics created in the administrative a
 
 **Independent Test**: Create a record for an antibiotic not yet in the list with "Gültig für" = Meningokokken and all
 four breakpoint fields filled; open a Meningococci isolate and verify the antibiotic and the record (labelled
-"<details> - v<version> vom <date>") are offered and that an entered measurement is interpreted against it; verify the
+`<details> - v<version> vom <date>`) are offered and that an entered measurement is interpreted against it; verify the
 antibiotic is not offered for Haemophilus isolates.
 
 **Acceptance Scenarios**:
@@ -87,10 +87,10 @@ antibiotic is not offered for Haemophilus isolates.
 5. **Given** "Antibiotikum Details" is longer than 128 characters or "Version" longer than 64 characters, **When** the
    user saves, **Then** the form is shown again with a validation message and nothing is stored.
 6. **Given** all four of "Version", "Gültig ab", "Sensibel <=", and "Resistent >" are left empty, **When** the user
-   saves, **Then** the record is stored as an "ohne Grenzwerte" record: it is offered as "<details> - ohne Grenzwerte"
+   saves, **Then** the record is stored as an "ohne Grenzwerte" record: it is offered as `<details> - ohne Grenzwerte`
    and every measurement interpreted against it is classified "not determined" (see specs 004 and 005).
 7. **Given** all four fields are filled, **When** the record is stored, **Then** it is offered in the E-Test section
-   as "<details> - v<version> vom <dd. MMM. yy of Gültig ab>"; a measurement greater than "Resistent >" is classified
+   as `<details> - v<version> vom <dd. MMM. yy of Gültig ab>`; a measurement greater than "Resistent >" is classified
    resistant, a measurement at or below "Sensibel <=" susceptible, and any other measurement intermediate (see specs
    004 and 005).
 8. **Given** a record whose antibiotic had no record yet for the chosen pathogen, **When** an isolate form of that
@@ -235,9 +235,9 @@ affected isolates.
 - **FR-006**: Saving MUST NOT check the relation between the two thresholds, their range, or the plausibility of
   version and date (current behavior).
 - **FR-007**: A record with version, valid-from date, and both thresholds empty MUST be treated as "ohne Grenzwerte":
-  it MUST be offered as "<details> - ohne Grenzwerte", and measurements interpreted against it MUST be classified
+  it MUST be offered as `<details> - ohne Grenzwerte`, and measurements interpreted against it MUST be classified
   "not determined".
-- **FR-008**: A record with all four values MUST be offered as "<details> - v<version> vom <valid-from date>", and
+- **FR-008**: A record with all four values MUST be offered as `<details> - v<version> vom <valid-from date>`, and
   measurements MUST be classified resistant above the resistant threshold, susceptible at or below the susceptible
   threshold, and intermediate otherwise (interpretation as documented in specs 004 and 005).
 - **FR-009**: The combination of antibiotic, details, pathogen, and version MUST be unique; a duplicate MUST be
@@ -264,8 +264,8 @@ affected isolates.
 
 | Record kind | Version, "Gültig ab", thresholds | Label on isolate form | Interpretation of a measurement | On report |
 | --- | --- | --- | --- | --- |
-| With breakpoints | All filled | "<details> - v<version> vom <date>" | Resistant / susceptible / intermediate | Thresholds and year of "Gültig ab" |
-| "ohne Grenzwerte" | All empty | "<details> - ohne Grenzwerte" | Not determined | "---" for thresholds and year |
+| With breakpoints | All filled | `<details> - v<version> vom <date>` | Resistant / susceptible / intermediate | Thresholds and year of "Gültig ab" |
+| "ohne Grenzwerte" | All empty | `<details> - ohne Grenzwerte` | Not determined | "---" for thresholds and year |
 | "Gültig für" = "Allgemein" | Either | Never offered | Not applicable | Not applicable |
 
 ### Effects of Changes on Existing Data

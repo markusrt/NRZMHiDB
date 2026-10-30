@@ -71,18 +71,18 @@ While typing a postal code, the employee is offered matching postal codes with t
 postal code is taken (User Story 1, scenarios 2–4).
 
 **Independent Test**: On a sender or submission form, type the first digits of a postal code and verify that
-suggestions "<postal code> <place>" appear under the field; pick one belonging to a postal code shared by several
+suggestions `<postal code> <place>` appear under the field; pick one belonging to a postal code shared by several
 places and verify that "Wohnort"/"Ort", "Landkreis", and "Bundesland" show that place.
 
 **Acceptance Scenarios**:
 
 1. **Given** the field "Postleitzahl" of a sender or patient form, **When** its content changes and is not empty,
    **Then** the system asks the external service for postal codes in Germany that start with the content and offers
-   them under the field as suggestions of the form "<postal code> <place name>"; the previous suggestions are replaced.
+   them under the field as suggestions of the form `<postal code> <place name>`; the previous suggestions are replaced.
 2. **Given** suggestions, **Then** they are offered by the browser's own suggestion list for the field (the browser's
    autofill for the field is switched off); the number and order of suggestions are those returned by the service —
    the application sets no limit and no minimum number of typed characters.
-3. **Given** a suggestion is chosen, **Then** the field briefly holds "<postal code> <place name>" and the lookup of
+3. **Given** a suggestion is chosen, **Then** the field briefly holds `<postal code> <place name>` and the lookup of
    User Story 1 runs with that place name, so that the chosen place is taken and "Postleitzahl" ends up holding the
    postal code only.
 4. **Given** the content changes to anything other than exactly five characters (including the moment a suggestion
@@ -213,7 +213,7 @@ place names known for the postal code; verify which cases carry coordinates.
   (create, edit), and the Haemophilus and Meningococci patient pages MUST offer postal-code suggestions and
   postal-code resolution on the field "Postleitzahl".
 - **FR-002**: On every non-empty change of "Postleitzahl", the system MUST request postal codes in Germany starting
-  with the content from the external Geonames service and MUST offer them as "<postal code> <place name>"
+  with the content from the external Geonames service and MUST offer them as `<postal code> <place name>`
   suggestions, replacing earlier ones, without own limit or minimum length.
 - **FR-003**: On every change to a content other than exactly five characters, the system MUST empty the place and
   county fields and set "Bundesland" to "n.n." (where present); an emptied field MUST leave them unchanged.

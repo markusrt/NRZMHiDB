@@ -52,7 +52,7 @@ that the sign-in page is shown again.
 6. **Given** repeated wrong passwords for one user name, **Then** the account is never locked, no delay is added, and
    no failed attempt is counted or logged. [SUSPECTED-DEFECT]
 7. **Given** a signed-in user, **Then** the navigation shows, at the right, "Über" (the change log) and "Abmelden
-   (<user name>)"; **When** "Abmelden" is selected, **Then** the sign-in ends (the request carries an anti-forgery
+   (`<user name>`)"; **When** "Abmelden" is selected, **Then** the sign-in ends (the request carries an anti-forgery
    token) and, because the home page needs a sign-in, the sign-in page is shown.
 8. **Given** the application is reached over plain HTTP from a host other than `localhost`, **Then** it is redirected
    permanently to HTTPS before sign-in (server rewrite rule).
@@ -250,7 +250,7 @@ without a session and with a Public Health account.
    list helper of the postal-code lookup.
 5. **Given** the RKI match import page, **Then** it is not linked from any page, offers a file field "CSV Datei" and
    the button "Upload", does not verify an anti-forgery token, and writes RKI match states into Haemophilus
-   submissions; it reports "File Uploaded Successfully!!" or "File upload failed: <message>" (derived from code; not
+   submissions; it reports "File Uploaded Successfully!!" or "File upload failed: `<message>`" (derived from code; not
    specified in any other spec). [SUSPECTED-DEFECT]
 
 ---
@@ -267,7 +267,7 @@ sign in with the new password.
 **Acceptance Scenarios**:
 
 1. **Given** any signed-in account, **When** the own password page is requested by direct address, **Then** an
-   English page "Manage Account" is shown with "You're logged in as <user name>", a "Change Password Form" ("Current
+   English page "Manage Account" is shown with "You're logged in as `<user name>`", a "Change Password Form" ("Current
    password", "New password", "Confirm new password", "Change password"), and a section "Use another service to log
    in." stating that no external authentication services are configured.
 2. **Given** a correct current password and a new password of at least 6 characters with matching confirmation,
@@ -347,7 +347,7 @@ sign in with the new password.
   Benutzername oder Passwort." for a wrong combination, MUST return only to return addresses inside the application,
   MUST offer a persistent sign-in ("Eingeloggt bleiben?"), and MUST NOT lock accounts, delay, count, or log failed
   attempts (current behavior).
-- **FR-003**: Sign-out MUST be offered to every signed-in user as "Abmelden (<user name>)", MUST verify the
+- **FR-003**: Sign-out MUST be offered to every signed-in user as "Abmelden (`<user name>`)", MUST verify the
   anti-forgery token, and MUST end the sign-in.
 - **FR-004**: The application MUST know exactly three access-relevant roles: Standard User (`Standardbenutzer`),
   Administrator (`Administrator`), and Public Health (`RKI`). Further stored roles MUST NOT grant access to anything.

@@ -51,7 +51,7 @@ After choosing a template (and a signer, see specs 008/009), the user requests r
 
 ### User Story 3 - Preliminary versus final is derived from the chosen template (Priority: P3)
 
-Whether a generated report is treated as preliminary or final is not chosen separately: it follows from the chosen template's location string containing the configured preliminary marker (default `Teilbefund - `).
+Whether a generated report is treated as preliminary or final is not chosen separately: it follows from the chosen template's location string containing the configured preliminary marker (default "Teilbefund - ").
 
 **Why this priority**: This coupling makes template naming a functional, not just cosmetic, decision; its downstream status effects are documented in specs 008/009.
 
@@ -107,7 +107,7 @@ Template creation and editing is a developer task. A developer edits the Word do
 - **FR-004**: The system MUST discover templates even when the report-creation page is then rejected for a missing or unknown isolate; discovery does not depend on the isolate.
 - **FR-005**: The report-creation page MUST offer each discovered template as one choice, labelled with its file name (including extension) and carrying the template's application-relative web location as its value, preceded by the placeholder `Auswählen...`, with no default selection.
 - **FR-006**: The system MUST NOT pre-select, suggest, filter, or restrict templates based on isolate data, interpretation results, report status, or user role; template choice MUST be a free manual selection among all discovered templates of the pathogen.
-- **FR-007**: The system MUST make the configured preliminary marker (setting `PreliminaryReportMarker`, default `Teilbefund - `) available to the report-creation page and MUST classify the chosen template as preliminary exactly when its web location string contains the marker; all other chosen templates MUST be classified as final.
+- **FR-007**: The system MUST make the configured preliminary marker (setting `PreliminaryReportMarker`, default "Teilbefund - ") available to the report-creation page and MUST classify the chosen template as preliminary exactly when its web location string contains the marker; all other chosen templates MUST be classified as final.
 - **FR-008**: On report-creation request, the browser MUST retrieve the chosen template from its web location with a random cache-busting parameter, and the web server's output caching MUST be disabled for `.docx` files.
 - **FR-009**: The system MUST fill the retrieved template in the browser with the isolate's complete prepared report data, extended in the browser by the selected signer (`Signer`), one value per typing attribute (`Typing-<Attribute>`), and, when a reportable QR image is present, the decoded image (`DemisIdQrImage`).
 - **FR-010**: Template filling MUST support value placeholders, repeated sections over lists, conditional sections, and image placeholders, and MUST preserve line breaks contained in values.
@@ -155,7 +155,7 @@ The Haemophilus set encodes the reportable result in the template itself (one te
 - **Report template**: A Word-compatible document file in a pathogen's template location. Its file name is its user-visible label and carries its version; its web location string determines preliminary versus final; its placeholders determine which prepared data appear.
 - **Template location**: A per-pathogen folder whose direct `.docx` entries form that pathogen's template set; fixed per pathogen in the application (Haemophilus default location, Meningococci sub-folder).
 - **Template fragment (include)**: A shared Word document (header, footer, signature, first page, fax cover, fax footnote) embedded into templates at authoring time; never offered, not shipped.
-- **Preliminary marker**: A configurable text (default `Teilbefund - `) whose presence in a template's location string classifies the template as preliminary.
+- **Preliminary marker**: A configurable text (default "Teilbefund - ") whose presence in a template's location string classifies the template as preliminary.
 - **Prepared report data**: The isolate's complete report view data plus browser-added signer, flattened typing values, and decoded QR image, supplied unchanged to whichever template is chosen.
 - **Filled report document**: The browser-generated result of filling a template, offered for download and not retained by the system.
 
