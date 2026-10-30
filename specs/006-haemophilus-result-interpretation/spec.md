@@ -1,6 +1,6 @@
 # Feature Specification: Haemophilus result interpretation engine
 
-**Feature Branch**: `006-haemophilus-result-interpretation`
+**Feature Branch**: `speckit-init`
 
 **Created**: 2026-08-30
 

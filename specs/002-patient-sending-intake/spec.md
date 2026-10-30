@@ -1,6 +1,6 @@
 # Feature Specification: Haemophilus patient + sending intake (PatientSending)
 
-**Feature Branch**: `002-patient-sending-intake`
+**Feature Branch**: `speckit-init`
 
 **Created**: 2026-08-26
 

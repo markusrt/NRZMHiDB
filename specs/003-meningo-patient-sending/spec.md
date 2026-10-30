@@ -1,6 +1,6 @@
 # Feature Specification: Meningococci patient + sending intake (MeningoPatientSending)
 
-**Feature Branch**: `003-meningo-patient-sending`
+**Feature Branch**: `speckit-init`
 
 **Created**: 2026-08-27
 

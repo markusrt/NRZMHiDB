@@ -1,6 +1,6 @@
 # Feature Specification: Haemophilus isolate analysis results entry
 
-**Feature Branch**: `004-haemophilus-isolate-entry`
+**Feature Branch**: `speckit-init`
 
 **Created**: 2026-08-27
 

@@ -1,6 +1,6 @@
 # Feature Specification: Haemophilus reporting (preliminary + final)
 
-**Feature Branch**: `008-haemophilus-reporting`
+**Feature Branch**: `speckit-init`
 
 **Created**: 2026-09-21
 

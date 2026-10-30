@@ -1,6 +1,6 @@
 # Feature Specification: Meningococci result interpretation ruleset
 
-**Feature Branch**: `007-meningococci-result-interpretation`
+**Feature Branch**: `speckit-init`
 
 **Created**: 2026-08-30
 

@@ -1,6 +1,6 @@
 # Feature Specification: Meningococci isolate analysis results entry
 
-**Feature Branch**: `005-meningococci-isolate-entry`
+**Feature Branch**: `speckit-init`
 
 **Created**: 2026-08-30
 

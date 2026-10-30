@@ -1,6 +1,6 @@
 # Feature Specification: Sender management (shared across both databases)
 
-**Feature Branch**: `001-sender-management`
+**Feature Branch**: `speckit-init`
 
 **Created**: 2026-08-26
 
