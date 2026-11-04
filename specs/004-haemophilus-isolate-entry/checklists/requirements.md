@@ -34,3 +34,16 @@
 - Items marked incomplete require spec updates before `/speckit-clarify` or `/speckit-plan`
 - This is an *as-is* status-quo inventory (backlog ref A3-H); it documents observed behavior only
   and proposes no changes.
+- Verification 2026-11-04: US2, FR-006: the form has fixed rows (free row, saved measurements, standard
+  antibiotics) instead of added rows; US2.4 and US2.5 added (breakpoint preselection, removing a
+  measurement).
+- Verification 2026-11-04: FR-005, Key Entities, Assumptions: api NH is not on the form and MALDI-TOF
+  (VITEK MS) is read-only; FR-011 and the edge case limit the VITEK rule to stored values (REF-020).
+- Verification 2026-11-04: FR-004, FR-009, FR-012, FR-017, Edge Cases: preselected growth type, whole
+  stem numbers, date-only "Befund am", one conflict per save, bad request for a non-numeric id.
+- Verification 2026-11-04: FR-010, Edge Cases: the browser and the server answer an empty laboratory
+  number with different messages.
+- Verification 2026-11-04: New defects recorded in FR-008, FR-010, FR-015, FR-018, SC-002, SC-003,
+  SC-005, Assumptions and Edge Cases: SEC-014, DATA-032 to DATA-035, UX-011, UX-012; FR-018 no longer
+  calls the anti-forgery token an over-posting protection.
+- Verification 2026-11-04: New edge case for the isolate of a deleted submission (see 020).

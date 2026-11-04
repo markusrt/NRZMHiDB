@@ -76,3 +76,7 @@ listed, add it here in the same commit.
 | `Given a Meningococci submission for patient "<initials>" born "<date>" with postal code "<code>" exists` | 003 | As above, for a patient with these identifying details. |
 | `Then the Meningococci submission list row "<search text>" shows "<text>"` | 003 | The Meningococci submission list (`/MeningoPatientSending`), filtered with the search box, has a row containing the text. |
 | `Then the Meningococci submission list shows <n> row(s)` | 003 | The Meningococci list currently shows exactly this many rows. |
+| `Given a Haemophilus breakpoint for "<antibiotic>" with "Sensibel <=" "<value>" and "Resistent >" "<value>" exists` | 004 | Create the breakpoint on `/EucastClinicalBreakpoints/Create` if missing (details with the prefix `SV-004-`). |
+| `When I open the isolate of the submission "<lab no>"` | 004 | Find the submission by its "Labnr. Einsender" in the list search and click its "Labor-Nr" link. |
+| `When I select "<value>" in the E-Test row "<antibiotic>"` | 004 | Choose the measured value in the row of this antibiotic. |
+| `Then the E-Test row "<antibiotic>" shows "<result>"` | 004 | The row of this antibiotic shows this susceptibility result. |

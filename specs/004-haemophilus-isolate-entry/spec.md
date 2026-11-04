@@ -60,16 +60,19 @@ submissions list.
 ### User Story 2 - Enter E-Test measurements with automatic susceptibility interpretation (Priority: P2)
 
 While recording results, the user enters Epsilometer-test (E-Test) measurements for antibiotics.
-For each measurement the user selects an antibiotic and the applicable EUCAST clinical breakpoint,
-and enters the measured value; the form derives the susceptibility result (susceptible /
+The form offers a fixed set of rows: one free row with an antibiotic selection, then one row per
+saved measurement, then one row per configured standard antibiotic that has no measurement yet.
+In a row the user picks the measured value from the E-Test scale of that antibiotic and the
+applicable EUCAST clinical breakpoint; the form derives the susceptibility result (susceptible /
 intermediate / resistant / not determined) from the measurement against the selected breakpoint.
 
 **Why this priority**: Antibiotic susceptibility is a key clinical output of the work-up, but it is
 secondary to being able to record the core identification results at all.
 
-**Independent Test**: On the isolate edit form, add an E-Test row, select an antibiotic and its
-breakpoint, enter a measurement, and confirm the susceptibility result is derived from the
-measurement and breakpoint and is persisted with the isolate on save.
+**Independent Test**: On the isolate edit form, pick a measurement in a standard antibiotic row or
+select an antibiotic and a measurement in the free row, keep or change the breakpoint, and confirm
+the susceptibility result is derived from the measurement and breakpoint and is persisted with the
+isolate on save.
 
 **Acceptance Scenarios**:
 
@@ -82,6 +85,12 @@ measurement and breakpoint and is persisted with the isolate on save.
    is available).
 3. **Given** one or more E-Test rows, **When** the user saves the isolate, **Then** the E-Test
    measurements and their derived results are persisted with the isolate.
+4. **Given** a row without a selected breakpoint, **When** the user picks a measurement, **Then**
+   the first breakpoint of the list (the newest one) is selected; a selected breakpoint cannot be
+   reset to empty while the row has a measurement.
+5. **Given** a saved measurement, **When** the user resets its value to "MHK auswählen..." and
+   saves, **Then** the measurement is removed and the row disappears, or becomes an empty standard
+   antibiotic row.
 
 ---
 
@@ -114,24 +123,58 @@ warning is shown; save and proceed to report creation.
 
 ### Edge Cases
 
-- **Laboratory number format**: Saving with an empty laboratory number, or one not in the `39/14`
-  form (digits, slash, two digits), fails validation ("Die Labornummer muss in der Form '39/14'
-  eingegeben werden.").
-- **Growth type required when growth present**: When growth is set to "yes", a type of growth must
-  be selected; otherwise validation fails ("Die Art des Wachstums muss angegeben werden.").
+- **Laboratory number format**: The browser rejects an empty laboratory number ("'Labornummer' darf
+  nicht leer sein.") and one not in the `39/14` form, digits, slash, two digits ("Die Labornummer
+  muss in der Form '39/14' eingegeben werden."); the server answers both with the second message.
+  `[SUSPECTED-DEFECT]` The server only looks for the pattern inside the value: a request that
+  bypasses the browser check stores "abc12/345xyz" as 000/00 (year 2000), "12/345" as 012/345
+  (year 2345) and "1/2/34" as 001/02 (DATA-032).
+- **Growth type required when growth present**: Setting growth to "Ja" ticks "Typisches Wachstum
+  auf KB" unless a type is already ticked; several types may be ticked. When growth is "Ja" and no
+  type remains ticked, validation fails ("Die Art des Wachstums muss angegeben werden."). Any other
+  growth value hides the types and clears them.
 - **Conditionally required detail fields**: When 16S rDNA is positive, its best match and match
   percentage are required; when a MALDI-TOF (VITEK or Biotyper) result is "determined", its best
   match and confidence are required; when MLST is "determined", the sequence type is required; when
   Real-Time PCR is positive, its RIDOM evaluation is required. Missing any of these fails validation
-  ("... darf nicht leer sein.").
+  ("... darf nicht leer sein.", with the field label, e.g. "MLST Sequenztyp darf nicht leer sein.").
+  The VITEK values are not editable on the form, so that rule only concerns stored values; a request
+  with VITEK "durchgeführt" but without details redisplays the form without a visible message.
 - **Duplicate stem number**: Saving a stem number already used by another isolate fails with "Diese
   Stammnummer ist bereits vergeben" on the stem-number field.
 - **Duplicate laboratory number**: Saving a laboratory number already used by another isolate fails
-  with "Diese Labornummer ist bereits vergeben" on the laboratory-number field.
+  with "Diese Labornummer ist bereits vergeben" on the laboratory-number field. When the stem number
+  and the laboratory number both conflict, only one message appears (observed: the laboratory
+  number). The same number of another year is no conflict.
+- **Non-numeric stem number**: The stem number takes whole numbers only ("The Feld Stammnummer muss
+  eine Zahl enthalten.").
 - **Evaluation vs agglutination discrepancy**: Choosing an evaluation that disagrees with the
-  selected agglutination serogroup surfaces a warning but does not block saving.
-- **Unknown or missing isolate id**: Requesting the edit form with no id returns a bad-request
-  response; requesting a non-existent isolate returns a not-found response.
+  selected agglutination serogroup surfaces the warning 'Achtung: Diskrepanz zu Agglutination mit dem
+  Wert "B"' (internal upper-case letter) but does not block saving. `[SUSPECTED-DEFECT]` The warning
+  is evaluated only when the evaluation is changed: it stays with its old text after the
+  agglutination is changed, and it is not shown when a saved isolate with a disagreement is reopened
+  (UX-012).
+- **Unknown or missing isolate id**: Requesting the edit form with no id or a non-numeric id returns
+  a bad-request response; requesting a non-existent isolate returns a not-found response.
+- **Free E-Test row without a measurement**: `[SUSPECTED-DEFECT]` After an antibiotic is selected in
+  the free row, the placeholder of the rebuilt scale carries its text as value, so saving without a
+  measurement is blocked with "The Feld Messwert muss eine Zahl enthalten."; resetting the antibiotic
+  to "Antibiotikum auswählen..." removes the block. The rebuilt scale also follows the browser
+  language: in an English browser the decimal values ("0.75") derive no result and cannot be saved
+  (UX-011).
+- **E-Test result taken from the request**: `[SUSPECTED-DEFECT]` The server neither repeats the
+  derivation nor checks that the breakpoint belongs to the antibiotic. A request stored 0,5 against a
+  breakpoint "Sensibel <= 0,5" as "resistent", and an Ampicillin row with a Meningococci breakpoint;
+  a measurement without a result ends in HTTP 500 (DATA-035).
+- **Every save rewrites the E-Tests**: `[SUSPECTED-DEFECT]` Each save inserts all measurements as new
+  rows and detaches the previous rows from the isolate without deleting them, so orphaned rows
+  accumulate (DATA-033).
+- **Stale form resets the report state**: `[SUSPECTED-DEFECT]` The form carries the report status it
+  loaded and the report date. Saving a form opened before a report was generated sets a final report
+  back to "Kein Befund erstellt" and clears "Befund am"; saving a fresh form drops the time of "Befund
+  am" (DATA-034).
+- **Isolate of a deleted submission**: The edit form of an isolate whose submission is soft-deleted
+  stays reachable by direct address; it does not check the deleted mark (see 020).
 
 ## Requirements *(mandatory)*
 
@@ -145,50 +188,64 @@ warning is shown; save and proceed to report creation.
   for each submission from intake (A2-H) and this feature edits it.
 - **FR-003**: The isolate edit form MUST display the submission's sampling location, material,
   invasive flag, patient id, and patient age at sampling as read-only context.
-- **FR-004**: The system MUST allow entry of the growth outcome and, when growth is present, the type
-  of growth, and MUST require a type of growth to be selected whenever growth is "yes".
-- **FR-005**: The system MUST allow entry of the identification and typing results, including at
-  least: oxidase, factor test, agglutination, ß-lactamase, penicillin ADT, outer-membrane proteins
-  P2 and P6, bexA, fucK, serotype PCR, genome sequencing, ftsI (with up to three evaluations),
-  MLST (with sequence type), Real-Time PCR (with device and RIDOM evaluation), 16S rDNA (with best
-  match and match percentage), MALDI-TOF via VITEK MS and via Biotyper (each with best match and
-  confidence), and the api NH identification.
+- **FR-004**: The system MUST allow entry of the growth outcome and, when growth is present, one or
+  more types of growth, and MUST require a type of growth to be selected whenever growth is "Ja". On
+  "Ja" the form preselects "Typisches Wachstum auf KB" if no type is ticked; other growth values hide
+  and clear the types.
+- **FR-005**: The system MUST allow entry of the identification and typing results: oxidase, factor
+  test, agglutination, ß-lactamase, penicillin ADT, outer-membrane proteins P2 and P6, bexA, fucK,
+  serotype PCR, genome sequencing, ftsI (with up to three evaluations), MLST (with sequence type),
+  Real-Time PCR (with device and RIDOM evaluation), 16S rDNA (with best match and match percentage),
+  and MALDI-TOF via Biotyper (with best match and confidence). The details of ftsI, MLST, the RIDOM
+  evaluation, 16S rDNA and Biotyper appear only for "durchgeführt" or "positiv" and are cleared
+  otherwise. MALDI-TOF via VITEK MS is shown read-only with its stored details. api NH is not on the
+  form; stored api NH values appear only in the laboratory export (011). `[POTENTIAL-REFACTORING]`
+  REF-020.
 - **FR-006**: The system MUST allow entry of Epsilometer-test (E-Test) measurements, each associating
   an antibiotic and an applicable EUCAST clinical breakpoint with a measured value, and MUST derive
   the susceptibility result (susceptible / intermediate / resistant / not determined) from the
-  measurement against the selected breakpoint.
+  measurement against the selected breakpoint. The form has one free row (antibiotic selection), one
+  read-only antibiotic row per saved measurement, and one read-only antibiotic row per configured
+  standard antibiotic (`PrimaryAntibiotics_Haemophilus`) that has a Haemophilus breakpoint and no
+  measurement. One free measurement can be added per save. The measured value is chosen from the
+  E-Test scale of the antibiotic (separate scales for Ampicillin and Amoxicillin / Clavulansäure, for
+  Azithromycin, and for all others). A row without a measurement is not stored. `[POTENTIAL-REFACTORING]`
+  REF-019.
 - **FR-007**: The E-Test section MUST offer only the antibiotics and clinical breakpoints defined for
   the Haemophilus database, with the current breakpoints presented first.
 - **FR-008**: The system MUST allow the user to set an overall evaluation (species/serotype
   conclusion), MUST pre-select the evaluation from the agglutination result (serogroups A–F map to
-  the matching Haemophilus serotype; other results map to non-encapsulated / NTHi), and MUST warn
-  when the chosen evaluation disagrees with the selected agglutination serogroup without blocking the
-  save.
-- **FR-009**: The system MUST allow entry of a laboratory number, a stem number, a report date, and a
-  free-text remark on the isolate.
+  the matching Haemophilus serotype; other results, including "n.d.", map to non-encapsulated / NTHi),
+  and MUST warn when the evaluation is changed to one that disagrees with the selected agglutination
+  serogroup without blocking the save. `[SUSPECTED-DEFECT]` UX-012.
+- **FR-009**: The system MUST allow entry of a laboratory number, a stem number (whole numbers only),
+  a report date ("Befund am", date without time), and a free-text remark on the isolate.
 - **FR-010**: The system MUST require a laboratory number and MUST require it to match the `39/14`
   form (digits, slash, two digits); an empty or malformed laboratory number MUST fail validation.
+  `[SUSPECTED-DEFECT]` The browser checks the whole value, the server only part of it (DATA-032).
 - **FR-011**: The system MUST enforce conditionally required detail fields on save: 16S rDNA best
-  match and percentage when 16S rDNA is positive; MALDI-TOF (VITEK and Biotyper) best match and
-  confidence when the respective result is "determined"; MLST sequence type when MLST is
-  "determined"; and the Real-Time PCR RIDOM evaluation when Real-Time PCR is positive.
+  match and percentage when 16S rDNA is positive; MALDI-TOF (Biotyper, and for stored values VITEK)
+  best match and confidence when the respective result is "determined"; MLST sequence type when MLST
+  is "determined"; and the Real-Time PCR RIDOM evaluation when Real-Time PCR is positive.
 - **FR-012**: The system MUST reject a save whose stem number or laboratory number duplicates that of
   another isolate, reporting the conflict against the corresponding field ("Diese Stammnummer ist
-  bereits vergeben" / "Diese Labornummer ist bereits vergeben").
+  bereits vergeben" / "Diese Labornummer ist bereits vergeben"); one save reports one conflict.
 - **FR-013**: When required or conditionally required fields are missing or invalid, the system MUST
   reject the save, persist nothing, and redisplay the form with validation messages.
 - **FR-014**: On a valid save via the primary submit, the system MUST persist the results and return
   the user to the submissions list; on a valid save via the secondary submit, the system MUST persist
   the results and take the user to report creation for that isolate.
 - **FR-015**: The isolate MUST carry a report status of none, preliminary, or final; the status is
-  set by the reporting flow (A4-H), not by this feature. "Ready for reporting" is expressed by the
-  isolate saving validly and the user being able to proceed to report creation from it.
+  set by the reporting flow (A4-H). "Ready for reporting" is expressed by the isolate saving validly
+  and the user being able to proceed to report creation from it. `[SUSPECTED-DEFECT]` The form has no
+  visible status field but writes back the status and date it loaded (DATA-034).
 - **FR-016**: All isolate edit actions MUST require the user to hold the standard laboratory-user
   role; unauthenticated or unauthorized requests MUST be denied.
-- **FR-017**: Requesting the edit form without an isolate id MUST return a bad-request response, and
-  requesting a non-existent isolate MUST return a not-found response.
-- **FR-018**: The system MUST protect the isolate edit against over-posting via an anti-forgery token
-  on the edit form.
+- **FR-017**: Requesting the edit form without an isolate id or with a non-numeric one MUST return a
+  bad-request response, and requesting a non-existent isolate MUST return a not-found response.
+- **FR-018**: The edit form MUST carry an anti-forgery token, and a save without it MUST fail
+  (HTTP 500). The save has no list of intended fields: it binds every posted isolate property.
+  `[SUSPECTED-DEFECT]` SEC-014.
 - **FR-019**: Coordination of which laboratory user performs which analysis MUST remain outside the
   system; the system provides no in-app task planning or assignment for isolate analyses.
 
@@ -199,7 +256,8 @@ warning is shown; save and proceed to report creation.
   factor test, agglutination, ß-lactamase, penicillin ADT, outer-membrane proteins P2/P6, bexA, fucK,
   serotype PCR, genome sequencing, ftsI and its evaluations, MLST and sequence type, Real-Time PCR
   with device and RIDOM evaluation, 16S rDNA with best match and percentage, MALDI-TOF via VITEK and
-  Biotyper with best match and confidence, api NH), the overall evaluation, the E-Test collection,
+  Biotyper with best match and confidence, api NH; VITEK is read-only and api NH is not shown on the
+  form), the overall evaluation, the E-Test collection,
   the stem number and laboratory number, the yearly sequential isolate number and year, a report
   date, a report status, and a remark. Base fields are shared with the Meningococci isolate via the
   common isolate abstraction.
@@ -222,15 +280,19 @@ warning is shown; save and proceed to report creation.
 
 - **SC-001**: An authorized user can open a submission's isolate, record its laboratory analysis
   results, and save them in a single form, then be returned to the submissions list.
-- **SC-002**: Attempting to save an isolate with an empty or malformed laboratory number, a missing
-  type of growth when growth is "yes", or any missing conditionally required detail field, never
-  persists the isolate and always returns an actionable validation message.
-- **SC-003**: An E-Test measurement always yields a susceptibility result consistent with the
-  measured value and the selected clinical breakpoint, and that result is persisted with the isolate.
+- **SC-002**: Attempting to save an isolate through the form with an empty or malformed laboratory
+  number, a missing type of growth when growth is "yes", or any missing conditionally required detail
+  field, never persists the isolate and always returns an actionable validation message.
+  `[SUSPECTED-DEFECT]` A request that bypasses the browser can store a malformed laboratory number
+  (DATA-032).
+- **SC-003**: An E-Test measurement entered in the form yields a susceptibility result consistent
+  with the measured value and the selected clinical breakpoint, and that result is persisted with
+  the isolate. `[SUSPECTED-DEFECT]` The server stores the posted result unchecked (DATA-035).
 - **SC-004**: A stem number or laboratory number that duplicates another isolate's is never stored,
   and the conflict is always reported against the correct field.
-- **SC-005**: Selecting an agglutination serogroup always pre-selects the matching evaluation, and a
-  disagreeing evaluation is always flagged to the user while still allowing the save.
+- **SC-005**: Selecting an agglutination serogroup always pre-selects the matching evaluation, and
+  changing the evaluation to a disagreeing one is flagged to the user while still allowing the save.
+  `[SUSPECTED-DEFECT]` A saved disagreement is not flagged on reopening (UX-012).
 - **SC-006**: From a valid isolate the user can always proceed to report creation, and every isolate
   carries a report status of none, preliminary, or final.
 
@@ -244,10 +306,11 @@ warning is shown; save and proceed to report creation.
   feature only records the inputs and lets the user proceed to report creation.
 - **Susceptibility derivation is form-side**: The E-Test susceptibility result is derived on the edit
   form from the measurement against the selected breakpoint; this is documented as observed behavior.
+  The server stores the result it receives (DATA-035).
 - **Shared isolate abstraction**: The base controller (`IsolateControllerBase<…>`) and base fields
   (`IsolateCommon`) are shared with the Meningococci isolate (A3-M) per the constitution's noted
   legacy debt (parallel Meningococci/Haemophilus domains); Haemophilus-specific fields (e.g. api NH)
-  live on the Haemophilus isolate.
+  live on the Haemophilus isolate. api NH remains stored and exported but has no entry field.
 - **Standard role name**: The standard laboratory-user role is the application's default user role;
   it is required for all isolate edit actions.
 - **No in-app task planning**: Coordinating who performs which analysis is out of scope by design;

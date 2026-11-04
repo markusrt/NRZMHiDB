@@ -130,6 +130,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   verification) for Meningococci submissions. From code: on edit, the posted patient and submission
   numbers decide which records are overwritten, so one request can change another patient. The sender pages already
   restrict binding (001 FR-017).
+- **SEC-014 – Isolate edit binds every isolate property** (Bugfix; source: 004 FR-018): The save has no list of
+  intended fields; the anti-forgery token, which 004 FR-018 used to describe as protection against over-posting, does
+  not limit them. Confirmed on system 2026-11-04 (004 verification): a request with `ReportStatus=Final` stores the
+  status, and a request with another `IsolateId` overwrites that isolate. Same pattern as SEC-013.
 
 ## DATA — Data correctness and privacy
 
@@ -228,6 +232,28 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   500 ("Die Sequenz enthält mehr als ein Element."). Reachable through the UI when two pages sit at the duplicate
   prompt for the same patient. Confirmed on system 2026-10-30 (003 verification) for Meningococci patients, with the
   same two outcomes.
+- **DATA-032 – Server check of the isolate laboratory number is not anchored** (Bugfix; source: 004 FR-010, Edge
+  Cases): The rule `\d+/\d\d` accepts any value that contains the pattern, and unparsable parts become 0. The browser
+  checks the whole value, so only a request that bypasses it gets through. Confirmed on system 2026-11-04 (004
+  verification): "abc12/345xyz" stored as 000/00 (year 2000), "12/345" as 012/345 (year 2345), "1/2/34" as 001/02. The
+  Meningococci validator has the same rule (from code).
+- **DATA-033 – Every isolate save orphans the previous E-Test rows** (Bugfix; source: 004 Edge Cases): Each save inserts
+  all measurements as new rows and only clears the foreign key of the old ones. Confirmed on system 2026-11-04 (004
+  verification): re-saving an isolate with four measurements left four rows without isolate; at the end of the
+  verification 10 of 15 rows were orphaned. From code: no page or export reads them, and the mapping is shared with the
+  Meningococci isolate. Overlaps DATA-011.
+- **DATA-034 – Isolate form writes back a stale report status and date** (Bugfix; source: 004 FR-015, Edge Cases): The
+  form posts the report status it loaded and "Befund am". Confirmed on system 2026-11-04 (004 verification, with the
+  request the report page sends after generating a report): a form opened before that request set the isolate back to
+  "Kein Befund erstellt" and cleared the date on save. Reachable whenever the form stays open while a report is
+  generated. Saving a fresh form stored the date with the time 00:00. The Meningococci form carries the same hidden
+  status field (from code).
+- **DATA-035 – E-Test result is taken from the request unchecked** (Bugfix; source: 004 Edge Cases, Assumptions, SC-003):
+  The derivation exists only in the page script. Confirmed on system 2026-11-04 (004 verification): 0,5 against a
+  breakpoint "Sensibel <= 0,5" stored as "resistent" when the request says so; an Ampicillin row accepted a Meningococci
+  breakpoint of another antibiotic (the row then shows as Rifampicin without a selectable breakpoint, and every save
+  fails with "'Breakpoint' darf nicht leer sein"); a measurement without a result ends in HTTP 500 ("Das Objekt mit
+  Nullwert muss einen Wert haben."). From code: the stored result reaches reports and exports (Principle I).
 
 ## UX — Robustness and user feedback
 
@@ -256,6 +282,15 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   instead of "bad request"/"not found" (the sender pages answer 400/404, 001 FR-018). Confirmed on system 2026-10-30
   (002 verification). Confirmed on system 2026-10-30 (003 verification) for the same `/MeningoPatientSending`
   addresses. Restore overlaps DATA-008.
+- **UX-011 – Free E-Test row is rebuilt without an empty value and in the browser language** (Bugfix; source: 004 Edge
+  Cases): Confirmed on system 2026-11-04 (004 verification): after an antibiotic is selected, the placeholder "MHK
+  auswählen..." is posted as value, so saving without a measurement is blocked with "The Feld Messwert muss eine Zahl
+  enthalten." until the antibiotic is reset. In an English browser the scale reads "0.75": no result is derived, no
+  breakpoint is preselected and the value cannot be saved. The field messages are half translated ("The Feld …").
+- **UX-012 – Agglutination discrepancy warning reacts only to changes of the evaluation** (Bugfix; source: 004 FR-008,
+  SC-005, Edge Cases): Confirmed on system 2026-11-04 (004 verification): after the agglutination changes, the old
+  warning stays although the evaluation now matches; a saved disagreement shows no warning on reopening. The warning
+  quotes the internal letter "B" where the form shows "b".
 
 ## REF — Refactoring and legacy debt
 
@@ -316,6 +351,14 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   sending controllers compute the next stem number, but the switch that enables it is `false` for every submission
   type, so intake leaves the stem number empty and it is entered on the isolate page. Confirmed on system 2026-10-30
   (002 and 003 verifications). Specs 002 and 003 described automatic stem numbers; both are corrected.
+- **REF-019 – E-Test row construction** (Refactoring; source: 004 FR-006): The final sort of the rows discards its
+  result, so empty standard rows keep the order of `PrimaryAntibiotics_Haemophilus` after the saved rows; the row
+  template emits its script once per row and hard-codes the free row; it repeats the scale selection in JavaScript
+  (marked TODO in code); the warning script sets an unused global `invalid`. The susceptibility derivation lives in the
+  page script, so no unit test reaches it (see also REF-002).
+- **REF-020 – api NH and MALDI-TOF (VITEK MS) have no entry path** (Refactoring; source: 004 FR-005): The api NH entry
+  was removed from the form, but its three fields stay on the model and in the laboratory export. VITEK is read-only,
+  yet its validation rules and hidden fields remain. Offen: are the stored values still needed?
 
 ## TEST — Test gaps
 
