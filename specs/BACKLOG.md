@@ -254,8 +254,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   breakpoint of another antibiotic (the row then shows as Rifampicin without a selectable breakpoint, and every save
   fails with "'Breakpoint' darf nicht leer sein"); a measurement without a result ends in HTTP 500 ("Das Objekt mit
   Nullwert muss einen Wert haben."). From code: the stored result reaches reports and exports (Principle I).
-  **decided 2026-11-07** (owner): the server repeats the derivation on save and validates the E-Test input; the details
-  belong in the change spec.
+  **decided 2026-11-07** (owner): the server repeats the derivation on save and validates the E-Test input, for
+  Haemophilus and Meningococci isolates alike; the details belong in the change spec.
 
 ## UX — Robustness and user feedback
 

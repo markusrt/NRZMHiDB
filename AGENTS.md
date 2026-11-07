@@ -194,3 +194,6 @@ Standing rules from the owner. Add new ones here with the date and the reason.
   other work on them and do not decide them implicitly in a spec.
 - 2026-10-30: The backlog is written in English like the specs.
 - 2026-10-30: Spec structure decisions D1–D5 belong in the constitution, not in a planning file.
+- 2026-11-07: Change specs (new features and fixes from the backlog) start only after the verification of
+  the inventory specs is finished. Until then, record owner decisions in the backlog entry and move on.
+  Reason: findings are handled together at the end.
