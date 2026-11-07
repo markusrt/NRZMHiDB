@@ -254,6 +254,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   breakpoint of another antibiotic (the row then shows as Rifampicin without a selectable breakpoint, and every save
   fails with "'Breakpoint' darf nicht leer sein"); a measurement without a result ends in HTTP 500 ("Das Objekt mit
   Nullwert muss einen Wert haben."). From code: the stored result reaches reports and exports (Principle I).
+  **decided 2026-11-07** (owner): the server repeats the derivation on save and validates the E-Test input; the details
+  belong in the change spec.
 
 ## UX — Robustness and user feedback
 
@@ -358,7 +360,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   page script, so no unit test reaches it (see also REF-002).
 - **REF-020 – api NH and MALDI-TOF (VITEK MS) have no entry path** (Refactoring; source: 004 FR-005): The api NH entry
   was removed from the form, but its three fields stay on the model and in the laboratory export. VITEK is read-only,
-  yet its validation rules and hidden fields remain. Offen: are the stored values still needed?
+  yet its validation rules and hidden fields remain. **decided 2026-11-07** (owner): the stored values are still
+  needed for old records and stay read-only. The Biotyper replaced the VITEK MS for MALDI-TOF from a cut-over date on. A
+  cleaner architecture for such legacy device data may follow later; until then this entry is a refactoring
+  candidate only.
 
 ## TEST — Test gaps
 

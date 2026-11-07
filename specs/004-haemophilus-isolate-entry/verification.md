@@ -131,9 +131,11 @@ the report page sends after generating a report; no report document was generate
 ## Open questions for the owner
 
 - REF-020: are the stored api NH and VITEK values still needed, or can the fields leave the model and the laboratory
-  export? `DEC-*` candidate; it touches export columns.
+  export? `DEC-*` candidate; it touches export columns. Answered 2026-11-07: still needed for old records, read-only;
+  recorded in the backlog entry.
 - DATA-035: should the server repeat the E-Test derivation, or is the browser result authoritative? `DEC-*` candidate
-  because it concerns clinical semantics.
+  because it concerns clinical semantics. Answered 2026-11-07: the server repeats and validates; recorded in the
+  backlog entry.
 - Own records left behind: nine `SV-004-*` breakpoints; submissions `SV-004-A` to `SV-004-E`. Isolate 5 keeps the
   Meningococci breakpoint row, isolates 5 to 8 have report status "Endbefund" from the checks above. No seeded record was
   changed. A seeded Haemophilus breakpoint set would spare 008 and 011 the same setup.
