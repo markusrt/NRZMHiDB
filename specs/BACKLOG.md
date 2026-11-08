@@ -92,7 +92,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   submission, and `/MeningoPatientSending/Undelete/<id>` restores it.
 - **DEC-008 – EpiScanGIS case selection** (Decision; source: 023 Edge Cases): Only sampling locations "Blut" and
   "Liquor" are exported, not the invasive set used by RKI/IRIS/LGA (011 FR-011); the date window starts 2019-10-01 with
-  an asymmetric boundary. Offen: agreed with the receiver, or drift?
+  an asymmetric boundary. Offen: agreed with the receiver, or drift? Observed 2026-11-08 (023 verification, unit level,
+  no decision taken): of the invasive locations only "Blut" and "Liquor" are exported; a case sampled on 2019-10-01 is
+  left out, a case without sampling date received on 2019-10-01 is exported.
 - **DEC-009 – Duplicate-submission window in adjusted exports** (Decision; source: 012 Edge Cases, FR-006): Code
   comments describe "less than six months", the implementation compares only the month component of the date
   difference (drops < 1 month and whole-year distances, keeps 1–11 months). Offen: which rule is intended, so that
@@ -119,7 +121,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **SEC-002 – Registration with an unknown role leaves a role-less account** (Bugfix; source: 021 US6.7): The account
   is created before the role assignment fails with the generic error page.
 - **SEC-003 – Missing `RegistrationToken` setting opens registration and the EpiScanGIS export** (Bugfix; source: 021
-  Edge Cases, 023): A request without token would match an absent setting.
+  Edge Cases, 023): A request without token would match an absent setting. Reproduced at unit level 2026-11-08 (023
+  verification; the controller run with stubbed data in uncommitted tests, because a run on the system needs the secret
+  token): with the setting absent, the EpiScanGIS export answers a request without token with the file; a wrong token
+  still gets "not found". On the host the key exists in `Web.config`, its template and both transforms (counted, values
+  not read).
 - **SEC-004 – Report pages, health offices and RKI match import check no role** (Bugfix; source: 008/009 Edge Cases,
   016 Edge Cases, 021 US4.4–4.6, US7, access matrix, 024): Public Health (and role-less) accounts can open the report
   page of any isolate (patient data, document generation, status marking), create/edit/delete health offices, and
@@ -150,7 +156,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
 - **SEC-007 – One secret for registration and the EpiScanGIS export, carried in the URL** (Bugfix; source: 021 US7.1–7.2,
-  023): The token appears in web-server logs; the export is an anonymous GET.
+  023): The token appears in web-server logs; the export is an anonymous GET. Not verifiable in the 023 verification
+  (2026-11-08): the host keeps no web-server request log; the anonymous GET is test-asserted
+  (`Index_AdmitsAnonymousGetWithoutRoleOrAntiForgeryCheck`).
 - **SEC-008 – Unescaped external data rendered as markup** (Bugfix; source: 016 Edge Cases, 022 Edge Cases; 008
   FR-006; 009 FR-008): Health-office address/phone/fax/email (from the RKI website or local edits) on the report page, and Geonames
   place names in the postal-code suggestion list. Confirmed on system 2026-11-08 (008 verification, with a synthetic
@@ -172,7 +180,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   of the account running IIS Express, a spreadsheet of the same size as the downloaded file (e.g. 5318 bytes for the
   Haemophilus laboratory export of 2024), still present after the download. Confirmed on system 2026-11-08 (013
   verification) for both sender exports: each of the nine runs left a `tmp*.tmp` spreadsheet of the downloaded file's
-  size (e.g. 2394 bytes for the Haemophilus sender export of 2022).
+  size (e.g. 2394 bytes for the Haemophilus sender export of 2022). EpiScanGIS (023 verification, 2026-11-08): a
+  successful run deletes its temporary file (unit test `Download_SavesNothingAndLeavesNoTemporaryFile`); an aborted run
+  (network failure, non-JSON answer, submission without isolate) leaves an empty `tmp*.tmp` file (reproduced at unit
+  level).
 - **SEC-013 – Combined submission form binds every patient and sending property** (Bugfix; source: 002 FR-021; 003
   FR-023): Create and edit have no list of intended fields. Confirmed on system 2026-10-30 (002 verification): a create
   request with `Sending.Deleted=true` stores the new submission as deleted. Confirmed on system 2026-10-30 (003
@@ -186,6 +197,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   as SEC-013. Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates: `ReportStatus=Final` stored,
   and a request from one isolate's form with another `MeningoIsolateId` (and that isolate's laboratory number)
   overwrote the other isolate.
+- **SEC-015 – Refused EpiScanGIS token distinguishable from an unknown address** (Bugfix; source: 023 US1.2):
+  A missing or wrong token gets HTTP 404 with the web server's "HTTP Error 404.0 - Not Found" page, an unknown
+  address HTTP 404 with the framework's "Die Ressource kann nicht gefunden werden." page, so the refusal shows
+  that the export address exists. Observed on system 2026-11-08 (023 verification) for `/EpiscanGisExport`
+  without token, with an empty and with a wrong token, anonymous and as `Standard1`, `Admin1`, `Rki1` and
+  `Labor1`, against `/SV023DoesNotExist` and `/EpiscanGisExport/SV023Nothing`.
 
 ## DATA — Data correctness and privacy
 
@@ -215,7 +232,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **DATA-005 – Unknown birth date exported as age 0** (Bugfix; source: 011 Edge Cases, 023): Indistinguishable from an
   infant under one month in PubMLST, IRIS and EpiScanGIS. Confirmed on system 2026-11-08 (011 verification): a
   Haemophilus patient without birth date has `age_yr` 0 and `age_mth` 0 in the PubMLST file, a Meningococci patient
-  without birth date 0 years and 0 months in the IRIS file.
+  without birth date 0 years and 0 months in the IRIS file. Reproduced at unit level 2026-11-08 (023 verification; the
+  controller run with stubbed data in uncommitted tests, because a run on the system needs the secret token): a
+  Meningococci patient without birth date gets age `0` in the EpiScanGIS line.
 - **DATA-006 – "Gelöschte Einsendungen (Haemophilus)" lists active submissions** (Bugfix; source: 020 US2, Edge Cases
   "Inverted selection"; 002/003 Assumptions): Inverted by the 2018 generics restructuring (commit `e8aac1d`); no page
   lists deleted submissions, restore works only by direct address. Confirmed on system 2026-10-30 (002
@@ -269,7 +288,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **DATA-020 – EpiScanGIS export defects** (Bugfix after DEC-008; source: 023 Edge Cases): Blut/Liquor-only selection;
   asymmetric date boundary at 2019-10-01; any lookup failure other than "not found" aborts the whole run; cases whose
   "Wohnort" differs from the Geonames place name (or is "Unbekannt") are dropped without notice (also 022 US4.2);
-  values written unescaped without header.
+  values written unescaped without header. Reproduced at unit level 2026-11-08 (023 verification; the controller run
+  with stubbed data in uncommitted tests, because a run on the system needs the secret token): "Blut und Liquor",
+  "Gelenkspunktat", "Petechien", "Pleurapunktat", "Serum" and "Anderer invasiv" left out; boundary as in DEC-008; a
+  network failure (or a non-JSON answer) on the third lookup ends the run with an exception and no file; "Wohnort"
+  "Graefenhainichen" (service: "Gräfenhainichen") and "Unbekannt" left out; a PorA VR1 "22;…" adds a column and a line
+  break in FetA VR adds a line. See also DATA-041.
 - **DATA-021 – RKI match import skips rows without `klhi_nr`** (Bugfix; source: 024 US3.1): The laboratory-number
   fallback is reached only via a stem-number row; "Upload" without a file ends in an object-reference message.
 - **DATA-022 – Postal-code lookup overwrites a foreign residence** (Bugfix; source: 022 Edge Cases): Typing a postal code
@@ -396,6 +420,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   date of two existing "X.Y." patients, leaving four patient records with identical values; the exports group them
   as one patient (012 FR-003). The intake rejects every further submission with these values ("Es existieren bereits
   zwei Patienten …"; observed with two records, from code for any number above one). Related: DATA-031.
+- **DATA-041 – EpiScanGIS export drops cases silently on a Geonames error answer** (Bugfix; source: 023 US6.3,
+  FR-011; related 022 Edge Cases "Service unavailable or failing"): The lookup treats only HTTP 404 as an error;
+  any other answer with a JSON body but no list of places (for example the service's account or quota message)
+  counts as "no place", so the case is left out without log entry and the file is delivered. An exhausted quota
+  therefore yields a file with fewer or no cases that looks like a normal run. Reproduced at unit level
+  2026-11-08 (023 verification): a status answer for every lookup gave an empty file for 10 qualifying cases.
 
 ## UX — Robustness and user feedback
 
@@ -502,7 +532,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   each for rule, flag and serogroup; 007 verification 2026-11-08).
 - **REF-012 – EpiScanGIS export internals** (Refactoring; source: 023 Edge Cases): "Most data" per patient decided by
   line length; Geonames queried once per case before de-duplication; unbounded ever-growing window with no range
-  parameter; no application-log trace; temp-file round trip.
+  parameter; no application-log trace; temp-file round trip. Observed 2026-11-08 (023 verification, unit level): 10
+  lookups for 10 cases that yield 9 lines (two cases of one patient); a case with sampling date 2030-01-01 is exported.
 - **REF-013 – RKI match import internals** (Refactoring; source: 024 Edge Cases, US2.5, US3.7, US4.4): Lenient status
   parsing (English names, numbers, word prefixes); soft-deleted submissions matched; stored state can only be raised;
   process-wide CSV separator switched to ";" and left so; no import trace (Principle I); stale code comment.
@@ -557,7 +588,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   rows, soft-deleted submissions, all-or-nothing; county pages and upload (025; the importer, matching and exports are
   tested). Sender export: covered by tests added in the 013 verification (2026-11-08) for file name, column headers,
   selection by sampling or receiving date and row content of non-deleted submissions; the counting of soft-deleted
-  submissions (DEC-002) stays untested on purpose.
+  submissions (DEC-002) stays untested on purpose. EpiScanGIS export: covered by tests added in the 023 verification
+  (2026-11-08) for the time window away from its boundary day, soft-deleted submissions, missing coordinates, a "not
+  found" lookup, file name and type, empty file, line order and temp-file cleanup; the "Blut und Liquor" exclusion, the
+  boundary day and the abort cases stay untested on purpose (DEC-008, DATA-020).
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

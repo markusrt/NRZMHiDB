@@ -43,8 +43,11 @@ retrieval; repeat (a) and (b) with a signed-in account of each role. Verify what
    value of the `RegistrationToken` setting exactly (same characters, same case), **Then** a file download of the
    Meningococci case file (User Stories 2–5) is answered; no sign-in page and no page of the application is shown.
 2. **Given** no session, **When** the export address is requested with a token that differs from the setting in any
-   way, or without a token, **Then** the answer is "not found", as for an address that does not exist; nothing hints
-   that the address is valid (spec 021, SC-006).
+   way, or without a token, **Then** the answer is "not found" (HTTP 404, spec 021, SC-006). The page shown is the web
+   server's own "HTTP Error 404.0 - Not Found" page, whereas an address that does not exist (an unknown page group or
+   page) shows the application framework's page "Die Ressource kann nicht gefunden werden."; both carry status 404,
+   but the two answers can be told apart, so the refusal hints that the address is handled by the application.
+   [SUSPECTED-DEFECT] (backlog SEC-015)
 3. **Given** any signed-in account (Standard User, Administrator, Public Health, or without role), **Then** the same
    two rules apply: the token decides, the account and its role do not (spec 021, access matrix row "EpiScanGIS
    export (token in address)").
@@ -83,8 +86,9 @@ both sides of 2019-10-01, soft-deleted and active, and with isolates whose inter
 4. **Given** a submission with a sampling date ("Entnahmedatum"), **Then** it is considered only when the sampling date
    is later than 2019-10-01; **given** a submission without sampling date, **Then** it is considered only when its
    receiving date ("Eingangsdatum") is 2019-10-01 or later. A case sampled exactly on 2019-10-01 is therefore left
-   out while a case received on that day without sampling date is included (derived from code; not covered by a
-   test). There is no end date: every later case is included on every run. [SUSPECTED-DEFECT]
+   out while a case received on that day without sampling date is included (the window away from the boundary day is
+   covered by a test; the boundary itself was reproduced with stubbed data in the 2026-11-08 verification, not on the
+   running system). There is no end date: every later case is included on every run. [SUSPECTED-DEFECT]
 5. **Given** a considered submission, **When** the export runs, **Then** the clinical interpretation of its isolate is
    computed afresh with the current rules (spec 007) and its normalized serogroup is taken; the case is left out when
    no serogroup results or when the serogroup is `NG` (non-groupable) or `cnl` (capsule null locus). Cases whose
@@ -124,8 +128,9 @@ birth date 2012-01-01, serogroup C, PorA VR1 "22", VR2 "14", FetA VR "5-5", and 
    exports, which write "keine Angabe" (spec 011).
 4. **Given** the variants, **Then** PorA VR1, PorA VR2, and FetA VR are written exactly as stored in the isolate
    ("PorA VR1", "PorA VR2", "FetA VR" on the isolate page, spec 005); a variant that was not recorded yields an empty
-   column. The values are not escaped: a stored value containing a semicolon or a line break would shift or split the
-   columns (derived from code; not exercised). [POTENTIAL-REFACTORING]
+   column. The values are not escaped: a stored value containing a semicolon or a line break shifts or splits the
+   columns (reproduced with stubbed data in the 2026-11-08 verification: a PorA VR1 "22;…" adds a column, a line
+   break in FetA VR adds a line). [POTENTIAL-REFACTORING]
 5. **Given** the age, **Then** it is the number of full years between the patient's birth date and the sampling date,
    or the receiving date when no sampling date is stored; **given** no birth date, **Then** the age is written as `0`,
    which cannot be told apart from an infant (same rule and same finding as the age columns in spec 011, Edge Cases).
@@ -220,11 +225,17 @@ run.
 2. **Given** the external service answers "not found" for a case, **Then** the lookup component logs an error whose
    message starts with a stray "$" ("$Failed to call Geonames PostalCodeLookupJSON REST API.", spec 022, tagged there)
    and the case is left out; the export continues and the file is delivered.
-3. **Given** the external service cannot be reached, times out, or answers in an unexpected form for any one case,
-   **Then** the whole run ends with the generic server error: no file is delivered, the error is logged by the general
-   error logging ("Unhandled error: …"), and the cases already processed are discarded. An empty temporary file
-   created on the server for the run remains behind in that case (derived from code; not exercised).
-   [SUSPECTED-DEFECT]
+3. **Given** the external service cannot be reached, times out, or answers with something that is not JSON (for
+   example an HTML error page) for any one case, **Then** the whole run ends with the generic server error: no file is
+   delivered, the error is logged by the general error logging ("Unhandled error: …"), and the cases already processed
+   are discarded. An empty temporary file created on the server for the run remains behind in that case (reproduced
+   with stubbed data in the 2026-11-08 verification; the logging was not exercised). [SUSPECTED-DEFECT]
+
+   **Given** the external service answers with any status other than "not found" and a JSON body without a list of
+   places (for example an account or quota message), **Then** the answer is treated like an empty result: the case is
+   left out without notice and without any log entry, the run continues, and the file is delivered. When every lookup
+   of a run gets such an answer, an empty file is delivered as if no case qualified (reproduced with stubbed data in
+   the 2026-11-08 verification). [SUSPECTED-DEFECT] (backlog DATA-041)
 4. **Given** a successful run, **Then** the lines are first written to a temporary file in the server's temporary
    folder, read back, delivered, and the temporary file is deleted; nothing of the run is kept on the server.
    [POTENTIAL-REFACTORING]
@@ -236,8 +247,8 @@ run.
 - **Missing `RegistrationToken` setting**: A request without token would be admitted (spec 021, Edge Cases, tagged
   there); the setting exists in the main configuration file, its template, and both build transforms.
 - **Submission without isolate**: Every Meningococci submission owns an isolate created on save (spec 003); should a
-  selected submission have none, the interpretation step would fail and the run would end with the generic server
-  error as in User Story 6.3 (derived from code; not exercised).
+  selected submission have none, the interpretation step fails and the run ends with the generic server error as in
+  User Story 6.3, leaving an empty temporary file (reproduced with stubbed data in the 2026-11-08 verification).
 - **Serogroup values**: Column 4 carries the normalized serogroup of spec 007 (for example `B`, `C`, `W`, `Y`, or a
   combined value such as `W/Y` as the rules deliver it); `NG` and `cnl` never appear because such cases are left out.
 - **Patient with empty postal code**: The service is asked with an empty postal code; the answer, and thus whether the
@@ -248,7 +259,7 @@ run.
 - **Several runs per day**: Each run produces the file anew from the current data; two runs on the same day deliver
   files with the same name.
 - **Age for a sampling date before the birth date**: Not possible through the forms (spec 003 rejects it); for stored
-  data of that kind the age would be negative (derived from the shared age rule; not exercised).
+  data of that kind the age is negative (observed with stubbed data in the 2026-11-08 verification, e.g. `-2`).
 - **Privacy** (Constitution Principle IV): The file contains pseudonymous health data (internal patient number, case
   dates, age, serogroup, typing, and the coordinates of the postal-code place) and is handed to whoever presents the
   token, without sign-in, role, or record of the download; whether the transport is encrypted depends on the hosting,
@@ -257,11 +268,17 @@ run.
 - **Architecture** (Constitution "Known Architectural Constraints (Legacy Debt)", Principles II and III): Selection,
   line building, reduction per patient, and file handling all live in the page group of the export; the database
   access and the lookup service are created by the page group itself when no substitutes are supplied, which the
-  automated tests use. The tests cover the token check, the line format (literal example line), the exclusion of a
-  non-invasive sampling location and of cases without serogroup, and the one-line-per-patient rule with "most data";
-  they do not cover the date window, the exclusion of "Blut und Liquor" and the other invasive locations, soft-deleted
-  submissions, cases without coordinates, or the failure cases of User Story 6. The test for the invalid token names
-  the expected answer; the test for a non-invasive location uses "Ohrabstrich". [POTENTIAL-REFACTORING]
+  automated tests use. The tests cover the token check (also missing, empty and differently spelled tokens), the
+  request attributes (retrieval only, anonymous, no role or anti-forgery check), the line format (literal example
+  line, empty sampling date, age from the receiving date, decimal point under a German culture), the exclusion of a
+  non-invasive sampling location, of soft-deleted submissions and of cases without serogroup, `NG`, `cnl` or
+  coordinates, the inclusion of "Blut" and "Liquor", the time window away from its boundary day, the lookup with
+  "Postleitzahl" and "Wohnort" and the place choice, a "not found" answer, the one-line-per-patient rule with "most
+  data" and its tie-break, file name, type, empty file, line order, and that a successful run saves nothing and leaves
+  no temporary file (tests added in the 2026-11-08 verification). They do not cover the exclusion of "Blut und Liquor"
+  and the other invasive locations, the boundary day 2019-10-01, the age for an unknown birth date, the failure cases
+  of User Story 6.3 (both paragraphs), or a missing setting (all recorded as defects in the backlog). The test for the invalid
+  token names the expected answer; the test for a non-invasive location uses "Ohrabstrich". [POTENTIAL-REFACTORING]
 
 ## Requirements *(mandatory)*
 
@@ -294,8 +311,10 @@ run.
 - **FR-010**: The file MUST be delivered as `text/csv` under the name `EpiscanGis_Export_<yyyyMMdd>.csv` with the
   server's current date, in ascending order of patient number, and MUST be empty when no case qualifies.
 - **FR-011**: The export MUST NOT log the request, its outcome, or the number of cases; a "not found" answer of the
-  external service MUST be logged by the lookup component and MUST leave out only that case; any other lookup failure
-  MUST end the run with the generic server error, logged by the general error logging (current behavior).
+  external service MUST be logged by the lookup component and MUST leave out only that case; any other answer with a
+  JSON body but no list of places MUST leave out that case without log entry; a network failure, a time-out, or an
+  answer that is not JSON MUST end the run with the generic server error, logged by the general error logging (current
+  behavior).
 - **FR-012**: The export MUST NOT change or mark any patient, submission, or isolate record and MUST NOT keep the file
   on the server after delivery (current behavior).
 - **FR-013**: This feature MUST document the current behavior only and MUST NOT introduce new parameters, columns,
@@ -325,7 +344,7 @@ run.
 | Sampling location | Exactly "Blut" or "Liquor" | Any other location, including "Blut und Liquor" and the other invasive locations |
 | Time window | Sampling date > 2019-10-01, or no sampling date and receiving date ≥ 2019-10-01 | Earlier cases; sampling date exactly 2019-10-01 |
 | Serogroup | Normalized serogroup present and not `NG`/`cnl` | No serogroup, `NG`, `cnl` (incl. "no meningococci" conclusions, incomplete typing) |
-| Coordinates | Place chosen by the Geonames lookup | No chosen place (unknown postal code, "Wohnort" mismatch, "Unbekannt", "not found") |
+| Coordinates | Place chosen by the Geonames lookup | No chosen place (unknown postal code, "Wohnort" mismatch, "Unbekannt", "not found", a JSON answer without places) |
 | Per patient | Longest line per patient number | Shorter lines of the same patient |
 
 ### Roles and Boundaries
@@ -335,7 +354,7 @@ run.
 | EpiScanGIS import tool (external, automated) | Requests the export address with the token and receives the case file; the only intended caller. |
 | Anonymous visitor | Receives the file with the correct token, "not found" otherwise (spec 021). |
 | Standard User, Administrator, Public Health, account without role | No menu entry; treated exactly like an anonymous visitor at the export address — the token decides, not the role (spec 021). |
-| Geonames service (external) | Supplies the coordinates per case; a "not found" answer leaves the case out, any other failure aborts the run (spec 022). |
+| Geonames service (external) | Supplies the coordinates per case; a "not found" answer or a JSON answer without places (e.g. a quota message) leaves the case out, a network failure, time-out or non-JSON answer aborts the run (spec 022). |
 | Operator | Maintains the `RegistrationToken` and `GeonamesAccount` settings (spec 018) and the receiving tool's configuration; has no view of runs inside the application. |
 
 ### Key Entities *(include if feature involves data)*
@@ -385,9 +404,11 @@ run.
   collecting container; it is not a documented guarantee of that container.
 - Every selected submission is assumed to own an isolate (spec 003); the consequence of a missing isolate is derived,
   not exercised.
-- The behavior for an empty postal code, a foreign postal code, a network failure or unexpected answer of the external
-  service (whole-run abort, left-over temporary file), a negative age, and unescaped semicolons in variant values is
-  derived from code and the shared helpers; none of it is covered by tests or was exercised.
+- The behavior for an empty postal code and a foreign postal code is derived from code and the shared helpers and was
+  not exercised. The behavior for a network failure or unexpected answer of the external service (whole-run abort,
+  left-over temporary file; silent omission for a JSON answer without places), a missing isolate, a negative age, and
+  unescaped semicolons in variant values was reproduced with stubbed data in the 2026-11-08 verification, not on the
+  running system, because a run needs the secret token.
 - Decimal precision of the coordinates is assumed to be whatever the service delivers (the test uses five decimals);
   the application neither rounds nor pads.
 - Labels are quoted as shown to users on the Meningococci pages; column names in this spec are descriptive, since the

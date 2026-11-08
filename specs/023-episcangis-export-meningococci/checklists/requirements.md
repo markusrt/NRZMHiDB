@@ -61,3 +61,14 @@
   longest-line heuristic with reading-order tie-break; one lookup per case before per-patient reduction; unbounded
   growing window of sequential lookups; no application-log trace of requests or token outcomes; temporary-file round
   trip; logic in the page group with manual wiring and test gaps).
+- Verification 2026-11-08: Verified against the running app (refusal path only; the export run with the secret
+  `RegistrationToken` was not performed) and through unit tests (26 test cases added in
+  `EpiscanGisExportControllerTests`); defect and refactoring rows were reproduced with stubbed data in uncommitted
+  unit-level runs. See `verification.md`. Corrections: User Story 1.2 no longer claims that the refusal looks like an
+  unknown address (the web server's "HTTP Error 404.0 - Not Found" page versus the framework's "Die Ressource kann
+  nicht gefunden werden.", new [SUSPECTED-DEFECT], SEC-015); User Story 6.3, FR-011, the selection summary and the
+  roles table now separate a network failure, time-out or non-JSON answer (run aborted) from a JSON answer without
+  places such as a quota message (case left out silently, without log entry; new [SUSPECTED-DEFECT], DATA-041); the
+  "derived; not exercised" markers of User Stories 2.4 and 3.4, the Edge Cases "Submission without isolate" and "Age
+  for a sampling date before the birth date", and the Assumptions now say what was reproduced; the test-coverage
+  statement in the Edge Case "Architecture" lists the added tests.

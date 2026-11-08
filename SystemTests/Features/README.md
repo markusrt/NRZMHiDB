@@ -58,6 +58,7 @@ listed, add it here in the same commit.
 | `Then "<label>" contains <value description>` | The field with this label holds the described value (e.g. "January 1st of the previous year"). |
 | `Then a file named like "<pattern>" is downloaded` | A download starts whose file name matches the wildcard pattern. |
 | `Then no file is downloaded` | No download starts within a few seconds after the preceding action. |
+| `Then the server answers "not found"` | The response to the preceding navigation has HTTP status 404 (whatever error page is shown). |
 | `Then "<label>" offers "<option text>"` | The selection list with this label has an entry whose text contains the option text. |
 | `Then "<label>" does not offer "<option text>"` | The selection list with this label has no entry whose text contains the option text. |
 | `Then "<label>" offers <n> entries` | The selection list with this label has exactly this many entries, placeholder included. |
