@@ -108,7 +108,8 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
 
   ```js
   const ctx = page.context();
-  ctx.svBlocked = ctx.svBlocked || [];   // globals do not survive between run_code calls; the context does
+  await ctx.unrouteAll({ behavior: 'ignoreErrors' });   // the MCP browser context outlives earlier runs
+  ctx.svBlocked = [];   // globals do not survive between run_code calls; the context does
   const external = /\/QueryHealthOffice|\/PubMlst\/NeisseriaIsolates|\/HealthOffices\/Edit\?.*postalCode=|\/MeningoIsolate\/PubMlstMatch/i;
   await ctx.route('**/*', r => {
     const req = r.request();
@@ -156,6 +157,9 @@ backlog entry, and every success criterion or assumption that claims something n
   Verified by mapping the FR to a unit test in `HaemophilusWebTests/` (step 2b), not in the browser.
   Prefer this path for 006, 007, 012, the validator FRs of 001–005/016/017, and the column
   definitions of 011/013/023. A validator FR may be checked both ways; record both.
+- **Code**: only readable in the code, with no observable effect and no sensible test (dead code,
+  leftovers, a call whose result is discarded). Use it for `[POTENTIAL-REFACTORING]` rows only and
+  quote file and member in the evidence; a behavior claim never rests on code reading alone.
 - **Not verifiable here**: external service, missing fixture (e.g. an RKI match file), timing.
   Say why and what would make it verifiable.
 
@@ -254,7 +258,16 @@ For every item classified **Test** (and for UI items where a test already exists
    DataAnnotations rules are tested with `Validator.TryValidateObject`; assert member names, not
    message texts (they depend on the culture).
 3. Never write a test for `Defect confirmed` or `New defect`: a test would cement the defect. The
-   backlog entry is the record.
+   backlog entry is the record. For a `DEC-*` item, a test may assert the parts of the FR the open
+   question does not touch (e.g. that the evaluation is inserted), never the disputed wording or
+   outcome.
+   A `TEST-*` entry is a test gap, not a defect: when your added tests close it, the row's verdict is
+   `Match` (path "Unit test (added)"), and the entry gets "Covered by tests added in the NNN
+   verification (YYYY-MM-DD)." The owner closes entries; you do not remove them. A coverage note in
+   the spec that your tests make outdated is corrected like any spec text (checklist note, listed
+   under "Spec corrections applied"), without a row of its own.
+   Count test cases (each `[TestCase]`/`[Values]` combination) in the report and name the methods; for
+   combinatorial tests add the method count in parentheses.
 4. Run the affected fixtures before committing (PowerShell, from the repository root). Build with
    `/p:BuildProjectReferences=false`: the test project references `HaemophilusWeb`, and rebuilding it
    regenerates `Web.config` and recycles the running app (Preconditions, 1).
@@ -272,7 +285,8 @@ For every item classified **Test** (and for UI items where a test already exists
    ```
 
    `/Tests:` matches substrings of the fully qualified name, so `IsolateViewModelValidatorTests` also
-   runs `MeningoIsolateViewModelValidatorTests`; say so when you report the fixture count.
+   runs `MeningoIsolateViewModelValidatorTests`. For an exact set use
+   `/TestCaseFilter:"FullyQualifiedName~HaemophilusWeb.Validators.IsolateViewModelValidatorTests|FullyQualifiedName~…"`.
 
    Then run the full suite once with a results file, so a failure can be named:
 
@@ -304,7 +318,7 @@ SpecVerificationHost (`http://localhost:9899`, catalog `HaemophilusWeb_Screensho
 | New defect | n |
 | Not verifiable | n |
 
-By primary path: Browser n · File n · DB n · Unit test (existing) n · Unit test (added) n ·
+By primary path: Browser n · File n · DB n · Unit test (existing) n · Unit test (added) n · Code n ·
 Not verifiable n (adds up to the row count). Also test-asserted: n rows with a browser, file or DB
 verdict. Test run: `vstest.console.exe … /Tests:<fixtures>` → n passed, 0 failed; full suite →
 n passed, n failed.
