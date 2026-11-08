@@ -122,7 +122,7 @@ its edit page by direct address and saving it.
    from being cleared. [SUSPECTED-DEFECT]
 5. **Given** the restore address is requested with a missing or unknown submission number, **Then** the generic
    error page is shown; for senders, a missing number gives a "bad request" and an unknown number a "not found"
-   answer. [SUSPECTED-DEFECT]
+   answer. [SUSPECTED-DEFECT] (UX-010, DATA-008)
 
 ---
 
@@ -152,8 +152,10 @@ navigation has no Meningococci entry.
    exercised); this is the only code path that soft-deletes a Meningococci submission.
 5. **Given** the Meningococci sender pages (other than "Einsender Export"), **When** the sender list, deleted-sender
    list, delete, or edit address of the Meningococci sender area is requested directly, **Then** the error page is
-   shown, because only the export page exists there; a restore request by direct address would work and restore the
-   shared sender (derived). Sender maintenance is done through the Haemophilus "Einsender" pages (spec 001).
+   shown, because only the export page exists there; a restore request by direct address clears the deleted mark of
+   the shared sender and saves it, and its redirect to the Meningococci sender list then ends on the error page, so
+   the sender is active again although the user sees an error. Sender maintenance is done through the Haemophilus
+   "Einsender" pages (spec 001).
 
 ---
 
@@ -176,7 +178,7 @@ with a Public Health account and verify that all are refused.
    handled, **Then** it is rejected and nothing is deleted.
 4. **Given** a restore request, **Then** it is a plain link without anti-forgery token and without confirmation, so
    any request to the restore address by a signed-in Standard User (for example one triggered from another page)
-   restores the record. [SUSPECTED-DEFECT]
+   restores the record. [SUSPECTED-DEFECT] (DATA-008, SEC-005)
 
 ### Edge Cases
 
@@ -184,9 +186,17 @@ with a Public Health account and verify that all are refused.
   deleted mark; the record, its patient, its isolate, and all laboratory data remain stored. No page offers a
   permanent deletion of a sender or a submission. The generated, untranslated submission pages ("Delete", "Are you
   sure you want to delete this?") that exist next to the real pages have no matching function and do not delete
-  anything. By contrast, the generated, untranslated patient delete page of either pathogen, reachable only by
-  direct address, removes a patient permanently, without recovery (derived from code; not specified elsewhere; its
-  interaction with the patient's submissions corresponds to the merge, specs 014 and 015).
+  anything: the Haemophilus and Meningococci delete addresses of these pages answer "not found" (ASP.NET page "Die
+  Ressource kann nicht gefunden werden."). By contrast, the generated, untranslated patient pages of either pathogen
+  ("Patienten" list, "Neuen Patienten anlegen", and a delete page with the heading "Delete", the question "Are you
+  sure you want to delete this?", English values such as "Male", "Unknown", "NotStated", and the button "Delete"),
+  reachable only by direct address, are open to the Standard User role. Their delete removes a patient permanently,
+  without recovery or trace, when no submission refers to it (for example a patient created on the generated create
+  page); for a patient whose submission has an isolate record (observed with a soft-deleted submission), it ends on
+  the error page with the database's reference conflict and deletes nothing, like the merge (specs 014 and 015). The
+  generated submission pages of the Haemophilus area still list and show submissions, while the generated
+  Meningococci submission list ends on the error page because its page does not compile. Not specified elsewhere.
+  [POTENTIAL-REFACTORING]
 - **What deletion changes for senders**: A deleted sender disappears from "Einsender", from the sender choice of new
   submissions, and from both sender exports (spec 013), but remains attached to its submissions and is still shown
   in the sender choice of those submissions (spec 001, spec 002 FR-004).
@@ -202,8 +212,11 @@ with a Public Health account and verify that all are refused.
     matching result links to the isolate forms of deleted Meningococci submissions it processed (spec 019).
   - Merge failure: a soft-deleted submission that remains attached to a patient being merged away makes the merge
     fail with the error page and nothing changed (specs 014, 015).
-- **Numbers are not reused**: The stem and laboratory numbers of soft-deleted submissions stay assigned; new
-  submissions continue counting from the highest number including those of deleted submissions (derived from code).
+- **Numbers are not reused**: The stem and laboratory numbers of soft-deleted submissions stay assigned. New
+  submissions continue counting the laboratory number of the year from the highest number including those of deleted
+  submissions. Stem numbers are not assigned at intake but entered on the isolate page (spec 002 FR-003, spec 003
+  FR-003); a stem number held by a soft-deleted submission is refused there with "Diese Stammnummer ist bereits
+  vergeben".
 - **Inverted selection on "Gelöschte Einsendungen"**: The page selects submissions that are *not* deleted. The
   source history shows that before a 2018 restructuring, which merged the Haemophilus and Meningococci controllers,
   the page selected deleted submissions; the restructuring replaced the selection with the shared "not deleted"
@@ -236,9 +249,11 @@ with a Public Health account and verify that all are refused.
   sender and submission controllers inherit the delete, deleted-list, and restore functions, but the pages for them
   exist only for Haemophilus, which is why the Meningococci variants end on the error page. Restoring a submission
   goes through a separately created sending controller with its own data connection, reflecting the "weak dependency
-  injection" constraint. Automated tests cover the sender delete warning, the "non-deleted only" sender choice, and the
-  "non-deleted only" selection of the generated, unlinked submission list, but not the deleted-records pages or
-  restoring. [POTENTIAL-REFACTORING]
+  injection" constraint. Automated tests cover the sender delete warning, the "non-deleted only" sender choice, the
+  "non-deleted only" selection of the generated, unlinked submission list, the "Gelöschte Einsender" selection,
+  deleting and restoring senders and submissions of both pathogens (also restoring an active record and the
+  Meningococci sender restore), and the laboratory number that counts on after a deleted submission; the inverted
+  selection of "Gelöschte Einsendungen (Haemophilus)" is not covered. [POTENTIAL-REFACTORING]
 
 ## Requirements *(mandatory)*
 
@@ -266,7 +281,8 @@ with a Public Health account and verify that all are refused.
 - **FR-008**: Saving the edit page of a deleted sender or submission MUST clear its deleted mark (current behavior).
 - **FR-009**: The Meningococci deleted-submissions address, the Meningococci submission delete page, and the
   Meningococci sender pages other than the export MUST end on the generic error page, because no pages exist for
-  them (current behavior).
+  them (current behavior); the Meningococci sender restore address MUST clear the deleted mark of the shared sender
+  before its redirect ends on that error page.
 - **FR-010**: Soft-deleted submissions MUST be excluded and included elsewhere exactly as listed under "What deletion
   changes for submissions" (references to specs 001, 002, 011, 013, 014, 015, 019).
 - **FR-011**: Stem and laboratory numbers of soft-deleted submissions MUST stay assigned and MUST NOT be reused.
@@ -320,7 +336,10 @@ with a Public Health account and verify that all are refused.
 ## Assumptions
 
 - Current application code, views, navigation, version history, role constants, and the automated tests are the
-  source of truth. No running system was exercised.
+  source of truth. No running system was exercised when the spec was written; the verification of 2026-11-08
+  (`verification.md`) exercised the derived points below on the running application, including the restore by
+  saving an edit page (by reference to the verifications of specs 001–003), the crafted Meningococci soft delete, the
+  Meningococci sender restore, the error pages, the anti-forgery refusal, and the sign-in redirect.
 - Accounts are assumed to hold exactly one role, as in specs 011, 014, 017, 018, and 019, so an Administrator account
   is refused by these functions.
 - "Restore address" means the restore function of the sender or submission pages requested with the internal record
@@ -331,7 +350,8 @@ with a Public Health account and verify that all are refused.
   framework features used; not observed in a browser.
 - The implicit restore by saving an edit page is derived from the edit forms (which do not carry the deleted mark)
   and from the save, which writes all fields; not exercised.
-- That the Meningococci soft delete would work for a crafted confirmation request, and that a Meningococci sender
-  restore by direct address would work, are derived from the inherited code; not exercised.
+- That the Meningococci soft delete works for a crafted confirmation request, and that a Meningococci sender restore
+  by direct address clears the deleted mark before ending on the error page, were derived from the inherited code and
+  observed in the verification.
 - The intent of the "Gelöschte Einsendungen" selection is inferred from the page title, the menu entry, the
   "Wiederherstellen" button, and the version history; the current behavior is documented as found.

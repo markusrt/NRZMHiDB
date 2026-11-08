@@ -66,6 +66,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   `Admin1` sees "Konfiguration" as the first "Administration" entry, and `/Configuration`, `/Configuration/Index`,
   `/Configuration/Edit` and the save post redirect it to the sign-in page; `Rki1` has no "Administration" menu and is
   redirected the same way.
+  Confirmed on system 2026-11-08 for the deleted-records pages (020 verification; observation only, no decision):
+  `Admin1` sees "Gelöschte Einsender" and "Gelöschte Einsendungen (Haemophilus)", and both lists, the sender and
+  submission delete pages and the restore addresses of both pathogens (also `/MeningoSender/Undelete/<id>`) redirect
+  it to the sign-in page without restoring; `Rki1` has no "Administration" menu and is redirected the same way.
 - **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
   Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
   include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
@@ -105,7 +109,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   end in HTTP 500 (view not found); a delete request with anti-forgery token sent outside the pages soft-deletes the
   submission, and `/MeningoPatientSending/Undelete/<id>` restores it. Observed again 2026-11-08 (015 verification; no
   decision): "Eintrag löschen" ends in HTTP 500; the two soft-deleted submissions the merge checks needed were
-  produced with such a delete request.
+  produced with such a delete request. Observed again 2026-11-08 (020 verification; no decision): "Eintrag löschen"
+  (`/MeningoPatientSending/Delete/<id>`) and `/MeningoPatientSending/Deleted` end in HTTP 500; an own submission was
+  soft-deleted with a delete request carrying the page's token and restored by `/MeningoPatientSending/Undelete/<id>`.
 - **DEC-008 – EpiScanGIS case selection** (Decision; source: 023 Edge Cases): Only sampling locations "Blut" and
   "Liquor" are exported, not the invasive set used by RKI/IRIS/LGA (011 FR-011); the date window starts 2019-10-01 with
   an asymmetric boundary. Offen: agreed with the receiver, or drift? Observed 2026-11-08 (023 verification, unit level,
@@ -185,7 +191,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   `/MeningoPatientSending/MergePatient` merged at once ("Erfolgreich"). Reproduced at unit level 2026-11-08 (016
   verification) for the health-office lookup: both report pages post only `postalCode` to `/Report/QueryHealthOffice/`
   (request held in the browser), and the action is marked for POST without a token check; the create, edit and delete
-  forms of the health-office pages refuse a POST without token (HTTP 500).
+  forms of the health-office pages refuse a POST without token (HTTP 500). Confirmed on system 2026-11-08 (020
+  verification) for the restore links: sender and submission restores of both pathogens are plain GETs without token,
+  and an image element on another application page restored a deleted sender; the sender and submission delete
+  confirmations refuse a POST without token (HTTP 500 "The required anti-forgery form field
+  "__RequestVerificationToken" is not present.").
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
@@ -278,7 +288,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **DATA-006 – "Gelöschte Einsendungen (Haemophilus)" lists active submissions** (Bugfix; source: 020 US2, Edge Cases
   "Inverted selection"; 002/003 Assumptions): Inverted by the 2018 generics restructuring (commit `e8aac1d`); no page
   lists deleted submissions, restore works only by direct address. Confirmed on system 2026-10-30 (002
-  verification).
+  verification). Confirmed on system 2026-11-08 (020 verification): the page lists all 17 active Haemophilus
+  submissions and not the own submission soft-deleted through "Löschen bestätigen"; neither it nor the overview search
+  finds the deleted one.
 - **DATA-007 – Saving the edit page of a deleted submission or sender silently restores it** (Bugfix; source: 020
   US3.3–3.4; 001 Edge Cases; 002 Edge Cases; 003 Edge Cases). Confirmed on system 2026-10-30 (001 verification) for
   senders. Confirmed on system 2026-10-30 (002 verification) for Haemophilus submissions. Confirmed on system
@@ -286,7 +298,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **DATA-008 – Restore is a plain link without confirmation; unknown id ends on the error page** (Bugfix; source: 020
   US3.5, US5.4; 002 Edge Cases; 003 Edge Cases). Confirmed on system 2026-10-30 (002 verification):
   `/PatientSending/Undelete/<id>` restores on a plain GET; an unknown or missing id ends in HTTP 500 (null reference).
-  Confirmed on system 2026-10-30 (003 verification) for `/MeningoPatientSending/Undelete/<id>`.
+  Confirmed on system 2026-10-30 (003 verification) for `/MeningoPatientSending/Undelete/<id>`. Confirmed on system
+  2026-11-08 (020 verification): plain GETs of `/PatientSending/Undelete/<id>`, `/MeningoPatientSending/Undelete/<id>`
+  and `/Sender/Undelete/<id>` restore without confirmation; an image element added to another page of the application
+  restored a deleted sender with the signed-in Standard User's cookie; missing or unknown submission numbers end in
+  HTTP 500 (null reference), while the sender restore answers 400 and 404.
 - **DATA-009 – Patient merge: soft-deleted submissions, latent data mix-up, no audit** (Bugfix; source: 014/015 Edge
   Cases, FR-011/FR-014): Soft-deleted submissions of the patient to delete make the save fail (or are dropped silently
   without isolate); Patient 1's number is placed in Patient 2's slot of the confirmation data (masked today); no log,
@@ -591,10 +607,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   List"; the field labels are German, the antibiotic is shown with its internal name ("Ceftriaxone"); "Gültig für" is
   missing there and shows "Haemophilus", "Meningococci" or "None" in the list.
 - **UX-010 – Submission pages with missing or unknown id end in HTTP 500** (Bugfix; source: 002 Edge Cases; 003 Edge
-  Cases): `/PatientSending/Edit`, `/Delete` and `/Undelete` without id or with an unknown id fail with a null reference
+  Cases; 020 US3.5): `/PatientSending/Edit`, `/Delete` and `/Undelete` without id or with an unknown id fail with a null reference
   instead of "bad request"/"not found" (the sender pages answer 400/404, 001 FR-018). Confirmed on system 2026-10-30
   (002 verification). Confirmed on system 2026-10-30 (003 verification) for the same `/MeningoPatientSending`
-  addresses. Restore overlaps DATA-008.
+  addresses. Restore overlaps DATA-008. Confirmed on system 2026-11-08 (020 verification) for `/Undelete` of both
+  pathogens without id and with id 99999.
 - **UX-011 – Free E-Test row is rebuilt without an empty value and in the browser language** (Bugfix; source: 004 Edge
   Cases, 005 Edge Cases): Confirmed on system 2026-11-04 (004 verification): after an antibiotic is selected, the
   placeholder "MHK auswählen..." is posted as value, so saving without a measurement is blocked with "The Feld Messwert
@@ -692,13 +709,19 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   navigation** (Refactoring; source: 001 Assumptions, Edge Cases, FR-007): The Meningococci CRUD addresses have no
   views and end in HTTP 500 (confirmed on system 2026-10-30, 001 verification); its restore address would clear the
   deleted mark before failing (from code, not exercised). The sender details page is unlinked, untranslated
-  scaffolding.
+  scaffolding. Confirmed on system 2026-11-08 (020 verification): `/MeningoSender/Undelete/<id>` cleared the deleted
+  mark of an own sender (HTTP 302) and the redirect to `/MeningoSender` ended in HTTP 500 ("The view 'Index' or its
+  master was not found …"); `/MeningoSender/Deleted` ends in HTTP 500 as well.
 - **REF-009 – Postal-code lookup leftovers** (Refactoring; source: 022 Edge Cases, US3.3): `countries.json` snapshot from
   2020 (code TODO to refresh); "Unbekannt" assigned twice; fields matched by id suffix; `LoadCountries` reachable by
   URL returning a type name. Observed on system 2026-11-08 (022 verification): `Rki1` and `Admin1` get HTTP 200 with
   the type name ``System.Collections.Generic.List`1[HaemophilusWeb.Models.Country]`` from `/Geonames/LoadCountries`.
 - **REF-010 – Deleted-records page loads all active submissions and looks up each isolate; skip-validation switch set
-  on the wrong data context** (Refactoring; source: 020 Edge Cases).
+  on the wrong data context** (Refactoring; source: 020 Edge Cases). Observed 2026-11-08 (020 verification): the page
+  is a client-side table with all 17 active submissions in the page source; `Views/PatientSending/Deleted.cshtml`
+  reads `item.Sending.Isolate` per row from the list built in `PatientSendingControllerBase.Deleted` (only the patient
+  is included), and `EditUnvalidated` switches off save validation on the controller's own context while the separately
+  created `SendingController` saves through its own `ApplicationDbContext`.
 - **REF-011 – Interpretation code smells** (Refactoring; source: 006 Key Entities/Assumptions, 007 Edge Cases, 007
   FR-014): `[Obsolete]`-marked fields are the only ones used by the Haemophilus path; always-true guard in the
   negative/negative branch; TODO to move interpretation into the shared base class; rule-order comment in
@@ -739,6 +762,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   2026-11-08 (017 verification) for the breakpoint deletion and edits: deleting a record in use (two E-Test rows
   removed) and three successful edits left no application log line; only failures appear as "Unhandled error";
   confirming the deletion of a record that no longer exists ends in HTTP 500 "Der Wert darf nicht NULL sein.".
+  Confirmed on system 2026-11-08 (020 verification) for sender and submission delete and restore: `Senders`, `Sendings`
+  and `MeningoSendings` carry only the `Deleted` flag (no date or user column), the catalog has no audit or history
+  table, and the application log got no line for nine sender deletions, three submission deletions, seven restore
+  requests and a permanent patient deletion through the generated patient delete page (REF-022).
 - **REF-018 – Automatic stem numbers implemented but never enabled** (Refactoring; source: 002 FR-003; 003 FR-003): The
   sending controllers compute the next stem number, but the switch that enables it is `false` for every submission
   type, so intake leaves the stem number empty and it is entered on the isolate page. Confirmed on system 2026-10-30
@@ -766,6 +793,20 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   (`DocumentFormat.OpenXml.EMMA`); the health-office lookup is posted to the Haemophilus report controller
   (`/Report/QueryHealthOffice/`); the filename prefix is hard-coded ("TODO Replace MZ and KL with Database Prefix").
   Overlaps REF-002.
+- **REF-022 – Generated patient and submission pages reachable by direct address** (Refactoring; source: 020 Edge
+  Cases "Soft delete is the only deletion"): The scaffolded `PatientController`, `MeningoPatientController`,
+  `SendingController` and `MeningoSendingController` pages are unlinked but open to the Standard User role. Observed on
+  system 2026-11-08 (020 verification): `/Patient` and `/MeningoPatient` ("Patienten"), `/Patient/Create` and
+  `/MeningoPatient/Create` ("Neuen Patienten anlegen") and the delete pages (heading "Delete", "Are you sure you want
+  to delete this?", English values "Male", "Unknown", "None", "NotStated", button "Delete") answer HTTP 200; a patient
+  created on the generated create page was deleted permanently through `/Patient/Delete/<id>` without log line, while
+  the same delete for a patient with a soft-deleted submission that has an isolate record ended in HTTP 500 ("The
+  DELETE statement conflicted with the REFERENCE constraint "FK_dbo.Isolates_dbo.Sendings_SendingId"…") and changed
+  nothing. `/Sending` and `/Sending/Details/<id>` show submissions (also deleted ones by id), `/Sending/Delete/<id>` and
+  `/MeningoSending/Delete/<id>` answer 404, and `/MeningoSending` ends in HTTP 500 because its view does not compile
+  ("'HaemophilusWeb.Models.Meningo.MeningoSamplingLocation' enthält keine Definition für 'Other'"). The combined
+  intake controllers use these controllers internally (restore path, REF-003), so only their pages are leftovers.
+  Overlaps REF-016 (permanent patient deletion without trace) and UX-009.
 
 ## TEST — Test gaps
 
@@ -814,7 +855,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   blocks, director names and announcement, the dates stored without text, the failed save that stores nothing, the
   success message, the anti-forgery check, an unreadable stored value, the inclusive period days and the report data
   of both pathogens; the empty signer list (DATA-027) and the role rule (DEC-001) stay untested on purpose, the
-  placeholder defaults because the seeding needs a real database context.
+  placeholder defaults because the seeding needs a real database context. Deleted-records pages and restore: covered
+  by tests added in the 001, 002, 003 and 020 verifications for the "Gelöschte Einsender" selection, deleting and
+  restoring senders and submissions of both pathogens, restoring an active sender or submission, the Meningococci
+  sender restore and the laboratory number that counts on after a deleted submission (020 verification, 2026-11-08);
+  the inverted selection of "Gelöschte Einsendungen (Haemophilus)" (DATA-006) and the error answers for missing or
+  unknown submission numbers (UX-010, DATA-008) stay untested on purpose.
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

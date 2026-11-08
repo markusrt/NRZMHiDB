@@ -59,3 +59,15 @@
   delete confirmations verify the anti-forgery token, restore requests (plain links) do not.
 - As-is observations tagged in the spec: 9 [SUSPECTED-DEFECT], 4 [POTENTIAL-REFACTORING].
 - Review 2026-10-30: the edge case "Inconsistency with earlier specs" was reworded to "Relation to earlier specs" after specs 002 and 003 were aligned with this spec's findings.
+- Verification 2026-11-08: US4.5 and FR-009 now state that the Meningococci sender restore address clears the deleted
+  mark of the shared sender and then ends on the error page (observed; was "would work", derived).
+- Verification 2026-11-08: edge case "Numbers are not reused" corrected: only laboratory numbers are counted at
+  intake; stem numbers are entered on the isolate page, and one held by a soft-deleted submission is refused with
+  "Diese Stammnummer ist bereits vergeben" (was: new submissions continue counting stem numbers too).
+- Verification 2026-11-08: edge case "Soft delete is the only deletion" extended with the observed generated pages:
+  the generated submission delete addresses answer "not found", the generated patient pages delete a patient without
+  submissions permanently and end on the error page for a patient whose submission has an isolate record, and the
+  generated Meningococci submission list does not compile; tagged [POTENTIAL-REFACTORING] (REF-022).
+- Verification 2026-11-08: the coverage note in the "Architecture" edge case updated for the tests added in the 001,
+  002, 003 and 020 verifications; Assumptions note which derived points the verification exercised; US3.5 and US5.4
+  name their backlog IDs.

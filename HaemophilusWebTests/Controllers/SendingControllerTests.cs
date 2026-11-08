@@ -79,6 +79,25 @@ namespace HaemophilusWeb.Controllers
             isolate.StemNumber.HasValue.Should().BeFalse();
         }
 
+        // specs/020 FR-011, SC-006: the laboratory number of a soft-deleted submission stays assigned; the next
+        // submission continues counting after it
+        [Test]
+        public void AssignStemNumber_IsolateOfDeletedSendingInCurrentYear_AssignsFollowingLaboratoryNumber()
+        {
+            var controller = CreateMockSendingController();
+            var deleted = DbMock.Sendings.Single(s => s.SendingId == MockData.SecondId);
+            deleted.Deleted = true;
+            DbMock.Isolates.Add(new Isolate
+            {
+                SendingId = deleted.SendingId, Sending = deleted, YearlySequentialIsolateNumber = 7, Year = DateTime.Now.Year
+            });
+            var sending = DbMock.Sendings.Single(s => s.SendingId == MockData.FirstId);
+
+            controller.CreateSendingAndAssignStemAndLaboratoryNumber(sending);
+
+            sending.Isolate.LaboratoryNumber.Should().Be($"008/{DateTime.Now:yy}");
+        }
+
         [Test]
         public void AssignStemNumber_UnknownId_ReturnsError()
         {

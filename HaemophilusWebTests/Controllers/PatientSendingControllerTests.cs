@@ -401,6 +401,22 @@ namespace HaemophilusWeb.Controllers
             db.SavedWithoutValidation.Should().Equal(true);
         }
 
+        // specs/020 US2.4, FR-006: "Wiederherstellen" on an active submission saves it unchanged and shows the overview
+        [Test]
+        public void Undelete_ActiveSending_StaysActiveAndRedirectsToList()
+        {
+            var db = new IntakeDbStub();
+            var sending = CreateStoredSending(100, SenderId, CreatePatient(42, "X.A."));
+            db.Sendings.Add(sending);
+            var controller = CreateIsolatedController(db);
+
+            var result = controller.Undelete(100);
+
+            result.Should().BeOfType<RedirectToRouteResult>().Which.RouteValues["action"].Should().Be("Index");
+            sending.Deleted.Should().BeFalse();
+            db.SavedWithoutValidation.Should().Equal(true);
+        }
+
         // specs/002 FR-013, FR-016
         [Test]
         public void DataTableAjax_ListsOnlyNotDeletedSendingsWithSenderAndPatientColumns()

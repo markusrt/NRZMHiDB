@@ -126,6 +126,35 @@ namespace HaemophilusWeb.Controllers
             ((RedirectToRouteResult)result).RouteValues["action"].Should().Be("Index");
         }
 
+        // specs/020 FR-006, Edge Cases "Restore of an active record": restoring an active sender is not refused and
+        // saves it unchanged
+        [Test]
+        public void Undelete_ActiveSender_StaysActiveAndRedirectsToList()
+        {
+            var sender = new Sender {SenderId = 1, Name = "SV-020"};
+            var db = CreateIsolatedDb(sender);
+
+            var result = new SenderController(db).Undelete(1);
+
+            sender.Deleted.Should().BeFalse();
+            sender.Name.Should().Be("SV-020");
+            db.SavedWithoutValidation.Should().Equal(true);
+            ((RedirectToRouteResult)result).RouteValues["action"].Should().Be("Index");
+        }
+
+        // specs/020 US4.5: the inherited Meningococci restore clears the deleted mark of the shared sender
+        [Test]
+        public void MeningoUndelete_DeletedSender_ClearsDeletedFlagOfSharedSender()
+        {
+            var sender = new Sender {SenderId = 1, Deleted = true};
+            var db = CreateIsolatedDb(sender);
+
+            new MeningoSenderController(db).Undelete(1);
+
+            sender.Deleted.Should().BeFalse();
+            db.SavedWithoutValidation.Should().Equal(true);
+        }
+
         // specs/001 FR-017: create and edit bind only the editable fields, never the deleted flag
         [TestCase("Create")]
         [TestCase("Edit")]
