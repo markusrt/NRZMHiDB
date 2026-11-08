@@ -15,7 +15,8 @@ Claude-specific details on top of the shared guide:
 - `/spec-verify NNN` verifies one spec against the running app (skill in
   `.claude/skills/spec-verify/`, host and rules in `AGENTS.md`, "Spec verification"). It needs the
   Playwright MCP server from `.mcp.json`; approve it when Claude Code asks on session start. Run
-  one spec per session.
+  one spec per session, or one `general-purpose` subagent per spec, sequentially, with the main
+  session checking each commit (skill section "Running as a subagent").
 - Reply to the owner in German; write every artifact in English (see "Language" in `AGENTS.md`).
 - Lint documentation before committing: `npx -y markdownlint-cli "specs/**/*.md"`. The IDE's
   markdownlint extension and the CLI share `.markdownlint.json`.

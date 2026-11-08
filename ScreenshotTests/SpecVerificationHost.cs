@@ -106,7 +106,10 @@ namespace ScreenshotTests
                 $"Fixtures: sender {Seeder.FixtureSenderName} with KL002/20 (active), KL003/20 (soft-deleted), " +
                 "MZ002/20 (active), MZ003/20 (soft-deleted), sampled 10.03.2020 / 15.06.2020 (013 FR-015, DEC-002)\n" +
                 $"Fixtures: sender {Seeder.PositiveFindingSenderName} with MZ004/20 (active, blood, Neisseria meningitidis " +
-                "serogroup W/Y), sampled 20.05.2020, included in the RKI, IRIS and LGA exports (003 FR-021, 011)\n";
+                "serogroup W/Y), sampled 20.05.2020, included in the RKI, IRIS and LGA exports (003 FR-021, 011)\n" +
+                $"Fixtures: clinical breakpoints \"{Seeder.FixtureBreakpointPrefix} …\" for the standard antibiotics of both " +
+                "databases (valid from 01.01.2024), an older Ampicillin version (Haemophilus, 2020) and Azithromycin " +
+                "\"ohne Grenzwerte\" per database (004, 005, 008, 009, 011, 017)\n";
         }
     }
 }

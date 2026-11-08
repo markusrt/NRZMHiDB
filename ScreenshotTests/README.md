@@ -153,8 +153,11 @@ Haemophilus submissions KL002/20 (active) and KL003/20 (soft-deleted) and the Me
 MZ002/20 (active) and MZ003/20 (soft-deleted), sampled 10.03.2020 and 15.06.2020 (spec 013 FR-015,
 backlog DEC-002); sender `SV-Seed-Positive` with the Meningococci submission MZ004/20 (blood, sampled
 20.05.2020, isolate matching stem interpretation rule 8: Neisseria meningitidis, serogroup W/Y), the only
-record the RKI, IRIS and LGA exports include (spec 003 FR-021, spec 011). The gold-master run does not
-seed them, so its lists keep one record each.
+record the RKI, IRIS and LGA exports include (spec 003 FR-021, spec 011); clinical breakpoints whose
+"Antibiotikum Details" start with `SV-Seed` for the standard antibiotics of both databases (valid from
+01.01.2024), an older Haemophilus Ampicillin version (2020) and Azithromycin "ohne Grenzwerte" per
+database (test values, not authoritative EUCAST data). The gold-master run does not seed them, so its
+lists keep one record each.
 
 **Avoid building the web app while the host runs.** Every build of `HaemophilusWeb` (the solution, the
 web project, `ScreenshotTests` without the switch below, or `HaemophilusWebTests` without

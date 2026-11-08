@@ -81,14 +81,16 @@ to describe the desired behavior; the change spec says which parts it supersedes
 
 The inventory specs were written from code. `/spec-verify NNN` (skill in
 `.claude/skills/spec-verify/`) checks one spec against the real application in a browser and is
-the review method for specs the owner does not read line by line. One spec per session.
+the review method for specs the owner does not read line by line. One spec per session, or one
+subagent per spec run one after another by a main session (skill section "Running as a subagent").
 
 - **Host**: `ScreenshotTests/SpecVerificationHost` resets and seeds the catalog
   `HaemophilusWeb_Screenshots`, starts IIS Express on `http://localhost:9899` and waits until
   `ScreenshotTests/host.stop` exists. `host.ready` lists URL and accounts: `Labor1` (all roles),
   `Standard1`, `Admin1`, `Rki1` (one role each), password `123456`, and the host-only fixtures (sender
   `SV-Seed-DEC-002` with an active and a soft-deleted submission per database for 013 FR-015 / DEC-002;
-  sender `SV-Seed-Positive` with MZ004/20, an invasive Meningococci finding for 003 FR-021 / 011).
+  sender `SV-Seed-Positive` with MZ004/20, an invasive Meningococci finding for 003 FR-021 / 011;
+  clinical breakpoints "SV-Seed …" for the standard antibiotics of both databases).
   Run one host at a time; `host.ready` alone does not prove that the app answers (see the skill's
   host check). While it runs, avoid building `HaemophilusWeb`: the build regenerates `Web.config` and recycles the app
   (the host re-applies its connection string within seconds). Build unit tests with
@@ -197,3 +199,6 @@ Standing rules from the owner. Add new ones here with the date and the reason.
 - 2026-11-07: Change specs (new features and fixes from the backlog) start only after the verification of
   the inventory specs is finished. Until then, record owner decisions in the backlog entry and move on.
   Reason: findings are handled together at the end.
+- 2026-11-08: The remaining spec verifications run as one subagent per spec, sequentially, from a main
+  session that revises the skill after the first spec of each new type (unit-test only, reports,
+  exports, external services). Reason: the skill is stable for forms and lists.

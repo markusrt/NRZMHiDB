@@ -42,6 +42,12 @@ namespace ScreenshotTests
         /// </summary>
         public const string PositiveFindingSenderName = "SV-Seed-Positive";
 
+        /// <summary>
+        /// Prefix of the "Antibiotikum Details" of the seeded clinical breakpoints, so the E-Test sections of both
+        /// isolate forms, the reports and the exports have breakpoints (specs 004, 005, 008, 009, 011, 017).
+        /// </summary>
+        public const string FixtureBreakpointPrefix = "SV-Seed";
+
         // Fixed dates keep screenshots stable across runs/days (avoids DateTime.Now noise in diffs).
         private static readonly DateTime Sampling = new DateTime(2020, 1, 1);
         private static readonly DateTime Receiving = new DateTime(2020, 1, 3);
@@ -223,11 +229,14 @@ namespace ScreenshotTests
         /// Haemophilus: KL002/20 (active), KL003/20 (soft-deleted); Meningococci: MZ002/20 (active),
         /// MZ003/20 (soft-deleted); all attributed to <see cref="FixtureSenderName"/>. Meningococci MZ004/20
         /// (active, invasive, Neisseria meningitidis serogroup W/Y) attributed to <see cref="PositiveFindingSenderName"/>.
+        /// Clinical breakpoints for the standard antibiotics of both databases (see <see cref="SeedFixtureBreakpoints"/>).
         /// </summary>
         public static void SeedSpecVerificationFixtures()
         {
             using (var context = new ApplicationDbContext())
             {
+                SeedFixtureBreakpoints(context);
+
                 if (context.Senders.Any(s => s.Name == FixtureSenderName))
                 {
                     return;
@@ -258,6 +267,56 @@ namespace ScreenshotTests
                 positiveIsolate.FetAVr = "Z";
                 context.SaveChanges();
             }
+        }
+
+        /// <summary>
+        /// Breakpoints for the standard antibiotics (<c>PrimaryAntibiotics_*</c>) of both databases, valid from
+        /// 01.01.2024, plus an older Ampicillin version and one record "ohne Grenzwerte" per database. Thresholds
+        /// are plausible test values, not authoritative EUCAST data. Idempotent.
+        /// </summary>
+        private static void SeedFixtureBreakpoints(ApplicationDbContext context)
+        {
+            if (context.EucastClinicalBreakpoints.Any(b => b.AntibioticDetails.StartsWith(FixtureBreakpointPrefix)))
+            {
+                return;
+            }
+
+            var current = new DateTime(2024, 1, 1);
+            var breakpoints = new[]
+            {
+                Breakpoint(DatabaseType.Haemophilus, Antibiotic.Ampicillin, "14.0", current, 1f, 1f),
+                Breakpoint(DatabaseType.Haemophilus, Antibiotic.Ampicillin, "10.0", new DateTime(2020, 1, 1), 1f, 2f),
+                Breakpoint(DatabaseType.Haemophilus, Antibiotic.AmoxicillinClavulanate, "14.0", current, 2f, 2f),
+                Breakpoint(DatabaseType.Haemophilus, Antibiotic.Cefotaxime, "14.0", current, 0.125f, 0.125f),
+                Breakpoint(DatabaseType.Haemophilus, Antibiotic.Meropenem, "14.0", current, 0.25f, 2f),
+                Breakpoint(DatabaseType.Haemophilus, Antibiotic.Azithromycin, null, null, null, null),
+                Breakpoint(DatabaseType.Meningococci, Antibiotic.Benzylpenicillin, "14.0", current, 0.064f, 0.25f),
+                Breakpoint(DatabaseType.Meningococci, Antibiotic.Ciprofloxacin, "14.0", current, 0.016f, 0.016f),
+                Breakpoint(DatabaseType.Meningococci, Antibiotic.Rifampicin, "14.0", current, 0.25f, 0.25f),
+                Breakpoint(DatabaseType.Meningococci, Antibiotic.Cefotaxime, "14.0", current, 0.125f, 0.125f),
+                Breakpoint(DatabaseType.Meningococci, Antibiotic.Azithromycin, null, null, null, null)
+            };
+            foreach (var breakpoint in breakpoints)
+            {
+                context.EucastClinicalBreakpoints.Add(breakpoint);
+            }
+
+            context.SaveChanges();
+        }
+
+        private static EucastClinicalBreakpoint Breakpoint(DatabaseType validFor, Antibiotic antibiotic, string version,
+            DateTime? validFrom, float? susceptible, float? resistant)
+        {
+            return new EucastClinicalBreakpoint
+            {
+                ValidFor = validFor,
+                Antibiotic = antibiotic,
+                AntibioticDetails = $"{FixtureBreakpointPrefix} {antibiotic} {validFor}",
+                Version = version,
+                ValidFrom = validFrom,
+                MicBreakpointSusceptible = susceptible,
+                MicBreakpointResistent = resistant
+            };
         }
 
         private static Sender AddFixtureSender(ApplicationDbContext context, string name, string department)

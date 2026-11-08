@@ -89,7 +89,8 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
    `host.ready` lists them (e.g. sender `SV-Seed-DEC-002` with one active and one soft-deleted
    submission per database for 013 FR-015 / DEC-002, sender `SV-Seed-Positive` with MZ004/20, the
    one invasive Meningococci finding that the RKI, IRIS and LGA exports of 2020 include, for 003
-   FR-021 and 011). Use them read-only. Records you create live only
+   FR-021 and 011; clinical breakpoints "SV-Seed …" for the standard antibiotics of both databases,
+   so the E-Test sections, reports and exports have data). Use them read-only. Records you create live only
    until the next host start; when another spec needs data that must survive a restart, propose a seed
    extension in the report instead of relying on your own records. You may
    change a seeded record through the UI when no own record can show the behavior (e.g. a sender
@@ -101,7 +102,26 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
 
 - External services: Geonames postal-code lookups are allowed (the app uses the owner's account).
   Never trigger actions that call RKI, PubMLST, IRIS or EpiScanGIS endpoints (spec 019 matching,
-  023 export run). File exports that are generated locally and downloaded are fine.
+  023 export run). File exports that are generated locally and downloaded are fine. Some pages call
+  them without a click, so install this block in every browser context **before** the first
+  navigation (also in contexts you create for role checks) and report the blocked URLs:
+
+  ```js
+  const blocked = [];
+  const external = /\/QueryHealthOffice|\/PubMlst\/NeisseriaIsolates|\/HealthOffices\/Edit\?.*postalCode=|\/MeningoIsolate\/PubMlstMatch/i;
+  await page.context().route('**/*', r => {
+    const req = r.request();
+    const hit = external.test(req.url()) && (!/PubMlstMatch/i.test(req.url()) || req.method() === 'POST');
+    if (hit) { blocked.push(req.method() + ' ' + req.url()); return r.abort(); }
+    return r.continue();
+  });
+  ```
+
+  Known triggers: both report pages (`/Report/Isolate/n`, `/MeningoReport/Isolate/n`) post
+  `QueryHealthOffice` on load, which asks the RKI tool; the "PubMLST" button of the Meningococci
+  isolate form; the health-office edit page with `?postalCode=`; the PubMLST matching submit. Routing
+  does not cover `page.request.get/post`: never send those to the addresses above. A new outbound call
+  you find in the code goes into the pattern and into the report.
 - Never copy secret values (`RegistrationToken`, `Iris*`, `GeonamesAccount`) into any file.
 - Never paste real patient data. Use obviously synthetic initials, dates and postal codes.
 - Do not change application code or `Web.config`. The host swaps the connection string itself and
@@ -161,9 +181,12 @@ Practical notes for this application:
 - Check role behavior in a separate browser context instead of signing out and in:
   `const ctx = await page.context().browser().newContext(); const p2 = await ctx.newPage();`, sign
   in there with the second account, and close the context afterwards.
+  The anti-forgery token belongs to the signed-in account: post a form only from the context it was
+  loaded in (another account's token ends in HTTP 500, which says nothing about roles).
 - Forms with `preventSiteNavigationWithPendingChanges` raise a `beforeunload` dialog when you
-  leave them with changes. It interrupts the running call; answer it with `browser_handle_dialog`
-  and check the page state before continuing.
+  leave them with changes. Before navigating away from a changed form, call
+  `await page.evaluate(() => $(window).off('beforeunload'))`. If a dialog still appears, it interrupts
+  the running call; answer it with `browser_handle_dialog` and check the page state before continuing.
 - The date pickers open over the submit button. Set date fields with `page.evaluate` (value in
   `dd.MM.yyyy`) and click the button via `page.evaluate` as well.
 - Radio buttons and flag checkboxes sit inside Bootstrap button-group labels that intercept clicks;
@@ -226,17 +249,25 @@ For every item classified **Test** (and for UI items where a test already exists
    `/p:BuildProjectReferences=false`: the test project references `HaemophilusWeb`, and rebuilding it
    regenerates `Web.config` and recycles the running app (Preconditions, 1).
    Specs are verified without application changes, so the existing `HaemophilusWeb` build output is
-   current; if it is missing, stop the host before building the solution.
+   current; if it is missing, stop the host before building the solution. `msbuild` and
+   `vstest.console.exe` are often not on the PATH of the agent's shell; resolve them through
+   `vswhere` (Visual Studio 2022):
 
    ```powershell
-   msbuild HaemophilusWebTests\HaemophilusWebTests.csproj /p:Configuration=Debug /p:BuildProjectReferences=false /m /verbosity:minimal
-   vstest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /Tests:SenderValidatorTests
+   $vsRoot = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -version "[17.0,18.0)" -latest -property installationPath
+   $msbuild = "$vsRoot\MSBuild\Current\Bin\MSBuild.exe"
+   $vstest = "$vsRoot\Common7\IDE\Extensions\TestPlatform\vstest.console.exe"
+   & $msbuild HaemophilusWebTests\HaemophilusWebTests.csproj /p:Configuration=Debug /p:BuildProjectReferences=false /m /verbosity:minimal
+   & $vstest HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /Tests:SenderValidatorTests
    ```
+
+   `/Tests:` matches substrings of the fully qualified name, so `IsolateViewModelValidatorTests` also
+   runs `MeningoIsolateViewModelValidatorTests`; say so when you report the fixture count.
 
    Then run the full suite once with a results file, so a failure can be named:
 
    ```powershell
-   vstest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /logger:trx /ResultsDirectory:<scratchpad>\TestResults
+   & $vstest HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /logger:trx /ResultsDirectory:<scratchpad>\TestResults
    ```
 
    A red test of yours means your reading of the code or of the app is wrong; investigate, do not
@@ -372,6 +403,23 @@ Include `spec.md`, `checklists/requirements.md`, `verification.md`, `specs/BACKL
 `HaemophilusWebTests.csproj` for new files) under `HaemophilusWebTests/`. Exclude
 `specs/*/verification/`, `.playwright-mcp/`, `host.*`, `Web.config`, and build output.
 
+Use a message file in the scratchpad (`git commit -F <file>`); PowerShell here-strings passed to `git
+commit -F -` are not read as the message. After the commit, `git status` must show only changes that
+were there before you started.
+
 Then report to the owner in German: the summary table, the deviations you fixed, confirmed and new
 defects with backlog IDs, what was not verifiable and why, open questions, and the suggested next
 spec number. Keep the host running.
+
+### Running as a subagent
+
+The owner may let a main session run the verifications one after another, one subagent per spec
+(never two at once: they share the host and the catalog). In that case the subagent:
+
+- does everything above including the commit, but never starts, stops or restarts the host; if the
+  host check fails, it stops and reports the failure;
+- does not ask the owner; questions and `DEC-*` candidates go into "Open questions" and the report;
+- returns the report as its final message, in German, at most about 400 words: commit hash, summary
+  table, new backlog IDs and confirmed ones, spec corrections in one line each, not verifiable items,
+  open questions, blocked external URLs, and a "Skill review" list with only what the skill got
+  wrong or missed in this run.
