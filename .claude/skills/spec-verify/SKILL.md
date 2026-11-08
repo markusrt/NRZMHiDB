@@ -212,6 +212,22 @@ Practical notes for this application:
 - Export addresses called directly (`page.request.get`) need ISO dates in the query
   (`?From=2020-01-01&To=2020-12-31`); `dd.MM.yyyy` there is not bound and yields a file with only
   the header row. The export forms in the UI are not affected.
+- Downloads: the MCP server renames them (spaces and `_` become `-`) and overwrites a file of the
+  same name, so move every download into `specs/NNN-*/verification/` right after it arrives. Downloads
+  in contexts you create yourself do not land in `.playwright-mcp/`; save them with
+  `download.saveAs('.playwright-mcp/<name>')`.
+- Report documents (.docx) are zips: read the text of `word/document.xml`, `word/header*.xml` and
+  `word/footer*.xml` (strip tags, keep `<w:br/>` as line breaks), list `word/media/` for images and read
+  their size from `wp:extent` (EMU; 9525 per pixel).
+- Report generation runs in the page and confirms with a `$.post` to `ReportGenerated` without
+  navigating. Check it with a request listener (`page.on('request', …)`) plus a SQL query of
+  `ReportStatus`/`ReportDate`. A failure path (template not loadable) can be produced by aborting the
+  template download with a page route.
+- `page.route` takes precedence over the context route block, so a page route may answer a blocked
+  lookup in the browser with synthetic data (e.g. a health office for `QueryHealthOffice`) to verify
+  how the page shows it; the server never calls the external service. Say so in the evidence.
+- Pages that format numbers with Globalize fail with "E_DEFAULT_LOCALE_NOT_DEFINED" when a change
+  handler fires before the culture data are loaded; wait for `networkidle` after navigation.
 - `browser_run_code_unsafe` has no `require('fs')`. Save a file from a directly called export address
   by adding a temporary anchor with that address, clicking it, and calling `saveAs` on the download
   event; `page.request` responses cannot be written to disk.
