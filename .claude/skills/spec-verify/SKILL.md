@@ -130,7 +130,11 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
   does not cover `page.request.get/post`: never send those to the addresses above, not even for role
   checks (check the role on another address of the same controller). A new outbound call you find in
   the code goes into the pattern and into the report.
-- Never copy secret values (`RegistrationToken`, `Iris*`, `GeonamesAccount`) into any file.
+- Never copy secret values (`RegistrationToken`, `Iris*`, `GeonamesAccount`) into any file, and never
+  read, print or send them. Check that a key exists with a count (`Select-String -Pattern
+  'key="RegistrationToken"' | Measure-Object`), not by showing its line. Behavior behind a secret (the
+  token-protected EpiScanGIS export) is verified by unit tests; on the system only the refusal without
+  or with a wrong token.
 - Never paste real patient data. Use obviously synthetic initials, dates and postal codes.
 - Do not change application code or `Web.config`. The host swaps the connection string itself and
   re-applies it when a build regenerates the file. Do not add, move or remove files in the
@@ -270,6 +274,9 @@ Practical notes for this application:
   rule the seeded MZ004/20 uses. Counties are not seeded: create them through the UI when a column
   needs them and delete them afterwards. Warnings (e.g. county not found) are written to
   `HaemophilusWeb/Logs/<date>.txt`; leftover export files to `%TEMP%`.
+- A refusal answered with 404 is compared with an unknown address of the same shape (status, title
+  and text): IIS ("HTTP Error 404.0") and ASP.NET ("Die Ressource kann nicht gefunden werden.") pages
+  differ, which tells an outsider that the address exists.
 - A signed-in account without the required role is redirected to `/Account/Login?ReturnUrl=…`
   (HTTP 302), not shown a 403 page. Missing views and unhandled errors show as HTTP 500. The host
   runs with detailed errors, so it shows the ASP.NET error page with the exception; production may
@@ -314,7 +321,15 @@ For every item classified **Test** (and for UI items where a test already exists
    DataAnnotations rules are tested with `Validator.TryValidateObject`; assert member names, not
    message texts (they depend on the culture).
 3. Never write a test for `Defect confirmed` or `New defect`: a test would cement the defect. The
-   backlog entry is the record. For a `DEC-*` item, a test may assert the parts of the FR the open
+   backlog entry is the record. When a defect sits behind an external service or a secret and the
+   system cannot show it, reproduce it in a separate test assembly in the scratchpad (compile with
+   `csc` against `HaemophilusWebTests\bin\Debug`, copy the `*.dll.config`), never in
+   `HaemophilusWebTests`. Path "Unit test (scratch)"; the verdict stays `Defect confirmed`/`New
+   defect`, and the backlog text says "Reproduced at unit level YYYY-MM-DD (NNN verification)" instead
+   of "Confirmed on system". Keep the source in `specs/NNN-*/verification/`.
+   For failure paths of a service, use the real client with a stubbed HTTP function (e.g.
+   `GeonamesService(Func<string, string>)`) rather than a mocked interface, so the client's own parsing
+   is exercised. Tests that check temp files redirect `TMP`/`TEMP` to a test folder. For a `DEC-*` item, a test may assert the parts of the FR the open
    question does not touch (e.g. that the evaluation is inserted), never the disputed wording or
    outcome.
    A `TEST-*` entry is a test gap, not a defect: when your added tests close it, the row's verdict is
@@ -374,8 +389,8 @@ SpecVerificationHost (`http://localhost:9899`, catalog `HaemophilusWeb_Screensho
 | New defect | n |
 | Not verifiable | n |
 
-By primary path: Browser n · File n · DB n · Unit test (existing) n · Unit test (added) n · Code n ·
-Not verifiable n (adds up to the row count). Also test-asserted: n rows with a browser, file or DB
+By primary path: Browser n · File n · DB n · Unit test (existing) n · Unit test (added) n · Unit test
+(scratch) n · Code n · Not verifiable n (adds up to the row count). Also test-asserted: n rows with a browser, file or DB
 verdict. Test run: `vstest.console.exe … /Tests:<fixtures>` → n passed, 0 failed; full suite →
 n passed, n failed.
 
