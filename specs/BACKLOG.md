@@ -130,10 +130,13 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   verification) for Meningococci submissions. From code: on edit, the posted patient and submission
   numbers decide which records are overwritten, so one request can change another patient. The sender pages already
   restrict binding (001 FR-017).
-- **SEC-014 – Isolate edit binds every isolate property** (Bugfix; source: 004 FR-018): The save has no list of
-  intended fields; the anti-forgery token, which 004 FR-018 used to describe as protection against over-posting, does
-  not limit them. Confirmed on system 2026-11-04 (004 verification): a request with `ReportStatus=Final` stores the
-  status, and a request with another `IsolateId` overwrites that isolate. Same pattern as SEC-013.
+- **SEC-014 – Isolate edit binds every isolate property** (Bugfix; source: 004 FR-018, 005 FR-023): The save has no
+  list of intended fields; the anti-forgery token, which 004 FR-018 used to describe as protection against
+  over-posting, does not limit them. Confirmed on system 2026-11-04 (004 verification): a request with
+  `ReportStatus=Final` stores the status, and a request with another `IsolateId` overwrites that isolate. Same pattern
+  as SEC-013. Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates: `ReportStatus=Final` stored,
+  and a request from one isolate's form with another `MeningoIsolateId` (and that isolate's laboratory number)
+  overwrote the other isolate.
 
 ## DATA — Data correctness and privacy
 
@@ -233,29 +236,57 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   prompt for the same patient. Confirmed on system 2026-10-30 (003 verification) for Meningococci patients, with the
   same two outcomes.
 - **DATA-032 – Server check of the isolate laboratory number is not anchored** (Bugfix; source: 004 FR-010, Edge
-  Cases): The rule `\d+/\d\d` accepts any value that contains the pattern, and unparsable parts become 0. The browser
-  checks the whole value, so only a request that bypasses it gets through. Confirmed on system 2026-11-04 (004
-  verification): "abc12/345xyz" stored as 000/00 (year 2000), "12/345" as 012/345 (year 2345), "1/2/34" as 001/02. The
-  Meningococci validator has the same rule (from code).
-- **DATA-033 – Every isolate save orphans the previous E-Test rows** (Bugfix; source: 004 Edge Cases): Each save inserts
-  all measurements as new rows and only clears the foreign key of the old ones. Confirmed on system 2026-11-04 (004
-  verification): re-saving an isolate with four measurements left four rows without isolate; at the end of the
-  verification 10 of 15 rows were orphaned. From code: no page or export reads them, and the mapping is shared with the
-  Meningococci isolate. Overlaps DATA-011.
-- **DATA-034 – Isolate form writes back a stale report status and date** (Bugfix; source: 004 FR-015, Edge Cases): The
-  form posts the report status it loaded and "Befund am". Confirmed on system 2026-11-04 (004 verification, with the
+  Cases; 005 FR-008, Edge Cases): The rule `\d+/\d\d` accepts any value that contains the pattern, and unparsable parts
+  become 0. The browser checks the whole value, so only a request that bypasses it gets through. Confirmed on system
+  2026-11-04 (004 verification): "abc12/345xyz" stored as 000/00 (year 2000), "12/345" as 012/345 (year 2345), "1/2/34"
+  as 001/02. The Meningococci validator has the same rule (from code). Confirmed on system 2026-11-08 (005
+  verification) for Meningococci isolates: "abc12/345xyz" stored as year 2000, number 0; "12/345" shown as 012/345;
+  "-5/26" stored with the sequential number -5 and then shown read-only as "NR005/26".
+- **DATA-033 – Every isolate save orphans the previous E-Test rows** (Bugfix; source: 004 Edge Cases, 005 Edge Cases):
+  Each save inserts all measurements as new rows and only clears the foreign key of the old ones. Confirmed on system
+  2026-11-04 (004 verification): re-saving an isolate with four measurements left four rows without isolate; at the
+  end of the verification 10 of 15 rows were orphaned. From code: no page or export reads them, and the mapping is
+  shared with the Meningococci isolate. Overlaps DATA-011. Confirmed on system 2026-11-08 (005 verification) for
+  Meningococci isolates: re-saving an isolate with three measurements unchanged left three rows without isolate.
+- **DATA-034 – Isolate form writes back a stale report status and date** (Bugfix; source: 004 FR-015, Edge Cases; 005
+  FR-018, Edge Cases): The form posts the report status it loaded and "Befund am". Confirmed on system 2026-11-04 (004 verification, with the
   request the report page sends after generating a report): a form opened before that request set the isolate back to
   "Kein Befund erstellt" and cleared the date on save. Reachable whenever the form stays open while a report is
   generated. Saving a fresh form stored the date with the time 00:00. The Meningococci form carries the same hidden
-  status field (from code).
-- **DATA-035 – E-Test result is taken from the request unchecked** (Bugfix; source: 004 Edge Cases, Assumptions, SC-003):
-  The derivation exists only in the page script. Confirmed on system 2026-11-04 (004 verification): 0,5 against a
+  status field (from code). Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates: a form opened
+  before the report request reset "Endbefund" to "Kein Befund erstellt" and cleared the date; a fresh form kept the
+  status and stored the date with the time 00:00.
+- **DATA-035 – E-Test result is taken from the request unchecked** (Bugfix; source: 004 Edge Cases, Assumptions, SC-003;
+  005 FR-006, Edge Cases, SC-003): The derivation exists only in the page script. Confirmed on system 2026-11-04 (004 verification): 0,5 against a
   breakpoint "Sensibel <= 0,5" stored as "resistent" when the request says so; an Ampicillin row accepted a Meningococci
   breakpoint of another antibiotic (the row then shows as Rifampicin without a selectable breakpoint, and every save
   fails with "'Breakpoint' darf nicht leer sein"); a measurement without a result ends in HTTP 500 ("Das Objekt mit
   Nullwert muss einen Wert haben."). From code: the stored result reaches reports and exports (Principle I).
+  Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates: 0,064 against Cefotaxime "Sensibel <=
+  0,125" stored as "resistent"; a Benzylpenicillin row accepted the Haemophilus Ampicillin breakpoint (the row then
+  shows as "Ampicillin" without a selectable breakpoint, and every save fails with "'Breakpoint' darf nicht leer
+  sein"); a measurement without a result ends in HTTP 500.
   **decided 2026-11-07** (owner): the server repeats the derivation on save and validates the E-Test input, for
   Haemophilus and Meningococci isolates alike; the details belong in the change spec.
+- **DATA-036 – Every Meningococci isolate save without a current PubMLST match stores an empty PubMLST record**
+  (Bugfix; source: 005 US3.5, FR-021, Edge Cases, SC-005): The form always posts the PubMLST part, and the save assigns
+  it to the isolate; with PubMLST id 0 it becomes a new, empty local PubMLST record and the previously linked one
+  stays behind. Confirmed on system 2026-11-08 (005 verification): the first save of an isolate without lookup created
+  an empty record, each further save another one (about 20 empty records after the verification). After a lookup
+  that found nothing, saving an isolate that was linked to a matched record replaced that link with a new empty
+  record, so the match was lost without a message. Saving a matched isolate without a new lookup kept its link. From
+  code: the batch matching (019) and the exports read the linked record. Overlaps DATA-016.
+- **DATA-037 – Meningococci isolate form ignores a changed laboratory number** (Bugfix; source: 005 FR-003, FR-014, Edge
+  Cases): The form carries the laboratory number as a hidden field before the visible input, the request contains
+  both values, and the server binds the first one. Confirmed on system 2026-11-08 (005 verification): "007/26" entered
+  for MZ006/26 was posted as "006/26, 007/26" and the isolate kept 006/26 without a message; the laboratory-number
+  conflict of 005 FR-014 is therefore unreachable through the form. The Haemophilus form has no such hidden field (004).
+- **DATA-038 – Meningococci no-growth material change fires on the default values and is never undone** (Bugfix;
+  source: 005 FR-011, Edge Cases): Both growth fields default to "Nein", so saving a new isolate of a "Vitaler Stamm"
+  submission without entering growth sets the material to "Nicht angewachsen"; entering growth later does not set it
+  back. Confirmed on system 2026-11-08 (005 verification). From code: the material is exported (laboratory and IRIS
+  exports, 011) and shown on the submission form (003). Offen: should the material follow the growth fields in both directions, and
+  should "Nein" stay the default?
 
 ## UX — Robustness and user feedback
 
@@ -285,14 +316,24 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   (002 verification). Confirmed on system 2026-10-30 (003 verification) for the same `/MeningoPatientSending`
   addresses. Restore overlaps DATA-008.
 - **UX-011 – Free E-Test row is rebuilt without an empty value and in the browser language** (Bugfix; source: 004 Edge
-  Cases): Confirmed on system 2026-11-04 (004 verification): after an antibiotic is selected, the placeholder "MHK
-  auswählen..." is posted as value, so saving without a measurement is blocked with "The Feld Messwert muss eine Zahl
-  enthalten." until the antibiotic is reset. In an English browser the scale reads "0.75": no result is derived, no
-  breakpoint is preselected and the value cannot be saved. The field messages are half translated ("The Feld …").
+  Cases, 005 Edge Cases): Confirmed on system 2026-11-04 (004 verification): after an antibiotic is selected, the
+  placeholder "MHK auswählen..." is posted as value, so saving without a measurement is blocked with "The Feld Messwert
+  muss eine Zahl enthalten." until the antibiotic is reset. In an English browser the scale reads "0.75": no result is
+  derived, no breakpoint is preselected and the value cannot be saved. The field messages are half translated ("The
+  Feld …"). Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates (German browser; the English
+  case was not repeated).
 - **UX-012 – Agglutination discrepancy warning reacts only to changes of the evaluation** (Bugfix; source: 004 FR-008,
   SC-005, Edge Cases): Confirmed on system 2026-11-04 (004 verification): after the agglutination changes, the old
   warning stays although the evaluation now matches; a saved disagreement shows no warning on reopening. The warning
   quotes the internal letter "B" where the form shows "b".
+- **UX-013 – PubMLST lookup without stem number asks the remote databases for "DE -"** (Bugfix; source: 005 US3.3): The
+  form checks only that the prefixed reference is not empty, but an isolate without stem number has the reference
+  "DE -". Confirmed on system 2026-11-08 (005 verification, request blocked in the browser): "Abfragen" posted
+  `isolateReference=DE -` to the lookup, which would ask IRIS and the public PubMLST database (019 US2), and showed
+  "Isolat wurde nicht gefunden" only after the request failed.
+- **UX-014 – Meningococci isolate form label and message slips** (Bugfix; source: 005 Edge Cases): Confirmed on system
+  2026-11-08 (005 verification): the PubMLST tab labels porB as "'porB"; the 16S rDNA percentage message is repeated
+  under PorA-VR2 whenever the PorA fields are shown (the field reuses the 16S message slot).
 
 ## REF — Refactoring and legacy debt
 
@@ -353,14 +394,18 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   sending controllers compute the next stem number, but the switch that enables it is `false` for every submission
   type, so intake leaves the stem number empty and it is entered on the isolate page. Confirmed on system 2026-10-30
   (002 and 003 verifications). Specs 002 and 003 described automatic stem numbers; both are corrected.
-- **REF-019 – E-Test row construction** (Refactoring; source: 004 FR-006): The final sort of the rows discards its
-  result, so empty standard rows keep the order of `PrimaryAntibiotics_Haemophilus` after the saved rows; the row
-  template emits its script once per row and hard-codes the free row; it repeats the scale selection in JavaScript
-  (marked TODO in code); the warning script sets an unused global `invalid`. The susceptibility derivation lives in the
-  page script, so no unit test reaches it (see also REF-002).
-- **REF-020 – api NH and MALDI-TOF (VITEK MS) have no entry path** (Refactoring; source: 004 FR-005): The api NH entry
-  was removed from the form, but its three fields stay on the model and in the laboratory export. VITEK is read-only,
-  yet its validation rules and hidden fields remain. **decided 2026-11-07** (owner): the stored values are still
+- **REF-019 – E-Test row construction** (Refactoring; source: 004 FR-006, 005 US2.4): The final sort of the rows
+  discards its result, so empty standard rows keep the order of `PrimaryAntibiotics_Haemophilus` after the saved rows;
+  the row template emits its script once per row and hard-codes the free row; it repeats the scale selection in
+  JavaScript (marked TODO in code); the warning script sets an unused global `invalid`. The susceptibility derivation
+  lives in the page script, so no unit test reaches it (see also REF-002). Confirmed on system 2026-11-08 (005
+  verification) for Meningococci isolates: saved rows come sorted (Cefotaxim, Azithromycin, Penicillin), the empty
+  standard rows follow in the order of `PrimaryAntibiotics_Meningococci`, and the free row offers yet another order.
+- **REF-020 – api NH and MALDI-TOF (VITEK MS) have no entry path** (Refactoring; source: 004 FR-005, 005 FR-003): The
+  api NH entry was removed from the form, but its three fields stay on the model and in the laboratory export. VITEK is
+  read-only, yet its validation rules and hidden fields remain. Confirmed on system 2026-11-08 (005 verification) for
+  Meningococci isolates (no api NH there): VITEK shown read-only, posted back as hidden values; a request with
+  "Determined" and no details redisplays the form without a visible message. **decided 2026-11-07** (owner): the stored values are still
   needed for old records and stay read-only. The Biotyper replaced the VITEK MS for MALDI-TOF from a cut-over date on. A
   cleaner architecture for such legacy device data may follow later; until then this entry is a refactoring
   candidate only.

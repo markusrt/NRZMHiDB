@@ -80,3 +80,5 @@ listed, add it here in the same commit.
 | `When I open the isolate of the submission "<lab no>"` | 004 | Find the submission by its "Labnr. Einsender" in the list search and click its "Labor-Nr" link. |
 | `When I select "<value>" in the E-Test row "<antibiotic>"` | 004 | Choose the measured value in the row of this antibiotic. |
 | `Then the E-Test row "<antibiotic>" shows "<result>"` | 004 | The row of this antibiotic shows this susceptibility result. |
+| `Given a Meningococci breakpoint for "<antibiotic>" with "Sensibel <=" "<value>" and "Resistent >" "<value>" exists` | 005 | Create the breakpoint for Meningococci on `/EucastClinicalBreakpoints/Create` if no current one with these limits exists (details with the prefix `SV-005-`). |
+| `When I open the isolate of the Meningococci submission "<lab no>"` | 005 | Find the submission by its "Labnr. Einsender" in the Meningococci list search (`/MeningoPatientSending`) and click its "Labor-Nr" link. |

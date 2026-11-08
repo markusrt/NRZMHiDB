@@ -40,6 +40,26 @@ namespace HaemophilusWeb.Automapper
             isolate.Sending.Material.Should().Be(expectedMaterial);
         }
 
+        // specs/005 FR-011: growth on either agar leaves the material of the submission unchanged
+        [TestCase(Growth.TypicalGrowth, Growth.No)]
+        [TestCase(Growth.No, Growth.ATypicalGrowth)]
+        public void ProcessViewModelToModel_AnyGrowth_KeepsMaterial(Growth growthOnBloodAgar, Growth growthOnMartinLewisAgar)
+        {
+            var sut = new MeningoIsolateViewModelMappingAction();
+            var isolateViewModel = new MeningoIsolateViewModel
+            {
+                LaboratoryNumber = "001/26",
+                GrowthOnBloodAgar = growthOnBloodAgar,
+                GrowthOnMartinLewisAgar = growthOnMartinLewisAgar
+            };
+            var isolate = CreateEmptyIsolate();
+            isolate.Sending.Material = MeningoMaterial.VitalStem;
+
+            sut.Process(isolateViewModel, isolate, null);
+
+            isolate.Sending.Material.Should().Be(MeningoMaterial.VitalStem);
+        }
+
         [Test]
         public void ProcessModelToViewModel_ConvertsEnumValuesToDescription()
         {
