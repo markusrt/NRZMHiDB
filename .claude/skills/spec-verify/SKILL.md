@@ -268,6 +268,20 @@ Practical notes for this application:
   event; `page.request` responses cannot be written to disk.
 - After clicking a submit button, a further `page.evaluate` fails with "Execution context was
   destroyed"; read a button's state after submit inside the same `evaluate` (via `setTimeout`).
+- Every page has a second form (logout in the layout): address fields and buttons by `id` or name,
+  and uploads with `form[enctype="multipart/form-data"]`, never with a bare `form` selector.
+- Scaffolded pages (`/Patient`, `/Sending`, `/MeningoSending`, `/County`) are reachable by address;
+  probe them with `page.request.get`, and delete only your own records there. They save empty text
+  fields as NULL, so test empty fields deliberately. Whether such a page validates in the browser
+  shows only by counting the POST requests per click (the server renders the same messages).
+- IIS Express answers PUT, DELETE and PATCH with 404.0 at every address, and MVC's `HttpNotFound`
+  also shows the IIS page, while an unknown action shows the ASP.NET page; compare like with like.
+- Background requests (`X-Requested-With: XMLHttpRequest`) without the required role get HTTP 200
+  with an empty body and a header `X-Responded-JSON` carrying status 401, not a redirect.
+- Unit-test notes: `ConfigurationManager.AppSettings.Remove` throws (read-only); restore the old value
+  (also `null`) with the indexer. A user store with passwords is substituted as
+  `Substitute.For<IUserStore<T>, IUserPasswordStore<T>>()`. `System.Web.Mvc.CompareAttribute` gives no
+  member name; use `Validator.TryValidateProperty` for it.
 - Failed inserts consume identity values; look up the ids of your records with SQL instead of
   assuming "last + 1".
 - Form values containing `<…>` are rejected by ASP.NET request validation with HTTP 500 ("Ein
