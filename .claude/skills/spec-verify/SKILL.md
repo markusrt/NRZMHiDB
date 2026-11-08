@@ -277,8 +277,14 @@ Practical notes for this application:
   quote them as observed and say that they are framework messages.
 - `sed -i` in Git Bash turns CRLF into LF; edit CRLF files with the edit tool or restore the line
   endings before committing.
-- Keep `sqlcmd` calls and file operations (`Remove-Item`, `Move-Item`) in separate shell calls; the
-  combination is blocked by the path guard.
+- Run file operations (`Remove-Item`, `Move-Item`) in shell calls of their own, never combined with
+  `sqlcmd`, Python or other commands; the path guard blocks such combinations.
+- The seeded Haemophilus patients have no gender; pages that format a patient in long form (e.g.
+  the merge summary) fail on them (UX-018). Use own patients for such flows.
+- Scratch assemblies: compile with the Roslyn `csc.exe` of the Visual Studio found by `vswhere`
+  (`MSBuild\Current\Bin\Roslyn`), reference `System.Web`, `System.ComponentModel.DataAnnotations` and
+  `System.Data` from the .NET Framework 4.8 reference assemblies plus the DLLs in
+  `HaemophilusWebTests\bin\Debug`, and copy those DLLs next to the output.
 - Data with identical patient details: intake blocks a third patient with the same initials, birth
   date and postal code (002 FR-012). Create further submissions for an existing patient with
   "Bestehenden Patienten verwenden" while only one matching record exists.
