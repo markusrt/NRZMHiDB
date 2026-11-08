@@ -216,6 +216,13 @@ Practical notes for this application:
   validation, a hidden link, a direct address, a missing role). A request no form can produce
   (e.g. only the token without the record's fields) is out of scope: no row, no verdict; mention it
   under "Open questions" only when it changes or exposes data.
+- The MCP browser context may still be signed in from an earlier run: call `ctx.clearCookies()`
+  before the first sign-in, and check unauthenticated access only in a fresh context.
+- Report data (`var documentData`, the `#ReportSigner` options) can be read from the page source
+  fetched with `page.request.get` on the report address; that request does not run the page script
+  and therefore sends no `QueryHealthOffice`.
+- Last-write-wins behavior is shown with a second tab in the same context
+  (`await page.context().newPage()`).
 - Check role behavior in a separate browser context instead of signing out and in:
   `const ctx = await page.context().browser().newContext(); const p2 = await ctx.newPage();`, sign
   in there with the second account, and close the context afterwards.
