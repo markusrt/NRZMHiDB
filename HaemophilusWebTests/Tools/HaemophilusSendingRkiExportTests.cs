@@ -144,6 +144,72 @@ namespace HaemophilusWeb.Tools
         }
 
 
+        // specs/012 FR-010: identifier removal keeps the indirect patient attributes of the RKI layout.
+        [Test]
+        public void DataTable_KeepsIndirectPatientColumnsAfterCleanup()
+        {
+            var col = new RkiExportColumns();
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            new DuplicatePatientResolver(col).RemovePatientData(export);
+
+            var columns = export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).ToList();
+            columns.Should().NotContain(new[] {col.Initials, col.DateOfBirth, col.PostalCode});
+            columns.Should().Contain(new[]
+            {
+                col.BirthMonth, col.BirthYear, col.Sex, col.County, col.CountyNumber, col.State, col.StateNumber,
+                col.SenderId, col.DemisId, col.SampleDate, col.ReceivedDate
+            });
+        }
+
+        // specs/012 Edge Cases (empty-strain removal never takes effect): the RKI serotype/evaluation value is never
+        // empty, whatever the evaluation.
+        [Test]
+        public void DataTable_SerotypeIsNeverEmpty([Values] Evaluation evaluation)
+        {
+            Sending.Isolate.Evaluation = evaluation;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0][new RkiExportColumns().Serotype].ToString().Should().NotBeNullOrEmpty();
+        }
+
+        // specs/012 FR-006, Edge Cases (stem numbers compared as numbers in the RKI export), US1.6: with the RKI
+        // layout the stem numbers are ordered numerically (999 before 1000), the German receiving date is read, the
+        // identical strain received ten days later is dropped and the remaining two rows of the patient form a group.
+        [Test]
+        public void CleanOrMarkDuplicates_WithRkiLayout_KeepsLowerNumericStemNumberAndMarksGroup()
+        {
+            var first = CreateSendingOfSamePatient(1000, new DateTime(2020, 1, 15), Evaluation.HaemophilusTypeB);
+            var second = CreateSendingOfSamePatient(999, new DateTime(2020, 1, 5), Evaluation.HaemophilusTypeB);
+            var third = CreateSendingOfSamePatient(1001, new DateTime(2020, 1, 20), Evaluation.HaemophilusNonEncapsulated);
+            var col = new RkiExportColumns();
+            var export = CreateExportDefinition().ToDataTable(new List<Sending> {second, first, third});
+
+            new DuplicatePatientResolver(col).CleanOrMarkDuplicates(export);
+
+            export.Rows.Count.Should().Be(2);
+            export.Rows[0][col.StemNumber].Should().Be(999);
+            export.Rows[1][col.StemNumber].Should().Be(1001);
+            export.Rows[0][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 1");
+            export.Rows[1][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 1");
+            export.Columns.Contains(col.Initials).Should().BeFalse();
+        }
+
+        private Sending CreateSendingOfSamePatient(int stemNumber, DateTime receivingDate, Evaluation evaluation)
+        {
+            var sending = CreateInstance<Sending>();
+            sending.Patient = Sending.Patient;
+            sending.SamplingLocation = SamplingLocation.Blood;
+            sending.ReceivingDate = receivingDate;
+            sending.SamplingDate = receivingDate.AddDays(-2);
+            sending.Isolate.StemNumber = stemNumber;
+            sending.Isolate.Evaluation = evaluation;
+            sending.Isolate.BetaLactamase = TestResult.Negative;
+            sending.Isolate.EpsilometerTests.Clear();
+            return sending;
+        }
+
         private HaemophilusSendingRkiExport CreateExportDefinition()
         {
             return new HaemophilusSendingRkiExport(Counties);

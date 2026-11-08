@@ -257,6 +257,7 @@
     <Compile Include="Tools\MeningoStateAuthorityExportTests.cs" />
     <Compile Include="Tools\MeningoSendingLaboratoryExportTests.cs" />
     <Compile Include="Tools\DuplicatePatientResolverTests.cs" />
+    <Compile Include="Tools\CreateExcelFileTests.cs" />
     <Compile Include="Tools\RkiMatchImporterTests.cs" />
     <Compile Include="Tools\CountyImporterTests.cs" />
     <Compile Include="Tools\RkiToolTests.cs" />

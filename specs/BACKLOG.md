@@ -84,10 +84,13 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **DEC-009 – Duplicate-submission window in adjusted exports** (Decision; source: 012 Edge Cases, FR-006): Code
   comments describe "less than six months", the implementation compares only the month component of the date
   difference (drops < 1 month and whole-year distances, keeps 1–11 months). Offen: which rule is intended, so that
-  DATA-001 can be fixed and tested?
+  DATA-001 can be fixed and tested? Observed on system 2026-11-08 (012 verification, no decision taken): an identical
+  strain received 3 months and 5 days after the kept submission stayed in the adjusted RKI export.
 - **DEC-010 – Export duplicate rules for Meningococci** (Decision; source: 012 Edge Cases, 011): No Meningococci export
   applies duplicate cleaning or identifier removal; the Meningococci RKI page accepts but ignores the "unadjusted"
-  setting. Offen: should Meningococci RKI/IRIS get the same pseudonymization as Haemophilus RKI/PubMLST?
+  setting. Offen: should Meningococci RKI/IRIS get the same pseudonymization as Haemophilus RKI/PubMLST? Observed on
+  system 2026-11-08 (012 verification, no decision taken): the Meningococci RKI file for 2020 has the same rows and
+  columns with and without `Unadjusted=Yes`; no Meningococci file has a `duplicate_group` column.
 - **DEC-011 – Report pages open to every signed-in account** (Decision; source: 008, 009 Edge Cases, 021 US4.4): See
   SEC-004; the decision is whether report generation stays available to roles other than Standard User at all.
 - **DEC-012 – Where to keep D1–D5** (Decision; **decided 2026-10-30**): Moved to the constitution (v1.2.0, section
@@ -149,16 +152,25 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 ## DATA — Data correctness and privacy
 
 - **DATA-001 – Duplicate-submission window compares only the month component** (Bugfix after DEC-009; source: 012
-  Edge Cases, FR-006).
+  Edge Cases, FR-006). Confirmed on system 2026-11-08 (012 verification): of four identical-strain submissions of
+  one patient, the one received 10 days after the first was dropped, the one received 3 months and 5 days later was
+  kept (the documented six-month rule would drop it); the whole-year case was not exercised.
 - **DATA-002 – Duplicate matching over-merges patients without birth date and postal code** (Bugfix; source: 012 Edge
   Cases): Same initials and gender with both identifiers empty are one patient; the four values are concatenated
-  without separator (collision risk).
+  without separator (collision risk). Confirmed on system 2026-11-08 (012 verification): two separate patient
+  records "Q.Q." (same gender, no birth date, no postal code) with identical strains received 7 days apart; the
+  second submission was missing from the adjusted RKI and PubMLST files.
 - **DATA-003 – PubMLST export compares stem numbers as text** (Bugfix; source: 012 Edge Cases): "H1000" sorts before
-  "H999", so the "earlier" submission is chosen by text order; RKI compares numerically.
+  "H999", so the "earlier" submission is chosen by text order; RKI compares numerically. Confirmed on system
+  2026-11-08 (012 verification): for four identical-strain submissions H9998, H9999, H10000, H10001 of one patient
+  the adjusted RKI file kept 9998 and 10000, the adjusted PubMLST file kept only H10000 (H10000 was taken as the
+  earliest and H9998/H9999, received three months before it, were dropped).
 - **DATA-004 – PubMLST export selection and encoding defects** (Bugfix; source: 011 Edge Cases, 012): Hint promises
   overseas data and all locations in unadjusted mode but both are always excluded; overseas check uses the free-text
   county ("Ausland") instead of the state; state "Ausland" yields region `blood`; H. haemolyticus is exported
-  although marked "not to be exported"; the adjusted-mode removal of non-invasive rows is a no-op.
+  although marked "not to be exported"; the adjusted-mode removal of non-invasive rows is a no-op. Confirmed on
+  system 2026-11-08 (012 verification) for the no-op: an "Anderer nicht invasiv" submission is in the laboratory
+  export and missing from the PubMLST file in both modes.
 - **DATA-005 – Unknown birth date exported as age 0** (Bugfix; source: 011 Edge Cases, 023): Indistinguishable from an
   infant under one month in PubMLST, IRIS and EpiScanGIS.
 - **DATA-006 – "Gelöschte Einsendungen (Haemophilus)" lists active submissions** (Bugfix; source: 020 US2, Edge Cases
@@ -304,6 +316,13 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   discrepant or not yet entered results are exported as Meningococci cases. Observed on system 2026-11-08 (007
   verification): six invasive submissions without a rule (empty "Regel" in the laboratory export) appeared in the RKI
   export for November 2026. Related: DEC-005 (rule 32). Offen: should unmatched results be excluded, flagged, or kept?
+- **DATA-040 – Editing a submission stores duplicate patient identities without a check** (Bugfix; source: 002
+  FR-015, 012 Edge Cases): Intake checks initials, birth date and postal code against existing patients and blocks a
+  third record (002 FR-011), but the edit save of a submission changes these values without any check. Observed on
+  system 2026-11-08 (012 verification): two "X.Y." patients created with other birth dates were edited to the birth
+  date of two existing "X.Y." patients, leaving four patient records with identical values; the exports group them
+  as one patient (012 FR-003). The intake rejects every further submission with these values ("Es existieren bereits
+  zwei Patienten …"; observed with two records, from code for any number above one). Related: DATA-031.
 
 ## UX — Robustness and user feedback
 
@@ -450,7 +469,13 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   "30a"/"31a" (the "30a"/"30b" cases select rule 01b); several tests draw inputs at random
   (`GetRandomNegativeOrInhibitory` and similar), so each run checks a different combination. The added test
   `Interpret_RepresentativeInput_SelectsDocumentedRule` asserts the rule identifier and typing order for every
-  reachable rule.
+  reachable rule. 012 (verification 2026-11-08): tests with fixed dates added for the undisputed parts of the
+  duplicate rules (10 days dropped, 7 months kept, reference replacement, all four strain characteristics, case-
+  sensitive matching, group cells, unadjusted mode, empty selection) and one with the RKI layout; the disputed window
+  distances (DEC-009) and the export actions' mode choice stay untested, and the wall-clock test is unchanged.
+  Flaky: `Tools/HaemophilusPubMlstExportTests.DataTable_ContainsAntibioticMeasurements("CTX", Cefotaxime,
+  Susceptible, …)` failed once in the full suite (found "I") and passed on rerun; `Setup` adds a random E-test, and when
+  it has the same antibiotic it is found first.
 - **TEST-003 – Decision-table rows derived from code only** (Test; source: 006 Decision Table note): Haemophilus
   interpretation rows 4 and 7 and the unmatched combinations have no test; the null-submission failure is untested.
   Addressed 2026-11-08 (006 verification): `Domain/IsolateInterpretationTests` now asserts rows 4 and 7, the unmatched

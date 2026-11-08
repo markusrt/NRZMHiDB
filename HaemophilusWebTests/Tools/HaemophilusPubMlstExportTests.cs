@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.TestUtils;
@@ -316,6 +317,37 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["sex"].Should().Be(expectedValue);
+        }
+
+        // specs/012 FR-009, FR-010: identifier removal drops exactly the three direct identifiers of the PubMLST layout
+        // and keeps the indirect patient attributes.
+        [Test]
+        public void DataTable_RemovePatientData_KeepsIndirectPatientColumns()
+        {
+            var col = new PubMlstColumns();
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            new DuplicatePatientResolver(col).RemovePatientData(export);
+
+            var columns = export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).ToList();
+            columns.Should().HaveCount(42);
+            columns.Should().NotContain(new[] {col.Initials, col.DateOfBirth, col.PostalCode});
+            columns.Should().Contain(new[]
+            {
+                col.AgeInYears, col.AgeInMonths, col.Sex, col.Region, col.Year, col.SampleDate, col.ReceivedDate
+            });
+        }
+
+        // specs/012 Edge Cases (empty-strain removal never takes effect): the PubMLST serotype value is never empty,
+        // whatever the evaluation.
+        [Test]
+        public void DataTable_SerotypeIsNeverEmpty([Values] Evaluation evaluation)
+        {
+            Sending.Isolate.Evaluation = evaluation;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0][new PubMlstColumns().Serotype].ToString().Should().NotBeNullOrEmpty();
         }
 
         private static HaemophilusPubMlstExport CreateExportDefinition()
