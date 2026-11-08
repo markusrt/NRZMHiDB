@@ -180,7 +180,9 @@ repository root instead. Move the screenshots to `specs/NNN-*/verification/` at 
 click the export button; the MCP server saves every download in `.playwright-mcp/` on its own. When
 you also call `download.saveAs(…)`, delete the automatic copy (same name with a hyphenated suffix)
 so each export is kept once. Move the files to `specs/NNN-*/verification/` too and inspect them with
-the shell (an `.xlsx` is a zip: read `xl/sharedStrings.xml` and `xl/worksheets/sheet1.xml`). Before
+the shell (an `.xlsx` is a zip: read `xl/sharedStrings.xml` and `xl/worksheets/sheet1.xml`; the
+helper `python -I .claude/skills/spec-verify/xlsx_dump.py <file> header` prints the header, and
+`… <file> table "Col A,Col B"` prints the chosen columns, `#` marking numeric cells). Before
 committing, `git status` must show no stray `.png` or export in the repository root.
 
 Practical notes for this application:
@@ -255,6 +257,15 @@ Practical notes for this application:
   "Bestehenden Patienten verwenden" while only one matching record exists.
 - New Haemophilus and Meningococci submissions get a laboratory number of the year of saving, not of
   the sampling date (002 FR-003); plan date-range checks with that in mind.
+- Exports: earlier verifications leave records in the current year and in 2020. Put your own export
+  records into a year nobody uses (pick one, check it is empty with SQL, and name it in the report).
+  Row selection lives in the controllers and has no unit tests, so it is verified through the file;
+  column names and order are verified by tests that assert the full header, not only its count.
+  A Meningococci isolate with default values matches the "kein Nachweis" rule and drops out of the
+  RKI, IRIS and LGA exports; for an included case enter growth, for a positive one the inputs of the
+  rule the seeded MZ004/20 uses. Counties are not seeded: create them through the UI when a column
+  needs them and delete them afterwards. Warnings (e.g. county not found) are written to
+  `HaemophilusWeb/Logs/<date>.txt`; leftover export files to `%TEMP%`.
 - A signed-in account without the required role is redirected to `/Account/Login?ReturnUrl=…`
   (HTTP 302), not shown a 403 page. Missing views and unhandled errors show as HTTP 500. The host
   runs with detailed errors, so it shows the ASP.NET error page with the exception; production may
