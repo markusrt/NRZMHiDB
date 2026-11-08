@@ -52,9 +52,15 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   Confirmed on system 2026-11-08 for the exports (011 verification): `Admin1` sees the full Export menu (both
   "Einsender Export" entries and the seven exports of 011), and every one of the seven export addresses, form and
   direct run, redirects it to the sign-in page.
+  Confirmed on system 2026-11-08 for the sender exports (013 verification): `Admin1` sees both "Einsender Export"
+  entries, and both addresses, form and direct run, redirect it to the sign-in page.
 - **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
   Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
   include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
+  Observed on system 2026-11-08 (013 verification, no decision): the seeded sender "SV-Seed-DEC-002" appears in the
+  2020 sender exports with "Anzahl Einsendungen" 2, "Labornummern" "KL002/20,KL003/20" and "MZ002/20,MZ003/20"
+  (KL003/20 and MZ003/20 soft-deleted); an own sender with three active and one soft-deleted Haemophilus submission in
+  2022 shows 4 and lists the deleted one; a sender whose only submission in the range is soft-deleted is not listed.
 - **DEC-003 – "Gültig für = Allgemein" breakpoints** (Decision; source: 017 Edge Cases): Storable, never offered for
   either pathogen. Offen: dead value to remove, or should such records apply to both pathogens?
 - **DEC-004 – Haemophilus interpretation: growth "Ja"/"Nein" wording** (Decision; source: 006 FR-012/FR-013,
@@ -137,7 +143,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   verification) for the Meningococci report-status marking: the page posts only `id` and `preliminary` to
   `/MeningoReport/ReportGenerated/`, without token, and the status is stored. Confirmed on system 2026-11-08 (011
   verification) for the exports: a GET with a date range returns the spreadsheet (e.g. the Haemophilus laboratory
-  export), and a POST of only the dates without token returns the Meningococci RKI file.
+  export), and a POST of only the dates without token returns the Meningococci RKI file. Confirmed on system
+  2026-11-08 (013 verification) for both sender exports: a GET with a date range returns the Haemophilus sender file,
+  and a POST of only the dates without token returns the Meningococci sender file.
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
@@ -162,7 +170,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   server's temp directory; exports and the RKI match file contain patient data (Principle IV). Confirmed on system
   2026-11-08 (011 verification): every export run of the verification left one `tmp*.tmp` file in the temp directory
   of the account running IIS Express, a spreadsheet of the same size as the downloaded file (e.g. 5318 bytes for the
-  Haemophilus laboratory export of 2024), still present after the download.
+  Haemophilus laboratory export of 2024), still present after the download. Confirmed on system 2026-11-08 (013
+  verification) for both sender exports: each of the nine runs left a `tmp*.tmp` spreadsheet of the downloaded file's
+  size (e.g. 2394 bytes for the Haemophilus sender export of 2022).
 - **SEC-013 – Combined submission form binds every patient and sending property** (Bugfix; source: 002 FR-021; 003
   FR-023): Create and edit have no list of intended fields. Confirmed on system 2026-10-30 (002 verification): a create
   request with `Sending.Deleted=true` stores the new submission as deleted. Confirmed on system 2026-10-30 (003
@@ -292,7 +302,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   Cases): Absent equals absent in the comparison; all three exports then assign its number and the Meningococci
   exports log no warning.
 - **DATA-026 – "Anzahl Einsendungen" written as text** (Bugfix; source: 013 Edge Cases): The generic spreadsheet writer
-  treats only certain numeric types as numbers.
+  treats only certain numeric types as numbers. Confirmed on system 2026-11-08 (013 verification): both sender exports
+  write "Anzahl Einsendungen" as a text cell and "Einsendernummer" as a numeric cell.
 - **DATA-027 – Empty signer list is accepted and blocks all reporting** (Bugfix; source: 018 US1.5, Edge Cases, untagged
   there): No warning on save; afterwards every report attempt fails the required-selection check.
 - **DATA-030 – Server-side initials check accepts free text** (Bugfix; source: 002 FR-007, Edge Cases; 003 FR-007,
@@ -467,6 +478,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   "Table1", observed 2026-11-08 in the 011 verification); Meningococci
   RKI model carries an ignored "unadjusted" field; PubMLST reuses the IRIS-named query (source TODO); sender export
   matches the range twice with diverging deletion handling and loads unused patient data; no explicit row ordering.
+  013 verification 2026-11-08: the sender export files also show "Table1"; rows came in ascending sender number and
+  the numbers within a row in ascending submission order, which nothing in the code guarantees.
 - **REF-006 – Breakpoints maintained as unversioned runtime data** (Refactoring; source: 017 Edge Cases): Authoritative
   reference data without review step, history or audit (Principle I).
 - **REF-007 – Health-office records saved without validation and then unsavable** (Refactoring; source: 016 Edge Cases):
@@ -542,7 +555,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   record, result page and matching page; EpiScanGIS date window, "Blut und Liquor" exclusion, deleted submissions,
   missing coordinates and failures; RKI match controller, unknown status word, non-numeric cells, lab-number-only
   rows, soft-deleted submissions, all-or-nothing; county pages and upload (025; the importer, matching and exports are
-  tested).
+  tested). Sender export: covered by tests added in the 013 verification (2026-11-08) for file name, column headers,
+  selection by sampling or receiving date and row content of non-deleted submissions; the counting of soft-deleted
+  submissions (DEC-002) stays untested on purpose.
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

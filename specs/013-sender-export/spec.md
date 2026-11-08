@@ -75,8 +75,8 @@ Only users with the Standard User role can run the sender exports; the navigatio
 
 ### Edge Cases
 
-- A request without a start date always shows the form pre-filled with the previous calendar year, even if an end date was supplied; an unparseable start date behaves the same way and shows no error message (same as spec 011).
-- A start date later than the end date, or a missing end date, is not rejected; the download contains only the header row. The same holds when no sender had a submission in the range.
+- A request without a start date always shows the form pre-filled with the previous calendar year, even if an end date was supplied, and shows no message. An unparseable start date (typed into the form or given in the address) also shows the pre-filled form, replacing the submitted end date, together with the binding message "Start-Datum ist kein gültiger Wert für abc." (same as spec 011).
+- A start date later than the end date, or a missing end date, is not rejected; the download contains only the header row. A missing end date appears as `00010101` in the file name (e.g. `Einsender-Meningokokken-Export_20220101-00010101.xlsx`). The same holds when no sender had a submission in the range.
 - The end date is compared as a calendar date at the start of the day; for date-only values the end day is included (same assumption as spec 011).
 - The page heading reads "Entnahmedatum der Einsendung(en)" (sampling date), although submissions without a sampling date are matched by their receiving date.
 - Sender rows are not explicitly sorted; their order is whatever the database returns. Within a row, stem and laboratory numbers are listed in the order the submissions are returned, which is likewise not explicitly defined, but the two lists are positionally aligned. [POTENTIAL-REFACTORING]
@@ -91,10 +91,10 @@ Only users with the Standard User role can run the sender exports; the navigatio
 - The export form embeds an anti-forgery token, but the export accepts any request method and does not verify the token (same as spec 011). [POTENTIAL-REFACTORING]
 - If writing the spreadsheet fails, the failure is only traced and the user still receives the (empty or partial) temporary file as a normal download, with no error shown; failures while assembling the rows surface as an error page (same as spec 011). [SUSPECTED-DEFECT]
 - Each export writes a temporary file on the server that is not deleted afterwards, so exported sender contact data remains in the server's temporary directory (relevant to Constitution Principle IV; same as spec 011). [POTENTIAL-REFACTORING]
-- The single worksheet is not given an explicit name (same as spec 011). [POTENTIAL-REFACTORING]
+- The single worksheet is not given an explicit name; it appears as "Table1", the default name of the underlying table (same as spec 011). [POTENTIAL-REFACTORING]
 - Both sender exports are reachable for Administrator-only accounts through the menu but refused by authorization (accounts are registered with exactly one role; same pattern as spec 011). [SUSPECTED-DEFECT]
 - The sender export (as well as the per-sender aggregation) lives in the shared sender controller rather than in a service, and the two pathogen variants exist as parallel controllers over the same shared sender directory (Constitution, "Known Architectural Constraints": parallel domains and god-controllers). [POTENTIAL-REFACTORING]
-- No automated test covers the sender export; the existing sender controller tests cover only the delete warning.
+- Automated tests cover the form default (previous calendar year), the file name, the 14 column headers in order, the sender selection by sampling or receiving date, and the row content for non-deleted submissions; the inclusion of soft-deleted submissions (DEC-002) and the text cell of "Anzahl Einsendungen" are deliberately not covered by tests.
 
 ## Requirements *(mandatory)*
 
@@ -174,11 +174,11 @@ Only users with the Standard User role can run the sender exports; the navigatio
 
 ## Assumptions
 
-- Current application code and views are the source of truth for this inventory; no production data or deployment configuration was inspected, and no automated test of the sender export exists to confirm behavior.
+- Current application code and views are the source of truth for this inventory; no production data or deployment configuration was inspected. The behavior was verified against the running application and partly by automated tests on 2026-11-08 (see `verification.md`).
 - Sampling and receiving dates are stored as date-only values, so the end date of the range is effectively inclusive (same assumption as spec 011).
-- Sender rows and the order of numbers within a row follow the database's default return order, which in practice is assumed to be ascending sender number and ascending submission identifier respectively; this is not guaranteed by the implementation.
+- Sender rows and the order of numbers within a row follow the database's default return order, which in practice is assumed to be ascending sender number and ascending submission identifier respectively (observed so in the 2026-11-08 verification); this is not guaranteed by the implementation.
 - Every submission has an isolate record, because isolates are created together with submissions (specs 002–005); the failure behavior for a submission without one was derived from the code, not exercised.
-- A refused request for an authenticated user is assumed to lead back to the login page (standard behavior of the authentication setup; same assumption as spec 011).
+- A refused request for an authenticated user leads to the sign-in page (HTTP 302 to `/Account/Login?ReturnUrl=…`), as does any sender export request without sign-in (verified 2026-11-08; same as spec 011).
 - Whether an Administrator account can also hold the Standard User role was not established beyond the observation that registration assigns exactly one role (same as spec 011).
 - Inclusion of soft-deleted submissions in the per-sender values is recorded as observed behavior; whether it is intended is left to review.
 - Generic mechanism properties (date parsing, form defaults, error handling, temporary files, worksheet naming) were verified to use the same shared code path as the exports in spec 011 and are therefore stated consistently with it.

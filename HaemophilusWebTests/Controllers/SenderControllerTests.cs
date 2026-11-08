@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
+using System.Reflection;
 using System.Web.Mvc;
 using FluentAssertions;
 using HaemophilusWeb.Mocks;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.TestUtils;
+using HaemophilusWeb.Tools;
 using HaemophilusWeb.ViewModels;
 using NUnit.Framework;
 
@@ -148,6 +151,113 @@ namespace HaemophilusWeb.Controllers
             var query = (FromToQuery)result.Model;
             query.From.Should().Be(new DateTime(lastYear, 1, 1));
             query.To.Should().Be(new DateTime(lastYear, 12, 31));
+        }
+
+        private static readonly string[] DocumentedSenderExportColumns =
+        {
+            "Einsendernummer", "Name", "Abteilung", "Straße", "Postleitzahl", "Ort", "Telefon #1", "Telefon #2",
+            "Fax", "E-Mail", "Bemerkung", "Anzahl Einsendungen", "Stammnummern", "Labornummern"
+        };
+
+        private static readonly FromToQuery Range2022 =
+            new FromToQuery {From = new DateTime(2022, 1, 1), To = new DateTime(2022, 12, 31)};
+
+        // specs/013 FR-006, FR-007, FR-010, US1.2, US1.6, SC-004: file name per pathogen and the 14 columns in order
+        [TestCase(false, "Einsender-Haemophilus-Export_20220101-20221231.xlsx")]
+        [TestCase(true, "Einsender-Meningokokken-Export_20220101-20221231.xlsx")]
+        public void Export_WithRange_WritesDocumentedFileNameAndColumns(bool meningococci, string expectedFileName)
+        {
+            var db = CreateIsolatedDb(new Sender {SenderId = 1, Name = "SV-013"});
+            var controller = meningococci
+                ? (System.Web.Mvc.ControllerBase)new MeningoSenderController(db)
+                : new SenderController(db);
+
+            var result = meningococci
+                ? ((MeningoSenderController)controller).Export(Range2022)
+                : ((SenderController)controller).Export(Range2022);
+            var table = SenderExportTable(controller, Range2022);
+
+            ((FileContentResult)result).FileDownloadName.Should().Be(expectedFileName);
+            table.Columns.Cast<DataColumn>().Select(c => c.ColumnName).Should().Equal(DocumentedSenderExportColumns);
+        }
+
+        // specs/013 FR-003, FR-005, US1.3, US1.4, US2.2, SC-002: active senders with an active submission of the
+        // pathogen whose sampling date (or, without one, receiving date) lies in the range, both ends inclusive
+        [Test]
+        public void Export_SelectsActiveSendersBySamplingOrReceivingDateOfThePathogen()
+        {
+            var db = CreateIsolatedDb(
+                new Sender {SenderId = 1}, new Sender {SenderId = 2}, new Sender {SenderId = 3},
+                new Sender {SenderId = 4, Deleted = true}, new Sender {SenderId = 5}, new Sender {SenderId = 6});
+            AddSending(db, 1, 1, sampled: new DateTime(2022, 1, 1), received: new DateTime(2022, 1, 3));
+            AddSending(db, 2, 1, sampled: new DateTime(2022, 12, 31), received: new DateTime(2023, 1, 2));
+            AddSending(db, 3, 2, sampled: null, received: new DateTime(2022, 12, 31));
+            AddSending(db, 4, 3, sampled: new DateTime(2021, 12, 31), received: new DateTime(2022, 1, 2));
+            AddSending(db, 5, 3, sampled: null, received: new DateTime(2023, 1, 1));
+            AddSending(db, 6, 4, sampled: new DateTime(2022, 3, 10), received: new DateTime(2022, 3, 12));
+            db.MeningoSendings.Add(new MeningoSending
+            {
+                MeningoSendingId = 1, SenderId = 5, SamplingDate = new DateTime(2022, 5, 10),
+                ReceivingDate = new DateTime(2022, 5, 12), Isolate = new MeningoIsolate()
+            });
+
+            var table = SenderExportTable(new SenderController(db), Range2022);
+
+            table.Rows.Cast<DataRow>().Select(r => r["Einsendernummer"]).Should().Equal(1, 2);
+        }
+
+        // specs/013 FR-006, FR-007, US1.7, US2.1, US2.3: current contact data, then count, stem numbers without prefix
+        // ("-" when absent) and prefixed laboratory numbers of the export's pathogen only, in the same order
+        [Test]
+        public void Export_RowListsContactDataAndNumbersOfThePathogenOnly()
+        {
+            var db = CreateIsolatedDb(new Sender
+            {
+                SenderId = 7, Name = "SV-013-Alpha", Department = "SV-013 Abteilung", StreetWithNumber = "Teststraße 13",
+                PostalCode = "97080", City = "Würzburg", Phone1 = "0931 1300", Phone2 = "0931 1301",
+                Fax = "0931 1302", Email = "sv013@example.org", Remark = "SV-013-neu"
+            });
+            AddSending(db, 1, 7, new DateTime(2022, 1, 1), new DateTime(2022, 1, 3), stemNumber: 31301, sequentialNumber: 24);
+            AddSending(db, 2, 7, null, new DateTime(2022, 12, 31), stemNumber: null, sequentialNumber: 25);
+            db.MeningoSendings.Add(new MeningoSending
+            {
+                MeningoSendingId = 1, SenderId = 7, SamplingDate = new DateTime(2022, 5, 10),
+                ReceivingDate = new DateTime(2022, 5, 12),
+                Isolate = new MeningoIsolate {StemNumber = 31301, YearlySequentialIsolateNumber = 20, Year = 2026}
+            });
+
+            var haemophilusRow = SenderExportTable(new SenderController(db), Range2022).Rows.Cast<DataRow>().Single();
+            var meningoRow = SenderExportTable(new MeningoSenderController(db), Range2022).Rows.Cast<DataRow>().Single();
+
+            haemophilusRow.ItemArray.Should().Equal(7, "SV-013-Alpha", "SV-013 Abteilung", "Teststraße 13", "97080",
+                "Würzburg", "0931 1300", "0931 1301", "0931 1302", "sv013@example.org", "SV-013-neu", 2L,
+                "31301,-", "KL024/26,KL025/26");
+            meningoRow.ItemArray.Skip(11).Should().Equal(1L, "31301", "MZ020/26");
+        }
+
+        private static void AddSending(SenderDbStub db, int sendingId, int senderId, DateTime? sampled,
+            DateTime received, int? stemNumber = null, int sequentialNumber = 1)
+        {
+            db.Sendings.Add(new Sending
+            {
+                SendingId = sendingId, SenderId = senderId, SamplingDate = sampled, ReceivingDate = received,
+                Isolate = new Isolate {StemNumber = stemNumber, YearlySequentialIsolateNumber = sequentialNumber, Year = 2026}
+            });
+        }
+
+        /// <summary>
+        ///     Runs the export's sender selection and column definition (private members of the shared base
+        ///     controller) and returns the table that the spreadsheet writer receives.
+        /// </summary>
+        private static DataTable SenderExportTable(System.Web.Mvc.ControllerBase controller, FromToQuery query)
+        {
+            var baseType = controller.GetType().BaseType;
+            const BindingFlags flags = BindingFlags.NonPublic | BindingFlags.Instance;
+            var senders = (List<Sender>)baseType.GetMethod("SendersMatchingExportQuery", flags)
+                .Invoke(controller, new object[] {query});
+            var definition = (ExportDefinition<Sender>)baseType.GetMethod("CreateExportDefinition", flags)
+                .Invoke(controller, new object[] {query});
+            return definition.ToDataTable(senders);
         }
 
         private static SenderDbStub CreateIsolatedDb(params Sender[] senders)

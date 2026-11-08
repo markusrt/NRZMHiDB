@@ -27,6 +27,7 @@ listed, add it here in the same commit.
 | --- | --- |
 | `Given I am signed in as "<account>"` | Sign in via `/Account/Login` with the seeded account (password `123456`). A later step of this kind signs in again as the new account. |
 | `When I open "<address>"` | Navigate to an address relative to the host. |
+| `Given I am not signed in` | Use a browser session without sign-in (overrides the Background sign-in). |
 | `Then I am on "<address>"` | The current address path equals the given one (query ignored). |
 | `Then I am on the sign-in page` | The current address is `/Account/Login` (unauthorized accounts are redirected there). |
 | `Then the page title is "<title>"` | The page heading (`h1`) equals the text. |
@@ -38,6 +39,7 @@ listed, add it here in the same commit.
 | `When I click "<text>"` | Click the link or button with this visible text. |
 | `When I click the button "<text>"` | Click the submit button with this text when a link has the same text. |
 | `When I click "<text>" in the row "<row text>"` | Click a link or button inside the table row that contains the row text. |
+| `When I click "<text>" in the menu section "<section>"` | In the open navigation drop-down, click the entry with this text below the section header (e.g. "Haemophilus", "Meningokokken") when several entries share the text. |
 | `When I enter "<value>" into "<label>"` | Fill the field with this label. |
 | `When I enter "<value>" into the search field "<placeholder>"` | Fill the search field showing this placeholder (list searches without labels). |
 | `When I select "<option text>" in "<label>"` | Choose the entry of the selection list with this label whose text contains the option text. |
@@ -50,6 +52,7 @@ listed, add it here in the same commit.
 | --- | --- |
 | `Then I see "<text>"` | The text is visible on the page. |
 | `Then I see the link "<text>"` | A link with this text is visible. |
+| `Then I do not see the link "<text>"` | The navigation and the page contain no link with this text, also not inside closed drop-downs. |
 | `Then I see the validation message "<text>"` | A field validation message with this text is shown. |
 | `Then I see the search field "<placeholder>"` | A search field showing this placeholder is visible (list searches without labels). |
 | `Then "<label>" contains <value description>` | The field with this label holds the described value (e.g. "January 1st of the previous year"). |
@@ -96,3 +99,4 @@ listed, add it here in the same commit.
 | `Then the Meningococci submission list row "<search text>" shows the report status "<status>"` | 009 | As above, in the Meningococci submission list (`/MeningoPatientSending`). |
 | `Given a submission with sender laboratory number "<lab no>", sampling location "<location>" and sampling date "<date>" exists` | 011 | Create a Haemophilus submission with this "Labnr. Einsender", "Entnahmeort" (for "Anderer …" also an "Anderer Entnahmeort" text with the prefix `SV-011-`) and "Entnahmedatum" through the UI if missing (sender `SV-001-Alpha`, synthetic patient). |
 | `Given two submissions of patient "<initials>" born "<date>" with postal code "<code>", sampled "<date>" and received "<date>", exist` | 012 | Create two Haemophilus submissions ("Blut", isolate defaults) through intake if missing; the second one with "Bestehenden Patienten verwenden", so both belong to one patient and have identical strain characteristics. |
+| `Given a submission of sender "<name>" with sampling date "<date>" exists` | 013 | Create a Haemophilus submission ("Blut", isolate defaults, "Labnr. Einsender" with the prefix `SV-013-`) for this sender and "Entnahmedatum" through the UI if missing (synthetic patient). |
