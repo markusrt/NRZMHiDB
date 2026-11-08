@@ -259,8 +259,12 @@ Practical notes for this application:
   the sampling date (002 FR-003); plan date-range checks with that in mind.
 - Exports: earlier verifications leave records in the current year and in 2020. Put your own export
   records into a year nobody uses (pick one, check it is empty with SQL, and name it in the report).
-  Row selection lives in the controllers and has no unit tests, so it is verified through the file;
-  column names and order are verified by tests that assert the full header, not only its count.
+  Row selection lives in the controllers and is verified through the file; where the query uses only
+  `IApplicationDbContext`, a test with own in-memory sets can assert it too (EF `Include` does nothing
+  there; private members can be reached by reflection). Column names and order are verified by tests
+  that assert the full header, not only its count. Intake assigns no stem number: for exports with
+  stem numbers enter them on the isolate form (`#StemNumber`, then `primary-submit`). Export pages
+  show their title as `h1`.
   A Meningococci isolate with default values matches the "kein Nachweis" rule and drops out of the
   RKI, IRIS and LGA exports; for an included case enter growth, for a positive one the inputs of the
   rule the seeded MZ004/20 uses. Counties are not seeded: create them through the UI when a column
