@@ -18,8 +18,9 @@
 > referenced instead: sign-in, roles, and anti-forgery rules (spec 021, User Stories 4.6 and 7.5, access matrix row
 > "RKI match import \"RKI Matching Daten\""); the Haemophilus laboratory export as a whole (spec 011, User Story 1
 > scenario 5); the assignment and uniqueness of stem and laboratory numbers (spec 004); soft-deleted submissions
-> (spec 020). The feature has no counterpart for Meningococci. No running system was exercised; everything is derived
-> from code, version history, the change log, and the automated tests. No secret values are reproduced.
+> (spec 020). The feature has no counterpart for Meningococci. The spec was derived from code, version history, the
+> change log, and the automated tests, and verified against the running application with synthetic match files on
+> 2026-11-08 (see `verification.md`); no real RKI file was used. No secret values are reproduced.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -41,7 +42,8 @@ with an unknown status word; observe the page, the feedback line, and the stored
 
 1. **Given** any signed-in account, **When** the page is requested by direct address, **Then** the page "RKI Matching
    Daten" opens inside the normal page frame with the role's navigation; it offers one file field labelled "CSV Datei"
-   and one button "Upload"; nothing else is shown and no previous import is listed.
+   and one button "Upload"; nothing else is shown and no previous import is listed. The page sets no title of its own,
+   so the browser tab reads "Haemophilus Web -" with nothing after the dash.
 2. **Given** the page, **Then** it is not linked from any menu or page (navigation reviewed: the menus "Export",
    "PubMLST", and "Administration" and the Public Health menu contain no entry for it; spec 021, User Story 7.5).
 3. **Given** no session, **When** the page or the upload is requested, **Then** it is refused (redirected to the
@@ -54,14 +56,19 @@ with an unknown status word; observe the page, the feedback line, and the stored
    shown regardless of how many rows matched a submission — also when no row matched. [POTENTIAL-REFACTORING]
 6. **Given** a file of zero length, **When** it is uploaded, **Then** nothing is imported and "File Uploaded
    Successfully!!" is shown nevertheless.
-7. **Given** no file is chosen, **When** "Upload" is pressed, **Then** the page shows "File upload failed: Object
-   reference not set to an instance of an object." (derived from code and framework behavior: the missing file arrives
-   as "no file" and the length check fails on it; not exercised). [SUSPECTED-DEFECT]
+7. **Given** no file is chosen, **When** "Upload" is pressed, **Then** the page shows "File upload failed: " followed by
+   the framework's object-reference message in the server's language (the missing file arrives as "no file" and the
+   length check fails on it); on a German server: "File upload failed: Der Objektverweis wurde nicht auf eine
+   Objektinstanz festgelegt." [SUSPECTED-DEFECT]
 8. **Given** the import fails for any reason (User Story 6), **Then** the page shows "File upload failed: `<message>`"
-   where `<message>` is the technical message of the failure, in English, and nothing of the file is stored.
+   where `<message>` is the technical message of the failure and nothing of the file is stored. Messages of the status
+   helper and of the reading library are English (for example "Input string was not in a correct format."); messages
+   of the framework follow the server's language (scenario 7), so one line can mix English and German.
 9. **Given** the uploaded file, **Then** its name and extension are not checked; the automated tests use the extension
-   `.asc`. The file is first written to a temporary file in the server's temporary folder and read from there; that
-   temporary file is not deleted afterwards (derived from code; not exercised). [SUSPECTED-DEFECT]
+   `.asc`, the verification `.csv`. A non-empty file is first written to a temporary file (`tmp*.tmp`) in the temporary
+   folder of the account running the application and read from there; that temporary file is not deleted afterwards
+   (one file per non-empty upload, of the uploaded file's size). A file of zero length is not written.
+   [SUSPECTED-DEFECT]
 
 ---
 
@@ -81,27 +88,31 @@ Story 4.
 **Acceptance Scenarios**:
 
 1. **Given** the file, **Then** it is read as UTF-8 text, one row per line, columns separated by semicolons, with the
-   first line as header; columns are identified by their header name, not by position (derived from the reading
-   library; the test file carries the headers in the order shown). Double-quoted values are accepted as the library
-   defines them (derived; not exercised).
+   first line as header; columns are identified by their header name, not by position (the test file carries the
+   headers in the order shown). A UTF-8 byte order mark and Windows line ends (CR LF) are accepted. Double-quoted values
+   are accepted, so a quoted file number may contain a semicolon (`"SV-024-AZ;J2"` is stored as `SV-024-AZ;J2`).
 2. **Given** the header, **Then** the recognized columns are `InterneRef`, `Aktenzeichen`, `StatusName`, `klhi_nr`,
-   `LaufendeNummer`, and `Jahr` (see "File columns"); columns with other names are ignored, and a recognized column
-   that is absent is treated as empty in every row.
+   `LaufendeNummer`, and `Jahr` (see "File columns"), regardless of the case of the header names (for example
+   `KLHI_NR`); columns with other names are ignored, and a recognized column that is absent is treated as empty in
+   every row.
 3. **Given** a row, **Then** `InterneRef`, `klhi_nr`, `LaufendeNummer`, and `Jahr` are read as whole numbers; an empty
    cell means "not given"; a negative number is accepted as a number (the test file uses `-12` and `-234` as stem
    numbers that match nothing).
-4. **Given** a row whose numeric cell contains text that is not a whole number, **Then** reading fails and the whole
-   import ends with "File upload failed: `<message>`" (derived from the reading library; not covered by a test).
+4. **Given** a row whose numeric cell contains text that is not a whole number, **Then** reading fails before any row
+   is applied and the whole import ends with "File upload failed: Input string was not in a correct format.", whatever
+   the row would have matched.
 5. **Given** the column `StatusName`, **Then** its value is interpreted as one of the four RKI match states (see
    "RKI match states"): the German words "kein Match", "möglich", "wahrscheinlich", "definitiv" regardless of case;
    also accepted by the shared helper are the internal English names (None, Possible, Probable, Definite), the
    numbers 0–3, and any text that is the beginning of one of the German words (for example "mög"); an empty cell
-   means "kein Match" (derived from the shared helper; the test file covers the four German words and the empty
-   cell). [POTENTIAL-REFACTORING]
-6. **Given** a `StatusName` that none of these rules accept, **Then** the import fails with the helper's message,
-   shown as "File upload failed: 'xyz' is not a valid value for 'RkiStatus'; valid values are 'None (0), Possible (1),
-   Probable (2), Definite (3)'" (derived from code; not covered by a test). Because the failure ends the whole import,
-   one unknown word in one row prevents every other row from being stored (User Story 6).
+   means "kein Match". The test file covers the four German words; its row with an empty status carries no stem number
+   and is skipped. [POTENTIAL-REFACTORING]
+6. **Given** a `StatusName` that none of these rules accept in a row that is applied (a submission was found, it was
+   received in 2009 or later, and `InterneRef` is given; User Story 3), **Then** the import fails with the helper's
+   message, shown as "File upload failed: 'xyz' is not a valid value for 'RkiStatus'; valid values are 'None (0),
+   Possible (1), Probable (2), Definite (3)'". Because the failure ends the whole import, one unknown word in such a row
+   prevents every other row from being stored (User Story 6). The status of a row that is skipped is never
+   interpreted: an unknown word there does not stop the import.
 7. **Given** a file with no data rows, or a file whose header matches no recognized column, **Then** nothing is
    stored and "File Uploaded Successfully!!" is shown.
 
@@ -138,9 +149,11 @@ number and year, (d) with a stem number of a submission received in 2008, (e) wi
    without `InterneRef` is skipped (test: last row of the test file).
 6. **Given** the lookup by stem number or by laboratory number finds more than one submission, **Then** the import
    fails ("Sequence contains more than one element") and nothing is stored. Stem and laboratory numbers are kept
-   unique by the isolate form (spec 004), so this is not expected for active data (derived from code; not exercised).
+   unique by the isolate form (spec 004), so this is not expected for active data (not producible through the UI;
+   asserted by a unit test).
 7. **Given** a soft-deleted submission (spec 020) with the given stem or laboratory number, **Then** it is found and
-   updated like an active one; the deletion mark is not consulted (derived from code; not covered by a test).
+   updated like an active one; the deletion mark is not consulted (observed on the running system; not covered by a
+   test).
    [POTENTIAL-REFACTORING]
 8. **Given** a stem number that occurs in several rows, **Then** every row is processed in file order against the same
    submission (User Story 4).
@@ -200,15 +213,16 @@ one without; compare the three RKI columns.
 1. **Given** the Haemophilus laboratory export (spec 011, User Story 1 scenario 5: "the RKI match reference, file
    number, and status"), **Then** its last three columns are "RKI InterneRef", "RKI Aktenzeichen", and "RKI Status",
    after "Bemerkung (Isolat)".
-2. **Given** a submission with a record, **Then** the columns carry the stored reference as number, the file number as
+2. **Given** a submission with a record, **Then** the columns carry the stored reference as digits in a text cell (not
+   a numeric cell), the file number as
    text, and the state as its German word ("kein Match", "möglich", "wahrscheinlich", "definitiv"; test: "möglich").
 3. **Given** a submission without a record, **Then** "RKI InterneRef" and "RKI Aktenzeichen" are empty and "RKI
    Status" is "kein Match" — the same word as a stored state "kein Match"; the export does not distinguish "never
-   matched by the RKI" from "matched with result: no match" (derived from code; not covered by a test).
+   matched by the RKI" from "matched with result: no match".
 4. **Given** the Haemophilus RKI export, the PubMLST export, the sender exports, the submission pages, the isolate
    page, and the report (specs 004, 008, 011, 013), **Then** none of them shows or exports the RKI match record.
 5. **Given** a Haemophilus patient merge (spec 014), **Then** the record stays with its submission, which moves to the
-   kept patient; the merge does not touch it (derived from the record's ownership; not covered by a test).
+   kept patient; the merge does not touch it (observed on the running system; not covered by a test).
 
 ---
 
@@ -239,7 +253,8 @@ Inspect the application log afterwards.
    Platform Constraints on logging). [POTENTIAL-REFACTORING]
 4. **Given** a file larger than the platform's default request size (about 4 MB; no explicit limit is configured),
    **Then** the request is rejected before the page runs, with the generic error page rather than the "File upload
-   failed" line (derived from configuration and framework behavior; not exercised).
+   failed" line: HTTP 500 with the framework's message, on a German server "Maximale Anforderungslänge überschritten.";
+   the rejection is not written to the application log either.
 5. **Given** two uploads of the same file, **Then** the second changes nothing (every row meets an equal state and
    rewrites the same values) and reports success again.
 
@@ -251,16 +266,21 @@ Inspect the application log afterwards.
   this feature.
 - **Row with `klhi_nr` of a submission received before 2009 and a laboratory number of a newer one**: The stem-number
   path finds the old submission first, so the laboratory-number path is not tried and the row is skipped because of
-  the 2009 rule (derived from code; not exercised).
+  the 2009 rule.
 - **Same `InterneRef` in rows for different stem numbers**: Each submission receives its own record with the same
   reference; the reference is not required to be unique.
 - **Status word with surrounding spaces**: Not trimmed by the helper; " möglich" with a leading space is not the
-  beginning of any German word and fails the import (derived from the shared helper; not exercised).
-- **Header spelled differently** (for example `KLHI_NR` or `Klhi_Nr`): Whether the column is still recognized depends
-  on the reading library's name matching and is not fixed by a test; the test file uses the exact spellings listed
-  under "File columns".
+  beginning of any German word and fails the import when the row is applied ("File upload failed: ' möglich' is not a
+  valid value for 'RkiStatus'; …").
+- **Header spelled differently** (for example `KLHI_NR` or `Klhi_Nr`): The column is still recognized; header names
+  are matched regardless of case. Other spellings (for example `Stamm` for `klhi_nr`) are not recognized, and their
+  rows are skipped.
 - **Semicolon inside the file number**: `Aktenzeichen` is free text; an unquoted semicolon shifts the following columns
-  of that row (derived from the separator rule; not exercised).
+  of that row; when text lands in a numeric column (for example the status word in `klhi_nr`), the whole import fails
+  with "Input string was not in a correct format.". A quoted value may contain the semicolon (User Story 2.1).
+- **File from a Windows program**: A UTF-8 byte order mark before the header and CR LF line ends are read like a plain
+  file. A file in another encoding (for example Windows-1252) is read as UTF-8, so "möglich" would not be recognized
+  (derived from the reading setting; not exercised).
 - **Global separator setting**: Reading the file switches the shared text-table separator of the application to the
   semicolon and leaves it so; today no other function reads or writes such tables, so nothing else is affected
   (derived from code). [POTENTIAL-REFACTORING]
@@ -273,10 +293,12 @@ Inspect the application log afterwards.
   updating in one unit, which the tests exercise with a substituted in-memory database. The code comment of the
   importer still describes `klhi_nr` as the submission number, which it was until 2018-03-18; since then it is the stem
   number. The tests cover the four German status words and the empty cell, the stem-number and laboratory-number
-  paths, the 2009 rule, the "best status wins" rule with an existing record, and several submissions per file; they
-  do not cover the page itself (no test exists for the page group), unknown status words, non-numeric cells, rows with
-  laboratory number but without stem number, soft-deleted submissions, or the all-or-nothing behavior (the test
-  database applies changes without a transaction). [POTENTIAL-REFACTORING]
+  paths, the 2009 rule, the "best status wins" rule with an existing record, several submissions per file, and (added
+  in the 024 verification, 2026-11-08) unknown status words in applied and skipped rows, non-numeric cells,
+  upper-case headers, a file without byte order mark and with CR LF, an ambiguous lookup, the use of one transaction,
+  and the page's success and failure lines; they do not cover rows with laboratory number but without stem number,
+  soft-deleted submissions, the upload without a file, the temporary file, or the rollback itself (the test database
+  applies changes without a transaction; the rollback was observed on the running system). [POTENTIAL-REFACTORING]
 
 ## Requirements *(mandatory)*
 
@@ -293,7 +315,8 @@ Inspect the application log afterwards.
   numbers and MUST end the import with a failure when a numeric cell cannot be read as a whole number.
 - **FR-004**: The application MUST interpret `StatusName` as one of the four states "kein Match", "möglich",
   "wahrscheinlich", "definitiv" (case-insensitive; empty means "kein Match"; the shared helper's further accepted
-  forms are documented in User Story 2.5) and MUST end the import with a failure for any other value.
+  forms are documented in User Story 2.5) for every row that is applied (FR-005, FR-006) and MUST end the import with
+  a failure for any other value in such a row; the status of a skipped row is not interpreted.
 - **FR-005**: The application MUST skip every row without `klhi_nr`, MUST look up the Haemophilus submission whose
   isolate has the stem number `klhi_nr`, and, when none exists and both `LaufendeNummer` and `Jahr` are given, MUST
   look up the submission whose isolate has this yearly sequential number and year.
@@ -351,7 +374,7 @@ below rank 0, so the first applied row always writes.
 | Ambiguity | Exactly one submission per lookup | Import failed: more than one submission found |
 | Receiving date | 2009-01-01 or later | Skipped: received before 2009 |
 | Reference | `InterneRef` filled | Skipped: empty |
-| State | Interpretable `StatusName` | Import failed: unknown word |
+| State | Interpretable `StatusName` (checked only for rows that passed the steps above) | Import failed: unknown word |
 | Rank | Row rank ≥ stored rank (or no record yet) | Skipped: row rank lower than stored |
 
 ### Roles and Boundaries
@@ -406,18 +429,19 @@ below rank 0, so the first applied row always writes.
   2018-03-12 "Small fixes to RKI match export", 2018-03-18 "New requirements for RKI match import"), the change log
   ("Über" page data: "Import-Funktion für RKI Match Datensätze", feature, 2018-02-20; "Überarbeitung der RKI Match
   Funktion (Duplikate, Matching mit Labornummer).", feature, 2018-03-18), and the automated tests are the source of
-  truth. No running system was exercised and no real RKI file was available; the file layout is known from the
-  importer and its test table only.
-- Header-based column recognition, acceptance of quoted values, the failure on non-numeric cells, and the
-  case-sensitivity of header names are derived from the behavior of the reading library and are not fixed by tests.
+  truth. No real RKI file was available; the file layout is known from the importer and its test table only. The
+  behavior was verified on 2026-11-08 against the running application with synthetic files built in that layout
+  (`verification.md`); whether real RKI files follow it is not known.
+- Header-based column recognition (regardless of case), acceptance of quoted values, byte order mark and CR LF, and the
+  failure on non-numeric cells were observed on the running system and are asserted by unit tests.
 - The further accepted status forms (English names, numbers 0–3, word prefixes) and the exact failure message for an
-  unknown status word are derived from the shared enumeration helper; the tests cover only the four German words and
-  the empty cell.
-- The behavior when no file is chosen (technical "object reference" message), when the request exceeds the platform's
-  default size, when a lookup is ambiguous, and when a soft-deleted submission is matched is derived from code and
-  framework behavior; none of it is exercised or tested.
-- The left-over temporary file is derived from the absence of a delete step; the server's temporary folder and its
-  housekeeping are outside the application.
+  unknown status word come from the shared enumeration helper; they were observed on the running system ("Probable",
+  "3", "mög"); the helper's own tests cover names and prefixes in general.
+- The upload without a file, the request above the platform's default size, and the matching of a soft-deleted
+  submission were observed on the running system; the ambiguous lookup cannot be produced through the UI and is
+  asserted by a unit test.
+- The left-over temporary file was observed on the running system; the server's temporary folder and its housekeeping
+  are outside the application.
 - The import is assumed to be the only writer of RKI match records and the Haemophilus laboratory export the only
   reader; a search over the application's pages and exports found no other use.
 - Spec 021 is taken as authoritative for sign-in, role, and anti-forgery behavior and is referenced, not re-derived;

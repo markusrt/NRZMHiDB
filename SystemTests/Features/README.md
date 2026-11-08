@@ -46,6 +46,7 @@ listed, add it here in the same commit.
 | `When I choose "<option>" for "<label>"` | Pick the radio button or toggle with this text in the group with this label. |
 | `When I open the edit page of "<name>"` | Open the edit page of the record with this name from its list. |
 | `When I open the tab "<text>"` | Show the tab of the current form with this title (e.g. "PubMLST" on the Meningococci isolate form), not a menu entry of the same text. |
+| `When I choose a file "<name>" for "<label>" with the lines:` | Put a UTF-8 text file with this name and the lines of the following doc string (LF line ends, no byte order mark) into the file field with this label; the file is created by the test, never taken from real data. |
 | `When I choose the suggestion "<text>" for "<label>"` | Pick the entry with this text from the field's suggestion list (browser datalist), as a user does with the mouse or arrow keys; the field fires one change with the full text. |
 
 ### Assertions

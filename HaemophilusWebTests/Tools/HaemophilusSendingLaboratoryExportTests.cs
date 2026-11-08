@@ -116,6 +116,21 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["RKI Status"].Should().Be("möglich");
         }
 
+        // specs/024 FR-011, US5.3: without RKI match record the reference and file number stay empty and the status
+        // reads "kein Match", the same word as a stored state None
+        [Test]
+        public void DataTable_WithoutRkiMatchRecord_ShowsEmptyReferenceAndKeinMatch()
+        {
+            var sut = CreateExportDefinition();
+            Sending.RkiMatchRecord = null;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["RKI InterneRef"].Should().Be(System.DBNull.Value);
+            export.Rows[0]["RKI Aktenzeichen"].Should().Be(System.DBNull.Value);
+            export.Rows[0]["RKI Status"].Should().Be("kein Match");
+        }
+
         [Test]
         public void DataTable_ContainsRealTimePcrFields()
         {

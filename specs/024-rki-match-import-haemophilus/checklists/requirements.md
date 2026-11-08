@@ -64,3 +64,16 @@
   can never be lowered or removed and no page shows or edits it; failures are not logged; no trace of an import at all
   (Constitution Principle I); the shared text-table separator is switched process-wide and left so; importer logic in
   one unit with manually created database access and test gaps incl. no test for the page).
+- Verification 2026-11-08: Checked against the running application with synthetic match files (see
+  `verification.md`). User Story 2.6, FR-004 and the "State" row of the matching summary now say that the status word
+  is interpreted only for rows that are applied; an unknown word in a skipped row does not stop the import (was: any
+  unknown word fails the import). User Stories 1.7 and 1.8: the failure message follows the server's language for
+  framework errors (German "Der Objektverweis wurde nicht auf eine Objektinstanz festgelegt." for an upload without
+  file) and is English for the status helper and the reading library (was: English). User Story 2.1 and the new Edge
+  Case "File from a Windows program": byte order mark, CR LF and quoted values are accepted. User Story 2.2 and the
+  Edge Case "Header spelled differently": header names are recognized regardless of case (was: open). User Story 2.5:
+  the empty-status row of the test table is skipped (no stem number), so the test table does not cover the empty
+  cell (was: covered). User Story 5.2: the reference is written as digits in a text cell (was: as number). User Story
+  1.1: the page sets no title ("Haemophilus Web -"). User Story 1.9, 3.6, 3.7, 5.3, 5.5, 6.4, the Edge Cases on
+  pre-2009 stem numbers, surrounding spaces and semicolons, the Assumptions and the test-coverage statement of the
+  Edge Case "Architecture" now say what was observed or is asserted by the tests added in this verification.

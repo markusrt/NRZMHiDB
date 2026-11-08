@@ -137,7 +137,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   page; `Rki1` generated a "Teilbefund" document there, which set the isolate to "Teilbefund". Confirmed on system
   2026-11-08 (009 verification) for Meningococci: `Rki1` and `Admin1` open `/MeningoReport/Isolate/16` (HTTP 200, patient
   initials and postal code shown) while `/MeningoIsolate/Edit/16` and `/MeningoPatientSending` redirect them to the
-  sign-in page; `Rki1` generated a "Fax - Teilbefund - v2.docx" document, which set MZ012/26 to "Teilbefund".
+  sign-in page; `Rki1` generated a "Fax - Teilbefund - v2.docx" document, which set MZ012/26 to "Teilbefund". Confirmed
+  on system 2026-11-08 (024 verification): `Rki1` and `Admin1` open `/RkiMatch` (HTTP 200, page "RKI Matching Daten"),
+  and an upload by `Rki1` was processed ("File Uploaded Successfully!!").
 - **SEC-005 – Anti-forgery token not verified on state-changing actions** (Bugfix; source: 021 Edge Cases
   "consolidated"; 002 FR-021, 003 FR-023, 008 FR-015, 009 FR-016, 011, 013, 014, 015, 016, 019, 020, 022, 024): Not verified on the combined
   submission create/edit saves, all exports (also any request method), both patient merges (a single request merges
@@ -157,7 +159,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   verification) for both postal-code lookups: the forms post only `postalCode`/`placeName` and `postalCodePrefix`,
   without token, and get the answer (HTTP 200). Reproduced at unit level 2026-11-08 (019 verification) for the PubMLST
   lookup: the isolate form posts only `isolateReference` (request held in the browser), and the lookup action carries
-  no token check.
+  no token check. Confirmed on system 2026-11-08 (024 verification) for the RKI match import: the upload form carries no
+  token, and every upload of the verification was processed.
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
@@ -191,7 +194,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   size (e.g. 2394 bytes for the Haemophilus sender export of 2022). EpiScanGIS (023 verification, 2026-11-08): a
   successful run deletes its temporary file (unit test `Download_SavesNothingAndLeavesNoTemporaryFile`); an aborted run
   (network failure, non-JSON answer, submission without isolate) leaves an empty `tmp*.tmp` file (reproduced at unit
-  level).
+  level). Confirmed on system 2026-11-08 (024 verification) for the RKI match upload: each of the 18 non-empty uploads
+  left a `tmp*.tmp` copy of the uploaded file (same size, synthetic content) in the temp directory of the account
+  running IIS Express; a zero-length upload and a request above the size limit left none.
 - **SEC-013 – Combined submission form binds every patient and sending property** (Bugfix; source: 002 FR-021; 003
   FR-023): Create and edit have no list of intended fields. Confirmed on system 2026-10-30 (002 verification): a create
   request with `Sending.Deleted=true` stores the new submission as deleted. Confirmed on system 2026-10-30 (003
@@ -310,7 +315,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   "Graefenhainichen" (service: "Gräfenhainichen") and "Unbekannt" left out; a PorA VR1 "22;…" adds a column and a line
   break in FetA VR adds a line. See also DATA-041.
 - **DATA-021 – RKI match import skips rows without `klhi_nr`** (Bugfix; source: 024 US3.1): The laboratory-number
-  fallback is reached only via a stem-number row; "Upload" without a file ends in an object-reference message.
+  fallback is reached only via a stem-number row; "Upload" without a file ends in an object-reference message. Confirmed
+  on system 2026-11-08 (024 verification): a row with `LaufendeNummer`/`Jahr` of an existing submission and an empty
+  `klhi_nr` created no record; "Upload" without a file shows "File upload failed: Der Objektverweis wurde nicht auf eine
+  Objektinstanz festgelegt." (the framework message in the server's language).
 - **DATA-022 – Postal-code lookup overwrites a foreign residence** (Bugfix; source: 022 Edge Cases): Typing a postal code
   resets "Bundesland" away from "Ausland" and overwrites "Wohnort"/"Landkreis"; the Meningococci state/country check
   then rejects the save. Confirmed on system 2026-11-08 (022 verification): on the Meningococci submission form with
@@ -480,7 +488,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   address and only the first lookup's postal code; details/delete pages are untranslated and unlinked; the RKI website
   is queried before local records on every lookup (unreachable website → nothing shown).
 - **UX-006 – RKI match import always reports "File Uploaded Successfully!!"** (Refactoring; source: 024 US1.5): Also
-  for zero matches or an empty file; failures never reach the application log.
+  for zero matches or an empty file; failures never reach the application log. Observed on system 2026-11-08 (024
+  verification): the success line also for a header-only file, a file with unknown headers and a file whose rows match
+  nothing; failures (unknown status word, non-numeric cell, no file, request above the size limit) left no entry in the
+  application log; failure lines mix English library messages with German framework messages; the page sets no title
+  (browser tab "Haemophilus Web -").
 - **UX-007 – PubMLST matching form defaults to the current year, result table unsorted, no progress or cancel**
   (Refactoring; source: 019 US1.2–1.3, Edge Cases): Exports default to the previous year. Confirmed on system
   2026-11-08 (019 verification): "Start-Datum" 01.01.2026 and "Ende-Datum" 31.12.2026; after the click the button
@@ -589,7 +601,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   lookups for 10 cases that yield 9 lines (two cases of one patient); a case with sampling date 2030-01-01 is exported.
 - **REF-013 – RKI match import internals** (Refactoring; source: 024 Edge Cases, US2.5, US3.7, US4.4): Lenient status
   parsing (English names, numbers, word prefixes); soft-deleted submissions matched; stored state can only be raised;
-  process-wide CSV separator switched to ";" and left so; no import trace (Principle I); stale code comment.
+  process-wide CSV separator switched to ";" and left so; no import trace (Principle I); stale code comment. Observed on
+  system 2026-11-08 (024 verification): "Probable", "3" and "mög" are accepted as status; a soft-deleted submission
+  received a record; a lower state from a later upload left the stored record unchanged.
 - **REF-014 – Configuration saved as five separate writes without history or concurrency check** (Refactoring; source:
   018 Edge Cases).
 - **REF-015 – Role seeding code never called; role page save without anti-forgery or rules** (Refactoring; source: 021
@@ -648,7 +662,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   record: covered by tests added in the 019 verification (2026-11-08), together with the period bounds, the save per
   found isolate, the kept link of an isolate not found, the repeated search on a later run, the single IRIS session
   and the lookup order of the controller; the result page and the matching page stay untested (their view is rendered
-  only after a run against PubMLST).
+  only after a run against PubMLST). RKI match import: covered by tests added in the 024 verification (2026-11-08) for
+  unknown status words in applied and skipped rows, the empty status, non-numeric cells, upper-case headers, a file
+  without byte order mark and with CR LF, an ambiguous lookup, the use of one transaction, a lower state against a
+  stored record, the export without record, and the page's success line for a zero-length file and its failure line;
+  lab-number-only rows (DATA-021), the upload without a file and soft-deleted submissions (REF-013) stay untested on
+  purpose; the rollback itself was observed on the system only.
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

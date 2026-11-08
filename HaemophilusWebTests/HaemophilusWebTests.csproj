@@ -225,6 +225,7 @@
     <Compile Include="Controllers\PatientSendingControllerTests.cs" />
     <Compile Include="Controllers\SendingControllerTests.cs" />
     <Compile Include="Controllers\HomeControllerTests.cs" />
+    <Compile Include="Controllers\RkiMatchControllerTests.cs" />
     <Compile Include="Domain\IsolateExtensionsTests.cs" />
     <Compile Include="Domain\MeningoIsolateInterpretationTests.cs" />
     <Compile Include="Domain\IsolateInterpretationTests.cs" />
