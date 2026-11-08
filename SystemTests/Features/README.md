@@ -54,6 +54,7 @@ listed, add it here in the same commit.
 | `Then I see the search field "<placeholder>"` | A search field showing this placeholder is visible (list searches without labels). |
 | `Then "<label>" contains <value description>` | The field with this label holds the described value (e.g. "January 1st of the previous year"). |
 | `Then a file named like "<pattern>" is downloaded` | A download starts whose file name matches the wildcard pattern. |
+| `Then no file is downloaded` | No download starts within a few seconds after the preceding action. |
 
 ### Domain steps
 
@@ -82,3 +83,4 @@ listed, add it here in the same commit.
 | `Then the E-Test row "<antibiotic>" shows "<result>"` | 004 | The row of this antibiotic shows this susceptibility result. |
 | `Given a Meningococci breakpoint for "<antibiotic>" with "Sensibel <=" "<value>" and "Resistent >" "<value>" exists` | 005 | Create the breakpoint for Meningococci on `/EucastClinicalBreakpoints/Create` if no current one with these limits exists (details with the prefix `SV-005-`). |
 | `When I open the isolate of the Meningococci submission "<lab no>"` | 005 | Find the submission by its "Labnr. Einsender" in the Meningococci list search (`/MeningoPatientSending`) and click its "Labor-Nr" link. |
+| `Then the report field "<label>" shows "<text>"` | 006 | On the report page ("Befund erstellen"), the value next to this label (e.g. "Teilbefund", "Befund") equals the text. |

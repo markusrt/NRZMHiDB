@@ -57,7 +57,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **DEC-004 – Haemophilus interpretation: growth "Ja"/"Nein" wording** (Decision; source: 006 FR-012/FR-013,
   test-asserted): With all typing not determined, growth "Ja" yields "Der eingesendete Stamm konnte nicht angezüchtet
   werden …", growth "Nein" yields "Kein Nachweis von Haemophilus influenzae." — inverse to the "Wachstum" label but
-  asserted by tests. Offen: intended laboratory semantics or long-standing defect?
+  asserted by tests. Offen: intended laboratory semantics or long-standing defect? Confirmed on system 2026-11-08 (006
+  verification): on the report page of an isolate with all typing "n.d.", "Wachstum" "Ja" shows "Der eingesendete Stamm
+  konnte nicht angezüchtet werden. Um Wiedereinsendung wird gebeten." with the disclaimer "Eine telefonische
+  Vorabmitteilung ist erfolgt."; "Nein" shows "Kein Nachweis von Haemophilus influenzae." with "Beim eingesendeten Isolat
+  handelt es sich am ehesten um NTHi.", because "Beurteilung" keeps its preselected "NTHi" unless the user changes it.
 - **DEC-005 – Meningococci native rule 32 and the NoMeningococci flag** (Decision; source: 007 FR-010, Edge Cases,
   test-asserted): An all-negative native-material result does not set the flag, so it counts as "Meningococci found"
   in the RKI/IRIS selection (011 FR-011). Related: rules 11, 14, 41 emit sequence rows without the sequencing-provider
@@ -190,7 +194,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   isolate is written back in full (overwrites concurrent edits); "Failed to match isolate by reference" is logged for
   every isolate including successes.
 - **DATA-017 – Haemophilus interpretation text contains the typo "phänotpischen"** (Bugfix; source: 006 FR-006,
-  test-asserted — the test must change too).
+  test-asserted — the test must change too). Confirmed on system 2026-11-08 (006 verification): the report page shows
+  "Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren Haemophilus influenzae (NTHi). …".
 - **DATA-018 – Meningococci interpretation rules without sequencing comment / shadowed rules** (Bugfix after DEC-005;
   source: 007 Edge Cases): Rules 11, 14, 41; native 30a/30b unreachable; rule 09's cnl case shadowed by rule 20.
 - **DATA-019 – Export spreadsheet write failure delivers a partial file silently** (Bugfix; source: 011, 013 Edge
@@ -420,9 +425,15 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   missing coordinates and failures; RKI match controller, unknown status word, non-numeric cells, lab-number-only
   rows, soft-deleted submissions, all-or-nothing; county pages and upload (025; the importer, matching and exports are
   tested).
-- **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases): The PubMLST empty-query test
+- **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;
-  "…MultipleMatches_ReturnsAllEntries" verifies that one entry is returned.
+  "…MultipleMatches_ReturnsAllEntries" verifies that one entry is returned. 006 (verification 2026-11-08):
+  "Interpret_DistinctAgglutinationWithNotDeterminedBexA_NotDeterminedSerotype_NonInvasive_IsSpecificPreliminaryTypingWithEmptyDisclaimer"
+  asserts the non-invasive note, not an empty disclaimer; the negative/negative test checks only the fragment
+  "nicht-typisierbar" (the exact text is now asserted by an added test).
 - **TEST-003 – Decision-table rows derived from code only** (Test; source: 006 Decision Table note): Haemophilus
   interpretation rows 4 and 7 and the unmatched combinations have no test; the null-submission failure is untested.
+  Addressed 2026-11-08 (006 verification): `Domain/IsolateInterpretationTests` now asserts rows 4 and 7, the unmatched
+  combinations, the disclaimer for every negative-agglutination combination and sampling location, and the failure
+  without a submission.

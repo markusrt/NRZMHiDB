@@ -49,3 +49,8 @@
   and unread fields), test-coverage note under the decision table. Tags added: 2x
   [SUSPECTED-DEFECT], 3x [POTENTIAL-REFACTORING] (obsolete-marked result fields, always-true guard
   condition, mapping-action TODO).
+- Verification 2026-11-08: verified against the running app (report page of a SV-006 isolate, discrepancy dialog,
+  generated preliminary report) and against unit tests; no spec deviation found. Updated the test-coverage note under
+  the decision table because the verification added tests for rows 4 and 7, the unmatched combinations, the
+  disclaimer per sampling location, and the failure without a submission (TEST-003). DATA-017 and DEC-004 observed on
+  the system. See `verification.md`.

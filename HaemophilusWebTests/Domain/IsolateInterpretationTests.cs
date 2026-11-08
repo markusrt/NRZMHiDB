@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using HaemophilusWeb.Models;
 using NUnit.Framework;
 
@@ -237,5 +238,264 @@ namespace HaemophilusWeb.Domain
                 .Contain("Beim eingesendeten Isolat handelt es sich am ehesten um Haemophilus sp., nicht H. influenzae.");
         }
 
+        private const string Discrepant = "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.";
+
+        private const string NonInvasiveDisclaimer =
+            "Eine molekularbiologische Typisierung und Resistenztestungen werden bei nicht-invasiven Isolaten aus epidemiologischen und Kostengründen nicht durchgeführt.";
+
+        private static string InvasiveDisclaimer(string category) =>
+            $"Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: {category}.";
+
+        private static Isolate CreateIsolate(SerotypeAgg agglutination, TestResult bexA, SerotypePcr serotypePcr,
+            SamplingLocation samplingLocation = SamplingLocation.Blood, YesNoOptional growth = YesNoOptional.NotStated)
+        {
+            return new Isolate
+            {
+                Agglutination = agglutination,
+                BexA = bexA,
+                SerotypePcr = serotypePcr,
+                Growth = growth,
+                Sending = new Sending { SamplingLocation = samplingLocation }
+            };
+        }
+
+        // specs/006 FR-003: a new isolate starts with typing "not determined" and growth "not stated"
+        [Test]
+        public void NewIsolate_StartsWithTypingNotDeterminedAndGrowthNotStated()
+        {
+            var isolate = new Isolate();
+
+            isolate.Agglutination.Should().Be(SerotypeAgg.NotDetermined);
+            isolate.BexA.Should().Be(TestResult.NotDetermined);
+            isolate.SerotypePcr.Should().Be(SerotypePcr.NotDetermined);
+            isolate.Growth.Should().Be(YesNoOptional.NotStated);
+        }
+
+        // specs/006 FR-002, FR-003: fields other than agglutination, bexA, serotype PCR, growth, evaluation and
+        // sampling location do not influence the result
+        [TestCase(SerotypeAgg.Negative, TestResult.Negative, SerotypePcr.B, YesNoOptional.Yes)]
+        [TestCase(SerotypeAgg.C, TestResult.Positive, SerotypePcr.C, YesNoOptional.No)]
+        [TestCase(SerotypeAgg.D, TestResult.NotDetermined, SerotypePcr.NotDetermined, YesNoOptional.Yes)]
+        [TestCase(SerotypeAgg.NotDetermined, TestResult.NotDetermined, SerotypePcr.NotDetermined, YesNoOptional.No)]
+        [TestCase(SerotypeAgg.Poly, TestResult.Positive, SerotypePcr.A, YesNoOptional.Yes)]
+        public void Interpret_FieldsOtherThanTheSixInputs_DoNotChangeTheResult(SerotypeAgg agglutination, TestResult bexA,
+            SerotypePcr serotypePcr, YesNoOptional growth)
+        {
+            var randomIsolate = new TestDataGenerator.Catalog().CreateInstance<Isolate>();
+            randomIsolate.Agglutination = agglutination;
+            randomIsolate.BexA = bexA;
+            randomIsolate.SerotypePcr = serotypePcr;
+            randomIsolate.Growth = growth;
+            randomIsolate.Evaluation = Evaluation.HaemophilusTypeC;
+            randomIsolate.Sending.SamplingLocation = SamplingLocation.Liquor;
+            var plainIsolate = CreateIsolate(agglutination, bexA, serotypePcr, SamplingLocation.Liquor, growth);
+            plainIsolate.Evaluation = Evaluation.HaemophilusTypeC;
+
+            var fromRandom = isolateInterpretation.Interpret(randomIsolate);
+            var fromPlain = isolateInterpretation.Interpret(plainIsolate);
+
+            fromRandom.Interpretation.Should().Be(fromPlain.Interpretation);
+            fromRandom.InterpretationPreliminary.Should().Be(fromPlain.InterpretationPreliminary);
+            fromRandom.InterpretationDisclaimer.Should().Be(fromPlain.InterpretationDisclaimer);
+        }
+
+        // specs/006 FR-005, Decision Table row 1: exact final text, preliminary stays discrepant
+        [TestCase(SerotypePcr.Negative)]
+        [TestCase(SerotypePcr.NotDetermined)]
+        public void Interpret_NegativeAgglutinationAndBexA_NegativeOrNotDeterminedPcr_IsExactNotTypableText(SerotypePcr serotypePcr)
+        {
+            var interpretation = isolateInterpretation.Interpret(CreateIsolate(SerotypeAgg.Negative, TestResult.Negative, serotypePcr));
+
+            interpretation.Interpretation.Should().Be(
+                "Die Ergebnisse sprechen für einen unbekapselten Haemophilus influenzae (sog. \"nicht-typisierbarer\" H. influenzae, NTHi).");
+            interpretation.InterpretationPreliminary.Should().Be(Discrepant);
+        }
+
+        // specs/006 FR-008, Edge Cases 1 and 8: every negative-agglutination combination gets the unencapsulated
+        // reporting disclaimer (blood, liquor, other invasive) or the non-invasive note (other non-invasive)
+        [Test]
+        public void Interpret_NegativeAgglutination_AnyBexAAndPcr_AssignsDisclaimerBySamplingLocation(
+            [Values] TestResult bexA, [Values] SerotypePcr serotypePcr, [Values] SamplingLocation samplingLocation)
+        {
+            var interpretation = isolateInterpretation.Interpret(
+                CreateIsolate(SerotypeAgg.Negative, bexA, serotypePcr, samplingLocation));
+
+            var expected = samplingLocation == SamplingLocation.OtherNonInvasive
+                ? NonInvasiveDisclaimer
+                : InvasiveDisclaimer("Haemophilus influenzae, unbekapselt");
+            interpretation.InterpretationDisclaimer.Should().Be(expected);
+        }
+
+        // specs/006 Decision Table row 4, Edge Case 1: negative agglutination with positive bexA, or with
+        // not-determined bexA and a determined PCR value, stays discrepant but gets the disclaimer
+        [TestCase(TestResult.Positive, SerotypePcr.NotDetermined)]
+        [TestCase(TestResult.Positive, SerotypePcr.A)]
+        [TestCase(TestResult.Positive, SerotypePcr.Negative)]
+        [TestCase(TestResult.NotDetermined, SerotypePcr.B)]
+        [TestCase(TestResult.NotDetermined, SerotypePcr.F)]
+        [TestCase(TestResult.NotDetermined, SerotypePcr.Negative)]
+        public void Interpret_NegativeAgglutination_PositiveBexAOrUndeterminedBexAWithPcrValue_IsDiscrepant(TestResult bexA,
+            SerotypePcr serotypePcr)
+        {
+            var interpretation = isolateInterpretation.Interpret(CreateIsolate(SerotypeAgg.Negative, bexA, serotypePcr));
+
+            interpretation.Interpretation.Should().Be(Discrepant);
+            interpretation.InterpretationPreliminary.Should().Be(Discrepant);
+            interpretation.InterpretationDisclaimer.Should().Be(InvasiveDisclaimer("Haemophilus influenzae, unbekapselt"));
+        }
+
+        // specs/006 Decision Table row 7, Edge Case 2: specific agglutination, bexA not determined and matching PCR
+        // enters the specific branch (serotype disclaimer) without replacing either interpretation
+        [TestCase(SerotypeAgg.A, SerotypePcr.A)]
+        [TestCase(SerotypeAgg.B, SerotypePcr.B)]
+        [TestCase(SerotypeAgg.C, SerotypePcr.C)]
+        [TestCase(SerotypeAgg.D, SerotypePcr.D)]
+        [TestCase(SerotypeAgg.E, SerotypePcr.E)]
+        [TestCase(SerotypeAgg.F, SerotypePcr.F)]
+        public void Interpret_SpecificAgglutinationUndeterminedBexA_MatchingPcr_IsDiscrepantWithSerotypeDisclaimer(
+            SerotypeAgg agglutination, SerotypePcr serotypePcr)
+        {
+            var interpretation = isolateInterpretation.Interpret(
+                CreateIsolate(agglutination, TestResult.NotDetermined, serotypePcr));
+
+            interpretation.Interpretation.Should().Be(Discrepant);
+            interpretation.InterpretationPreliminary.Should().Be(Discrepant);
+            interpretation.InterpretationDisclaimer.Should().Be(
+                InvasiveDisclaimer($"Haemophilus influenzae, Serotyp {agglutination.ToString().ToLower()}"));
+        }
+
+        // specs/006 Edge Case 3, FR-014: specific agglutination with negative bexA, or with a conflicting determined
+        // PCR value, is unmatched: both texts discrepant, disclaimer empty
+        [TestCase(SerotypeAgg.A, TestResult.Negative, SerotypePcr.NotDetermined)]
+        [TestCase(SerotypeAgg.B, TestResult.Negative, SerotypePcr.B)]
+        [TestCase(SerotypeAgg.C, TestResult.Negative, SerotypePcr.Negative)]
+        [TestCase(SerotypeAgg.D, TestResult.Positive, SerotypePcr.E)]
+        [TestCase(SerotypeAgg.E, TestResult.Positive, SerotypePcr.Negative)]
+        [TestCase(SerotypeAgg.F, TestResult.NotDetermined, SerotypePcr.A)]
+        [TestCase(SerotypeAgg.A, TestResult.NotDetermined, SerotypePcr.Negative)]
+        public void Interpret_SpecificAgglutination_UnmatchedCombination_IsDiscrepantWithEmptyDisclaimer(
+            SerotypeAgg agglutination, TestResult bexA, SerotypePcr serotypePcr)
+        {
+            var interpretation = isolateInterpretation.Interpret(CreateIsolate(agglutination, bexA, serotypePcr));
+
+            interpretation.Interpretation.Should().Be(Discrepant);
+            interpretation.InterpretationPreliminary.Should().Be(Discrepant);
+            interpretation.InterpretationDisclaimer.Should().BeEmpty();
+        }
+
+        // specs/006 Edge Case 5, FR-004, FR-014: auto, poly and non-evaluable agglutination have no outcome
+        [Test]
+        public void Interpret_AutoPolyOrNotEvaluableAgglutination_IsDiscrepantWithEmptyDisclaimer(
+            [Values(SerotypeAgg.Auto, SerotypeAgg.Poly, SerotypeAgg.NotEvaluable)] SerotypeAgg agglutination,
+            [Values] TestResult bexA, [Values] SerotypePcr serotypePcr)
+        {
+            var interpretation = isolateInterpretation.Interpret(
+                CreateIsolate(agglutination, bexA, serotypePcr, growth: YesNoOptional.Yes));
+
+            interpretation.Interpretation.Should().Be(Discrepant);
+            interpretation.InterpretationPreliminary.Should().Be(Discrepant);
+            interpretation.InterpretationDisclaimer.Should().BeEmpty();
+        }
+
+        // specs/006 Edge Case 6, FR-004: all typing not determined with growth "not stated" stays discrepant
+        [Test]
+        public void Interpret_AllTypingNotDetermined_GrowthNotStated_IsDiscrepantWithEmptyDisclaimer()
+        {
+            var isolate = CreateIsolate(SerotypeAgg.NotDetermined, TestResult.NotDetermined, SerotypePcr.NotDetermined);
+            isolate.Evaluation = Evaluation.HaemophilusParainfluenzae;
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Interpretation.Should().Be(Discrepant);
+            interpretation.InterpretationPreliminary.Should().Be(Discrepant);
+            interpretation.InterpretationDisclaimer.Should().BeEmpty();
+        }
+
+        // specs/006 Edge Case 7: outside the all-not-determined/growth "no" branch the evaluation has no influence
+        [TestCase(SerotypeAgg.Negative, TestResult.Negative, SerotypePcr.Negative, YesNoOptional.No)]
+        [TestCase(SerotypeAgg.Negative, TestResult.NotDetermined, SerotypePcr.NotDetermined, YesNoOptional.No)]
+        [TestCase(SerotypeAgg.A, TestResult.Positive, SerotypePcr.A, YesNoOptional.No)]
+        [TestCase(SerotypeAgg.B, TestResult.NotDetermined, SerotypePcr.NotDetermined, YesNoOptional.No)]
+        [TestCase(SerotypeAgg.Auto, TestResult.Positive, SerotypePcr.A, YesNoOptional.No)]
+        [TestCase(SerotypeAgg.NotDetermined, TestResult.NotDetermined, SerotypePcr.NotDetermined, YesNoOptional.Yes)]
+        [TestCase(SerotypeAgg.NotDetermined, TestResult.NotDetermined, SerotypePcr.NotDetermined, YesNoOptional.NotStated)]
+        public void Interpret_OutsideNoGrowthBranch_EvaluationDoesNotChangeTheResult(SerotypeAgg agglutination,
+            TestResult bexA, SerotypePcr serotypePcr, YesNoOptional growth)
+        {
+            var reference = isolateInterpretation.Interpret(CreateIsolate(agglutination, bexA, serotypePcr, growth: growth));
+
+            foreach (Evaluation evaluation in Enum.GetValues(typeof(Evaluation)))
+            {
+                var isolate = CreateIsolate(agglutination, bexA, serotypePcr, growth: growth);
+                isolate.Evaluation = evaluation;
+
+                var interpretation = isolateInterpretation.Interpret(isolate);
+
+                interpretation.Interpretation.Should().Be(reference.Interpretation);
+                interpretation.InterpretationPreliminary.Should().Be(reference.InterpretationPreliminary);
+                interpretation.InterpretationDisclaimer.Should().Be(reference.InterpretationDisclaimer);
+            }
+        }
+
+        // specs/006 US3, FR-011, SC-002, SC-003, Edge Case 8: the sampling location changes only the disclaimer
+        [TestCase(SerotypeAgg.Negative, TestResult.Negative, SerotypePcr.Negative, "Haemophilus influenzae, unbekapselt")]
+        [TestCase(SerotypeAgg.Negative, TestResult.Negative, SerotypePcr.C, "Haemophilus influenzae, unbekapselt")]
+        [TestCase(SerotypeAgg.Negative, TestResult.NotDetermined, SerotypePcr.NotDetermined, "Haemophilus influenzae, unbekapselt")]
+        [TestCase(SerotypeAgg.A, TestResult.Positive, SerotypePcr.A, "Haemophilus influenzae, Serotyp a")]
+        [TestCase(SerotypeAgg.D, TestResult.Positive, SerotypePcr.NotDetermined, "Haemophilus influenzae, Serotyp d")]
+        [TestCase(SerotypeAgg.F, TestResult.NotDetermined, SerotypePcr.NotDetermined, "Haemophilus influenzae, Serotyp f")]
+        public void Interpret_SamplingLocation_ChangesOnlyTheDisclaimer(SerotypeAgg agglutination, TestResult bexA,
+            SerotypePcr serotypePcr, string category)
+        {
+            var blood = isolateInterpretation.Interpret(CreateIsolate(agglutination, bexA, serotypePcr));
+
+            foreach (SamplingLocation samplingLocation in Enum.GetValues(typeof(SamplingLocation)))
+            {
+                var interpretation = isolateInterpretation.Interpret(
+                    CreateIsolate(agglutination, bexA, serotypePcr, samplingLocation));
+
+                interpretation.Interpretation.Should().Be(blood.Interpretation);
+                interpretation.InterpretationPreliminary.Should().Be(blood.InterpretationPreliminary);
+                interpretation.InterpretationDisclaimer.Should().Be(samplingLocation == SamplingLocation.OtherNonInvasive
+                    ? NonInvasiveDisclaimer
+                    : InvasiveDisclaimer(category));
+            }
+        }
+
+        // specs/006 FR-001, FR-015: three report fields only (no report array, no comment); the isolate is not changed
+        [TestCase(SerotypeAgg.Negative, TestResult.Negative, SerotypePcr.Negative, YesNoOptional.NotStated)]
+        [TestCase(SerotypeAgg.B, TestResult.Positive, SerotypePcr.B, YesNoOptional.Yes)]
+        [TestCase(SerotypeAgg.NotDetermined, TestResult.NotDetermined, SerotypePcr.NotDetermined, YesNoOptional.No)]
+        [TestCase(SerotypeAgg.Poly, TestResult.Negative, SerotypePcr.A, YesNoOptional.NotStated)]
+        public void Interpret_ProducesNoReportArrayNorComment_AndLeavesIsolateUnchanged(SerotypeAgg agglutination,
+            TestResult bexA, SerotypePcr serotypePcr, YesNoOptional growth)
+        {
+            var isolate = CreateIsolate(agglutination, bexA, serotypePcr, SamplingLocation.OtherInvasive, growth);
+            isolate.Evaluation = Evaluation.NoGrowth;
+
+            var interpretation = isolateInterpretation.Interpret(isolate);
+
+            interpretation.Report.Should().BeNull();
+            interpretation.Comment.Should().BeNull();
+            isolate.Agglutination.Should().Be(agglutination);
+            isolate.BexA.Should().Be(bexA);
+            isolate.SerotypePcr.Should().Be(serotypePcr);
+            isolate.Growth.Should().Be(growth);
+            isolate.Evaluation.Should().Be(Evaluation.NoGrowth);
+            isolate.Sending.SamplingLocation.Should().Be(SamplingLocation.OtherInvasive);
+        }
+
+        // specs/006 Edge Case 9: the negative and specific branches need the submission to derive invasive status
+        [TestCase(SerotypeAgg.Negative, TestResult.Negative, SerotypePcr.Negative)]
+        [TestCase(SerotypeAgg.B, TestResult.Positive, SerotypePcr.B)]
+        public void Interpret_NegativeOrSpecificBranchWithoutSending_FailsWithAnError(SerotypeAgg agglutination,
+            TestResult bexA, SerotypePcr serotypePcr)
+        {
+            var isolate = new Isolate { Agglutination = agglutination, BexA = bexA, SerotypePcr = serotypePcr };
+
+            Action interpret = () => isolateInterpretation.Interpret(isolate);
+
+            interpret.Should().Throw<Exception>();
+        }
     }
 }

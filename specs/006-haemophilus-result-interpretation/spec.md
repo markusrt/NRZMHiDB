@@ -268,9 +268,12 @@ interpretation and requires explicit confirmation before report generation conti
 | Not determined | Not determined | Not determined | No | No *H. influenzae* detected | Discrepancy | Most likely identity from evaluation |
 | Any unmatched combination | Any | Any | Any | Discrepancy | Discrepancy | Empty unless the negative or specific branch assigned one as above |
 
-Automated tests cover rows 1, 2, 3, 5, 6, 8, and 9 (including the non-invasive disclaimer for rows
-1 and 6) and the empty, all-not-determined isolate. Rows 4 and 7 and the remaining unmatched
-combinations are derived from code and not exercised by tests.
+Automated tests cover every row of the table: rows 1, 2, 3, 5, 6, 8, and 9 since before the
+verification; rows 4 and 7, the unmatched combinations (specific agglutination with negative bexA or
+a conflicting PCR value; auto, poly, and non-evaluable agglutination; all typing not determined with
+growth "not stated"), the disclaimer for every negative-agglutination combination and sampling
+location, and the failure without a submission since the verification of 2026-11-08. The growth
+"Ja"/"Nein" association of rows 8 and 9 is asserted only by the earlier tests (DEC-004).
 
 ### Key Entities *(include if feature involves data)*
 

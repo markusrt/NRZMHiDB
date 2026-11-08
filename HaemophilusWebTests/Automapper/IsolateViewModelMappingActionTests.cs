@@ -64,6 +64,30 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.Invasive.Should().Be(expectedInvasive);
         }
 
+        // specs/006 FR-001, FR-015, FR-016: the view model carries the three interpretation fields; the comment stays empty
+        [Test]
+        public void ProcessModelToViewModel_CopiesInterpretationFieldsAndLeavesCommentEmpty()
+        {
+            var sut = new IsolateViewModelMappingAction();
+            var isolateViewModel = new IsolateViewModel();
+            var isolate = CreateEmptyIsolate();
+            isolate.Agglutination = SerotypeAgg.A;
+            isolate.BexA = TestResult.Positive;
+            isolate.SerotypePcr = SerotypePcr.A;
+            isolate.Sending.SamplingLocation = SamplingLocation.Liquor;
+
+            sut.Process(isolate, isolateViewModel, null);
+
+            isolateViewModel.Interpretation.Should().Be(
+                "Die Ergebnisse sprechen für eine Infektion mit Haemophilus influenzae des Serotyp a (Hia).");
+            isolateViewModel.InterpretationPreliminary.Should().Be(
+                "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.");
+            isolateViewModel.InterpretationDisclaimer.Should().Be(
+                "Der direkte Nachweis von Haemophilus influenzae aus Blut oder Liquor ist nach §7 IfSG meldepflichtig. Meldekategorie dieses Befundes: Haemophilus influenzae, Serotyp a.");
+            isolateViewModel.Comment.Should().BeNull();
+            isolateViewModel.HasComment.Should().BeFalse();
+        }
+
         [Test]
         public void ProcessModelToViewModel_PopulatesDemisIdImageUrl()
         {
