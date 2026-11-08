@@ -70,6 +70,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   `Admin1` sees "Gelöschte Einsender" and "Gelöschte Einsendungen (Haemophilus)", and both lists, the sender and
   submission delete pages and the restore addresses of both pathogens (also `/MeningoSender/Undelete/<id>`) redirect
   it to the sign-in page without restoring; `Rki1` has no "Administration" menu and is redirected the same way.
+  Observed on system 2026-11-08 across all menus (021 verification; observation only, no decision): `Admin1` sees the
+  same navigation and home-page tiles as `Standard1`; every navigation entry and tile button except "Gesundheitsämter"
+  redirects it to the sign-in page, as do the county and generated pages, while `/Role` and `/Role/Create` answer
+  HTTP 200.
 - **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
   Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
   include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
@@ -101,7 +105,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   `RKI` role but not in its navigation. Offen: should Public Health have it (add to menu) or not (restrict)?
   Observed on system 2026-11-08 (011 verification, no decision taken): `Rki1` sees only "RKI Export (Haemophilus)"
   and "RKI Export (Meningokokken)"; `/MeningoPatientSending/StateAuthorityExport` opens the form for it and a direct
-  request with a date range returns `LGA-Export_20200101-20201231.xlsx`.
+  request with a date range returns `LGA-Export_20200101-20201231.xlsx`. Observed again 2026-11-08 (021 verification,
+  no decision taken): `/MeningoPatientSending/StateAuthorityExport` answers HTTP 200 for `Rki1`.
 - **DEC-007 – Soft deletion of Meningococci submissions** (Decision; source: 003 US3, 015, 020 US4): No Meningococci
   delete-confirmation or deleted-submissions page exists; "Eintrag löschen" ends on the error page. Offen: is soft
   delete wanted for Meningococci (add pages) or not (remove the button and inherited actions)? Confirmed on system
@@ -139,15 +144,21 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 
 - **SEC-001 – Registration submission does not re-check the token** (Bugfix; source: 021 US6.6, FR-007): Only showing
   the form checks `RegistrationToken`; the POST checks just the anti-forgery token, which any visitor obtains from the
-  sign-in page. Anyone can register an account with any stored role.
+  sign-in page. Anyone can register an account with any stored role. Reproduced at unit level 2026-11-08 (021
+  verification; scratch test, because a run on the system would need the secret token or create an account by a
+  crafted request): the POST action carries `[HttpPost]`, `[AllowAnonymous]` and `[ValidateAntiForgeryToken]` and takes
+  only the form model; called without any prior token request it creates the account, assigns the role and signs in.
 - **SEC-002 – Registration with an unknown role leaves a role-less account** (Bugfix; source: 021 US6.7): The account
-  is created before the role assignment fails with the generic error page.
+  is created before the role assignment fails with the generic error page. Reproduced at unit level 2026-11-08 (021
+  verification, scratch test): with a role assignment that throws as the store does for an unknown role, the account is
+  created first, the exception is not handled, and nothing removes the account.
 - **SEC-003 – Missing `RegistrationToken` setting opens registration and the EpiScanGIS export** (Bugfix; source: 021
   Edge Cases, 023): A request without token would match an absent setting. Reproduced at unit level 2026-11-08 (023
   verification; the controller run with stubbed data in uncommitted tests, because a run on the system needs the secret
   token): with the setting absent, the EpiScanGIS export answers a request without token with the file; a wrong token
   still gets "not found". On the host the key exists in `Web.config`, its template and both transforms (counted, values
-  not read).
+  not read). Reproduced at unit level 2026-11-08 (021 verification, scratch test) for the registration form: with the
+  setting absent, a request without token gets the registration form; a wrong token still gets the sign-in view.
 - **SEC-004 – Report pages, health offices and RKI match import check no role** (Bugfix; source: 008/009 Edge Cases,
   016 Edge Cases, 021 US4.4–4.6, US7, access matrix, 024): Public Health (and role-less) accounts can open the report
   page of any isolate (patient data, document generation, status marking), create/edit/delete health offices, and
@@ -163,7 +174,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   verification): `Rki1` and `Admin1` get HTTP 200 for the health-office list, create, edit, details and delete pages
   (signed-out requests are redirected to the sign-in page); `Rki1`, who is offered no "Gesundheitsämter" entry, created a
   record through the create page. The lookup action carries no role check either (reproduced at unit level; the
-  lookup itself was not sent because it asks the RKI tool).
+  lookup itself was not sent because it asks the RKI tool). Observed again 2026-11-08 (021 verification): `Rki1` and
+  `Admin1` get HTTP 200 for `/RkiMatch`, `/HealthOffices` and `/HealthOffices/Create`, while the county and generated
+  pages and every laboratory address except the RKI exports (and the LGA export for `Rki1`) refuse them.
 - **SEC-005 – Anti-forgery token not verified on state-changing actions** (Bugfix; source: 021 Edge Cases
   "consolidated"; 002 FR-021, 003 FR-023, 008 FR-015, 009 FR-016, 011, 013, 014, 015, 016, 019, 020, 022, 024): Not verified on the combined
   submission create/edit saves, all exports (also any request method), both patient merges (a single request merges
@@ -195,14 +208,23 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   verification) for the restore links: sender and submission restores of both pathogens are plain GETs without token,
   and an image element on another application page restored a deleted sender; the sender and submission delete
   confirmations refuse a POST without token (HTTP 500 "The required anti-forgery form field
-  "__RequestVerificationToken" is not present.").
+  "__RequestVerificationToken" is not present."). Confirmed on system 2026-11-08 (021 verification) for the role page
+  save: a POST of only `Name` by `Admin1`, without token, stored the role "SV-021-Rolle-ohne-Token"; sign-in, sign-out
+  and the password change refuse a POST without token (HTTP 500, same message).
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
-  changes are not logged (constitution: failures affecting authentication MUST be logged).
+  changes are not logged (constitution: failures affecting authentication MUST be logged). Confirmed on system
+  2026-11-08 (021 verification): six wrong passwords in a row for `Rki1` were answered alike (about 0.85 s each,
+  "Ungültiger Benutzername oder Passwort."), the seventh attempt with the correct password signed in, `AccessFailedCount`
+  stayed 0 with lockout disabled for every account, and the day's log file got no line for any sign-in, failure,
+  sign-out or role creation (only unhandled errors were logged).
 - **SEC-007 – One secret for registration and the EpiScanGIS export, carried in the URL** (Bugfix; source: 021 US7.1–7.2,
   023): The token appears in web-server logs; the export is an anonymous GET. Not verifiable in the 023 verification
   (2026-11-08): the host keeps no web-server request log; the anonymous GET is test-asserted
-  (`Index_AdmitsAnonymousGetWithoutRoleOrAntiForgeryCheck`).
+  (`Index_AdmitsAnonymousGetWithoutRoleOrAntiForgeryCheck`). Reproduced at unit level 2026-11-08 (021 verification):
+  the registration form (`AccountControllerTests.Register_WithConfiguredToken_ShowsFormWithAllStoredRoles`) and the
+  EpiScanGIS export (`EpiscanGisExportControllerTests`) both open with the value of the one setting `RegistrationToken`,
+  passed as the query value `token`; the server log part stays not verifiable.
 - **SEC-008 – Unescaped external data rendered as markup** (Bugfix; source: 016 Edge Cases, 022 Edge Cases; 008
   FR-006; 009 FR-008): Health-office address/phone/fax/email (from the RKI website or local edits) on the report page, and Geonames
   place names in the postal-code suggestion list. Confirmed on system 2026-11-08 (008 verification, with a synthetic
@@ -220,7 +242,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   FileSaver from cdnjs (with integrity) and `pizzip.js` / `pizzip-utils.js` from unpkg (without integrity).
 - **SEC-011 – Internal helper actions reachable by URL** (Refactoring; source: 021 Edge Cases, 022): Create patient,
   create sending, assign stem/laboratory numbers (Standard User), country list (any signed-in account) act without
-  form, token or duplicate check.
+  form, token or duplicate check. Observed 2026-11-08 (021 verification): `/Patient/CreatePatient`,
+  `/Sending/AssignStemAndLaboratoryNumber/1` and `/MeningoSending/CreateSendingAndAssignStemAndLaboratoryNumber`
+  redirect `Admin1` and `Rki1` to the sign-in page; they were not called as Standard User, because each call changes
+  data.
 - **SEC-012 – Temporary export/import files are never deleted** (Bugfix; source: 011, 013 Edge Cases, 023, 024, 025):
   Every spreadsheet export, the EpiScanGIS export, the RKI match upload and the county upload leave files in the
   server's temp directory; exports and the RKI match file contain patient data (Principle IV). Confirmed on system
@@ -561,7 +586,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **UX-001 – Navigation shows functions the role cannot use** (Bugfix after DEC-001; source: see DEC-001): Also LGA
   export hidden from Public Health (DEC-006).
 - **UX-002 – Refusal is shown as the sign-in page** (Refactoring; source: 021 Edge Cases): No "access denied" message;
-  signing in again leads to the same refusal.
+  signing in again leads to the same refusal. Confirmed on system 2026-11-08 (021 verification): `Rki1` opening
+  `/Sender` lands on `/Account/Login?ReturnUrl=%2FSender`, which shows its own navigation above the sign-in form, and
+  signing in again as `Rki1` leads to the same page. Refused background requests (header `X-Requested-With`) get HTTP
+  200 with an empty body and the header `X-Responded-JSON` `{"status":401,…}`, so the list script sees no refusal.
 - **UX-003 – Postal-code lookup: one request per keystroke, no debounce, race on answers, only "not found" handled**
   (Refactoring; source: 022 Edge Cases): Quota use; last answer wins; other failures end in the generic server error;
   log message with stray "$"; parameters not URL-encoded. Observed 2026-11-08 (022 verification): typing "913" sent
@@ -743,7 +771,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   key and value per setting (`ConfigurationEntries`), no history or audit table, and the application log has no entry
   for a save. `ConfigurationService.Set` calls `SaveChanges` once per setting, so a save makes five separate writes.
 - **REF-015 – Role seeding code never called; role page save without anti-forgery or rules** (Refactoring; source: 021
-  Edge Cases).
+  Edge Cases). Confirmed 2026-11-08 (021 verification): `ApplicationDbContext.InitializeDatabase` (which calls
+  `SeedRoles`) has no caller; on the system, `Admin1` stored a role without token (SEC-005), and an empty name and the
+  existing name "RKI" ended in HTTP 500 ("Validation failed for one or more entities. …").
 - **REF-017 – County list maintained as unvalidated runtime data** (Refactoring; source: 025 Edge Cases): Any Standard
   User creates, overwrites, hard-deletes or bulk-uploads counties without review, audit or recovery; the county number
   is not validated (any text, first two characters become the state number); upload failures show untranslated
@@ -860,7 +890,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   restoring senders and submissions of both pathogens, restoring an active sender or submission, the Meningococci
   sender restore and the laboratory number that counts on after a deleted submission (020 verification, 2026-11-08);
   the inverted selection of "Gelöschte Einsendungen (Haemophilus)" (DATA-006) and the error answers for missing or
-  unknown submission numbers (UX-010, DATA-008) stay untested on purpose.
+  unknown submission numbers (UX-010, DATA-008) stay untested on purpose. Registration, role checks and navigation by
+  role: covered by tests added in the 021 verification (2026-11-08) for the token check of the registration form, the
+  role choice, the successful registration (one role, sign-in as the new account), a rejected account, the account
+  rules, the password change and the role checks of the access matrix; the navigation by role (views) stays untested,
+  and the Administrator cells (DEC-001), the LGA export for Public Health (DEC-006) and the functions without role
+  check (SEC-004, SEC-011) on purpose.
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

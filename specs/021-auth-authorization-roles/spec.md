@@ -48,7 +48,9 @@ that the sign-in page is shown again.
    address if it points into the application, otherwise to the home page.
 5. **Given** "Eingeloggt bleiben?" was ticked, **Then** the sign-in survives closing the browser; otherwise it lasts
    for the browser session. In both cases the sign-in expires after a period of inactivity set by the framework
-   default (14 days, renewed while in use; derived, not configured by the application).
+   default (14 days, renewed while in use; not configured by the application). Observed 2026-11-08: with the option
+   the sign-in cookie expires 14 days after sign-in, without it the cookie lasts for the browser session; the renewal
+   while in use was not observed.
 6. **Given** repeated wrong passwords for one user name, **Then** the account is never locked, no delay is added, and
    no failed attempt is counted or logged. [SUSPECTED-DEFECT]
 7. **Given** a signed-in user, **Then** the navigation shows, at the right, "Über" (the change log) and "Abmelden
@@ -201,7 +203,8 @@ role assignments and verify that each account holds exactly one role.
    long ("Das Passwort muss mindestens 6 Zeichen lang sein."), and the confirmation must match ("Die beiden Passwörter
    stimmen nicht überein."). No other password rule (complexity, history, expiry) applies. A user name that is
    already taken or contains characters other than letters, digits, "@", "_", and "." is rejected with the framework's
-   default message (derived from framework defaults; not exercised).
+   default message (framework defaults of the user manager; asserted by unit tests, not exercised on the running
+   system because the form needs the secret token).
 4. **Given** valid input, **When** "Neuen Benutzer anlegen" is selected, **Then** the account is created, the chosen
    role is assigned to it, the browser is signed in **as the new account** (ending the session of whoever filled in
    the form), and the home page is shown.
@@ -212,11 +215,12 @@ role assignments and verify that each account holds exactly one role.
    accounts created in the application.
 6. **Given** a registration submitted directly, without first opening the form with the correct token, **Then** it is
    accepted, because only the display of the form checks the token, not the submission; the submission checks only
-   the anti-forgery token, which any visitor obtains from the sign-in page (derived from code; not exercised).
-   [SUSPECTED-DEFECT]
+   the anti-forgery token, which any visitor obtains from the sign-in page (reproduced at unit level 2026-11-08; not
+   exercised on the running system; SEC-001). [SUSPECTED-DEFECT]
 7. **Given** a submitted role name that is not a stored role (possible only by a crafted submission), **Then** the
    account is created first and the role assignment then fails with the generic error page, leaving an account
-   without role (derived from code; not exercised). [SUSPECTED-DEFECT]
+   without role (reproduced at unit level 2026-11-08; not exercised on the running system; SEC-002).
+   [SUSPECTED-DEFECT]
 
 ---
 
@@ -241,8 +245,8 @@ without a session and with a Public Health account.
 2. **Given** the same setting, **Then** one secret value both opens the registration form and the EpiScanGIS export,
    and it travels as part of the address. [SUSPECTED-DEFECT]
 3. **Given** no session, **When** a file under the report templates, scripts, styles, or images is requested, **Then**
-   it is delivered, because static files are not covered by the sign-in check (derived from configuration; not
-   exercised; spec 010 left this open).
+   it is delivered, because static files are not covered by the sign-in check (observed 2026-11-08: a report template,
+   the style sheet, a change-log image, and the site icon answer HTTP 200 without sign-in; spec 010 left this open).
 4. **Given** any signed-in account (including Public Health, Administrator-only, and accounts without role), **When**
    the following are requested, **Then** they are admitted: home page, "Über" and its change entries, the own password
    page, the Haemophilus and Meningococci report pages with report-status marking and the health-office lookup (specs
@@ -282,8 +286,11 @@ sign in with the new password.
 - **Refusal looks like sign-in**: When a signed-in user requests a function the role is not admitted to, the request
   is answered as "not authorized", which the sign-in handling turns into a redirect to the sign-in page with the
   requested address as return address; no "access denied" message is shown. Signing in again with the same account
-  leads back to the same refusal. Background requests of list pages receive the "not authorized" status instead
-  (derived from framework behavior; not exercised). Earlier specs call this outcome "refused".
+  leads back to the same refusal; the sign-in page then shows the navigation of the signed-in account above the
+  sign-in form. Background requests that the page script marks as such (for example the list data of the submission
+  lists) receive neither a redirect nor a "not authorized" status: the answer is HTTP 200 with an empty body and a
+  header `X-Responded-JSON` that carries the status 401 and the sign-in address (framework behavior, observed
+  2026-11-08). Earlier specs call this outcome "refused".
   [POTENTIAL-REFACTORING]
 - **Roles travel with the sign-in**: The roles of an account are read at sign-in and kept with the sign-in; a role
   changed in the database takes effect only after the next sign-in (derived from framework behavior).
@@ -295,11 +302,12 @@ sign in with the new password.
   never called; the roles must already exist (created on "Neuen Rolle anlegen" by an Administrator, which requires an
   Administrator account and thus the role, or in the database directly). [POTENTIAL-REFACTORING]
 - **Registration without token setting**: If the `RegistrationToken` setting were missing, a request without token
-  would match it and open the registration form, and the EpiScanGIS export would be delivered without token (derived
-  from code; the setting exists in the main configuration file and its template). [SUSPECTED-DEFECT]
+  would match it and open the registration form, and the EpiscanGIS export would be delivered without token
+  (reproduced at unit level for the export in the 023 verification and for the registration form in the 021
+  verification; the setting exists in the main configuration file and its template). [SUSPECTED-DEFECT]
 - **Role page save**: Saving "Neuen Rolle anlegen" does not verify the anti-forgery token the form carries and checks
-  no rule; an empty or already used name ends on the generic error page (derived from the storage rules; not
-  exercised). [POTENTIAL-REFACTORING]
+  no rule; an empty or already used name ends on the generic error page (observed 2026-11-08: HTTP 500 "Validation
+  failed for one or more entities. …" for an empty name and for "RKI"). [POTENTIAL-REFACTORING]
 - **Anti-forgery tokens — consolidated**: The token is verified on sign-in, registration, sign-out, password change,
   and on the create/edit/delete forms of senders, patients, sendings, isolates, breakpoints, health offices,
   counties, configuration, and PubMLST matching (specs 001, 004, 005, 016–020). It is **not** verified on:
@@ -332,8 +340,9 @@ sign in with the new password.
   rules are declared per page group or per function, partly in shared base page groups used by both pathogens
   (submissions, senders, isolates, patients, sendings) and partly in the derived ones; the navigation repeats the role
   decision separately, which is how menu and access diverge for the Administrator. Automated tests cover sign-in
-  success, failure message, local/remote return address, sign-out, and the EpiScanGIS token check, but not
-  registration, role checks, or the navigation by role. [POTENTIAL-REFACTORING]
+  success, failure message, local/remote return address, sign-out, the EpiScanGIS token check, and (added in the
+  021 verification) registration, the password change, the account rules, and the role checks that no open backlog item
+  disputes; the navigation by role is not covered. [POTENTIAL-REFACTORING]
 
 ## Requirements *(mandatory)*
 
@@ -446,17 +455,22 @@ that role. "Signed-in" means any signed-in account, including accounts without r
 ## Assumptions
 
 - Current application code, views, navigation, configuration files (values not read into this spec), version
-  history, role constants, and the automated tests are the source of truth. No running system was exercised.
+  history, role constants, and the automated tests are the source of truth. The spec was written from code; the
+  2026-11-08 verification (`verification.md`) checked it against the running application and unit tests.
 - The production database is assumed to contain the three roles, because the application does not create them and
   the navigation and access checks rely on them.
-- The redirect of refused signed-in users to the sign-in page, the "not authorized" answer of background requests,
-  the sign-in lifetime (14 days, renewed while in use), cookie protection, the user-name character rule, and the
-  English framework messages are derived from the defaults of the sign-in framework in use, because the application
-  configures only the sign-in page address; not observed in a browser.
-- That static files are delivered without sign-in is derived from the absence of any access rule for them in the
-  configuration; not exercised.
-- The direct registration submission without token (User Story 6.6), the account left without role (6.7), the
-  missing-setting cases, and the helper functions reachable by address are derived from code; not exercised.
+- The redirect of refused signed-in users to the sign-in page, the answer to refused background requests, the sign-in
+  lifetime (14 days, renewed while in use), cookie protection, the user-name character rule, and the English framework
+  messages come from the defaults of the sign-in framework in use, because the application configures only the
+  sign-in page address. The 2026-11-08 verification observed the redirect, the background answer, the cookie lifetime,
+  and the English messages; the user-name rule is asserted by unit tests; the renewal while in use was not observed.
+- That static files are delivered without sign-in follows from the absence of any access rule for them in the
+  configuration and was observed in the 2026-11-08 verification.
+- The direct registration submission without token (User Story 6.6), the account left without role (6.7), and the
+  missing-setting case of the registration form were reproduced at unit level in the 2026-11-08 verification, not on
+  the running system (registration needs the secret token). The helper functions reachable by address refuse the
+  Administrator and Public Health roles; what they do for the Standard User role is derived from code and was not
+  exercised, because each call changes data.
 - "Exactly one role" is established for accounts created in the application; whether accounts with several roles
   were created directly in the production database cannot be determined from code.
 - Labels are quoted as shown to users; the English labels of the password and external-login pages come from the

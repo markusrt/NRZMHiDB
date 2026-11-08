@@ -64,3 +64,11 @@
   the anti-forgery token), specs 008/009 (report pages open to any signed-in account, now tagged there). Cross-references
   to the postal-code lookup now point to spec 022.
 - As-is observations tagged in the spec: 12 [SUSPECTED-DEFECT], 8 [POTENTIAL-REFACTORING].
+- Verification 2026-11-08: checked against the running app (`Standard1`, `Admin1`, `Rki1`, `Labor1`, anonymous) and
+  unit tests; see `verification.md`. Edge case "Refusal looks like sign-in" corrected: refused background requests get
+  HTTP 200 with an empty body and an `X-Responded-JSON` header carrying status 401 (was: the "not authorized" status);
+  the sign-in page then shows the signed-in account's navigation. Qualifiers "derived, not exercised" replaced by what
+  was observed (cookie lifetime in US1.5, static files in US7.3 and FR-001, role page save errors) or reproduced at unit
+  level (US6.6, US6.7, missing token setting); the account-rule note in US6.3 now cites unit tests; the Architecture
+  edge case names the tests added for registration, password change, account rules and role checks; Assumptions
+  updated accordingly.
