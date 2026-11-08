@@ -48,7 +48,8 @@ sampling data, isolate data, and report status.
    submission, **When** the user selects "Zusammenfügen vorbereiten", **Then** the confirmation page (heading
    "Bestätigung", title "Patienten Zusammenfügen (Meningokokken)") shows the patient summary lines and submission lines
    in the formats of spec 014, with Meningococci laboratory numbers prefixed "MZ" (or "NR" for laboratory numbers
-   stored with a leading "-") and stem numbers prefixed "DE".
+   stored with a leading "-") and stem numbers prefixed "DE" ("DE -" without stem number), for example
+   `Labornummer: MZ002/26, Labnr. Einsender: SV-015-B1, Eingangsdatum: 08.11.2026, Stammnummer: DE99015`.
 3. **Given** the confirmation page, **When** the user keeps "Patient 1" (preselected) or "Patient 2" and selects
    "Zusammenfügen und doppelten Patienten löschen", **Then** every active Meningococci submission of the non-selected
    patient is reassigned to the selected patient and the non-selected Meningococci patient record is deleted, in a
@@ -112,32 +113,37 @@ Findings of spec 014, checked against the Meningococci variant:
 
 - **First opening shows the validation message — applies the same.** Opening the request page from the menu treats
   both numbers as `0`; the "two different patient numbers" message is shown at "Patienten-Nr. 1" before anything was
-  entered, and both fields show `0`. The cause is the shared request handling. (Derived from code; not exercised.)
-  [SUSPECTED-DEFECT]
+  entered, and both fields show `0`. The cause is the shared request handling. (Observed on the system in the 015
+  verification, 2026-11-08.) [SUSPECTED-DEFECT]
 - **Soft-deleted submissions of the deleted patient — applies the same in principle, but is harder to reach.** Only
   active Meningococci submissions are shown and moved. Soft-deleted ones stay attached to the patient to be deleted;
   the database rule that deletes a Meningococci patient's submissions with the patient is then blocked by their
-  isolate records, the whole save fails, nothing changes, and the generic error page is shown (a soft-deleted
-  submission without an isolate would be removed silently instead). Unlike Haemophilus, the Meningococci user
-  interface offers no working way to soft-delete a submission today: the "Eintrag löschen" button on the Meningococci
-  submission edit page leads to a deletion page that does not exist for Meningococci (error page), and there is no
-  "Gelöschte Einsendungen" page for Meningococci. Soft-deleted Meningococci submissions can therefore only stem from
-  requests outside the normal pages or direct database changes. (Derived from schema and code; not exercised.)
-  [SUSPECTED-DEFECT]
+  isolate records, the whole save fails, nothing changes, and the confirmation ends in HTTP 500 with the reference
+  conflict "The DELETE statement conflicted with the REFERENCE constraint
+  "FK_dbo.MeningoIsolates_dbo.MeningoSendings_MeningoSendingId"…" (a soft-deleted submission without an isolate would
+  be removed silently instead; intake always creates the isolate, so this case cannot be produced through the pages).
+  Unlike Haemophilus, the Meningococci user interface offers no working way to soft-delete a submission today: the
+  "Eintrag löschen" button on the Meningococci submission edit page leads to a deletion page that does not exist for
+  Meningococci (HTTP 500), and there is no "Gelöschte Einsendungen" page for Meningococci. Soft-deleted Meningococci
+  submissions can therefore only stem from requests outside the normal pages (a delete request with the anti-forgery
+  token soft-deletes the submission, see 003) or direct database changes. (Observed on the system in the 015
+  verification, 2026-11-08, with a submission soft-deleted by such a request; DATA-009.) [SUSPECTED-DEFECT]
 - **Missing Meningococci deletion page — Meningococci specific.** The missing deletion page noted above also affects
   the soft-delete flow described in spec 003, User Story 3; it is recorded here because it determines whether the
-  soft-delete failure of the merge can occur. (Derived from the set of existing pages; not exercised.)
-  [SUSPECTED-DEFECT]
+  soft-delete failure of the merge can occur. "Eintrag löschen" (`/MeningoPatientSending/Delete/<id>`) ends in HTTP 500
+  because the view is missing (observed 2026-11-08; DEC-007). [SUSPECTED-DEFECT]
 - **Patient 1 number in Patient 2's slot — applies the same.** The data prepared for the confirmation page carries
   Patient 1's number as Patient 2's number. It is masked because the confirmation form re-displays the number the user
-  submitted for "Patienten-Nr. 2". [SUSPECTED-DEFECT]
+  submitted for "Patienten-Nr. 2" (observed: the hidden field carries the submitted number; reproduced at unit level
+  with the Meningococci controller, 2026-11-08). [SUSPECTED-DEFECT]
 - **No anti-forgery check, any request method — applies the same.** Request, confirmation, and execution share one
   page address, accept any request method, and do not check the anti-forgery token the forms carry; a single request
   with both numbers, the kept-patient choice, and the confirmation flag performs the merge without the confirmation
-  page. [SUSPECTED-DEFECT]
+  page (observed: a GET request without token merged at once and showed "Erfolgreich"). [SUSPECTED-DEFECT]
 - **No audit trail or undo — applies the same.** No log entry, former-patient reference, or undo exists; the deleted
   Meningococci patient can only be recovered from a database backup, which does not meet the auditability expectation
-  of Constitution Principle I. [SUSPECTED-DEFECT]
+  of Constitution Principle I. Successful merges write no line to the application log; only failed ones appear there as
+  "Unhandled error" (observed 2026-11-08). [SUSPECTED-DEFECT]
 - **Cancel/back links point to the other pathogen — does not apply.** The Meningococci pages' "Abbrechen" and
   "Zurück zur Übersicht" lead to the Meningococci merge page and list. The two view sets differ only in the page
   title, so the wrong Haemophilus targets are consistent with the Haemophilus pages having been copied from the
@@ -159,10 +165,17 @@ Findings of spec 014, checked against the Meningococci variant:
   the patient's date of birth. The merge does not apply this rule: a moved submission whose sampling date lies before
   the kept patient's date of birth is accepted, and the next edit of that submission fails validation with "Das
   Entnahmedatum muss nach dem Geburtsdatum des Patienten liegen" until patient or sampling data is corrected.
-  (Derived from code; not exercised.)
+  (Observed on the system in the 015 verification, 2026-11-08; DATA-009.) [SUSPECTED-DEFECT]
 - **Derived patient age changes — Meningococci relevant.** "Patientenalter bei Entnahme" in the Meningococci
   Laboratory and IRIS exports and on the isolate page is computed from the kept patient's date of birth, so it can
-  change for moved submissions when the two records' dates of birth differed.
+  change for moved submissions when the two records' dates of birth differed. When the sampling date now lies before
+  the kept patient's date of birth, the age is negative (observed: "-4" on the isolate page and in the Laboratory
+  export).
+- **Patient without gender — applies the same.** The patient summary of the confirmation page formats the gender
+  without a check, so "Zusammenfügen vorbereiten" with a Meningococci patient record that has no gender ends in HTTP 500
+  ("Der Objektverweis wurde nicht auf eine Objektinstanz festgelegt.", framework message) and nothing changes; such a
+  patient can be neither merged nor kept. Intake requires a gender, but the seeded and possibly imported records lack
+  it (observed with a seeded Meningococci patient, 2026-11-08; see 014 Edge Cases, UX-018). [SUSPECTED-DEFECT]
 - **EpiScanGIS export grouping — Meningococci specific.** The token-protected EpiScanGIS export (spec 023)
   writes at most one line per Meningococci patient number. After a merge, the moved submissions share the kept
   patient's number, so the export emits one line for the merged person instead of one line per former patient
@@ -275,18 +288,22 @@ Findings of spec 014, checked against the Meningococci variant:
 
 ## Assumptions
 
-- Current application code, views, schema migrations, and role constants are the source of truth; no automated test
-  covers the merge function, so no statement here is confirmed by a test.
+- Current application code, views, schema migrations, and role constants are the source of truth. Unit tests added in
+  the 015 verification (2026-11-08) cover the equal-number rule, "Unbekannter Patient" for unknown numbers, numbers with
+  only soft-deleted submissions and Haemophilus-only numbers, the confirmation data with the "MZ"/"DE" prefixes, and the
+  reassign-and-delete step for both choices; the defects (soft-deleted failure, number mix-up, missing audit, missing
+  gender, sampling date not re-checked) are untested on purpose.
 - Every statement made in spec 014 about the shared flow (request binding, validation, confirmation data, request
   method and anti-forgery handling, success page) applies to the Meningococci variant, because the same shared code
   and view layout are used; the derivations and their unverified status are those listed in spec 014's Assumptions.
 - The merge failure on soft-deleted submissions is derived from the Meningococci schema (submissions are deleted with
   their patient; isolates are not deleted with their submission) and from the assumption that every Meningococci
-  submission recorded through intake has an isolate record; it was not exercised. The user-facing result is assumed
-  to be the generic error page.
+  submission recorded through intake has an isolate record; it was observed on the system on 2026-11-08 (HTTP 500,
+  nothing changed), and every submission created through intake in that verification had an isolate record.
 - The statement that Meningococci submissions cannot be soft-deleted through the normal pages is derived from the
   absence of a Meningococci deletion page (none has ever existed in the repository history) and of a Meningococci
-  "Gelöschte Einsendungen" menu entry; it was not exercised. It is assumed that the legacy data import does not set
+  "Gelöschte Einsendungen" menu entry; "Eintrag löschen" was observed to end in HTTP 500 and the Administration menu
+  shows no such entry (2026-11-08). It is assumed that the legacy data import does not set
   the soft-delete flag (the importer does not touch it), so existing soft-deleted Meningococci submissions, if any,
   stem from requests outside the normal pages or direct database changes. Spec 003 (User Story 3, FR-018)
   records the same absence.

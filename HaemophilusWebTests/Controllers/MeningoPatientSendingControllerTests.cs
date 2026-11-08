@@ -297,6 +297,147 @@ namespace HaemophilusWeb.Controllers
             ((string) row.Invasive).Should().Be("Nein");
         }
 
+        // specs/015 FR-003 (spec 014 FR-004): an invalid request (equal numbers) is shown again without confirmation or save
+        [Test]
+        public void MergePatient_InvalidRequest_ReturnsRequestViewWithoutSaving()
+        {
+            var db = CreateMergeDb();
+            var controller = CreateController(db);
+            controller.ModelState.AddModelError(nameof(MergePatientRequest.PatientOneId), "Bitte geben Sie zum Zusammenfügen zwei verschiedenen Patientennummern ein");
+            var request = new MergePatientRequest { PatientOneId = 42, PatientTwoId = 42, Confirmation = true };
+
+            var result = controller.MergePatient(request);
+
+            var view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().BeEmpty();
+            view.Model.Should().BeSameAs(request);
+            db.SavedWithoutValidation.Should().BeEmpty();
+            db.MeningoPatients.Select(p => p.PatientId).Should().BeEquivalentTo(new[] { 42, 43, 44 });
+        }
+
+        // specs/015 FR-003, FR-004, US2.2: numbers without an active Meningococci submission are "Unbekannter Patient",
+        // also when the confirmation flag is set; Haemophilus patients and submissions with the same number are ignored
+        [TestCase(42, 99, false, new[] { "PatientTwoId" })]
+        [TestCase(98, 99, false, new[] { "PatientOneId", "PatientTwoId" })]
+        [TestCase(44, 43, false, new[] { "PatientOneId" })]
+        [TestCase(42, 44, true, new[] { "PatientTwoId" })]
+        [TestCase(42, 45, true, new[] { "PatientTwoId" })]
+        public void MergePatient_PatientWithoutActiveMeningoSendings_IsReportedAsUnknownAndNothingChanges(int patientOneId, int patientTwoId, bool confirmation, string[] expectedErrorKeys)
+        {
+            var db = CreateMergeDb();
+            var controller = CreateController(db);
+            var request = new MergePatientRequest { PatientOneId = patientOneId, PatientTwoId = patientTwoId, Confirmation = confirmation };
+
+            var result = controller.MergePatient(request);
+
+            var view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().BeEmpty();
+            view.Model.Should().BeSameAs(request);
+            controller.ModelState.Where(e => e.Value.Errors.Any()).Select(e => e.Key).Should().BeEquivalentTo(expectedErrorKeys);
+            controller.ModelState.SelectMany(e => e.Value.Errors).Select(e => e.ErrorMessage).Should().OnlyContain(m => m == "Unbekannter Patient");
+            db.SavedWithoutValidation.Should().BeEmpty();
+            db.MeningoPatients.Select(p => p.PatientId).Should().BeEquivalentTo(new[] { 42, 43, 44 });
+            db.Patients.Should().ContainSingle().Which.PatientId.Should().Be(45);
+        }
+
+        // specs/015 FR-003, FR-005, US1.2: confirmation data lists both patients and their active submissions with the
+        // "MZ" laboratory-number and "DE" stem-number prefixes
+        [Test]
+        public void MergePatient_WithoutConfirmation_ShowsSummariesAndActiveSendingsWithMeningococciPrefixesWithoutSaving()
+        {
+            var db = CreateMergeDb();
+            var controller = CreateController(db);
+
+            var result = controller.MergePatient(new MergePatientRequest { PatientOneId = 42, PatientTwoId = 43, MainPatient = MainPatientSelector.PatientTwo });
+
+            var view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().Be("MergePatientConfirmation");
+            var confirmation = view.Model.Should().BeOfType<MergePatientConfirmation>().Subject;
+            confirmation.PatientOne.Should().Be("Patienten-Nr.: 42,  Initialen: X.A., Geschlecht: weiblich, Postleitzahl: 97082");
+            confirmation.PatientTwo.Should().Be("Patienten-Nr.: 43,  Initialen: X.B., Geschlecht: männlich, Postleitzahl: 97082");
+            confirmation.PatientOneSendings.Should().Equal(
+                "Labornummer: MZ100/26, Labnr. Einsender: SV-003, Eingangsdatum: 08.11.2026, Stammnummer: DE -");
+            confirmation.PatientTwoSendings.Should().Equal(
+                "Labornummer: MZ101/26, Labnr. Einsender: SV-003, Eingangsdatum: 08.11.2026, Stammnummer: DE1015");
+            confirmation.PatientOneId.Should().Be(42);
+            confirmation.MainPatient.Should().Be(MainPatientSelector.PatientTwo);
+            confirmation.Confirmation.Should().BeTrue();
+            db.SavedWithoutValidation.Should().BeEmpty();
+            db.MeningoPatients.Select(p => p.PatientId).Should().BeEquivalentTo(new[] { 42, 43, 44 });
+        }
+
+        // specs/015 FR-006, FR-007, US1.3, US1.4: active submissions of the other patient move to the kept patient, the
+        // other patient is removed in one save; the kept patient's data (incl. clinical information and risk factors)
+        // and the submission and isolate data stay as they were
+        [TestCase(MainPatientSelector.PatientOne, 42, 43)]
+        [TestCase(MainPatientSelector.PatientTwo, 43, 42)]
+        public void MergePatient_Confirmed_ReassignsActiveMeningoSendingsAndRemovesOtherPatient(MainPatientSelector mainPatient, int keptId, int deletedId)
+        {
+            var db = CreateMergeDb();
+            var kept = db.MeningoPatients.Single(p => p.PatientId == keptId);
+            var keptValues = new { kept.Initials, kept.BirthDate, kept.PostalCode, kept.Gender, kept.City, kept.ClinicalInformation, kept.RiskFactors, kept.OtherRiskFactor };
+            var movedSending = db.MeningoSendings.Single(s => s.MeningoPatientId == deletedId && !s.Deleted);
+            var movedIsolate = movedSending.Isolate;
+            var otherSending = db.MeningoSendings.Single(s => s.MeningoPatientId == 44);
+            var controller = CreateController(db);
+
+            var result = controller.MergePatient(new MergePatientRequest { PatientOneId = 42, PatientTwoId = 43, MainPatient = mainPatient, Confirmation = true });
+
+            var view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().Be("MergePatientSuccess");
+            view.Model.Should().BeOfType<MergePatientConfirmation>().Which.MainPatient.Should().Be(mainPatient);
+            db.MeningoSendings.Where(s => !s.Deleted && (s.MeningoPatientId == 42 || s.MeningoPatientId == 43)).Select(s => s.MeningoPatientId).Should().OnlyContain(id => id == keptId).And.HaveCount(2);
+            db.MeningoPatients.Select(p => p.PatientId).Should().BeEquivalentTo(new[] { keptId, 44 });
+            db.SavedWithoutValidation.Should().HaveCount(1);
+            new { kept.Initials, kept.BirthDate, kept.PostalCode, kept.Gender, kept.City, kept.ClinicalInformation, kept.RiskFactors, kept.OtherRiskFactor }.Should().BeEquivalentTo(keptValues);
+            movedSending.SenderLaboratoryNumber.Should().Be("SV-003");
+            movedSending.SenderId.Should().Be(SenderId);
+            movedSending.Isolate.Should().BeSameAs(movedIsolate);
+            movedIsolate.StemNumber.Should().Be(keptId == 42 ? 1015 : (int?) null);
+            otherSending.MeningoPatientId.Should().Be(44);
+            db.Patients.Should().ContainSingle().Which.PatientId.Should().Be(45);
+        }
+
+        /// <summary>
+        ///     Meningococci patients 42 (one active submission, clinical information and risk factors), 43 (male, one
+        ///     active submission with stem number 1015) and 44 (only a soft-deleted submission); a Haemophilus patient 45
+        ///     with an active Haemophilus submission.
+        /// </summary>
+        private static IntakeDbStub CreateMergeDb()
+        {
+            var db = new IntakeDbStub();
+            var patients = new[] { CreatePatient(42, "X.A."), CreatePatient(43, "X.B."), CreatePatient(44, "X.C.") };
+            patients[0].City = "SV-015-Ort";
+            patients[0].ClinicalInformation = MeningoClinicalInformation.Meningitis;
+            patients[0].RiskFactors = RiskFactors.Other;
+            patients[0].OtherRiskFactor = "SV-015-Risiko";
+            patients[1].Gender = Gender.Male;
+            foreach (var patient in patients)
+            {
+                db.MeningoPatients.Add(patient);
+            }
+
+            var sendingOne = CreateStoredSending(100, SenderId, patients[0]);
+            var sendingTwo = CreateStoredSending(101, SenderId, patients[1]);
+            sendingTwo.Isolate.StemNumber = 1015;
+            var deletedSending = CreateStoredSending(102, SenderId, patients[2]);
+            deletedSending.Deleted = true;
+            foreach (var sending in new[] { sendingOne, sendingTwo, deletedSending })
+            {
+                sending.ReceivingDate = new DateTime(2026, 11, 8);
+                db.MeningoSendings.Add(sending);
+            }
+
+            var haemophilusPatient = new Patient { PatientId = 45, Initials = "X.H.", Gender = Gender.Female };
+            db.Patients.Add(haemophilusPatient);
+            db.Sendings.Add(new Sending
+            {
+                SendingId = 103, PatientId = 45, Patient = haemophilusPatient, SenderId = SenderId,
+                Isolate = new Isolate { IsolateId = 103, Year = 2026, YearlySequentialIsolateNumber = 103 }
+            });
+            return db;
+        }
+
         private static MeningoPatient CreatePatient(int patientId, string initials)
         {
             return new MeningoPatient
