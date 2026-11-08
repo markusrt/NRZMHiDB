@@ -49,8 +49,14 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
    wait until `host.ready` is rewritten and the check above passes (up to 5 minutes):
 
    ```powershell
+   $env:SPEC_VERIFY_TIMEOUT_MINUTES = '900'   # default 240; a series of verifications needs longer
    dotnet test ScreenshotTests\ScreenshotTests.csproj --no-build --filter SpecVerificationHost
    ```
+
+   The host ends on its own when the timeout is reached; the restart reseeds the catalog. Note the
+   time `host.ready` was written when you start, and compare it before each data-dependent check
+   (`(Get-Item ScreenshotTests\host.ready).LastWriteTime`). After a restart, re-create your records,
+   repeat the checks that ran against the new catalog, and name the restart in the report.
 
    If the build output is missing, build first (MSBuild, not `dotnet build`; see
    `ScreenshotTests/README.md`). Claude Code may end background shells under memory pressure, which
@@ -265,6 +271,12 @@ Practical notes for this application:
   appears in reports; restore the previous value afterwards and list the change.
 - Python run with `-I` ignores `PYTHONIOENCODING`; scripts that print document text need
   `sys.stdout.reconfigure(encoding="utf-8")`.
+- File uploads: `page.setInputFiles(selector, '<absolute path in the scratchpad>')` works; build
+  synthetic upload files there, never from real data.
+- Framework exception texts (e.g. "Der Objektverweis wurde nicht …") follow the server's language;
+  quote them as observed and say that they are framework messages.
+- `sed -i` in Git Bash turns CRLF into LF; edit CRLF files with the edit tool or restore the line
+  endings before committing.
 - Keep `sqlcmd` calls and file operations (`Remove-Item`, `Move-Item`) in separate shell calls; the
   combination is blocked by the path guard.
 - Data with identical patient details: intake blocks a third patient with the same initials, birth
