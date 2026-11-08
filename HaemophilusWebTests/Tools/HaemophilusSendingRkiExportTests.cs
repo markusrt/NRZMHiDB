@@ -271,6 +271,26 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["landkreis"].Should().Be("SV-011-Unknown");
         }
 
+        // specs/025 US1.6: the state number is the first two characters of the matched county number, whatever
+        // they are; a shorter number yields what there is and an empty text yields an empty state number
+        [TestCase("01001", "01")]
+        [TestCase("abc", "ab")]
+        [TestCase("1", "1")]
+        [TestCase("", "")]
+        public void DataTable_StateNumberIsFirstTwoCharactersOfCountyNumber(string countyNumber, string expected)
+        {
+            Counties.Clear();
+            Counties.Add(new County {CountyId = 1, CountyNumber = countyNumber, Name = "SV-025-Flensburg, Stadt"});
+            Sending.Patient.County = "Landkreis SV-025-Flensburg";
+            Sending.Patient.State = State.BY;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["kreis_nr"].Should().Be(countyNumber);
+            export.Rows[0]["bundesland"].Should().Be(expected);
+            export.Rows[0]["bundeslandName"].Should().Be("Bayern");
+        }
+
         private HaemophilusSendingRkiExport CreateExportDefinition()
         {
             return new HaemophilusSendingRkiExport(Counties);

@@ -240,6 +240,23 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Geschlecht"].Should().Be("?");
         }
 
+        // specs/025 FR-012, US1.1, US1.3: county number from the matching record, state number from its first two
+        // characters; both empty without a match
+        [TestCase("Kreisfreie Stadt SV-025-Lübeck", "99002", "99")]
+        [TestCase("sv-025-lübeck", "99002", "99")]
+        [TestCase("SV-025-Lubeck", "", "")]
+        public void DataTable_CountyAndStateNumberFromMatchingCounty(string patientCounty, string countyNumber, string stateNumber)
+        {
+            Counties.Clear();
+            Counties.Add(new County {CountyId = 1, CountyNumber = "99002", Name = "SV-025-Lübeck, Hansestadt"});
+            Sending.Patient.County = patientCounty;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["Landkreis"].Should().Be(countyNumber);
+            export.Rows[0]["Bundesland"].Should().Be(stateNumber);
+        }
+
         private MeningoSendingRkiExport CreateExportDefinition()
         {
             return new MeningoSendingRkiExport(Counties);

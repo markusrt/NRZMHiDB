@@ -53,7 +53,8 @@ check the application log.
 3. **Given** a patient whose county text matches no stored record (for example "Hof" against "Hofstetten", or
    "Unbekannt" written by the postal-code lookup, spec 022), **When** the row is exported, **Then** both number columns
    are empty; the Meningococci RKI and LGA exports write a warning to the application log naming the county text and the
-   submission identifier, the Haemophilus RKI export does not (spec 011); the export completes normally.
+   submission identifier ("County SV-025-Lubeck not found for sending 22."), twice per row and run because the look-up
+   runs once per number column; the Haemophilus RKI export does not (spec 011); the export completes normally.
 4. **Given** a patient without county text, **When** the row is exported, **Then** both number columns are empty and
    no warning is written.
 5. **Given** several stored records match the same text (for example the same county from several uploaded editions,
@@ -63,7 +64,11 @@ check the application log.
    (derived; see Assumptions).
 6. **Given** the matched record, **When** the state number is derived, **Then** it is the first two characters of the
    stored county number, whatever they are; a county number with fewer than two characters yields what there is, and
-   an empty county number yields an empty state number.
+   an empty county number text (as the upload stores a blank key) yields an empty state number. A record saved on the
+   create or edit page with an empty "CountyNumber" is stored without a number; a patient whose county text matches it
+   makes the export end in HTTP 500 ("Der Wert darf nicht NULL sein. Parametername: source") instead of a file
+   (observed for the Haemophilus RKI export; the Meningococci exports use the same derivation). [SUSPECTED-DEFECT]
+   (backlog DATA-043)
 7. **Given** the export runs, **When** the patient's "Bundesland" selection differs from the state implied by the
    matched county, **Then** the numbers still follow the matched county; the patient's "Bundesland" is not consulted
    for either number. The Haemophilus RKI export additionally exports the free county text (`landkreis`) and the state
@@ -141,7 +146,9 @@ refused.
 3. **Given** "Details" is selected, **When** the page is shown, **Then** it shows the headings "Details" and "County",
    the three values, and the links "Edit" and "Back to List".
 4. **Given** the details, edit, or delete page is requested without a record identifier, **When** the request is
-   handled, **Then** a "bad request" response is shown; an unknown identifier gives a "not found" response.
+   handled, **Then** a "bad request" response is shown (HTTP 400, web server page "HTTP Error 400.0 - Bad Request");
+   an unknown identifier gives a "not found" response (HTTP 404, web server page "HTTP Error 404.0 - Not Found", unlike
+   the application's own page "Die Ressource kann nicht gefunden werden." for an unknown address).
 5. **Given** an account holding only the Administrator role, or a Public Health account, **When** any county page or the
    upload is requested, **Then** the request is refused (redirected to the sign-in page), because all county pages admit
    only the Standard User role (`Standardbenutzer`).
@@ -165,13 +172,15 @@ checked; edit it; delete it; run an export in between and verify the effect on t
 
 1. **Given** the list, **When** "Create New" is selected, **Then** the page "Create" (heading "County") offers the text
    fields "CountyNumber", "Name", and "ValidSince", the button "Create", and the link "Back to List".
-2. **Given** a value in "ValidSince" that is a date (German date format, optionally with time), **When** "Create" is
-   selected, **Then** the record is stored and the list is shown; "CountyNumber" and "Name" are stored as entered,
-   including any text, any length, or nothing at all.
-3. **Given** "ValidSince" is empty or not a date, **When** the user saves, **Then** the form is shown again with a
-   validation message (also before sending, in the browser) and nothing is stored. No other rule is checked: the
-   county number is not required to be five digits, the name is not required, and duplicates of number or name are
-   accepted.
+2. **Given** a value in "ValidSince" that is a date (German date format, optionally with time; the server also reads
+   an ISO date such as "2016-02-03"), **When** "Create" is selected, **Then** the record is stored and the list is
+   shown; "CountyNumber" and "Name" are stored as entered, including any text, any length, or nothing at all (an empty
+   field is stored as "no value").
+3. **Given** "ValidSince" is empty or not a date, **When** the user saves, **Then** the form is sent (the browser does
+   not check the field before sending), and the server shows it again with the validation message "Eingabe
+   erforderlich" (empty) or "ValidSince ist kein gültiger Wert für kein Datum." (for the text "kein Datum"; the
+   application-wide wording, see spec 011) and stores nothing. No other rule is checked: the county number is not
+   required to be five digits, the name is not required, and duplicates of number or name are accepted.
 4. **Given** "Edit" is selected for a record, **When** the page "Edit" is shown, **Then** it offers the same three
    fields filled with the stored values and the button "Save"; saving overwrites all three values in place, keeps no
    previous version, writes no audit record, and shows the list; the same validation as on the create page applies.
@@ -186,7 +195,8 @@ checked; edit it; delete it; run an export in between and verify the effect on t
    changed: the patient's county is free text, and no stored record refers to a county record; only future exports are
    affected.
 9. **Given** the create, edit, or delete form is submitted, **When** the request is handled, **Then** the anti-forgery
-   token is verified; the upload does not verify a token and accepts any request method (spec 021).
+   token is verified; the upload does not verify a token and answers GET, HEAD, and POST alike (spec 021); PUT, DELETE,
+   and PATCH are refused by the web server with HTTP 404 before they reach the application, as for every address.
 
 ### Edge Cases
 
@@ -201,13 +211,19 @@ checked; edit it; delete it; run an export in between and verify the effect on t
   "X, Hansestadt" and the like) and a surrounding district "Landkreis X", both names normalize to "X", and the patient
   text "Landkreis X" delivered by the postal-code lookup (spec 022) matches both; the record with the earliest
   "ValidSince" (and, on a tie, the first in storage order) is exported, which can be the city's number for a patient of
-  the district. Derived from the rules; not exercised. [SUSPECTED-DEFECT]
+  the district. Observed on the system 2026-11-08 with synthetic records (025 verification, backlog DATA-028).
+  [SUSPECTED-DEFECT]
 - **A record with an empty name matches patients without county text**: A record saved on the create or edit page
   with an empty "Name" is stored without a name; the comparison treats "no name" against "no county text" as equal.
   Every patient without county text then receives that record's county and state number in all three exports, and the
-  Meningococci exports write no warning for them. Derived from the matching rule and its automated test for two empty
-  names; not exercised. The upload never produces an empty name of this kind (it stores an empty text, which does not
-  match). [SUSPECTED-DEFECT]
+  Meningococci exports write no warning for them. Observed on the system 2026-11-08 for the Haemophilus RKI export
+  (025 verification, backlog DATA-029). The upload never produces an empty name of this kind (it stores an empty text,
+  which does not match). [SUSPECTED-DEFECT]
+- **A record without county number breaks the exports**: A record saved on the create or edit page with an empty
+  "CountyNumber" is stored without a number. As long as no patient text matches it, nothing happens; once one does,
+  the state-number column cannot be derived and the export ends in HTTP 500 instead of delivering a file (observed for
+  the Haemophilus RKI export; derived for the two Meningococci exports, which share the code). Deleting the record
+  restores the export. [SUSPECTED-DEFECT] (backlog DATA-043)
 - **"Earliest validity wins" together with "uploads only add"**: Because every upload adds records and the earliest
   "ValidSince" is chosen, uploading a newer edition changes the exported number only for names that did not exist
   before. A county whose number changed (territorial reform) keeps being exported with the old number as long as the
@@ -223,11 +239,13 @@ checked; edit it; delete it; run an export in between and verify the effect on t
   no review step, version history, audit record, log entry, or recovery; a wrong upload cannot be undone except record
   by record. [POTENTIAL-REFACTORING]
 - **Upload page served by the upload function**: The page is shown by the same function that performs the upload, so
-  the page can be reached with any request method and already displays "Bitte geben sie eine Datei an." when first
-  opened; the form carries no anti-forgery token and none is verified (spec 021 records the latter).
-- **Upload errors show technical text**: A failed import shows "Fehler:" followed by the untranslated technical message
-  of the failure (for example an index-out-of-range or date-format message); the failure is not logged, and the
-  uploaded copy remains in the server's temporary folder. [POTENTIAL-REFACTORING]
+  the page answers GET and POST alike and already displays "Bitte geben sie eine Datei an." when first opened; the
+  form carries no anti-forgery token and none is verified (spec 021 records the latter).
+- **Upload errors show technical text**: A failed import shows "Fehler:" followed, without a blank, by the framework
+  message of the failure in the server's language (observed: "Fehler:Der Index und die Länge müssen sich auf eine
+  Position in der Zeichenfolge beziehen. Parametername: length" for a short county line, "Fehler:Die Zeichenfolge
+  wurde nicht als gültiges DateTime erkannt." for an invalid validity field); the failure is not logged, and the
+  uploaded copy remains in the server's temporary folder (backlog SEC-012). [POTENTIAL-REFACTORING]
 - **File format assumptions**: The importer relies on fixed character positions of the GV100AD layout and on the
   record type "40"; a file in another layout (for example a CSV export of the directory) either imports nothing (no
   line starts with "40") and shows the list unchanged, or fails with the technical message when a line happens to start
@@ -246,10 +264,12 @@ checked; edit it; delete it; run an export in between and verify the effect on t
 - **Layering and duplication**: The county pages read and write the database directly from the page controller and
   render the stored record itself; the matching rule lives in the county record, and the look-up with the "empty
   county" fallback and the first-two-characters rule is copied into each of the three exports (the warning code twice,
-  in the two Meningococci exports). The importer and the matching rule have automated tests (three-county test file;
-  name variations "Hamburg"/"Hamburg, Freie und Hansestadt", "Städteregion Aachen"/"Aachen", "Berlin"/"Kreisfreie
-  Stadt Berlin", "Region Hannover"/"Hannover"), and the export tests cover the derived numbers; the county pages and
-  the upload have none. This reflects the constitution's "Known Architectural Constraints (Legacy Debt)" and
+  in the two Meningococci exports; the look-up runs once per number column, so each warning is written twice). The
+  importer and the matching rule have automated tests (three-county test file, record-type filter, short lines,
+  invalid validity, a file without county lines; name variations such as "Hamburg"/"Hamburg, Freie und Hansestadt",
+  "Städteregion Aachen"/"Aachen", case, comma suffix, and the literal fill words), and the export tests cover the
+  derived numbers; the county pages and the upload function have none (the page controller creates its own database
+  context, so it cannot be tested without a database). This reflects the constitution's "Known Architectural Constraints (Legacy Debt)" and
   Principles II and III. [POTENTIAL-REFACTORING]
 
 ## Requirements *(mandatory)*
@@ -273,7 +293,8 @@ checked; edit it; delete it; run an export in between and verify the effect on t
 - **FR-007**: Confirming the delete page MUST remove the record permanently, without soft delete, recovery, or audit
   record; confirming for a record that no longer exists MUST end on the generic error page.
 - **FR-008**: The create, edit, and delete forms MUST verify the anti-forgery token; the upload MUST NOT verify one and
-  MUST accept any request method (current behavior).
+  MUST answer GET, HEAD, and POST alike, without a method restriction of its own (current behavior; the web server
+  refuses PUT, DELETE, and PATCH for every address).
 - **FR-009**: The upload page MUST be titled "GV100AD acs-Datei hochladen", offer a file chooser "ACS-Datei:" and the
   button "Hochladen", and MUST show "Bitte geben sie eine Datei an." when opened, when no file is chosen, or when the
   chosen file is empty.
@@ -294,7 +315,8 @@ checked; edit it; delete it; run an export in between and verify the effect on t
 - **FR-014**: When several records match, the exports MUST use the record with the earliest validity date, regardless
   of the submission's dates; the patient's "Bundesland" MUST NOT be consulted.
 - **FR-015**: The Meningococci RKI and LGA exports MUST write a warning to the application log for every row whose
-  non-empty county text matches no record; the Haemophilus RKI export MUST NOT (current behavior, spec 011).
+  non-empty county text matches no record, twice per row and run (once per number column); the Haemophilus RKI export
+  MUST NOT (current behavior, spec 011).
 - **FR-016**: A county record MUST have no end of validity and MUST NOT be referenced by patients, submissions, or
   exports; changes MUST take effect at the next export run.
 - **FR-017**: This feature MUST document the current county behavior only and MUST NOT introduce new validation,
@@ -352,8 +374,8 @@ checked; edit it; delete it; run an export in between and verify the effect on t
 - **SC-002**: For patient texts that differ from the stored name only by case, a comma suffix, or the five fill words,
   100% of exported rows carry the stored county number and its first two characters as state number.
 - **SC-003**: For patient texts that match no record, 100% of exported rows carry empty county and state numbers; the
-  Meningococci exports log exactly one warning per such row with non-empty text and the Haemophilus RKI export logs
-  none.
+  Meningococci exports log exactly two warning lines per such row with non-empty text and run (one per number column)
+  and the Haemophilus RKI export logs none.
 - **SC-004**: When two records with different validity dates match the same text, 100% of exported rows carry the
   number of the record with the earlier date.
 - **SC-005**: In 100% of tested saves with an empty or non-date "ValidSince", nothing is stored and a validation message
@@ -391,3 +413,10 @@ checked; edit it; delete it; run an export in between and verify the effect on t
 - The GV100AD layout described (record type "40", positions of date, key, and name) is taken from the importer and its
   test data and is assumed to hold for the quarterly editions the laboratory uploads; other DeStatis layouts were not
   examined.
+- Verification 2026-11-08 (`verification.md`): the running application was exercised with synthetic records and a
+  synthetic GV100AD-shaped file (no real edition). Observed there and no longer only derived: the storage order
+  (ascending record identifier) on the list page and between records with equal validity date; the date display with
+  time of day; the validation messages; empty "Name" and "CountyNumber" stored as "no value"; the match of an
+  empty-name record with patients without county text; the all-or-nothing upload; the left-over temporary copy of
+  every non-empty upload. The upload reads only the local copy of the file and makes no outbound call. Whether real
+  quarterly editions keep the layout remains unverified.

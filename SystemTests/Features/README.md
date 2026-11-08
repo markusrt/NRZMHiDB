@@ -55,6 +55,7 @@ listed, add it here in the same commit.
 | Step | Meaning |
 | --- | --- |
 | `Then I see "<text>"` | The text is visible on the page. |
+| `Then I do not see "<text>"` | The text is not visible on the page (e.g. a deleted record in a list). |
 | `Then I see the link "<text>"` | A link with this text is visible. |
 | `Then I see the button "<text>"` | A button with this text is visible, including submit inputs whose text is their value. |
 | `Then the link "<text>" points to "<target>"` | A visible link with this text has exactly this `href` (e.g. `tel:…`, `mailto:…`). |

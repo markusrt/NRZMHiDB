@@ -258,7 +258,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   (network failure, non-JSON answer, submission without isolate) leaves an empty `tmp*.tmp` file (reproduced at unit
   level). Confirmed on system 2026-11-08 (024 verification) for the RKI match upload: each of the 18 non-empty uploads
   left a `tmp*.tmp` copy of the uploaded file (same size, synthetic content) in the temp directory of the account
-  running IIS Express; a zero-length upload and a request above the size limit left none.
+  running IIS Express; a zero-length upload and a request above the size limit left none. Confirmed on system
+  2026-11-08 (025 verification) for the county upload: each of the five non-empty uploads (a CSV file, a valid
+  GV100AD-shaped file twice, two failing files) left a `tmp*.tmp` copy of the uploaded file of the same size (62, 1412,
+  1412, 235 and 402 bytes, synthetic content), also after a failed import; the zero-length upload left none.
 - **SEC-013 – Combined submission form binds every patient and sending property** (Bugfix; source: 002 FR-021; 003
   FR-023): Create and edit have no list of intended fields. Confirmed on system 2026-10-30 (002 verification): a create
   request with `Sending.Deleted=true` stores the new submission as deleted. Confirmed on system 2026-10-30 (003
@@ -454,10 +457,21 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   01.01.2015), submissions sampled in 2024 got "09111" / "09" in the Haemophilus RKI, Meningococci RKI and LGA files.
 - **DATA-028 – County normalization collides "X, Stadt" with "Landkreis X"** (Bugfix; source: 025 Edge Cases): Both
   normalize to "X", so a district patient can receive the city's county number (earliest validity or storage order
-  wins).
+  wins). Confirmed on system 2026-11-08 (025 verification): with the uploaded records "SV-025-Hof, Stadt" ("99464")
+  and "Landkreis SV-025-Hof" ("99475"), both valid since 31.01.2014 and stored in this order, patients with the county
+  text "Landkreis SV-025-Hof" got "99464" / "99" in the Haemophilus RKI, Meningococci RKI and LGA files of 2018.
 - **DATA-029 – A county record with empty name matches every patient without county text** (Bugfix; source: 025 Edge
   Cases): Absent equals absent in the comparison; all three exports then assign its number and the Meningococci
-  exports log no warning.
+  exports log no warning. Confirmed on system 2026-11-08 (025 verification): after `/County/Create` stored a record
+  with number "99999" and an empty name (stored as NULL), the next Haemophilus RKI export of 2018 gave the patient
+  without county text "99999" / "99"; after the record was deleted, the row was empty again.
+- **DATA-043 – A county record without number breaks the exports** (Bugfix; source: 025 US1.6, Edge Cases): A
+  record saved on the county create or edit page with an empty "CountyNumber" is stored without a number (NULL); the
+  exports take the first two characters of the number without a null check, so a patient whose county text matches
+  such a record makes the export end in HTTP 500 ("Der Wert darf nicht NULL sein. Parametername: source") instead of
+  delivering empty numbers. Observed on system 2026-11-08 (025 verification) for the Haemophilus RKI export of 2018
+  (patient county "SV-025-OhneNummer"); the Meningococci RKI and LGA exports share the code (derived). Uploaded
+  records store a blank key as empty text and are not affected; deleting the record restores the export.
 - **DATA-026 – "Anzahl Einsendungen" written as text** (Bugfix; source: 013 Edge Cases): The generic spreadsheet writer
   treats only certain numeric types as numbers. Confirmed on system 2026-11-08 (013 verification): both sender exports
   write "Anzahl Einsendungen" as a text cell and "Einsendernummer" as a numeric cell.
@@ -778,7 +792,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   User creates, overwrites, hard-deletes or bulk-uploads counties without review, audit or recovery; the county number
   is not validated (any text, first two characters become the state number); upload failures show untranslated
   exception text and are not logged; the lookup plus first-two-characters rule is copied into three exports
-  (Principles I–III).
+  (Principles I–III). Observed on system 2026-11-08 (025 verification): number "abc", number "1" and an empty number
+  were stored, records were overwritten and hard-deleted without trace, and failed uploads wrote nothing to the
+  application log. The lookup runs once per number column, so the Meningococci RKI and LGA exports write each
+  "County … not found for sending …" warning twice per row and run (observed in the 011 and 025 verifications).
 - **REF-016 – No audit trail for data-losing operations** (Refactoring; source: 014/015, 017, 020 Edge Cases, 024; 016
   FR-014): Patient merges, breakpoint deletion, sender/submission delete and restore, RKI match import, health-office
   deletion and edits (local corrections are overwritten without history). Cross-cutting consequence
@@ -841,7 +858,7 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 ## TEST — Test gaps
 
 - **TEST-001 – Untested functions** (Test; source: Assumptions/Edge Cases of 013, 014, 015, 016, 017, 018, 019, 020,
-  021, 022, 023, 024): Sender export; both patient merges; health-office lookup, matching, storing and pages;
+  021, 022, 023, 024, 025): Sender export; both patient merges; health-office lookup, matching, storing and pages;
   breakpoint validator and pages; configuration page; deleted-records pages and restore; registration, role checks and
   navigation by role; browser behavior and both endpoints of the postal-code lookup; PubMLST update of an existing local
   record, result page and matching page; EpiScanGIS date window, "Blut und Liquor" exclusion, deleted submissions,
@@ -895,7 +912,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   role choice, the successful registration (one role, sign-in as the new account), a rejected account, the account
   rules, the password change and the role checks of the access matrix; the navigation by role (views) stays untested,
   and the Administrator cells (DEC-001), the LGA export for Public Health (DEC-006) and the functions without role
-  check (SEC-004, SEC-011) on purpose.
+  check (SEC-004, SEC-011) on purpose. County pages and upload (025 verification, 2026-11-08): not covered; the
+  page controller creates its own database context, so the pages and the upload function cannot be unit-tested
+  without a database (verified in the browser instead). Tests added in the same verification cover the importer
+  (record-type filter, midnight validity, short line, invalid validity, file without county lines), further matching
+  cases (case, comma suffix, fill words, literal spelling, umlauts) and the state-number derivation; the empty-name
+  match (DATA-029) and the record without number (DATA-043) stay untested on purpose.
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

@@ -72,3 +72,17 @@
   text, are not logged, and leave the uploaded copy in the temporary folder; controller/view layering, matching rule in
   the record, derivation copied into three exports, no tests for the pages or the upload — Principles II and III and
   the legacy-debt constraints). The earliest-validity choice itself remains tagged in spec 011 and is referenced.
+- Verification 2026-11-08: US4.2/US4.3 corrected: the browser does not check "ValidSince" before sending; the server
+  shows "Eingabe erforderlich" or "ValidSince ist kein gültiger Wert für kein Datum.", and also reads an ISO date.
+- Verification 2026-11-08: FR-008, US4.9 and the edge case "Upload page served by the upload function" corrected: the
+  upload answers GET, HEAD and POST; PUT, DELETE and PATCH are refused by the web server (HTTP 404) for every address,
+  so "any request method" was too broad.
+- Verification 2026-11-08: FR-015, US1.3 and SC-003 corrected: the Meningococci RKI and LGA exports write each
+  "County … not found for sending …" warning twice per row and run (the look-up runs once per number column).
+- Verification 2026-11-08: US1.6 corrected and new edge case "A record without county number breaks the exports"
+  added with [SUSPECTED-DEFECT] (DATA-043): an empty "CountyNumber" saved on the create page is stored without a
+  number and a matching patient makes the Haemophilus RKI export end in HTTP 500.
+- Verification 2026-11-08: US3.4 names the observed web server pages for "bad request" and "not found"; the edge case
+  "Upload errors show technical text" quotes the observed messages; the edge cases on DATA-028 and DATA-029 now say
+  that they were observed; the coverage note of "Layering and duplication" lists the importer and matching tests added
+  in the verification; Assumptions record what the verification observed.
