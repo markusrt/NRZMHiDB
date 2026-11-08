@@ -119,10 +119,17 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
   });
   ```
 
+  Allowed services still cost quota: count the real Geonames requests (in the same handler, push
+  `/Geonames/` URLs that no page route answers to `ctx.svGeonames`) and report the number. Keep them
+  few: evaluate whole values instead of typing per character unless per-keystroke behavior is under
+  test.
+
   To exercise what a page does with a lookup answer (e.g. the PubMLST button), register a more
   specific route afterwards that answers in the browser with synthetic data
   (`r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({...}) })`); the
-  request then never reaches the server.
+  request then never reaches the server. Failure answers (HTTP 500, status JSON) work the same way,
+  and a page route that delays one answer (`await new Promise(r => setTimeout(r, 2000))` before
+  `fulfill`) shows which of two overlapping answers wins.
 
   Known triggers: both report pages (`/Report/Isolate/n`, `/MeningoReport/Isolate/n`) post
   `/Report/QueryHealthOffice/` on load (the Meningococci page too), which asks the RKI tool; the "PubMLST" button of the Meningococci
@@ -326,7 +333,10 @@ For every item classified **Test** (and for UI items where a test already exists
    `csc` against `HaemophilusWebTests\bin\Debug`, copy the `*.dll.config`), never in
    `HaemophilusWebTests`. Path "Unit test (scratch)"; the verdict stays `Defect confirmed`/`New
    defect`, and the backlog text says "Reproduced at unit level YYYY-MM-DD (NNN verification)" instead
-   of "Confirmed on system". Keep the source in `specs/NNN-*/verification/`.
+   of "Confirmed on system". Keep the source in `specs/NNN-*/verification/`. The same path serves
+   refactoring rows that a committed test would cement (e.g. unencoded parameters).
+   A missing setting can be tested without a secret: the test project's `App.config` lacks the
+   secret keys; never let an assertion print a configured value.
    For failure paths of a service, use the real client with a stubbed HTTP function (e.g.
    `GeonamesService(Func<string, string>)`) rather than a mocked interface, so the client's own parsing
    is exercised. Tests that check temp files redirect `TMP`/`TEMP` to a test folder. For a `DEC-*` item, a test may assert the parts of the FR the open
@@ -432,6 +442,8 @@ has no bold titles, so the numbers in the report never shift. Path is the one ev
 further evidence goes into the Evidence column. Screenshots and downloads stay local
 (`specs/*/verification/` is git-ignored); the report references them by name so the owner can open
 them from the working tree.
+
+Code spans that contain a backtick (e.g. ``List`1``) need double backticks, or markdownlint fails.
 
 ### 4. Correct the spec and the backlog
 
