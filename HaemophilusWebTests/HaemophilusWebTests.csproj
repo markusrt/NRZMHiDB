@@ -217,6 +217,7 @@
     <Compile Include="Controllers\GeonamesControllerTests.cs" />
     <Compile Include="Controllers\PubMlstControllerTests.cs" />
     <Compile Include="Controllers\ReportControllerTests.cs" />
+    <Compile Include="Controllers\MeningoReportControllerTests.cs" />
     <Compile Include="Controllers\SenderControllerTests.cs" />
     <Compile Include="Controllers\IsolateControllerTests.cs" />
     <Compile Include="Controllers\MeningoIsolateControllerTests.cs" />
