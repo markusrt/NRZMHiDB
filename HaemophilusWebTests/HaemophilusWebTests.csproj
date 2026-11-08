@@ -215,6 +215,7 @@
     <Compile Include="Controllers\EpiscanGisExportControllerTests.cs" />
     <Compile Include="Controllers\AccountControllerTests.cs" />
     <Compile Include="Controllers\GeonamesControllerTests.cs" />
+    <Compile Include="Controllers\HealthOfficesControllerTests.cs" />
     <Compile Include="Controllers\PubMlstControllerTests.cs" />
     <Compile Include="Controllers\ReportControllerTests.cs" />
     <Compile Include="Controllers\MeningoReportControllerTests.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="Mocks\FakeDbSet.cs" />
     <Compile Include="Models\SamplingLocationExtensionsTests.cs" />
     <Compile Include="Models\CountyTests.cs" />
+    <Compile Include="Models\HealthOfficeTests.cs" />
     <Compile Include="Models\SenderTests.cs" />
     <Compile Include="Models\Meningo\MeningoSendingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

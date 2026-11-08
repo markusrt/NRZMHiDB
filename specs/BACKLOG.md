@@ -144,7 +144,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   initials and postal code shown) while `/MeningoIsolate/Edit/16` and `/MeningoPatientSending` redirect them to the
   sign-in page; `Rki1` generated a "Fax - Teilbefund - v2.docx" document, which set MZ012/26 to "Teilbefund". Confirmed
   on system 2026-11-08 (024 verification): `Rki1` and `Admin1` open `/RkiMatch` (HTTP 200, page "RKI Matching Daten"),
-  and an upload by `Rki1` was processed ("File Uploaded Successfully!!").
+  and an upload by `Rki1` was processed ("File Uploaded Successfully!!"). Confirmed on system 2026-11-08 (016
+  verification): `Rki1` and `Admin1` get HTTP 200 for the health-office list, create, edit, details and delete pages
+  (signed-out requests are redirected to the sign-in page); `Rki1`, who is offered no "Gesundheitsämter" entry, created a
+  record through the create page. The lookup action carries no role check either (reproduced at unit level; the
+  lookup itself was not sent because it asks the RKI tool).
 - **SEC-005 – Anti-forgery token not verified on state-changing actions** (Bugfix; source: 021 Edge Cases
   "consolidated"; 002 FR-021, 003 FR-023, 008 FR-015, 009 FR-016, 011, 013, 014, 015, 016, 019, 020, 022, 024): Not verified on the combined
   submission create/edit saves, all exports (also any request method), both patient merges (a single request merges
@@ -169,7 +173,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   Haemophilus patient merge: a plain GET of `/PatientSending/MergePatient` with both numbers, `MainPatient` and
   `Confirmation=true`, without token, merged the two patients at once and showed the success page. Confirmed on system
   2026-11-08 (015 verification) for the Meningococci patient merge: the same GET of
-  `/MeningoPatientSending/MergePatient` merged at once ("Erfolgreich").
+  `/MeningoPatientSending/MergePatient` merged at once ("Erfolgreich"). Reproduced at unit level 2026-11-08 (016
+  verification) for the health-office lookup: both report pages post only `postalCode` to `/Report/QueryHealthOffice/`
+  (request held in the browser), and the action is marked for POST without a token check; the create, edit and delete
+  forms of the health-office pages refuse a POST without token (HTTP 500).
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
@@ -184,7 +191,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   bold on the Haemophilus report page. Confirmed on system 2026-11-08 (009 verification, synthetic answer as above) for
   the Meningococci report page. Confirmed on system 2026-11-08 (022 verification, synthetic suggestion answer injected
   in the browser): "Sankt Peter's Ort" is offered as "12371 Sankt Peter", and text after an apostrophe adds an
-  attribute to the suggestion and a `<b>` element to the page.
+  attribute to the suggestion and a `<b>` element to the page. Observed 2026-11-08 (016 verification): local edits
+  cannot carry markup into the report box; the health-office create and edit forms refuse values with tags through the
+  framework's request validation (HTTP 500, input lost), so only RKI answers reach the page unescaped.
 - **SEC-009 – Geonames called over plain HTTP** (Bugfix; source: 022 Edge Cases): Account name and typed patient/sender
   postal codes travel unencrypted (Principle IV).
 - **SEC-010 – Rendering libraries from public CDNs on every page, two without integrity check** (Refactoring; source:
@@ -301,13 +310,21 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   combinations are rejected only by the database (generic error page, input lost).
 - **DATA-014 – Health-office records created for postal codes unknown to the RKI website are never shown** (Bugfix;
   source: 016 US3.2, Edge Cases): Matching uses only the address the website returns; the create page is unlinked.
+  Reproduced at unit level 2026-11-08 (016 verification, real RKI client with stubbed answers): a stored record for a
+  postal code the website does not know is not returned for that postal code, and a stored record with the queried
+  postal code but another address is ignored while a new record is stored from the website values. On the system the
+  create page stored such records (`SV-016-…`, also by `Rki1`), and the list shows no create link.
 - **DATA-015 – Locally cleared health-office fields break the report page** (Bugfix; source: 016 Edge Cases; 008
   FR-006; 009 FR-008): An empty telephone stops the page script; cleared email/fax display as "null". Confirmed on system
   2026-11-08 (008 verification, synthetic lookup answers injected in the browser): without telephone only the address
   appears, fax and email stay empty, "Gesundheitsamt bearbeiten" stays inactive and the browser reports "Cannot read
   properties of null (reading 'replace')"; without fax and email both show "null" (fax linked to `mailto:-@fax`).
   Document generation still works. Confirmed on system 2026-11-08 (009 verification, same synthetic answers) for the
-  Meningococci report page, with the same messages.
+  Meningococci report page, with the same messages. Confirmed on system 2026-11-08 (016 verification): clearing
+  telephone, fax and email on the edit page saves the record with these fields without a value; fed with the same
+  values in the browser, the report page shows "null" for email and fax (fax linked to `mailto:-@fax`), and with the
+  telephone also cleared it shows only the address, keeps "Gesundheitsamt bearbeiten" inactive and reports the same
+  browser error.
 - **DATA-016 – PubMLST batch matching defects** (Bugfix; source: 019 Edge Cases): Includes isolates of deleted
   sendings; batch asks public then IRIS while the single lookup asks IRIS then public (different records possible);
   local record found by PubMLST id only, ignoring the database (cross-database overwrite, database name not updated);
@@ -515,7 +532,13 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   a message. The order was the file system's (case-insensitive alphabetical on the NTFS host, `~$…` last).
 - **UX-005 – Health-office list and hidden pages** (Refactoring; source: 016 US2.3, US3, Edge Cases): List shows no
   address and only the first lookup's postal code; details/delete pages are untranslated and unlinked; the RKI website
-  is queried before local records on every lookup (unreachable website → nothing shown).
+  is queried before local records on every lookup (unreachable website → nothing shown). Confirmed on system
+  2026-11-08 (016 verification): the list "Gesundheitsämter" shows "Postleitzahl", "Email", "Telefon", "Fax" and
+  "Bearbeiten" only, and its search does not find address words ("Teststadt" → "Keine Einträge vorhanden."); details,
+  delete and create are reachable only by address. Reproduced at unit level: a record stored by a lookup keeps the
+  postal code of the first lookup when a second postal code of the same office is looked up. Also observed: an empty
+  lookup answer (`null`) leaves the box empty without a message only because the report page script stops on it
+  ("Cannot read properties of null (reading 'error')"); the script's error branch never applies.
 - **UX-006 – RKI match import always reports "File Uploaded Successfully!!"** (Refactoring; source: 024 US1.5): Also
   for zero matches or an empty file; failures never reach the application log. Observed on system 2026-11-08 (024
   verification): the success line also for a header-only file, a file with unknown headers and a file whose rows match
@@ -532,7 +555,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   "Initialen", "Geburtsdatum", "Stammnummer", "Eingangsdatum", "Entnahmeort", "Invasiv", "Labor-Nr" and "Befund"; the
   patient number is shown only on the isolate page ("Patienten-Nr.") and in the laboratory export.
 - **UX-009 – Breakpoint and health-office details/delete pages are untranslated generated pages** (Refactoring; source:
-  016, 017 Edge Cases): Internal identifiers shown in "Gültig für" and on details pages.
+  016, 017 Edge Cases): Internal identifiers shown in "Gültig für" and on details pages. Confirmed on system
+  2026-11-08 (016 verification) for the health-office pages: titles "Details" and "Delete", the class name
+  "HealthOffice" as heading, "Are you sure you want to delete this?", "Delete", "Edit" and "Back to List"; the field
+  labels are German ("Adresse", "Telefon", "Postleitzahl") except "Email" and "Fax".
 - **UX-010 – Submission pages with missing or unknown id end in HTTP 500** (Bugfix; source: 002 Edge Cases; 003 Edge
   Cases): `/PatientSending/Edit`, `/Delete` and `/Undelete` without id or with an unknown id fail with a null reference
   instead of "bad request"/"not found" (the sender pages answer 400/404, 001 FR-018). Confirmed on system 2026-10-30
@@ -619,7 +645,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **REF-006 – Breakpoints maintained as unversioned runtime data** (Refactoring; source: 017 Edge Cases): Authoritative
   reference data without review step, history or audit (Principle I).
 - **REF-007 – Health-office records saved without validation and then unsavable** (Refactoring; source: 016 Edge Cases):
-  Deliberate exception to Principle I that blocks the edit page until values are corrected.
+  Deliberate exception to Principle I that blocks the edit page until values are corrected. Observed 2026-11-08 (016
+  verification): the lookup stores website values through the save without validation (unit test with a stubbed RKI
+  answer), while the edit and create pages refuse a malformed telephone or fax only after the round trip ("Das Feld
+  Telefon enthält keine gültige Telefonnummer."; the browser checks email and postal code only).
 - **REF-008 – Sender model validated by DataAnnotations only; Meningococci sender controller exposes full CRUD without
   navigation** (Refactoring; source: 001 Assumptions, Edge Cases, FR-007): The Meningococci CRUD addresses have no
   views and end in HTTP 500 (confirmed on system 2026-10-30, 001 verification); its restore address would clear the
@@ -655,13 +684,16 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   is not validated (any text, first two characters become the state number); upload failures show untranslated
   exception text and are not logged; the lookup plus first-two-characters rule is copied into three exports
   (Principles I–III).
-- **REF-016 – No audit trail for data-losing operations** (Refactoring; source: 014/015, 017, 020 Edge Cases, 024):
-  Patient merges, breakpoint deletion, sender/submission delete and restore, RKI match import. Cross-cutting consequence
+- **REF-016 – No audit trail for data-losing operations** (Refactoring; source: 014/015, 017, 020 Edge Cases, 024; 016
+  FR-014): Patient merges, breakpoint deletion, sender/submission delete and restore, RKI match import, health-office
+  deletion and edits (local corrections are overwritten without history). Cross-cutting consequence
   of Principle I; overlaps DATA-009, DATA-011 and SEC-006. Confirmed on system 2026-11-08 (014 verification) for the
   Haemophilus patient merge: two successful merges left no application log line, and the catalog has no audit or
   history table; the moved submissions keep no reference to the deleted patient. Confirmed on system 2026-11-08 (015
   verification) for the Meningococci patient merge: three successful merges left no log line; only the failed merge
-  appears as "Unhandled error".
+  appears as "Unhandled error". Confirmed on system 2026-11-08 (016 verification) for the health-office deletion: the
+  confirmed deletion left no log line and the record is gone from the catalog; only the confirmation for a record that
+  no longer exists appears, as "Unhandled error: Der Wert darf nicht NULL sein." (HTTP 500).
 - **REF-018 – Automatic stem numbers implemented but never enabled** (Refactoring; source: 002 FR-003; 003 FR-003): The
   sending controllers compute the next stem number, but the switch that enables it is `false` for every submission
   type, so intake leaves the stem number empty and it is entered on the isolate page. Confirmed on system 2026-10-30
@@ -721,7 +753,13 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   equal-number rule, "Unbekannter Patient" for unknown numbers, numbers with only soft-deleted submissions and
   Haemophilus-only numbers, the confirmation data with the "MZ"/"DE" prefixes and the reassign-and-delete step for both
   choices; the soft-deleted failure, the number mix-up, the missing audit, the sampling date not re-checked (DATA-009)
-  and the missing gender (UX-018) stay untested on purpose.
+  and the missing gender (UX-018) stay untested on purpose. Health-office lookup, matching, storing and pages: covered
+  by tests added in the 016 verification (2026-11-08) for storing an unknown office without validation, returning a
+  stored record with the same address (also with CR LF line breaks) without storing, one record for two postal codes
+  of the same office, a changed address and a deleted record, no office, failing query and unreadable page, the "not
+  found" answer of the edit page when the website returns no office, the "bad request" answers, and the email,
+  telephone and fax format rules; the edit page's matching branch (database created inside the controller) and the
+  views stay untested, and the first-lookup postal code (UX-005) and the unused own postal code (DATA-014) on purpose.
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

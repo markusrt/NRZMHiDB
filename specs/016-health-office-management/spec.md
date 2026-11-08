@@ -156,7 +156,11 @@ stored from the RKI values.
   changed its page layout, or returns no office, no health office is shown even if a suitable local record exists,
   and "Gesundheitsamt bearbeiten" cannot be used from the report page. The website's page layout has changed in the
   past (change history 2017-05-31 and 2017-06-16), and reading it depends on the position of fields on that page.
-  [POTENTIAL-REFACTORING]
+  When the lookup returns no office, the server answers with an empty (`null`) result; the report page shows no
+  message, and the box stays empty only because the page script stops on that answer (browser error "Cannot read
+  properties of null (reading 'error')"); the script's branch for an error answer never applies, because the server
+  never answers in that shape (observed in the 016 verification with answers injected in the browser). A failed
+  request (for example HTTP 500) leaves the box empty without a script error. [POTENTIAL-REFACTORING]
 - The application's change history (2017-04-20) states that own records can be created for postal codes for which
   the RKI website finds no match. Records created that way are never shown, because lookups only match by the
   address the RKI website returns; the create page is in addition not linked from the list. [SUSPECTED-DEFECT]
@@ -170,19 +174,23 @@ stored from the RKI values.
   postal code, email, telephone, and fax, not the address, so an office covering many postal codes is findable in the
   list only under that first postal code. [POTENTIAL-REFACTORING]
 - Matching compares the RKI address and the stored address with line breaks removed; all other characters,
-  including spaces between lines, must be identical. Whether letter case matters is decided by the database's
-  comparison rules (see Assumptions). If the RKI website changes the wording or layout of an office's address, a new
-  record is stored and earlier local corrections stop being shown.
+  including spaces between lines, must be identical. The comparison runs in the database and follows its comparison
+  rules: on the verification catalog (collation `SQL_Latin1_General_CP1_CI_AS`) letter case and trailing spaces are
+  ignored. If the RKI website changes the wording or layout of an office's address, a new record is stored and
+  earlier local corrections stop being shown.
 - No rule prevents two stored records with the same address (for example two report pages looked up simultaneously,
   or a record created directly). When several records match, the system uses one of them without a defined order.
 - If a locally edited record has an empty telephone number, the report page stops while displaying it: the address is
   shown, but fax and email are not, and "Gesundheitsamt bearbeiten" stays inactive. A locally cleared email is
   displayed as the text "null", and a locally cleared fax as the text "null" linked to `-@fax` (a fax missing on the
-  RKI website instead appears as an empty link). Such empty fields arise because the edit page stores cleared fields
-  as empty. (Derived from the report page script and standard form handling; not exercised.)
-  [SUSPECTED-DEFECT]
-- The report page inserts the address, telephone, fax, and email into the page as markup without escaping. These
-  values come from the external RKI website or from local edits. [SUSPECTED-DEFECT]
+  RKI website instead appears as an empty link). Such fields arise because the edit page saves cleared telephone,
+  fax, and email without a value (observed in the 016 verification: the stored fields hold no value, and the report
+  page behaved as described with the same values injected in the browser). [SUSPECTED-DEFECT]
+- The report page inserts the address, telephone, fax, and email into the page as markup without escaping. Markup
+  can reach the page only from the external RKI website: a local edit or a create whose values contain markup (for
+  example `<b>…</b>` in the address) is refused by the framework's request validation with HTTP 500 ("Ein
+  möglicherweise gefährlicher Request.Form-Wert wurde vom Client … entdeckt.", framework message), and the input is
+  lost. [SUSPECTED-DEFECT]
 - A patient without postal code, or with a foreign or invalid postal code, is still looked up on the RKI website with
   that value; normally no office is returned and the box stays empty.
 - Telephone and fax are shortened only by collapsing repeated spaces; email is taken over as delivered. The leading
@@ -198,16 +206,19 @@ stored from the RKI values.
 - The create, edit, and delete forms verify the anti-forgery token. The lookup accepts only posted requests but does
   not check an anti-forgery token, although it can store a new record (limited to values returned by the RKI
   website). [SUSPECTED-DEFECT]
-- Deleting a record is permanent, is not logged, and has no undo; the confirmation for a non-existent record ends on
-  the generic error page.
+- Deleting a record is permanent, is not logged, and has no undo; the confirmation for a non-existent record (for
+  example a delete page left open while the record was deleted elsewhere) ends in HTTP 500 (framework message "Der
+  Wert darf nicht NULL sein."), which the application log records as an unhandled error. The missing audit trail is
+  the cross-cutting finding REF-016 of specs 014/015, 017, and 020.
 - Details and delete pages are untranslated standard pages (English labels "Details", "Delete", "Edit", "Back to
   List", heading "HealthOffice"), unlike the German list, create, and edit pages.
 - The lookup-and-match logic exists twice, once for the report pages and once for opening the edit page from the
   report page; the RKI website client is created directly inside the controllers, so neither the matching nor the
   storing can be tested without the website, and the health-office pages display the stored entity directly. This
   reflects the constitution's "Known Architectural Constraints (Legacy Debt)" (god-controllers with weak dependency
-  injection) and Principle III. Only the reading of the RKI page is covered by automated tests, using stored sample
-  pages. [POTENTIAL-REFACTORING]
+  injection) and Principle III. Automated tests replace the website client's query function and reach the private
+  client field by reflection (added in the 016 verification); the edit page's matching branch stays untestable
+  without a database. [POTENTIAL-REFACTORING]
 
 ## Requirements *(mandatory)*
 
@@ -310,17 +321,21 @@ stored from the RKI values.
 
 - Current application code, views, the schema migration, the application's change history, and role constants are
   the source of truth. The RKI website was not called; its behavior is described only as the application reads it.
-  Only the reading of RKI answers is covered by automated tests (stored sample pages for one result, no result,
-  several results, special characters, and malformed telephone/fax); lookup, matching, storing, and the pages have no
+  The reading of RKI answers is covered by automated tests (stored sample pages for one result, no result, several
+  results, special characters, and malformed telephone/fax). The report-page lookup (matching, storing, no office),
+  the "not found" and "bad request" answers of the health-office pages, and the email, telephone, and fax format rules
+  are covered by tests added in the 016 verification; the edit page's matching branch and the pages' views have no
   automated tests.
-- Address matching is executed by the database; letter-case sensitivity is assumed to follow the database's default
-  comparison rules (commonly case-insensitive) and was not verified.
-- The report-page failure on an empty telephone number, the "null" email display, and the storing of cleared fields as
-  empty are derived from the page script and standard form handling; they were not exercised in a running system.
+- Address matching is executed by the database; letter case follows the database's comparison rules. On the
+  verification catalog (collation `SQL_Latin1_General_CP1_CI_AS`) the comparison ignores letter case and trailing
+  spaces (016 verification); a production database with another collation could differ.
+- The report-page failure on an empty telephone number, the "null" email display, and the saving of cleared fields
+  without a value were observed in the 016 verification (stored values checked in the catalog, the report page fed with
+  the same values in the browser, because the RKI lookup was not called).
 - The leading `0` added to the fax number in the email link is assumed to be an outside-line prefix required by the
   institute's fax-to-email gateway; the code gives no reason.
-- When the lookup returns no office, the report page is assumed to show nothing and to raise no visible error; the
-  exact browser behavior for the empty answer was not observed.
+- When the lookup returns no office, the report page shows nothing and no visible message; the page script stops with
+  a browser error (see Edge Cases; observed in the 016 verification with the empty answer injected in the browser).
 - Accounts are assumed to hold exactly one role, as in specs 011 and 014; since the health-office functions check no
   role, this assumption does not change the outcome here.
 - The patient's postal code is assumed to be the value stored on the patient at intake (specs 002 and 003); no other

@@ -41,3 +41,9 @@
   - Only the reading of RKI answers is covered by automated tests; lookup, matching, storing, and the health-office pages are not.
 - Unlike specs 011 and 014, an Administrator is not refused here: the health-office functions check no role at all, so the single-role assumption does not change the outcome; Public Health accounts can reach them by direct address.
 - As-is observations tagged in the spec: 5 [SUSPECTED-DEFECT], 4 [POTENTIAL-REFACTORING].
+- Verification 2026-11-08: Edge Cases (second bullet) now describe the empty (`null`) lookup answer as observed: no message, the box stays empty only because the page script stops ("Cannot read properties of null (reading 'error')"), and the script's error branch never applies; Assumptions updated accordingly.
+- Verification 2026-11-08: letter case of the address match observed instead of assumed: the verification catalog's collation `SQL_Latin1_General_CP1_CI_AS` ignores letter case and trailing spaces (Edge Cases, Assumptions).
+- Verification 2026-11-08: cleared telephone, fax, and email are saved without a value (was: "as empty"); the report-page behavior for them was observed with the values injected in the browser, so "not exercised" was removed (Edge Cases, Assumptions).
+- Verification 2026-11-08: markup in the report box can come only from the RKI website; local edits or creates containing markup are refused by request validation with HTTP 500 (Edge Cases, unescaped markup bullet).
+- Verification 2026-11-08: the delete confirmation for a non-existent record ends in HTTP 500 ("Der Wert darf nicht NULL sein.", logged as an unhandled error) instead of "the generic error page".
+- Verification 2026-11-08: coverage notes updated (Edge Cases last bullet, Assumptions): tests added in the 016 verification cover the report-page lookup, the "not found"/"bad request" answers of the health-office pages, and the format rules; the edit page's matching branch and the views stay untested.

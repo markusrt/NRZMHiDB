@@ -56,6 +56,8 @@ listed, add it here in the same commit.
 | `Then I see "<text>"` | The text is visible on the page. |
 | `Then I see the link "<text>"` | A link with this text is visible. |
 | `Then I see the button "<text>"` | A button with this text is visible, including submit inputs whose text is their value. |
+| `Then the link "<text>" points to "<target>"` | A visible link with this text has exactly this `href` (e.g. `tel:…`, `mailto:…`). |
+| `Then "<text>" is enabled` | The link or button with this text is not disabled (no `disabled` attribute or class). |
 | `Then I do not see the link "<text>"` | The navigation and the page contain no link with this text, also not inside closed drop-downs. |
 | `Then I see the validation message "<text>"` | A field validation message with this text is shown. |
 | `Then I see the search field "<placeholder>"` | A search field showing this placeholder is visible (list searches without labels). |
@@ -111,5 +113,8 @@ listed, add it here in the same commit.
 | `Given a Meningococci submission with sender laboratory number "<lab no>" for patient "<initials>" born "<date>" with postal code "<code>" exists` | 015 | Create a Meningococci submission ("Blut", isolate defaults, a gender chosen) with this "Labnr. Einsender" for a new patient with these identifying details through intake if missing (sender `SV-003-Alpha`). |
 | `When I enter the patient number of the Meningococci submission "<lab no>" into "<label>"` | 015 | Read the "Patienten-Nr." shown on the Meningococci isolate page of the submission with this "Labnr. Einsender" and fill it into the field with this label. |
 | `Then the Meningococci submission list filtered by patient number of "<lab no>" shows <n> row(s)` | 015 | Enter the "Patienten-Nr." of that submission (as read from its isolate page) into the search field "Patienten-Nr." of the Meningococci list (`/MeningoPatientSending`) and count the rows. |
+| `Given a health office with address "<lines>" and postal code "<code>" exists` | 016 | Create the record on `/HealthOffices/Create` if missing (address lines separated by `\|`, synthetic values with the prefix `SV-016-`). |
+| `Then the health-office list row "<search text>" shows "<text>"` | 016 | The list "Gesundheitsämter" (`/HealthOffices`), filtered with the search box, has a row containing the text. |
+| `Given the health-office lookup is answered in the browser with address "<lines>", telephone "<phone>", fax "<fax>" and email "<email>"` | 016 | The browser answers the report page's lookup request (`POST /Report/QueryHealthOffice/`) itself with a synthetic office (address lines separated by `\|`); the request never reaches the server, the RKI tool is never contacted. |
 | `Given the PubMLST lookup is answered in the browser with PubMLST id "<id>", database "<database>" and ST "<value>"` | 019 | The browser answers the lookup request of the isolate form (`POST /PubMlst/NeisseriaIsolates/`) itself with a synthetic record carrying these values (other typing values empty); the request never reaches the server, PubMLST is never contacted. |
 | `Given the PubMLST lookup is answered in the browser with "not found"` | 019 | As above, answered with HTTP 404. |
