@@ -125,7 +125,7 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
   request then never reaches the server.
 
   Known triggers: both report pages (`/Report/Isolate/n`, `/MeningoReport/Isolate/n`) post
-  `QueryHealthOffice` on load, which asks the RKI tool; the "PubMLST" button of the Meningococci
+  `/Report/QueryHealthOffice/` on load (the Meningococci page too), which asks the RKI tool; the "PubMLST" button of the Meningococci
   isolate form; the health-office edit page with `?postalCode=`; the PubMLST matching submit. Routing
   does not cover `page.request.get/post`: never send those to the addresses above, not even for role
   checks (check the role on another address of the same controller). A new outbound call you find in
@@ -237,6 +237,11 @@ Practical notes for this application:
 - The rule ID of an interpretation is not shown on the report page; it appears only in the "Regel"
   column of the laboratory export. The RKI exports carry no laboratory number; match rows by "PatNr
   NRZM" or the stem number.
+- A fresh Meningococci isolate matches no interpretation rule, so its report reads "Diskrepante
+  Ergebnisse …". For a report without discrepancy, enter the inputs of a rule from
+  `MeningoIsolateInterpretationTests` (e.g. the stem rule the seeded MZ004/20 uses).
+- Keep `sqlcmd` calls and file operations (`Remove-Item`, `Move-Item`) in separate shell calls; the
+  combination is blocked by the path guard.
 - Data with identical patient details: intake blocks a third patient with the same initials, birth
   date and postal code (002 FR-012). Create further submissions for an existing patient with
   "Bestehenden Patienten verwenden" while only one matching record exists.
