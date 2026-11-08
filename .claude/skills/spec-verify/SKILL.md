@@ -114,6 +114,7 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
 
   ```js
   const ctx = page.context();
+  for (const p of ctx.pages()) await p.unrouteAll({ behavior: 'ignoreErrors' });   // page routes win over the block
   await ctx.unrouteAll({ behavior: 'ignoreErrors' });   // the MCP browser context outlives earlier runs
   ctx.svBlocked = [];   // globals do not survive between run_code calls; the context does
   const external = /\/QueryHealthOffice|\/PubMlst\/NeisseriaIsolates|\/HealthOffices\/Edit\?.*postalCode=|\/MeningoIsolate\/PubMlstMatch/i;
@@ -133,12 +134,15 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
   To exercise what a page does with a lookup answer (e.g. the PubMLST button), register a more
   specific route afterwards that answers in the browser with synthetic data
   (`r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({...}) })`); the
-  request then never reaches the server. Failure answers (HTTP 500, status JSON) work the same way,
+  request then never reaches the server. Remove your page routes (`page.unrouteAll`) as soon as the
+  check is done and again at the end of the run: a leftover page route answers blocked addresses
+  silently in later runs. Failure answers (HTTP 500, status JSON) work the same way,
   and a page route that delays one answer (`await new Promise(r => setTimeout(r, 2000))` before
   `fulfill`) shows which of two overlapping answers wins.
 
   Known triggers: both report pages (`/Report/Isolate/n`, `/MeningoReport/Isolate/n`) post
-  `/Report/QueryHealthOffice/` on load (the Meningococci page too), which asks the RKI tool; the "PubMLST" button of the Meningococci
+  `/Report/QueryHealthOffice/` on load (the Meningococci page too, and also with an empty postal
+  code), which asks the RKI tool; the "PubMLST" button of the Meningococci
   isolate form; the health-office edit page with `?postalCode=`; the PubMLST matching submit. Routing
   does not cover `page.request.get/post`: never send those to the addresses above, not even for role
   checks (check the role on another address of the same controller). A new outbound call you find in
@@ -221,8 +225,9 @@ Practical notes for this application:
   number); MVC binds the first value, so a crafted request must replace every occurrence
   (`URLSearchParams.delete` then `append`), and the duplicate itself may be a finding.
 - Forms with `preventSiteNavigationWithPendingChanges` raise a `beforeunload` dialog when you
-  leave them with changes. Before navigating away from a changed form, call
-  `await page.evaluate(() => $(window).off('beforeunload'))`. If a dialog still appears, it interrupts
+  leave them with changes. Before every navigation (not only before a submit), call
+  `await page.evaluate(() => window.$ && $(window).off('beforeunload'))`; a dialog left by an earlier
+  call otherwise breaks the first `page.goto` of the next one. If a dialog still appears, it interrupts
   the running call; answer it with `browser_handle_dialog` and check the page state before continuing.
 - The date pickers open over the submit button. Set date fields with `page.evaluate` (value in
   `dd.MM.yyyy`) and click the button via `page.evaluate` as well.
@@ -256,6 +261,17 @@ Practical notes for this application:
   event; `page.request` responses cannot be written to disk.
 - After clicking a submit button, a further `page.evaluate` fails with "Execution context was
   destroyed"; read a button's state after submit inside the same `evaluate` (via `setTimeout`).
+- Failed inserts consume identity values; look up the ids of your records with SQL instead of
+  assuming "last + 1".
+- Form values containing `<…>` are rejected by ASP.NET request validation with HTTP 500 ("Ein
+  möglicherweise gefährlicher Request.Form-Wert …"); the input is lost.
+- In unit tests, a private `readonly` service field without a constructor parameter (e.g. `rkiTool`)
+  can be replaced by reflection. Scratch assemblies that use NSubstitute 5 also reference
+  `System.Threading.Tasks.Extensions.dll`.
+- For Meningococci submissions the UI offers no working soft delete ("Eintrag löschen" ends in
+  HTTP 500, DEC-007); as data preparation, the delete POST with the page's token may be sent and
+  must be named in the report. "Bestehenden Patienten verwenden" overwrites the existing patient
+  with the form values; set distinguishing details on the edit page afterwards.
 - Records of earlier verifications have laboratory numbers that change with every host start; name
   them in the report by their sender laboratory number or sender (`SV-NNN-…`).
 - The submit buttons of the edit forms are `input type="submit"` elements named `primary-submit` and
