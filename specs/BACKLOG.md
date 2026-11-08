@@ -144,7 +144,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **SEC-009 – Geonames called over plain HTTP** (Bugfix; source: 022 Edge Cases): Account name and typed patient/sender
   postal codes travel unencrypted (Principle IV).
 - **SEC-010 – Rendering libraries from public CDNs on every page, two without integrity check** (Refactoring; source:
-  010 Edge Cases).
+  010 Edge Cases). Confirmed on system 2026-11-08 (010 verification): the sender list loads docxtemplater and
+  FileSaver from cdnjs (with integrity) and `pizzip.js` / `pizzip-utils.js` from unpkg (without integrity).
 - **SEC-011 – Internal helper actions reachable by URL** (Refactoring; source: 021 Edge Cases, 022): Create patient,
   create sending, assign stem/laboratory numbers (Standard User), country list (any signed-in account) act without
   form, token or duplicate check.
@@ -257,7 +258,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   "Befund erstellen" produced no document, no message and no status request; only a browser script error
   ("InvalidStateError: Failed to read the 'responseText' property …") was raised. Confirmed on system 2026-11-08 (009
   verification) for the Meningococci report page: the same outcome with the download of a `ReportTemplates/Meningo/`
-  template aborted.
+  template aborted. Confirmed on system 2026-11-08 (010 verification) for processing failures: a template file that is
+  not a zip raised "Can't find end of central directory : is this a zip file ?" without any console output from the
+  page code; a template with an unclosed loop tag logged "Unclosed loop" / "Multi error" to the console; an offered
+  folder entry answered HTTP 403. In every case no document, no message and no `ReportGenerated`; the isolate's report
+  status stayed unchanged. The empty-list label could not be reproduced on the system (it needs an empty template
+  folder).
 - **DATA-025 – County version choice ignores the submission date** (Bugfix; source: 011 Edge Cases, 025 Edge Cases):
   When several stored county versions match, the earliest validity date wins regardless of sampling/receiving date;
   because uploads only add records, a renumbered county keeps exporting its old number.
@@ -364,7 +370,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   (Refactoring; source: 022 Edge Cases): Quota use; last answer wins; other failures end in the generic server error;
   log message with stray "$"; parameters not URL-encoded.
 - **UX-004 – Template discovery accepts lock/temp `.docx` files, applies no sort, matches the preliminary marker on
-  the whole path** (Refactoring; source: 010 Edge Cases).
+  the whole path** (Refactoring; source: 010 Edge Cases). Confirmed on system 2026-11-08 (010 verification): a
+  temporary `~$SV-010-Lock.docx` placed in `ReportTemplates/` was offered at once; a folder named `SV-010-Ordner.docx`
+  was offered as well (discovery lists file-system entries, not only files) and choosing it ended in HTTP 403 without
+  a message. The order was the file system's (case-insensitive alphabetical on the NTFS host, `~$…` last).
 - **UX-005 – Health-office list and hidden pages** (Refactoring; source: 016 US2.3, US3, Edge Cases): List shows no
   address and only the first lookup's postal code; details/delete pages are untranslated and unlinked; the RKI website
   is queried before local records on every lookup (unreachable website → nothing shown).
@@ -400,6 +409,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **UX-014 – Meningococci isolate form label and message slips** (Bugfix; source: 005 Edge Cases): Confirmed on system
   2026-11-08 (005 verification): the PubMLST tab labels porB as "'porB"; the 16S rDNA percentage message is repeated
   under PorA-VR2 whenever the PorA fields are shown (the field reuses the 16S message slot).
+- **UX-015 – Haemophilus reports print "≤--- µg/ml" for susceptibility results without breakpoints** (Bugfix; source:
+  010 Edge Cases; 017 FR-012): The resistance-profile templates wrap the breakpoint values in "≤… µg/ml" and
+  ">… µg/ml"; for an "ohne Grenzwerte" result the values are "---", so the report reads "≤--- µg/ml", ">--- µg/ml" and
+  "---" as year next to "0,5 µg/ml, n.d.". Confirmed on system 2026-11-08 (010 verification, Azithromycin on isolate
+  KL012/26, "BLNAS v10.docx"). Meningococci reports remove Azithromycin (009 FR-006).
 
 ## REF — Refactoring and legacy debt
 
@@ -409,13 +423,20 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **REF-002 – Duplicated logic across pathogens** (Refactoring; source: 010, 014/015, 016, 017, 019): Report
   selection/rendering script (`Views/Report/Isolate.cshtml` vs `Views/MeningoReport/Isolate.cshtml`); merge lookup and
   reassign-and-delete; health-office lookup-and-match (report base vs edit-by-postal-code); antibiotic derivation and
-  E-Test interpretation script; the 17-field PubMLST update list (batch vs isolate save, marked TODO in code).
+  E-Test interpretation script; the 17-field PubMLST update list (batch vs isolate save, marked TODO in code). The two
+  report scripts differ in the discrepancy check (`if (false)//… TODO` on the Meningococci page), the filename prefix,
+  the `ReportGenerated` address with its isolate id, and the isolate-edit link (010 verification, 2026-11-08).
 - **REF-003 – Services created inside controllers instead of injected** (Refactoring; source: 012, 016, 018, 019, 020,
   022, 023, 024): DuplicatePatientResolver, RKI client, ConfigurationService (plus a static test hook), PubMLST
   services and credentials, the restore path's separate sending controller, Geonames service (a controller
   instantiating another controller for the country list), EpiScanGIS and RKI match logic entirely in controllers.
 - **REF-004 – Report templates: includes with absolute developer paths, fax variants embedding base templates,
-  deprecated docxtemplater API, unused flattened typing values** (Refactoring; source: 010 Edge Cases).
+  deprecated docxtemplater API, unused flattened typing values** (Refactoring; source: 010 Edge Cases). Confirmed
+  2026-11-08 (010 verification): all 26 templates carry `INCLUDETEXT` fields pointing to
+  `D:\Development\NRZMHiDB\HaemophilusWeb\ReportTemplates\…` (a path that does not exist even in the current
+  checkout), and the generated documents keep these fields; the 14 Haemophilus fax variants with a base template
+  include it, while the Meningococci fax variants include only the shared fragments; no template references a
+  `Typing-<Attribute>` value; the page calls `loadZip`/`setData`/`setOptions`, without a console warning.
 - **REF-005 – Export mechanism leftovers** (Refactoring; source: 011 Edge Cases, 013): Unnamed worksheet; Meningococci
   RKI model carries an ignored "unadjusted" field; PubMLST reuses the IRIS-named query (source TODO); sender export
   matches the range twice with diverging deletion handling and loads unused patient data; no explicit row ordering.

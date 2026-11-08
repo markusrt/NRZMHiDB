@@ -56,6 +56,10 @@ listed, add it here in the same commit.
 | `Then a file named like "<pattern>" is downloaded` | A download starts whose file name matches the wildcard pattern. |
 | `Then no file is downloaded` | No download starts within a few seconds after the preceding action. |
 | `Then "<label>" offers "<option text>"` | The selection list with this label has an entry whose text contains the option text. |
+| `Then "<label>" does not offer "<option text>"` | The selection list with this label has no entry whose text contains the option text. |
+| `Then "<label>" offers <n> entries` | The selection list with this label has exactly this many entries, placeholder included. |
+| `Then "<label>" shows "<option text>"` | The entry currently selected in the selection list with this label has exactly this text. |
+| `Then the downloaded document contains "<text>"` | The text of the downloaded Word document (body, headers and footers, tags stripped) contains the text. |
 | `Then the downloaded file has no column "<name>"` | The header row of the downloaded spreadsheet has no column with this name. |
 | `Then the downloaded file has <n> row(s) with "<value>" in column "<name>"` | Exactly this many data rows of the downloaded spreadsheet hold the value in that column. |
 

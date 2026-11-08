@@ -121,6 +121,30 @@ namespace HaemophilusWeb.Controllers
             reportTemplates.Count.Should().Be(0);
         }
 
+        // specs/010 FR-002, US1.4 (the list is read on every request, not cached)
+        [Test]
+        public void Isolate_TemplateAddedBetweenRequests_IsListedOnNextRequest()
+        {
+            controller.Isolate(IsolateId);
+            CreateMockReportTemplate("report3.docx");
+
+            var viewResult = controller.Isolate(IsolateId) as ViewResult;
+
+            var reportTemplates = viewResult.ViewBag.ReportTemplates as List<FileInfo>;
+            reportTemplates.Select(f => f.Name).Should().BeEquivalentTo(Report1, Report2, "report3.docx");
+        }
+
+        // specs/010 FR-004
+        [Test]
+        public void Isolate_WithoutId_StillDiscoversTemplates()
+        {
+            var result = controller.Isolate(null) as HttpStatusCodeResult;
+
+            result.StatusCode.Should().Be(400);
+            var reportTemplates = controller.ViewBag.ReportTemplates as List<FileInfo>;
+            reportTemplates.Should().HaveCount(2);
+        }
+
         [Test]
         public void ReportGenerated_ValidIsolateId_AssignsReportDate()
         {

@@ -46,5 +46,20 @@ namespace HaemophilusWeb.Utils
             files.Select(f => f.Name).Should().Contain("test2.docx");
             files.Select(f => f.Name).Should().NotContain("test1.exe");
         }
+
+        // specs/010 FR-002, Edge Cases (sub-folders such as Meningo/ and includes/ are never listed)
+        [Test]
+        public void Files_SubFolderWithMatchingFiles_ListsTopLevelEntriesOnly()
+        {
+            File.WriteAllText(Path.Combine(TemporaryDirectoryToStoreTestData, "top.docx"), "content");
+            var subFolder = Path.Combine(TemporaryDirectoryToStoreTestData, "includes");
+            Directory.CreateDirectory(subFolder);
+            File.WriteAllText(Path.Combine(subFolder, "nested.docx"), "content");
+            var lister = new FileLister(TemporaryDirectoryToStoreTestData, ".docx");
+
+            var files = lister.Files;
+
+            files.Select(f => f.Name).Should().BeEquivalentTo("top.docx");
+        }
     }
 }
