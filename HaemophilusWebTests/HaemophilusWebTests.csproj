@@ -277,6 +277,7 @@
     <Compile Include="Validators\IsolateViewModelValidatorTests.cs" />
     <Compile Include="Validators\HealthOfficeValidatorTests.cs" />
     <Compile Include="Validators\ConfigurationViewModelValidatorTests.cs" />
+    <Compile Include="Validators\MergePatientRequestValidatorTests.cs" />
     <Compile Include="Validators\MeningoPatientValidatorTests.cs" />
     <Compile Include="Validators\PatientValidatorTests.cs" />
     <Compile Include="Validators\MeningoIsolateViewModelValidatorTests.cs" />

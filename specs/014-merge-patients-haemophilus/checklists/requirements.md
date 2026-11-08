@@ -39,3 +39,6 @@
   - Administrator refusal assumes single-role accounts, as in spec 011.
   - No automated test covers the merge function, so no statement is confirmed by a test.
 - As-is observations tagged in the spec: 6 [SUSPECTED-DEFECT], 2 [POTENTIAL-REFACTORING].
+- Verification 2026-11-08: US1.2 and FR-006 now state the observed display format (gender display name, "KL" and "H" prefixes, "H -" without stem number); US2.4 now names the browser message "The Feld Patienten-Nr. 1 muss eine Zahl enthalten." and the server message for requests that bypass it.
+- Verification 2026-11-08: The first-open message, the soft-deleted failure (HTTP 500 with the reference-conflict message, generic log line) and the masked number mix-up were observed; the "not exercised" notes in Edge Cases and Assumptions are replaced. The no-record edge case now says that a successful merge writes no log line.
+- Verification 2026-11-08: New edge case "Patient without gender" (HTTP 500 on "Zusammenfügen vorbereiten") tagged [SUSPECTED-DEFECT] (UX-018). The Assumption "no automated test covers the merge function" is replaced, since the verification added unit tests.

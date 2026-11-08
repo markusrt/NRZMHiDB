@@ -427,6 +427,130 @@ namespace HaemophilusWeb.Controllers
             ((string) row.Invasive).Should().Be("Ja");
         }
 
+        // specs/014 FR-004: an invalid request (equal numbers) is shown again without confirmation or save
+        [Test]
+        public void MergePatient_InvalidRequest_ReturnsRequestViewWithoutSaving()
+        {
+            var db = CreateMergeDb();
+            var controller = CreateIsolatedController(db);
+            controller.ModelState.AddModelError(nameof(MergePatientRequest.PatientOneId), "Bitte geben Sie zum Zusammenfügen zwei verschiedenen Patientennummern ein");
+            var request = new MergePatientRequest { PatientOneId = 42, PatientTwoId = 42, Confirmation = true };
+
+            var result = controller.MergePatient(request);
+
+            var view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().BeEmpty();
+            view.Model.Should().BeSameAs(request);
+            db.SavedWithoutValidation.Should().BeEmpty();
+            db.Patients.Select(p => p.PatientId).Should().BeEquivalentTo(new[] { 42, 43, 44 });
+        }
+
+        // specs/014 FR-005, FR-008, US2.2, US2.3: numbers without active submissions are "Unbekannter Patient",
+        // also when the confirmation flag is set
+        [TestCase(42, 99, false, new[] { "PatientTwoId" })]
+        [TestCase(98, 99, false, new[] { "PatientOneId", "PatientTwoId" })]
+        [TestCase(44, 43, false, new[] { "PatientOneId" })]
+        [TestCase(42, 44, true, new[] { "PatientTwoId" })]
+        public void MergePatient_PatientWithoutActiveSendings_IsReportedAsUnknownAndNothingChanges(int patientOneId, int patientTwoId, bool confirmation, string[] expectedErrorKeys)
+        {
+            var db = CreateMergeDb();
+            var controller = CreateIsolatedController(db);
+            var request = new MergePatientRequest { PatientOneId = patientOneId, PatientTwoId = patientTwoId, Confirmation = confirmation };
+
+            var result = controller.MergePatient(request);
+
+            var view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().BeEmpty();
+            view.Model.Should().BeSameAs(request);
+            controller.ModelState.Where(e => e.Value.Errors.Any()).Select(e => e.Key).Should().BeEquivalentTo(expectedErrorKeys);
+            controller.ModelState.SelectMany(e => e.Value.Errors).Select(e => e.ErrorMessage).Should().OnlyContain(m => m == "Unbekannter Patient");
+            db.SavedWithoutValidation.Should().BeEmpty();
+            db.Patients.Select(p => p.PatientId).Should().BeEquivalentTo(new[] { 42, 43, 44 });
+        }
+
+        // specs/014 FR-006, FR-007, US1.2, US1.3: confirmation page data lists both patients and their active submissions
+        [Test]
+        public void MergePatient_WithoutConfirmation_ShowsSummariesAndActiveSendingsWithoutSaving()
+        {
+            var db = CreateMergeDb();
+            var controller = CreateIsolatedController(db);
+
+            var result = controller.MergePatient(new MergePatientRequest { PatientOneId = 42, PatientTwoId = 43, MainPatient = MainPatientSelector.PatientTwo });
+
+            var view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().Be("MergePatientConfirmation");
+            var confirmation = view.Model.Should().BeOfType<MergePatientConfirmation>().Subject;
+            confirmation.PatientOne.Should().Be("Patienten-Nr.: 42,  Initialen: X.A., Geschlecht: weiblich, Postleitzahl: 97082");
+            confirmation.PatientTwo.Should().Be("Patienten-Nr.: 43,  Initialen: X.B., Geschlecht: weiblich, Postleitzahl: 97082");
+            confirmation.PatientOneSendings.Should().Equal(
+                "Labornummer: KL100/26, Labnr. Einsender: SV-002, Eingangsdatum: 08.11.2026, Stammnummer: H -");
+            confirmation.PatientTwoSendings.Should().Equal(
+                "Labornummer: KL101/26, Labnr. Einsender: SV-002, Eingangsdatum: 08.11.2026, Stammnummer: H1014");
+            confirmation.PatientOneId.Should().Be(42);
+            confirmation.MainPatient.Should().Be(MainPatientSelector.PatientTwo);
+            confirmation.Confirmation.Should().BeTrue();
+            db.SavedWithoutValidation.Should().BeEmpty();
+            db.Patients.Select(p => p.PatientId).Should().BeEquivalentTo(new[] { 42, 43, 44 });
+        }
+
+        // specs/014 FR-008, FR-009, FR-010, FR-012, US1.4, US1.5, US1.6: active submissions of the other patient move
+        // to the kept patient, the other patient is removed in one save, nothing else changes
+        [TestCase(MainPatientSelector.PatientOne, 42, 43)]
+        [TestCase(MainPatientSelector.PatientTwo, 43, 42)]
+        public void MergePatient_Confirmed_ReassignsActiveSendingsAndRemovesOtherPatient(MainPatientSelector mainPatient, int keptId, int deletedId)
+        {
+            var db = CreateMergeDb();
+            var kept = db.Patients.Single(p => p.PatientId == keptId);
+            var keptValues = new { kept.Initials, kept.BirthDate, kept.PostalCode, kept.Gender, kept.City, kept.ClinicalInformation, kept.HibVaccination };
+            var movedSending = db.Sendings.Single(s => s.PatientId == deletedId && !s.Deleted);
+            var movedIsolate = movedSending.Isolate;
+            var otherSending = db.Sendings.Single(s => s.PatientId == 44);
+            var controller = CreateIsolatedController(db);
+
+            var result = controller.MergePatient(new MergePatientRequest { PatientOneId = 42, PatientTwoId = 43, MainPatient = mainPatient, Confirmation = true });
+
+            var view = result.Should().BeOfType<ViewResult>().Subject;
+            view.ViewName.Should().Be("MergePatientSuccess");
+            view.Model.Should().BeOfType<MergePatientConfirmation>().Which.MainPatient.Should().Be(mainPatient);
+            db.Sendings.Where(s => !s.Deleted && (s.PatientId == 42 || s.PatientId == 43)).Select(s => s.PatientId).Should().OnlyContain(id => id == keptId).And.HaveCount(2);
+            db.Patients.Select(p => p.PatientId).Should().BeEquivalentTo(new[] { keptId, 44 });
+            db.SavedWithoutValidation.Should().HaveCount(1);
+            new { kept.Initials, kept.BirthDate, kept.PostalCode, kept.Gender, kept.City, kept.ClinicalInformation, kept.HibVaccination }.Should().BeEquivalentTo(keptValues);
+            movedSending.SenderLaboratoryNumber.Should().Be("SV-002");
+            movedSending.SenderId.Should().Be(SenderId);
+            movedSending.Isolate.Should().BeSameAs(movedIsolate);
+            movedIsolate.StemNumber.Should().Be(keptId == 42 ? 1014 : (int?) null);
+            otherSending.PatientId.Should().Be(44);
+        }
+
+        /// <summary>
+        ///     Patients 42 (one active submission), 43 (one active submission with stem number 1014) and 44 (only a
+        ///     soft-deleted submission), all with the same patient data except the initials.
+        /// </summary>
+        private static IntakeDbStub CreateMergeDb()
+        {
+            var db = new IntakeDbStub();
+            var patients = new[] { CreatePatient(42, "X.A."), CreatePatient(43, "X.B."), CreatePatient(44, "X.C.") };
+            patients[0].City = "SV-014-Ort";
+            foreach (var patient in patients)
+            {
+                db.Patients.Add(patient);
+            }
+
+            var sendingOne = CreateStoredSending(100, SenderId, patients[0]);
+            var sendingTwo = CreateStoredSending(101, SenderId, patients[1]);
+            sendingTwo.Isolate.StemNumber = 1014;
+            var deletedSending = CreateStoredSending(102, SenderId, patients[2]);
+            deletedSending.Deleted = true;
+            foreach (var sending in new[] { sendingOne, sendingTwo, deletedSending })
+            {
+                sending.ReceivingDate = new DateTime(2026, 11, 8);
+                db.Sendings.Add(sending);
+            }
+
+            return db;
+        }
+
         private const int SenderId = 7;
 
         private static Patient CreatePatient(int patientId, string initials)

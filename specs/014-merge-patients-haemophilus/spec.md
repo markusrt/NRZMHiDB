@@ -49,6 +49,9 @@ and that the moved submissions keep their laboratory numbers, stem numbers, send
    `Patienten-Nr.: <n>,  Initialen: <initials>, Geschlecht: <gender>, Postleitzahl: <postal code>` and, under
    "Einsendungen Patient 1" / "Einsendungen Patient 2", one line per active submission in the form
    `Labornummer: <lab no.>, Labnr. Einsender: <sender lab no.>, Eingangsdatum: <receiving date>, Stammnummer: <stem no.>`.
+   The gender is shown by its display name (e.g. "männlich", "weiblich"), the laboratory number with its prefix
+   (e.g. "KL005/26"), the receiving date as `dd.MM.yyyy`, and the stem number with its prefix (e.g. "H99014"); a
+   submission without stem number shows "H -".
 3. **Given** the confirmation page, **When** it is shown, **Then** it offers the choice "Zusammenfügen zu" with the
    options "Patient 1" and "Patient 2" (Patient 1 preselected), the red button
    "Zusammenfügen und doppelten Patienten löschen", and an "Abbrechen" link.
@@ -88,8 +91,10 @@ messages and that no confirmation page is shown.
    show the message.
 3. **Given** a number of an existing Haemophilus patient whose submissions are all soft-deleted, or who has no
    submissions, **When** the request is submitted, **Then** that number is also reported as "Unbekannter Patient".
-4. **Given** a non-numeric entry, **When** the request is submitted, **Then** it is rejected as an invalid number by
-   the input conversion and the form is shown again.
+4. **Given** a non-numeric entry, **When** the user selects "Zusammenfügen vorbereiten", **Then** the browser does
+   not submit the form and shows "The Feld Patienten-Nr. 1 muss eine Zahl enthalten." (or "… Patienten-Nr. 2 …") at
+   the field; a request that bypasses the browser check is rejected by the input conversion, and the form is shown
+   again with the framework message "Patienten-Nr. 1 ist kein gültiger Wert für abc." (for the entry "abc").
 
 ---
 
@@ -120,8 +125,7 @@ patient received the submissions and which was deleted and offers a way back.
 
 - Opening the request page from the menu (no numbers submitted yet) treats both numbers as `0`; because `0` equals
   `0`, the "two different patient numbers" message is already displayed at "Patienten-Nr. 1" before the user has
-  entered anything, and both fields show `0`. (Derived from the request handling; not exercised in a running
-  system.) [SUSPECTED-DEFECT]
+  entered anything, and both fields show `0` (observed in the 2026-11-08 verification). [SUSPECTED-DEFECT]
 - Patient numbers are separate per pathogen database. The Haemophilus page looks up Haemophilus patients only; a
   Meningococci patient number either is "Unbekannter Patient" or, if the same number exists in Haemophilus,
   silently addresses an unrelated Haemophilus patient. The confirmation page is the only point where the user can
@@ -133,16 +137,25 @@ patient received the submissions and which was deleted and offers a way back.
 - Only active (not soft-deleted) submissions are shown on the confirmation page and moved. Soft-deleted submissions
   of the patient to be deleted stay attached to that patient. When the patient is then deleted, the database's
   cascading rule for submissions tries to delete those soft-deleted submissions as well, which is blocked by their
-  isolate records; the whole save fails, nothing is changed, and the user sees the generic error page. A
-  soft-deleted submission without an isolate record would instead be permanently deleted together with the patient
-  without being shown. (Derived from the schema and code; not exercised.) [SUSPECTED-DEFECT]
+  isolate records; the whole save fails, nothing is changed, and the confirmation ends in HTTP 500 with the
+  database's reference-conflict message (`FK_dbo.Isolates_dbo.Sendings_SendingId`); the application log records only
+  the generic "Unhandled error" line (observed in the 2026-11-08 verification). A soft-deleted submission without an
+  isolate record would instead be permanently deleted together with the patient without being shown (derived from
+  the schema; intake always creates the isolate record, so this cannot be produced through the UI).
+  [SUSPECTED-DEFECT]
 - The confirmation summary shows only patient number, initials, gender, and postal code. Date of birth, residence,
   clinical information, and Hib vaccination are not shown, so the user cannot compare the attributes that will be
   discarded with the deleted patient. There is no field-by-field merge: the kept record wins entirely.
 - The data prepared for the confirmation page carries Patient 1's number in the slot for Patient 2's number. The
   defect is not observable today, because the confirmation form re-displays the number the user submitted for
-  "Patienten-Nr. 2" rather than the prepared value; it would surface if that re-display behavior changed.
-  [SUSPECTED-DEFECT]
+  "Patienten-Nr. 2" rather than the prepared value; it would surface if that re-display behavior changed. (2026-11-08
+  verification: the hidden "Patienten-Nr. 2" field of the confirmation form carries the submitted number; the
+  prepared value is Patient 1's number, reproduced at unit level.) [SUSPECTED-DEFECT]
+- **Patient without gender**: The confirmation summary needs the patient's gender. When either patient record has no
+  gender (possible for records not entered through the current intake form, which requires it, e.g. imported
+  records), "Zusammenfügen vorbereiten" ends in HTTP 500 with a null-reference
+  error, and such a patient can be neither merged nor kept. Nothing is changed. (Observed in the 2026-11-08
+  verification.) [SUSPECTED-DEFECT]
 - The merge step re-reads the active submissions at confirmation time. A submission added to, removed from, or
   restored for the patient to be deleted between showing the confirmation page and confirming is handled according
   to the state at confirmation, even though it was not (or was) shown.
@@ -151,7 +164,8 @@ patient received the submissions and which was deleted and offers a way back.
   kept-patient choice, and the confirmation flag performs the merge immediately, without the confirmation page being
   shown. [SUSPECTED-DEFECT]
 - No record of the merge is kept: there is no log entry, no history of the former patient number on the moved
-  submissions, and no undo. The deleted patient can only be recovered from a database backup. This does not meet the
+  submissions, and no undo; a successful merge adds no line to the application log (a failed one adds only the
+  generic error line). The deleted patient can only be recovered from a database backup. This does not meet the
   auditability expectation of Constitution Principle I for data-losing merges. [SUSPECTED-DEFECT]
 - The Haemophilus confirmation and success pages are copies of the Meningococci pages and still contain the
   Meningococci targets for "Abbrechen" and "Zurück zur Übersicht" (see User Story 3). [SUSPECTED-DEFECT]
@@ -183,7 +197,8 @@ patient received the submissions and which was deleted and offers a way back.
   confirmation page MUST be shown while either number is unknown.
 - **FR-006**: The confirmation page MUST show, for each patient, the summary of patient number, initials, gender,
   and postal code (taken from the patient of that patient's first listed submission) and one line per active
-  submission with laboratory number, sender laboratory number, receiving date, and stem number.
+  submission with laboratory number, sender laboratory number, receiving date, and stem number (laboratory and stem
+  number with their prefixes, see US1.2).
 - **FR-007**: The confirmation page MUST let the user choose the kept patient ("Zusammenfügen zu": "Patient 1" or
   "Patient 2", default "Patient 1") and MUST require an explicit confirmation via
   "Zusammenfügen und doppelten Patienten löschen" before any data is changed.
@@ -270,16 +285,18 @@ patient received the submissions and which was deleted and offers a way back.
 
 ## Assumptions
 
-- Current application code, views, schema migrations, and role constants are the source of truth; no automated test
-  covers the merge function, so no statement here is confirmed by a test.
+- Current application code, views, schema migrations, and role constants are the source of truth. Unit tests added
+  in the 2026-11-08 verification cover the number validation, the "Unbekannter Patient" checks, the confirmation
+  data, and the reassign-and-delete step (FR-004 to FR-010, FR-012); the defects tagged above are deliberately not
+  covered by tests.
 - Behavior on first opening the request page (the "two different numbers" message shown for the default `0`/`0`
-  values) is derived from how the request is bound and validated and was not observed in a running system.
-- The failure on soft-deleted submissions is derived from the schema (submissions are deleted with their patient,
-  isolates are not deleted with their submission) and from the assumption that every submission recorded through
-  intake (spec 002) has an isolate record; it was not exercised. The user-facing result is assumed to be the
-  application's generic error page.
-- The latent mix-up of Patient 2's number in the confirmation data is assumed to be masked by the standard behavior
-  of re-displaying submitted form values; this was not verified in a running system.
+  values) was observed in the 2026-11-08 verification.
+- The failure on soft-deleted submissions follows from the schema (submissions are deleted with their patient,
+  isolates are not deleted with their submission); every submission recorded through intake (spec 002) has an
+  isolate record. It was observed in the 2026-11-08 verification as HTTP 500 with the database's reference-conflict
+  message.
+- The latent mix-up of Patient 2's number in the confirmation data is masked by the standard behavior of
+  re-displaying submitted form values; observed in the 2026-11-08 verification and reproduced at unit level.
 - As in spec 011, accounts are assumed to hold exactly one role, so an Administrator account is refused.
 - "Active submission" means a submission not soft-deleted as described in spec 002.
 - Merging is assumed to be used for records of the same person that the intake duplicate check (spec 002) did not

@@ -160,7 +160,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   without token, and get the answer (HTTP 200). Reproduced at unit level 2026-11-08 (019 verification) for the PubMLST
   lookup: the isolate form posts only `isolateReference` (request held in the browser), and the lookup action carries
   no token check. Confirmed on system 2026-11-08 (024 verification) for the RKI match import: the upload form carries no
-  token, and every upload of the verification was processed.
+  token, and every upload of the verification was processed. Confirmed on system 2026-11-08 (014 verification) for the
+  Haemophilus patient merge: a plain GET of `/PatientSending/MergePatient` with both numbers, `MainPatient` and
+  `Confirmation=true`, without token, merged the two patients at once and showed the success page.
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
@@ -264,9 +266,17 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   Cases, FR-011/FR-014): Soft-deleted submissions of the patient to delete make the save fail (or are dropped silently
   without isolate); Patient 1's number is placed in Patient 2's slot of the confirmation data (masked today); no log,
   history or undo for a permanent patient deletion (Principle I); the request page shows the validation message on
-  first open; the Meningococci sampling-before-birth rule is not re-checked.
+  first open; the Meningococci sampling-before-birth rule is not re-checked. Confirmed on system 2026-11-08 (014
+  verification) for the Haemophilus merge: with a soft-deleted submission on the patient to delete, the confirmation
+  ends in HTTP 500 (reference conflict `FK_dbo.Isolates_dbo.Sendings_SendingId`) and nothing is changed; the request
+  page opened from the menu shows "Bitte geben Sie zum Zusammenfügen zwei verschiedenen Patientennummern ein" with
+  `0`/`0`; successful merges leave no log line and no history (the catalog has no audit table). The number mix-up is
+  masked on the system (the hidden "Patienten-Nr. 2" field carries the submitted number) and reproduced at unit level
+  2026-11-08 (014 verification): the confirmation data carries Patient 1's number as Patient 2's.
 - **DATA-010 – Haemophilus merge pages link to the Meningococci pages** (Bugfix; source: 014 US3, FR-013): "Abbrechen"
-  and "Zurück zur Übersicht" are copy-paste leftovers.
+  and "Zurück zur Übersicht" are copy-paste leftovers. Confirmed on system 2026-11-08 (014 verification): "Abbrechen"
+  opens `/MeningoPatientSending/MergePatient` ("Patienten Zusammenfügen (Meningokokken)") and "Zurück zur Übersicht"
+  opens `/MeningoPatientSending`.
 - **DATA-011 – Breakpoint deletion cascades to all E-Test measurements** (Bugfix; source: 017 US4.3, FR-014): No
   warning, audit or undo; the page is reachable by direct address only (Principle I).
 - **DATA-012 – Editing a breakpoint in use changes historical report output** (Bugfix; source: 017 US3.4, Edge Cases):
@@ -449,7 +459,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   system 2026-11-08 (012 verification): two "X.Y." patients created with other birth dates were edited to the birth
   date of two existing "X.Y." patients, leaving four patient records with identical values; the exports group them
   as one patient (012 FR-003). The intake rejects every further submission with these values ("Es existieren bereits
-  zwei Patienten …"; observed with two records, from code for any number above one). Related: DATA-031.
+  zwei Patienten …"; observed with two records, from code for any number above one). Related: DATA-031. The patient
+  merge (014) is the only way to consolidate such records; it compares no patient values either: a merge of two
+  patients with different initials, birth date, postal code and gender was accepted without notice (014 verification,
+  2026-11-08).
 - **DATA-041 – EpiScanGIS export drops cases silently on a Geonames error answer** (Bugfix; source: 023 US6.3,
   FR-011; related 022 Edge Cases "Service unavailable or failing"): The lookup treats only HTTP 404 as an error;
   any other answer with a JSON body but no list of places (for example the service's account or quota message)
@@ -499,7 +512,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   reads "Abfrage läuft ..." and is disabled, with no progress or cancel. The result order was not observable (the
   result page needs a run against PubMLST).
 - **UX-008 – Haemophilus submission list has no patient-number column or search** (Refactoring; source: 014 Edge Cases):
-  The Meningococci list offers both.
+  The Meningococci list offers both. Confirmed on system 2026-11-08 (014 verification): the list columns are
+  "Initialen", "Geburtsdatum", "Stammnummer", "Eingangsdatum", "Entnahmeort", "Invasiv", "Labor-Nr" and "Befund"; the
+  patient number is shown only on the isolate page ("Patienten-Nr.") and in the laboratory export.
 - **UX-009 – Breakpoint and health-office details/delete pages are untranslated generated pages** (Refactoring; source:
   016, 017 Edge Cases): Internal identifiers shown in "Gültig für" and on details pages.
 - **UX-010 – Submission pages with missing or unknown id end in HTTP 500** (Bugfix; source: 002 Edge Cases; 003 Edge
@@ -545,6 +560,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   verification, answers simulated in the browser): on MZ003/26 with stored record 99001 ("PubMLST Eintrag"), and
   after a successful simulated lookup on MZ001/26 ("PubMLST Eintrag anzeigen"), a failed lookup (HTTP 404 or
   500) left the link pointing to `…db=pubmlst_neisseria_iris&id=…` of the earlier record.
+- **UX-018 – Patient merge fails with HTTP 500 when a patient has no gender** (Bugfix; source: 014 Edge Cases "Patient
+  without gender"): The confirmation summary formats the gender without a null check, so "Zusammenfügen vorbereiten"
+  with a patient record that has no gender (not enterable through the current intake form, possible for imported
+  records) ends in a null reference; such patients can be neither merged nor kept. Observed on system 2026-11-08 (014
+  verification): the seeded Haemophilus patient 1 (no gender) with patient 8 gave HTTP 500, nothing changed. The
+  summary is shared with the Meningococci merge (015), which is affected from code.
 
 ## REF — Refactoring and legacy debt
 
@@ -556,7 +577,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   reassign-and-delete; health-office lookup-and-match (report base vs edit-by-postal-code); antibiotic derivation and
   E-Test interpretation script; the 17-field PubMLST update list (batch vs isolate save, marked TODO in code). The two
   report scripts differ in the discrepancy check (`if (false)//… TODO` on the Meningococci page), the filename prefix,
-  the `ReportGenerated` address with its isolate id, and the isolate-edit link (010 verification, 2026-11-08).
+  the `ReportGenerated` address with its isolate id, and the isolate-edit link (010 verification, 2026-11-08). The
+  Haemophilus and Meningococci merge views differ only in the page title, so the Haemophilus copies keep the
+  Meningococci targets (DATA-010); the two `MergePatients` methods differ only in the patient key (014 verification,
+  2026-11-08).
 - **REF-003 – Services created inside controllers instead of injected** (Refactoring; source: 012, 016, 018, 019, 020,
   022, 023, 024): DuplicatePatientResolver, RKI client, ConfigurationService (plus a static test hook), PubMLST
   services and credentials, the restore path's separate sending controller, Geonames service (a controller
@@ -615,7 +639,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   (Principles I–III).
 - **REF-016 – No audit trail for data-losing operations** (Refactoring; source: 014/015, 017, 020 Edge Cases, 024):
   Patient merges, breakpoint deletion, sender/submission delete and restore, RKI match import. Cross-cutting consequence
-  of Principle I; overlaps DATA-009, DATA-011 and SEC-006.
+  of Principle I; overlaps DATA-009, DATA-011 and SEC-006. Confirmed on system 2026-11-08 (014 verification) for the
+  Haemophilus patient merge: two successful merges left no application log line, and the catalog has no audit or
+  history table; the moved submissions keep no reference to the deleted patient.
 - **REF-018 – Automatic stem numbers implemented but never enabled** (Refactoring; source: 002 FR-003; 003 FR-003): The
   sending controllers compute the next stem number, but the switch that enables it is `false` for every submission
   type, so intake leaves the stem number empty and it is entered on the isolate page. Confirmed on system 2026-10-30
@@ -667,7 +693,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   without byte order mark and with CR LF, an ambiguous lookup, the use of one transaction, a lower state against a
   stored record, the export without record, and the page's success line for a zero-length file and its failure line;
   lab-number-only rows (DATA-021), the upload without a file and soft-deleted submissions (REF-013) stay untested on
-  purpose; the rollback itself was observed on the system only.
+  purpose; the rollback itself was observed on the system only. Haemophilus patient merge: covered by tests added in
+  the 014 verification (2026-11-08) for the equal-number rule, "Unbekannter Patient" for unknown numbers and numbers
+  with only soft-deleted submissions (also at confirmation), the confirmation data and the reassign-and-delete step
+  for both choices; the soft-deleted failure, the number mix-up and the missing audit (DATA-009) stay untested on
+  purpose. The Meningococci merge (015) stays untested.
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;
