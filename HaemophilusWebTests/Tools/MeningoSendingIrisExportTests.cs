@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -176,6 +177,21 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["Klinische Angaben"].Should().Be("Meningitis, Craniocerebral Injury");
+        }
+
+        // specs/011 FR-004, FR-015, US4.3: header names and order of the IRIS export as observed in the downloaded file
+        // (011 verification 2026-11-08).
+        [Test]
+        public void DataTable_ColumnHeadersAreInDocumentedOrder()
+        {
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).Should().Equal(
+                "Labornummer", "Stammnummer", "Bundesland", "Eingangsdatum", "Entnahmedatum", "Material", "Invasiv",
+                "Patientenalter bei Entnahme", "Patientenalter bei Entnahme (Monate)", "Geschlecht",
+                "Klinische Angaben", "Entnahmeort", "Agglutination", "Penicillin MHK", "Cefotaxim MHK",
+                "Rifampicin MHK", "Ciprofloxacin MHK", "PorA-VR1", "PorA-VR2", "FetA-VR", "Serogruppen-PCR",
+                "Real-Time-PCR", "Real-Time-PCR Gerät", "csb-PCR", "csc-PCR", "cswy-PCR", "cswy-Allel");
         }
 
         private static MeningoSendingIrisExport CreateExportDefinition()

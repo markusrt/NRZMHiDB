@@ -49,6 +49,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   "Labor Export", "IRIS Export", "LGA Export", "RKI Export" and "Patienten Zusammenfügen" for Meningococci, and every
   `/MeningoPatientSending` address (list, create, edit, delete, deleted list, restore, merge, all four exports, list
   data) redirects it to the sign-in page.
+  Confirmed on system 2026-11-08 for the exports (011 verification): `Admin1` sees the full Export menu (both
+  "Einsender Export" entries and the seven exports of 011), and every one of the seven export addresses, form and
+  direct run, redirects it to the sign-in page.
 - **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
   Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
   include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
@@ -72,6 +75,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   carries the sequencing-provider comment although it emits no sequence row. No decision taken.
 - **DEC-006 – LGA export open to Public Health** (Decision; source: 011 Edge Cases, 021 US4.2): Authorized for the
   `RKI` role but not in its navigation. Offen: should Public Health have it (add to menu) or not (restrict)?
+  Observed on system 2026-11-08 (011 verification, no decision taken): `Rki1` sees only "RKI Export (Haemophilus)"
+  and "RKI Export (Meningokokken)"; `/MeningoPatientSending/StateAuthorityExport` opens the form for it and a direct
+  request with a date range returns `LGA-Export_20200101-20201231.xlsx`.
 - **DEC-007 – Soft deletion of Meningococci submissions** (Decision; source: 003 US3, 015, 020 US4): No Meningococci
   delete-confirmation or deleted-submissions page exists; "Eintrag löschen" ends on the error page. Offen: is soft
   delete wanted for Meningococci (add pages) or not (remove the button and inherited actions)? Confirmed on system
@@ -129,7 +135,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   Haemophilus report-status marking: the report page itself posts only `id` and `preliminary` to
   `/Report/ReportGenerated`, without token, and the status is stored. Confirmed on system 2026-11-08 (009
   verification) for the Meningococci report-status marking: the page posts only `id` and `preliminary` to
-  `/MeningoReport/ReportGenerated/`, without token, and the status is stored.
+  `/MeningoReport/ReportGenerated/`, without token, and the status is stored. Confirmed on system 2026-11-08 (011
+  verification) for the exports: a GET with a date range returns the spreadsheet (e.g. the Haemophilus laboratory
+  export), and a POST of only the dates without token returns the Meningococci RKI file.
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
@@ -151,7 +159,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   form, token or duplicate check.
 - **SEC-012 – Temporary export/import files are never deleted** (Bugfix; source: 011, 013 Edge Cases, 023, 024, 025):
   Every spreadsheet export, the EpiScanGIS export, the RKI match upload and the county upload leave files in the
-  server's temp directory; exports and the RKI match file contain patient data (Principle IV).
+  server's temp directory; exports and the RKI match file contain patient data (Principle IV). Confirmed on system
+  2026-11-08 (011 verification): every export run of the verification left one `tmp*.tmp` file in the temp directory
+  of the account running IIS Express, a spreadsheet of the same size as the downloaded file (e.g. 5318 bytes for the
+  Haemophilus laboratory export of 2024), still present after the download.
 - **SEC-013 – Combined submission form binds every patient and sending property** (Bugfix; source: 002 FR-021; 003
   FR-023): Create and edit have no list of intended fields. Confirmed on system 2026-10-30 (002 verification): a create
   request with `Sending.Deleted=true` stores the new submission as deleted. Confirmed on system 2026-10-30 (003
@@ -187,9 +198,14 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   county ("Ausland") instead of the state; state "Ausland" yields region `blood`; H. haemolyticus is exported
   although marked "not to be exported"; the adjusted-mode removal of non-invasive rows is a no-op. Confirmed on
   system 2026-11-08 (012 verification) for the no-op: an "Anderer nicht invasiv" submission is in the laboratory
-  export and missing from the PubMLST file in both modes.
+  export and missing from the PubMLST file in both modes. Confirmed on system 2026-11-08 (011 verification): the
+  "Ja" and "Nein" files of 2024 have the same five rows, without the "Ausland"-county and the non-invasive submission
+  the hint promises; a patient with state "Ausland" and county "Paris" is exported with region `blood`; an isolate
+  evaluated "H. haemolyticus" is exported with serotype "Haemophilus Hemolyticus".
 - **DATA-005 – Unknown birth date exported as age 0** (Bugfix; source: 011 Edge Cases, 023): Indistinguishable from an
-  infant under one month in PubMLST, IRIS and EpiScanGIS.
+  infant under one month in PubMLST, IRIS and EpiScanGIS. Confirmed on system 2026-11-08 (011 verification): a
+  Haemophilus patient without birth date has `age_yr` 0 and `age_mth` 0 in the PubMLST file, a Meningococci patient
+  without birth date 0 years and 0 months in the IRIS file.
 - **DATA-006 – "Gelöschte Einsendungen (Haemophilus)" lists active submissions** (Bugfix; source: 020 US2, Edge Cases
   "Inverted selection"; 002/003 Assumptions): Inverted by the 2018 generics restructuring (commit `e8aac1d`); no page
   lists deleted submissions, restore works only by direct address. Confirmed on system 2026-10-30 (002
@@ -266,7 +282,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   folder).
 - **DATA-025 – County version choice ignores the submission date** (Bugfix; source: 011 Edge Cases, 025 Edge Cases):
   When several stored county versions match, the earliest validity date wins regardless of sampling/receiving date;
-  because uploads only add records, a renumbered county keeps exporting its old number.
+  because uploads only add records, a renumbered county keeps exporting its old number. Confirmed on system 2026-11-08
+  (011 verification): with two versions of one county ("09111" valid since 01.01.2000, "08222" valid since
+  01.01.2015), submissions sampled in 2024 got "09111" / "09" in the Haemophilus RKI, Meningococci RKI and LGA files.
 - **DATA-028 – County normalization collides "X, Stadt" with "Landkreis X"** (Bugfix; source: 025 Edge Cases): Both
   normalize to "X", so a district patient can receive the city's county number (earliest validity or storage order
   wins).
@@ -328,30 +346,38 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   **decided 2026-11-07** (owner): the server repeats the derivation on save and validates the E-Test input, for
   Haemophilus and Meningococci isolates alike; the details belong in the change spec.
 - **DATA-036 – Every Meningococci isolate save without a current PubMLST match stores an empty PubMLST record**
-  (Bugfix; source: 005 US3.5, FR-021, Edge Cases, SC-005): The form always posts the PubMLST part, and the save assigns
+  (Bugfix; source: 005 US3.5, FR-021, Edge Cases, SC-005; 011 Edge Cases): The form always posts the PubMLST part, and the save assigns
   it to the isolate; with PubMLST id 0 it becomes a new, empty local PubMLST record and the previously linked one
   stays behind. Confirmed on system 2026-11-08 (005 verification): the first save of an isolate without lookup created
   an empty record, each further save another one (about 20 empty records after the verification). After a lookup
   that found nothing, saving an isolate that was linked to a matched record replaced that link with a new empty
   record, so the match was lost without a message. Saving a matched isolate without a new lookup kept its link. From
-  code: the batch matching (019) and the exports read the linked record. Overlaps DATA-016.
+  code: the batch matching (019) and the exports read the linked record. Overlaps DATA-016. Confirmed on system
+  2026-11-08 (011 verification) in the exports: every isolate saved without lookup shows "PubMLST ID" 0 with empty
+  typing columns in the Meningococci laboratory and RKI files, while isolates without any linked record show "-".
 - **DATA-037 – Meningococci isolate form ignores a changed laboratory number** (Bugfix; source: 005 FR-003, FR-014, Edge
   Cases): The form carries the laboratory number as a hidden field before the visible input, the request contains
   both values, and the server binds the first one. Confirmed on system 2026-11-08 (005 verification): "007/26" entered
   for MZ006/26 was posted as "006/26, 007/26" and the isolate kept 006/26 without a message; the laboratory-number
   conflict of 005 FR-014 is therefore unreachable through the form. The Haemophilus form has no such hidden field (004).
 - **DATA-038 – Meningococci no-growth material change fires on the default values and is never undone** (Bugfix;
-  source: 005 FR-011, Edge Cases): Both growth fields default to "Nein", so saving a new isolate of a "Vitaler Stamm"
+  source: 005 FR-011, Edge Cases; 011 Edge Cases): Both growth fields default to "Nein", so saving a new isolate of a "Vitaler Stamm"
   submission without entering growth sets the material to "Nicht angewachsen"; entering growth later does not set it
   back. Confirmed on system 2026-11-08 (005 verification). From code: the material is exported (laboratory and IRIS
   exports, 011) and shown on the submission form (003). Offen: should the material follow the growth fields in both directions, and
-  should "Nein" stay the default?
+  should "Nein" stay the default? Confirmed on system 2026-11-08 (011 verification): three "Vitaler Stamm"
+  submissions whose isolates were first saved with the defaults and later with "typisches Wachstum" are exported
+  with material "Nicht angewachsen" in the laboratory and IRIS files.
 - **DATA-039 – Unmatched Meningococci interpretation counts as "Meningococci found" in the RKI/IRIS selection**
   (Bugfix; source: 007 Edge Cases, FR-011, FR-014; 011 FR-011): Without a matching rule the no-Meningococci flag stays
   false, and the RKI and IRIS exports include every invasive submission whose flag is false, so submissions with
   discrepant or not yet entered results are exported as Meningococci cases. Observed on system 2026-11-08 (007
   verification): six invasive submissions without a rule (empty "Regel" in the laboratory export) appeared in the RKI
   export for November 2026. Related: DEC-005 (rule 32). Offen: should unmatched results be excluded, flagged, or kept?
+  Confirmed on system 2026-11-08 (011 verification): three invasive submissions of 2024 without a rule (one with
+  the inputs of rule 08 except a negative FetA PCR, one with only growth and a negative oxidase, one of an "Ausland"
+  patient) are in the RKI, IRIS and LGA files; the same six November 2026 submissions as in 007 and the rule 32
+  submission are in all three files.
 - **DATA-040 – Editing a submission stores duplicate patient identities without a check** (Bugfix; source: 002
   FR-015, 012 Edge Cases): Intake checks initials, birth date and postal code against existing patients and blocks a
   third record (002 FR-011), but the edit save of a submission changes these values without any check. Observed on
@@ -437,7 +463,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   checkout), and the generated documents keep these fields; the 14 Haemophilus fax variants with a base template
   include it, while the Meningococci fax variants include only the shared fragments; no template references a
   `Typing-<Attribute>` value; the page calls `loadZip`/`setData`/`setOptions`, without a console warning.
-- **REF-005 – Export mechanism leftovers** (Refactoring; source: 011 Edge Cases, 013): Unnamed worksheet; Meningococci
+- **REF-005 – Export mechanism leftovers** (Refactoring; source: 011 Edge Cases, 013): Unnamed worksheet (shown as
+  "Table1", observed 2026-11-08 in the 011 verification); Meningococci
   RKI model carries an ignored "unadjusted" field; PubMLST reuses the IRIS-named query (source TODO); sender export
   matches the range twice with diverging deletion handling and loads unused patient data; no explicit row ordering.
 - **REF-006 – Breakpoints maintained as unversioned runtime data** (Refactoring; source: 017 Edge Cases): Authoritative
@@ -532,6 +559,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   duplicate rules (10 days dropped, 7 months kept, reference replacement, all four strain characteristics, case-
   sensitive matching, group cells, unadjusted mode, empty selection) and one with the RKI layout; the disputed window
   distances (DEC-009) and the export actions' mode choice stay untested, and the wall-clock test is unchanged.
+  011 (verification 2026-11-08): the column tests of all seven exports asserted only the column count; tests of the
+  exact header names and order were added, the PubMLST empty-query test still calls the Laboratory export, and the row
+  selection of the export actions (sampling locations, evaluations, "Ausland", interpretation) has no unit test.
   Flaky: `Tools/HaemophilusPubMlstExportTests.DataTable_ContainsAntibioticMeasurements("CTX", Cefotaxime,
   Susceptible, …)` failed once in the full suite (found "I") and passed on rerun; `Setup` adds a random E-test, and when
   it has the same antibiotic it is found first.

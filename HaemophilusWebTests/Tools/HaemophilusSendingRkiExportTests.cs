@@ -210,6 +210,67 @@ namespace HaemophilusWeb.Tools
             return sending;
         }
 
+        // specs/011 FR-004, FR-015, US2.4: header names and order of the Haemophilus RKI export as observed in the
+        // downloaded file (011 verification 2026-11-08); the three identifier columns come first and are removed before
+        // writing (FR-012).
+        [Test]
+        public void DataTable_ColumnHeadersAreInDocumentedOrder()
+        {
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).Should().Equal(
+                "initials", "date_of_birth", "postal_code",
+                "klhi_nr", "eing", "ent", "mat", "geb_monat", "geb_jahr", "geschlecht", "hib_impf", "styp", "b_lac",
+                "kreis_nr", "bundesland", "einsender", "landkreis", "bundeslandName", "ampicillinMHK",
+                "ampicillinBewertung", "amoxicillinClavulansaeureMHK", "bewertungAmoxicillinClavulansaeure",
+                "demis_id", "Real-Time-PCR", "Real-Time-PCR Gerät", "Real-Time-PCR Auswertung (RIDOM)");
+        }
+
+        // specs/011 Edge Cases (unknown birth date, missing sampling date, missing stem number): birth month and year 0,
+        // "keine Angabe" as sampling date and stem number -1.
+        [Test]
+        public void DataTable_WithoutBirthDateSamplingDateAndStemNumber_ExportsPlaceholders()
+        {
+            Sending.Patient.BirthDate = null;
+            Sending.SamplingDate = null;
+            Sending.Isolate.StemNumber = null;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["geb_monat"].Should().Be(0);
+            export.Rows[0]["geb_jahr"].Should().Be(0);
+            export.Rows[0]["ent"].Should().Be("keine Angabe");
+            export.Rows[0]["klhi_nr"].Should().Be(-1);
+        }
+
+        // specs/011 Edge Cases (gender initials): first letter of the German label, "?" without gender.
+        [TestCase(Gender.Male, "m")]
+        [TestCase(Gender.Female, "w")]
+        [TestCase(Gender.Intersex, "d")]
+        [TestCase(Gender.NotStated, "k")]
+        [TestCase(null, "?")]
+        public void DataTable_ExportsGenderInitial(Gender? gender, string expected)
+        {
+            Sending.Patient.Gender = gender;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["geschlecht"].Should().Be(expected);
+        }
+
+        // specs/011 FR-014: without a matching county both the county number and the state number are empty.
+        [Test]
+        public void DataTable_UnknownCounty_LeavesCountyAndStateNumbersEmpty()
+        {
+            Sending.Patient.County = "SV-011-Unknown";
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["kreis_nr"].Should().Be("");
+            export.Rows[0]["bundesland"].Should().Be("");
+            export.Rows[0]["landkreis"].Should().Be("SV-011-Unknown");
+        }
+
         private HaemophilusSendingRkiExport CreateExportDefinition()
         {
             return new HaemophilusSendingRkiExport(Counties);

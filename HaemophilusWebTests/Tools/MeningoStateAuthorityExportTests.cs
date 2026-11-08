@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -197,6 +198,29 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["Serogruppe"].Should().Be("C");
+        }
+
+        // specs/011 FR-004, FR-015, US4.4: header names and order of the LGA export as observed in the downloaded file
+        // (011 verification 2026-11-08).
+        [Test]
+        public void DataTable_ColumnHeadersAreInDocumentedOrder()
+        {
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).Should().Equal(
+                "Patientnr NRZM", "Geschlecht", "Geburtsmonat", "Eingangsdatum", "Entnahmedatum", "Serogruppe",
+                "PorA VR1", "PorA VR2", "FetA VR", "Spezies", "Landkreis", "Bundesland");
+        }
+
+        // specs/011 Edge Cases (unknown birth date): the LGA export leaves the birth month empty.
+        [Test]
+        public void DataTable_WithoutBirthDate_LeavesBirthMonthEmpty()
+        {
+            Sending.Patient.BirthDate = null;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["Geburtsmonat"].Should().Be("");
         }
 
         private static MeningoStateAuthorityExport CreateExportDefinition()

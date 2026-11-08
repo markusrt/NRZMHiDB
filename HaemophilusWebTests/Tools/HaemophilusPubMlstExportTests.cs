@@ -350,6 +350,35 @@ namespace HaemophilusWeb.Tools
             export.Rows[0][new PubMlstColumns().Serotype].ToString().Should().NotBeNullOrEmpty();
         }
 
+        // specs/011 FR-004, FR-015, US3.4: header names and order of the PubMLST export as observed in the downloaded
+        // file (011 verification 2026-11-08); the three identifier columns come first and are removed before writing
+        // (FR-012).
+        [Test]
+        public void DataTable_ColumnHeadersAreInDocumentedOrder()
+        {
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).Should().Equal(
+                "initials", "date_of_birth", "postal_code",
+                "isolate", "aliases", "references", "country", "region", "year", "date_received", "date_sampled",
+                "non_culture", "serotype", "serotype_by_serology", "serotype_by_PCR", "genotype", "biotype",
+                "ribotype", "age_yr", "age_mth", "sex", "source", "disease", "epidemiology", "MLEE_lineage",
+                "MLEE_ET", "beta_lactamase", "AMX_MIC", "AMX_SIR", "AMC_MIC", "AMC_SIR", "CTX_MIC", "CTX_SIR",
+                "CRO_MIC", "CRO_SIR", "ENA_accession", "comments", "adk", "atpG", "frdB", "fucK", "mdh", "pgi",
+                "recA", "ftsI");
+        }
+
+        // specs/011 US3.5: a patient whose state is "n.n." gets the region "n.a.".
+        [Test]
+        public void DataTable_UnknownState_RegionIsNotAvailable()
+        {
+            Sending.Patient.State = State.Unknown;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["region"].Should().Be("n.a.");
+        }
+
         private static HaemophilusPubMlstExport CreateExportDefinition()
         {
             return new HaemophilusPubMlstExport();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -207,6 +208,36 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Ciprofloxacin MHK Etest"].Should().Be(.75d);
             export.Rows[0]["Cefotaxim MHK Etest"].Should().Be(1.25d);
             export.Rows[0]["Rifampicin MHK Etest"].Should().Be(.125d);
+        }
+
+        // specs/011 FR-004, FR-015, US2.7: header names and order of the Meningococci RKI export as observed in the
+        // downloaded file (011 verification 2026-11-08).
+        [Test]
+        public void DataTable_ColumnHeadersAreInDocumentedOrder()
+        {
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).Should().Equal(
+                "PatNr NRZM", "Eingang NRZM", "Entnahme", "cnl", "Agglutination", "Serogruppen-PCR", "csb-PCR",
+                "csc-PCR", "cswy-PCR", "cswy-Allel", "Real-Time-PCR", "Real-Time-PCR Gerät",
+                "Real-Time-PCR Auswertung (RIDOM)", "PorA VR1", "PorA VR2", "FetA VR", "Penicillin MHK Etest",
+                "Ciprofloxacin MHK Etest", "Cefotaxim MHK Etest", "Rifampicin MHK Etest", "Geburtsmonat",
+                "Geburtsjahr", "Geschlecht", "Landkreis", "Bundesland", "PubMLST ID", "Datenbank", "PorA_VR1",
+                "PorA_VR2", "FetA_VR", "penA", "gyrA", "rpoB", "ST", "clonal_complex", "demis_id");
+        }
+
+        // specs/011 Edge Cases (unknown birth date, gender initials): birth month and year 0, gender "?" without gender.
+        [Test]
+        public void DataTable_WithoutBirthDateAndGender_ExportsZeroAndQuestionMark()
+        {
+            Sending.Patient.BirthDate = null;
+            Sending.Patient.Gender = null;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["Geburtsmonat"].Should().Be(0);
+            export.Rows[0]["Geburtsjahr"].Should().Be(0);
+            export.Rows[0]["Geschlecht"].Should().Be("?");
         }
 
         private MeningoSendingRkiExport CreateExportDefinition()

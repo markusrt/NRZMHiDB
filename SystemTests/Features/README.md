@@ -62,6 +62,7 @@ listed, add it here in the same commit.
 | `Then the downloaded document contains "<text>"` | The text of the downloaded Word document (body, headers and footers, tags stripped) contains the text. |
 | `Then the downloaded file has no column "<name>"` | The header row of the downloaded spreadsheet has no column with this name. |
 | `Then the downloaded file has <n> row(s) with "<value>" in column "<name>"` | Exactly this many data rows of the downloaded spreadsheet hold the value in that column. |
+| `Then the downloaded file has no data rows` | The downloaded spreadsheet contains only the header row. |
 
 ### Domain steps
 
@@ -93,4 +94,5 @@ listed, add it here in the same commit.
 | `Then the report field "<label>" shows "<text>"` | 006 | On the report page ("Befund erstellen"), the value next to this label (e.g. "Teilbefund", "Befund") equals the text. |
 | `Then the submission list row "<search text>" shows the report status "<status>"` | 008 | In the Haemophilus submission list (`/PatientSending`), filtered with the search box, the "Befund" icon of the row has this title ("Kein Befund erstellt", "Teilbefund", "Endbefund"). |
 | `Then the Meningococci submission list row "<search text>" shows the report status "<status>"` | 009 | As above, in the Meningococci submission list (`/MeningoPatientSending`). |
+| `Given a submission with sender laboratory number "<lab no>", sampling location "<location>" and sampling date "<date>" exists` | 011 | Create a Haemophilus submission with this "Labnr. Einsender", "Entnahmeort" (for "Anderer …" also an "Anderer Entnahmeort" text with the prefix `SV-011-`) and "Entnahmedatum" through the UI if missing (sender `SV-001-Alpha`, synthetic patient). |
 | `Given two submissions of patient "<initials>" born "<date>" with postal code "<code>", sampled "<date>" and received "<date>", exist` | 012 | Create two Haemophilus submissions ("Blut", isolate defaults) through intake if missing; the second one with "Bestehenden Patienten verwenden", so both belong to one patient and have identical strain characteristics. |
