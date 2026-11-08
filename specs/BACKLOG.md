@@ -65,7 +65,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **DEC-005 – Meningococci native rule 32 and the NoMeningococci flag** (Decision; source: 007 FR-010, Edge Cases,
   test-asserted): An all-negative native-material result does not set the flag, so it counts as "Meningococci found"
   in the RKI/IRIS selection (011 FR-011). Related: rules 11, 14, 41 emit sequence rows without the sequencing-provider
-  comment; native rules 30a/30b are fully shadowed by 01b/01a. Offen: clinical intent for each.
+  comment; native rules 30a/30b are fully shadowed by 01b/01a. Offen: clinical intent for each. Observed on system
+  2026-11-08 (007 verification): an invasive native submission with every test negative (rule 32, report "Kein Hinweis
+  auf Neisseria meningitidis.") had an empty "Meningokokken" column in the laboratory export and appeared in the RKI
+  export, while native rule 06 with the same report wording showed "kein Nachweis" and was left out; rule 32 also
+  carries the sequencing-provider comment although it emits no sequence row. No decision taken.
 - **DEC-006 – LGA export open to Public Health** (Decision; source: 011 Edge Cases, 021 US4.2): Authorized for the
   `RKI` role but not in its navigation. Offen: should Public Health have it (add to menu) or not (restrict)?
 - **DEC-007 – Soft deletion of Meningococci submissions** (Decision; source: 003 US3, 015, 020 US4): No Meningococci
@@ -198,6 +202,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   "Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren Haemophilus influenzae (NTHi). …".
 - **DATA-018 – Meningococci interpretation rules without sequencing comment / shadowed rules** (Bugfix after DEC-005;
   source: 007 Edge Cases): Rules 11, 14, 41; native 30a/30b unreachable; rule 09's cnl case shadowed by rule 20.
+  Confirmed on system 2026-11-08 (007 verification): a non-invasive cultured isolate matching rule 41 and then rule 11
+  showed PorA and FetA sequence rows on the report page without a comment.
 - **DATA-019 – Export spreadsheet write failure delivers a partial file silently** (Bugfix; source: 011, 013 Edge
   Cases): Failure is only traced; the user downloads the empty/partial temp file.
 - **DATA-020 – EpiScanGIS export defects** (Bugfix after DEC-008; source: 023 Edge Cases): Blut/Liquor-only selection;
@@ -292,6 +298,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   back. Confirmed on system 2026-11-08 (005 verification). From code: the material is exported (laboratory and IRIS
   exports, 011) and shown on the submission form (003). Offen: should the material follow the growth fields in both directions, and
   should "Nein" stay the default?
+- **DATA-039 – Unmatched Meningococci interpretation counts as "Meningococci found" in the RKI/IRIS selection**
+  (Bugfix; source: 007 Edge Cases, FR-011, FR-014; 011 FR-011): Without a matching rule the no-Meningococci flag stays
+  false, and the RKI and IRIS exports include every invasive submission whose flag is false, so submissions with
+  discrepant or not yet entered results are exported as Meningococci cases. Observed on system 2026-11-08 (007
+  verification): six invasive submissions without a rule (empty "Regel" in the laboratory export) appeared in the RKI
+  export for November 2026. Related: DEC-005 (rule 32). Offen: should unmatched results be excluded, flagged, or kept?
 
 ## UX — Robustness and user feedback
 
@@ -372,11 +384,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   URL returning a type name.
 - **REF-010 – Deleted-records page loads all active submissions and looks up each isolate; skip-validation switch set
   on the wrong data context** (Refactoring; source: 020 Edge Cases).
-- **REF-011 – Interpretation code smells** (Refactoring; source: 006 Key Entities/Assumptions, 007 Edge Cases):
-  `[Obsolete]`-marked fields are the only ones used by the Haemophilus path; always-true guard in the negative/negative
-  branch; TODO to move interpretation into the shared base class; rule-order comment in `StemRules.json` names the wrong
-  rules; rule evaluation order relies on dictionary enumeration order; comment retention on reused interpreter
-  instances.
+- **REF-011 – Interpretation code smells** (Refactoring; source: 006 Key Entities/Assumptions, 007 Edge Cases, 007
+  FR-014): `[Obsolete]`-marked fields are the only ones used by the Haemophilus path; always-true guard in the
+  negative/negative branch; TODO to move interpretation into the shared base class; rule-order comment in
+  `StemRules.json` names the wrong rules; rule evaluation order relies on dictionary enumeration order; comment retention
+  on reused interpreter instances; the Meningococci laboratory export interprets each isolate three times per row (once
+  each for rule, flag and serogroup; 007 verification 2026-11-08).
 - **REF-012 – EpiScanGIS export internals** (Refactoring; source: 023 Edge Cases): "Most data" per patient decided by
   line length; Geonames queried once per case before de-duplication; unbounded ever-growing window with no range
   parameter; no application-log trace; temp-file round trip.
@@ -425,13 +438,19 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   missing coordinates and failures; RKI match controller, unknown status word, non-numeric cells, lab-number-only
   rows, soft-deleted submissions, all-or-nothing; county pages and upload (025; the importer, matching and exports are
   tested).
-- **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 verification): The PubMLST empty-query test
+- **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;
   "…MultipleMatches_ReturnsAllEntries" verifies that one entry is returned. 006 (verification 2026-11-08):
   "Interpret_DistinctAgglutinationWithNotDeterminedBexA_NotDeterminedSerotype_NonInvasive_IsSpecificPreliminaryTypingWithEmptyDisclaimer"
   asserts the non-invasive note, not an empty disclaimer; the negative/negative test checks only the fragment
-  "nicht-typisierbar" (the exact text is now asserted by an added test).
+  "nicht-typisierbar" (the exact text is now asserted by an added test). 007 (verification 2026-11-08): most
+  rule-named tests in `Domain/MeningoIsolateInterpretationTests` do not assert the selected rule (e.g. the rule 32 test
+  checks the flag only through its list of no-Meningococci rules); the "30b" and "31b" test cases repeat the inputs of
+  "30a"/"31a" (the "30a"/"30b" cases select rule 01b); several tests draw inputs at random
+  (`GetRandomNegativeOrInhibitory` and similar), so each run checks a different combination. The added test
+  `Interpret_RepresentativeInput_SelectsDocumentedRule` asserts the rule identifier and typing order for every
+  reachable rule.
 - **TEST-003 – Decision-table rows derived from code only** (Test; source: 006 Decision Table note): Haemophilus
   interpretation rows 4 and 7 and the unmatched combinations have no test; the null-submission failure is untested.
   Addressed 2026-11-08 (006 verification): `Domain/IsolateInterpretationTests` now asserts rows 4 and 7, the unmatched

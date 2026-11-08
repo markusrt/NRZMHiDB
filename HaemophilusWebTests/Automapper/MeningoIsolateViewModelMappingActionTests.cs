@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using FluentAssertions;
 using HaemophilusWeb.Controllers;
+using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.ViewModels;
@@ -150,6 +152,32 @@ namespace HaemophilusWeb.Automapper
 
             isolateViewModel.DemisIdQrImageUrl.Should().StartWith("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaCAYAAAA2BoVjAAAA");
             isolateViewModel.DemisIdQrImageUrl.Should().EndWith("/aNZaa31qf2jWWmt9an9o1lprfWp/aNZaa33of//7PzFUPlvfvwGnAAAAAElFTkSuQmCC");
+        }
+
+        // specs/007 FR-013: the report view model receives report lines, typings and comment of a fresh interpretation
+        [Test]
+        public void ProcessModelToViewModel_CopiesReportTypingsAndCommentFromInterpretation()
+        {
+            var sut = new MeningoIsolateViewModelMappingAction();
+            var isolateViewModel = new MeningoIsolateViewModel();
+            var isolate = CreateEmptyIsolate();
+            isolate.Sending.SamplingLocation = MeningoSamplingLocation.Blood;
+            isolate.SerogroupPcr = MeningoSerogroupPcr.C;
+            isolate.PorAPcr = NativeMaterialTestResult.Positive;
+            isolate.FetAPcr = NativeMaterialTestResult.Positive;
+            isolate.PorAVr1 = "X";
+            isolate.PorAVr2 = "Y";
+            isolate.FetAVr = "Z";
+            var expected = new MeningoIsolateInterpretation();
+            expected.Interpret(isolate);
+
+            sut.Process(isolate, isolateViewModel, null);
+
+            expected.Rule.Should().Be("StemInterpretation_02");
+            isolateViewModel.Report.Should().Equal(expected.Result.Report);
+            isolateViewModel.Typings.Select(t => t.Attribute + "=" + t.Value)
+                .Should().Equal(expected.Typings.Select(t => t.Attribute + "=" + t.Value));
+            isolateViewModel.Comment.Should().NotBeNullOrEmpty().And.Be(expected.Result.Comment);
         }
 
         private static MeningoIsolate CreateEmptyIsolate()

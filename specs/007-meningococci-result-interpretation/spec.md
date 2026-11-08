@@ -38,9 +38,10 @@ and normalized serogroup.
 2. **Given** the corresponding non-invasive cultured isolate, **When** interpretation runs,
    **Then** the output identifies *N. meningitidis* but reports the current note that resistance
    testing was not performed rather than the invasive notification lines.
-3. **Given** a submitted strain that did not grow and has no positive molecular evidence,
-   **When** interpretation runs, **Then** the report states that cultivation failed, requests a new
-   submission, emits no typing rows, and marks the result as no Meningococci.
+3. **Given** a submitted strain that did not grow and whose identification and molecular tests are
+   all not determined, **When** interpretation runs, **Then** the report states that cultivation
+   failed, requests a new submission, emits no typing rows, and marks the result as no
+   Meningococci. Negative molecular results do not lead here (see Edge Cases).
 4. **Given** a strain that did not grow but has qualifying serogroup-PCR and PorA or FetA evidence,
    **When** interpretation runs, **Then** the report identifies *N. meningitidis*, reports its
    category, explains that susceptibility testing was unavailable, and emits molecular typing
@@ -151,10 +152,22 @@ report, empty typing list, null rule and serogroup, and false no-Meningococci fl
 - A successful match may intentionally return no report lines (cultured rules 12, 13, 25, and 26).
   This differs from no match, which returns the discrepancy line.
 - Native rule 32 reports no Meningococci evidence but is not configured as no Meningococci; its
-  observable flag value is therefore false, and the focused test asserts this value. Because the
-  RKI and IRIS exports include invasive submissions whose flag is false (FR-014), an all-negative
-  native result selected by rule 32 is included in those exports as Meningococci found.
-  [SUSPECTED-DEFECT]
+  observable flag value is therefore false. The focused test asserts the flag through its list of
+  no-Meningococci rules but not the rule identifier. Because the RKI and IRIS exports include
+  invasive submissions whose flag is false (FR-014), an all-negative native result selected by
+  rule 32 is included in those exports as Meningococci found; observed on the system (verification
+  2026-11-08), where native rule 06 with the same report wording was excluded. Rule 32 also carries
+  the sequencing-provider comment although it emits no sequence row. [SUSPECTED-DEFECT] (DEC-005)
+- **No growth with negative molecular results**: a strain that did not grow, with negative
+  serogroup PCR and PorA and FetA not amplified (or with PorA or FetA positive but serogroup PCR not
+  determined), matches no cultured rule and yields the discrepancy report; rules 01 and 27 require
+  every molecular test to be not determined, rules 02, 28-32 and 35 a serogroup PCR result.
+- **Unmatched results count as Meningococci found**: an unmatched interpretation leaves the
+  no-Meningococci flag false (FR-011), and the RKI and IRIS selection includes every invasive
+  submission whose flag is false (FR-014, 011 FR-011). An invasive submission with discrepant or not
+  yet entered results is therefore exported as a Meningococci case; observed on the system
+  (verification 2026-11-08): six invasive submissions without a matching rule (empty rule column in
+  the laboratory export) appeared in the RKI export. [SUSPECTED-DEFECT] (DATA-039)
 - Rules that emit a sequence typing row may add the sequencing-provider comment. Rules without
   that configured comment leave it empty, including positive rules with no sequence output.
   Cultured rules 11, 14, and 41 emit PorA/FetA sequence rows without the comment, whereas every
@@ -219,7 +232,9 @@ report, empty typing list, null rule and serogroup, and false no-Meningococci fl
   Meningococci found, independently of report wording. The laboratory export MUST expose the flag as
   "kein Nachweis" when set and MUST expose the selected rule identifier; the laboratory,
   state-authority, and EpiScanGIS exports MUST use the normalized serogroup (EpiScanGIS skips empty,
-  `NG`, and `cnl` values). Each of these exports runs the interpretation anew per submission.
+  `NG`, and `cnl` values). Each of these exports runs the interpretation anew per submission; the
+  laboratory export runs it once per derived column (rule, flag, serogroup), i.e. three times per
+  row. [POTENTIAL-REFACTORING]
 - **FR-015**: The system MUST derive normalized serogroup after typing rows are assembled: use the
   sole serogroup or serogenogroup; use equal values when both exist; prefer serogenogroup when the
   agglutination text denotes unknown encapsulation or non-invasive behavior; and allow a recognized

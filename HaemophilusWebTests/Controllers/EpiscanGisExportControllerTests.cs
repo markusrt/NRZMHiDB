@@ -158,6 +158,24 @@ namespace HaemophilusWeb.Controllers
             exportedLineForThisPatient.Should().Match("*;B;22;14;5-5;*");
         }
 
+        // specs/007 FR-014: submissions whose normalized serogroup is "NG" or "cnl" are skipped
+        [Test]
+        public void DownloadWithEntriesInterpretedAsNgAndCnl_ReturnsTwoLinesLess()
+        {
+            var testFile = Path.Combine(TemporaryDirectoryToStoreTestData, "download.csv");
+            var sut = CreateController();
+            SetupToInterpretAsSerogroup(_db.MeningoSendings.First(), MeningoSerogroupPcr.Negative);
+            SetupToInterpretAsSerogroup(_db.MeningoSendings.Skip(1).First(), MeningoSerogroupPcr.Cnl);
+
+            var actionResult = sut.Index(ValidToken);
+
+            var content = actionResult.Should().BeOfType<FileContentResult>().Subject.FileContents;
+            File.WriteAllBytes(testFile, content);
+            var lines = File.ReadAllLines(testFile);
+            lines.Should().HaveCount(_db.MeningoSendings.Count() - 2);
+            lines.Should().NotContain(l => l.Contains(";NG;") || l.Contains(";cnl;"));
+        }
+
         private static void SetupToInterpretAsSerogroup(MeningoSending sending, MeningoSerogroupPcr serogroupPcr)
         {
             var isolate = sending.Isolate;
