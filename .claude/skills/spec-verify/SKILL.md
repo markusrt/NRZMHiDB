@@ -133,7 +133,11 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
 - Never copy secret values (`RegistrationToken`, `Iris*`, `GeonamesAccount`) into any file.
 - Never paste real patient data. Use obviously synthetic initials, dates and postal codes.
 - Do not change application code or `Web.config`. The host swaps the connection string itself and
-  re-applies it when a build regenerates the file.
+  re-applies it when a build regenerates the file. Do not add, move or remove files in the
+  application's folders either (e.g. report templates), not even temporarily: verify file discovery
+  with unit tests (`FileLister`) and rendering or failure paths with a synthetic file answered by a
+  page route (`r.fulfill({ body: Buffer.from(base64, 'base64') })`). When such a check would
+  generate a report for a seeded record, abort `ReportGenerated` with a page route so its status stays.
 - Do not edit other specs than `NNN` except for cross-reference fixes that `NNN` requires; record
   those in the verification report.
 
@@ -240,6 +244,10 @@ Practical notes for this application:
 - A fresh Meningococci isolate matches no interpretation rule, so its report reads "Diskrepante
   Ergebnisse …". For a report without discrepancy, enter the inputs of a rule from
   `MeningoIsolateInterpretationTests` (e.g. the stem rule the seeded MZ004/20 uses).
+- The announcement ("Mitteilung") on the configuration page needs a start and an end date before it
+  appears in reports; restore the previous value afterwards and list the change.
+- Python run with `-I` ignores `PYTHONIOENCODING`; scripts that print document text need
+  `sys.stdout.reconfigure(encoding="utf-8")`.
 - Keep `sqlcmd` calls and file operations (`Remove-Item`, `Move-Item`) in separate shell calls; the
   combination is blocked by the path guard.
 - Data with identical patient details: intake blocks a third patient with the same initials, birth
