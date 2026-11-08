@@ -79,13 +79,17 @@ antibiotic is not offered for Haemophilus isolates.
    (placeholder "0,5"), and "Resistent >" (placeholder "0,5"), with the buttons "Neu anlegen" and "Zurück zur Liste".
 2. **Given** valid input, **When** "Neu anlegen" is selected, **Then** the record is stored and the list "Grenzwerte"
    is shown.
-3. **Given** "Antibiotikum Details" is empty, **When** the user saves, **Then** the form is shown again with a
-   validation message and nothing is stored.
+3. **Given** "Antibiotikum Details" is empty, **When** the user saves, **Then** the browser keeps the form and shows
+   "'Antibiotikum Details' darf nicht leer sein." before anything is sent (the server repeats the check), and nothing
+   is stored.
 4. **Given** some but not all of "Version", "Gültig ab", "Sensibel <=", and "Resistent >" are filled, **When** the user
-   saves, **Then** the form is shown again with the message "Die Felder 'Version', 'Gültig ab', 'Sensibel <=' und
-   'Resistent >' müssen entweder alle gefüllt oder alle leer sein." and nothing is stored.
+   saves, **Then** the form is sent and shown again with the message "Die Felder 'Version', 'Gültig ab', 'Sensibel <='
+   und 'Resistent >' müssen entweder alle gefüllt oder alle leer sein." below each of the four fields (four times), and
+   nothing is stored.
 5. **Given** "Antibiotikum Details" is longer than 128 characters or "Version" longer than 64 characters, **When** the
-   user saves, **Then** the form is shown again with a validation message and nothing is stored.
+   user saves, **Then** the browser keeps the form and shows "Das Feld "Antibiotikum Details" muss ein Zeichenfolgen-
+   oder Arraytyp mit einer maximalen Länge von 128 sein." or the same message for "Version" with 64 (the server repeats
+   the check), and nothing is stored.
 6. **Given** all four of "Version", "Gültig ab", "Sensibel <=", and "Resistent >" are left empty, **When** the user
    saves, **Then** the record is stored as an "ohne Grenzwerte" record: it is offered as `<details> - ohne Grenzwerte`
    and every measurement interpreted against it is classified "not determined" (see specs 004 and 005).
@@ -194,10 +198,15 @@ affected isolates.
   (User Story 3). [POTENTIAL-REFACTORING]
 - Editing thresholds or "Gültig ab" of a record in use makes reports of earlier measurements show thresholds and a
   year that differ from the ones against which the stored result was derived, so a report can show, for example, a
-  "susceptible" result next to thresholds that would now classify the measurement as resistant. [SUSPECTED-DEFECT]
+  "susceptible" result next to thresholds that would now classify the measurement as resistant. The isolate form shows
+  the stored result next to the edited record and derives a result again only when the row is changed, so saving the
+  isolate again keeps the old result (the server does not derive it, see 004/005 and DATA-035). [SUSPECTED-DEFECT]
+  (Confirmed on system in the 017 verification, see DATA-012.)
 - Deleting a record also deletes all E-Test measurements of both pathogens that refer to it, without any warning on
   the delete page; this is a data-losing operation that is neither auditable nor recoverable within the application,
-  contrary to Constitution Principle I. The delete page is reachable only by direct address. [SUSPECTED-DEFECT]
+  contrary to Constitution Principle I. The delete page is reachable only by direct address. The deletion also removes
+  the rows that earlier isolate saves left without isolate (DATA-033). [SUSPECTED-DEFECT] (Confirmed on system in the
+  017 verification, see DATA-011.)
 - The details and delete pages are untranslated standard pages (English labels, entity name as heading, internal
   antibiotic identifiers), unlike the German list, create, and edit pages; the list shows internal pathogen
   identifiers in "Gültig für".
@@ -211,8 +220,10 @@ affected isolates.
   itself rather than a page-specific model; the logic that derives the offered antibiotics from the breakpoint list is
   copied in two places, and the client-side interpretation script is duplicated in the Haemophilus and Meningococci
   isolate forms. This reflects the constitution's "Known Architectural Constraints (Legacy Debt)" (parallel
-  Meningococci/Haemophilus domains; god-controllers with weak dependency injection) and Principle III. Neither the
-  breakpoint validator nor the breakpoint pages have automated tests. [POTENTIAL-REFACTORING]
+  Meningococci/Haemophilus domains; god-controllers with weak dependency injection) and Principle III. The breakpoint
+  pages have no automated tests (the page controller creates its database context itself); the breakpoint validator,
+  the record label, and the report values of a measurement are covered by unit tests added in the 017 verification.
+  [POTENTIAL-REFACTORING]
 
 ## Requirements *(mandatory)*
 
@@ -228,10 +239,14 @@ affected isolates.
   or delete pages.
 - **FR-004**: The create and edit pages MUST offer antibiotic, details, version, pathogen ("Haemophilus",
   "Meningokokken", "Allgemein"), valid-from date, susceptible threshold ("Sensibel <="), and resistant threshold
-  ("Resistent >").
+  ("Resistent >"). On the create page no "Gültig für" choice is preselected, and the browser refuses to send the form
+  without one ("'Gültig für' darf kein Nullwert sein."); a request without the field that bypasses the browser is
+  stored with "Haemophilus".
 - **FR-005**: Saving MUST require non-empty details of at most 128 characters and a version of at most 64 characters,
   and MUST require version, valid-from date, and both thresholds to be either all filled or all empty; otherwise the
-  form MUST be shown again with validation messages and nothing stored.
+  form MUST be shown again with validation messages and nothing stored. The empty details and the two length limits
+  are checked in the browser before sending and again on the server; the all-or-none rule is checked only on the
+  server, and its message appears below each of the four fields.
 - **FR-006**: Saving MUST NOT check the relation between the two thresholds, their range, or the plausibility of
   version and date (current behavior).
 - **FR-007**: A record with version, valid-from date, and both thresholds empty MUST be treated as "ohne Grenzwerte":
@@ -251,7 +266,9 @@ affected isolates.
   the referenced record at the time the report is created, and MUST show "---" instead when the stored result is "not
   determined" (see spec 010); the stored result MUST NOT be recalculated.
 - **FR-013**: Exports MUST attribute each stored measurement to the antibiotic of its referenced record (see spec
-  011); breakpoint thresholds MUST NOT be exported.
+  011); breakpoint thresholds MUST NOT be exported. Each export has fixed columns for a fixed set of antibiotics, so a
+  measurement whose record names an antibiotic without a column (for example after the antibiotic of the record was
+  edited) does not appear in that export.
 - **FR-014**: The details and delete pages MUST be reachable by direct address only; confirming deletion MUST remove
   the record and every E-Test measurement that refers to it, permanently, without audit record or undo.
 - **FR-015**: The create, edit, and delete forms MUST verify the anti-forgery token.
@@ -273,10 +290,10 @@ affected isolates.
 | Change to a record in use | Effect on stored measurements | Effect on later reports and exports |
 | --- | --- | --- |
 | New record (new version) added | None; existing measurements keep their record | None; the new record is pre-selected for new measurements |
-| Thresholds or "Gültig ab" edited | Stored result unchanged | Reports show new thresholds and year |
-| Antibiotic edited | Measurements now count as the new antibiotic | Reports and exports list them under the new antibiotic |
+| Thresholds or "Gültig ab" edited | Stored result unchanged, also when the isolate is saved again without touching the row | Reports show new thresholds and year |
+| Antibiotic edited | Measurements now count as the new antibiotic | Reports list them under the new antibiotic; exports list them only if the new antibiotic has an export column |
 | "Gültig für" edited | Measurement keeps the record | Record no longer offered on the previous pathogen's form |
-| Record deleted | All measurements referring to it are deleted | Measurements disappear from reports and exports |
+| Record deleted | All measurements referring to it are deleted, including rows that earlier isolate saves left without isolate | Measurements disappear from reports and exports |
 
 ### Roles and Boundaries
 
@@ -320,19 +337,21 @@ affected isolates.
 ## Assumptions
 
 - Current application code, views, schema migrations, configuration, the application's change history, and role
-  constants are the source of truth. No running system was exercised; there are no automated tests for the breakpoint
-  pages or the breakpoint validator.
+  constants are the source of truth. The behavior was verified against the running application on 2026-11-08 (017
+  verification); the breakpoint pages have no automated tests, the breakpoint validator has tests since that
+  verification.
 - The deletion of dependent E-Test measurements follows from the cascading relation defined when the measurement table
-  was created; no later migration changes it. It was not exercised.
-- When "Gültig für" is left unselected on the create page (no option is pre-selected for a new record), the record is
-  assumed to be stored with "Haemophilus", following standard form handling for an absent value; not exercised.
-- Records without "Gültig ab" are assumed to be listed after dated records because the database sorts empty dates last
-  in descending order; not verified.
-- After a change of "Gültig für", an existing measurement whose record is no longer offered is assumed to show no
-  selected breakpoint on the isolate form, so saving that isolate requires choosing another breakpoint (derived from
-  the form and its validation, see specs 004 and 005); not exercised.
+  was created; no later migration changes it. Exercised in the 017 verification.
+- When "Gültig für" is left unselected on the create page (no option is pre-selected for a new record), the browser
+  refuses to send the form ("'Gültig für' darf kein Nullwert sein."); only a request that bypasses the browser and
+  omits the field is stored with "Haemophilus" (017 verification).
+- Records without "Gültig ab" are listed after dated records on the isolate form (the database sorts empty dates last
+  in descending order); observed in the 017 verification.
+- After a change of "Gültig für", an existing measurement whose record is no longer offered shows no selected
+  breakpoint on the isolate form, and saving that isolate fails with "'Breakpoint' darf nicht leer sein" until another
+  breakpoint is chosen (observed in the 017 verification; see specs 004 and 005).
 - The "Gültig ab" display with time of day and the internal identifiers shown for "Gültig für" and on the details and
-  delete pages are derived from the standard display of dates and enumerations; not observed in a browser.
+  delete pages were observed in the 017 verification.
 - Accounts are assumed to hold exactly one role, as in specs 011 and 014, so an Administrator account is refused.
 - The values of the stored breakpoint records themselves (which EUCAST or CLSI versions exist) are data, not behavior,
   and were not inspected.

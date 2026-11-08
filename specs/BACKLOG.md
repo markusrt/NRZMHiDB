@@ -59,6 +59,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   Confirmed on system 2026-11-08 for the Meningococci patient merge (015 verification; observation only, no
   decision): `Admin1` sees "Patienten Zusammenfügen" below "Meningokokken", and `/MeningoPatientSending/MergePatient`,
   also with both numbers and `Confirmation=true`, redirects it to the sign-in page without merging.
+  Confirmed on system 2026-11-08 for the breakpoint pages (017 verification; observation only, no decision): `Admin1`
+  sees "Administration" → "Antibiotika Grenzwerte", and list, create, edit, details, delete and the create post
+  redirect it to the sign-in page; `Rki1` has no "Administration" menu and is redirected the same way.
 - **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
   Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
   include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
@@ -68,6 +71,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   2022 shows 4 and lists the deleted one; a sender whose only submission in the range is soft-deleted is not listed.
 - **DEC-003 – "Gültig für = Allgemein" breakpoints** (Decision; source: 017 Edge Cases): Storable, never offered for
   either pathogen. Offen: dead value to remove, or should such records apply to both pathogens?
+  Observed on system 2026-11-08 (017 verification, no decision): a Levofloxacin record "SV-017-Allgemein" with "Gültig
+  für" = "Allgemein" was stored and is listed with "Gültig für" "None"; neither isolate form offers Levofloxacin.
 - **DEC-004 – Haemophilus interpretation: growth "Ja"/"Nein" wording** (Decision; source: 006 FR-012/FR-013,
   test-asserted): With all typing not determined, growth "Ja" yields "Der eingesendete Stamm konnte nicht angezüchtet
   werden …", growth "Nein" yields "Kein Nachweis von Haemophilus influenzae." — inverse to the "Wachstum" label but
@@ -302,12 +307,25 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   opens `/MeningoPatientSending`. The Meningococci pages are not affected: there the same targets are correct (015
   verification, 2026-11-08).
 - **DATA-011 – Breakpoint deletion cascades to all E-Test measurements** (Bugfix; source: 017 US4.3, FR-014): No
-  warning, audit or undo; the page is reachable by direct address only (Principle I).
+  warning, audit or undo; the page is reachable by direct address only (Principle I). Confirmed on system 2026-11-08
+  (017 verification): deleting an own Ceftriaxon breakpoint used by a Meningococci isolate removed both of its E-Test
+  rows, the current one and the one an earlier isolate save had left without isolate (DATA-033); the measurement
+  against a seeded breakpoint stayed. The delete page shows no count, the report data lost the Ceftriaxon line, and the
+  application log got no line.
 - **DATA-012 – Editing a breakpoint in use changes historical report output** (Bugfix; source: 017 US3.4, Edge Cases):
-  Reports show new thresholds and year next to the unchanged stored result.
+  Reports show new thresholds and year next to the unchanged stored result. Confirmed on system 2026-11-08 (017
+  verification): a Meningococci measurement 0,25 stored as "sensibel" against "Sensibel <= 0,25", "Resistent > 0,5",
+  "Gültig ab" 2025; after the record was edited to 0,064 / 0,125 / 01.01.2026, the report data show "sensibel" with
+  0,064, 0,125 and 2026 (the new values would give "resistent"). The isolate form shows the stored "sensibel" next to
+  the edited record and saving it unchanged stores "sensibel" again (no derivation on the server, DATA-035). An
+  edited antibiotic moves the measurement to the new antibiotic on the isolate form and in the report data.
 - **DATA-013 – Breakpoint validation gaps** (Bugfix; source: 017 Edge Cases): No check that "Sensibel <=" is at most
   "Resistent >" (reversed thresholds classify everything above resistant and nothing intermediate); duplicate
-  combinations are rejected only by the database (generic error page, input lost).
+  combinations are rejected only by the database (generic error page, input lost). Confirmed on system 2026-11-08 (017
+  verification): a Chloramphenicol record with "Sensibel <= 1" and "Resistent > 0,25" was stored; the isolate form
+  classifies 0,5 and 1 as "resistent", 0,25 and below as "sensibel", nothing as "intermediär". Duplicates on create
+  (dated and "ohne Grenzwerte") and on edit end in HTTP 500 with the database message "Cannot insert duplicate key row
+  … 'IX_EucastClinicalBreakpointVersionAntibioticDetails'"; the same combination for the other pathogen is accepted.
 - **DATA-014 – Health-office records created for postal codes unknown to the RKI website are never shown** (Bugfix;
   source: 016 US3.2, Edge Cases): Matching uses only the address the website returns; the create page is unlinked.
   Reproduced at unit level 2026-11-08 (016 verification, real RKI client with stubbed answers): a stored record for a
@@ -426,6 +444,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   end of the verification 10 of 15 rows were orphaned. From code: no page or export reads them, and the mapping is
   shared with the Meningococci isolate. Overlaps DATA-011. Confirmed on system 2026-11-08 (005 verification) for
   Meningococci isolates: re-saving an isolate with three measurements unchanged left three rows without isolate.
+  Observed 2026-11-08 (017 verification): the orphaned rows keep their breakpoint reference, so deleting that
+  breakpoint (DATA-011) removes them too; orphans of other breakpoints stay.
 - **DATA-034 – Isolate form writes back a stale report status and date** (Bugfix; source: 004 FR-015, Edge Cases; 005
   FR-018, Edge Cases; 008 Edge Cases; 009 Edge Cases): The form posts the report status it loaded and "Befund am". Confirmed on system 2026-11-04 (004 verification, with the
   request the report page sends after generating a report): a form opened before that request set the isolate back to
@@ -559,6 +579,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   2026-11-08 (016 verification) for the health-office pages: titles "Details" and "Delete", the class name
   "HealthOffice" as heading, "Are you sure you want to delete this?", "Delete", "Edit" and "Back to List"; the field
   labels are German ("Adresse", "Telefon", "Postleitzahl") except "Email" and "Fax".
+  Confirmed on system 2026-11-08 (017 verification) for the breakpoint pages: titles "Details" and "Delete", the class
+  name "EucastClinicalBreakpoint" as heading, "Are you sure you want to delete this?", "Delete", "Edit" and "Back to
+  List"; the field labels are German, the antibiotic is shown with its internal name ("Ceftriaxone"); "Gültig für" is
+  missing there and shows "Haemophilus", "Meningococci" or "None" in the list.
 - **UX-010 – Submission pages with missing or unknown id end in HTTP 500** (Bugfix; source: 002 Edge Cases; 003 Edge
   Cases): `/PatientSending/Edit`, `/Delete` and `/Undelete` without id or with an unknown id fail with a null reference
   instead of "bad request"/"not found" (the sender pages answer 400/404, 001 FR-018). Confirmed on system 2026-10-30
@@ -624,7 +648,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   the `ReportGenerated` address with its isolate id, and the isolate-edit link (010 verification, 2026-11-08). The
   Haemophilus and Meningococci merge views differ only in the page title, so the Haemophilus copies keep the
   Meningococci targets (DATA-010); the two `MergePatients` methods differ only in the patient key (014 verification,
-  2026-11-08; 015 verification, 2026-11-08: the three view pairs differ only in `ViewBag.Title`).
+  2026-11-08; 015 verification, 2026-11-08: the three view pairs differ only in `ViewBag.Title`). The antibiotic
+  derivation exists as `AvailableAntibiotics` in `IsolateControllerBase` and in `IsolateViewModelMappingActionBase`
+  (marked "TODO Refactor copied code"), the `ETestChange` script in `Views/Isolate/Edit.cshtml` and
+  `Views/MeningoIsolate/Edit.cshtml` (017 verification, 2026-11-08).
 - **REF-003 – Services created inside controllers instead of injected** (Refactoring; source: 012, 016, 018, 019, 020,
   022, 023, 024): DuplicatePatientResolver, RKI client, ConfigurationService (plus a static test hook), PubMLST
   services and credentials, the restore path's separate sending controller, Geonames service (a controller
@@ -643,7 +670,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   013 verification 2026-11-08: the sender export files also show "Table1"; rows came in ascending sender number and
   the numbers within a row in ascending submission order, which nothing in the code guarantees.
 - **REF-006 – Breakpoints maintained as unversioned runtime data** (Refactoring; source: 017 Edge Cases): Authoritative
-  reference data without review step, history or audit (Principle I).
+  reference data without review step, history or audit (Principle I). Confirmed on system 2026-11-08 (017
+  verification): `Standard1` created, edited (thresholds, "Gültig ab", antibiotic, "Gültig für") and deleted records in
+  use without a warning; the catalog keeps no previous values and has no history table.
 - **REF-007 – Health-office records saved without validation and then unsavable** (Refactoring; source: 016 Edge Cases):
   Deliberate exception to Principle I that blocks the edit page until values are corrected. Observed 2026-11-08 (016
   verification): the lookup stores website values through the save without validation (unit test with a stubbed RKI
@@ -693,7 +722,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   verification) for the Meningococci patient merge: three successful merges left no log line; only the failed merge
   appears as "Unhandled error". Confirmed on system 2026-11-08 (016 verification) for the health-office deletion: the
   confirmed deletion left no log line and the record is gone from the catalog; only the confirmation for a record that
-  no longer exists appears, as "Unhandled error: Der Wert darf nicht NULL sein." (HTTP 500).
+  no longer exists appears, as "Unhandled error: Der Wert darf nicht NULL sein." (HTTP 500). Confirmed on system
+  2026-11-08 (017 verification) for the breakpoint deletion and edits: deleting a record in use (two E-Test rows
+  removed) and three successful edits left no application log line; only failures appear as "Unhandled error";
+  confirming the deletion of a record that no longer exists ends in HTTP 500 "Der Wert darf nicht NULL sein.".
 - **REF-018 – Automatic stem numbers implemented but never enabled** (Refactoring; source: 002 FR-003; 003 FR-003): The
   sending controllers compute the next stem number, but the switch that enables it is `false` for every submission
   type, so intake leaves the stem number empty and it is entered on the isolate page. Confirmed on system 2026-10-30
@@ -760,6 +792,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   found" answer of the edit page when the website returns no office, the "bad request" answers, and the email,
   telephone and fax format rules; the edit page's matching branch (database created inside the controller) and the
   views stay untested, and the first-lookup postal code (UX-005) and the unused own postal code (DATA-014) on purpose.
+  Breakpoint validator: covered by tests added in the 017 verification (2026-11-08) for the non-empty details, the
+  all-or-none rule with its message, the "ohne Grenzwerte" case, the length limits, the record label and the report
+  values of a measurement ("---" for "n.d."); the breakpoint pages stay untested (the controller creates its database
+  context itself), and the missing threshold check (DATA-013) and the thresholds taken from the current record
+  (DATA-012) on purpose.
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

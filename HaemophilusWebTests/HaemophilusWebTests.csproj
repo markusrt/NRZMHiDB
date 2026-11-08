@@ -235,6 +235,7 @@
     <Compile Include="Models\SamplingLocationExtensionsTests.cs" />
     <Compile Include="Models\CountyTests.cs" />
     <Compile Include="Models\HealthOfficeTests.cs" />
+    <Compile Include="Models\EucastClinicalBreakpointTests.cs" />
     <Compile Include="Models\SenderTests.cs" />
     <Compile Include="Models\Meningo\MeningoSendingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="Validators\EpsilometerTestValidatorTest.cs" />
     <Compile Include="Validators\IsolateViewModelValidatorTests.cs" />
     <Compile Include="Validators\HealthOfficeValidatorTests.cs" />
+    <Compile Include="Validators\EucastClinicalBreakpointValidatorTests.cs" />
     <Compile Include="Validators\ConfigurationViewModelValidatorTests.cs" />
     <Compile Include="Validators\MergePatientRequestValidatorTests.cs" />
     <Compile Include="Validators\MeningoPatientValidatorTests.cs" />
@@ -286,6 +288,7 @@
     <Compile Include="Validators\MeningoSendingValidatorTest.cs" />
     <Compile Include="Validators\SendingValidatorTests.cs" />
     <Compile Include="ViewModels\IsolateViewModelTests.cs" />
+    <Compile Include="ViewModels\EpsilometerTestReportModelTests.cs" />
     <Compile Include="Views\Utils\EnumEditorTests.cs" />
     <Compile Include="Views\Utils\BootstrapEditorTests.cs" />
     <Compile Include="Views\Utils\SimpleModel.cs" />
