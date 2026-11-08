@@ -50,9 +50,9 @@ their isolate form is opened.
    heading "Entnahmedatum", the date fields "Start-Datum" and "Ende-Datum" prefilled with 1 January and 31 December
    of the **current** calendar year, the hint "Hinweis: Die Abfrage nimmt einige Zeit in Anspruch. Die Seite lädt
    automatisch neu sobald alle Daten von PubMLST geladen sind.", and the button "Abfrage der PubMLST Daten".
-3. **Given** a period, **When** the user starts the matching, **Then** the button changes to "Abfrage läuft ..." and
-   the page waits until every isolate of the period has been processed; there is no progress indication and no way
-   to cancel.
+3. **Given** a period, **When** the user starts the matching, **Then** the button changes to "Abfrage läuft ...", is
+   disabled, and the page waits until every isolate of the period has been processed; there is no progress
+   indication and no way to cancel.
 4. **Given** the matching runs, **Then** it selects every Meningococci isolate whose sending has a sampling date
    within the period, or — when the sending has no sampling date — whose receiving date lies within the period
    (both bounds inclusive), the same date rule as the Meningococci exports (spec 011).
@@ -101,7 +101,9 @@ last batch), but the persistence itself belongs to isolate entry and is specifie
    PubMLST id, and the database, and enables the link to the PubMLST entry (spec 005); nothing is written to the
    database by the lookup itself.
 3. **Given** no record is found or the lookup fails, **Then** the form shows "Isolat wurde nicht gefunden", empties
-   the typing fields, and resets the PubMLST id to 0.
+   the typing fields and the database, and resets the PubMLST id to 0. The link to the PubMLST entry keeps its
+   previous state: after an earlier successful lookup, or for an isolate opened with a stored record, it stays enabled
+   and still points to that record. [SUSPECTED-DEFECT] (UX-017)
 4. **Given** a looked-up record, **When** the isolate is saved validly, **Then** the values shown in the form are
    stored with the create-or-update rule described in spec 005 (FR-021); the save does not contact PubMLST again.
 
@@ -173,9 +175,11 @@ account and verify both are refused.
   covers the isolate or by an individual lookup followed by a save.
 - **Periods and bounds**: The period is compared with the stored dates including the time of day, with the end date
   taken as the very start of that day; since sending dates are entered without time, the end day is effectively
-  included (derived). No check prevents a start date after the end date; such a period selects nothing and shows
-  "0" in the summary. An empty or unreadable date is not reported back to the user; the run proceeds with the
-  earliest possible date for that bound (derived from the unchecked form input).
+  included (stored dates carry no time of day). No check prevents a start date after the end date; such a period
+  selects nothing and shows "0" in the summary. The form has no check of its own: the browser submits an empty or
+  unreadable date ("abc") as entered. Such a date is not reported back to the user; the run proceeds with the
+  earliest possible date for that bound, so an empty or unreadable "Start-Datum" matches every isolate up to the end
+  date, back to the oldest record, and an empty "Ende-Datum" selects nothing. [SUSPECTED-DEFECT] (UX-016)
 - **Default period is the current year**: Unlike the exports, which default to the previous year (spec 011), the
   matching form defaults to the current calendar year, although the internal name of the default suggests "last
   year". [POTENTIAL-REFACTORING]
@@ -211,7 +215,8 @@ account and verify both are refused.
   batch run, or make an individual lookup show "Isolat wurde nicht gefunden" (derived from code,
   not exercised). Because the batch asks IRIS only for isolates not found in the public database, invalid IRIS
   credentials affect the batch only from the first such isolate on, while every individual lookup asks IRIS first.
-  [SUSPECTED-DEFECT]
+  Without the IRIS settings, the individual lookup fails before any request is sent, so the public database is never
+  asked and every lookup shows "Isolat wurde nicht gefunden". [SUSPECTED-DEFECT]
 - **Duplicate locus in a remote response**: If a remote record listed the same locus more than once, building the
   copied values would fail and, as above, end the run (derived from code; whether PubMLST returns such records was
   not verified). [SUSPECTED-DEFECT]
@@ -226,20 +231,25 @@ account and verify both are refused.
   [SUSPECTED-DEFECT]
 - **Stem number on the individual lookup**: The individual lookup uses the stem number stored when the form was
   opened; a stem number entered or changed in the same form takes effect only after saving and reopening. An isolate
-  without a stem number sends the placeholder "DE -", which finds nothing (derived).
+  without a stem number sends the placeholder "DE -" to both databases, which finds nothing (see 005 US3.3, UX-013).
+  [SUSPECTED-DEFECT]
 - **Client-provided values on save**: The values stored by the individual path are those posted back by the form;
   the server does not fetch them again on save, so the stored copy is only as reliable as the form submission
-  (derived; see spec 005). [POTENTIAL-REFACTORING]
+  (derived; see spec 005). [POTENTIAL-REFACTORING] A save without a current match stores a new, empty local record
+  with PubMLST id 0, so many local records share the id 0, while the batch keeps one record per real PubMLST id (see
+  005 US3.5, DATA-036). [SUSPECTED-DEFECT]
 - **Authorization**: The matching page and the individual lookup admit only the Standard User role. Navigation shows
   the "PubMLST" menu to Standard User and Administrator accounts, so an Administrator-only account sees "Matching
   (Meningokokken)" but is refused, as in specs 011, 014, 017, and 018. [SUSPECTED-DEFECT] Public Health accounts are
   neither offered the menu nor admitted. The matching submission verifies the anti-forgery token; the individual
-  lookup does not, but it only reads from PubMLST.
+  lookup does not, but it only reads from PubMLST; the form posts only the reference, without token (see 021, SEC-005).
+  [SUSPECTED-DEFECT]
 - **Architecture** (Constitution "Known Architectural Constraints (Legacy Debt)", Principles II and III): The batch
   logic lives in a dedicated matching service with automated tests (period selection, isolates without stem number,
-  first/second database, creation of a new local record); the update of an existing local record, the result page,
-  and the matching page itself have no automated test. The remote services are covered by tests with simulated
-  responses, plus one IRIS test against the live service that runs only on explicit request. The matching page
+  first/second database, creation of a new local record, and, since the 019 verification, the update of an existing
+  local record); the result page and the matching page itself have no automated test. The remote services are covered
+  by tests with simulated responses, plus four tests against the live services (three for the public database, one
+  for IRIS) that run only on explicit request. The matching page
   creates the matching service, both remote services, and their credentials directly instead of receiving them,
   reflecting the "weak dependency injection" constraint. The feature exists only for Meningococci; there is no
   Haemophilus counterpart. [POTENTIAL-REFACTORING]
@@ -381,7 +391,11 @@ Local records created before the database name was recorded carry the public dat
   features used; not observed in a browser.
 - The consequences of unhandled remote failures (aborted run, error page, partial saves) and of concurrent edits are
   derived from code paths; not exercised.
-- Sending dates are assumed to be stored without time of day, as they are entered as dates only; therefore the end
-  day of the period is effectively included.
+- Sending dates are stored without time of day, as they are entered as dates only (all stored sampling and receiving
+  dates carried 00:00 in the 019 verification); therefore the end day of the period is effectively included.
+- The 019 verification exercised the matching form, the menu, the role refusals and the individual lookup display in
+  the running application with the remote answers simulated in the browser; the matching submission and the result
+  page were not run, because they would contact PubMLST. The matching logic was checked by unit tests with simulated
+  remote answers.
 - Whether the IRIS and public databases can assign the same numeric PubMLST id to different records was not verified;
   the related edge case describes what the code would do.

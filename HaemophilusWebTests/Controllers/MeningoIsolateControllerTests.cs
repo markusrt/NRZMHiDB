@@ -58,5 +58,14 @@ namespace HaemophilusWeb.Controllers
                 .Single(m => m.Name == "Edit" && m.IsDefined(typeof(HttpPostAttribute), true))
                 .IsDefined(typeof(ValidateAntiForgeryTokenAttribute), true).Should().BeTrue();
         }
+
+        // specs/019 FR-003, US4.3: the matching submission requires the anti-forgery token
+        [Test]
+        public void PubMlstMatchPost_ValidatesAntiForgeryToken()
+        {
+            typeof(MeningoIsolateController).GetMethods()
+                .Single(m => m.Name == "PubMlstMatch" && m.IsDefined(typeof(HttpPostAttribute), true))
+                .IsDefined(typeof(ValidateAntiForgeryTokenAttribute), true).Should().BeTrue();
+        }
     }
 }

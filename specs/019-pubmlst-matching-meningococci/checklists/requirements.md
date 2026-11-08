@@ -56,3 +56,17 @@
   the "PubMLST" menu but is refused. Both the matching page and the lookup check a role (Standard User only); the
   matching submission verifies the anti-forgery token, the individual lookup does not (read-only).
 - As-is observations tagged in the spec: 8 [SUSPECTED-DEFECT], 4 [POTENTIAL-REFACTORING].
+- Verification 2026-11-08: US1.3 states that the button is also disabled while the run waits (observed with the
+  submission held and aborted in the browser).
+- Verification 2026-11-08: US2.3 adds that the database is emptied too and that the link to the PubMLST entry keeps
+  its previous target after a failed lookup; tagged [SUSPECTED-DEFECT] (UX-017).
+- Verification 2026-11-08: Edge case "Periods and bounds" states that the form has no check of its own, that an empty
+  or unreadable start date matches every earlier isolate and an empty end date none, and that stored dates carry no
+  time of day; tagged [SUSPECTED-DEFECT] (UX-016). The related assumption is now observed, not assumed.
+- Verification 2026-11-08: Edge case "Unhandled remote failures abort the run" adds that the individual lookup fails
+  before any request without the IRIS settings (reproduced at unit level).
+- Verification 2026-11-08: Edge case "Architecture" corrected: four live-service tests (three public, one IRIS), and
+  the update of an existing local record is now covered by tests added in this verification.
+- Verification 2026-11-08: cross-reference notes added for defects from other specs confirmed here: UX-013 (stem
+  number edge case), DATA-036 (client-provided values edge case), SEC-005 (authorization edge case); new assumption
+  on what the verification ran. Tags now: 13 [SUSPECTED-DEFECT], 4 [POTENTIAL-REFACTORING].

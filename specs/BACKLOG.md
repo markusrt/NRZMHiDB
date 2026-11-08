@@ -54,6 +54,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   direct run, redirects it to the sign-in page.
   Confirmed on system 2026-11-08 for the sender exports (013 verification): `Admin1` sees both "Einsender Export"
   entries, and both addresses, form and direct run, redirect it to the sign-in page.
+  Confirmed on system 2026-11-08 for the PubMLST matching (019 verification; observation only, no decision): `Admin1`
+  sees "PubMLST" → "Matching (Meningokokken)", and `/MeningoIsolate/PubMlstMatch` redirects it to the sign-in page.
 - **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
   Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
   include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
@@ -153,7 +155,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   2026-11-08 (013 verification) for both sender exports: a GET with a date range returns the Haemophilus sender file,
   and a POST of only the dates without token returns the Meningococci sender file. Confirmed on system 2026-11-08 (022
   verification) for both postal-code lookups: the forms post only `postalCode`/`placeName` and `postalCodePrefix`,
-  without token, and get the answer (HTTP 200).
+  without token, and get the answer (HTTP 200). Reproduced at unit level 2026-11-08 (019 verification) for the PubMLST
+  lookup: the isolate form posts only `isolateReference` (request held in the browser), and the lookup action carries
+  no token check.
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
@@ -279,7 +283,14 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   local record found by PubMLST id only, ignoring the database (cross-database overwrite, database name not updated);
   unhandled remote errors abort the run and leave partial saves; a duplicate locus would crash the run; each matched
   isolate is written back in full (overwrites concurrent edits); "Failed to match isolate by reference" is logged for
-  every isolate including successes.
+  every isolate including successes. Reproduced at unit level 2026-11-08 (019 verification; the real matcher and
+  clients with stubbed remote answers, in uncommitted tests, because a run on the system would call PubMLST): an
+  isolate of a deleted sending is matched; the production wiring asks the public database first in the batch and IRIS
+  first in the lookup; an IRIS record with the id of a stored public record overwrites its values and keeps
+  "pubmlst_neisseria_isolates"; a "not found" status of the search, a connection failure, an IRIS answer to rejected
+  credentials and a duplicate locus each end the run with an exception after earlier isolates were saved; the error
+  entry is written for a successful match. Without the IRIS settings every individual lookup fails before any request,
+  so the public database is never asked. The concurrent-edit overwrite was not reproduced.
 - **DATA-017 – Haemophilus interpretation text contains the typo "phänotpischen"** (Bugfix; source: 006 FR-006,
   test-asserted — the test must change too). Confirmed on system 2026-11-08 (006 verification): the report page shows
   "Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren Haemophilus influenzae (NTHi). …".
@@ -390,7 +401,7 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   **decided 2026-11-07** (owner): the server repeats the derivation on save and validates the E-Test input, for
   Haemophilus and Meningococci isolates alike; the details belong in the change spec.
 - **DATA-036 – Every Meningococci isolate save without a current PubMLST match stores an empty PubMLST record**
-  (Bugfix; source: 005 US3.5, FR-021, Edge Cases, SC-005; 011 Edge Cases): The form always posts the PubMLST part, and the save assigns
+  (Bugfix; source: 005 US3.5, FR-021, Edge Cases, SC-005; 011 Edge Cases; 019 Edge Cases): The form always posts the PubMLST part, and the save assigns
   it to the isolate; with PubMLST id 0 it becomes a new, empty local PubMLST record and the previously linked one
   stays behind. Confirmed on system 2026-11-08 (005 verification): the first save of an isolate without lookup created
   an empty record, each further save another one (about 20 empty records after the verification). After a lookup
@@ -399,6 +410,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   code: the batch matching (019) and the exports read the linked record. Overlaps DATA-016. Confirmed on system
   2026-11-08 (011 verification) in the exports: every isolate saved without lookup shows "PubMLST ID" 0 with empty
   typing columns in the Meningococci laboratory and RKI files, while isolates without any linked record show "-".
+  Confirmed on system 2026-11-08 (019 verification): 40 of the 41 local PubMLST records in the catalog carry PubMLST
+  id 0, so the "one local record per PubMLST id" of 019 SC-003 does not hold for id 0.
 - **DATA-037 – Meningococci isolate form ignores a changed laboratory number** (Bugfix; source: 005 FR-003, FR-014, Edge
   Cases): The form carries the laboratory number as a hidden field before the visible input, the request contains
   both values, and the server binds the first one. Confirmed on system 2026-11-08 (005 verification): "007/26" entered
@@ -469,7 +482,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **UX-006 – RKI match import always reports "File Uploaded Successfully!!"** (Refactoring; source: 024 US1.5): Also
   for zero matches or an empty file; failures never reach the application log.
 - **UX-007 – PubMLST matching form defaults to the current year, result table unsorted, no progress or cancel**
-  (Refactoring; source: 019 US1.2–1.3, Edge Cases): Exports default to the previous year.
+  (Refactoring; source: 019 US1.2–1.3, Edge Cases): Exports default to the previous year. Confirmed on system
+  2026-11-08 (019 verification): "Start-Datum" 01.01.2026 and "Ende-Datum" 31.12.2026; after the click the button
+  reads "Abfrage läuft ..." and is disabled, with no progress or cancel. The result order was not observable (the
+  result page needs a run against PubMLST).
 - **UX-008 – Haemophilus submission list has no patient-number column or search** (Refactoring; source: 014 Edge Cases):
   The Meningococci list offers both.
 - **UX-009 – Breakpoint and health-office details/delete pages are untranslated generated pages** (Refactoring; source:
@@ -490,11 +506,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   SC-005, Edge Cases): Confirmed on system 2026-11-04 (004 verification): after the agglutination changes, the old
   warning stays although the evaluation now matches; a saved disagreement shows no warning on reopening. The warning
   quotes the internal letter "B" where the form shows "b".
-- **UX-013 – PubMLST lookup without stem number asks the remote databases for "DE -"** (Bugfix; source: 005 US3.3): The
+- **UX-013 – PubMLST lookup without stem number asks the remote databases for "DE -"** (Bugfix; source: 005 US3.3; 019 Edge Cases): The
   form checks only that the prefixed reference is not empty, but an isolate without stem number has the reference
   "DE -". Confirmed on system 2026-11-08 (005 verification, request blocked in the browser): "Abfragen" posted
   `isolateReference=DE -` to the lookup, which would ask IRIS and the public PubMLST database (019 US2), and showed
-  "Isolat wurde nicht gefunden" only after the request failed.
+  "Isolat wurde nicht gefunden" only after the request failed. Confirmed on system 2026-11-08 (019 verification,
+  request held in the browser): MZ002/26 without stem number posted `isolateReference=DE -`.
 - **UX-014 – Meningococci isolate form label and message slips** (Bugfix; source: 005 Edge Cases): Confirmed on system
   2026-11-08 (005 verification): the PubMLST tab labels porB as "'porB"; the 16S rDNA percentage message is repeated
   under PorA-VR2 whenever the PorA fields are shown (the field reuses the 16S message slot).
@@ -503,6 +520,19 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   ">… µg/ml"; for an "ohne Grenzwerte" result the values are "---", so the report reads "≤--- µg/ml", ">--- µg/ml" and
   "---" as year next to "0,5 µg/ml, n.d.". Confirmed on system 2026-11-08 (010 verification, Azithromycin on isolate
   KL012/26, "BLNAS v10.docx"). Meningococci reports remove Azithromycin (009 FR-006).
+- **UX-016 – PubMLST matching runs with empty or unreadable dates without notice** (Bugfix; source: 019 Edge Cases
+  "Periods and bounds"): The form has no check and the action ignores the binding errors; an empty or unreadable date
+  becomes the earliest possible date. An empty "Start-Datum" therefore matches every isolate up to the end date, back
+  to the oldest record, against PubMLST in one request; an empty "Ende-Datum" matches nothing and reports "0".
+  Confirmed on system 2026-11-08 (019 verification, submission held and aborted in the browser): "", "abc" and an
+  empty end date are posted without a message. Reproduced at unit level 2026-11-08 (019 verification): the dates bind
+  to 0001-01-01 with an invalid model state, and the matcher then selects an isolate sampled in 1999.
+- **UX-017 – Failed PubMLST lookup leaves the link to the previous PubMLST entry enabled** (Bugfix; source: 019 US2.3;
+  005 US3.3): After "Isolat wurde nicht gefunden" the form empties the typing fields and the database and sets the
+  PubMLST id to 0, but the link keeps its text, target and enabled state. Confirmed on system 2026-11-08 (019
+  verification, answers simulated in the browser): on MZ003/26 with stored record 99001 ("PubMLST Eintrag"), and
+  after a successful simulated lookup on MZ001/26 ("PubMLST Eintrag anzeigen"), a failed lookup (HTTP 404 or
+  500) left the link pointing to `…db=pubmlst_neisseria_iris&id=…` of the earlier record.
 
 ## REF — Refactoring and legacy debt
 
@@ -614,7 +644,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   submissions (DEC-002) stays untested on purpose. EpiScanGIS export: covered by tests added in the 023 verification
   (2026-11-08) for the time window away from its boundary day, soft-deleted submissions, missing coordinates, a "not
   found" lookup, file name and type, empty file, line order and temp-file cleanup; the "Blut und Liquor" exclusion, the
-  boundary day and the abort cases stay untested on purpose (DEC-008, DATA-020).
+  boundary day and the abort cases stay untested on purpose (DEC-008, DATA-020). PubMLST update of an existing local
+  record: covered by tests added in the 019 verification (2026-11-08), together with the period bounds, the save per
+  found isolate, the kept link of an isolate not found, the repeated search on a later run, the single IRIS session
+  and the lookup order of the controller; the result page and the matching page stay untested (their view is rendered
+  only after a run against PubMLST).
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

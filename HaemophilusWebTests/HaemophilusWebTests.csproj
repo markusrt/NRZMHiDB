@@ -263,6 +263,7 @@
     <Compile Include="Tools\CountyImporterTests.cs" />
     <Compile Include="Tools\RkiToolTests.cs" />
     <Compile Include="Utils\AntibioticPriorityListComparerTest.cs" />
+    <Compile Include="Utils\AppSettingsExtensionsTests.cs" />
     <Compile Include="Utils\EnumSerializerTests.cs" />
     <Compile Include="Utils\EnumUtilsTests.cs" />
     <Compile Include="Utils\ExceptionUtilsTests.cs" />

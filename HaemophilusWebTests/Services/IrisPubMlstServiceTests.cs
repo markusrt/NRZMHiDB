@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -55,6 +56,46 @@ namespace HaemophilusWeb.Services
 
             postUrl.Should().Contain("TheConsumerKey");
             postUrl.Should().Contain("oauth_token=TheSessionToken");
+        }
+
+        // specs/019 FR-012, US3.4: the IRIS session is established once and reused for further lookups;
+        // found records carry the IRIS database name
+        [Test]
+        public void GetIsolateByReference_TwoLookups_EstablishSessionOnce()
+        {
+            var getUrls = new List<string>();
+
+            string GetCall(string url)
+            {
+                getUrls.Add(url);
+                if (url.Contains("/oauth/get_session_token"))
+                {
+                    return "{\"oauth_token\":\"TheSessionToken\",\"oauth_token_secret\":\"TheSessionTokenSecret\"}";
+                }
+                return url.Contains("/allele_ids")
+                    ? "{\"records\":1,\"allele_ids\":[{\"PorA_VR1\":\"7-2\"}]}"
+                    : DeserializeFromResource("HaemophilusWeb.TestData.PubMlstIsolateById.json");
+            }
+
+            string PostCall(string url, Dictionary<string, string> _) =>
+                "{\"isolates\":[\"https://rest.pubmlst.org/db/pubmlst_neisseria_iris/isolates/93683\"],\"records\": 1}";
+
+            var authorization = new PubMlstAuthorization
+            {
+                AccessToken = "TheAccessToken",
+                AccessTokenSecret = "TheAccessTokenSecret",
+                ConsumerKey = "TheConsumerKey",
+                ConsumerSecret = "TheConsumerSecret"
+            };
+            var sut = new IrisPubMlstService(authorization, GetCall, PostCall);
+
+            var first = sut.GetIsolateByReference("DE14505");
+            var second = sut.GetIsolateByReference("DE14506");
+
+            getUrls.Count(u => u.Contains("/oauth/get_session_token")).Should().Be(1);
+            getUrls.Should().HaveCount(5);
+            first.Database.Should().Be("pubmlst_neisseria_iris");
+            second.PorAVr1.Should().Be("7-2");
         }
 
         [Test]

@@ -132,6 +132,45 @@ namespace HaemophilusWeb.Services
             isolate.TrumenbaReactivity.Should().Be("cross-reactive");
         }
 
+        // specs/019 FR-005, Edge Cases "Exact reference search": more than one record counts as not found, no details fetched
+        [Test]
+        public void GetIsolateByReference_MoreThanOneRecord_ReturnsNullWithoutFetchingDetails()
+        {
+            var getCalls = 0;
+            var service = new NeisseriaPubMlstService(
+                url => { getCalls++; return GetUrlReturningIsolate(url); },
+                (url, parameters) =>
+                    "{\"isolates\":[\"https://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/1\",\"https://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/2\"],\"records\": 2}");
+
+            var isolate = service.GetIsolateByReference("DE14505");
+
+            isolate.Should().BeNull();
+            getCalls.Should().Be(0);
+        }
+
+        // specs/019 FR-014, FR-007, Edge Cases "What is sent to PubMLST": the search sends only the prefixed stem number;
+        // details and allele designations are read from the found record of the public database
+        [Test]
+        public void GetIsolateByReference_SendsOnlyReferenceAndReadsFoundRecord()
+        {
+            string postUrl = null;
+            Dictionary<string, string> postParameters = null;
+            var getUrls = new List<string>();
+            var service = new NeisseriaPubMlstService(
+                url => { getUrls.Add(url); return GetUrlReturningIsolate(url); },
+                (url, parameters) => { postUrl = url; postParameters = parameters; return PostUrlReturnsResult(url, parameters); });
+
+            var isolate = service.GetIsolateByReference("DE14505");
+
+            postUrl.Should().Be("https://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/search");
+            postParameters.Should().BeEquivalentTo(new Dictionary<string, string> { { "field.isolate", "DE14505" } });
+            getUrls.Should().Equal(
+                "https://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/93683",
+                "https://rest.pubmlst.org/db/pubmlst_neisseria_isolates/isolates/93683/allele_ids?return_all=1");
+            isolate.PubMlstId.Should().Be(93683);
+            isolate.Database.Should().Be("pubmlst_neisseria_isolates");
+        }
+
         [Test]
         [Explicit]
         [Category("Integration")]

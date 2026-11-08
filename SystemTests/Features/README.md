@@ -45,6 +45,7 @@ listed, add it here in the same commit.
 | `When I select "<option text>" in "<label>"` | Choose the entry of the selection list with this label whose text contains the option text. |
 | `When I choose "<option>" for "<label>"` | Pick the radio button or toggle with this text in the group with this label. |
 | `When I open the edit page of "<name>"` | Open the edit page of the record with this name from its list. |
+| `When I open the tab "<text>"` | Show the tab of the current form with this title (e.g. "PubMLST" on the Meningococci isolate form), not a menu entry of the same text. |
 | `When I choose the suggestion "<text>" for "<label>"` | Pick the entry with this text from the field's suggestion list (browser datalist), as a user does with the mouse or arrow keys; the field fires one change with the full text. |
 
 ### Assertions
@@ -53,6 +54,7 @@ listed, add it here in the same commit.
 | --- | --- |
 | `Then I see "<text>"` | The text is visible on the page. |
 | `Then I see the link "<text>"` | A link with this text is visible. |
+| `Then I see the button "<text>"` | A button with this text is visible, including submit inputs whose text is their value. |
 | `Then I do not see the link "<text>"` | The navigation and the page contain no link with this text, also not inside closed drop-downs. |
 | `Then I see the validation message "<text>"` | A field validation message with this text is shown. |
 | `Then I see the search field "<placeholder>"` | A search field showing this placeholder is visible (list searches without labels). |
@@ -103,3 +105,5 @@ listed, add it here in the same commit.
 | `Given a submission with sender laboratory number "<lab no>", sampling location "<location>" and sampling date "<date>" exists` | 011 | Create a Haemophilus submission with this "Labnr. Einsender", "Entnahmeort" (for "Anderer …" also an "Anderer Entnahmeort" text with the prefix `SV-011-`) and "Entnahmedatum" through the UI if missing (sender `SV-001-Alpha`, synthetic patient). |
 | `Given two submissions of patient "<initials>" born "<date>" with postal code "<code>", sampled "<date>" and received "<date>", exist` | 012 | Create two Haemophilus submissions ("Blut", isolate defaults) through intake if missing; the second one with "Bestehenden Patienten verwenden", so both belong to one patient and have identical strain characteristics. |
 | `Given a submission of sender "<name>" with sampling date "<date>" exists` | 013 | Create a Haemophilus submission ("Blut", isolate defaults, "Labnr. Einsender" with the prefix `SV-013-`) for this sender and "Entnahmedatum" through the UI if missing (synthetic patient). |
+| `Given the PubMLST lookup is answered in the browser with PubMLST id "<id>", database "<database>" and ST "<value>"` | 019 | The browser answers the lookup request of the isolate form (`POST /PubMlst/NeisseriaIsolates/`) itself with a synthetic record carrying these values (other typing values empty); the request never reaches the server, PubMLST is never contacted. |
+| `Given the PubMLST lookup is answered in the browser with "not found"` | 019 | As above, answered with HTTP 404. |
