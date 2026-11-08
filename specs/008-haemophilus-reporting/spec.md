@@ -142,7 +142,9 @@ image, then inspect the downloaded document and confirm that no signed state is 
 - Preliminary classification depends only on the selected template path containing the configured
   preliminary marker. A selected template without that marker follows the final path.
 - A document-template loading or rendering error stops the flow before the report-generation
-  notification, so this path does not update status or report date.
+  notification, so this path does not update status or report date. The page shows no message;
+  only a browser script error records the failure (see 010 Edge Cases, DATA-024).
+  [SUSPECTED-DEFECT]
 - The download request is initiated before the report-generation notification. The system records
   generation without confirming that the user retained, opened, printed, or externally signed the
   downloaded file.
@@ -151,8 +153,13 @@ image, then inspect the downloaded document and confirm that no signed state is 
 - Repeated final generation replaces the prior report date; repeated preliminary generation does
   not assign or change a report date unless the isolate was already Final, in which case the
   existing date is preserved.
-- The date supplied inside report data and the date used in the filename reflect the generation
-  day; the persisted final report date records the later notification time and includes time of day.
+- The date supplied inside report data and the date used in the filename are fixed when the report
+  page is loaded (server date); a page left open past midnight produces documents with the previous
+  day's date. The persisted final report date records the notification time and includes time of
+  day.
+- An isolate form opened before a report is generated still holds the old report status and date;
+  saving it writes them back, so a final report can be reset to "Teilbefund" or "Kein Befund
+  erstellt" and its date cleared (see 004 FR-015, DATA-034). [SUSPECTED-DEFECT]
 - Responsible health-office lookup is ancillary to report generation. A missing or failed lookup
   does not itself block template selection or document generation.
 
@@ -161,7 +168,9 @@ image, then inspect the downloaded document and confirm that no signed state is 
 ### Functional Requirements
 
 - **FR-001**: The system MUST allow a Standard User to enter report creation after successfully
-  saving Haemophilus isolate edits through the save-and-create-report action.
+  saving Haemophilus isolate edits through the save-and-create-report action, and from the
+  "Befund erstellen" action of each submissions-list row (see 002 FR-014). The report page links
+  back to the isolate form ("Isolat bearbeiten").
 - **FR-002**: Report routes MUST require an authenticated account. The current report controller
   MUST apply no report-specific role restriction beyond that authentication requirement; therefore
   any authenticated role can address those routes directly, although the normal edit-to-report
@@ -176,9 +185,14 @@ image, then inspect the downloaded document and confirm that no signed state is 
   Haemophilus Word-compatible templates plus all configured report signers.
 - **FR-006**: The report page MUST request responsible health-office details using the patient's
   postal code and display returned address, telephone, fax, and email details; successful retrieval
-  MUST enable the health-office edit link.
+  MUST enable the health-office edit link. The display formats (telephone link, fax as an email
+  link to `0<fax digits>@fax`, email link) are described in spec 016. The values are inserted as
+  markup without escaping, and an answer without telephone stops the display script before fax,
+  email, and the edit link (see 016 Edge Cases, SEC-008, DATA-015). [SUSPECTED-DEFECT]
 - **FR-007**: The system MUST require both a report template and a signer before generation and MUST
-  show the same missing-selection error if either is absent.
+  show the same missing-selection error ("Bitte wählen Sie eine Befundvorlage und einen
+  Unterzeichner aus.") if either is absent. Each further attempt adds another copy of the message,
+  and the messages stay on the page after both selections have been made.
 - **FR-008**: The system MUST classify a selected template as preliminary exactly when its path
   contains the configured preliminary marker; every other selected template MUST be final.
 - **FR-009**: For a final template, generation MUST inspect the final interpretation for the
@@ -190,13 +204,18 @@ image, then inspect the downloaded document and confirm that no signed state is 
   its typing attribute name, and make an available QR image usable by the report template.
 - **FR-012**: The system MUST preserve line breaks while populating the selected template and MUST
   offer the resulting Word-compatible document for local download.
-- **FR-013**: The downloaded filename MUST be `KL <laboratory-number>-<generation-date>.docx`, with
-  slashes in the laboratory number replaced by underscores and the date formatted `YYYY-MM-DD`.
-- **FR-014**: The report document's displayed report date MUST be the current generation date in the
-  report's day-month-year format.
+- **FR-013**: The downloaded filename MUST be `KL <laboratory-number>-<date>.docx`, with slashes in
+  the laboratory number replaced by underscores and the date formatted `YYYY-MM-DD`. The date is
+  the server date at which the report page was loaded; it is written into the page and not
+  recomputed when the document is generated. Preliminary and final documents of the same day
+  therefore carry the same filename.
+- **FR-014**: The report document's displayed report date MUST be the server date at which the
+  report page was loaded, in the report's day-month-year format (`dd.MM.yyyy`).
 - **FR-015**: After rendering and initiating the download, the system MUST notify the report record
   of generation. It MUST NOT wait for confirmation that the user kept, opened, printed, or signed
-  the file.
+  the file, and the page shows no confirmation. The notification carries only the isolate
+  identifier and the preliminary flag; no anti-forgery token is sent or verified (see SEC-005).
+  [SUSPECTED-DEFECT]
 - **FR-016**: A final generation notification for an existing isolate MUST set status to Final and
   report date to the current date and time, replacing any prior report date.
 - **FR-017**: A preliminary generation notification for an existing isolate not already Final MUST

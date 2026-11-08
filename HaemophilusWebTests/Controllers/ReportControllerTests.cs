@@ -178,5 +178,81 @@ namespace HaemophilusWeb.Controllers
             controller.Invoking(c => c.ReportGenerated(isolateId)).Should().NotThrow();
         }
 
+        // specs/008 FR-003
+        [Test]
+        public void Isolate_WithoutId_ReturnsBadRequest()
+        {
+            var result = controller.Isolate(null) as HttpStatusCodeResult;
+
+            result.Should().NotBeNull();
+            result.StatusCode.Should().Be(400);
+        }
+
+        // specs/008 FR-003
+        [Test]
+        public void Isolate_UnknownId_ReturnsNotFound()
+        {
+            var result = controller.Isolate(4711);
+
+            result.Should().BeOfType<HttpNotFoundResult>();
+        }
+
+        // specs/008 FR-005
+        [Test]
+        public void Isolate_ConfiguredReportSigners_AddsSignersToViewBag()
+        {
+            DbMock.ConfigurationEntries.Add(new ConfigurationEntry
+            {
+                Key = HaemophilusWeb.Services.ConfigurationService.Keys.ReportSigners,
+                Value = "[\"Signer One\",\"Signer Two\"]"
+            });
+
+            var viewResult = controller.Isolate(IsolateId) as ViewResult;
+
+            var signers = viewResult.ViewBag.ReportSigners as List<string>;
+            signers.Should().Equal("Signer One", "Signer Two");
+        }
+
+        // specs/008 FR-019, Report State Transitions (unknown/missing identifier)
+        [TestCase(4711, false)]
+        [TestCase(4711, true)]
+        [TestCase(null, false)]
+        [TestCase(null, true)]
+        public void ReportGenerated_UnknownOrMissingIsolateId_AcknowledgesAndChangesNoIsolate(int? isolateId, bool preliminary)
+        {
+            var result = controller.ReportGenerated(isolateId, preliminary);
+
+            result.Data.Should().Be(true);
+            var isolate = DbMock.Isolates.Single(i => i.IsolateId == IsolateId);
+            isolate.ReportStatus.Should().Be(ReportStatus.None);
+            isolate.ReportDate.Should().BeNull();
+        }
+
+        // specs/008 FR-016, Report State Transitions (Preliminary -> Final)
+        [Test]
+        public void ReportGenerated_FinalAfterPreliminary_SetsFinalAndReportDate()
+        {
+            controller.ReportGenerated(IsolateId, true);
+
+            controller.ReportGenerated(IsolateId);
+
+            var isolate = DbMock.Isolates.Single(i => i.IsolateId == IsolateId);
+            isolate.ReportStatus.Should().Be(ReportStatus.Final);
+            isolate.ReportDate.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
+        }
+
+        // specs/008 FR-017, Report State Transitions (Preliminary -> Preliminary)
+        [Test]
+        public void ReportGenerated_PreliminaryAfterPreliminary_KeepsPreliminaryWithoutReportDate()
+        {
+            controller.ReportGenerated(IsolateId, true);
+
+            controller.ReportGenerated(IsolateId, true);
+
+            var isolate = DbMock.Isolates.Single(i => i.IsolateId == IsolateId);
+            isolate.ReportStatus.Should().Be(ReportStatus.Preliminary);
+            isolate.ReportDate.Should().BeNull();
+        }
+
     }
 }

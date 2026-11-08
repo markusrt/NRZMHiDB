@@ -93,6 +93,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   columns with and without `Unadjusted=Yes`; no Meningococci file has a `duplicate_group` column.
 - **DEC-011 – Report pages open to every signed-in account** (Decision; source: 008, 009 Edge Cases, 021 US4.4): See
   SEC-004; the decision is whether report generation stays available to roles other than Standard User at all.
+  Observed on system 2026-11-08 (008 verification, no decision taken): `Rki1` and `Admin1` reach the Haemophilus
+  report page by direct address and can generate documents and set the report status.
 - **DEC-012 – Where to keep D1–D5** (Decision; **decided 2026-10-30**): Moved to the constitution (v1.2.0, section
   "Specification Structure"). This file keeps only the pointer above.
 
@@ -109,22 +111,29 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   016 Edge Cases, 021 US4.4–4.6, US7, access matrix, 024): Public Health (and role-less) accounts can open the report
   page of any isolate (patient data, document generation, status marking), create/edit/delete health offices, and
   upload RKI match files. Only the navigation hides these functions (Constitution Principle IV). See DEC-011.
+  Confirmed on system 2026-11-08 (008 verification): `Rki1` and `Admin1` open `/Report/Isolate/14` (HTTP 200, patient
+  initials and postal code shown) although the isolate form and the submissions list redirect them to the sign-in
+  page; `Rki1` generated a "Teilbefund" document there, which set the isolate to "Teilbefund".
 - **SEC-005 – Anti-forgery token not verified on state-changing actions** (Bugfix; source: 021 Edge Cases
-  "consolidated"; 002 FR-021, 003 FR-023, 011, 013, 014, 015, 016, 019, 020, 022, 024): Not verified on the combined
+  "consolidated"; 002 FR-021, 003 FR-023, 008 FR-015, 011, 013, 014, 015, 016, 019, 020, 022, 024): Not verified on the combined
   submission create/edit saves, all exports (also any request method), both patient merges (a single request merges
   without the confirmation page), restore links, the health-office lookup (which stores records), report-status
   marking, the PubMLST and postal-code lookups, list data requests, the county upload, the RKI match import, and the
   role page save. Confirmed on system 2026-10-30 (002 verification) for the combined Haemophilus submission create
   save: a POST without token is stored. Confirmed on system 2026-10-30 (003 verification) for the combined
-  Meningococci submission create and edit saves.
+  Meningococci submission create and edit saves. Confirmed on system 2026-11-08 (008 verification) for the
+  Haemophilus report-status marking: the report page itself posts only `id` and `preliminary` to
+  `/Report/ReportGenerated`, without token, and the status is stored.
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
 - **SEC-007 – One secret for registration and the EpiScanGIS export, carried in the URL** (Bugfix; source: 021 US7.1–7.2,
   023): The token appears in web-server logs; the export is an anonymous GET.
-- **SEC-008 – Unescaped external data rendered as markup** (Bugfix; source: 016 Edge Cases, 022 Edge Cases):
-  Health-office address/phone/fax/email (from the RKI website or local edits) on the report page, and Geonames place
-  names in the postal-code suggestion list.
+- **SEC-008 – Unescaped external data rendered as markup** (Bugfix; source: 016 Edge Cases, 022 Edge Cases; 008
+  FR-006): Health-office address/phone/fax/email (from the RKI website or local edits) on the report page, and Geonames
+  place names in the postal-code suggestion list. Confirmed on system 2026-11-08 (008 verification, with a synthetic
+  lookup answer injected in the browser because the RKI call is blocked): an address containing `<b>…</b>` is rendered
+  bold on the Haemophilus report page.
 - **SEC-009 – Geonames called over plain HTTP** (Bugfix; source: 022 Edge Cases): Account name and typed patient/sender
   postal codes travel unencrypted (Principle IV).
 - **SEC-010 – Rendering libraries from public CDNs on every page, two without integrity check** (Refactoring; source:
@@ -201,8 +210,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   combinations are rejected only by the database (generic error page, input lost).
 - **DATA-014 – Health-office records created for postal codes unknown to the RKI website are never shown** (Bugfix;
   source: 016 US3.2, Edge Cases): Matching uses only the address the website returns; the create page is unlinked.
-- **DATA-015 – Locally cleared health-office fields break the report page** (Bugfix; source: 016 Edge Cases): An empty
-  telephone stops the page script; cleared email/fax display as "null".
+- **DATA-015 – Locally cleared health-office fields break the report page** (Bugfix; source: 016 Edge Cases; 008
+  FR-006): An empty telephone stops the page script; cleared email/fax display as "null". Confirmed on system
+  2026-11-08 (008 verification, synthetic lookup answers injected in the browser): without telephone only the address
+  appears, fax and email stay empty, "Gesundheitsamt bearbeiten" stays inactive and the browser reports "Cannot read
+  properties of null (reading 'replace')"; without fax and email both show "null" (fax linked to `mailto:-@fax`).
+  Document generation still works.
 - **DATA-016 – PubMLST batch matching defects** (Bugfix; source: 019 Edge Cases): Includes isolates of deleted
   sendings; batch asks public then IRIS while the single lookup asks IRIS then public (different records possible);
   local record found by PubMLST id only, ignoring the database (cross-database overwrite, database name not updated);
@@ -230,8 +243,11 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
 - **DATA-023 – Postal-code suggestion script expects `postalCodes`, server fallback returns `postalcodes`** (Bugfix;
   source: 022 Edge Cases): Suggestions vanish with a browser script error; the empty-result and "error" checks never
   apply.
-- **DATA-024 – Report template failures and empty-list label** (Bugfix; source: 010 Edge Cases): Template retrieval or
-  filling failures show no user message; the "Keine Vorlagen hinterlegt" label is never shown (specs 008/009 aligned).
+- **DATA-024 – Report template failures and empty-list label** (Bugfix; source: 010 Edge Cases; 008 Edge Cases): Template
+  retrieval or filling failures show no user message; the "Keine Vorlagen hinterlegt" label is never shown (specs 008/009
+  aligned). Confirmed on system 2026-11-08 (008 verification): with the template download aborted in the browser,
+  "Befund erstellen" produced no document, no message and no status request; only a browser script error
+  ("InvalidStateError: Failed to read the 'responseText' property …") was raised.
 - **DATA-025 – County version choice ignores the submission date** (Bugfix; source: 011 Edge Cases, 025 Edge Cases):
   When several stored county versions match, the earliest validity date wins regardless of sampling/receiving date;
   because uploads only add records, a renumbered county keeps exporting its old number.
@@ -272,13 +288,15 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   shared with the Meningococci isolate. Overlaps DATA-011. Confirmed on system 2026-11-08 (005 verification) for
   Meningococci isolates: re-saving an isolate with three measurements unchanged left three rows without isolate.
 - **DATA-034 – Isolate form writes back a stale report status and date** (Bugfix; source: 004 FR-015, Edge Cases; 005
-  FR-018, Edge Cases): The form posts the report status it loaded and "Befund am". Confirmed on system 2026-11-04 (004 verification, with the
+  FR-018, Edge Cases; 008 Edge Cases): The form posts the report status it loaded and "Befund am". Confirmed on system 2026-11-04 (004 verification, with the
   request the report page sends after generating a report): a form opened before that request set the isolate back to
   "Kein Befund erstellt" and cleared the date on save. Reachable whenever the form stays open while a report is
   generated. Saving a fresh form stored the date with the time 00:00. The Meningococci form carries the same hidden
   status field (from code). Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates: a form opened
   before the report request reset "Endbefund" to "Kein Befund erstellt" and cleared the date; a fresh form kept the
-  status and stored the date with the time 00:00.
+  status and stored the date with the time 00:00. Confirmed on system 2026-11-08 (008 verification): an isolate form
+  opened while the isolate was "Teilbefund", saved after a final report had been generated from the report page, set
+  the isolate back to "Teilbefund" without report date.
 - **DATA-035 – E-Test result is taken from the request unchecked** (Bugfix; source: 004 Edge Cases, Assumptions, SC-003;
   005 FR-006, Edge Cases, SC-003): The derivation exists only in the page script. Confirmed on system 2026-11-04 (004 verification): 0,5 against a
   breakpoint "Sensibel <= 0,5" stored as "resistent" when the request says so; an Ampicillin row accepted a Meningococci

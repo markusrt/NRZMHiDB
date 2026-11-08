@@ -55,6 +55,7 @@ listed, add it here in the same commit.
 | `Then "<label>" contains <value description>` | The field with this label holds the described value (e.g. "January 1st of the previous year"). |
 | `Then a file named like "<pattern>" is downloaded` | A download starts whose file name matches the wildcard pattern. |
 | `Then no file is downloaded` | No download starts within a few seconds after the preceding action. |
+| `Then "<label>" offers "<option text>"` | The selection list with this label has an entry whose text contains the option text. |
 | `Then the downloaded file has no column "<name>"` | The header row of the downloaded spreadsheet has no column with this name. |
 | `Then the downloaded file has <n> row(s) with "<value>" in column "<name>"` | Exactly this many data rows of the downloaded spreadsheet hold the value in that column. |
 
@@ -86,4 +87,5 @@ listed, add it here in the same commit.
 | `Given a Meningococci breakpoint for "<antibiotic>" with "Sensibel <=" "<value>" and "Resistent >" "<value>" exists` | 005 | Create the breakpoint for Meningococci on `/EucastClinicalBreakpoints/Create` if no current one with these limits exists (details with the prefix `SV-005-`). |
 | `When I open the isolate of the Meningococci submission "<lab no>"` | 005 | Find the submission by its "Labnr. Einsender" in the Meningococci list search (`/MeningoPatientSending`) and click its "Labor-Nr" link. |
 | `Then the report field "<label>" shows "<text>"` | 006 | On the report page ("Befund erstellen"), the value next to this label (e.g. "Teilbefund", "Befund") equals the text. |
+| `Then the submission list row "<search text>" shows the report status "<status>"` | 008 | In the Haemophilus submission list (`/PatientSending`), filtered with the search box, the "Befund" icon of the row has this title ("Kein Befund erstellt", "Teilbefund", "Endbefund"). |
 | `Given two submissions of patient "<initials>" born "<date>" with postal code "<code>", sampled "<date>" and received "<date>", exist` | 012 | Create two Haemophilus submissions ("Blut", isolate defaults) through intake if missing; the second one with "Bestehenden Patienten verwenden", so both belong to one patient and have identical strain characteristics. |
