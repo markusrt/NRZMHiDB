@@ -248,6 +248,10 @@ Practical notes for this application:
 - `browser_run_code_unsafe` has no `require('fs')`. Save a file from a directly called export address
   by adding a temporary anchor with that address, clicking it, and calling `saveAs` on the download
   event; `page.request` responses cannot be written to disk.
+- After clicking a submit button, a further `page.evaluate` fails with "Execution context was
+  destroyed"; read a button's state after submit inside the same `evaluate` (via `setTimeout`).
+- Records of earlier verifications have laboratory numbers that change with every host start; name
+  them in the report by their sender laboratory number or sender (`SV-NNN-…`).
 - The submit buttons of the edit forms are `input type="submit"` elements named `primary-submit` and
   `secondary-submit` ("Änderungen speichern und Befund erstellen"); locate them by name, not as
   `button`.
@@ -337,6 +341,10 @@ For every item classified **Test** (and for UI items where a test already exists
    refactoring rows that a committed test would cement (e.g. unencoded parameters).
    A missing setting can be tested without a secret: the test project's `App.config` lacks the
    secret keys; never let an assertion print a configured value.
+   Never run code that would open a connection to an external host, not even in a scratch assembly
+   behind a local proxy or a redirected `defaultProxy`: a misconfiguration would send the request.
+   Wire every client with a stubbed HTTP function or substitute. What only the production wiring can
+   show is "Not verifiable".
    For failure paths of a service, use the real client with a stubbed HTTP function (e.g.
    `GeonamesService(Func<string, string>)`) rather than a mocked interface, so the client's own parsing
    is exercised. Tests that check temp files redirect `TMP`/`TEMP` to a test folder. For a `DEC-*` item, a test may assert the parts of the FR the open
@@ -368,11 +376,14 @@ For every item classified **Test** (and for UI items where a test already exists
    `/Tests:` matches substrings of the fully qualified name, so `IsolateViewModelValidatorTests` also
    runs `MeningoIsolateViewModelValidatorTests`. For an exact set use
    `/TestCaseFilter:"FullyQualifiedName~HaemophilusWeb.Validators.IsolateViewModelValidatorTests|FullyQualifiedName~…"`.
+   Name filters can select `[Explicit]` live tests (`[Category("Integration")]`, they call PubMLST):
+   always add `TestCategory!=Integration` (e.g. `/TestCaseFilter:"(FullyQualifiedName~…)&TestCategory!=Integration"`),
+   also for the full suite.
 
    Then run the full suite once with a results file, so a failure can be named:
 
    ```powershell
-   & $vstest HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /logger:trx /ResultsDirectory:<scratchpad>\TestResults
+   & $vstest HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll /TestCaseFilter:"TestCategory!=Integration" /logger:trx /ResultsDirectory:<scratchpad>\TestResults
    ```
 
    A red test of yours means your reading of the code or of the app is wrong; investigate, do not
