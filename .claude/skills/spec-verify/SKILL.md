@@ -107,21 +107,28 @@ screenshots, and `SystemTests/Features/NNN-<slug>.feature` with at least one `@s
   navigation (also in contexts you create for role checks) and report the blocked URLs:
 
   ```js
-  const blocked = [];
+  const ctx = page.context();
+  ctx.svBlocked = ctx.svBlocked || [];   // globals do not survive between run_code calls; the context does
   const external = /\/QueryHealthOffice|\/PubMlst\/NeisseriaIsolates|\/HealthOffices\/Edit\?.*postalCode=|\/MeningoIsolate\/PubMlstMatch/i;
-  await page.context().route('**/*', r => {
+  await ctx.route('**/*', r => {
     const req = r.request();
     const hit = external.test(req.url()) && (!/PubMlstMatch/i.test(req.url()) || req.method() === 'POST');
-    if (hit) { blocked.push(req.method() + ' ' + req.url()); return r.abort(); }
+    if (hit) { ctx.svBlocked.push(req.method() + ' ' + req.url()); return r.abort(); }
     return r.continue();
   });
   ```
 
+  To exercise what a page does with a lookup answer (e.g. the PubMLST button), register a more
+  specific route afterwards that answers in the browser with synthetic data
+  (`r.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({...}) })`); the
+  request then never reaches the server.
+
   Known triggers: both report pages (`/Report/Isolate/n`, `/MeningoReport/Isolate/n`) post
   `QueryHealthOffice` on load, which asks the RKI tool; the "PubMLST" button of the Meningococci
   isolate form; the health-office edit page with `?postalCode=`; the PubMLST matching submit. Routing
-  does not cover `page.request.get/post`: never send those to the addresses above. A new outbound call
-  you find in the code goes into the pattern and into the report.
+  does not cover `page.request.get/post`: never send those to the addresses above, not even for role
+  checks (check the role on another address of the same controller). A new outbound call you find in
+  the code goes into the pattern and into the report.
 - Never copy secret values (`RegistrationToken`, `Iris*`, `GeonamesAccount`) into any file.
 - Never paste real patient data. Use obviously synthetic initials, dates and postal codes.
 - Do not change application code or `Web.config`. The host swaps the connection string itself and
@@ -182,7 +189,10 @@ Practical notes for this application:
   `const ctx = await page.context().browser().newContext(); const p2 = await ctx.newPage();`, sign
   in there with the second account, and close the context afterwards.
   The anti-forgery token belongs to the signed-in account: post a form only from the context it was
-  loaded in (another account's token ends in HTTP 500, which says nothing about roles).
+  loaded in (another account's token ends in HTTP 500, which says nothing about roles). Some forms
+  post a field twice (a hidden copy before the visible input, e.g. the Meningococci laboratory
+  number); MVC binds the first value, so a crafted request must replace every occurrence
+  (`URLSearchParams.delete` then `append`), and the duplicate itself may be a finding.
 - Forms with `preventSiteNavigationWithPendingChanges` raise a `beforeunload` dialog when you
   leave them with changes. Before navigating away from a changed form, call
   `await page.evaluate(() => $(window).off('beforeunload'))`. If a dialog still appears, it interrupts
