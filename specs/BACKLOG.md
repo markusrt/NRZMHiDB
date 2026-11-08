@@ -151,7 +151,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   verification) for the exports: a GET with a date range returns the spreadsheet (e.g. the Haemophilus laboratory
   export), and a POST of only the dates without token returns the Meningococci RKI file. Confirmed on system
   2026-11-08 (013 verification) for both sender exports: a GET with a date range returns the Haemophilus sender file,
-  and a POST of only the dates without token returns the Meningococci sender file.
+  and a POST of only the dates without token returns the Meningococci sender file. Confirmed on system 2026-11-08 (022
+  verification) for both postal-code lookups: the forms post only `postalCode`/`placeName` and `postalCodePrefix`,
+  without token, and get the answer (HTTP 200).
 - **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
   source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
   changes are not logged (constitution: failures affecting authentication MUST be logged).
@@ -164,7 +166,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   place names in the postal-code suggestion list. Confirmed on system 2026-11-08 (008 verification, with a synthetic
   lookup answer injected in the browser because the RKI call is blocked): an address containing `<b>…</b>` is rendered
   bold on the Haemophilus report page. Confirmed on system 2026-11-08 (009 verification, synthetic answer as above) for
-  the Meningococci report page.
+  the Meningococci report page. Confirmed on system 2026-11-08 (022 verification, synthetic suggestion answer injected
+  in the browser): "Sankt Peter's Ort" is offered as "12371 Sankt Peter", and text after an apostrophe adds an
+  attribute to the suggestion and a `<b>` element to the page.
 - **SEC-009 – Geonames called over plain HTTP** (Bugfix; source: 022 Edge Cases): Account name and typed patient/sender
   postal codes travel unencrypted (Principle IV).
 - **SEC-010 – Rendering libraries from public CDNs on every page, two without integrity check** (Refactoring; source:
@@ -298,10 +302,15 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   fallback is reached only via a stem-number row; "Upload" without a file ends in an object-reference message.
 - **DATA-022 – Postal-code lookup overwrites a foreign residence** (Bugfix; source: 022 Edge Cases): Typing a postal code
   resets "Bundesland" away from "Ausland" and overwrites "Wohnort"/"Landkreis"; the Meningococci state/country check
-  then rejects the save.
+  then rejects the save. Confirmed on system 2026-11-08 (022 verification): on the Meningococci submission form with
+  "Ausland" and "Österreich", typing "A-1010" set "Wohnort" and "Landkreis" to "Unbekannt" and "Bundesland" to
+  "n.n."; "Land" stayed "Österreich" (the save itself was not attempted).
 - **DATA-023 – Postal-code suggestion script expects `postalCodes`, server fallback returns `postalcodes`** (Bugfix;
   source: 022 Edge Cases): Suggestions vanish with a browser script error; the empty-result and "error" checks never
-  apply.
+  apply. Confirmed on system 2026-11-08 (022 verification, answers injected in the browser; the server side reproduced
+  at unit level): the fallback `{"postalcodes":[]}` and a service status message both empty the suggestion list with
+  "Cannot read properties of undefined (reading 'length')". Live empty results of the service (`{"postalCodes":[]}`,
+  e.g. for "00000") are handled without error.
 - **DATA-024 – Report template failures and empty-list label** (Bugfix; source: 010 Edge Cases; 008 Edge Cases; 009 Edge Cases): Template
   retrieval or filling failures show no user message; the "Keine Vorlagen hinterlegt" label is never shown (specs 008/009
   aligned). Confirmed on system 2026-11-08 (008 verification): with the template download aborted in the browser,
@@ -426,6 +435,16 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   counts as "no place", so the case is left out without log entry and the file is delivered. An exhausted quota
   therefore yields a file with fewer or no cases that looks like a normal run. Reproduced at unit level
   2026-11-08 (023 verification): a status answer for every lookup gave an empty file for 10 qualifying cases.
+  Also affects the interactive lookup (022 FR-008, Edge Cases "Service unavailable or failing"): a status answer
+  makes the form write "Unbekannt"/"n.n." as for an unknown postal code, without notice. Reproduced at unit level
+  2026-11-08 (022 verification: the lookup returns the status with an empty place list) and shown in the browser with
+  that answer injected.
+- **DATA-042 – Failed postal-code lookup leaves the previous place next to a new postal code** (Bugfix; source: 022
+  Edge Cases "Service unavailable or failing"): A change of "Postleitzahl" to exactly five characters empties nothing
+  before the lookup; when the lookup then fails (network failure, non-JSON answer, HTTP 500), "Wohnort"/"Ort",
+  "Landkreis" and "Bundesland" keep the values of the previous postal code and are saved with the new one without
+  notice. Observed on system 2026-11-08 (022 verification, synthetic HTTP 500 injected in the browser): "91301" →
+  "97080" left "Forchheim", "Landkreis Forchheim", "Bayern".
 
 ## UX — Robustness and user feedback
 
@@ -435,7 +454,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   signing in again leads to the same refusal.
 - **UX-003 – Postal-code lookup: one request per keystroke, no debounce, race on answers, only "not found" handled**
   (Refactoring; source: 022 Edge Cases): Quota use; last answer wins; other failures end in the generic server error;
-  log message with stray "$"; parameters not URL-encoded.
+  log message with stray "$"; parameters not URL-encoded. Observed 2026-11-08 (022 verification): typing "913" sent
+  three suggestion requests, each five-character change two requests; network failures and non-JSON answers end in
+  an exception (HTTP 500) and "&"/"#" in the typed content are inserted unencoded (reproduced at unit level); JSON
+  status answers are not failures but "no place" (DATA-041). See DATA-042.
 - **UX-004 – Template discovery accepts lock/temp `.docx` files, applies no sort, matches the preliminary marker on
   the whole path** (Refactoring; source: 010 Edge Cases). Confirmed on system 2026-11-08 (010 verification): a
   temporary `~$SV-010-Lock.docx` placed in `ReportTemplates/` was offered at once; a folder named `SV-010-Ordner.docx`
@@ -521,7 +543,8 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   scaffolding.
 - **REF-009 – Postal-code lookup leftovers** (Refactoring; source: 022 Edge Cases, US3.3): `countries.json` snapshot from
   2020 (code TODO to refresh); "Unbekannt" assigned twice; fields matched by id suffix; `LoadCountries` reachable by
-  URL returning a type name.
+  URL returning a type name. Observed on system 2026-11-08 (022 verification): `Rki1` and `Admin1` get HTTP 200 with
+  the type name ``System.Collections.Generic.List`1[HaemophilusWeb.Models.Country]`` from `/Geonames/LoadCountries`.
 - **REF-010 – Deleted-records page loads all active submissions and looks up each isolate; skip-validation switch set
   on the wrong data context** (Refactoring; source: 020 Edge Cases).
 - **REF-011 – Interpretation code smells** (Refactoring; source: 006 Key Entities/Assumptions, 007 Edge Cases, 007

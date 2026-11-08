@@ -19,7 +19,9 @@
 > state/country consistency rule (specs 002, 003), the settings table (spec 018), access and anti-forgery rules (spec
 > 021), the use of the county text by exports (spec 011), and the EpiScanGIS export itself (spec 023).
 > The value of the `GeonamesAccount` setting is named but never reproduced. No call to the external service was made;
-> everything is derived from code, configuration structure, version history, and automated tests.
+> everything is derived from code, configuration structure, version history, and automated tests. The verification
+> of 2026-11-08 checked this text against the running application with 17 real lookups and with synthetic answers
+> injected in the browser for the failure paths (see `verification.md`).
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -45,7 +47,9 @@ only, one that belongs to several places, and one that does not exist; inspect "
    part before the first space is used as postal code and written back into "Postleitzahl", and the part after it is
    used as place name; without a space the whole value is the postal code and no place name is used.
 3. **Given** no place name, **When** the service knows the postal code, **Then** the **first** place it returns is
-   taken, also when the postal code belongs to several places; no choice is offered.
+   taken, also when the postal code belongs to several places; no choice is offered. The order of this answer is the
+   service's and can differ from the order of the suggestions (User Story 2): for "06773" the lookup takes "Gossa"
+   while the first suggestion is "06773 Gräfenhainichen".
 4. **Given** a place name, **When** the service returns a place whose name equals it exactly (same spelling and case),
    **Then** that place is taken; **given** no exactly equal place name, **Then** no place is taken (scenario 6).
 5. **Given** a place is taken, **Then** "Postleitzahl" is set to the postal code returned for it, "Wohnort" to its
@@ -55,7 +59,8 @@ only, one that belongs to several places, and one that does not exist; inspect "
 6. **Given** no place is taken (unknown postal code, no matching place name, or the service could not be reached and
    reported "not found"), **Then** "Wohnort" and "Landkreis" are set to "Unbekannt" and "Bundesland" to "n.n.".
 7. **Given** the result, **Then** no message is shown to the user in any case; the outcome is written only to the
-   browser's developer console ("Postal code query result: …" or "Error querying postal code data: …").
+   browser's developer console ("Postal code query result:…" with the answer appended without a space, or "Error
+   querying postal code data: …").
 8. **Given** the fields were filled automatically, **Then** they remain editable and are saved like typed values;
    nothing marks them as looked up.
 9. **Given** the sender form (create or edit), **Then** the same lookup runs and fills "Postleitzahl" and "Ort" only,
@@ -81,10 +86,13 @@ places and verify that "Wohnort"/"Ort", "Landkreis", and "Bundesland" show that 
    them under the field as suggestions of the form `<postal code> <place name>`; the previous suggestions are replaced.
 2. **Given** suggestions, **Then** they are offered by the browser's own suggestion list for the field (the browser's
    autofill for the field is switched off); the number and order of suggestions are those returned by the service —
-   the application sets no limit and no minimum number of typed characters.
+   the application sets no limit and no minimum number of typed characters. Observed: "9" and "91" already ask the
+   service, "913" yields 29 suggestions and "06773" 12, neither sorted by postal code nor by place name.
 3. **Given** a suggestion is chosen, **Then** the field briefly holds `<postal code> <place name>` and the lookup of
    User Story 1 runs with that place name, so that the chosen place is taken and "Postleitzahl" ends up holding the
-   postal code only.
+   postal code only (the postal code is written back in the same step, before any answer arrives). The suggestion
+   request sent for the chosen value `<postal code> <place name>` finds no postal codes, so the suggestion list is
+   empty afterwards until the field is changed again.
 4. **Given** the content changes to anything other than exactly five characters (including the moment a suggestion
    with place name is chosen), **Then** "Wohnort"/"Ort" and "Landkreis" are emptied and "Bundesland" is set to "n.n."
    before any result arrives; a following lookup (User Story 1) fills them again.
@@ -161,22 +169,33 @@ place names known for the postal code; verify which cases carry coordinates.
   "Removed 5-digit restriction on postalcode").
 - **One request per keystroke**: Each change of the field sends a suggestion request and, from five characters on,
   also a lookup request; nothing delays or bundles them. Answers can arrive out of order, so the last answer to arrive
-  decides the field contents (derived from code; not exercised). Every request uses the quota of the configured
+  decides the field contents, "Postleitzahl" included (observed with a delayed answer injected in the browser: the
+  slower answer for an earlier postal code replaced the newer one and its place). Every request uses the quota of the configured
   Geonames account. [POTENTIAL-REFACTORING]
-- **Service unavailable or failing**: Only a "not found" answer from the service is handled; it yields an empty result
-  ("Unbekannt"/"n.n." for the lookup, no suggestions). A network failure, a time-out, or an answer that is not in the
-  expected format ends the request with the generic server error; the form then shows nothing, the fields keep what
-  User Story 2, scenario 4, left in them, and nothing is reported to the user. The failure is logged by the general error logging;
-  the "not found" case is logged with a message starting with a stray "$" ("$Failed to call Geonames …").
-  [POTENTIAL-REFACTORING]
+- **Service unavailable or failing**: An unknown postal code is answered by the service with an empty list (observed
+  for "00000"), not as an error. As an error, only an HTTP "not found" answer is handled; it yields an empty result
+  ("Unbekannt"/"n.n." for the lookup, no suggestions). Any other answer in JSON without a list of places, such as the
+  service's account or quota message, counts as "no place" as well: the lookup writes "Unbekannt"/"n.n." exactly as for
+  an unknown postal code, and the suggestion request passes the message on unchanged (Edge case "Service error
+  answers"); nothing tells the user that the service failed (see DATA-041, found by spec 023). A network failure, a
+  time-out, or an answer that is not JSON (for example an HTML error page) ends the request with HTTP 500; the form
+  then shows nothing and the fields keep what User Story 2, scenario 4, left in them. For a change to exactly five
+  characters that step empties nothing, so a failed lookup leaves the place, county and state of the previous postal
+  code next to the new one (observed with a synthetic HTTP 500 after "91301" → "97080": "Forchheim", "Landkreis
+  Forchheim", "Bayern" stay), and they are saved unless corrected. [SUSPECTED-DEFECT] The failure is logged by the
+  general error logging; the "not found" case is logged with a message starting with a stray "$" ("$Failed to call
+  Geonames …"). [POTENTIAL-REFACTORING]
 - **Service error answers**: The suggestion list expects a list named differently from the one in the empty result
   the server returns after "not found"; in that case, and whenever the service answers without a list (for example an
   account or quota message), the previous suggestions are removed and a script error occurs in the browser; no
   suggestions are shown. A check meant to stop on an empty result never applies. The page itself checks only for an
-  "error" entry in the answer, which the application itself never adds (derived from code; not exercised). [SUSPECTED-DEFECT]
+  "error" entry in the answer, which neither the application nor the service's status messages contain (observed with
+  both answers injected in the browser: "Cannot read properties of undefined (reading 'length')", list emptied).
+  [SUSPECTED-DEFECT]
 - **Place names in suggestions**: Place names from the service are inserted into the suggestion list without
-  escaping; a name containing an apostrophe would be cut off in the suggestion, and markup in a name would become part
-  of the page (derived from code; not exercised). [SUSPECTED-DEFECT]
+  escaping; a name containing an apostrophe is cut off in the suggestion ("Sankt Peter's Ort" becomes "12371 Sankt
+  Peter"), and text after an apostrophe becomes attributes or markup of the page (observed with a synthetic answer
+  injected in the browser). [SUSPECTED-DEFECT]
 - **Unencoded parameters**: The typed content is passed to the service address without encoding, so characters such
   as "&" or "#" alter the request to the service (derived from code; not exercised). [POTENTIAL-REFACTORING]
 - **Unencrypted connection**: The service is called over plain HTTP, so the account name and the typed patient and
@@ -191,19 +210,21 @@ place names known for the postal code; verify which cases carry coordinates.
   "County", or "State" and lists suggestions in one fixed list; on the current forms each name occurs once, so only
   the intended fields are affected. A form with two such fields would fill both. [POTENTIAL-REFACTORING]
 - **Access** (consistent with spec 021): The suggestion and lookup requests admit only the Standard User role and do
-  not verify an anti-forgery token; all forms that use them admit only the Standard User role as well. A refused
-  background request has no visible effect. The country list is also reachable as an address of its own for any
-  signed-in account; requested that way it answers with a technical type name instead of a list, because it is a
-  helper and not a page (derived from framework behavior; not exercised). [POTENTIAL-REFACTORING]
+  not verify an anti-forgery token (part of SEC-005); all forms that use them admit only the Standard User role as
+  well. A refused background request has no visible effect. The country list is also reachable as an address of its
+  own (`/Geonames/LoadCountries`) for any signed-in account; requested that way it answers with HTTP 200 and the
+  technical type name ``System.Collections.Generic.List`1[HaemophilusWeb.Models.Country]`` instead of a list, because it
+  is a helper and not a page. [POTENTIAL-REFACTORING]
 - **Architecture** (Constitution "Known Architectural Constraints (Legacy Debt)", Principles II and III): The service
   is wired manually; the lookup page group creates its own service instance by its concrete type, and the
   Meningococci patient page group creates an instance of the lookup page group to read the country list instead of
   using a service. The fill logic lives in a script shared by the sender, Haemophilus patient, and Meningococci
   patient forms (one shared copy, not duplicated per pathogen). Automated tests cover the server-side place selection
-  (single and several matches, place name, "not found", unexpected answer), the coordinate lookup, and reading the
-  country file; the browser behavior (suggestions, field filling, clearing) and the two request endpoints are not
-  covered. One test named "…MultipleMatches_ReturnsAllEntries" actually verifies that only one entry is returned.
-  [POTENTIAL-REFACTORING]
+  (single and several matches with the fields of the first place, exact place name, "not found", unexpected answer),
+  the service addresses and the unchanged suggestion answer, the empty account name without setting, the coordinate
+  lookup, reading and ordering the country file, and the default country; the browser behavior (suggestions, field
+  filling, clearing) and the two request endpoints are not covered. One test named "…MultipleMatches_ReturnsAllEntries"
+  actually verifies that only one entry is returned. [POTENTIAL-REFACTORING]
 
 ## Requirements *(mandatory)*
 
@@ -227,8 +248,9 @@ place names known for the postal code; verify which cases carry coordinates.
   without a taken place it MUST set place and county to "Unbekannt" and "Bundesland" to "n.n.". Fields absent from a
   form MUST be skipped.
 - **FR-007**: The lookup MUST NOT show messages to the user and MUST NOT change "Land".
-- **FR-008**: A "not found" answer of the service MUST yield an empty result; other failures end the request with the
-  generic server error (current behavior).
+- **FR-008**: A "not found" answer of the service, and any answer in JSON without a list of places (including the
+  service's account or quota messages), MUST yield an empty result; a network failure or an answer that is not JSON
+  ends the request with HTTP 500 (current behavior; see Edge Cases "Service unavailable or failing", DATA-041).
 - **FR-009**: The service MUST be addressed with the account name from the `GeonamesAccount` setting (spec 018); its
   value MUST NOT appear in this specification.
 - **FR-010**: The Meningococci patient form MUST offer "Land" from the stored country file (250 countries, German
@@ -293,15 +315,18 @@ place names known for the postal code; verify which cases carry coordinates.
 ## Assumptions
 
 - Current application code, views, configuration structure (values not read into this spec), version history, and
-  automated tests are the source of truth. The external service was not called and no running system was exercised.
+  automated tests are the source of truth. The external service was not called and no running system was exercised
+  while writing this spec; the verification of 2026-11-08 did both.
 - The structure of the service's answers (lists of postal codes with place name, county name, state short code, and
   coordinates) is taken from the code and the answers recorded in the automated tests. That the state short codes
-  equal the application's state codes (`SH` … `TH`) is assumed from those recorded answers.
-- The number and order of suggestions are assumed to follow the service's defaults, since the application sends no
-  limit; not observed.
-- The outcome of network failures, unexpected answers, a missing setting, out-of-order answers, unescaped place names,
-  unencoded parameters, and the country list requested by address is derived from code and framework behavior; not
-  exercised.
+  equal the application's state codes (`SH` … `TH`) is assumed from those recorded answers; the verification of
+  2026-11-08 observed `BY` and `ST` in live answers.
+- The number and order of suggestions follow the service's defaults, since the application sends no limit (observed
+  2026-11-08, User Story 2, scenario 2).
+- Out-of-order answers were shown with a delayed answer injected in the browser. Network failures, non-JSON and status answers, a missing
+  setting, and unencoded parameters were reproduced at unit level with the real lookup component and a stubbed
+  connection, unescaped place names and the browser's reaction to failures with answers injected in the browser, and
+  the country list requested by address on the running application (verification 2026-11-08).
 - That a refused background request has no visible effect is derived from the page script, which reacts only to
   successful answers.
 - Labels are quoted as shown to users; the console messages are English developer texts.

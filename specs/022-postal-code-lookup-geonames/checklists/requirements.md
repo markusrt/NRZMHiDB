@@ -50,3 +50,16 @@
   - Behavior on network failure, unexpected answers, missing `GeonamesAccount`, out-of-order answers, unescaped place
     names, unencoded parameters, and requesting the country list by address is derived from code; not exercised.
 - As-is observations tagged in the spec: 4 [SUSPECTED-DEFECT], 9 [POTENTIAL-REFACTORING].
+- Verification 2026-11-08: Checked against the running app (17 real Geonames lookups, synthetic answers injected in
+  the browser for failure paths) and unit tests (see `verification.md`). Edge case "Service unavailable or failing"
+  and FR-008 corrected: unknown postal codes come as an empty list, any JSON answer without places (account or quota
+  message) also yields "Unbekannt"/"n.n." (DATA-041), only network failures and non-JSON answers end in HTTP 500, and
+  a failed lookup after a five-character change keeps the previous place, county and state (new [SUSPECTED-DEFECT],
+  DATA-042). User Story 2, scenario 3: the suggestion list is empty after choosing a suggestion. User Story 2,
+  scenario 2 and Assumptions: number and order of suggestions observed (29 for "913", unsorted). User Story 1,
+  scenario 3: the first place of the lookup can differ from the first suggestion. User Story 1, scenario 7: console
+  text "Postal code query result:" has no space before the answer. Edge cases "Service error answers", "Place names
+  in suggestions", "One request per keystroke" (out-of-order answers) and "Access" now state the observed behavior
+  instead of "not exercised"; the Access case names
+  SEC-005. Architecture coverage note updated for the tests added. Tags now: 5 [SUSPECTED-DEFECT], 9
+  [POTENTIAL-REFACTORING].

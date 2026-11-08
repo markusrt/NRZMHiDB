@@ -45,6 +45,7 @@ listed, add it here in the same commit.
 | `When I select "<option text>" in "<label>"` | Choose the entry of the selection list with this label whose text contains the option text. |
 | `When I choose "<option>" for "<label>"` | Pick the radio button or toggle with this text in the group with this label. |
 | `When I open the edit page of "<name>"` | Open the edit page of the record with this name from its list. |
+| `When I choose the suggestion "<text>" for "<label>"` | Pick the entry with this text from the field's suggestion list (browser datalist), as a user does with the mouse or arrow keys; the field fires one change with the full text. |
 
 ### Assertions
 
@@ -63,6 +64,7 @@ listed, add it here in the same commit.
 | `Then "<label>" does not offer "<option text>"` | The selection list with this label has no entry whose text contains the option text. |
 | `Then "<label>" offers <n> entries` | The selection list with this label has exactly this many entries, placeholder included. |
 | `Then "<label>" shows "<option text>"` | The entry currently selected in the selection list with this label has exactly this text. |
+| `Then "<label>" suggests "<text>"` | The suggestion list (browser datalist) of the text field with this label has an entry with exactly this text, after the field's background requests have answered. |
 | `Then the downloaded document contains "<text>"` | The text of the downloaded Word document (body, headers and footers, tags stripped) contains the text. |
 | `Then the downloaded file has no column "<name>"` | The header row of the downloaded spreadsheet has no column with this name. |
 | `Then the downloaded file has <n> row(s) with "<value>" in column "<name>"` | Exactly this many data rows of the downloaded spreadsheet hold the value in that column. |
