@@ -212,6 +212,18 @@ Practical notes for this application:
 - Export addresses called directly (`page.request.get`) need ISO dates in the query
   (`?From=2020-01-01&To=2020-12-31`); `dd.MM.yyyy` there is not bound and yields a file with only
   the header row. The export forms in the UI are not affected.
+- `browser_run_code_unsafe` has no `require('fs')`. Save a file from a directly called export address
+  by adding a temporary anchor with that address, clicking it, and calling `saveAs` on the download
+  event; `page.request` responses cannot be written to disk.
+- The submit buttons of the edit forms are `input type="submit"` elements named `primary-submit` and
+  `secondary-submit` ("Änderungen speichern und Befund erstellen"); locate them by name, not as
+  `button`.
+- The rule ID of an interpretation is not shown on the report page; it appears only in the "Regel"
+  column of the laboratory export. The RKI exports carry no laboratory number; match rows by "PatNr
+  NRZM" or the stem number.
+- Data with identical patient details: intake blocks a third patient with the same initials, birth
+  date and postal code (002 FR-012). Create further submissions for an existing patient with
+  "Bestehenden Patienten verwenden" while only one matching record exists.
 - New Haemophilus and Meningococci submissions get a laboratory number of the year of saving, not of
   the sampling date (002 FR-003); plan date-range checks with that in mind.
 - A signed-in account without the required role is redirected to `/Account/Login?ReturnUrl=…`
@@ -356,8 +368,8 @@ n passed, n failed.
 The ID column names the FR first, then the scenarios (`US2.2`) and edge cases (`EC1` = first
 bullet under Edge Cases) the row covers. Number the edge cases as the list stood before this
 verification and state the numbering under the summary; edge cases that the verification adds to
-the spec are referred to by their bold title ("New EC "…""), so the numbers in the report never
-shift. Path is the one evidence path that decided the verdict;
+the spec are referred to by their bold title ("New EC "…""), or by their first words where the list
+has no bold titles, so the numbers in the report never shift. Path is the one evidence path that decided the verdict;
 further evidence goes into the Evidence column. Screenshots and downloads stay local
 (`specs/*/verification/` is git-ignored); the report references them by name so the owner can open
 them from the working tree.
