@@ -180,6 +180,39 @@ namespace HaemophilusWeb.Automapper
             isolateViewModel.Comment.Should().NotBeNullOrEmpty().And.Be(expected.Result.Comment);
         }
 
+        // specs/018 FR-013, FR-014: the report data carry both director names, the contact blocks joined by one empty
+        // line and the announcement only while it is active
+        [TestCase(0, 0, "Hinweis")]
+        [TestCase(1, 2, "")]
+        [TestCase(-3, -1, "")]
+        public void ProcessModelToViewModel_AppliesReportConfiguration(int startOffset, int endOffset, string expectedAnnouncement)
+        {
+            AddConfigurationEntry(Services.ConfigurationService.Keys.LabDirector, "\"Lab\"");
+            AddConfigurationEntry(Services.ConfigurationService.Keys.MedicalDirector, "\"Med\"");
+            AddConfigurationEntry(Services.ConfigurationService.Keys.Contacts, "[\"A\\nTel 1\",\"B\"]");
+            AddConfigurationEntry(Services.ConfigurationService.Keys.Announcement, Newtonsoft.Json.JsonConvert.SerializeObject(
+                new Services.AnnouncementSetting
+                {
+                    Text = "Hinweis",
+                    Start = System.DateTime.Today.AddDays(startOffset),
+                    End = System.DateTime.Today.AddDays(endOffset)
+                }));
+            var sut = new MeningoIsolateViewModelMappingAction();
+            var isolateViewModel = new MeningoIsolateViewModel();
+
+            sut.Process(CreateEmptyIsolate(), isolateViewModel, null);
+
+            isolateViewModel.LabDirector.Should().Be("Lab");
+            isolateViewModel.MedicalDirector.Should().Be("Med");
+            isolateViewModel.Contacts.Should().Be("A\nTel 1\n\nB");
+            isolateViewModel.Announcement.Should().Be(expectedAnnouncement);
+        }
+
+        private void AddConfigurationEntry(string key, string value)
+        {
+            DbMock.ConfigurationEntries.Add(new ConfigurationEntry { Key = key, Value = value });
+        }
+
         private static MeningoIsolate CreateEmptyIsolate()
         {
             return new MeningoIsolate

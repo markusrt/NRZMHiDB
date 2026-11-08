@@ -151,6 +151,39 @@ namespace HaemophilusWeb.Automapper
             eTests[0].Result.Should().Be(EpsilometerTestResult.Susceptible);
         }
 
+        // specs/018 FR-013, FR-014: the report data carry both director names, the contact blocks joined by one empty
+        // line and the announcement only while it is active
+        [TestCase(-1, 1, "Hinweis\nZeile 2")]
+        [TestCase(1, 2, "")]
+        [TestCase(-3, -1, "")]
+        public void ProcessModelToViewModel_AppliesReportConfiguration(int startOffset, int endOffset, string expectedAnnouncement)
+        {
+            AddConfigurationEntry(Services.ConfigurationService.Keys.LabDirector, "\"Lab\"");
+            AddConfigurationEntry(Services.ConfigurationService.Keys.MedicalDirector, "\"Med\"");
+            AddConfigurationEntry(Services.ConfigurationService.Keys.Contacts, "[\"A\\nTel 1\",\"B\\nTel 2\",\"C\"]");
+            AddConfigurationEntry(Services.ConfigurationService.Keys.Announcement, Newtonsoft.Json.JsonConvert.SerializeObject(
+                new Services.AnnouncementSetting
+                {
+                    Text = "Hinweis\nZeile 2",
+                    Start = System.DateTime.Today.AddDays(startOffset),
+                    End = System.DateTime.Today.AddDays(endOffset)
+                }));
+            var sut = new IsolateViewModelMappingAction();
+            var isolateViewModel = new IsolateViewModel();
+
+            sut.Process(CreateEmptyIsolate(), isolateViewModel, null);
+
+            isolateViewModel.LabDirector.Should().Be("Lab");
+            isolateViewModel.MedicalDirector.Should().Be("Med");
+            isolateViewModel.Contacts.Should().Be("A\nTel 1\n\nB\nTel 2\n\nC");
+            isolateViewModel.Announcement.Should().Be(expectedAnnouncement);
+        }
+
+        private void AddConfigurationEntry(string key, string value)
+        {
+            DbMock.ConfigurationEntries.Add(new ConfigurationEntry { Key = key, Value = value });
+        }
+
         private class ETestRowMapping : IsolateViewModelMappingActionBase
         {
             public ETestRowMapping(List<Antibiotic> primaryAntibiotics, params EucastClinicalBreakpoint[] breakpoints)

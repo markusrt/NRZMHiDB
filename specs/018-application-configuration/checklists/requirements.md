@@ -42,3 +42,9 @@
 - Consistent with specs 011, 014, and 017: accounts are assumed to hold exactly one role, so an Administrator sees the menu entry but is refused. The configuration page does check a role (Standard User only), and its save verifies the anti-forgery token.
 - As-is observations tagged in the spec: 1 [SUSPECTED-DEFECT], 3 [POTENTIAL-REFACTORING].
 - Review 2026-10-30: the `GeonamesAccount` row now references spec 022 (postal-code lookup) instead of spec 001.
+- Verification 2026-11-08: US1.5 now says that saving an empty signer list shows the usual "Konfiguration
+  gespeichert." and no warning (was: "no message is shown"), and quotes the report page's message; the
+  Authorization edge case records the confirmation of DEC-001 and the redirect to the sign-in page; the coverage note
+  of the Architecture edge case and the Assumptions (running system, anti-forgery refusal, sign-in redirect, date
+  fields, placeholder defaults, printed values) were updated to the observed behavior and the tests added in the
+  verification (see `verification.md`).

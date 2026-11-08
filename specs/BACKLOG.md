@@ -62,6 +62,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   Confirmed on system 2026-11-08 for the breakpoint pages (017 verification; observation only, no decision): `Admin1`
   sees "Administration" → "Antibiotika Grenzwerte", and list, create, edit, details, delete and the create post
   redirect it to the sign-in page; `Rki1` has no "Administration" menu and is redirected the same way.
+  Confirmed on system 2026-11-08 for the configuration page (018 verification; observation only, no decision):
+  `Admin1` sees "Konfiguration" as the first "Administration" entry, and `/Configuration`, `/Configuration/Index`,
+  `/Configuration/Edit` and the save post redirect it to the sign-in page; `Rki1` has no "Administration" menu and is
+  redirected the same way.
 - **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
   Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
   include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
@@ -417,7 +421,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   treats only certain numeric types as numbers. Confirmed on system 2026-11-08 (013 verification): both sender exports
   write "Anzahl Einsendungen" as a text cell and "Einsendernummer" as a numeric cell.
 - **DATA-027 – Empty signer list is accepted and blocks all reporting** (Bugfix; source: 018 US1.5, Edge Cases, untagged
-  there): No warning on save; afterwards every report attempt fails the required-selection check.
+  there): No warning on save; afterwards every report attempt fails the required-selection check. Confirmed on system
+  2026-11-08 (018 verification): saving an empty "Unterzeichner" field shows "Konfiguration gespeichert." and stores an
+  empty list; both report pages then offer only "Auswählen..." and answer "Befund erstellen" with "Bitte wählen Sie
+  eine Befundvorlage und einen Unterzeichner aus." although a template is chosen.
 - **DATA-030 – Server-side initials check accepts free text** (Bugfix; source: 002 FR-007, Edge Cases; 003 FR-007,
   Edge Cases): The Haemophilus patient rule `([a-zA-ZäöüÄÖÜ]\.)+` and the Meningococci rule `([a-zA-ZäöüÄÖÜ\?]\.)+`
   are not anchored, so any value containing one letter (or "?") followed by a dot passes; only the browser check
@@ -656,6 +663,9 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   022, 023, 024): DuplicatePatientResolver, RKI client, ConfigurationService (plus a static test hook), PubMLST
   services and credentials, the restore path's separate sending controller, Geonames service (a controller
   instantiating another controller for the country list), EpiScanGIS and RKI match logic entirely in controllers.
+  Confirmed 2026-11-08 (018 verification): `ConfigurationController` and `ReportControllerBase` create
+  `new ConfigurationService(db)`, and `IsolateViewModelMappingActionBase` creates its own database context unless the
+  static `DbForTest` is set.
 - **REF-004 – Report templates: includes with absolute developer paths, fax variants embedding base templates,
   deprecated docxtemplater API, unused flattened typing values** (Refactoring; source: 010 Edge Cases). Confirmed
   2026-11-08 (010 verification): all 26 templates carry `INCLUDETEXT` fields pointing to
@@ -705,7 +715,10 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   system 2026-11-08 (024 verification): "Probable", "3" and "mög" are accepted as status; a soft-deleted submission
   received a record; a lower state from a later upload left the stored record unchanged.
 - **REF-014 – Configuration saved as five separate writes without history or concurrency check** (Refactoring; source:
-  018 Edge Cases).
+  018 Edge Cases). Confirmed on system 2026-11-08 (018 verification): with the page open in two tabs, the second save
+  silently overwrote all values of the first, including a field changed only in the first tab; the catalog keeps only
+  key and value per setting (`ConfigurationEntries`), no history or audit table, and the application log has no entry
+  for a save. `ConfigurationService.Set` calls `SaveChanges` once per setting, so a save makes five separate writes.
 - **REF-015 – Role seeding code never called; role page save without anti-forgery or rules** (Refactoring; source: 021
   Edge Cases).
 - **REF-017 – County list maintained as unvalidated runtime data** (Refactoring; source: 025 Edge Cases): Any Standard
@@ -796,7 +809,12 @@ backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved the
   all-or-none rule with its message, the "ohne Grenzwerte" case, the length limits, the record label and the report
   values of a measurement ("---" for "n.d."); the breakpoint pages stay untested (the controller creates its database
   context itself), and the missing threshold check (DATA-013) and the thresholds taken from the current record
-  (DATA-012) on purpose.
+  (DATA-012) on purpose. Configuration page: covered by tests added in the 018 verification (2026-11-08) for the
+  redirect of the area address, the loading of the stored values, the splitting and trimming of signers, contact
+  blocks, director names and announcement, the dates stored without text, the failed save that stores nothing, the
+  success message, the anti-forgery check, an unreadable stored value, the inclusive period days and the report data
+  of both pathogens; the empty signer list (DATA-027) and the role rule (DEC-001) stay untested on purpose, the
+  placeholder defaults because the seeding needs a real database context.
 - **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
   calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
   column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;

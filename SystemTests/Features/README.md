@@ -47,6 +47,7 @@ listed, add it here in the same commit.
 | `When I open the edit page of "<name>"` | Open the edit page of the record with this name from its list. |
 | `When I open the tab "<text>"` | Show the tab of the current form with this title (e.g. "PubMLST" on the Meningococci isolate form), not a menu entry of the same text. |
 | `When I choose a file "<name>" for "<label>" with the lines:` | Put a UTF-8 text file with this name and the lines of the following doc string (LF line ends, no byte order mark) into the file field with this label; the file is created by the test, never taken from real data. |
+| `When I enter the lines into "<label>":` | Replace the content of the multi-line field with this label by the lines of the following doc string (empty lines included). |
 | `When I choose the suggestion "<text>" for "<label>"` | Pick the entry with this text from the field's suggestion list (browser datalist), as a user does with the mouse or arrow keys; the field fires one change with the full text. |
 
 ### Assertions
@@ -61,6 +62,7 @@ listed, add it here in the same commit.
 | `Then I do not see the link "<text>"` | The navigation and the page contain no link with this text, also not inside closed drop-downs. |
 | `Then I see the validation message "<text>"` | A field validation message with this text is shown. |
 | `Then I see the search field "<placeholder>"` | A search field showing this placeholder is visible (list searches without labels). |
+| `Then "<label>" contains the lines:` | The multi-line field with this label holds exactly the lines of the following doc string. |
 | `Then "<label>" contains <value description>` | The field with this label holds the described value (e.g. "January 1st of the previous year"). |
 | `Then a file named like "<pattern>" is downloaded` | A download starts whose file name matches the wildcard pattern. |
 | `Then no file is downloaded` | No download starts within a few seconds after the preceding action. |

@@ -49,9 +49,10 @@ Meningococci isolate and verify that exactly these names are offered as "Unterze
 4. **Given** stored signers, **When** the report page of any Haemophilus or Meningococci isolate is opened afterwards,
    **Then** the choice "Unterzeichner" offers "Auswählen..." followed by exactly the stored names in stored order,
    and the chosen name is placed into the generated document (see specs 008, 009, and 010).
-5. **Given** the field "Unterzeichner" is emptied, **When** the user saves, **Then** no message is shown and an empty
-   list is stored; afterwards the report pages offer only "Auswählen...", so every report attempt ends with the
-   message asking for a template and a signer (see specs 008 and 009).
+5. **Given** the field "Unterzeichner" is emptied, **When** the user saves, **Then** no warning is shown (only the
+   usual "Konfiguration gespeichert.") and an empty list is stored; afterwards the report pages offer only
+   "Auswählen...", so every report attempt ends with the message "Bitte wählen Sie eine Befundvorlage und einen
+   Unterzeichner aus." (see specs 008 and 009).
 6. **Given** the same name is entered twice, **When** the user saves, **Then** both lines are stored and the report
    pages offer the name twice.
 7. **Given** a signer name is removed or changed, **When** reports are created afterwards, **Then** only the new list
@@ -195,11 +196,13 @@ verify that it is refused.
   does not ask for confirmation when the user leaves it with unsaved changes.
 - **Authorization**: The page admits only the Standard User role. Navigation shows "Konfiguration" to Standard User
   and Administrator accounts, so an Administrator-only account sees the entry but is refused, as in specs 011, 014,
-  and 017. [SUSPECTED-DEFECT] Public Health accounts are neither offered the entry nor admitted. The save verifies the
-  anti-forgery token.
+  and 017. [SUSPECTED-DEFECT] (Confirmed on system in the 018 verification, see DEC-001.) Refused accounts are
+  redirected to the sign-in page. Public Health accounts are neither offered the entry nor admitted. The save verifies
+  the anti-forgery token.
 - **Architecture** (Constitution "Known Architectural Constraints (Legacy Debt)", Principle III): Reading and writing
-  the settings is located in a dedicated service rather than in the page controller, and that service and the save
-  validation have automated tests; the configuration page itself has none. The page and both report pages create the
+  the settings is located in a dedicated service rather than in the page controller; that service, the save
+  validation, the page's loading and saving, and the report data taken from the settings have automated tests (the
+  page tests were added in the 018 verification). The page and both report pages create the
   service directly instead of receiving it, and the report data preparation obtains its own database access through a
   static test hook, reflecting the "weak dependency injection" constraint. [POTENTIAL-REFACTORING]
 
@@ -316,17 +319,23 @@ server; the application offers no page for them. Values are deliberately not rep
 ## Assumptions
 
 - Current application code, views, schema migrations, startup data seeding, the report templates, the application
-  settings file, and role constants are the source of truth. No running system was exercised. Automated tests exist
-  for the settings service and the save validation, but not for the configuration page.
+  settings file, and role constants are the source of truth. The behavior was verified against the running application
+  on 2026-11-08 (018 verification). Automated tests exist for the settings service, the save validation, the
+  configuration page's loading and saving, and the report data taken from the settings.
 - Accounts are assumed to hold exactly one role, as in specs 011, 014, and 017, so an Administrator account is
   refused by the page.
-- The refusal of a save without anti-forgery token, the redirect of unauthenticated users to sign in, and the display
-  of the date fields are derived from the standard behavior of the framework features used; not observed in a browser.
-- Placeholder settings are assumed to be created at the first application start after deployment, because the
-  database is brought to the latest schema version on startup and the defaults are added in that step; not exercised.
-- The statement that templates print the announcement, director names, and contacts is based on the placeholders
-  found in the current Haemophilus and Meningococci templates and their header parts; the exact rendering is
-  documented in spec 010.
+- A save without anti-forgery token ends in HTTP 500 with the framework message that the field
+  "__RequestVerificationToken" is missing, and nothing is stored; unauthenticated and refused accounts are redirected
+  to the sign-in page; the date fields open a date picker and show dates as day.month.year. Observed in the 018
+  verification.
+- Placeholder settings are created when the application database is brought to the latest schema version at start:
+  a freshly created database holds the five settings with the placeholder values (observed in the 018 verification).
+  That a later start keeps changed settings is derived from the code; it was not exercised, because it needs an
+  application restart after a change.
+- The announcement, director names, and contacts are printed by the current Haemophilus and Meningococci templates:
+  the signer and the announcement in the body, both director names and the contact blocks (with their inner line
+  breaks) in the page headers (observed in the 018 verification for "BLNAS v10.docx" and "Untersuchungsbefund
+  v2.docx"); the exact rendering is documented in spec 010.
 - Changes to the application settings file are assumed to require editing the file on the server; whether and when
   the running application picks them up (typically by restarting the application) is standard hosting behavior and
   was not verified.
