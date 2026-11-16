@@ -33,6 +33,51 @@ one generic export spec; reporting per pathogen with separate interpretation spe
 templates) live in `.specify/memory/constitution.md` v1.2.0, section "Specification Structure", together with the
 backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved there on 2026-10-30 (DEC-012).
 
+## Open owner questions from the spec verification
+
+Collected on 2026-11-16 from the "Open questions for the owner" sections of `specs/005`–`specs/025/verification.md`
+(verification of 2026-11-08). None blocks other work. The owner may turn a question into a `DEC-*` entry, decide it in
+the named entry (`**decided YYYY-MM-DD**`), or leave it to the change spec that fixes the entry.
+
+Clinical and reporting semantics:
+
+1. DATA-038 (005): Should the material follow the growth fields in both directions, and should "Nein" stay the
+   default of the growth fields?
+2. DATA-039 (007, 011): Should submissions without a matching interpretation rule leave the RKI and IRIS exports, be
+   marked, or stay as they are?
+3. REF-021 (009): Should the Meningococci report ask before a final report of discrepant results, as the Haemophilus
+   report does? The check is disabled with `if (false)` today.
+4. DEC-004, DEC-005 (006, 007): Does "Kein Nachweis … am ehesten um NTHi" belong to DEC-004? Does the sequencing
+   comment of native rule 32 belong to DEC-005? Is "no growth with negative molecular tests" meant to be "Diskrepante
+   Ergebnisse", or is a rule missing?
+5. UX-015 (010): Should susceptibility results without breakpoints appear in Haemophilus reports at all?
+6. DATA-035 with DATA-012 and REF-006 (017): A server-side recalculation would overwrite the stored results of older
+   isolates after a breakpoint change. Should the change spec protect unchanged rows, or should breakpoints be
+   versioned or locked first?
+
+Access and privacy:
+
+1. Report templates and other static files are reachable without sign-in (010, 021). Should that stay?
+2. REF-022 (020): The scaffolded patient and submission pages are reachable by address, and `/Patient/Delete` deletes
+   for good. Should they be removed?
+
+User feedback (likely decided in the change specs):
+
+1. 008, 009: Should the report date be the time of generation instead of page load, and should the file name name
+   the report type?
+2. DATA-041, DATA-042, UX-005, UX-006 (016, 022, 023, 024): Should failed Geonames lookups, "no health office found"
+   and the result of an RKI match import be shown to the user?
+3. 011, 013, UX-018, DATA-009 (014, 015): Should an unreadable start date keep the entered end date? Should the merge
+   summary show "keine Angabe" for a missing gender? Should a merge be blocked or warned about when it leaves a
+   sampling date before the birth date?
+4. DATA-029, DATA-043 (025): Should the county page require number and name, or should the exports tolerate empty
+   values?
+
+Seed extensions that would make further rows verifiable: an account without role and a disposable account (021); a
+patient without or with a foreign postal code (016); a seeded RKI match record (024); two positive invasive
+Meningococci submissions of one patient (012); counties (011, 025). The PubMLST result page (019 FR-010) stays not
+verifiable: a matching submit is only acceptable once the code shows that it cannot reach PubMLST or IRIS.
+
 ## DEC — Owner decisions
 
 - **DEC-001 – Administrator role: defect or intended?** (Decision; source: 011, 013, 014, 015, 017, 018, 019, 020,
