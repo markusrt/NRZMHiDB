@@ -13,12 +13,18 @@ on:
 jobs:
   build:
     runs-on: windows-2022
+    env:
+      # Empty for pull requests from forks and Dependabot; the SonarCloud steps are skipped then.
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
     - uses: actions/checkout@ee0669bd1cc54295c223e0bb666b733df41de1c5 # v2
+      with:
+        # SonarCloud needs the full history to tell new code from old code.
+        fetch-depth: 0
 
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2
-        
+
     - name: Setup VSTest.console.exe
       uses: darenm/Setup-VSTest@d9a5dffa3f11d9c27ec42eb69515d3aaeaad9ef8 # v1.2
 
@@ -26,12 +32,39 @@ jobs:
       uses: nuget/setup-nuget@d105a947828025cd7a980103c35ba2bfae586d0f # v2
       with:
         nuget-version: 'latest'
-      
+
+    - name: Setup Java for the SonarScanner
+      if: env.SONAR_TOKEN != ''
+      uses: actions/setup-java@d1374f8ac74474200d16ef8ecee22c7ae7a51880 # v6.3.0
+      with:
+        distribution: temurin
+        java-version: '17'
+
+    - name: Install coverage and analysis tools
+      run: |
+        dotnet tool install --global dotnet-coverage
+        if ($env:SONAR_TOKEN) { dotnet tool install --global dotnet-sonarscanner }
+
     - name: Restore NuGet packages
-      run: nuget restore HaemophilusWeb.sln 
-        
+      run: nuget restore HaemophilusWeb.sln
+
+    - name: Begin SonarCloud analysis
+      if: env.SONAR_TOKEN != ''
+      run: >
+        dotnet-sonarscanner begin
+        /k:"markusrt_NRZMHiDB" /o:"markusrt"
+        /d:sonar.host.url="https://sonarcloud.io"
+        /d:sonar.token="$env:SONAR_TOKEN"
+        /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
+        /d:sonar.exclusions=".specify/**,.claude/**"
+        /d:sonar.coverage.exclusions="**/Migrations/**"
+
     - name: Build solution
-      run: msbuild HaemophilusWeb.sln 
-      
-    - name: Run unit tests
-      run: VSTest.console.exe /Enablecodecoverage HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll 
+      run: msbuild HaemophilusWeb.sln
+
+    - name: Run unit tests with coverage
+      run: dotnet-coverage collect "VSTest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll" -f xml -o coverage.xml
+
+    - name: End SonarCloud analysis
+      if: env.SONAR_TOKEN != ''
+      run: dotnet-sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
