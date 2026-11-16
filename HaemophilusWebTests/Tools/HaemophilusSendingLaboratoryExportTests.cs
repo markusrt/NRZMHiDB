@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
@@ -163,7 +164,7 @@ namespace HaemophilusWeb.Tools
 
             var export = sut.ToDataTable(Sendings);
 
-            export.Rows[0]["Penicillin ADT"].Should().Be("n.d. mm");
+            export.Rows[0]["Penicillin ADT"].Should().Be(DBNull.Value);
         }
 
         [Test]

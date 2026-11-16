@@ -95,7 +95,7 @@ namespace HaemophilusWeb.Tools
         private static string ExportPenicillinAdt(PenicillinAdt penicillinAdt)
         {
             var value = ExportToString(penicillinAdt);
-            return value != null ? value + " mm" : null;
+            return value != null && penicillinAdt != PenicillinAdt.NotDetermined ? value + " mm" : null;
         }
     }
 }
