@@ -17,6 +17,30 @@ entry per underlying issue. Items observed in several specs are listed once and 
 > "test-asserted" they were **not** exercised in a running system. The specs describe current behavior; this list is
 > the only place where "should this change?" is asked.
 
+## Roadmap
+
+Order agreed with the owner on 2026-11-16. Steps 1–3 make up the next release.
+
+1. Merge PR #221 (branch `speckit-init`): as-is specs, verification, this backlog, CI with SonarCloud and coverage.
+2. Finish and merge PR #213 (`copilot/implement-speziesidentifikation-nm-hi`). It covers issue #217 (prefilled
+   MALDI-TOF entry, sub-issue of #205) and the part of #205 that makes the Biotyper the primary trigger for species
+   identification. Before the merge, #213 also:
+   - corrects the interpretation rules of both databases where needed and proves with tests that a Biotyper
+     identification, with the biochemical tests set to "n.d.", never yields "Diskrepante Ergebnisse" (DATA-044). The
+     owner provides new Meningococci rules; the Excel rule definitions are not in the repository;
+   - closes #217 only. #205 stays open until PR #186 is done.
+3. Merge the Dependabot PRs (#174–#178, #207) against the larger test suite. AutoMapper 10 → 15 (#207) spans several
+   major versions and may need code changes.
+4. Release.
+5. Merge `upgrade-bootstrap` (update its `MERGE-MASTER-PROMPT.md` to the state after step 1 first) and re-verify the UI
+   specs against Bootstrap 5. Then write the Reqnroll step definitions for the `@smoke` scenarios in
+   `SystemTests/Features/` and run them as a CI job against the seeded host (LocalDB and IIS Express exist on the
+   `windows-2022` runner). Today the CI runs the unit tests only.
+6. PR #186 (JSON rule system for Haemophilus, issue #185) as a change spec; afterwards close #205.
+7. Backlog triage, `DEC-*` decisions, privacy topics, change specs.
+
+Not scheduled: PR #197 (SDK-style project files).
+
 ## How to read
 
 - **ID prefixes**: `DEC` owner decision needed before anything else · `SEC` security and access · `DATA` data
@@ -517,6 +541,16 @@ verifiable: a matching submit is only acceptable once the code shows that it can
   delivering empty numbers. Observed on system 2026-11-08 (025 verification) for the Haemophilus RKI export of 2018
   (patient county "SV-025-OhneNummer"); the Meningococci RKI and LGA exports share the code (derived). Uploaded
   records store a blank key as empty text and are not affected; deleting the record restores the export.
+- **DATA-044 – Meningococci rules do not cover a Biotyper identification** (Bugfix; source: 007 FR "Cultured-Isolate
+  Decision Table", Assumptions; analysis of PR #213 on 2026-11-16, derived from code): Every rule that reports
+  *N. meningitidis* requires MALDI-TOF "not determined" (both devices). The only rules that accept a determined
+  MALDI-TOF are 04, 05, 34 and NoNM_01, all "no *N. meningitidis* detected", and 04, 05 and 34 also require a negative
+  ONPG. A meningococcus identified by the Biotyper therefore matches no rule and is reported as "Diskrepante
+  Ergebnisse", which DATA-039 then exports to RKI and IRIS as a Meningococci case. PR #213 sets ONPG to "n.d." when the
+  Biotyper is used, so rules 04, 05 and 34 stop matching as well. The Haemophilus interpretation does not evaluate
+  oxidase, factor test or MALDI-TOF today and is not affected until PR #186. **Decided 2026-11-16**: fixed within
+  PR #213 with the owner's new Meningococci rules; tests prove that Biotyper isolates give no discrepant results in
+  either database (see Roadmap, step 2).
 - **DATA-026 – "Anzahl Einsendungen" written as text** (Bugfix; source: 013 Edge Cases): The generic spreadsheet writer
   treats only certain numeric types as numbers. Confirmed on system 2026-11-08 (013 verification): both sender exports
   write "Anzahl Einsendungen" as a text cell and "Einsendernummer" as a numeric cell.
