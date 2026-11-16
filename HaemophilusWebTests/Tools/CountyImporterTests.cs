@@ -73,6 +73,66 @@ namespace HaemophilusWeb.Tools
             counties.Select(c => c.CountyNumber).Should().ContainInOrder(expectedNumbers);
         }
 
+        // specs/025 FR-010, US2.3: only lines of record type "40" become counties; state, association and
+        // municipality lines are skipped
+        [Test]
+        public void LoadCounties_ImportsOnlyCountyRecordLines()
+        {
+            var counties = LoadCounties().ToList();
+
+            counties.Should().HaveCount(3);
+            counties.Select(c => c.Name).Should().Equal("Flensburg, Stadt", "Kiel, Landeshauptstadt", "Lübeck, Hansestadt");
+        }
+
+        // specs/025 FR-010, US2.2: the validity date is read at midnight
+        [Test]
+        public void LoadCounties_ValidSinceHasNoTimeOfDay()
+        {
+            var counties = LoadCounties();
+
+            counties.Select(c => c.ValidSince.TimeOfDay).Should().OnlyContain(t => t == TimeSpan.Zero);
+        }
+
+        // specs/025 FR-011, US2.6: a county line shorter than the name field makes the whole import fail
+        [Test]
+        public void LoadCounties_CountyLineShorterThanNameField_Throws()
+        {
+            var importer = CreateImporter(
+                "402015010199101       SV-025-Gut                                        Ort\n" +
+                "4020150101991020000000SV-025-Kurz");
+
+            Action load = () => importer.LoadCounties().ToList();
+
+            load.Should().Throw<ArgumentOutOfRangeException>();
+        }
+
+        // specs/025 FR-011, US2.6: a validity field that is not eight digits makes the whole import fail
+        [Test]
+        public void LoadCounties_ValidityNotEightDigits_ThrowsFormatException()
+        {
+            var importer = CreateImporter(
+                "402015AB0199201       SV-025-Datum                                      Ort                               ");
+
+            Action load = () => importer.LoadCounties().ToList();
+
+            load.Should().Throw<FormatException>();
+        }
+
+        // specs/025 FR-010, edge case "File format assumptions": a file without county lines imports nothing
+        [Test]
+        public void LoadCounties_FileWithoutCountyLines_ReturnsNothing()
+        {
+            var importer = CreateImporter("Satzart;Datum;Schluessel;Name\nKreis;20150101;99301;SV-025-CSV");
+
+            importer.LoadCounties().Should().BeEmpty();
+        }
+
+        private CountyImporter CreateImporter(string content)
+        {
+            File.WriteAllText(TestFile, content, Encoding.GetEncoding(1252));
+            return new CountyImporter(TestFile);
+        }
+
         private IEnumerable<County> LoadCounties()
         {
             var importer = CreateImporter();

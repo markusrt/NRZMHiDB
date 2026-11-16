@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- dotnet-coverage settings for the CI job (.github/workflows/main.yml). Only the application assembly is
+     instrumented: instrumenting third-party assemblies such as HtmlAgilityPack breaks the RKI tool tests. -->
+<Configuration>
+  <CodeCoverage>
+    <ModulePaths>
+      <Include>
+        <ModulePath>.*\\HaemophilusWeb\.dll$</ModulePath>
+      </Include>
+    </ModulePaths>
+  </CodeCoverage>
+</Configuration>

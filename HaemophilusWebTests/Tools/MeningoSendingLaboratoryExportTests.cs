@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -303,6 +304,33 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["Cefotaxim MHK"].Should().Be(1.25d);
             export.Rows[0]["Rifampicin MHK"].Should().Be(.125d);
             export.Rows[0]["Azithromycin MHK"].Should().Be(32d);
+        }
+
+        // specs/011 FR-004, FR-008, FR-015, US1.6: header names and order of the Meningococci laboratory export as
+        // observed in the downloaded file (011 verification 2026-11-08).
+        [Test]
+        public void DataTable_ColumnHeadersAreInDocumentedOrder()
+        {
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).Should().Equal(
+                "Patienten-Nr.", "Labornummer", "Stammnummer", "Einsendernummer", "Eingangsdatum", "Entnahmedatum",
+                "Labnr. Einsender", "DEMIS ID", "Entnahmeort", "Material", "Invasiv", "Serogruppe Einsender",
+                "Spezies Einsender", "Initialen", "Geburtsdatum", "Patientenalter bei Entnahme", "Geschlecht",
+                "Postleitzahl", "Wohnort", "Landkreis", "Bundesland", "Klinische Angaben", "Risikofaktoren",
+                "Bemerkung (Einsendung)", "Regel", "Serogruppe", "Meningokokken", "Wachstum auf Blutagar",
+                "Wachstum auf Martin-Lewis-Agar", "Oxidase", "ONPG", "gamma-GT", "siaA", "ctrA", "cnl",
+                "Agglutination", "Serogruppen-PCR", "PorA-VR1", "PorA-VR2", "FetA-VR", "csb-PCR", "csc-PCR",
+                "cswy-PCR", "cswy-Allel", "Real-Time-PCR", "Real-Time-PCR Gerät", "Real-Time-PCR Auswertung (RIDOM)",
+                "16S rDNA", "16S rDNA beste Übereinstimmung", "16S rDNA Übereinstimmung", "MALDI-TOF (VITEK MS)",
+                "MALDI-TOF (VITEK MS) beste Übereinstimmung", "MALDI-TOF (VITEK MS) Übereinstimmung",
+                "MALDI-TOF (Biotyper)", "MALDI-TOF (Biotyper) beste Übereinstimmung",
+                "MALDI-TOF (Biotyper) Übereinstimmung", "Befund am", "Bemerkung (Isolat)", "Penicillin MHK",
+                "Penicillin Bewertung", "Ciprofloxacin MHK", "Ciprofloxacin Bewertung", "Rifampicin MHK",
+                "Rifampicin Bewertung", "Cefotaxim MHK", "Cefotaxim Bewertung", "Azithromycin MHK",
+                "Azithromycin Bewertung", "PubMLST ID", "Datenbank", "ST", "clonal_complex", "PorA_VR1", "PorA_VR2",
+                "FetA_VR", "'porB", "NHBA_peptide", "penA", "gyrA", "parC", "rpoB", "'rplF", "'fHbp", "parE",
+                "Bexsero_reactivity", "Trumenba_reactivity");
         }
 
         private static MeningoSendingLaboratoryExport CreateExportDefinition()

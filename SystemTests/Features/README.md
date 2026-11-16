@@ -1,0 +1,130 @@
+# System test features
+
+Gherkin features written during spec verification (`/spec-verify NNN`, see `AGENTS.md`, "Spec
+verification against the running app"). One file per spec: `NNN-<spec-slug>.feature`, tagged
+`@spec-NNN`, scenarios tagged with the `@US…` and `@FR-…` IDs they exercise and `@smoke` for the
+primary happy path.
+
+There are no step definitions yet. They follow after the Bootstrap 5 merge (Reqnroll on the
+Playwright harness in `ScreenshotTests/`). Until then this file is the step vocabulary: reuse these
+phrases so that one step definition serves every feature. When a scenario needs a step that is not
+listed, add it here in the same commit.
+
+## Conventions
+
+- English keywords and step text; German UI strings verbatim in double quotes.
+- `<…>` is a parameter; `"…"` marks a quoted UI string, address or account name.
+- Test data uses the prefix `SV-NNN-` of the spec that created it.
+- Steps name what the user sees (labels, button texts, page titles), never CSS selectors or ids.
+- No scenarios for defects (`[SUSPECTED-DEFECT]`, backlog entries); no scenarios for rules already
+  asserted by unit tests.
+
+## Steps
+
+### Session and navigation
+
+| Step | Meaning |
+| --- | --- |
+| `Given I am signed in as "<account>"` | Sign in via `/Account/Login` with the seeded account (password `123456`). A later step of this kind signs in again as the new account. |
+| `When I open "<address>"` | Navigate to an address relative to the host. |
+| `Given I am not signed in` | Use a browser session without sign-in (overrides the Background sign-in). |
+| `Then I am on "<address>"` | The current address path equals the given one (query ignored). |
+| `Then I am on the sign-in page` | The current address is `/Account/Login` (unauthorized accounts are redirected there). |
+| `Then the page title is "<title>"` | The page heading (`h1`) equals the text. |
+
+### Actions
+
+| Step | Meaning |
+| --- | --- |
+| `When I click "<text>"` | Click the link or button with this visible text. |
+| `When I click the button "<text>"` | Click the submit button with this text when a link has the same text. |
+| `When I click "<text>" in the row "<row text>"` | Click a link or button inside the table row that contains the row text. |
+| `When I click "<text>" in the menu section "<section>"` | In the open navigation drop-down, click the entry with this text below the section header (e.g. "Haemophilus", "Meningokokken") when several entries share the text. |
+| `When I enter "<value>" into "<label>"` | Fill the field with this label. |
+| `When I enter "<value>" into the search field "<placeholder>"` | Fill the search field showing this placeholder (list searches without labels). |
+| `When I select "<option text>" in "<label>"` | Choose the entry of the selection list with this label whose text contains the option text. |
+| `When I choose "<option>" for "<label>"` | Pick the radio button or toggle with this text in the group with this label. |
+| `When I open the edit page of "<name>"` | Open the edit page of the record with this name from its list. |
+| `When I open the tab "<text>"` | Show the tab of the current form with this title (e.g. "PubMLST" on the Meningococci isolate form), not a menu entry of the same text. |
+| `When I choose a file "<name>" for "<label>" with the lines:` | Put a UTF-8 text file with this name and the lines of the following doc string (LF line ends, no byte order mark) into the file field with this label; the file is created by the test, never taken from real data. |
+| `When I enter the lines into "<label>":` | Replace the content of the multi-line field with this label by the lines of the following doc string (empty lines included). |
+| `When I choose the suggestion "<text>" for "<label>"` | Pick the entry with this text from the field's suggestion list (browser datalist), as a user does with the mouse or arrow keys; the field fires one change with the full text. |
+
+### Assertions
+
+| Step | Meaning |
+| --- | --- |
+| `Then I see "<text>"` | The text is visible on the page. |
+| `Then I do not see "<text>"` | The text is not visible on the page (e.g. a deleted record in a list). |
+| `Then I see the link "<text>"` | A link with this text is visible. |
+| `Then I see the button "<text>"` | A button with this text is visible, including submit inputs whose text is their value. |
+| `Then the link "<text>" points to "<target>"` | A visible link with this text has exactly this `href` (e.g. `tel:…`, `mailto:…`). |
+| `Then "<text>" is enabled` | The link or button with this text is not disabled (no `disabled` attribute or class). |
+| `Then I do not see the link "<text>"` | The navigation and the page contain no link with this text, also not inside closed drop-downs. |
+| `Then I see the validation message "<text>"` | A field validation message with this text is shown. |
+| `Then I see the search field "<placeholder>"` | A search field showing this placeholder is visible (list searches without labels). |
+| `Then "<label>" contains the lines:` | The multi-line field with this label holds exactly the lines of the following doc string. |
+| `Then "<label>" contains <value description>` | The field with this label holds the described value (e.g. "January 1st of the previous year"). |
+| `Then a file named like "<pattern>" is downloaded` | A download starts whose file name matches the wildcard pattern. |
+| `Then no file is downloaded` | No download starts within a few seconds after the preceding action. |
+| `Then the server answers "not found"` | The response to the preceding navigation has HTTP status 404 (whatever error page is shown). |
+| `Then "<label>" offers "<option text>"` | The selection list with this label has an entry whose text contains the option text. |
+| `Then "<label>" does not offer "<option text>"` | The selection list with this label has no entry whose text contains the option text. |
+| `Then "<label>" offers <n> entries` | The selection list with this label has exactly this many entries, placeholder included. |
+| `Then "<label>" shows "<option text>"` | The entry currently selected in the selection list with this label has exactly this text. |
+| `Then "<label>" suggests "<text>"` | The suggestion list (browser datalist) of the text field with this label has an entry with exactly this text, after the field's background requests have answered. |
+| `Then the downloaded document contains "<text>"` | The text of the downloaded Word document (body, headers and footers, tags stripped) contains the text. |
+| `Then the downloaded file has no column "<name>"` | The header row of the downloaded spreadsheet has no column with this name. |
+| `Then the downloaded file has <n> row(s) with "<value>" in column "<name>"` | Exactly this many data rows of the downloaded spreadsheet hold the value in that column. |
+| `Then the downloaded file has no data rows` | The downloaded spreadsheet contains only the header row. |
+
+### Domain steps
+
+| Step | Spec | Meaning |
+| --- | --- | --- |
+| `Given a sender "<name>" exists` | 001 | Create the sender through the UI if missing. |
+| `Given a sender "<name>" without submissions exists` | 001 | As above; no submission references it. |
+| `Given the seeded sender "<name>" has the submissions "<lab no>" and "<lab no>"` | 001 | Precondition on the seed; fails if not true. |
+| `Then the sender list contains "<name>"` | 001 | The active sender list (`/Sender`, search box) shows the name. |
+| `Then the sender list does not contain "<name>"` | 001 | As above, negated. |
+| `Then the sender list row "<name>" shows "<text>"` | 001 | The row of that sender contains the text. |
+| `Then the sender selection offers "<name>"` | 001 | The "Einsender" selection of a submission form lists the sender. |
+| `Given a submission with sender laboratory number "<lab no>" exists` | 002 | Create a Haemophilus submission with this "Labnr. Einsender" through the UI if missing (sender `SV-001-Alpha`, synthetic patient). |
+| `Given a submission for patient "<initials>" born "<date>" with postal code "<code>" exists` | 002 | As above, for a patient with these identifying details. |
+| `When I open the edit page of the submission "<lab no>"` | 002 | Find the submission by its "Labnr. Einsender" in the list search and click "Bearbeiten". |
+| `Then the submission list row "<search text>" shows "<text>"` | 002 | The Haemophilus submission list (`/PatientSending`), filtered with the search box, has a row containing the text. |
+| `Then the submission list does not contain "<search text>"` | 002 | The search box finds no row for the text. |
+| `Then the submission list shows <n> row(s)` | 002 | The list currently shows exactly this many rows. |
+| `Given a Meningococci submission with sender laboratory number "<lab no>" exists` | 003 | Create a Meningococci submission with this "Labnr. Einsender" through the UI if missing (sender `SV-003-Alpha`, synthetic patient). |
+| `Given a Meningococci submission for patient "<initials>" born "<date>" with postal code "<code>" exists` | 003 | As above, for a patient with these identifying details. |
+| `Then the Meningococci submission list row "<search text>" shows "<text>"` | 003 | The Meningococci submission list (`/MeningoPatientSending`), filtered with the search box, has a row containing the text. |
+| `Then the Meningococci submission list shows <n> row(s)` | 003 | The Meningococci list currently shows exactly this many rows. |
+| `Given a Haemophilus breakpoint for "<antibiotic>" with "Sensibel <=" "<value>" and "Resistent >" "<value>" exists` | 004 | Create the breakpoint on `/EucastClinicalBreakpoints/Create` if missing (details with the prefix `SV-004-`). |
+| `When I open the isolate of the submission "<lab no>"` | 004 | Find the submission by its "Labnr. Einsender" in the list search and click its "Labor-Nr" link. |
+| `When I select "<value>" in the E-Test row "<antibiotic>"` | 004 | Choose the measured value in the row of this antibiotic. |
+| `Then the E-Test row "<antibiotic>" shows "<result>"` | 004 | The row of this antibiotic shows this susceptibility result. |
+| `Given a Meningococci breakpoint for "<antibiotic>" with "Sensibel <=" "<value>" and "Resistent >" "<value>" exists` | 005 | Create the breakpoint for Meningococci on `/EucastClinicalBreakpoints/Create` if no current one with these limits exists (details with the prefix `SV-005-`). |
+| `When I open the isolate of the Meningococci submission "<lab no>"` | 005 | Find the submission by its "Labnr. Einsender" in the Meningococci list search (`/MeningoPatientSending`) and click its "Labor-Nr" link. |
+| `Then the report field "<label>" shows "<text>"` | 006 | On the report page ("Befund erstellen"), the value next to this label (e.g. "Teilbefund", "Befund") equals the text. |
+| `Then the submission list row "<search text>" shows the report status "<status>"` | 008 | In the Haemophilus submission list (`/PatientSending`), filtered with the search box, the "Befund" icon of the row has this title ("Kein Befund erstellt", "Teilbefund", "Endbefund"). |
+| `Then the Meningococci submission list row "<search text>" shows the report status "<status>"` | 009 | As above, in the Meningococci submission list (`/MeningoPatientSending`). |
+| `Given a submission with sender laboratory number "<lab no>", sampling location "<location>" and sampling date "<date>" exists` | 011 | Create a Haemophilus submission with this "Labnr. Einsender", "Entnahmeort" (for "Anderer …" also an "Anderer Entnahmeort" text with the prefix `SV-011-`) and "Entnahmedatum" through the UI if missing (sender `SV-001-Alpha`, synthetic patient). |
+| `Given two submissions of patient "<initials>" born "<date>" with postal code "<code>", sampled "<date>" and received "<date>", exist` | 012 | Create two Haemophilus submissions ("Blut", isolate defaults) through intake if missing; the second one with "Bestehenden Patienten verwenden", so both belong to one patient and have identical strain characteristics. |
+| `Given a submission of sender "<name>" with sampling date "<date>" exists` | 013 | Create a Haemophilus submission ("Blut", isolate defaults, "Labnr. Einsender" with the prefix `SV-013-`) for this sender and "Entnahmedatum" through the UI if missing (synthetic patient). |
+| `Given a submission with sender laboratory number "<lab no>" for patient "<initials>" born "<date>" with postal code "<code>" exists` | 014 | Create a Haemophilus submission ("Blut", isolate defaults) with this "Labnr. Einsender" for a new patient with these identifying details through intake if missing (sender `SV-001-Alpha`). |
+| `When I enter the patient number of the submission "<lab no>" into "<label>"` | 014 | Read the "Patienten-Nr." shown on the isolate page of the submission with this "Labnr. Einsender" and fill it into the field with this label. |
+| `Given a Meningococci submission with sender laboratory number "<lab no>" for patient "<initials>" born "<date>" with postal code "<code>" exists` | 015 | Create a Meningococci submission ("Blut", isolate defaults, a gender chosen) with this "Labnr. Einsender" for a new patient with these identifying details through intake if missing (sender `SV-003-Alpha`). |
+| `When I enter the patient number of the Meningococci submission "<lab no>" into "<label>"` | 015 | Read the "Patienten-Nr." shown on the Meningococci isolate page of the submission with this "Labnr. Einsender" and fill it into the field with this label. |
+| `Then the Meningococci submission list filtered by patient number of "<lab no>" shows <n> row(s)` | 015 | Enter the "Patienten-Nr." of that submission (as read from its isolate page) into the search field "Patienten-Nr." of the Meningococci list (`/MeningoPatientSending`) and count the rows. |
+| `Given a health office with address "<lines>" and postal code "<code>" exists` | 016 | Create the record on `/HealthOffices/Create` if missing (address lines separated by `\|`, synthetic values with the prefix `SV-016-`). |
+| `Then the health-office list row "<search text>" shows "<text>"` | 016 | The list "Gesundheitsämter" (`/HealthOffices`), filtered with the search box, has a row containing the text. |
+| `Given the health-office lookup is answered in the browser with address "<lines>", telephone "<phone>", fax "<fax>" and email "<email>"` | 016 | The browser answers the report page's lookup request (`POST /Report/QueryHealthOffice/`) itself with a synthetic office (address lines separated by `\|`); the request never reaches the server, the RKI tool is never contacted. |
+| `Given a Meningococci breakpoint "<details>" for "<antibiotic>" with version "<version>", "Gültig ab" "<date>", "Sensibel <=" "<value>" and "Resistent >" "<value>" exists` | 017 | Create the record with "Gültig für" "Meningokokken" on `/EucastClinicalBreakpoints/Create` if no record with these details and version exists (details with the prefix `SV-017-`). |
+| `Then the breakpoint list row "<search text>" shows "<text>"` | 017 | The list "Grenzwerte" (`/EucastClinicalBreakpoints`), filtered with the search box, has a row containing the text. |
+| `Then the free E-Test row offers the antibiotic "<antibiotic>"` | 017 | The antibiotic selection ("Antibiotikum auswählen...") of the free first E-Test row on the isolate form has an entry with this text. |
+| `Then the free E-Test row does not offer the antibiotic "<antibiotic>"` | 017 | As above, negated. |
+| `When I select "<text>" in the free E-Test row` | 017 | Choose the antibiotic or the measured value with this text in the free first E-Test row of the isolate form. |
+| `Then the free E-Test row shows the breakpoint "<title>"` | 017 | The breakpoint selection of the free E-Test row has this entry selected. |
+| `Then the free E-Test row shows "<result>"` | 017 | The free E-Test row shows this susceptibility result. |
+| `Given the PubMLST lookup is answered in the browser with PubMLST id "<id>", database "<database>" and ST "<value>"` | 019 | The browser answers the lookup request of the isolate form (`POST /PubMlst/NeisseriaIsolates/`) itself with a synthetic record carrying these values (other typing values empty); the request never reaches the server, PubMLST is never contacted. |
+| `Given the PubMLST lookup is answered in the browser with "not found"` | 019 | As above, answered with HTTP 404. |

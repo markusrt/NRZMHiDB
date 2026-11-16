@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
@@ -116,6 +117,21 @@ namespace HaemophilusWeb.Tools
             export.Rows[0]["RKI Status"].Should().Be("möglich");
         }
 
+        // specs/024 FR-011, US5.3: without RKI match record the reference and file number stay empty and the status
+        // reads "kein Match", the same word as a stored state None
+        [Test]
+        public void DataTable_WithoutRkiMatchRecord_ShowsEmptyReferenceAndKeinMatch()
+        {
+            var sut = CreateExportDefinition();
+            Sending.RkiMatchRecord = null;
+
+            var export = sut.ToDataTable(Sendings);
+
+            export.Rows[0]["RKI InterneRef"].Should().Be(System.DBNull.Value);
+            export.Rows[0]["RKI Aktenzeichen"].Should().Be(System.DBNull.Value);
+            export.Rows[0]["RKI Status"].Should().Be("kein Match");
+        }
+
         [Test]
         public void DataTable_ContainsRealTimePcrFields()
         {
@@ -160,6 +176,33 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["Penicillin ADT"].Should().Be("≥ 12 mm");
+        }
+
+        // specs/011 FR-004, FR-008, FR-015, US1.5: header names and order of the Haemophilus laboratory export as
+        // observed in the downloaded file (011 verification 2026-11-08).
+        [Test]
+        public void DataTable_ColumnHeadersAreInDocumentedOrder()
+        {
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).Should().Equal(
+                "Patienten-Nr.", "Labornummer", "Stammnummer", "Einsendernummer", "Eingangsdatum", "Entnahmedatum",
+                "Labnr. Einsender", "DEMIS ID", "Entnahmeort", "Material", "Invasiv", "Serotyp Einsender",
+                "Spezies Einsender", "Initialen", "Geburtsdatum", "Patientenalter bei Entnahme", "Geschlecht",
+                "Postleitzahl", "Wohnort", "Landkreis", "Bundesland", "Klinische Angaben", "Hib-Impfung",
+                "Datum Hib-Impfung", "Bemerkung (Einsendung)", "Wachstum", "Art des Wachstums", "Oxidase",
+                "ß-Laktamase", "Penicillin ADT", "Agglutination", "Faktoren-test", "Ampicillin MHK",
+                "Ampicillin Bewertung", "Amoxicillin / Clavulansäure MHK", "Amoxicillin / Clavulansäure Bewertung",
+                "Meropenem MHK", "Meropenem Bewertung", "Cefotaxim MHK", "Cefotaxim Bewertung", "Imipenem MHK",
+                "Imipenem Bewertung", "Ciprofloxacin MHK", "Ciprofloxacin Bewertung", "ompP2", "bexA", "Serotyp-PCR",
+                "fucK", "ompP6", "Real-Time-PCR", "Real-Time-PCR Gerät", "Real-Time-PCR Auswertung (RIDOM)",
+                "16S rDNA", "16S rDNA beste Übereinstimmung", "16S rDNA Übereinstimmung", "api NH",
+                "api NH beste Übereinstimmung", "api NH Übereinstimmung", "MALDI-TOF (VITEK MS)",
+                "MALDI-TOF (VITEK MS) beste Übereinstimmung", "MALDI-TOF (VITEK MS) Übereinstimmung",
+                "MALDI-TOF (Biotyper)", "MALDI-TOF (Biotyper) beste Übereinstimmung",
+                "MALDI-TOF (Biotyper) Übereinstimmung", "Genomsequenzierung", "ftsI", "ftsI Beurteilung",
+                "ftsI Beurteilung 2", "ftsI Beurteilung 3", "MLST", "MLST Sequenztyp", "Beurteilung", "Befund am",
+                "Bemerkung (Isolat)", "RKI InterneRef", "RKI Aktenzeichen", "RKI Status");
         }
 
         private static HaemophilusSendingLaboratoryExport CreateExportDefinition()

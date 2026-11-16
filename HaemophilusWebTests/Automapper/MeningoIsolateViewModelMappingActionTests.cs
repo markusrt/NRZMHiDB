@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using FluentAssertions;
 using HaemophilusWeb.Controllers;
+using HaemophilusWeb.Domain;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.ViewModels;
@@ -38,6 +40,26 @@ namespace HaemophilusWeb.Automapper
             sut.Process(isolateViewModel, isolate, null);
 
             isolate.Sending.Material.Should().Be(expectedMaterial);
+        }
+
+        // specs/005 FR-011: growth on either agar leaves the material of the submission unchanged
+        [TestCase(Growth.TypicalGrowth, Growth.No)]
+        [TestCase(Growth.No, Growth.ATypicalGrowth)]
+        public void ProcessViewModelToModel_AnyGrowth_KeepsMaterial(Growth growthOnBloodAgar, Growth growthOnMartinLewisAgar)
+        {
+            var sut = new MeningoIsolateViewModelMappingAction();
+            var isolateViewModel = new MeningoIsolateViewModel
+            {
+                LaboratoryNumber = "001/26",
+                GrowthOnBloodAgar = growthOnBloodAgar,
+                GrowthOnMartinLewisAgar = growthOnMartinLewisAgar
+            };
+            var isolate = CreateEmptyIsolate();
+            isolate.Sending.Material = MeningoMaterial.VitalStem;
+
+            sut.Process(isolateViewModel, isolate, null);
+
+            isolate.Sending.Material.Should().Be(MeningoMaterial.VitalStem);
         }
 
         [Test]
@@ -130,6 +152,65 @@ namespace HaemophilusWeb.Automapper
 
             isolateViewModel.DemisIdQrImageUrl.Should().StartWith("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZoAAAGaCAYAAAA2BoVjAAAA");
             isolateViewModel.DemisIdQrImageUrl.Should().EndWith("/aNZaa31qf2jWWmt9an9o1lprfWp/aNZaa33of//7PzFUPlvfvwGnAAAAAElFTkSuQmCC");
+        }
+
+        // specs/007 FR-013: the report view model receives report lines, typings and comment of a fresh interpretation
+        [Test]
+        public void ProcessModelToViewModel_CopiesReportTypingsAndCommentFromInterpretation()
+        {
+            var sut = new MeningoIsolateViewModelMappingAction();
+            var isolateViewModel = new MeningoIsolateViewModel();
+            var isolate = CreateEmptyIsolate();
+            isolate.Sending.SamplingLocation = MeningoSamplingLocation.Blood;
+            isolate.SerogroupPcr = MeningoSerogroupPcr.C;
+            isolate.PorAPcr = NativeMaterialTestResult.Positive;
+            isolate.FetAPcr = NativeMaterialTestResult.Positive;
+            isolate.PorAVr1 = "X";
+            isolate.PorAVr2 = "Y";
+            isolate.FetAVr = "Z";
+            var expected = new MeningoIsolateInterpretation();
+            expected.Interpret(isolate);
+
+            sut.Process(isolate, isolateViewModel, null);
+
+            expected.Rule.Should().Be("StemInterpretation_02");
+            isolateViewModel.Report.Should().Equal(expected.Result.Report);
+            isolateViewModel.Typings.Select(t => t.Attribute + "=" + t.Value)
+                .Should().Equal(expected.Typings.Select(t => t.Attribute + "=" + t.Value));
+            isolateViewModel.Comment.Should().NotBeNullOrEmpty().And.Be(expected.Result.Comment);
+        }
+
+        // specs/018 FR-013, FR-014: the report data carry both director names, the contact blocks joined by one empty
+        // line and the announcement only while it is active
+        [TestCase(0, 0, "Hinweis")]
+        [TestCase(1, 2, "")]
+        [TestCase(-3, -1, "")]
+        public void ProcessModelToViewModel_AppliesReportConfiguration(int startOffset, int endOffset, string expectedAnnouncement)
+        {
+            AddConfigurationEntry(Services.ConfigurationService.Keys.LabDirector, "\"Lab\"");
+            AddConfigurationEntry(Services.ConfigurationService.Keys.MedicalDirector, "\"Med\"");
+            AddConfigurationEntry(Services.ConfigurationService.Keys.Contacts, "[\"A\\nTel 1\",\"B\"]");
+            AddConfigurationEntry(Services.ConfigurationService.Keys.Announcement, Newtonsoft.Json.JsonConvert.SerializeObject(
+                new Services.AnnouncementSetting
+                {
+                    Text = "Hinweis",
+                    Start = System.DateTime.Today.AddDays(startOffset),
+                    End = System.DateTime.Today.AddDays(endOffset)
+                }));
+            var sut = new MeningoIsolateViewModelMappingAction();
+            var isolateViewModel = new MeningoIsolateViewModel();
+
+            sut.Process(CreateEmptyIsolate(), isolateViewModel, null);
+
+            isolateViewModel.LabDirector.Should().Be("Lab");
+            isolateViewModel.MedicalDirector.Should().Be("Med");
+            isolateViewModel.Contacts.Should().Be("A\nTel 1\n\nB");
+            isolateViewModel.Announcement.Should().Be(expectedAnnouncement);
+        }
+
+        private void AddConfigurationEntry(string key, string value)
+        {
+            DbMock.ConfigurationEntries.Add(new ConfigurationEntry { Key = key, Value = value });
         }
 
         private static MeningoIsolate CreateEmptyIsolate()

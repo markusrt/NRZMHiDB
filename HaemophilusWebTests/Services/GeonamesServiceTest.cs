@@ -74,6 +74,95 @@ namespace HaemophilusWeb.Services
             jArray.First.Value<string>("placeName").Should().Be("Gossa");
         }
 
+        // specs/022 FR-005, FR-006, US1.3, US1.5: without place name the first returned place is taken, with its
+        // postal code, place name, county name (adminName3) and state short code (adminCode1)
+        [Test]
+        public void QueryPostalCode_MultipleMatchesWithoutPlaceName_ReturnsFirstEntryWithItsFields()
+        {
+            var service = new GeonamesService(GetUrlReturningMultipleResults);
+
+            var queryResult = service.QueryByPostalCode("06773");
+
+            var place = JObject.Parse(queryResult)["postalcodes"].As<JArray>().Should().ContainSingle().Subject;
+            place.Value<string>("placeName").Should().Be("Gossa");
+            place.Value<string>("postalcode").Should().Be("06773");
+            place.Value<string>("adminName3").Should().Be("Anhalt-Bitterfeld");
+            place.Value<string>("adminCode1").Should().Be("ST");
+        }
+
+        // specs/022 FR-005, US1.4: a place name that does not equal a returned name exactly (case, prefix,
+        // trailing space, "Unbekannt") selects no place
+        [TestCase("gossa")]
+        [TestCase("Goss")]
+        [TestCase("Gossa ")]
+        [TestCase("Unbekannt")]
+        public void QueryPostalCodeAndPlaceName_WithoutExactlyEqualName_ReturnsEmptyArray(string placeName)
+        {
+            var service = new GeonamesService(GetUrlReturningMultipleResults);
+
+            var queryResult = service.QueryByPostalCode("06773", placeName);
+
+            JObject.Parse(queryResult)["postalcodes"].As<JArray>().Should().BeEmpty();
+        }
+
+        // specs/022 FR-004, US1.1: the lookup asks for the places of the postal code in Germany
+        [Test]
+        public void QueryPostalCode_AsksLookupForPostalCodeInGermany()
+        {
+            string calledUrl = null;
+            var service = new GeonamesService(url =>
+            {
+                calledUrl = url;
+                return GetUrlReturningSingleResult(url);
+            });
+
+            service.QueryByPostalCode("91301", "Forchheim");
+
+            calledUrl.Should().Contain("/postalCodeLookupJSON?country=DE&");
+            calledUrl.Should().EndWith("&postalcode=91301");
+            calledUrl.Should().NotContain("Forchheim");
+        }
+
+        // specs/022 FR-002, US2.1, US2.2: suggestions are searched by prefix in Germany and the service's answer is
+        // passed on unchanged (no own limit, service order)
+        [Test]
+        public void QueryPostalCodePrefix_AsksSearchInGermanyAndPassesAnswerThrough()
+        {
+            const string answer =
+                "{\"postalCodes\":[{\"postalCode\":\"91320\",\"placeName\":\"Ebermannstadt\"},{\"postalCode\":\"91301\",\"placeName\":\"Forchheim\"},{\"postalCode\":\"91322\",\"placeName\":\"Gräfenberg\"}]}";
+            string calledUrl = null;
+            var service = new GeonamesService(url =>
+            {
+                calledUrl = url;
+                return answer;
+            });
+
+            var queryResult = service.QueryByPostalCodePrefix("913");
+
+            calledUrl.Should().Contain("/postalCodeSearchJSON?country=DE&");
+            calledUrl.Should().EndWith("&postalcode_startsWith=913");
+            JToken.DeepEquals(JObject.Parse(queryResult), JObject.Parse(answer)).Should().BeTrue();
+        }
+
+        // specs/022 FR-009, Edge Cases "Missing setting": without a GeonamesAccount setting (the test configuration
+        // has none) the service is addressed with an empty account name
+        [Test]
+        public void QueryPostalCode_WithoutAccountSetting_SendsEmptyAccountName()
+        {
+            Assume.That(System.Configuration.ConfigurationManager.AppSettings["GeonamesAccount"], Is.Null);
+            var calledUrls = new List<string>();
+            var service = new GeonamesService(url =>
+            {
+                calledUrls.Add(url);
+                return GetUrlReturningSingleResult(url);
+            });
+
+            service.QueryByPostalCode("91301");
+            service.QueryByPostalCodePrefix("913");
+
+            calledUrls.Should().HaveCount(2).And.OnlyContain(u => u.Contains("&username=&"));
+        }
+
         [TestCase(null)]
         [TestCase("")]
         [TestCase("Forchheim")]

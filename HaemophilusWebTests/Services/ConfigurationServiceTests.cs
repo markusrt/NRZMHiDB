@@ -144,5 +144,53 @@ namespace HaemophilusWeb.Services
 
             sut.GetActiveAnnouncement().Should().BeEmpty();
         }
+
+        // specs/018 FR-013, SC-003: the first and the last day of the period are both inclusive
+        [TestCase(1, 1, 10, true)]
+        [TestCase(10, 1, 10, true)]
+        [TestCase(5, 1, 10, true)]
+        [TestCase(11, 1, 10, false)]
+        [TestCase(4, 5, 10, false)]
+        public void AnnouncementIsActiveOn_PeriodBoundariesAreInclusive(int day, int startDay, int endDay, bool expected)
+        {
+            var announcement = new AnnouncementSetting
+            {
+                Text = "Hinweis",
+                Start = new DateTime(2026, 11, startDay),
+                End = new DateTime(2026, 11, endDay, 0, 0, 0)
+            };
+
+            announcement.IsActiveOn(new DateTime(2026, 11, day, 23, 59, 0)).Should().Be(expected);
+        }
+
+        // specs/018 Edge Cases "Announcement period is always closed in the page": a stored announcement without
+        // dates is treated as always active
+        [Test]
+        public void AnnouncementIsActiveOn_WithoutDates_IsActive()
+        {
+            new AnnouncementSetting { Text = "Hinweis" }.IsActiveOn(new DateTime(2026, 11, 8)).Should().BeTrue();
+        }
+
+        // specs/018 Edge Cases "Unreadable stored value": a value that cannot be read is treated as empty
+        [Test]
+        public void Get_UnreadableStoredValue_ReturnsEmptySettings()
+        {
+            foreach (var key in new[]
+                     {
+                         ConfigurationService.Keys.ReportSigners, ConfigurationService.Keys.Announcement,
+                         ConfigurationService.Keys.LabDirector, ConfigurationService.Keys.MedicalDirector,
+                         ConfigurationService.Keys.Contacts
+                     })
+            {
+                db.ConfigurationEntriesDbSet.Add(new ConfigurationEntry { Key = key, Value = "{not json" });
+            }
+
+            sut.GetReportSigners().Should().BeEmpty();
+            sut.GetAnnouncement().Text.Should().BeNull();
+            sut.GetActiveAnnouncement().Should().BeEmpty();
+            sut.GetLabDirector().Should().BeEmpty();
+            sut.GetMedicalDirector().Should().BeEmpty();
+            sut.GetContacts().Should().BeEmpty();
+        }
     }
 }

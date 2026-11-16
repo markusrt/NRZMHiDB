@@ -40,6 +40,13 @@ namespace HaemophilusWeb.Validators
             mhkScale.Should().NotContain(notContained);
         }
 
+        // specs/004 FR-006: a row without a measurement needs neither antibiotic nor breakpoint
+        [Test]
+        public void Validate_RowWithoutMeasurement_IsValid()
+        {
+            AssertIsValid(Validate(new EpsilometerTestViewModel()));
+        }
+
         protected static IEnumerable<Tuple<EpsilometerTestViewModel, string[]>> CreateInvalidModels()
         {
             yield return Tuple.Create(new EpsilometerTestViewModel

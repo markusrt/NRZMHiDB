@@ -1,0 +1,1026 @@
+# Backlog: Potential bugfixes and refactorings
+
+**Branch**: `speckit-init`
+
+**Created**: 2026-10-30
+
+**Status**: Draft — not yet triaged by the owner (2026-10-30: the owner will take the DEC decisions later; nothing in
+this list is blocked on them)
+
+**Source**: Every `[SUSPECTED-DEFECT]` and `[POTENTIAL-REFACTORING]` observation recorded in the as-is
+specifications `specs/001` to `specs/025` (status-quo inventory of the NRZMHi Database), consolidated into one
+entry per underlying issue. Items observed in several specs are listed once and cite all sources.
+
+> **Rule** (constitution v1.2.0, "Specification Structure"): nothing in this list is approved. Before an item is
+> implemented it needs either its own feature specification (`/speckit-specify`, referencing the backlog ID) or an
+> explicit owner decision recorded here. Items are observations derived from reading the code; unless marked
+> "test-asserted" they were **not** exercised in a running system. The specs describe current behavior; this list is
+> the only place where "should this change?" is asked.
+
+## Roadmap
+
+Order agreed with the owner on 2026-11-16. Steps 1–3 make up the next release.
+
+1. Merge PR #221 (branch `speckit-init`): as-is specs, verification, this backlog, CI with SonarCloud and coverage.
+2. Finish and merge PR #213 (`copilot/implement-speziesidentifikation-nm-hi`). It covers issue #217 (prefilled
+   MALDI-TOF entry, sub-issue of #205) and the part of #205 that makes the Biotyper the primary trigger for species
+   identification. Before the merge, #213 also:
+   - corrects the interpretation rules of both databases where needed and proves with tests that a Biotyper
+     identification, with the biochemical tests set to "n.d.", never yields "Diskrepante Ergebnisse" (DATA-044). The
+     owner provides new Meningococci rules; the Excel rule definitions are not in the repository;
+   - closes #217 only. #205 stays open until PR #186 is done.
+3. Merge the Dependabot PRs (#174–#178, #207) against the larger test suite. AutoMapper 10 → 15 (#207) spans several
+   major versions and may need code changes.
+4. Release.
+5. Merge `upgrade-bootstrap` (update its `MERGE-MASTER-PROMPT.md` to the state after step 1 first) and re-verify the UI
+   specs against Bootstrap 5. Then write the Reqnroll step definitions for the `@smoke` scenarios in
+   `SystemTests/Features/` and run them as a CI job against the seeded host (LocalDB and IIS Express exist on the
+   `windows-2022` runner). Today the CI runs the unit tests only.
+6. PR #186 (JSON rule system for Haemophilus, issue #185) as a change spec; afterwards close #205.
+7. Backlog triage, `DEC-*` decisions, privacy topics, change specs.
+
+Not scheduled: PR #197 (SDK-style project files).
+
+## How to read
+
+- **ID prefixes**: `DEC` owner decision needed before anything else · `SEC` security and access · `DATA` data
+  correctness and privacy · `UX` robustness and user feedback · `REF` refactoring and legacy debt · `TEST` test gaps.
+- **Type**: Decision · Bugfix · Refactoring · Test.
+- **Source**: spec number plus the section (FR, User Story/scenario, Edge Cases, Assumptions) that records the
+  observation.
+- **Offen** names what the owner must decide; absent when the fix is unambiguous.
+
+## Spec structure decisions
+
+The decisions D1–D5 that shaped how the as-is specs were cut (one spec per capability and pathogen; as-is only;
+one generic export spec; reporting per pathogen with separate interpretation specs; own spec for report
+templates) live in `.specify/memory/constitution.md` v1.2.0, section "Specification Structure", together with the
+backlog rule above. D6 (legacy debt) is in the same file since v1.1.0. Moved there on 2026-10-30 (DEC-012).
+
+## Open owner questions from the spec verification
+
+Collected on 2026-11-16 from the "Open questions for the owner" sections of `specs/005`–`specs/025/verification.md`
+(verification of 2026-11-08). None blocks other work. The owner may turn a question into a `DEC-*` entry, decide it in
+the named entry (`**decided YYYY-MM-DD**`), or leave it to the change spec that fixes the entry.
+
+Clinical and reporting semantics:
+
+1. DATA-038 (005): Should the material follow the growth fields in both directions, and should "Nein" stay the
+   default of the growth fields?
+2. DATA-039 (007, 011): Should submissions without a matching interpretation rule leave the RKI and IRIS exports, be
+   marked, or stay as they are?
+3. REF-021 (009): Should the Meningococci report ask before a final report of discrepant results, as the Haemophilus
+   report does? The check is disabled with `if (false)` today.
+4. DEC-004, DEC-005 (006, 007): Does "Kein Nachweis … am ehesten um NTHi" belong to DEC-004? Does the sequencing
+   comment of native rule 32 belong to DEC-005? Is "no growth with negative molecular tests" meant to be "Diskrepante
+   Ergebnisse", or is a rule missing?
+5. UX-015 (010): Should susceptibility results without breakpoints appear in Haemophilus reports at all?
+6. DATA-035 with DATA-012 and REF-006 (017): A server-side recalculation would overwrite the stored results of older
+   isolates after a breakpoint change. Should the change spec protect unchanged rows, or should breakpoints be
+   versioned or locked first?
+
+Access and privacy:
+
+1. Report templates and other static files are reachable without sign-in (010, 021). Should that stay?
+2. REF-022 (020): The scaffolded patient and submission pages are reachable by address, and `/Patient/Delete` deletes
+   for good. Should they be removed?
+
+User feedback (likely decided in the change specs):
+
+1. 008, 009: Should the report date be the time of generation instead of page load, and should the file name name
+   the report type?
+2. DATA-041, DATA-042, UX-005, UX-006 (016, 022, 023, 024): Should failed Geonames lookups, "no health office found"
+   and the result of an RKI match import be shown to the user?
+3. 011, 013, UX-018, DATA-009 (014, 015): Should an unreadable start date keep the entered end date? Should the merge
+   summary show "keine Angabe" for a missing gender? Should a merge be blocked or warned about when it leaves a
+   sampling date before the birth date?
+4. DATA-029, DATA-043 (025): Should the county page require number and name, or should the exports tolerate empty
+   values?
+
+Seed extensions that would make further rows verifiable: an account without role and a disposable account (021); a
+patient without or with a foreign postal code (016); a seeded RKI match record (024); two positive invasive
+Meningococci submissions of one patient (012); counties (011, 025). The PubMLST result page (019 FR-010) stays not
+verifiable: a matching submit is only acceptable once the code shows that it cannot reach PubMLST or IRIS.
+
+## DEC — Owner decisions
+
+- **DEC-001 – Administrator role: defect or intended?** (Decision; source: 011, 013, 014, 015, 017, 018, 019, 020,
+  021 US5): An Administrator-only account sees the full laboratory navigation and all Administration entries, but
+  every function except the unlinked role pages and the functions open to any signed-in account refuses it. Nine specs
+  tag this `[SUSPECTED-DEFECT]`. Offen: is Administrator meant to be a pure role-management role (then the navigation
+  is wrong and the tags become one UX item) or a superset of Standard User (then the authorization rules are wrong)?
+  Confirmed on system 2026-10-30 for the sender pages (001 verification): `Admin1` sees "Einsender", both "Einsender
+  Export" entries and "Gelöschte Einsender", and every sender address redirects it to the sign-in page.
+  Confirmed on system 2026-10-30 for the Haemophilus intake (002 verification): `Admin1` sees "Haemophilus",
+  "Gelöschte Einsendungen (Haemophilus)" and "Patienten Zusammenfügen", and every `/PatientSending` address (list,
+  create, edit, delete, restore, merge, all three exports, list data) redirects it to the sign-in page.
+  Confirmed on system 2026-10-30 for the Meningococci intake (003 verification): `Admin1` sees "Meningokokken",
+  "Labor Export", "IRIS Export", "LGA Export", "RKI Export" and "Patienten Zusammenfügen" for Meningococci, and every
+  `/MeningoPatientSending` address (list, create, edit, delete, deleted list, restore, merge, all four exports, list
+  data) redirects it to the sign-in page.
+  Confirmed on system 2026-11-08 for the exports (011 verification): `Admin1` sees the full Export menu (both
+  "Einsender Export" entries and the seven exports of 011), and every one of the seven export addresses, form and
+  direct run, redirects it to the sign-in page.
+  Confirmed on system 2026-11-08 for the sender exports (013 verification): `Admin1` sees both "Einsender Export"
+  entries, and both addresses, form and direct run, redirect it to the sign-in page.
+  Confirmed on system 2026-11-08 for the PubMLST matching (019 verification; observation only, no decision): `Admin1`
+  sees "PubMLST" → "Matching (Meningokokken)", and `/MeningoIsolate/PubMlstMatch` redirects it to the sign-in page.
+  Confirmed on system 2026-11-08 for the Meningococci patient merge (015 verification; observation only, no
+  decision): `Admin1` sees "Patienten Zusammenfügen" below "Meningokokken", and `/MeningoPatientSending/MergePatient`,
+  also with both numbers and `Confirmation=true`, redirects it to the sign-in page without merging.
+  Confirmed on system 2026-11-08 for the breakpoint pages (017 verification; observation only, no decision): `Admin1`
+  sees "Administration" → "Antibiotika Grenzwerte", and list, create, edit, details, delete and the create post
+  redirect it to the sign-in page; `Rki1` has no "Administration" menu and is redirected the same way.
+  Confirmed on system 2026-11-08 for the configuration page (018 verification; observation only, no decision):
+  `Admin1` sees "Konfiguration" as the first "Administration" entry, and `/Configuration`, `/Configuration/Index`,
+  `/Configuration/Edit` and the save post redirect it to the sign-in page; `Rki1` has no "Administration" menu and is
+  redirected the same way.
+  Confirmed on system 2026-11-08 for the deleted-records pages (020 verification; observation only, no decision):
+  `Admin1` sees "Gelöschte Einsender" and "Gelöschte Einsendungen (Haemophilus)", and both lists, the sender and
+  submission delete pages and the restore addresses of both pathogens (also `/MeningoSender/Undelete/<id>`) redirect
+  it to the sign-in page without restoring; `Rki1` has no "Administration" menu and is redirected the same way.
+  Observed on system 2026-11-08 across all menus (021 verification; observation only, no decision): `Admin1` sees the
+  same navigation and home-page tiles as `Standard1`; every navigation entry and tile button except "Gesundheitsämter"
+  redirects it to the sign-in page, as do the county and generated pages, while `/Role` and `/Role/Create` answer
+  HTTP 200.
+- **DEC-002 – Sender export counts soft-deleted submissions** (Decision; source: 013 Edge Cases, FR-008; 001 FR-015):
+  Senders are selected via non-deleted submissions, but "Anzahl Einsendungen", "Stammnummern" and "Labornummern"
+  include soft-deleted ones. Offen: intended (deleted submissions still "sent") or defect?
+  Observed on system 2026-11-08 (013 verification, no decision): the seeded sender "SV-Seed-DEC-002" appears in the
+  2020 sender exports with "Anzahl Einsendungen" 2, "Labornummern" "KL002/20,KL003/20" and "MZ002/20,MZ003/20"
+  (KL003/20 and MZ003/20 soft-deleted); an own sender with three active and one soft-deleted Haemophilus submission in
+  2022 shows 4 and lists the deleted one; a sender whose only submission in the range is soft-deleted is not listed.
+- **DEC-003 – "Gültig für = Allgemein" breakpoints** (Decision; source: 017 Edge Cases): Storable, never offered for
+  either pathogen. Offen: dead value to remove, or should such records apply to both pathogens?
+  Observed on system 2026-11-08 (017 verification, no decision): a Levofloxacin record "SV-017-Allgemein" with "Gültig
+  für" = "Allgemein" was stored and is listed with "Gültig für" "None"; neither isolate form offers Levofloxacin.
+- **DEC-004 – Haemophilus interpretation: growth "Ja"/"Nein" wording** (Decision; source: 006 FR-012/FR-013,
+  test-asserted): With all typing not determined, growth "Ja" yields "Der eingesendete Stamm konnte nicht angezüchtet
+  werden …", growth "Nein" yields "Kein Nachweis von Haemophilus influenzae." — inverse to the "Wachstum" label but
+  asserted by tests. Offen: intended laboratory semantics or long-standing defect? Confirmed on system 2026-11-08 (006
+  verification): on the report page of an isolate with all typing "n.d.", "Wachstum" "Ja" shows "Der eingesendete Stamm
+  konnte nicht angezüchtet werden. Um Wiedereinsendung wird gebeten." with the disclaimer "Eine telefonische
+  Vorabmitteilung ist erfolgt."; "Nein" shows "Kein Nachweis von Haemophilus influenzae." with "Beim eingesendeten Isolat
+  handelt es sich am ehesten um NTHi.", because "Beurteilung" keeps its preselected "NTHi" unless the user changes it.
+- **DEC-005 – Meningococci native rule 32 and the NoMeningococci flag** (Decision; source: 007 FR-010, Edge Cases,
+  test-asserted): An all-negative native-material result does not set the flag, so it counts as "Meningococci found"
+  in the RKI/IRIS selection (011 FR-011). Related: rules 11, 14, 41 emit sequence rows without the sequencing-provider
+  comment; native rules 30a/30b are fully shadowed by 01b/01a. Offen: clinical intent for each. Observed on system
+  2026-11-08 (007 verification): an invasive native submission with every test negative (rule 32, report "Kein Hinweis
+  auf Neisseria meningitidis.") had an empty "Meningokokken" column in the laboratory export and appeared in the RKI
+  export, while native rule 06 with the same report wording showed "kein Nachweis" and was left out; rule 32 also
+  carries the sequencing-provider comment although it emits no sequence row. No decision taken.
+- **DEC-006 – LGA export open to Public Health** (Decision; source: 011 Edge Cases, 021 US4.2): Authorized for the
+  `RKI` role but not in its navigation. Offen: should Public Health have it (add to menu) or not (restrict)?
+  Observed on system 2026-11-08 (011 verification, no decision taken): `Rki1` sees only "RKI Export (Haemophilus)"
+  and "RKI Export (Meningokokken)"; `/MeningoPatientSending/StateAuthorityExport` opens the form for it and a direct
+  request with a date range returns `LGA-Export_20200101-20201231.xlsx`. Observed again 2026-11-08 (021 verification,
+  no decision taken): `/MeningoPatientSending/StateAuthorityExport` answers HTTP 200 for `Rki1`.
+- **DEC-007 – Soft deletion of Meningococci submissions** (Decision; source: 003 US3, 015, 020 US4): No Meningococci
+  delete-confirmation or deleted-submissions page exists; "Eintrag löschen" ends on the error page. Offen: is soft
+  delete wanted for Meningococci (add pages) or not (remove the button and inherited actions)? Confirmed on system
+  2026-10-30 (003 verification; observation only, no decision): "Eintrag löschen" and `/MeningoPatientSending/Deleted`
+  end in HTTP 500 (view not found); a delete request with anti-forgery token sent outside the pages soft-deletes the
+  submission, and `/MeningoPatientSending/Undelete/<id>` restores it. Observed again 2026-11-08 (015 verification; no
+  decision): "Eintrag löschen" ends in HTTP 500; the two soft-deleted submissions the merge checks needed were
+  produced with such a delete request. Observed again 2026-11-08 (020 verification; no decision): "Eintrag löschen"
+  (`/MeningoPatientSending/Delete/<id>`) and `/MeningoPatientSending/Deleted` end in HTTP 500; an own submission was
+  soft-deleted with a delete request carrying the page's token and restored by `/MeningoPatientSending/Undelete/<id>`.
+- **DEC-008 – EpiScanGIS case selection** (Decision; source: 023 Edge Cases): Only sampling locations "Blut" and
+  "Liquor" are exported, not the invasive set used by RKI/IRIS/LGA (011 FR-011); the date window starts 2019-10-01 with
+  an asymmetric boundary. Offen: agreed with the receiver, or drift? Observed 2026-11-08 (023 verification, unit level,
+  no decision taken): of the invasive locations only "Blut" and "Liquor" are exported; a case sampled on 2019-10-01 is
+  left out, a case without sampling date received on 2019-10-01 is exported.
+- **DEC-009 – Duplicate-submission window in adjusted exports** (Decision; source: 012 Edge Cases, FR-006): Code
+  comments describe "less than six months", the implementation compares only the month component of the date
+  difference (drops < 1 month and whole-year distances, keeps 1–11 months). Offen: which rule is intended, so that
+  DATA-001 can be fixed and tested? Observed on system 2026-11-08 (012 verification, no decision taken): an identical
+  strain received 3 months and 5 days after the kept submission stayed in the adjusted RKI export.
+- **DEC-010 – Export duplicate rules for Meningococci** (Decision; source: 012 Edge Cases, 011): No Meningococci export
+  applies duplicate cleaning or identifier removal; the Meningococci RKI page accepts but ignores the "unadjusted"
+  setting. Offen: should Meningococci RKI/IRIS get the same pseudonymization as Haemophilus RKI/PubMLST? Observed on
+  system 2026-11-08 (012 verification, no decision taken): the Meningococci RKI file for 2020 has the same rows and
+  columns with and without `Unadjusted=Yes`; no Meningococci file has a `duplicate_group` column.
+- **DEC-011 – Report pages open to every signed-in account** (Decision; source: 008, 009 Edge Cases, 021 US4.4): See
+  SEC-004; the decision is whether report generation stays available to roles other than Standard User at all.
+  Observed on system 2026-11-08 (008 verification, no decision taken): `Rki1` and `Admin1` reach the Haemophilus
+  report page by direct address and can generate documents and set the report status. Observed on system 2026-11-08
+  (009 verification, no decision taken): the same holds for the Meningococci report page.
+- **DEC-012 – Where to keep D1–D5** (Decision; **decided 2026-10-30**): Moved to the constitution (v1.2.0, section
+  "Specification Structure"). This file keeps only the pointer above.
+
+## SEC — Security and access
+
+- **SEC-001 – Registration submission does not re-check the token** (Bugfix; source: 021 US6.6, FR-007): Only showing
+  the form checks `RegistrationToken`; the POST checks just the anti-forgery token, which any visitor obtains from the
+  sign-in page. Anyone can register an account with any stored role. Reproduced at unit level 2026-11-08 (021
+  verification; scratch test, because a run on the system would need the secret token or create an account by a
+  crafted request): the POST action carries `[HttpPost]`, `[AllowAnonymous]` and `[ValidateAntiForgeryToken]` and takes
+  only the form model; called without any prior token request it creates the account, assigns the role and signs in.
+- **SEC-002 – Registration with an unknown role leaves a role-less account** (Bugfix; source: 021 US6.7): The account
+  is created before the role assignment fails with the generic error page. Reproduced at unit level 2026-11-08 (021
+  verification, scratch test): with a role assignment that throws as the store does for an unknown role, the account is
+  created first, the exception is not handled, and nothing removes the account.
+- **SEC-003 – Missing `RegistrationToken` setting opens registration and the EpiScanGIS export** (Bugfix; source: 021
+  Edge Cases, 023): A request without token would match an absent setting. Reproduced at unit level 2026-11-08 (023
+  verification; the controller run with stubbed data in uncommitted tests, because a run on the system needs the secret
+  token): with the setting absent, the EpiScanGIS export answers a request without token with the file; a wrong token
+  still gets "not found". On the host the key exists in `Web.config`, its template and both transforms (counted, values
+  not read). Reproduced at unit level 2026-11-08 (021 verification, scratch test) for the registration form: with the
+  setting absent, a request without token gets the registration form; a wrong token still gets the sign-in view.
+- **SEC-004 – Report pages, health offices and RKI match import check no role** (Bugfix; source: 008/009 Edge Cases,
+  016 Edge Cases, 021 US4.4–4.6, US7, access matrix, 024): Public Health (and role-less) accounts can open the report
+  page of any isolate (patient data, document generation, status marking), create/edit/delete health offices, and
+  upload RKI match files. Only the navigation hides these functions (Constitution Principle IV). See DEC-011.
+  Confirmed on system 2026-11-08 (008 verification): `Rki1` and `Admin1` open `/Report/Isolate/14` (HTTP 200, patient
+  initials and postal code shown) although the isolate form and the submissions list redirect them to the sign-in
+  page; `Rki1` generated a "Teilbefund" document there, which set the isolate to "Teilbefund". Confirmed on system
+  2026-11-08 (009 verification) for Meningococci: `Rki1` and `Admin1` open `/MeningoReport/Isolate/16` (HTTP 200, patient
+  initials and postal code shown) while `/MeningoIsolate/Edit/16` and `/MeningoPatientSending` redirect them to the
+  sign-in page; `Rki1` generated a "Fax - Teilbefund - v2.docx" document, which set MZ012/26 to "Teilbefund". Confirmed
+  on system 2026-11-08 (024 verification): `Rki1` and `Admin1` open `/RkiMatch` (HTTP 200, page "RKI Matching Daten"),
+  and an upload by `Rki1` was processed ("File Uploaded Successfully!!"). Confirmed on system 2026-11-08 (016
+  verification): `Rki1` and `Admin1` get HTTP 200 for the health-office list, create, edit, details and delete pages
+  (signed-out requests are redirected to the sign-in page); `Rki1`, who is offered no "Gesundheitsämter" entry, created a
+  record through the create page. The lookup action carries no role check either (reproduced at unit level; the
+  lookup itself was not sent because it asks the RKI tool). Observed again 2026-11-08 (021 verification): `Rki1` and
+  `Admin1` get HTTP 200 for `/RkiMatch`, `/HealthOffices` and `/HealthOffices/Create`, while the county and generated
+  pages and every laboratory address except the RKI exports (and the LGA export for `Rki1`) refuse them.
+- **SEC-005 – Anti-forgery token not verified on state-changing actions** (Bugfix; source: 021 Edge Cases
+  "consolidated"; 002 FR-021, 003 FR-023, 008 FR-015, 009 FR-016, 011, 013, 014, 015, 016, 019, 020, 022, 024): Not verified on the combined
+  submission create/edit saves, all exports (also any request method), both patient merges (a single request merges
+  without the confirmation page), restore links, the health-office lookup (which stores records), report-status
+  marking, the PubMLST and postal-code lookups, list data requests, the county upload, the RKI match import, and the
+  role page save. Confirmed on system 2026-10-30 (002 verification) for the combined Haemophilus submission create
+  save: a POST without token is stored. Confirmed on system 2026-10-30 (003 verification) for the combined
+  Meningococci submission create and edit saves. Confirmed on system 2026-11-08 (008 verification) for the
+  Haemophilus report-status marking: the report page itself posts only `id` and `preliminary` to
+  `/Report/ReportGenerated`, without token, and the status is stored. Confirmed on system 2026-11-08 (009
+  verification) for the Meningococci report-status marking: the page posts only `id` and `preliminary` to
+  `/MeningoReport/ReportGenerated/`, without token, and the status is stored. Confirmed on system 2026-11-08 (011
+  verification) for the exports: a GET with a date range returns the spreadsheet (e.g. the Haemophilus laboratory
+  export), and a POST of only the dates without token returns the Meningococci RKI file. Confirmed on system
+  2026-11-08 (013 verification) for both sender exports: a GET with a date range returns the Haemophilus sender file,
+  and a POST of only the dates without token returns the Meningococci sender file. Confirmed on system 2026-11-08 (022
+  verification) for both postal-code lookups: the forms post only `postalCode`/`placeName` and `postalCodePrefix`,
+  without token, and get the answer (HTTP 200). Reproduced at unit level 2026-11-08 (019 verification) for the PubMLST
+  lookup: the isolate form posts only `isolateReference` (request held in the browser), and the lookup action carries
+  no token check. Confirmed on system 2026-11-08 (024 verification) for the RKI match import: the upload form carries no
+  token, and every upload of the verification was processed. Confirmed on system 2026-11-08 (014 verification) for the
+  Haemophilus patient merge: a plain GET of `/PatientSending/MergePatient` with both numbers, `MainPatient` and
+  `Confirmation=true`, without token, merged the two patients at once and showed the success page. Confirmed on system
+  2026-11-08 (015 verification) for the Meningococci patient merge: the same GET of
+  `/MeningoPatientSending/MergePatient` merged at once ("Erfolgreich"). Reproduced at unit level 2026-11-08 (016
+  verification) for the health-office lookup: both report pages post only `postalCode` to `/Report/QueryHealthOffice/`
+  (request held in the browser), and the action is marked for POST without a token check; the create, edit and delete
+  forms of the health-office pages refuse a POST without token (HTTP 500). Confirmed on system 2026-11-08 (020
+  verification) for the restore links: sender and submission restores of both pathogens are plain GETs without token,
+  and an image element on another application page restored a deleted sender; the sender and submission delete
+  confirmations refuse a POST without token (HTTP 500 "The required anti-forgery form field
+  "__RequestVerificationToken" is not present."). Confirmed on system 2026-11-08 (021 verification) for the role page
+  save: a POST of only `Name` by `Admin1`, without token, stored the role "SV-021-Rolle-ohne-Token"; sign-in, sign-out
+  and the password change refuse a POST without token (HTTP 500, same message).
+- **SEC-006 – No lockout, delay, counting or logging of failed sign-ins; no audit of authentication events** (Bugfix;
+  source: 021 US1.6, Edge Cases "No audit of access"): Sign-ins, failures, registrations, role creations and password
+  changes are not logged (constitution: failures affecting authentication MUST be logged). Confirmed on system
+  2026-11-08 (021 verification): six wrong passwords in a row for `Rki1` were answered alike (about 0.85 s each,
+  "Ungültiger Benutzername oder Passwort."), the seventh attempt with the correct password signed in, `AccessFailedCount`
+  stayed 0 with lockout disabled for every account, and the day's log file got no line for any sign-in, failure,
+  sign-out or role creation (only unhandled errors were logged).
+- **SEC-007 – One secret for registration and the EpiScanGIS export, carried in the URL** (Bugfix; source: 021 US7.1–7.2,
+  023): The token appears in web-server logs; the export is an anonymous GET. Not verifiable in the 023 verification
+  (2026-11-08): the host keeps no web-server request log; the anonymous GET is test-asserted
+  (`Index_AdmitsAnonymousGetWithoutRoleOrAntiForgeryCheck`). Reproduced at unit level 2026-11-08 (021 verification):
+  the registration form (`AccountControllerTests.Register_WithConfiguredToken_ShowsFormWithAllStoredRoles`) and the
+  EpiScanGIS export (`EpiscanGisExportControllerTests`) both open with the value of the one setting `RegistrationToken`,
+  passed as the query value `token`; the server log part stays not verifiable.
+- **SEC-008 – Unescaped external data rendered as markup** (Bugfix; source: 016 Edge Cases, 022 Edge Cases; 008
+  FR-006; 009 FR-008): Health-office address/phone/fax/email (from the RKI website or local edits) on the report page, and Geonames
+  place names in the postal-code suggestion list. Confirmed on system 2026-11-08 (008 verification, with a synthetic
+  lookup answer injected in the browser because the RKI call is blocked): an address containing `<b>…</b>` is rendered
+  bold on the Haemophilus report page. Confirmed on system 2026-11-08 (009 verification, synthetic answer as above) for
+  the Meningococci report page. Confirmed on system 2026-11-08 (022 verification, synthetic suggestion answer injected
+  in the browser): "Sankt Peter's Ort" is offered as "12371 Sankt Peter", and text after an apostrophe adds an
+  attribute to the suggestion and a `<b>` element to the page. Observed 2026-11-08 (016 verification): local edits
+  cannot carry markup into the report box; the health-office create and edit forms refuse values with tags through the
+  framework's request validation (HTTP 500, input lost), so only RKI answers reach the page unescaped.
+- **SEC-009 – Geonames called over plain HTTP** (Bugfix; source: 022 Edge Cases): Account name and typed patient/sender
+  postal codes travel unencrypted (Principle IV).
+- **SEC-010 – Rendering libraries from public CDNs on every page, two without integrity check** (Refactoring; source:
+  010 Edge Cases). Confirmed on system 2026-11-08 (010 verification): the sender list loads docxtemplater and
+  FileSaver from cdnjs (with integrity) and `pizzip.js` / `pizzip-utils.js` from unpkg (without integrity).
+- **SEC-011 – Internal helper actions reachable by URL** (Refactoring; source: 021 Edge Cases, 022): Create patient,
+  create sending, assign stem/laboratory numbers (Standard User), country list (any signed-in account) act without
+  form, token or duplicate check. Observed 2026-11-08 (021 verification): `/Patient/CreatePatient`,
+  `/Sending/AssignStemAndLaboratoryNumber/1` and `/MeningoSending/CreateSendingAndAssignStemAndLaboratoryNumber`
+  redirect `Admin1` and `Rki1` to the sign-in page; they were not called as Standard User, because each call changes
+  data.
+- **SEC-012 – Temporary export/import files are never deleted** (Bugfix; source: 011, 013 Edge Cases, 023, 024, 025):
+  Every spreadsheet export, the EpiScanGIS export, the RKI match upload and the county upload leave files in the
+  server's temp directory; exports and the RKI match file contain patient data (Principle IV). Confirmed on system
+  2026-11-08 (011 verification): every export run of the verification left one `tmp*.tmp` file in the temp directory
+  of the account running IIS Express, a spreadsheet of the same size as the downloaded file (e.g. 5318 bytes for the
+  Haemophilus laboratory export of 2024), still present after the download. Confirmed on system 2026-11-08 (013
+  verification) for both sender exports: each of the nine runs left a `tmp*.tmp` spreadsheet of the downloaded file's
+  size (e.g. 2394 bytes for the Haemophilus sender export of 2022). EpiScanGIS (023 verification, 2026-11-08): a
+  successful run deletes its temporary file (unit test `Download_SavesNothingAndLeavesNoTemporaryFile`); an aborted run
+  (network failure, non-JSON answer, submission without isolate) leaves an empty `tmp*.tmp` file (reproduced at unit
+  level). Confirmed on system 2026-11-08 (024 verification) for the RKI match upload: each of the 18 non-empty uploads
+  left a `tmp*.tmp` copy of the uploaded file (same size, synthetic content) in the temp directory of the account
+  running IIS Express; a zero-length upload and a request above the size limit left none. Confirmed on system
+  2026-11-08 (025 verification) for the county upload: each of the five non-empty uploads (a CSV file, a valid
+  GV100AD-shaped file twice, two failing files) left a `tmp*.tmp` copy of the uploaded file of the same size (62, 1412,
+  1412, 235 and 402 bytes, synthetic content), also after a failed import; the zero-length upload left none.
+- **SEC-013 – Combined submission form binds every patient and sending property** (Bugfix; source: 002 FR-021; 003
+  FR-023): Create and edit have no list of intended fields. Confirmed on system 2026-10-30 (002 verification): a create
+  request with `Sending.Deleted=true` stores the new submission as deleted. Confirmed on system 2026-10-30 (003
+  verification) for Meningococci submissions. From code: on edit, the posted patient and submission
+  numbers decide which records are overwritten, so one request can change another patient. The sender pages already
+  restrict binding (001 FR-017).
+- **SEC-014 – Isolate edit binds every isolate property** (Bugfix; source: 004 FR-018, 005 FR-023): The save has no
+  list of intended fields; the anti-forgery token, which 004 FR-018 used to describe as protection against
+  over-posting, does not limit them. Confirmed on system 2026-11-04 (004 verification): a request with
+  `ReportStatus=Final` stores the status, and a request with another `IsolateId` overwrites that isolate. Same pattern
+  as SEC-013. Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates: `ReportStatus=Final` stored,
+  and a request from one isolate's form with another `MeningoIsolateId` (and that isolate's laboratory number)
+  overwrote the other isolate.
+- **SEC-015 – Refused EpiScanGIS token distinguishable from an unknown address** (Bugfix; source: 023 US1.2):
+  A missing or wrong token gets HTTP 404 with the web server's "HTTP Error 404.0 - Not Found" page, an unknown
+  address HTTP 404 with the framework's "Die Ressource kann nicht gefunden werden." page, so the refusal shows
+  that the export address exists. Observed on system 2026-11-08 (023 verification) for `/EpiscanGisExport`
+  without token, with an empty and with a wrong token, anonymous and as `Standard1`, `Admin1`, `Rki1` and
+  `Labor1`, against `/SV023DoesNotExist` and `/EpiscanGisExport/SV023Nothing`.
+
+## DATA — Data correctness and privacy
+
+- **DATA-001 – Duplicate-submission window compares only the month component** (Bugfix after DEC-009; source: 012
+  Edge Cases, FR-006). Confirmed on system 2026-11-08 (012 verification): of four identical-strain submissions of
+  one patient, the one received 10 days after the first was dropped, the one received 3 months and 5 days later was
+  kept (the documented six-month rule would drop it); the whole-year case was not exercised.
+- **DATA-002 – Duplicate matching over-merges patients without birth date and postal code** (Bugfix; source: 012 Edge
+  Cases): Same initials and gender with both identifiers empty are one patient; the four values are concatenated
+  without separator (collision risk). Confirmed on system 2026-11-08 (012 verification): two separate patient
+  records "Q.Q." (same gender, no birth date, no postal code) with identical strains received 7 days apart; the
+  second submission was missing from the adjusted RKI and PubMLST files.
+- **DATA-003 – PubMLST export compares stem numbers as text** (Bugfix; source: 012 Edge Cases): "H1000" sorts before
+  "H999", so the "earlier" submission is chosen by text order; RKI compares numerically. Confirmed on system
+  2026-11-08 (012 verification): for four identical-strain submissions H9998, H9999, H10000, H10001 of one patient
+  the adjusted RKI file kept 9998 and 10000, the adjusted PubMLST file kept only H10000 (H10000 was taken as the
+  earliest and H9998/H9999, received three months before it, were dropped).
+- **DATA-004 – PubMLST export selection and encoding defects** (Bugfix; source: 011 Edge Cases, 012): Hint promises
+  overseas data and all locations in unadjusted mode but both are always excluded; overseas check uses the free-text
+  county ("Ausland") instead of the state; state "Ausland" yields region `blood`; H. haemolyticus is exported
+  although marked "not to be exported"; the adjusted-mode removal of non-invasive rows is a no-op. Confirmed on
+  system 2026-11-08 (012 verification) for the no-op: an "Anderer nicht invasiv" submission is in the laboratory
+  export and missing from the PubMLST file in both modes. Confirmed on system 2026-11-08 (011 verification): the
+  "Ja" and "Nein" files of 2024 have the same five rows, without the "Ausland"-county and the non-invasive submission
+  the hint promises; a patient with state "Ausland" and county "Paris" is exported with region `blood`; an isolate
+  evaluated "H. haemolyticus" is exported with serotype "Haemophilus Hemolyticus".
+- **DATA-005 – Unknown birth date exported as age 0** (Bugfix; source: 011 Edge Cases, 023): Indistinguishable from an
+  infant under one month in PubMLST, IRIS and EpiScanGIS. Confirmed on system 2026-11-08 (011 verification): a
+  Haemophilus patient without birth date has `age_yr` 0 and `age_mth` 0 in the PubMLST file, a Meningococci patient
+  without birth date 0 years and 0 months in the IRIS file. Reproduced at unit level 2026-11-08 (023 verification; the
+  controller run with stubbed data in uncommitted tests, because a run on the system needs the secret token): a
+  Meningococci patient without birth date gets age `0` in the EpiScanGIS line.
+- **DATA-006 – "Gelöschte Einsendungen (Haemophilus)" lists active submissions** (Bugfix; source: 020 US2, Edge Cases
+  "Inverted selection"; 002/003 Assumptions): Inverted by the 2018 generics restructuring (commit `e8aac1d`); no page
+  lists deleted submissions, restore works only by direct address. Confirmed on system 2026-10-30 (002
+  verification). Confirmed on system 2026-11-08 (020 verification): the page lists all 17 active Haemophilus
+  submissions and not the own submission soft-deleted through "Löschen bestätigen"; neither it nor the overview search
+  finds the deleted one.
+- **DATA-007 – Saving the edit page of a deleted submission or sender silently restores it** (Bugfix; source: 020
+  US3.3–3.4; 001 Edge Cases; 002 Edge Cases; 003 Edge Cases). Confirmed on system 2026-10-30 (001 verification) for
+  senders. Confirmed on system 2026-10-30 (002 verification) for Haemophilus submissions. Confirmed on system
+  2026-10-30 (003 verification) for Meningococci submissions.
+- **DATA-008 – Restore is a plain link without confirmation; unknown id ends on the error page** (Bugfix; source: 020
+  US3.5, US5.4; 002 Edge Cases; 003 Edge Cases). Confirmed on system 2026-10-30 (002 verification):
+  `/PatientSending/Undelete/<id>` restores on a plain GET; an unknown or missing id ends in HTTP 500 (null reference).
+  Confirmed on system 2026-10-30 (003 verification) for `/MeningoPatientSending/Undelete/<id>`. Confirmed on system
+  2026-11-08 (020 verification): plain GETs of `/PatientSending/Undelete/<id>`, `/MeningoPatientSending/Undelete/<id>`
+  and `/Sender/Undelete/<id>` restore without confirmation; an image element added to another page of the application
+  restored a deleted sender with the signed-in Standard User's cookie; missing or unknown submission numbers end in
+  HTTP 500 (null reference), while the sender restore answers 400 and 404.
+- **DATA-009 – Patient merge: soft-deleted submissions, latent data mix-up, no audit** (Bugfix; source: 014/015 Edge
+  Cases, FR-011/FR-014): Soft-deleted submissions of the patient to delete make the save fail (or are dropped silently
+  without isolate); Patient 1's number is placed in Patient 2's slot of the confirmation data (masked today); no log,
+  history or undo for a permanent patient deletion (Principle I); the request page shows the validation message on
+  first open; the Meningococci sampling-before-birth rule is not re-checked. Confirmed on system 2026-11-08 (014
+  verification) for the Haemophilus merge: with a soft-deleted submission on the patient to delete, the confirmation
+  ends in HTTP 500 (reference conflict `FK_dbo.Isolates_dbo.Sendings_SendingId`) and nothing is changed; the request
+  page opened from the menu shows "Bitte geben Sie zum Zusammenfügen zwei verschiedenen Patientennummern ein" with
+  `0`/`0`; successful merges leave no log line and no history (the catalog has no audit table). The number mix-up is
+  masked on the system (the hidden "Patienten-Nr. 2" field carries the submitted number) and reproduced at unit level
+  2026-11-08 (014 verification): the confirmation data carries Patient 1's number as Patient 2's. Confirmed on system
+  2026-11-08 (015 verification) for the Meningococci merge: with a soft-deleted submission on the patient to delete,
+  the confirmation ends in HTTP 500 (reference conflict `FK_dbo.MeningoIsolates_dbo.MeningoSendings_MeningoSendingId`)
+  and nothing is changed; the request page shows the message with `0`/`0` on first open; three successful merges left
+  no log line; a moved submission sampled before the kept patient's birth date was accepted, its next edit save failed
+  with "Das Entnahmedatum muss nach dem Geburtsdatum des Patienten liegen", and "Patientenalter bei Entnahme" became
+  "-4" on the isolate page and in the Laboratory export. The number mix-up is masked on the system and reproduced at
+  unit level 2026-11-08 (015 verification) with the Meningococci controller.
+- **DATA-010 – Haemophilus merge pages link to the Meningococci pages** (Bugfix; source: 014 US3, FR-013): "Abbrechen"
+  and "Zurück zur Übersicht" are copy-paste leftovers. Confirmed on system 2026-11-08 (014 verification): "Abbrechen"
+  opens `/MeningoPatientSending/MergePatient` ("Patienten Zusammenfügen (Meningokokken)") and "Zurück zur Übersicht"
+  opens `/MeningoPatientSending`. The Meningococci pages are not affected: there the same targets are correct (015
+  verification, 2026-11-08).
+- **DATA-011 – Breakpoint deletion cascades to all E-Test measurements** (Bugfix; source: 017 US4.3, FR-014): No
+  warning, audit or undo; the page is reachable by direct address only (Principle I). Confirmed on system 2026-11-08
+  (017 verification): deleting an own Ceftriaxon breakpoint used by a Meningococci isolate removed both of its E-Test
+  rows, the current one and the one an earlier isolate save had left without isolate (DATA-033); the measurement
+  against a seeded breakpoint stayed. The delete page shows no count, the report data lost the Ceftriaxon line, and the
+  application log got no line.
+- **DATA-012 – Editing a breakpoint in use changes historical report output** (Bugfix; source: 017 US3.4, Edge Cases):
+  Reports show new thresholds and year next to the unchanged stored result. Confirmed on system 2026-11-08 (017
+  verification): a Meningococci measurement 0,25 stored as "sensibel" against "Sensibel <= 0,25", "Resistent > 0,5",
+  "Gültig ab" 2025; after the record was edited to 0,064 / 0,125 / 01.01.2026, the report data show "sensibel" with
+  0,064, 0,125 and 2026 (the new values would give "resistent"). The isolate form shows the stored "sensibel" next to
+  the edited record and saving it unchanged stores "sensibel" again (no derivation on the server, DATA-035). An
+  edited antibiotic moves the measurement to the new antibiotic on the isolate form and in the report data.
+- **DATA-013 – Breakpoint validation gaps** (Bugfix; source: 017 Edge Cases): No check that "Sensibel <=" is at most
+  "Resistent >" (reversed thresholds classify everything above resistant and nothing intermediate); duplicate
+  combinations are rejected only by the database (generic error page, input lost). Confirmed on system 2026-11-08 (017
+  verification): a Chloramphenicol record with "Sensibel <= 1" and "Resistent > 0,25" was stored; the isolate form
+  classifies 0,5 and 1 as "resistent", 0,25 and below as "sensibel", nothing as "intermediär". Duplicates on create
+  (dated and "ohne Grenzwerte") and on edit end in HTTP 500 with the database message "Cannot insert duplicate key row
+  … 'IX_EucastClinicalBreakpointVersionAntibioticDetails'"; the same combination for the other pathogen is accepted.
+- **DATA-014 – Health-office records created for postal codes unknown to the RKI website are never shown** (Bugfix;
+  source: 016 US3.2, Edge Cases): Matching uses only the address the website returns; the create page is unlinked.
+  Reproduced at unit level 2026-11-08 (016 verification, real RKI client with stubbed answers): a stored record for a
+  postal code the website does not know is not returned for that postal code, and a stored record with the queried
+  postal code but another address is ignored while a new record is stored from the website values. On the system the
+  create page stored such records (`SV-016-…`, also by `Rki1`), and the list shows no create link.
+- **DATA-015 – Locally cleared health-office fields break the report page** (Bugfix; source: 016 Edge Cases; 008
+  FR-006; 009 FR-008): An empty telephone stops the page script; cleared email/fax display as "null". Confirmed on system
+  2026-11-08 (008 verification, synthetic lookup answers injected in the browser): without telephone only the address
+  appears, fax and email stay empty, "Gesundheitsamt bearbeiten" stays inactive and the browser reports "Cannot read
+  properties of null (reading 'replace')"; without fax and email both show "null" (fax linked to `mailto:-@fax`).
+  Document generation still works. Confirmed on system 2026-11-08 (009 verification, same synthetic answers) for the
+  Meningococci report page, with the same messages. Confirmed on system 2026-11-08 (016 verification): clearing
+  telephone, fax and email on the edit page saves the record with these fields without a value; fed with the same
+  values in the browser, the report page shows "null" for email and fax (fax linked to `mailto:-@fax`), and with the
+  telephone also cleared it shows only the address, keeps "Gesundheitsamt bearbeiten" inactive and reports the same
+  browser error.
+- **DATA-016 – PubMLST batch matching defects** (Bugfix; source: 019 Edge Cases): Includes isolates of deleted
+  sendings; batch asks public then IRIS while the single lookup asks IRIS then public (different records possible);
+  local record found by PubMLST id only, ignoring the database (cross-database overwrite, database name not updated);
+  unhandled remote errors abort the run and leave partial saves; a duplicate locus would crash the run; each matched
+  isolate is written back in full (overwrites concurrent edits); "Failed to match isolate by reference" is logged for
+  every isolate including successes. Reproduced at unit level 2026-11-08 (019 verification; the real matcher and
+  clients with stubbed remote answers, in uncommitted tests, because a run on the system would call PubMLST): an
+  isolate of a deleted sending is matched; the production wiring asks the public database first in the batch and IRIS
+  first in the lookup; an IRIS record with the id of a stored public record overwrites its values and keeps
+  "pubmlst_neisseria_isolates"; a "not found" status of the search, a connection failure, an IRIS answer to rejected
+  credentials and a duplicate locus each end the run with an exception after earlier isolates were saved; the error
+  entry is written for a successful match. Without the IRIS settings every individual lookup fails before any request,
+  so the public database is never asked. The concurrent-edit overwrite was not reproduced.
+- **DATA-017 – Haemophilus interpretation text contains the typo "phänotpischen"** (Bugfix; source: 006 FR-006,
+  test-asserted — the test must change too). Confirmed on system 2026-11-08 (006 verification): the report page shows
+  "Die Ergebnisse sprechen für einen phänotpischen nicht-typisierbaren Haemophilus influenzae (NTHi). …".
+- **DATA-018 – Meningococci interpretation rules without sequencing comment / shadowed rules** (Bugfix after DEC-005;
+  source: 007 Edge Cases): Rules 11, 14, 41; native 30a/30b unreachable; rule 09's cnl case shadowed by rule 20.
+  Confirmed on system 2026-11-08 (007 verification): a non-invasive cultured isolate matching rule 41 and then rule 11
+  showed PorA and FetA sequence rows on the report page without a comment.
+- **DATA-019 – Export spreadsheet write failure delivers a partial file silently** (Bugfix; source: 011, 013 Edge
+  Cases): Failure is only traced; the user downloads the empty/partial temp file.
+- **DATA-020 – EpiScanGIS export defects** (Bugfix after DEC-008; source: 023 Edge Cases): Blut/Liquor-only selection;
+  asymmetric date boundary at 2019-10-01; any lookup failure other than "not found" aborts the whole run; cases whose
+  "Wohnort" differs from the Geonames place name (or is "Unbekannt") are dropped without notice (also 022 US4.2);
+  values written unescaped without header. Reproduced at unit level 2026-11-08 (023 verification; the controller run
+  with stubbed data in uncommitted tests, because a run on the system needs the secret token): "Blut und Liquor",
+  "Gelenkspunktat", "Petechien", "Pleurapunktat", "Serum" and "Anderer invasiv" left out; boundary as in DEC-008; a
+  network failure (or a non-JSON answer) on the third lookup ends the run with an exception and no file; "Wohnort"
+  "Graefenhainichen" (service: "Gräfenhainichen") and "Unbekannt" left out; a PorA VR1 "22;…" adds a column and a line
+  break in FetA VR adds a line. See also DATA-041.
+- **DATA-021 – RKI match import skips rows without `klhi_nr`** (Bugfix; source: 024 US3.1): The laboratory-number
+  fallback is reached only via a stem-number row; "Upload" without a file ends in an object-reference message. Confirmed
+  on system 2026-11-08 (024 verification): a row with `LaufendeNummer`/`Jahr` of an existing submission and an empty
+  `klhi_nr` created no record; "Upload" without a file shows "File upload failed: Der Objektverweis wurde nicht auf eine
+  Objektinstanz festgelegt." (the framework message in the server's language).
+- **DATA-022 – Postal-code lookup overwrites a foreign residence** (Bugfix; source: 022 Edge Cases): Typing a postal code
+  resets "Bundesland" away from "Ausland" and overwrites "Wohnort"/"Landkreis"; the Meningococci state/country check
+  then rejects the save. Confirmed on system 2026-11-08 (022 verification): on the Meningococci submission form with
+  "Ausland" and "Österreich", typing "A-1010" set "Wohnort" and "Landkreis" to "Unbekannt" and "Bundesland" to
+  "n.n."; "Land" stayed "Österreich" (the save itself was not attempted).
+- **DATA-023 – Postal-code suggestion script expects `postalCodes`, server fallback returns `postalcodes`** (Bugfix;
+  source: 022 Edge Cases): Suggestions vanish with a browser script error; the empty-result and "error" checks never
+  apply. Confirmed on system 2026-11-08 (022 verification, answers injected in the browser; the server side reproduced
+  at unit level): the fallback `{"postalcodes":[]}` and a service status message both empty the suggestion list with
+  "Cannot read properties of undefined (reading 'length')". Live empty results of the service (`{"postalCodes":[]}`,
+  e.g. for "00000") are handled without error.
+- **DATA-024 – Report template failures and empty-list label** (Bugfix; source: 010 Edge Cases; 008 Edge Cases; 009 Edge Cases): Template
+  retrieval or filling failures show no user message; the "Keine Vorlagen hinterlegt" label is never shown (specs 008/009
+  aligned). Confirmed on system 2026-11-08 (008 verification): with the template download aborted in the browser,
+  "Befund erstellen" produced no document, no message and no status request; only a browser script error
+  ("InvalidStateError: Failed to read the 'responseText' property …") was raised. Confirmed on system 2026-11-08 (009
+  verification) for the Meningococci report page: the same outcome with the download of a `ReportTemplates/Meningo/`
+  template aborted. Confirmed on system 2026-11-08 (010 verification) for processing failures: a template file that is
+  not a zip raised "Can't find end of central directory : is this a zip file ?" without any console output from the
+  page code; a template with an unclosed loop tag logged "Unclosed loop" / "Multi error" to the console; an offered
+  folder entry answered HTTP 403. In every case no document, no message and no `ReportGenerated`; the isolate's report
+  status stayed unchanged. The empty-list label could not be reproduced on the system (it needs an empty template
+  folder).
+- **DATA-025 – County version choice ignores the submission date** (Bugfix; source: 011 Edge Cases, 025 Edge Cases):
+  When several stored county versions match, the earliest validity date wins regardless of sampling/receiving date;
+  because uploads only add records, a renumbered county keeps exporting its old number. Confirmed on system 2026-11-08
+  (011 verification): with two versions of one county ("09111" valid since 01.01.2000, "08222" valid since
+  01.01.2015), submissions sampled in 2024 got "09111" / "09" in the Haemophilus RKI, Meningococci RKI and LGA files.
+- **DATA-028 – County normalization collides "X, Stadt" with "Landkreis X"** (Bugfix; source: 025 Edge Cases): Both
+  normalize to "X", so a district patient can receive the city's county number (earliest validity or storage order
+  wins). Confirmed on system 2026-11-08 (025 verification): with the uploaded records "SV-025-Hof, Stadt" ("99464")
+  and "Landkreis SV-025-Hof" ("99475"), both valid since 31.01.2014 and stored in this order, patients with the county
+  text "Landkreis SV-025-Hof" got "99464" / "99" in the Haemophilus RKI, Meningococci RKI and LGA files of 2018.
+- **DATA-029 – A county record with empty name matches every patient without county text** (Bugfix; source: 025 Edge
+  Cases): Absent equals absent in the comparison; all three exports then assign its number and the Meningococci
+  exports log no warning. Confirmed on system 2026-11-08 (025 verification): after `/County/Create` stored a record
+  with number "99999" and an empty name (stored as NULL), the next Haemophilus RKI export of 2018 gave the patient
+  without county text "99999" / "99"; after the record was deleted, the row was empty again.
+- **DATA-043 – A county record without number breaks the exports** (Bugfix; source: 025 US1.6, Edge Cases): A
+  record saved on the county create or edit page with an empty "CountyNumber" is stored without a number (NULL); the
+  exports take the first two characters of the number without a null check, so a patient whose county text matches
+  such a record makes the export end in HTTP 500 ("Der Wert darf nicht NULL sein. Parametername: source") instead of
+  delivering empty numbers. Observed on system 2026-11-08 (025 verification) for the Haemophilus RKI export of 2018
+  (patient county "SV-025-OhneNummer"); the Meningococci RKI and LGA exports share the code (derived). Uploaded
+  records store a blank key as empty text and are not affected; deleting the record restores the export.
+- **DATA-044 – Meningococci rules do not cover a Biotyper identification** (Bugfix; source: 007 FR "Cultured-Isolate
+  Decision Table", Assumptions; analysis of PR #213 on 2026-11-16, derived from code): Every rule that reports
+  *N. meningitidis* requires MALDI-TOF "not determined" (both devices). The only rules that accept a determined
+  MALDI-TOF are 04, 05, 34 and NoNM_01, all "no *N. meningitidis* detected", and 04, 05 and 34 also require a negative
+  ONPG. A meningococcus identified by the Biotyper therefore matches no rule and is reported as "Diskrepante
+  Ergebnisse", which DATA-039 then exports to RKI and IRIS as a Meningococci case. PR #213 sets ONPG to "n.d." when the
+  Biotyper is used, so rules 04, 05 and 34 stop matching as well. The Haemophilus interpretation does not evaluate
+  oxidase, factor test or MALDI-TOF today and is not affected until PR #186. **Decided 2026-11-16**: fixed within
+  PR #213 with the owner's new Meningococci rules; tests prove that Biotyper isolates give no discrepant results in
+  either database (see Roadmap, step 2).
+- **DATA-026 – "Anzahl Einsendungen" written as text** (Bugfix; source: 013 Edge Cases): The generic spreadsheet writer
+  treats only certain numeric types as numbers. Confirmed on system 2026-11-08 (013 verification): both sender exports
+  write "Anzahl Einsendungen" as a text cell and "Einsendernummer" as a numeric cell.
+- **DATA-027 – Empty signer list is accepted and blocks all reporting** (Bugfix; source: 018 US1.5, Edge Cases, untagged
+  there): No warning on save; afterwards every report attempt fails the required-selection check. Confirmed on system
+  2026-11-08 (018 verification): saving an empty "Unterzeichner" field shows "Konfiguration gespeichert." and stores an
+  empty list; both report pages then offer only "Auswählen..." and answer "Befund erstellen" with "Bitte wählen Sie
+  eine Befundvorlage und einen Unterzeichner aus." although a template is chosen.
+- **DATA-030 – Server-side initials check accepts free text** (Bugfix; source: 002 FR-007, Edge Cases; 003 FR-007,
+  Edge Cases): The Haemophilus patient rule `([a-zA-ZäöüÄÖÜ]\.)+` and the Meningococci rule `([a-zA-ZäöüÄÖÜ\?]\.)+`
+  are not anchored, so any value containing one letter (or "?") followed by a dot passes; only the browser check
+  enforces the whole "E.M." form. Confirmed on system 2026-10-30 (002 verification): "Max M." sent past the browser
+  is stored as "MAX M.". Confirmed on system 2026-10-30 (003 verification) for Meningococci patients.
+- **DATA-031 – Duplicate-resolution choice skips the third-patient block** (Bugfix; source: 002 FR-011, Edge Cases;
+  003 FR-012, Edge Cases):
+  The "two patients already exist" check runs only when the request carries no duplicate-resolution choice.
+  Confirmed on system 2026-10-30 (002 verification): with "Neuen Patienten anlegen" posted, a third patient with the
+  same initials, birth date and postal code was stored; with "Bestehenden Patienten verwenden" the save ends in HTTP
+  500 ("Die Sequenz enthält mehr als ein Element."). Reachable through the UI when two pages sit at the duplicate
+  prompt for the same patient. Confirmed on system 2026-10-30 (003 verification) for Meningococci patients, with the
+  same two outcomes.
+- **DATA-032 – Server check of the isolate laboratory number is not anchored** (Bugfix; source: 004 FR-010, Edge
+  Cases; 005 FR-008, Edge Cases): The rule `\d+/\d\d` accepts any value that contains the pattern, and unparsable parts
+  become 0. The browser checks the whole value, so only a request that bypasses it gets through. Confirmed on system
+  2026-11-04 (004 verification): "abc12/345xyz" stored as 000/00 (year 2000), "12/345" as 012/345 (year 2345), "1/2/34"
+  as 001/02. The Meningococci validator has the same rule (from code). Confirmed on system 2026-11-08 (005
+  verification) for Meningococci isolates: "abc12/345xyz" stored as year 2000, number 0; "12/345" shown as 012/345;
+  "-5/26" stored with the sequential number -5 and then shown read-only as "NR005/26".
+- **DATA-033 – Every isolate save orphans the previous E-Test rows** (Bugfix; source: 004 Edge Cases, 005 Edge Cases):
+  Each save inserts all measurements as new rows and only clears the foreign key of the old ones. Confirmed on system
+  2026-11-04 (004 verification): re-saving an isolate with four measurements left four rows without isolate; at the
+  end of the verification 10 of 15 rows were orphaned. From code: no page or export reads them, and the mapping is
+  shared with the Meningococci isolate. Overlaps DATA-011. Confirmed on system 2026-11-08 (005 verification) for
+  Meningococci isolates: re-saving an isolate with three measurements unchanged left three rows without isolate.
+  Observed 2026-11-08 (017 verification): the orphaned rows keep their breakpoint reference, so deleting that
+  breakpoint (DATA-011) removes them too; orphans of other breakpoints stay.
+- **DATA-034 – Isolate form writes back a stale report status and date** (Bugfix; source: 004 FR-015, Edge Cases; 005
+  FR-018, Edge Cases; 008 Edge Cases; 009 Edge Cases): The form posts the report status it loaded and "Befund am". Confirmed on system 2026-11-04 (004 verification, with the
+  request the report page sends after generating a report): a form opened before that request set the isolate back to
+  "Kein Befund erstellt" and cleared the date on save. Reachable whenever the form stays open while a report is
+  generated. Saving a fresh form stored the date with the time 00:00. The Meningococci form carries the same hidden
+  status field (from code). Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates: a form opened
+  before the report request reset "Endbefund" to "Kein Befund erstellt" and cleared the date; a fresh form kept the
+  status and stored the date with the time 00:00. Confirmed on system 2026-11-08 (008 verification): an isolate form
+  opened while the isolate was "Teilbefund", saved after a final report had been generated from the report page, set
+  the isolate back to "Teilbefund" without report date. Confirmed on system 2026-11-08 (009 verification) with the
+  Meningococci report page: the form of MZ012/26 opened at "Teilbefund", a final report generated meanwhile (Endbefund
+  with date), then the form saved: back to "Teilbefund" without report date.
+- **DATA-035 – E-Test result is taken from the request unchecked** (Bugfix; source: 004 Edge Cases, Assumptions, SC-003;
+  005 FR-006, Edge Cases, SC-003): The derivation exists only in the page script. Confirmed on system 2026-11-04 (004 verification): 0,5 against a
+  breakpoint "Sensibel <= 0,5" stored as "resistent" when the request says so; an Ampicillin row accepted a Meningococci
+  breakpoint of another antibiotic (the row then shows as Rifampicin without a selectable breakpoint, and every save
+  fails with "'Breakpoint' darf nicht leer sein"); a measurement without a result ends in HTTP 500 ("Das Objekt mit
+  Nullwert muss einen Wert haben."). From code: the stored result reaches reports and exports (Principle I).
+  Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates: 0,064 against Cefotaxime "Sensibel <=
+  0,125" stored as "resistent"; a Benzylpenicillin row accepted the Haemophilus Ampicillin breakpoint (the row then
+  shows as "Ampicillin" without a selectable breakpoint, and every save fails with "'Breakpoint' darf nicht leer
+  sein"); a measurement without a result ends in HTTP 500.
+  **decided 2026-11-07** (owner): the server repeats the derivation on save and validates the E-Test input, for
+  Haemophilus and Meningococci isolates alike; the details belong in the change spec.
+- **DATA-036 – Every Meningococci isolate save without a current PubMLST match stores an empty PubMLST record**
+  (Bugfix; source: 005 US3.5, FR-021, Edge Cases, SC-005; 011 Edge Cases; 019 Edge Cases): The form always posts the PubMLST part, and the save assigns
+  it to the isolate; with PubMLST id 0 it becomes a new, empty local PubMLST record and the previously linked one
+  stays behind. Confirmed on system 2026-11-08 (005 verification): the first save of an isolate without lookup created
+  an empty record, each further save another one (about 20 empty records after the verification). After a lookup
+  that found nothing, saving an isolate that was linked to a matched record replaced that link with a new empty
+  record, so the match was lost without a message. Saving a matched isolate without a new lookup kept its link. From
+  code: the batch matching (019) and the exports read the linked record. Overlaps DATA-016. Confirmed on system
+  2026-11-08 (011 verification) in the exports: every isolate saved without lookup shows "PubMLST ID" 0 with empty
+  typing columns in the Meningococci laboratory and RKI files, while isolates without any linked record show "-".
+  Confirmed on system 2026-11-08 (019 verification): 40 of the 41 local PubMLST records in the catalog carry PubMLST
+  id 0, so the "one local record per PubMLST id" of 019 SC-003 does not hold for id 0.
+- **DATA-037 – Meningococci isolate form ignores a changed laboratory number** (Bugfix; source: 005 FR-003, FR-014, Edge
+  Cases): The form carries the laboratory number as a hidden field before the visible input, the request contains
+  both values, and the server binds the first one. Confirmed on system 2026-11-08 (005 verification): "007/26" entered
+  for MZ006/26 was posted as "006/26, 007/26" and the isolate kept 006/26 without a message; the laboratory-number
+  conflict of 005 FR-014 is therefore unreachable through the form. The Haemophilus form has no such hidden field (004).
+- **DATA-038 – Meningococci no-growth material change fires on the default values and is never undone** (Bugfix;
+  source: 005 FR-011, Edge Cases; 011 Edge Cases): Both growth fields default to "Nein", so saving a new isolate of a "Vitaler Stamm"
+  submission without entering growth sets the material to "Nicht angewachsen"; entering growth later does not set it
+  back. Confirmed on system 2026-11-08 (005 verification). From code: the material is exported (laboratory and IRIS
+  exports, 011) and shown on the submission form (003). Offen: should the material follow the growth fields in both directions, and
+  should "Nein" stay the default? Confirmed on system 2026-11-08 (011 verification): three "Vitaler Stamm"
+  submissions whose isolates were first saved with the defaults and later with "typisches Wachstum" are exported
+  with material "Nicht angewachsen" in the laboratory and IRIS files.
+- **DATA-039 – Unmatched Meningococci interpretation counts as "Meningococci found" in the RKI/IRIS selection**
+  (Bugfix; source: 007 Edge Cases, FR-011, FR-014; 011 FR-011): Without a matching rule the no-Meningococci flag stays
+  false, and the RKI and IRIS exports include every invasive submission whose flag is false, so submissions with
+  discrepant or not yet entered results are exported as Meningococci cases. Observed on system 2026-11-08 (007
+  verification): six invasive submissions without a rule (empty "Regel" in the laboratory export) appeared in the RKI
+  export for November 2026. Related: DEC-005 (rule 32). Offen: should unmatched results be excluded, flagged, or kept?
+  Confirmed on system 2026-11-08 (011 verification): three invasive submissions of 2024 without a rule (one with
+  the inputs of rule 08 except a negative FetA PCR, one with only growth and a negative oxidase, one of an "Ausland"
+  patient) are in the RKI, IRIS and LGA files; the same six November 2026 submissions as in 007 and the rule 32
+  submission are in all three files.
+- **DATA-040 – Editing a submission stores duplicate patient identities without a check** (Bugfix; source: 002
+  FR-015, 012 Edge Cases): Intake checks initials, birth date and postal code against existing patients and blocks a
+  third record (002 FR-011), but the edit save of a submission changes these values without any check. Observed on
+  system 2026-11-08 (012 verification): two "X.Y." patients created with other birth dates were edited to the birth
+  date of two existing "X.Y." patients, leaving four patient records with identical values; the exports group them
+  as one patient (012 FR-003). The intake rejects every further submission with these values ("Es existieren bereits
+  zwei Patienten …"; observed with two records, from code for any number above one). Related: DATA-031. The patient
+  merge (014) is the only way to consolidate such records; it compares no patient values either: a merge of two
+  patients with different initials, birth date, postal code and gender was accepted without notice (014 verification,
+  2026-11-08). The same holds for the Meningococci merge, which also discards the clinical information and risk
+  factors of the deleted record (015 verification, 2026-11-08).
+- **DATA-041 – EpiScanGIS export drops cases silently on a Geonames error answer** (Bugfix; source: 023 US6.3,
+  FR-011; related 022 Edge Cases "Service unavailable or failing"): The lookup treats only HTTP 404 as an error;
+  any other answer with a JSON body but no list of places (for example the service's account or quota message)
+  counts as "no place", so the case is left out without log entry and the file is delivered. An exhausted quota
+  therefore yields a file with fewer or no cases that looks like a normal run. Reproduced at unit level
+  2026-11-08 (023 verification): a status answer for every lookup gave an empty file for 10 qualifying cases.
+  Also affects the interactive lookup (022 FR-008, Edge Cases "Service unavailable or failing"): a status answer
+  makes the form write "Unbekannt"/"n.n." as for an unknown postal code, without notice. Reproduced at unit level
+  2026-11-08 (022 verification: the lookup returns the status with an empty place list) and shown in the browser with
+  that answer injected.
+- **DATA-042 – Failed postal-code lookup leaves the previous place next to a new postal code** (Bugfix; source: 022
+  Edge Cases "Service unavailable or failing"): A change of "Postleitzahl" to exactly five characters empties nothing
+  before the lookup; when the lookup then fails (network failure, non-JSON answer, HTTP 500), "Wohnort"/"Ort",
+  "Landkreis" and "Bundesland" keep the values of the previous postal code and are saved with the new one without
+  notice. Observed on system 2026-11-08 (022 verification, synthetic HTTP 500 injected in the browser): "91301" →
+  "97080" left "Forchheim", "Landkreis Forchheim", "Bayern".
+
+## UX — Robustness and user feedback
+
+- **UX-001 – Navigation shows functions the role cannot use** (Bugfix after DEC-001; source: see DEC-001): Also LGA
+  export hidden from Public Health (DEC-006).
+- **UX-002 – Refusal is shown as the sign-in page** (Refactoring; source: 021 Edge Cases): No "access denied" message;
+  signing in again leads to the same refusal. Confirmed on system 2026-11-08 (021 verification): `Rki1` opening
+  `/Sender` lands on `/Account/Login?ReturnUrl=%2FSender`, which shows its own navigation above the sign-in form, and
+  signing in again as `Rki1` leads to the same page. Refused background requests (header `X-Requested-With`) get HTTP
+  200 with an empty body and the header `X-Responded-JSON` `{"status":401,…}`, so the list script sees no refusal.
+- **UX-003 – Postal-code lookup: one request per keystroke, no debounce, race on answers, only "not found" handled**
+  (Refactoring; source: 022 Edge Cases): Quota use; last answer wins; other failures end in the generic server error;
+  log message with stray "$"; parameters not URL-encoded. Observed 2026-11-08 (022 verification): typing "913" sent
+  three suggestion requests, each five-character change two requests; network failures and non-JSON answers end in
+  an exception (HTTP 500) and "&"/"#" in the typed content are inserted unencoded (reproduced at unit level); JSON
+  status answers are not failures but "no place" (DATA-041). See DATA-042.
+- **UX-004 – Template discovery accepts lock/temp `.docx` files, applies no sort, matches the preliminary marker on
+  the whole path** (Refactoring; source: 010 Edge Cases). Confirmed on system 2026-11-08 (010 verification): a
+  temporary `~$SV-010-Lock.docx` placed in `ReportTemplates/` was offered at once; a folder named `SV-010-Ordner.docx`
+  was offered as well (discovery lists file-system entries, not only files) and choosing it ended in HTTP 403 without
+  a message. The order was the file system's (case-insensitive alphabetical on the NTFS host, `~$…` last).
+- **UX-005 – Health-office list and hidden pages** (Refactoring; source: 016 US2.3, US3, Edge Cases): List shows no
+  address and only the first lookup's postal code; details/delete pages are untranslated and unlinked; the RKI website
+  is queried before local records on every lookup (unreachable website → nothing shown). Confirmed on system
+  2026-11-08 (016 verification): the list "Gesundheitsämter" shows "Postleitzahl", "Email", "Telefon", "Fax" and
+  "Bearbeiten" only, and its search does not find address words ("Teststadt" → "Keine Einträge vorhanden."); details,
+  delete and create are reachable only by address. Reproduced at unit level: a record stored by a lookup keeps the
+  postal code of the first lookup when a second postal code of the same office is looked up. Also observed: an empty
+  lookup answer (`null`) leaves the box empty without a message only because the report page script stops on it
+  ("Cannot read properties of null (reading 'error')"); the script's error branch never applies.
+- **UX-006 – RKI match import always reports "File Uploaded Successfully!!"** (Refactoring; source: 024 US1.5): Also
+  for zero matches or an empty file; failures never reach the application log. Observed on system 2026-11-08 (024
+  verification): the success line also for a header-only file, a file with unknown headers and a file whose rows match
+  nothing; failures (unknown status word, non-numeric cell, no file, request above the size limit) left no entry in the
+  application log; failure lines mix English library messages with German framework messages; the page sets no title
+  (browser tab "Haemophilus Web -").
+- **UX-007 – PubMLST matching form defaults to the current year, result table unsorted, no progress or cancel**
+  (Refactoring; source: 019 US1.2–1.3, Edge Cases): Exports default to the previous year. Confirmed on system
+  2026-11-08 (019 verification): "Start-Datum" 01.01.2026 and "Ende-Datum" 31.12.2026; after the click the button
+  reads "Abfrage läuft ..." and is disabled, with no progress or cancel. The result order was not observable (the
+  result page needs a run against PubMLST).
+- **UX-008 – Haemophilus submission list has no patient-number column or search** (Refactoring; source: 014 Edge Cases):
+  The Meningococci list offers both. Confirmed on system 2026-11-08 (014 verification): the list columns are
+  "Initialen", "Geburtsdatum", "Stammnummer", "Eingangsdatum", "Entnahmeort", "Invasiv", "Labor-Nr" and "Befund"; the
+  patient number is shown only on the isolate page ("Patienten-Nr.") and in the laboratory export.
+- **UX-009 – Breakpoint and health-office details/delete pages are untranslated generated pages** (Refactoring; source:
+  016, 017 Edge Cases): Internal identifiers shown in "Gültig für" and on details pages. Confirmed on system
+  2026-11-08 (016 verification) for the health-office pages: titles "Details" and "Delete", the class name
+  "HealthOffice" as heading, "Are you sure you want to delete this?", "Delete", "Edit" and "Back to List"; the field
+  labels are German ("Adresse", "Telefon", "Postleitzahl") except "Email" and "Fax".
+  Confirmed on system 2026-11-08 (017 verification) for the breakpoint pages: titles "Details" and "Delete", the class
+  name "EucastClinicalBreakpoint" as heading, "Are you sure you want to delete this?", "Delete", "Edit" and "Back to
+  List"; the field labels are German, the antibiotic is shown with its internal name ("Ceftriaxone"); "Gültig für" is
+  missing there and shows "Haemophilus", "Meningococci" or "None" in the list.
+- **UX-010 – Submission pages with missing or unknown id end in HTTP 500** (Bugfix; source: 002 Edge Cases; 003 Edge
+  Cases; 020 US3.5): `/PatientSending/Edit`, `/Delete` and `/Undelete` without id or with an unknown id fail with a null reference
+  instead of "bad request"/"not found" (the sender pages answer 400/404, 001 FR-018). Confirmed on system 2026-10-30
+  (002 verification). Confirmed on system 2026-10-30 (003 verification) for the same `/MeningoPatientSending`
+  addresses. Restore overlaps DATA-008. Confirmed on system 2026-11-08 (020 verification) for `/Undelete` of both
+  pathogens without id and with id 99999.
+- **UX-011 – Free E-Test row is rebuilt without an empty value and in the browser language** (Bugfix; source: 004 Edge
+  Cases, 005 Edge Cases): Confirmed on system 2026-11-04 (004 verification): after an antibiotic is selected, the
+  placeholder "MHK auswählen..." is posted as value, so saving without a measurement is blocked with "The Feld Messwert
+  muss eine Zahl enthalten." until the antibiotic is reset. In an English browser the scale reads "0.75": no result is
+  derived, no breakpoint is preselected and the value cannot be saved. The field messages are half translated ("The
+  Feld …"). Confirmed on system 2026-11-08 (005 verification) for Meningococci isolates (German browser; the English
+  case was not repeated).
+- **UX-012 – Agglutination discrepancy warning reacts only to changes of the evaluation** (Bugfix; source: 004 FR-008,
+  SC-005, Edge Cases): Confirmed on system 2026-11-04 (004 verification): after the agglutination changes, the old
+  warning stays although the evaluation now matches; a saved disagreement shows no warning on reopening. The warning
+  quotes the internal letter "B" where the form shows "b".
+- **UX-013 – PubMLST lookup without stem number asks the remote databases for "DE -"** (Bugfix; source: 005 US3.3; 019 Edge Cases): The
+  form checks only that the prefixed reference is not empty, but an isolate without stem number has the reference
+  "DE -". Confirmed on system 2026-11-08 (005 verification, request blocked in the browser): "Abfragen" posted
+  `isolateReference=DE -` to the lookup, which would ask IRIS and the public PubMLST database (019 US2), and showed
+  "Isolat wurde nicht gefunden" only after the request failed. Confirmed on system 2026-11-08 (019 verification,
+  request held in the browser): MZ002/26 without stem number posted `isolateReference=DE -`.
+- **UX-014 – Meningococci isolate form label and message slips** (Bugfix; source: 005 Edge Cases): Confirmed on system
+  2026-11-08 (005 verification): the PubMLST tab labels porB as "'porB"; the 16S rDNA percentage message is repeated
+  under PorA-VR2 whenever the PorA fields are shown (the field reuses the 16S message slot).
+- **UX-015 – Haemophilus reports print "≤--- µg/ml" for susceptibility results without breakpoints** (Bugfix; source:
+  010 Edge Cases; 017 FR-012): The resistance-profile templates wrap the breakpoint values in "≤… µg/ml" and
+  ">… µg/ml"; for an "ohne Grenzwerte" result the values are "---", so the report reads "≤--- µg/ml", ">--- µg/ml" and
+  "---" as year next to "0,5 µg/ml, n.d.". Confirmed on system 2026-11-08 (010 verification, Azithromycin on isolate
+  KL012/26, "BLNAS v10.docx"). Meningococci reports remove Azithromycin (009 FR-006).
+- **UX-016 – PubMLST matching runs with empty or unreadable dates without notice** (Bugfix; source: 019 Edge Cases
+  "Periods and bounds"): The form has no check and the action ignores the binding errors; an empty or unreadable date
+  becomes the earliest possible date. An empty "Start-Datum" therefore matches every isolate up to the end date, back
+  to the oldest record, against PubMLST in one request; an empty "Ende-Datum" matches nothing and reports "0".
+  Confirmed on system 2026-11-08 (019 verification, submission held and aborted in the browser): "", "abc" and an
+  empty end date are posted without a message. Reproduced at unit level 2026-11-08 (019 verification): the dates bind
+  to 0001-01-01 with an invalid model state, and the matcher then selects an isolate sampled in 1999.
+- **UX-017 – Failed PubMLST lookup leaves the link to the previous PubMLST entry enabled** (Bugfix; source: 019 US2.3;
+  005 US3.3): After "Isolat wurde nicht gefunden" the form empties the typing fields and the database and sets the
+  PubMLST id to 0, but the link keeps its text, target and enabled state. Confirmed on system 2026-11-08 (019
+  verification, answers simulated in the browser): on MZ003/26 with stored record 99001 ("PubMLST Eintrag"), and
+  after a successful simulated lookup on MZ001/26 ("PubMLST Eintrag anzeigen"), a failed lookup (HTTP 404 or
+  500) left the link pointing to `…db=pubmlst_neisseria_iris&id=…` of the earlier record.
+- **UX-018 – Patient merge fails with HTTP 500 when a patient has no gender** (Bugfix; source: 014 Edge Cases "Patient
+  without gender"; 015 Edge Cases "Patient without gender"): The confirmation summary formats the gender without a null check, so "Zusammenfügen vorbereiten"
+  with a patient record that has no gender (not enterable through the current intake form, possible for imported
+  records) ends in a null reference; such patients can be neither merged nor kept. Observed on system 2026-11-08 (014
+  verification): the seeded Haemophilus patient 1 (no gender) with patient 8 gave HTTP 500, nothing changed. The
+  summary is shared with the Meningococci merge (015). Confirmed on system 2026-11-08 (015 verification): the seeded
+  Meningococci patient 1 (no gender; all four seeded Meningococci patients lack one) with an own patient gave HTTP 500,
+  nothing changed.
+
+## REF — Refactoring and legacy debt
+
+- **REF-001 – Parallel Meningococci/Haemophilus domains and god-controllers** (Refactoring; source: constitution "Known
+  Architectural Constraints", cited by every spec): Business logic in controllers, manual wiring, duplicated
+  per-pathogen controllers and views. Umbrella item; the concrete duplications follow.
+- **REF-002 – Duplicated logic across pathogens** (Refactoring; source: 010, 014/015, 016, 017, 019): Report
+  selection/rendering script (`Views/Report/Isolate.cshtml` vs `Views/MeningoReport/Isolate.cshtml`); merge lookup and
+  reassign-and-delete; health-office lookup-and-match (report base vs edit-by-postal-code); antibiotic derivation and
+  E-Test interpretation script; the 17-field PubMLST update list (batch vs isolate save, marked TODO in code). The two
+  report scripts differ in the discrepancy check (`if (false)//… TODO` on the Meningococci page), the filename prefix,
+  the `ReportGenerated` address with its isolate id, and the isolate-edit link (010 verification, 2026-11-08). The
+  Haemophilus and Meningococci merge views differ only in the page title, so the Haemophilus copies keep the
+  Meningococci targets (DATA-010); the two `MergePatients` methods differ only in the patient key (014 verification,
+  2026-11-08; 015 verification, 2026-11-08: the three view pairs differ only in `ViewBag.Title`). The antibiotic
+  derivation exists as `AvailableAntibiotics` in `IsolateControllerBase` and in `IsolateViewModelMappingActionBase`
+  (marked "TODO Refactor copied code"), the `ETestChange` script in `Views/Isolate/Edit.cshtml` and
+  `Views/MeningoIsolate/Edit.cshtml` (017 verification, 2026-11-08).
+- **REF-003 – Services created inside controllers instead of injected** (Refactoring; source: 012, 016, 018, 019, 020,
+  022, 023, 024): DuplicatePatientResolver, RKI client, ConfigurationService (plus a static test hook), PubMLST
+  services and credentials, the restore path's separate sending controller, Geonames service (a controller
+  instantiating another controller for the country list), EpiScanGIS and RKI match logic entirely in controllers.
+  Confirmed 2026-11-08 (018 verification): `ConfigurationController` and `ReportControllerBase` create
+  `new ConfigurationService(db)`, and `IsolateViewModelMappingActionBase` creates its own database context unless the
+  static `DbForTest` is set.
+- **REF-004 – Report templates: includes with absolute developer paths, fax variants embedding base templates,
+  deprecated docxtemplater API, unused flattened typing values** (Refactoring; source: 010 Edge Cases). Confirmed
+  2026-11-08 (010 verification): all 26 templates carry `INCLUDETEXT` fields pointing to
+  `D:\Development\NRZMHiDB\HaemophilusWeb\ReportTemplates\…` (a path that does not exist even in the current
+  checkout), and the generated documents keep these fields; the 14 Haemophilus fax variants with a base template
+  include it, while the Meningococci fax variants include only the shared fragments; no template references a
+  `Typing-<Attribute>` value; the page calls `loadZip`/`setData`/`setOptions`, without a console warning.
+- **REF-005 – Export mechanism leftovers** (Refactoring; source: 011 Edge Cases, 013): Unnamed worksheet (shown as
+  "Table1", observed 2026-11-08 in the 011 verification); Meningococci
+  RKI model carries an ignored "unadjusted" field; PubMLST reuses the IRIS-named query (source TODO); sender export
+  matches the range twice with diverging deletion handling and loads unused patient data; no explicit row ordering.
+  013 verification 2026-11-08: the sender export files also show "Table1"; rows came in ascending sender number and
+  the numbers within a row in ascending submission order, which nothing in the code guarantees.
+- **REF-006 – Breakpoints maintained as unversioned runtime data** (Refactoring; source: 017 Edge Cases): Authoritative
+  reference data without review step, history or audit (Principle I). Confirmed on system 2026-11-08 (017
+  verification): `Standard1` created, edited (thresholds, "Gültig ab", antibiotic, "Gültig für") and deleted records in
+  use without a warning; the catalog keeps no previous values and has no history table.
+- **REF-007 – Health-office records saved without validation and then unsavable** (Refactoring; source: 016 Edge Cases):
+  Deliberate exception to Principle I that blocks the edit page until values are corrected. Observed 2026-11-08 (016
+  verification): the lookup stores website values through the save without validation (unit test with a stubbed RKI
+  answer), while the edit and create pages refuse a malformed telephone or fax only after the round trip ("Das Feld
+  Telefon enthält keine gültige Telefonnummer."; the browser checks email and postal code only).
+- **REF-008 – Sender model validated by DataAnnotations only; Meningococci sender controller exposes full CRUD without
+  navigation** (Refactoring; source: 001 Assumptions, Edge Cases, FR-007): The Meningococci CRUD addresses have no
+  views and end in HTTP 500 (confirmed on system 2026-10-30, 001 verification); its restore address would clear the
+  deleted mark before failing (from code, not exercised). The sender details page is unlinked, untranslated
+  scaffolding. Confirmed on system 2026-11-08 (020 verification): `/MeningoSender/Undelete/<id>` cleared the deleted
+  mark of an own sender (HTTP 302) and the redirect to `/MeningoSender` ended in HTTP 500 ("The view 'Index' or its
+  master was not found …"); `/MeningoSender/Deleted` ends in HTTP 500 as well.
+- **REF-009 – Postal-code lookup leftovers** (Refactoring; source: 022 Edge Cases, US3.3): `countries.json` snapshot from
+  2020 (code TODO to refresh); "Unbekannt" assigned twice; fields matched by id suffix; `LoadCountries` reachable by
+  URL returning a type name. Observed on system 2026-11-08 (022 verification): `Rki1` and `Admin1` get HTTP 200 with
+  the type name ``System.Collections.Generic.List`1[HaemophilusWeb.Models.Country]`` from `/Geonames/LoadCountries`.
+- **REF-010 – Deleted-records page loads all active submissions and looks up each isolate; skip-validation switch set
+  on the wrong data context** (Refactoring; source: 020 Edge Cases). Observed 2026-11-08 (020 verification): the page
+  is a client-side table with all 17 active submissions in the page source; `Views/PatientSending/Deleted.cshtml`
+  reads `item.Sending.Isolate` per row from the list built in `PatientSendingControllerBase.Deleted` (only the patient
+  is included), and `EditUnvalidated` switches off save validation on the controller's own context while the separately
+  created `SendingController` saves through its own `ApplicationDbContext`.
+- **REF-011 – Interpretation code smells** (Refactoring; source: 006 Key Entities/Assumptions, 007 Edge Cases, 007
+  FR-014): `[Obsolete]`-marked fields are the only ones used by the Haemophilus path; always-true guard in the
+  negative/negative branch; TODO to move interpretation into the shared base class; rule-order comment in
+  `StemRules.json` names the wrong rules; rule evaluation order relies on dictionary enumeration order; comment retention
+  on reused interpreter instances; the Meningococci laboratory export interprets each isolate three times per row (once
+  each for rule, flag and serogroup; 007 verification 2026-11-08).
+- **REF-012 – EpiScanGIS export internals** (Refactoring; source: 023 Edge Cases): "Most data" per patient decided by
+  line length; Geonames queried once per case before de-duplication; unbounded ever-growing window with no range
+  parameter; no application-log trace; temp-file round trip. Observed 2026-11-08 (023 verification, unit level): 10
+  lookups for 10 cases that yield 9 lines (two cases of one patient); a case with sampling date 2030-01-01 is exported.
+- **REF-013 – RKI match import internals** (Refactoring; source: 024 Edge Cases, US2.5, US3.7, US4.4): Lenient status
+  parsing (English names, numbers, word prefixes); soft-deleted submissions matched; stored state can only be raised;
+  process-wide CSV separator switched to ";" and left so; no import trace (Principle I); stale code comment. Observed on
+  system 2026-11-08 (024 verification): "Probable", "3" and "mög" are accepted as status; a soft-deleted submission
+  received a record; a lower state from a later upload left the stored record unchanged.
+- **REF-014 – Configuration saved as five separate writes without history or concurrency check** (Refactoring; source:
+  018 Edge Cases). Confirmed on system 2026-11-08 (018 verification): with the page open in two tabs, the second save
+  silently overwrote all values of the first, including a field changed only in the first tab; the catalog keeps only
+  key and value per setting (`ConfigurationEntries`), no history or audit table, and the application log has no entry
+  for a save. `ConfigurationService.Set` calls `SaveChanges` once per setting, so a save makes five separate writes.
+- **REF-015 – Role seeding code never called; role page save without anti-forgery or rules** (Refactoring; source: 021
+  Edge Cases). Confirmed 2026-11-08 (021 verification): `ApplicationDbContext.InitializeDatabase` (which calls
+  `SeedRoles`) has no caller; on the system, `Admin1` stored a role without token (SEC-005), and an empty name and the
+  existing name "RKI" ended in HTTP 500 ("Validation failed for one or more entities. …").
+- **REF-017 – County list maintained as unvalidated runtime data** (Refactoring; source: 025 Edge Cases): Any Standard
+  User creates, overwrites, hard-deletes or bulk-uploads counties without review, audit or recovery; the county number
+  is not validated (any text, first two characters become the state number); upload failures show untranslated
+  exception text and are not logged; the lookup plus first-two-characters rule is copied into three exports
+  (Principles I–III). Observed on system 2026-11-08 (025 verification): number "abc", number "1" and an empty number
+  were stored, records were overwritten and hard-deleted without trace, and failed uploads wrote nothing to the
+  application log. The lookup runs once per number column, so the Meningococci RKI and LGA exports write each
+  "County … not found for sending …" warning twice per row and run (observed in the 011 and 025 verifications).
+- **REF-016 – No audit trail for data-losing operations** (Refactoring; source: 014/015, 017, 020 Edge Cases, 024; 016
+  FR-014): Patient merges, breakpoint deletion, sender/submission delete and restore, RKI match import, health-office
+  deletion and edits (local corrections are overwritten without history). Cross-cutting consequence
+  of Principle I; overlaps DATA-009, DATA-011 and SEC-006. Confirmed on system 2026-11-08 (014 verification) for the
+  Haemophilus patient merge: two successful merges left no application log line, and the catalog has no audit or
+  history table; the moved submissions keep no reference to the deleted patient. Confirmed on system 2026-11-08 (015
+  verification) for the Meningococci patient merge: three successful merges left no log line; only the failed merge
+  appears as "Unhandled error". Confirmed on system 2026-11-08 (016 verification) for the health-office deletion: the
+  confirmed deletion left no log line and the record is gone from the catalog; only the confirmation for a record that
+  no longer exists appears, as "Unhandled error: Der Wert darf nicht NULL sein." (HTTP 500). Confirmed on system
+  2026-11-08 (017 verification) for the breakpoint deletion and edits: deleting a record in use (two E-Test rows
+  removed) and three successful edits left no application log line; only failures appear as "Unhandled error";
+  confirming the deletion of a record that no longer exists ends in HTTP 500 "Der Wert darf nicht NULL sein.".
+  Confirmed on system 2026-11-08 (020 verification) for sender and submission delete and restore: `Senders`, `Sendings`
+  and `MeningoSendings` carry only the `Deleted` flag (no date or user column), the catalog has no audit or history
+  table, and the application log got no line for nine sender deletions, three submission deletions, seven restore
+  requests and a permanent patient deletion through the generated patient delete page (REF-022).
+- **REF-018 – Automatic stem numbers implemented but never enabled** (Refactoring; source: 002 FR-003; 003 FR-003): The
+  sending controllers compute the next stem number, but the switch that enables it is `false` for every submission
+  type, so intake leaves the stem number empty and it is entered on the isolate page. Confirmed on system 2026-10-30
+  (002 and 003 verifications). Specs 002 and 003 described automatic stem numbers; both are corrected.
+- **REF-019 – E-Test row construction** (Refactoring; source: 004 FR-006, 005 US2.4): The final sort of the rows
+  discards its result, so empty standard rows keep the order of `PrimaryAntibiotics_Haemophilus` after the saved rows;
+  the row template emits its script once per row and hard-codes the free row; it repeats the scale selection in
+  JavaScript (marked TODO in code); the warning script sets an unused global `invalid`. The susceptibility derivation
+  lives in the page script, so no unit test reaches it (see also REF-002). Confirmed on system 2026-11-08 (005
+  verification) for Meningococci isolates: saved rows come sorted (Cefotaxim, Azithromycin, Penicillin), the empty
+  standard rows follow in the order of `PrimaryAntibiotics_Meningococci`, and the free row offers yet another order.
+- **REF-020 – api NH and MALDI-TOF (VITEK MS) have no entry path** (Refactoring; source: 004 FR-005, 005 FR-003): The
+  api NH entry was removed from the form, but its three fields stay on the model and in the laboratory export. VITEK is
+  read-only, yet its validation rules and hidden fields remain. Confirmed on system 2026-11-08 (005 verification) for
+  Meningococci isolates (no api NH there): VITEK shown read-only, posted back as hidden values; a request with
+  "Determined" and no details redisplays the form without a visible message. **decided 2026-11-07** (owner): the stored values are still
+  needed for old records and stay read-only. The Biotyper replaced the VITEK MS for MALDI-TOF from a cut-over date on. A
+  cleaner architecture for such legacy device data may follow later; until then this entry is a refactoring
+  candidate only.
+- **REF-021 – Meningococci report page leftovers** (Refactoring; source: 009 FR-008, FR-011): `Views/MeningoReport/Isolate.cshtml`
+  still contains the Haemophilus discrepancy dialog and its "Ja" handler, but the check that opens it is disabled
+  (`if (false)//… TODO`), so the dialog never appears (confirmed on system 2026-11-08, 009 verification: a discrepant
+  isolate's final report was generated without a dialog); the summary's `Interpretation` branch ("TODO remove soon") is
+  never taken because the Meningococci view model fills only `Report`; the page imports an unused namespace
+  (`DocumentFormat.OpenXml.EMMA`); the health-office lookup is posted to the Haemophilus report controller
+  (`/Report/QueryHealthOffice/`); the filename prefix is hard-coded ("TODO Replace MZ and KL with Database Prefix").
+  Overlaps REF-002.
+- **REF-022 – Generated patient and submission pages reachable by direct address** (Refactoring; source: 020 Edge
+  Cases "Soft delete is the only deletion"): The scaffolded `PatientController`, `MeningoPatientController`,
+  `SendingController` and `MeningoSendingController` pages are unlinked but open to the Standard User role. Observed on
+  system 2026-11-08 (020 verification): `/Patient` and `/MeningoPatient` ("Patienten"), `/Patient/Create` and
+  `/MeningoPatient/Create` ("Neuen Patienten anlegen") and the delete pages (heading "Delete", "Are you sure you want
+  to delete this?", English values "Male", "Unknown", "None", "NotStated", button "Delete") answer HTTP 200; a patient
+  created on the generated create page was deleted permanently through `/Patient/Delete/<id>` without log line, while
+  the same delete for a patient with a soft-deleted submission that has an isolate record ended in HTTP 500 ("The
+  DELETE statement conflicted with the REFERENCE constraint "FK_dbo.Isolates_dbo.Sendings_SendingId"…") and changed
+  nothing. `/Sending` and `/Sending/Details/<id>` show submissions (also deleted ones by id), `/Sending/Delete/<id>` and
+  `/MeningoSending/Delete/<id>` answer 404, and `/MeningoSending` ends in HTTP 500 because its view does not compile
+  ("'HaemophilusWeb.Models.Meningo.MeningoSamplingLocation' enthält keine Definition für 'Other'"). The combined
+  intake controllers use these controllers internally (restore path, REF-003), so only their pages are leftovers.
+  Overlaps REF-016 (permanent patient deletion without trace) and UX-009.
+
+## TEST — Test gaps
+
+- **TEST-001 – Untested functions** (Test; source: Assumptions/Edge Cases of 013, 014, 015, 016, 017, 018, 019, 020,
+  021, 022, 023, 024, 025): Sender export; both patient merges; health-office lookup, matching, storing and pages;
+  breakpoint validator and pages; configuration page; deleted-records pages and restore; registration, role checks and
+  navigation by role; browser behavior and both endpoints of the postal-code lookup; PubMLST update of an existing local
+  record, result page and matching page; EpiScanGIS date window, "Blut und Liquor" exclusion, deleted submissions,
+  missing coordinates and failures; RKI match controller, unknown status word, non-numeric cells, lab-number-only
+  rows, soft-deleted submissions, all-or-nothing; county pages and upload (025; the importer, matching and exports are
+  tested). Sender export: covered by tests added in the 013 verification (2026-11-08) for file name, column headers,
+  selection by sampling or receiving date and row content of non-deleted submissions; the counting of soft-deleted
+  submissions (DEC-002) stays untested on purpose. EpiScanGIS export: covered by tests added in the 023 verification
+  (2026-11-08) for the time window away from its boundary day, soft-deleted submissions, missing coordinates, a "not
+  found" lookup, file name and type, empty file, line order and temp-file cleanup; the "Blut und Liquor" exclusion, the
+  boundary day and the abort cases stay untested on purpose (DEC-008, DATA-020). PubMLST update of an existing local
+  record: covered by tests added in the 019 verification (2026-11-08), together with the period bounds, the save per
+  found isolate, the kept link of an isolate not found, the repeated search on a later run, the single IRIS session
+  and the lookup order of the controller; the result page and the matching page stay untested (their view is rendered
+  only after a run against PubMLST). RKI match import: covered by tests added in the 024 verification (2026-11-08) for
+  unknown status words in applied and skipped rows, the empty status, non-numeric cells, upper-case headers, a file
+  without byte order mark and with CR LF, an ambiguous lookup, the use of one transaction, a lower state against a
+  stored record, the export without record, and the page's success line for a zero-length file and its failure line;
+  lab-number-only rows (DATA-021), the upload without a file and soft-deleted submissions (REF-013) stay untested on
+  purpose; the rollback itself was observed on the system only. Haemophilus patient merge: covered by tests added in
+  the 014 verification (2026-11-08) for the equal-number rule, "Unbekannter Patient" for unknown numbers and numbers
+  with only soft-deleted submissions (also at confirmation), the confirmation data and the reassign-and-delete step
+  for both choices; the soft-deleted failure, the number mix-up and the missing audit (DATA-009) stay untested on
+  purpose. Meningococci patient merge: covered by tests added in the 015 verification (2026-11-08) for the
+  equal-number rule, "Unbekannter Patient" for unknown numbers, numbers with only soft-deleted submissions and
+  Haemophilus-only numbers, the confirmation data with the "MZ"/"DE" prefixes and the reassign-and-delete step for both
+  choices; the soft-deleted failure, the number mix-up, the missing audit, the sampling date not re-checked (DATA-009)
+  and the missing gender (UX-018) stay untested on purpose. Health-office lookup, matching, storing and pages: covered
+  by tests added in the 016 verification (2026-11-08) for storing an unknown office without validation, returning a
+  stored record with the same address (also with CR LF line breaks) without storing, one record for two postal codes
+  of the same office, a changed address and a deleted record, no office, failing query and unreadable page, the "not
+  found" answer of the edit page when the website returns no office, the "bad request" answers, and the email,
+  telephone and fax format rules; the edit page's matching branch (database created inside the controller) and the
+  views stay untested, and the first-lookup postal code (UX-005) and the unused own postal code (DATA-014) on purpose.
+  Breakpoint validator: covered by tests added in the 017 verification (2026-11-08) for the non-empty details, the
+  all-or-none rule with its message, the "ohne Grenzwerte" case, the length limits, the record label and the report
+  values of a measurement ("---" for "n.d."); the breakpoint pages stay untested (the controller creates its database
+  context itself), and the missing threshold check (DATA-013) and the thresholds taken from the current record
+  (DATA-012) on purpose. Configuration page: covered by tests added in the 018 verification (2026-11-08) for the
+  redirect of the area address, the loading of the stored values, the splitting and trimming of signers, contact
+  blocks, director names and announcement, the dates stored without text, the failed save that stores nothing, the
+  success message, the anti-forgery check, an unreadable stored value, the inclusive period days and the report data
+  of both pathogens; the empty signer list (DATA-027) and the role rule (DEC-001) stay untested on purpose, the
+  placeholder defaults because the seeding needs a real database context. Deleted-records pages and restore: covered
+  by tests added in the 001, 002, 003 and 020 verifications for the "Gelöschte Einsender" selection, deleting and
+  restoring senders and submissions of both pathogens, restoring an active sender or submission, the Meningococci
+  sender restore and the laboratory number that counts on after a deleted submission (020 verification, 2026-11-08);
+  the inverted selection of "Gelöschte Einsendungen (Haemophilus)" (DATA-006) and the error answers for missing or
+  unknown submission numbers (UX-010, DATA-008) stay untested on purpose. Registration, role checks and navigation by
+  role: covered by tests added in the 021 verification (2026-11-08) for the token check of the registration form, the
+  role choice, the successful registration (one role, sign-in as the new account), a rejected account, the account
+  rules, the password change and the role checks of the access matrix; the navigation by role (views) stays untested,
+  and the Administrator cells (DEC-001), the LGA export for Public Health (DEC-006) and the functions without role
+  check (SEC-004, SEC-011) on purpose. County pages and upload (025 verification, 2026-11-08): not covered; the
+  page controller creates its own database context, so the pages and the upload function cannot be unit-tested
+  without a database (verified in the browser instead). Tests added in the same verification cover the importer
+  (record-type filter, midnight validity, short line, invalid validity, file without county lines), further matching
+  cases (case, comma suffix, fill words, literal spelling, umlauts) and the state-number derivation; the empty-name
+  match (DATA-029) and the record without number (DATA-043) stay untested on purpose.
+- **TEST-002 – Misleading or weak existing tests** (Test; source: 011, 012, 022 Edge Cases, 006 and 007 verification): The PubMLST empty-query test
+  calls the Laboratory export; one duplicate-resolver test depends on the wall clock and the RKI-layout test checks only
+  column removal; the duplicate-window tests (0 days, exactly 6 months) pass under both readings of the rule;
+  "…MultipleMatches_ReturnsAllEntries" verifies that one entry is returned. 006 (verification 2026-11-08):
+  "Interpret_DistinctAgglutinationWithNotDeterminedBexA_NotDeterminedSerotype_NonInvasive_IsSpecificPreliminaryTypingWithEmptyDisclaimer"
+  asserts the non-invasive note, not an empty disclaimer; the negative/negative test checks only the fragment
+  "nicht-typisierbar" (the exact text is now asserted by an added test). 007 (verification 2026-11-08): most
+  rule-named tests in `Domain/MeningoIsolateInterpretationTests` do not assert the selected rule (e.g. the rule 32 test
+  checks the flag only through its list of no-Meningococci rules); the "30b" and "31b" test cases repeat the inputs of
+  "30a"/"31a" (the "30a"/"30b" cases select rule 01b); several tests draw inputs at random
+  (`GetRandomNegativeOrInhibitory` and similar), so each run checks a different combination. The added test
+  `Interpret_RepresentativeInput_SelectsDocumentedRule` asserts the rule identifier and typing order for every
+  reachable rule. 012 (verification 2026-11-08): tests with fixed dates added for the undisputed parts of the
+  duplicate rules (10 days dropped, 7 months kept, reference replacement, all four strain characteristics, case-
+  sensitive matching, group cells, unadjusted mode, empty selection) and one with the RKI layout; the disputed window
+  distances (DEC-009) and the export actions' mode choice stay untested, and the wall-clock test is unchanged.
+  011 (verification 2026-11-08): the column tests of all seven exports asserted only the column count; tests of the
+  exact header names and order were added, the PubMLST empty-query test still calls the Laboratory export, and the row
+  selection of the export actions (sampling locations, evaluations, "Ausland", interpretation) has no unit test.
+  Flaky: `Tools/HaemophilusPubMlstExportTests.DataTable_ContainsAntibioticMeasurements("CTX", Cefotaxime,
+  Susceptible, …)` failed once in the full suite (found "I") and passed on rerun; `Setup` adds a random E-test, and when
+  it has the same antibiotic it is found first.
+- **TEST-003 – Decision-table rows derived from code only** (Test; source: 006 Decision Table note): Haemophilus
+  interpretation rows 4 and 7 and the unmatched combinations have no test; the null-submission failure is untested.
+  Addressed 2026-11-08 (006 verification): `Domain/IsolateInterpretationTests` now asserts rows 4 and 7, the unmatched
+  combinations, the disclaimer for every negative-agglutination combination and sampling location, and the failure
+  without a submission.

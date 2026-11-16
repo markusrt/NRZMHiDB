@@ -152,3 +152,14 @@ $RECYCLE.BIN/
 HaemophilusWeb/logs/
 **/.vs
 HaemophilusWeb/Web.config
+
+# Screenshot / spec-verification harness (ScreenshotTests)
+ScreenshotTests/screenshots/current/
+ScreenshotTests/screenshots/baseline/
+ScreenshotTests/report/
+ScreenshotTests/*.log
+*.screenshotbak
+ScreenshotTests/host.ready
+ScreenshotTests/host.stop
+.playwright-mcp/
+specs/*/verification/

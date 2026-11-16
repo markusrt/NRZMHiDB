@@ -144,6 +144,153 @@ namespace HaemophilusWeb.Tools
         }
 
 
+        // specs/012 FR-010: identifier removal keeps the indirect patient attributes of the RKI layout.
+        [Test]
+        public void DataTable_KeepsIndirectPatientColumnsAfterCleanup()
+        {
+            var col = new RkiExportColumns();
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            new DuplicatePatientResolver(col).RemovePatientData(export);
+
+            var columns = export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).ToList();
+            columns.Should().NotContain(new[] {col.Initials, col.DateOfBirth, col.PostalCode});
+            columns.Should().Contain(new[]
+            {
+                col.BirthMonth, col.BirthYear, col.Sex, col.County, col.CountyNumber, col.State, col.StateNumber,
+                col.SenderId, col.DemisId, col.SampleDate, col.ReceivedDate
+            });
+        }
+
+        // specs/012 Edge Cases (empty-strain removal never takes effect): the RKI serotype/evaluation value is never
+        // empty, whatever the evaluation.
+        [Test]
+        public void DataTable_SerotypeIsNeverEmpty([Values] Evaluation evaluation)
+        {
+            Sending.Isolate.Evaluation = evaluation;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0][new RkiExportColumns().Serotype].ToString().Should().NotBeNullOrEmpty();
+        }
+
+        // specs/012 FR-006, Edge Cases (stem numbers compared as numbers in the RKI export), US1.6: with the RKI
+        // layout the stem numbers are ordered numerically (999 before 1000), the German receiving date is read, the
+        // identical strain received ten days later is dropped and the remaining two rows of the patient form a group.
+        [Test]
+        public void CleanOrMarkDuplicates_WithRkiLayout_KeepsLowerNumericStemNumberAndMarksGroup()
+        {
+            var first = CreateSendingOfSamePatient(1000, new DateTime(2020, 1, 15), Evaluation.HaemophilusTypeB);
+            var second = CreateSendingOfSamePatient(999, new DateTime(2020, 1, 5), Evaluation.HaemophilusTypeB);
+            var third = CreateSendingOfSamePatient(1001, new DateTime(2020, 1, 20), Evaluation.HaemophilusNonEncapsulated);
+            var col = new RkiExportColumns();
+            var export = CreateExportDefinition().ToDataTable(new List<Sending> {second, first, third});
+
+            new DuplicatePatientResolver(col).CleanOrMarkDuplicates(export);
+
+            export.Rows.Count.Should().Be(2);
+            export.Rows[0][col.StemNumber].Should().Be(999);
+            export.Rows[1][col.StemNumber].Should().Be(1001);
+            export.Rows[0][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 1");
+            export.Rows[1][DuplicatePatientResolver.ColDuplicateGroup].Should().Be("Group 1");
+            export.Columns.Contains(col.Initials).Should().BeFalse();
+        }
+
+        private Sending CreateSendingOfSamePatient(int stemNumber, DateTime receivingDate, Evaluation evaluation)
+        {
+            var sending = CreateInstance<Sending>();
+            sending.Patient = Sending.Patient;
+            sending.SamplingLocation = SamplingLocation.Blood;
+            sending.ReceivingDate = receivingDate;
+            sending.SamplingDate = receivingDate.AddDays(-2);
+            sending.Isolate.StemNumber = stemNumber;
+            sending.Isolate.Evaluation = evaluation;
+            sending.Isolate.BetaLactamase = TestResult.Negative;
+            sending.Isolate.EpsilometerTests.Clear();
+            return sending;
+        }
+
+        // specs/011 FR-004, FR-015, US2.4: header names and order of the Haemophilus RKI export as observed in the
+        // downloaded file (011 verification 2026-11-08); the three identifier columns come first and are removed before
+        // writing (FR-012).
+        [Test]
+        public void DataTable_ColumnHeadersAreInDocumentedOrder()
+        {
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).Should().Equal(
+                "initials", "date_of_birth", "postal_code",
+                "klhi_nr", "eing", "ent", "mat", "geb_monat", "geb_jahr", "geschlecht", "hib_impf", "styp", "b_lac",
+                "kreis_nr", "bundesland", "einsender", "landkreis", "bundeslandName", "ampicillinMHK",
+                "ampicillinBewertung", "amoxicillinClavulansaeureMHK", "bewertungAmoxicillinClavulansaeure",
+                "demis_id", "Real-Time-PCR", "Real-Time-PCR Gerät", "Real-Time-PCR Auswertung (RIDOM)");
+        }
+
+        // specs/011 Edge Cases (unknown birth date, missing sampling date, missing stem number): birth month and year 0,
+        // "keine Angabe" as sampling date and stem number -1.
+        [Test]
+        public void DataTable_WithoutBirthDateSamplingDateAndStemNumber_ExportsPlaceholders()
+        {
+            Sending.Patient.BirthDate = null;
+            Sending.SamplingDate = null;
+            Sending.Isolate.StemNumber = null;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["geb_monat"].Should().Be(0);
+            export.Rows[0]["geb_jahr"].Should().Be(0);
+            export.Rows[0]["ent"].Should().Be("keine Angabe");
+            export.Rows[0]["klhi_nr"].Should().Be(-1);
+        }
+
+        // specs/011 Edge Cases (gender initials): first letter of the German label, "?" without gender.
+        [TestCase(Gender.Male, "m")]
+        [TestCase(Gender.Female, "w")]
+        [TestCase(Gender.Intersex, "d")]
+        [TestCase(Gender.NotStated, "k")]
+        [TestCase(null, "?")]
+        public void DataTable_ExportsGenderInitial(Gender? gender, string expected)
+        {
+            Sending.Patient.Gender = gender;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["geschlecht"].Should().Be(expected);
+        }
+
+        // specs/011 FR-014: without a matching county both the county number and the state number are empty.
+        [Test]
+        public void DataTable_UnknownCounty_LeavesCountyAndStateNumbersEmpty()
+        {
+            Sending.Patient.County = "SV-011-Unknown";
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["kreis_nr"].Should().Be("");
+            export.Rows[0]["bundesland"].Should().Be("");
+            export.Rows[0]["landkreis"].Should().Be("SV-011-Unknown");
+        }
+
+        // specs/025 US1.6: the state number is the first two characters of the matched county number, whatever
+        // they are; a shorter number yields what there is and an empty text yields an empty state number
+        [TestCase("01001", "01")]
+        [TestCase("abc", "ab")]
+        [TestCase("1", "1")]
+        [TestCase("", "")]
+        public void DataTable_StateNumberIsFirstTwoCharactersOfCountyNumber(string countyNumber, string expected)
+        {
+            Counties.Clear();
+            Counties.Add(new County {CountyId = 1, CountyNumber = countyNumber, Name = "SV-025-Flensburg, Stadt"});
+            Sending.Patient.County = "Landkreis SV-025-Flensburg";
+            Sending.Patient.State = State.BY;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["kreis_nr"].Should().Be(countyNumber);
+            export.Rows[0]["bundesland"].Should().Be(expected);
+            export.Rows[0]["bundeslandName"].Should().Be("Bayern");
+        }
+
         private HaemophilusSendingRkiExport CreateExportDefinition()
         {
             return new HaemophilusSendingRkiExport(Counties);

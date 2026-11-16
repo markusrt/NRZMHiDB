@@ -1,0 +1,349 @@
+# Feature Specification: Meningococci result interpretation ruleset
+
+**Feature Branch**: `speckit-init`
+
+**Created**: 2026-08-30
+
+**Status**: Draft (status-quo inventory)
+
+**Input**: User description: "Feature title: \"Meningococci result interpretation ruleset\" (backlog ref A5-M, Group A - Core laboratory workflow). Document the current, as-implemented behavior of the Meningococci clinical result interpretation that feeds final reports, as it exists today. Read the JSON rulesets under HaemophilusWeb/Domain/Interpretation/*.json and the code that loads and applies them. Capture what isolate inputs drive an interpretation and what report outputs are produced. Document observable behavior only - do not propose changes."
+
+> **Scope note**: This is an as-is specification of Meningococci interpretation behavior
+> (backlog ref A5-M). It records the currently observable selection, report, typing, comment,
+> Meningococci-presence, and serogroup outcomes. It does not redesign rules, assess clinical
+> correctness, or propose new behavior. Isolate data entry (A3-M), susceptibility calculations,
+> report layout, Haemophilus interpretation, and export formatting are out of scope.
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 - Interpret a cultured isolate (Priority: P1)
+
+A laboratory user prepares a final report for a vital strain or a strain that did not grow. The
+system evaluates the culture, biochemical, agglutination, molecular, and invasive-status results,
+selects the first complete cultured-isolate rule, and supplies its report content and typing rows.
+
+**Why this priority**: Cultured isolates are a principal Meningococci reporting path and include
+positive identification, no-detection, no-growth, non-invasive, and partial-report outcomes.
+
+**Independent Test**: Supply one isolate matching each cultured-isolate behavior group and verify
+the selected rule identifier, ordered report lines, ordered typing rows, comment, presence flag,
+and normalized serogroup.
+
+**Acceptance Scenarios**:
+
+1. **Given** a cultured invasive isolate with typical growth, positive oxidase, a specific
+   agglutination group, negative ONPG, and positive gamma-GT, **When** interpretation runs,
+   **Then** the output identifies *Neisseria meningitidis*, reports the statutory notification and
+   matching category, and emits the applicable typing rows.
+2. **Given** the corresponding non-invasive cultured isolate, **When** interpretation runs,
+   **Then** the output identifies *N. meningitidis* but reports the current note that resistance
+   testing was not performed rather than the invasive notification lines.
+3. **Given** a submitted strain that did not grow and whose identification and molecular tests are
+   all not determined, **When** interpretation runs, **Then** the report states that cultivation
+   failed, requests a new submission, emits no typing rows, and marks the result as no
+   Meningococci. Negative molecular results do not lead here (see Edge Cases).
+4. **Given** a strain that did not grow but has qualifying serogroup-PCR and PorA or FetA evidence,
+   **When** interpretation runs, **Then** the report identifies *N. meningitidis*, reports its
+   category, explains that susceptibility testing was unavailable, and emits molecular typing
+   rows for positive and non-amplified targets.
+
+---
+
+### User Story 2 - Interpret native material or isolated DNA (Priority: P2)
+
+A laboratory user prepares a final report for native material or isolated DNA. The system uses the
+capsule-gene, PorA, FetA, 16S-rDNA, and multiplex real-time PCR results to select the first complete
+native-material rule and produce report and molecular typing output.
+
+**Why this priority**: This path reports direct molecular evidence when no cultured strain is the
+interpretation source.
+
+**Independent Test**: Supply representative B, C, W, Y, W/Y, ungrouped positive, alternative-
+organism, and negative combinations and compare every output field with the native-material
+decision table.
+
+**Acceptance Scenarios**:
+
+1. **Given** positive csb, csc, or cswy evidence with its required allele and supporting test
+   combination, **When** interpretation runs, **Then** the report states that Meningococci-specific
+   DNA was detected and assigns B, C, W, Y, or W/Y as specified by the matched rule.
+2. **Given** a positive Meningococci real-time PCR or a matching *N. meningitidis* 16S sequence
+   without a determined capsule group, **When** interpretation runs, **Then** the report states an
+   invasive Meningococci infection without adding a serogroup category.
+3. **Given** a negative Meningococci combination or positive real-time PCR evidence for another
+   organism, **When** interpretation runs, **Then** the report states that Meningococci-specific DNA
+   was not detected and emits the test-specific typing rows selected by that rule.
+
+---
+
+### User Story 3 - Populate final-report fields (Priority: P3)
+
+For any matched rule, the reporting flow receives an ordered report-line collection, an ordered
+typing collection, and an optional comment. The interpretation also exposes the matched rule,
+Meningococci-presence status, and normalized serogroup for downstream reporting and exports.
+
+**Why this priority**: These are the observable products consumed after rule selection.
+
+**Independent Test**: Interpret one result from each output family and verify all six outputs,
+including order, substitutions from isolate values, and intentionally empty values.
+
+**Acceptance Scenarios**:
+
+1. **Given** a matched rule with an identification, **When** output is assembled, **Then** the
+   identification row appears first, followed by typing-template rows in the rule's declared order.
+2. **Given** a typing row for PorA, FetA, MALDI-TOF, molecular typing, 16S-rDNA, or real-time PCR,
+   **When** output is assembled, **Then** the recorded isolate values are substituted into the
+   corresponding display label and value.
+3. **Given** a rule whose report collection is empty, **When** interpretation runs, **Then** the
+   final report collection is empty rather than replaced with a discrepancy warning.
+4. **Given** a matched result with a derivable group, **When** interpretation completes, **Then**
+   the normalized serogroup is exposed as a group value, `NG`, or `cnl` according to the current
+   normalization rules.
+
+---
+
+### User Story 4 - Surface unmatched combinations (Priority: P4)
+
+If no rule accepts all relevant isolate values, the interpretation remains a discrepancy result so
+the laboratory record can be reviewed instead of being assigned the nearest clinical conclusion.
+
+**Why this priority**: This is the current guard behavior for incomplete, conflicting, and
+otherwise uncovered combinations.
+
+**Independent Test**: Supply a combination not accepted by any rule and verify the discrepancy
+report, empty typing list, null rule and serogroup, and false no-Meningococci flag.
+
+**Acceptance Scenarios**:
+
+1. **Given** no complete matching rule, **When** interpretation runs, **Then** the sole report line
+   is "Diskrepante Ergebnisse, bitte Datenbankeinträge kontrollieren.", no rule identifier or
+   serogroup is selected, no typing rows are emitted, and the no-Meningococci flag is false.
+2. **Given** several rules whose criteria could match, **When** interpretation runs, **Then** only
+   the first rule in the current ordered ruleset supplies output.
+
+### Edge Cases
+
+- `Nativmaterial` and `Isolierte DNA` both use the native-material rules. `Vitaler Stamm` and
+  `Nicht angewachsen` use the cultured-isolate rules.
+- Every native-material criterion is compared on every run. The list-valued criteria (csb, csc,
+  cswy, PorA, FetA, 16S-rDNA, real-time PCR status) are configured by every native rule and accept
+  any listed value. A rule that omits the cswy allele or the real-time organism result compares
+  against that value's default/unset state rather than treating it as a wildcard; only an omitted
+  16S best match is a wildcard. By contrast, omitted optional cultured-isolate criteria are
+  wildcards (blood-agar growth is the one cultured criterion that is always compared, and every
+  cultured rule configures it).
+- Cultured rules 20, 22, 24, and 26 (poly/auto agglutination, `cnl` serogroup PCR, positive P/F,
+  positive oxidase) are declared first and therefore precede the broader rules 08-11, whose
+  serogroup-PCR lists also include `cnl`; first-match order thereby preserves the `cnl`-specific
+  report and typing outcomes. Rule 09 differs from rule 20 only by its wider serogroup-PCR list, so
+  its `cnl` case is never selected. The ruleset's own source comment names rules 10 and 12 as the
+  overlapping rules; rule 12 requires serogroup PCR and P/F not determined and does not overlap.
+  [POTENTIAL-REFACTORING]
+- A non-invasive typical isolate with a specific agglutination group and a specific serogroup PCR
+  (the former rule 39, since removed) matches no rule and yields the discrepancy report; the focused
+  tests assert this.
+- A native real-time PCR organism result that combines several organisms matches no rule and yields
+  the discrepancy report, because the organism result is compared as one exact value.
+- Native rules 30a and 30b configure the same criteria as rules 01b and 01a, which precede them;
+  they are therefore never selected, and the shorter "invasive Meningococci infection" wording they
+  carry is not reachable. [POTENTIAL-REFACTORING]
+- Native rules 10 and 17 emit the same rows in different orders (10: 16S result, molecular group,
+  best match; 17: 16S result, best match, molecular group).
+- A successful match may intentionally return no report lines (cultured rules 12, 13, 25, and 26).
+  This differs from no match, which returns the discrepancy line.
+- Native rule 32 reports no Meningococci evidence but is not configured as no Meningococci; its
+  observable flag value is therefore false. The focused test asserts the flag through its list of
+  no-Meningococci rules but not the rule identifier. Because the RKI and IRIS exports include
+  invasive submissions whose flag is false (FR-014), an all-negative native result selected by
+  rule 32 is included in those exports as Meningococci found; observed on the system (verification
+  2026-11-08), where native rule 06 with the same report wording was excluded. Rule 32 also carries
+  the sequencing-provider comment although it emits no sequence row. [SUSPECTED-DEFECT] (DEC-005)
+- **No growth with negative molecular results**: a strain that did not grow, with negative
+  serogroup PCR and PorA and FetA not amplified (or with PorA or FetA positive but serogroup PCR not
+  determined), matches no cultured rule and yields the discrepancy report; rules 01 and 27 require
+  every molecular test to be not determined, rules 02, 28-32 and 35 a serogroup PCR result.
+- **Unmatched results count as Meningococci found**: an unmatched interpretation leaves the
+  no-Meningococci flag false (FR-011), and the RKI and IRIS selection includes every invasive
+  submission whose flag is false (FR-014, 011 FR-011). An invasive submission with discrepant or not
+  yet entered results is therefore exported as a Meningococci case; observed on the system
+  (verification 2026-11-08): six invasive submissions without a matching rule (empty rule column in
+  the laboratory export) appeared in the RKI export. [SUSPECTED-DEFECT] (DATA-039)
+- Rules that emit a sequence typing row may add the sequencing-provider comment. Rules without
+  that configured comment leave it empty, including positive rules with no sequence output.
+  Cultured rules 11, 14, and 41 emit PorA/FetA sequence rows without the comment, whereas every
+  other cultured or native rule that emits a PorA or FetA sequence row configures it.
+  [SUSPECTED-DEFECT]
+- If the same interpreter instance is reused, each run clears typings, rule, serogroup, and the
+  no-Meningococci flag. The comment is replaced only by a matched rule, so an unmatched run after a
+  commented match retains the prior comment while returning the discrepancy report. The current
+  reusing consumers (laboratory and state-authority exports) read only the rule, flag, and serogroup,
+  so the retained comment does not reach their output. [POTENTIAL-REFACTORING]
+- MALDI-TOF matching treats "not determined" as requiring both devices to be not determined and
+  "determined" as requiring either device. Output uses the Biotyper row when Biotyper is
+  determined; otherwise it uses the VITEK MS row.
+- A cultured rule can omit invasive status and therefore match either invasive or non-invasive
+  submissions after earlier, more specific rules have been considered.
+- Serogroup derivation leaves the value empty when a plain agglutination group and a serogenogroup
+  row conflict. No current rule emits both a plain agglutination group row and a serogenogroup row
+  (rules 08-11 emit the auto/poly agglutination texts, which defer to the serogenogroup), so this
+  path is not reachable with the active rulesets.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+- **FR-001**: The system MUST choose the native-material rules for native material and isolated DNA
+  and the cultured-isolate rules for vital strains and strains recorded as not grown.
+- **FR-002**: The system MUST evaluate rules in their current order and MUST use only the first rule
+  for which every configured criterion matches.
+- **FR-003**: Cultured-isolate selection MUST evaluate invasive status, blood-agar growth,
+  Martin-Lewis-agar growth, oxidase, agglutination, ONPG, gamma-GT, serogroup PCR, MALDI-TOF status,
+  PorA PCR, and FetA PCR. A criterion other than blood-agar growth that a cultured rule omits MUST
+  not restrict that rule (every current cultured rule configures blood-agar growth).
+- **FR-004**: Native-material selection MUST evaluate csb PCR, csc PCR, cswy PCR, cswy allele,
+  PorA PCR, FetA PCR, 16S-rDNA result, optional exact 16S best match, real-time PCR result status,
+  and real-time PCR organism result as exact configured criteria; an omitted 16S best match does not
+  restrict the rule, whereas an omitted cswy allele or organism result requires the unset value.
+- **FR-005**: Before each run, the system MUST clear typing rows, selected rule, normalized
+  serogroup, and no-Meningococci status and MUST initialize the report to the discrepancy line.
+- **FR-006**: A match MUST replace the report with that rule's ordered report lines, including an
+  intentionally empty collection, and MUST expose the matched rule identifier.
+- **FR-007**: A cultured rule with an identification MUST emit `Identifikation` as the first typing
+  row; remaining typing rows MUST follow the rule's declared order. Native-material typing rows
+  MUST follow their declared order.
+- **FR-008**: Output substitution MUST use the isolate's displayed enum values and recorded PorA
+  VR1/VR2, FetA VR, MALDI-TOF best match, 16S best match, real-time PCR device, and rule-provided
+  molecular-typing statement where selected.
+- **FR-009**: The interpretation MUST expose these report-facing outputs: ordered report lines,
+  ordered typing attribute/value rows, and an optional comment. It MUST also expose the selected
+  rule, normalized serogroup, and no-Meningococci flag to downstream consumers.
+- **FR-010**: Rules configured as no Meningococci MUST set the no-Meningococci flag. Native rule 32
+  MUST preserve its current exception: negative report wording with the flag left false (see Edge
+  Cases, tagged [SUSPECTED-DEFECT]).
+- **FR-011**: If no rule matches, the system MUST retain the discrepancy report, empty typing rows,
+  null selected rule, null serogroup, and a false no-Meningococci flag; it MUST NOT infer a nearest
+  result.
+- **FR-012**: For a fresh interpretation instance, the optional comment MUST be the matched rule's
+  configured comment or empty. On a reused instance, an unmatched run MUST preserve the prior
+  comment as currently observed.
+- **FR-013**: The report view model MUST receive the report lines, typing rows, and comment from the
+  interpretation before report configuration is applied.
+- **FR-014**: Downstream RKI and IRIS export filtering MUST treat `NoMeningococci = false` as
+  Meningococci found, independently of report wording. The laboratory export MUST expose the flag as
+  "kein Nachweis" when set and MUST expose the selected rule identifier; the laboratory,
+  state-authority, and EpiScanGIS exports MUST use the normalized serogroup (EpiScanGIS skips empty,
+  `NG`, and `cnl` values). Each of these exports runs the interpretation anew per submission; the
+  laboratory export runs it once per derived column (rule, flag, serogroup), i.e. three times per
+  row. [POTENTIAL-REFACTORING]
+- **FR-015**: The system MUST derive normalized serogroup after typing rows are assembled: use the
+  sole serogroup or serogenogroup; use equal values when both exist; prefer serogenogroup when the
+  agglutination text denotes unknown encapsulation or non-invasive behavior; and allow a recognized
+  molecular-typing statement to override the prior value.
+- **FR-016**: Serogroup normalization MUST map non-groupable, poly-agglutinating, and auto-
+  agglutinating values to `NG`; values containing `cnl` to `cnl`; remove parenthesized explanatory
+  suffixes; and map a no-agglutination typing to `NG` when no group was otherwise derived.
+- **FR-017**: The feature MUST preserve the current ruleset behavior and wording without adding,
+  correcting, or generalizing clinical interpretation rules.
+
+### Cultured-Isolate Decision Table
+
+In the table, `specific group` means A, B, C, E, W, X, Y, Z, or W/Y. `P/F` is PorA/FetA PCR.
+`Typical culture` means typical growth on both media, negative ONPG, positive gamma-GT, and
+MALDI-TOF not determined; positive oxidase is also required except by rules 08, 10, 11, 12, and 13,
+which do not evaluate oxidase. All rows use the additional exact criteria declared for the listed
+rule identifiers.
+
+| Rule identifier(s) | Observable input class | Report and status output | Typing/comment output |
+| --- | --- | --- | --- |
+| 01, 27 | Non-invasive/invasive; no growth on both media; all identification and molecular tests not determined | Three no-cultivation/resubmission lines; no Meningococci = true | No typings; no comment |
+| 02, 28, 29, 35 | Invasive; no growth; serogroup PCR specific or `cnl`; P/F respectively +/+, +/-, -/+, -/- | Notification, matching category, no susceptibility testing; molecular-method/resubmission wording on 02, 28, 29 only (35 ends after the no-susceptibility line); no Meningococci = false | Identification, serogenogroup, positive or non-amplified P/F rows; sequencing comment on 02, 28, 29 (at least one sequence row present), none on 35 |
+| 30, 31, 32 | Invasive; no growth; negative serogroup PCR; P/F respectively +/+, +/-, -/+ | Notification, `NG` category, no susceptibility testing, molecular-method/resubmission wording | Identification, non-groupable serogenogroup, P/F rows, sequencing comment; derived group `NG` |
+| 03, 04, 05, 34, NoNM_01, NoNM_02 | Atypical growth combinations with the listed biochemical/MALDI states | No *N. meningitidis* detected; no Meningococci = true | Growth and applicable ONPG, gamma-GT, and MALDI rows; no identification |
+| 06, 07 | Typical culture, positive oxidase, specific agglutination, negative ONPG, positive gamma-GT, molecular tests not determined; non-invasive/invasive | Non-invasive resistance-testing note or invasive notification and matching category | Identification and serogroup from agglutination |
+| 14, 36 | Invasive (14) / non-invasive (36) typical culture with specific agglutination, group PCR not determined, and positive P/F; rule 14 additionally accepts atypical Martin-Lewis growth and negative gamma-GT | Invasive notification and category or non-invasive resistance-testing note | Identification, agglutination group, PorA/FetA rows; sequencing comment on 36 only |
+| PartialReport | Invasive typical culture, specific agglutination, ONPG and gamma-GT not determined, other molecular tests not determined | Invasive notification and category | Identification, agglutination group, and susceptibility-test `follows` row |
+| 08, 09, 10, 11 | Typical culture; auto/poly agglutination; specific or `cnl` serogroup PCR; positive P/F; invasive/non-invasive | Invasive notification/category or non-invasive resistance-testing note | Identification, contextual agglutination, molecular serogenogroup, P/F rows; sequencing comment except rule 11 |
+| 12, 13 | Non-invasive typical culture; auto/poly agglutination; group and P/F not determined | Empty report; no Meningococci = false | Identification plus contextual agglutination; no comment; derived group `NG` |
+| 15-26 | Typical culture with negative/poly/auto agglutination and `cnl`; invasive/non-invasive; P/F not determined or positive | Invasive `cnl` notification/category, non-invasive resistance note, or empty report according to the exact rule | Identification, agglutination, `cnl` serogenogroup, optional P/F; sequencing comment only on configured positive-P/F rules; derived group `cnl` |
+| 33, 41 | Non-invasive typical culture; negative agglutination; group not determined; P/F not determined (33) or positive (41) | Non-invasive resistance-testing note | Identification, no-agglutination wording (33: A, B, C, E, W, X, Y with non-invasive note; 41: B, C, W, Y), P/F rows on 41; no comment on either rule; derived group `NG` |
+| 37, 38 | Non-invasive typical culture; poly with negative PCR or auto with undetermined PCR; positive P/F | Non-invasive resistance-testing note | Identification, contextual agglutination, P/F, sequencing comment; derived group `NG` |
+| 40 | Non-invasive typical culture; negative or poly agglutination; specific group PCR; P/F not determined | Non-invasive resistance-testing note | Identification and molecular serogenogroup; derived molecular group |
+| 43 | Non-invasive typical culture; agglutination and molecular tests not determined | Note that serogroup and resistance testing are not performed for non-invasive isolates | Identification only; no derived group |
+
+### Native-Material Decision Table
+
+All native rows require the exact csb, csc, cswy, allele, PorA, FetA, 16S, real-time PCR status,
+and real-time organism values configured by the selected rule.
+
+| Rule identifier(s) | Observable input class | Report and status output | Typing/comment output |
+| --- | --- | --- | --- |
+| 01a-05 | B, C, W, Y, or W/Y capsule-gene evidence with positive P/F and real-time PCR not determined | DNA detected, invasive infection with group, notification, matching category; no Meningococci = false | Molecular group, PorA/FetA; sequencing comment; derived B/C/W/Y/W-Y group |
+| 01b | B capsule-gene evidence, positive P/F, and positive Meningococci real-time PCR | Same B result and category | Positive real-time PCR, molecular group, PorA/FetA; sequencing comment; derived B |
+| 22, 25-28 | B, C, W, Y, or W/Y capsule-gene evidence, negative P/F, and positive Meningococci real-time PCR | DNA detected, invasive infection, notification, matching group category | Positive real-time PCR, molecular group, non-amplified P/F; no comment; derived group |
+| 29a/b, 30a/b, 31a/b | B capsule-gene evidence with mixed or positive P/F and positive Meningococci (a) or undetermined (b) real-time PCR; 30a/30b repeat the criteria of 01b/01a and are never selected (see Edge Cases) | DNA detected, invasive infection, notification, B category | Optional positive real-time PCR, molecular B, positive/non-amplified P/F; sequencing comment; derived B |
+| 07, 14 | Capsule-group PCR negative/inhibitory as configured (07: cswy not determined; 14: cswy negative/inhibitory), P/F negative/inhibitory, positive Meningococci real-time PCR | DNA detected, invasive infection, notification, category without group | Positive real-time PCR, negative molecular-group statement, non-amplified P/F; no comment; no derived group |
+| 10, 17 | Capsule-group and P/F tests negative/inhibitory; positive 16S with exact best match *N. meningitidis* | DNA detected, invasive infection, notification, category without group | 16S and best match, negative molecular-group statement, non-amplified P/F; sequencing comment; no derived group |
+| 21 | Capsule-group tests negative/inhibitory; positive P/F; 16S and real-time PCR not determined | DNA detected, notification, category without group | Negative molecular-group statement and PorA/FetA; sequencing comment; no derived group |
+| 06, 08, 09, 11-13, 15, 16, 18-20, 23, 24 | Negative/inhibitory/not-determined Meningococci evidence, alternative-organism real-time result, or non-Meningococci 16S best match as configured | DNA not detected and no indication of *N. meningitidis*; no Meningococci = true | Applicable real-time, 16S, molecular-group, and non-amplified P/F rows; sequencing comment only on the 16S-positive rules 11 and 18 |
+| 32 | Every tested capsule-group, P/F, 16S, and real-time PCR result negative | DNA not detected and no indication of *N. meningitidis*; no Meningococci = false | Negative real-time, 16S, molecular-group, and non-amplified P/F rows; sequencing comment; no derived group |
+
+### Output Catalog
+
+- **Report lines**: Ordered final-report statements. Depending on the rule, these communicate
+  detection or non-detection, invasive notification/category, inability to culture or test
+  susceptibility, resubmission guidance, or non-invasive testing policy.
+- **Typing rows**: Ordered attribute/value pairs for identification, culture growth, ONPG,
+  gamma-GT, MALDI-TOF, serogroup/agglutination, serogenogroup, PorA, FetA, real-time PCR, 16S-rDNA,
+  sequence best match, molecular typing, or a pending susceptibility test.
+- **Comment**: Optional sequencing-provider statement supplied only by rules that configure it.
+- **Selected rule**: The identifier of the first matched behavior, or null when unmatched.
+- **No-Meningococci flag**: A rule-controlled status used by downstream invasive-case exports.
+- **Normalized serogroup**: A derived concise group used by downstream exports; it may be a group,
+  `NG`, `cnl`, or null.
+
+### Key Entities *(include if feature involves data)*
+
+- **Meningococci isolate**: The laboratory result record whose material type and test values drive
+  interpretation.
+- **Submission**: The isolate's associated submission. Material selects the rule family and
+  sampling location supplies invasive status to cultured-isolate rules.
+- **Interpretation rule**: An ordered set of accepted input values and configured output content.
+- **Interpretation result**: The transient ordered report lines and optional comment supplied to
+  the final-report view model.
+- **Typing**: A transient report row with a display attribute and value.
+
+## Success Criteria *(mandatory)*
+
+### Measurable Outcomes
+
+- **SC-001**: For all 44 cultured-isolate rules and all 36 native-material rules, a matching input
+  selects the documented first rule and reproduces its report lines, typing order, comment, flag,
+  and normalized serogroup exactly.
+- **SC-002**: For 100% of unmatched input combinations, the report contains exactly the discrepancy
+  line and no clinical conclusion is inferred.
+- **SC-003**: For B, C, W, Y, W/Y, `NG`, and `cnl` outcomes, 100% of covered examples expose the
+  documented normalized serogroup.
+- **SC-004**: Every report-facing interpretation can be traced to one selected rule and its recorded
+  isolate inputs without relying on undocumented patient data or implementation knowledge.
+- **SC-005**: A laboratory-domain reviewer can use the two decision tables to classify every
+  current rule into an observable input/output family, with all exceptions explicitly recorded.
+
+## Assumptions
+
+- The current ordered rulesets, interpretation behavior, and focused automated tests are the source
+  of truth, including empty reports, missing flags, duplicate or unusual wording, and overlapping
+  rules.
+- Rule identifiers are included because they are exposed by the interpretation and provide stable
+  traceability for this status-quo inventory; they do not imply a proposed design.
+- Exact full report prose and long explanatory typing values remain authoritative in the active
+  ruleset. This specification describes when each output family is selected and preserves exact
+  strings where needed to distinguish fallback behavior.
+- Normal report mapping creates a new interpreter for an isolate. Reuse behavior is documented
+  because other current consumers retain an interpreter instance across calls.
+- Rule evaluation order is the declaration order of the rule files; the loader relies on its keyed
+  rule collections preserving that order, which is observed but not contractually guaranteed.
+  [POTENTIAL-REFACTORING]
+- Report configuration and templates may control placement or visibility after interpretation;
+  they do not change which rule matches or what raw interpretation output is produced.
+- Clinical validity, terminology changes, and gaps in rule coverage are outside this documentation
+  task.

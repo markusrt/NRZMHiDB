@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using HaemophilusWeb.Models;
 using HaemophilusWeb.TestUtils;
@@ -316,6 +317,66 @@ namespace HaemophilusWeb.Tools
             var export = sut.ToDataTable(Sendings);
 
             export.Rows[0]["sex"].Should().Be(expectedValue);
+        }
+
+        // specs/012 FR-009, FR-010: identifier removal drops exactly the three direct identifiers of the PubMLST layout
+        // and keeps the indirect patient attributes.
+        [Test]
+        public void DataTable_RemovePatientData_KeepsIndirectPatientColumns()
+        {
+            var col = new PubMlstColumns();
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            new DuplicatePatientResolver(col).RemovePatientData(export);
+
+            var columns = export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).ToList();
+            columns.Should().HaveCount(42);
+            columns.Should().NotContain(new[] {col.Initials, col.DateOfBirth, col.PostalCode});
+            columns.Should().Contain(new[]
+            {
+                col.AgeInYears, col.AgeInMonths, col.Sex, col.Region, col.Year, col.SampleDate, col.ReceivedDate
+            });
+        }
+
+        // specs/012 Edge Cases (empty-strain removal never takes effect): the PubMLST serotype value is never empty,
+        // whatever the evaluation.
+        [Test]
+        public void DataTable_SerotypeIsNeverEmpty([Values] Evaluation evaluation)
+        {
+            Sending.Isolate.Evaluation = evaluation;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0][new PubMlstColumns().Serotype].ToString().Should().NotBeNullOrEmpty();
+        }
+
+        // specs/011 FR-004, FR-015, US3.4: header names and order of the PubMLST export as observed in the downloaded
+        // file (011 verification 2026-11-08); the three identifier columns come first and are removed before writing
+        // (FR-012).
+        [Test]
+        public void DataTable_ColumnHeadersAreInDocumentedOrder()
+        {
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Columns.Cast<System.Data.DataColumn>().Select(c => c.ColumnName).Should().Equal(
+                "initials", "date_of_birth", "postal_code",
+                "isolate", "aliases", "references", "country", "region", "year", "date_received", "date_sampled",
+                "non_culture", "serotype", "serotype_by_serology", "serotype_by_PCR", "genotype", "biotype",
+                "ribotype", "age_yr", "age_mth", "sex", "source", "disease", "epidemiology", "MLEE_lineage",
+                "MLEE_ET", "beta_lactamase", "AMX_MIC", "AMX_SIR", "AMC_MIC", "AMC_SIR", "CTX_MIC", "CTX_SIR",
+                "CRO_MIC", "CRO_SIR", "ENA_accession", "comments", "adk", "atpG", "frdB", "fucK", "mdh", "pgi",
+                "recA", "ftsI");
+        }
+
+        // specs/011 US3.5: a patient whose state is "n.n." gets the region "n.a.".
+        [Test]
+        public void DataTable_UnknownState_RegionIsNotAvailable()
+        {
+            Sending.Patient.State = State.Unknown;
+
+            var export = CreateExportDefinition().ToDataTable(Sendings);
+
+            export.Rows[0]["region"].Should().Be("n.a.");
         }
 
         private static HaemophilusPubMlstExport CreateExportDefinition()
