@@ -63,7 +63,7 @@ jobs:
       run: msbuild HaemophilusWeb.sln
 
     - name: Run unit tests with coverage
-      run: dotnet-coverage collect "VSTest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll" -f xml -o coverage.xml
+      run: dotnet-coverage collect --settings .github\coverage.settings.xml "VSTest.console.exe HaemophilusWebTests\bin\Debug\HaemophilusWebTests.dll" -f xml -o coverage.xml
 
     - name: End SonarCloud analysis
       if: env.SONAR_TOKEN != ''
