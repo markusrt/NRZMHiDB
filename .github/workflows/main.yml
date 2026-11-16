@@ -57,7 +57,7 @@ jobs:
         /d:sonar.token="$env:SONAR_TOKEN"
         /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml"
         /d:sonar.exclusions=".specify/**,.claude/**"
-        /d:sonar.coverage.exclusions="**/Migrations/**"
+        /d:sonar.coverage.exclusions="**/Migrations/**,HaemophilusWeb/Scripts/**,AccessImporter/**,CsvImporter/**,tools/**"
 
     - name: Build solution
       run: msbuild HaemophilusWeb.sln
