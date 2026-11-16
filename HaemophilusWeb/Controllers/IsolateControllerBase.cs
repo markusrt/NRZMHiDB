@@ -12,6 +12,7 @@ using HaemophilusWeb.Models;
 using HaemophilusWeb.Models.Meningo;
 using HaemophilusWeb.Utils;
 using HaemophilusWeb.ViewModels;
+using HaemophilusWeb.Views.Utils;
 
 namespace HaemophilusWeb.Controllers
 {
@@ -21,6 +22,8 @@ namespace HaemophilusWeb.Controllers
     {
         private IApplicationDbContext db;
         private readonly DatabaseType databaseType;
+        private const string HaemophilusDefaultMaldiTofBiotyperBestMatch = "Haemophilus influenzae";
+        private const string MeningococciDefaultMaldiTofBiotyperBestMatch = "Neisseria meningitidis";
 
         private readonly AntibioticPriorityListComparer antibioticPriorityListComparer;
 
@@ -61,6 +64,32 @@ namespace HaemophilusWeb.Controllers
         {
             ViewBag.ClinicalBreakpoints = db.EucastClinicalBreakpoints.Where(e => e.ValidFor==databaseType).OrderByDescending(b => b.ValidFrom);
             ViewBag.Antibiotics = AvailableAntibiotics.OrderBy(a => a, antibioticPriorityListComparer);
+            ViewBag.PossibleMaldiTofBiotyperBestMatches = PossibleMaldiTofBiotyperBestMatches();
+            ViewBag.DefaultMaldiTofBiotyperBestMatch = DefaultMaldiTofBiotyperBestMatch();
+        }
+
+        private IEnumerable<string> PossibleMaldiTofBiotyperBestMatches()
+        {
+            var defaultBestMatch = DefaultMaldiTofBiotyperBestMatch();
+            if (databaseType == DatabaseType.Haemophilus)
+            {
+                return db.Isolates.Where(i => !string.IsNullOrEmpty(i.MaldiTofBiotyperBestMatch))
+                    .Select(i => i.MaldiTofBiotyperBestMatch)
+                    .Concat(new[] { defaultBestMatch })
+                    .AsDataList();
+            }
+
+            return db.MeningoIsolates.Where(i => !string.IsNullOrEmpty(i.MaldiTofBiotyperBestMatch))
+                .Select(i => i.MaldiTofBiotyperBestMatch)
+                .Concat(new[] { defaultBestMatch })
+                .AsDataList();
+        }
+
+        private string DefaultMaldiTofBiotyperBestMatch()
+        {
+            return databaseType == DatabaseType.Haemophilus
+                ? HaemophilusDefaultMaldiTofBiotyperBestMatch
+                : MeningococciDefaultMaldiTofBiotyperBestMatch;
         }
 
         protected override void Dispose(bool disposing)

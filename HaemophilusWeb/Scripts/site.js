@@ -26,6 +26,33 @@ function GeneralInput(id) {
     return "[id$='" + id + "']";
 }
 
+function DisableRadioGroupOnSpecificRadioValue(toggleRadio, toggleValue, valueToSet, radioNamesToDisable) {
+    let toggleSelector = "input:radio[name$='" + toggleRadio + "']";
+
+    let applyState = function () {
+        let disabled = $(toggleSelector + ":checked").val() === toggleValue;
+        $.each(radioNamesToDisable, function (index, radioName) {
+            SetRadioGroupValueAndDisabledState(radioName, valueToSet, disabled);
+        });
+    };
+
+    applyState();
+    $(toggleSelector).change(applyState);
+}
+
+function SetRadioGroupValueAndDisabledState(radioName, valueToSet, disabled) {
+    $("input:radio[name$='" + radioName + "']").each(function () {
+        let input = $(this);
+        if (disabled) {
+            let isTarget = input.val() === valueToSet;
+            input.prop("checked", isTarget);
+            input.parent().toggleClass("active", isTarget);
+        }
+        input.prop("disabled", disabled);
+        input.parent().toggleClass("disabled", disabled);
+    });
+}
+
 function ShowDivIfInputHasSpecificSelectedValueOrClearInputOtherwise(
     divToShow, inputSelector, valueSelector, valueOnWhichToShowDiv, inputToClearOnOtherValue, secondInputToClearOnOtherValue, thirdInputToClearOnOtherValue)
 {
@@ -165,4 +192,21 @@ function installBeforeUnloadListener() {
         return "Sie besitzen ungespeicherte Änderungen!";
     });
     window.installedBeforeUnloadListenerOnPendingChanges = true;
-};
+}
+
+function ConfigureMaldiTofBiotyperDefaults(defaultBestMatch) {
+    $("input:radio[name$='MaldiTofBiotyper']").change(function () {
+        if ($(this).val() !== "Determined" || !$(this).is(":checked")) {
+            return;
+        }
+
+        var bestMatchInput = GeneralInput("MaldiTofBiotyperBestMatch");
+        var confidenceInput = GeneralInput("MaldiTofBiotyperMatchConfidence");
+
+        if ($(bestMatchInput).val().length === 0) {
+            $(bestMatchInput).val(defaultBestMatch);
+        }
+
+        setTimeout(function () { $(confidenceInput).focus(); }, 0);
+    });
+}
